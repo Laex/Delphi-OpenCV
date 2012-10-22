@@ -109,14 +109,14 @@ procedure cvFree_(ptr: Pointer); cdecl;
 {$DEFINE cvFree(ptr(cvFree_}	(* (ptr)), *(ptr)=0)
 
   (* Allocates and initializes IplImage header *)
-function cvCreateImageHeader(size: CvSize; depth: Integer; channels: Integer): IplImage; cdecl;
+function cvCreateImageHeader(size: TCvSize; depth: Integer; channels: Integer): IplImage; cdecl;
 
 (* Inializes IplImage header *)
 // function cvInitImageHeader(IplImage * image, CvSize size, Integer depth, CVAPI(IplImage)channels,
 // Integer origin CV_DEFAULT(v1: 4)): Integer): IplImage;
 
 (* Creates IPL image (header and data) *)
-function cvCreateImage(size: CvSize; depth, channels: Integer): pIplImage; cdecl;
+function cvCreateImage(size: TCvSize; depth, channels: Integer): pIplImage; cdecl;
 
 (* Releases (i.e. deallocates) IPL image header *)
 procedure cvReleaseImageHeader(image: array of IplImage); cdecl;
@@ -125,7 +125,7 @@ procedure cvReleaseImageHeader(image: array of IplImage); cdecl;
 procedure cvReleaseImage(var image: pIplImage); cdecl;
 
 (* Creates a copy of IPL image (widthStep may differ) *)
-function cvCloneImage(image: pIplImage): IplImage; cdecl;
+function cvCloneImage(image: pIplImage): pIplImage; cdecl;
 
 (* Sets a Channel Of Interest (only a few functions support COI) -
   use cvCopy to extract the selected channel and/or put it back *)
@@ -135,13 +135,13 @@ procedure cvSetImageCOI(var image: IplImage; coi: Integer); cdecl;
 function cvGetImageCOI(image: pIplImage): Integer; cdecl;
 
 (* Sets image ROI (region of interest) (COI is not changed) *)
-procedure cvSetImageROI(var image: IplImage; rect: CvRect); cdecl;
+procedure cvSetImageROI(var image: IplImage; rect: TCvRect); cdecl;
 
 (* Resets image ROI and COI *)
 procedure cvResetImageROI(var image: IplImage); cdecl;
 
 (* Retrieves image ROI *)
-function cvGetImageROI(image: pIplImage): CvRect; cdecl;
+function cvGetImageROI(image: pIplImage): TCvRect; cdecl;
 
 (* Allocates and initalizes CvMat header *)
 function cvCreateMatHeader(rows: Integer; cols: Integer; cType: Integer): CvMat; cdecl;
@@ -398,15 +398,25 @@ function cvCreateMatHeader(rows: Integer; cols: Integer; cType: Integer): CvMat;
 // procedure cvGetRawData(var Returns width and height of array in elements * )
 
 // CVAPI(CvSize) cvGetSize( const CvArr* arr );
-//function cvGetSize(const arr: CvArr): CvSize; cdecl;
-//todo -cmedium -oLaex: Использовать процедуру OpenCV (need use OpenCV)
-function cvGetSize(const image: pIplImage): CvSize;
+// function cvGetSize(const arr: CvArr): CvSize; cdecl;
+// todo -cmedium -oLaex: Использовать процедуру OpenCV (need use OpenCV)
+// function cvGetSize(const arr: pCvArr): TCvSize; cdecl;
+function cvGetSize(const image: pIplImage): TCvSize;
 
 //
 // (* Copies source array to destination array *)
 // procedure cvCopy(var Sets all or " masked " elements of input array to the same value * )
-// procedure cvSet(CvArr * arr: v1: 0)): CvArr; (; value: CvScalar;
-// var Clears all the array elements(Sets them to 0) * )
+
+{
+  /* Sets all or "masked" elements of input array
+  to the same value*/
+  CVAPI(void)  cvSet( CvArr* arr, CvScalar value,
+  const CvArr* mask CV_DEFAULT(NULL) );
+  // procedure cvSet(CvArr * arr: v1: 0)): CvArr; (; value: CvScalar;
+  // var Clears all the array elements(Sets them to 0) * )
+}
+procedure cvSet(arr: TCvArr; value: TCvScalar; const mask: TCvArr = Nil); cdecl;
+
 // procedure cvSetZero(CvArr * arr: unction mask CV_DEFAULT(v1: 0)): CvArr; ();
 // const cvZero = cvSetZero;
 // {$EXTERNALSYM cvZero}
@@ -1129,119 +1139,148 @@ function cvGetSize(const image: pIplImage): CvSize;
 // *************************************************************************************** *)
 //
 /// / >> Following declaration is a macro definition!
-// const CV_RGB(r, g, B)CvScalar((B), (g), (r), 0); const CV_FILLED = -1;
-// {$EXTERNALSYM CV_FILLED}
-// const CV_AA = 16;
-// {$EXTERNALSYM CV_AA}
-// (* Draws 4-connected, 8-connected or antialiased line segment connecting two points *)
-// procedure cvLine(8: v1: ); shift CV_DEFAULT(0): Integer): Integer;
-//
-// (* Draws a rectangle given two opposite corners of the rectangle (pt1 & pt2),
-// if thickness<0 (e.g. thickness = CV_FILLED), the filled box is drawn *) then
-// procedure cvRectangle(8: v1: ); shift CV_DEFAULT(0): Integer): Integer;
-//
-// (* Draws a rectangle specified by a CvRect structure *)
-// procedure cvRectangleR(8: v1: ); shift CV_DEFAULT(0): Integer): Integer;
-//
-// (* Draws a circle with specified center and radius.
-// Thickness works in the same way as with cvRectangle *)
-// procedure cvCircle(8: v1: ); shift CV_DEFAULT(0): Integer): Integer;
-//
-// (* Draws ellipse outline, filled ellipse, elliptic arc or filled elliptic sector,
-// depending on <thickness>, <start_angle> and <end_angle> parameters. The resultant figure
-// is rotated by <angle>. All the angles are in degrees *)
-// procedure cvEllipse(8: v1: ); shift CV_DEFAULT(0): Integer): Integer;
-//
-// CV_INLINE CV_INLINE
-// procedure cvEllipseBox(
-//
-// v1: 1);
-//
-// var 0.5:
-// function line_type CV_DEFAULT(var 0.5: 0))begin CvSize axes;
-// axes.width := cvRound(box.size.width): Integer; axes.height := cvRound(box.size.height);
-//
-// cvEllipse(img, cvPointFrom32f(box.center), axes, box.angle, 0, 360, color, thickness, line_type,
-// shift); end;
-//
-// (* Fills convex or monotonous polygon. *)
-// procedure cvFillConvexPoly(var Fills an area bounded by one or more arbitrary polygons * )
-// procedure cvFillPoly(CvArr * img: v1: 0)): Integer; (; pts: array of CvPoint; var npts: Integer;
-// contours: Integer; color: CvScalar; var Draws one or more polygonal curves * )
-// procedure cvPolyLine(CvArr * img:
-// function line_type CV_DEFAULT(v1: 0)): Integer; (; pts: array of CvPoint; var npts: Integer;
-// contours: Integer; is_closed:
-// function; color: CvScalar; thickness CV_DEFAULT(v1: 8: Integer);
-// shift CV_DEFAULT(0): Integer): Integer;
-//
-// const cvDrawRect = cvRectangle;
-// {$EXTERNALSYM cvDrawRect}
-// const cvDrawLine = cvLine;
-// {$EXTERNALSYM cvDrawLine}
-// const cvDrawCircle = cvCircle;
-// {$EXTERNALSYM cvDrawCircle}
-// const cvDrawEllipse = cvEllipse;
-// {$EXTERNALSYM cvDrawEllipse}
-// const cvDrawPolyLine = cvPolyLine;
-// {$EXTERNALSYM cvDrawPolyLine}
-// (* Clips the line segment connecting *pt1 and *pt2
-// by the rectangular window
-// (0<=x<img_size.width, 0<=y<img_size.height). *)
-// CVAPI(Integer)cvClipLine(CvSize img_size, CvPoint * pt1, CvPoint * pt2);
-//
-// (* Initializes line iterator. Initially, line_iterator->ptr will point
-// to pt1 (or pt2, see left_to_right description) location in the image.
-// Returns the number of pixels on the line between the ending points. *)
-// CVAPI(Integer)cvInitLineIterator(CvArr * image, CvPoint pt1, CvPoint pt2,
-// CvLineIterator * line_iterator,
-// function connectivity CV_DEFAULT(v1: 0)): Integer;
-//
-// (* Moves iterator to the next line point *)
-/// / >> Following declaration is a macro definition!
-// const CV_NEXT_LINE_POINT(line_iterator); begin Integer _line_iterator_mask = (line_iterator).err <
-// 0 ? - 1: 0; (line_iterator).err := mod +(line_iterator).minus_delta + ((line_iterator)
-// .plus_delta and _line_iterator_mask); (line_iterator).ptr := mod +(line_iterator).minus_step +
-// ((line_iterator).plus_step and _line_iterator_mask); end;
-//
-// (* basic font types *)
-// const CV_FONT_HERSHEY_SIMPLEX = 0;
-// {$EXTERNALSYM CV_FONT_HERSHEY_SIMPLEX}
-// const CV_FONT_HERSHEY_PLAIN = 1;
-// {$EXTERNALSYM CV_FONT_HERSHEY_PLAIN}
-// const CV_FONT_HERSHEY_DUPLEX = 2;
-// {$EXTERNALSYM CV_FONT_HERSHEY_DUPLEX}
-// const CV_FONT_HERSHEY_COMPLEX = 3;
-// {$EXTERNALSYM CV_FONT_HERSHEY_COMPLEX}
-// const CV_FONT_HERSHEY_TRIPLEX = 4;
-// {$EXTERNALSYM CV_FONT_HERSHEY_TRIPLEX}
-// const CV_FONT_HERSHEY_COMPLEX_SMALL = 5;
-// {$EXTERNALSYM CV_FONT_HERSHEY_COMPLEX_SMALL}
-// const CV_FONT_HERSHEY_SCRIPT_SIMPLEX = 6;
-// {$EXTERNALSYM CV_FONT_HERSHEY_SCRIPT_SIMPLEX}
-// const CV_FONT_HERSHEY_SCRIPT_COMPLEX = 7;
-// {$EXTERNALSYM CV_FONT_HERSHEY_SCRIPT_COMPLEX}
-// (* font flags *)
-// const CV_FONT_ITALIC = 16;
-// {$EXTERNALSYM CV_FONT_ITALIC}
-// const CV_FONT_VECTOR0 = CV_FONT_HERSHEY_SIMPLEX;
-// {$EXTERNALSYM CV_FONT_VECTOR0}
-// (* Font structure *)
-// type
-//
-// = record nameFont: PCVChar; // Qt:nameFont
-// color: CvScalar;
-/// / Qt:ColorFont -> cvScalar(blue_component, green_component, red\_component[, alpha_component])
-// font_face: Integer; // Qt: bool italic         /* =CV_FONT_* */
-// ascii: ^Integer; (* font data and metrics *)
-// greek: ^Integer; cyrillic: ^Integer; hscale, vscale: single; shear: single;
-// (* slope coefficient: 0 - normal, >0 - italic *)
-// thickness: Integer; // Qt: weight               /* letters thickness */
-// dx: single; (* horizontal interval between letters *)
-// line_type: Integer; // Qt: PointSize
-// end; CvFont;
-//
-// (* Initializes font structure used further in cvPutText *)
-// procedure cvInitFont(1: v1: ); line_type CV_DEFAULT(8): Integer): Integer;
+function CV_RGB(const r, g, B: Double): TCvScalar; inline;
+// CvScalar((B), (g), (r), 0);
+
+const
+  CV_FILLED = -1;
+  // {$EXTERNALSYM CV_FILLED}
+
+  CV_AA = 16;
+
+  // {$EXTERNALSYM CV_AA}
+  // (* Draws 4-connected, 8-connected or antialiased line segment connecting two points *)
+  // procedure cvLine(8: v1: ); shift CV_DEFAULT(0): Integer): Integer;
+  //
+  // (* Draws a rectangle given two opposite corners of the rectangle (pt1 & pt2),
+  // if thickness<0 (e.g. thickness = CV_FILLED), the filled box is drawn *) then
+  // procedure cvRectangle(8: v1: ); shift CV_DEFAULT(0): Integer): Integer;
+  //
+  // (* Draws a rectangle specified by a CvRect structure *)
+  // procedure cvRectangleR(8: v1: ); shift CV_DEFAULT(0): Integer): Integer;
+  //
+  // (* Draws a circle with specified center and radius.
+  // Thickness works in the same way as with cvRectangle *)
+  // procedure cvCircle(8: v1: ); shift CV_DEFAULT(0): Integer): Integer;
+  //
+  // (* Draws ellipse outline, filled ellipse, elliptic arc or filled elliptic sector,
+  // depending on <thickness>, <start_angle> and <end_angle> parameters. The resultant figure
+  // is rotated by <angle>. All the angles are in degrees *)
+  // procedure cvEllipse(8: v1: ); shift CV_DEFAULT(0): Integer): Integer;
+  //
+  // CV_INLINE CV_INLINE
+  // procedure cvEllipseBox(
+  //
+  // v1: 1);
+  //
+  // var 0.5:
+  // function line_type CV_DEFAULT(var 0.5: 0))begin CvSize axes;
+  // axes.width := cvRound(box.size.width): Integer; axes.height := cvRound(box.size.height);
+  //
+  // cvEllipse(img, cvPointFrom32f(box.center), axes, box.angle, 0, 360, color, thickness, line_type,
+  // shift); end;
+  //
+  // (* Fills convex or monotonous polygon. *)
+  // procedure cvFillConvexPoly(var Fills an area bounded by one or more arbitrary polygons * )
+  // procedure cvFillPoly(CvArr * img: v1: 0)): Integer; (; pts: array of CvPoint; var npts: Integer;
+  // contours: Integer; color: CvScalar; var Draws one or more polygonal curves * )
+  // procedure cvPolyLine(CvArr * img:
+  // function line_type CV_DEFAULT(v1: 0)): Integer; (; pts: array of CvPoint; var npts: Integer;
+  // contours: Integer; is_closed:
+  // function; color: CvScalar; thickness CV_DEFAULT(v1: 8: Integer);
+  // shift CV_DEFAULT(0): Integer): Integer;
+  //
+  // const cvDrawRect = cvRectangle;
+  // {$EXTERNALSYM cvDrawRect}
+  // const cvDrawLine = cvLine;
+  // {$EXTERNALSYM cvDrawLine}
+  // const cvDrawCircle = cvCircle;
+  // {$EXTERNALSYM cvDrawCircle}
+  // const cvDrawEllipse = cvEllipse;
+  // {$EXTERNALSYM cvDrawEllipse}
+  // const cvDrawPolyLine = cvPolyLine;
+  // {$EXTERNALSYM cvDrawPolyLine}
+  // (* Clips the line segment connecting *pt1 and *pt2
+  // by the rectangular window
+  // (0<=x<img_size.width, 0<=y<img_size.height). *)
+  // CVAPI(Integer)cvClipLine(CvSize img_size, CvPoint * pt1, CvPoint * pt2);
+  //
+  // (* Initializes line iterator. Initially, line_iterator->ptr will point
+  // to pt1 (or pt2, see left_to_right description) location in the image.
+  // Returns the number of pixels on the line between the ending points. *)
+  // CVAPI(Integer)cvInitLineIterator(CvArr * image, CvPoint pt1, CvPoint pt2,
+  // CvLineIterator * line_iterator,
+  // function connectivity CV_DEFAULT(v1: 0)): Integer;
+  //
+  // (* Moves iterator to the next line point *)
+  /// / >> Following declaration is a macro definition!
+  // const CV_NEXT_LINE_POINT(line_iterator); begin Integer _line_iterator_mask = (line_iterator).err <
+  // 0 ? - 1: 0; (line_iterator).err := mod +(line_iterator).minus_delta + ((line_iterator)
+  // .plus_delta and _line_iterator_mask); (line_iterator).ptr := mod +(line_iterator).minus_step +
+  // ((line_iterator).plus_step and _line_iterator_mask); end;
+  //
+  (* basic font types *)
+const
+  CV_FONT_HERSHEY_SIMPLEX = 0;
+{$EXTERNALSYM CV_FONT_HERSHEY_SIMPLEX}
+  CV_FONT_HERSHEY_PLAIN = 1;
+{$EXTERNALSYM CV_FONT_HERSHEY_PLAIN}
+  CV_FONT_HERSHEY_DUPLEX = 2;
+{$EXTERNALSYM CV_FONT_HERSHEY_DUPLEX}
+  CV_FONT_HERSHEY_COMPLEX = 3;
+{$EXTERNALSYM CV_FONT_HERSHEY_COMPLEX}
+  CV_FONT_HERSHEY_TRIPLEX = 4;
+{$EXTERNALSYM CV_FONT_HERSHEY_TRIPLEX}
+  CV_FONT_HERSHEY_COMPLEX_SMALL = 5;
+{$EXTERNALSYM CV_FONT_HERSHEY_COMPLEX_SMALL}
+  CV_FONT_HERSHEY_SCRIPT_SIMPLEX = 6;
+{$EXTERNALSYM CV_FONT_HERSHEY_SCRIPT_SIMPLEX}
+  CV_FONT_HERSHEY_SCRIPT_COMPLEX = 7;
+{$EXTERNALSYM CV_FONT_HERSHEY_SCRIPT_COMPLEX}
+  (* font flags *)
+  CV_FONT_ITALIC = 16;
+{$EXTERNALSYM CV_FONT_ITALIC}
+  CV_FONT_VECTOR0 = CV_FONT_HERSHEY_SIMPLEX;
+{$EXTERNALSYM CV_FONT_VECTOR0}
+
+  (* Font structure *)
+  // type
+  //
+type
+  pCvFont = ^TCvFont;
+
+  TCvFont = packed record
+    nameFont: pCVChar; // Qt:nameFont
+    color: TCvScalar;
+    // Qt:ColorFont -> cvScalar(blue_component, green_component, red\_component[, alpha_component])
+    font_face: Integer; // Qt: bool italic         /* =CV_FONT_* */
+    ascii: pInteger; // * font data and metrics */
+    greek: pInteger;
+    cyrillic: pInteger;
+    hscale, vscale: Single;
+    shear: Single; // * slope coefficient: 0 - normal, >0 - italic */
+    thickness: Integer; // Qt: weight               /* letters thickness */
+    dx: Single; // * horizontal interval between letters */
+    line_type: Integer; // Qt: PointSize
+  end;
+
+  //
+  // (* Initializes font structure used further in cvPutText *)
+  // procedure cvInitFont(1: v1: ); line_type CV_DEFAULT(8): Integer): Integer;
+  {
+    CVAPI(void)
+    cvInitFont(
+    CvFont* font,
+    int font_face,
+    double hscale,
+    double vscale,
+    double shear CV_DEFAULT(0),
+    int thickness CV_DEFAULT(1),
+    int line_type CV_DEFAULT(8));
+  }
+procedure cvInitFont(font: pCvFont; font_face: Integer; hscale: Double; vscale: Double;
+  shear: Double = 0; thickness: Integer = 1; line_type: Integer = 8); cdecl;
+
 //
 // CV_INLINE CvFont CvFont(Double scale, Integer thickness CV_DEFAULT(1))begin CvFont font;
 // cvInitFont(and font, CV_FONT_HERSHEY_PLAIN, scale, scale, 0, thickness, CV_AA): Double;
@@ -1250,6 +1289,13 @@ function cvGetSize(const image: pIplImage): CvSize;
 // (* Renders text stroke with specified font and color at specified location.
 // CvFont should be initialized with cvInitFont *)
 // procedure cvPutText(var img: CvArr; text: PCVChar; org: CvPoint; var font: vFont; color: CvScalar);
+{
+  CVAPI(void)  cvPutText( CvArr* img, const char* text, CvPoint org,
+  const CvFont* font, CvScalar color );
+}
+procedure cvPutText(img: TCvArr; const text: pCVChar; org: TCvPoint; const font: pCvFont;
+  color: TCvScalar); cdecl;
+
 //
 // (* Calculates bounding box of text stroke (useful for alignment) *)
 // procedure cvGetTextSize(text_string: PCVChar; var font: CvFont; var text_size: CvSize;
@@ -1569,34 +1615,43 @@ const
 {$ENDIF}
 procedure cvAlloc(size: size_t); external DllName; cdecl;
 procedure cvFree_(ptr: Pointer); external DllName; cdecl;
-function cvCreateImageHeader(size: CvSize; depth: Integer; channels: Integer): IplImage;
+function cvCreateImageHeader(size: TCvSize; depth: Integer; channels: Integer): IplImage;
   external DllName; cdecl;
-function cvCreateImage(size: CvSize; depth, channels: Integer): pIplImage; external DllName; cdecl;
+function cvCreateImage(size: TCvSize; depth, channels: Integer): pIplImage; external DllName; cdecl;
 procedure cvReleaseImageHeader(image: array of IplImage); external DllName; cdecl;
 // procedure cvReleaseImage(image: array of IplImage); external DllName; cdecl;
 procedure cvReleaseImage(var image: pIplImage); external DllName; cdecl;
-function cvCloneImage(image: pIplImage): IplImage; external DllName; cdecl;
+function cvCloneImage; external DllName; cdecl;
 procedure cvSetImageCOI(var image: IplImage; coi: Integer); external DllName; cdecl;
 function cvGetImageCOI(image: pIplImage): Integer; external DllName; cdecl;
-procedure cvSetImageROI(var image: IplImage; rect: CvRect); external DllName; cdecl;
+procedure cvSetImageROI(var image: IplImage; rect: TCvRect); external DllName; cdecl;
 procedure cvResetImageROI(var image: IplImage); external DllName; cdecl;
-function cvGetImageROI(image: pIplImage): CvRect; external DllName; cdecl;
+function cvGetImageROI(image: pIplImage): TCvRect; external DllName; cdecl;
 function cvCreateMatHeader(rows: Integer; cols: Integer; cType: Integer): CvMat;
   external DllName; cdecl;
 
-//function cvGetSize(const arr: CvArr): CvSize; external DllName; cdecl;
- function cvGetSize(const image: pIplImage): CvSize;
- begin
- if assigned(Image^.roi) then
- begin
- Result.width := Image^.roi^.width;
- Result.height := Image^.roi^.height;
- end
- else
- begin
- Result.width := image^.width;
- Result.height := image^.height;
- end; // if/else
- end;
+// function cvGetSize; external DllName; cdecl;
+function cvGetSize(const image: pIplImage): TCvSize;
+begin
+  if assigned(image^.roi) then
+  begin
+    Result.width := image^.roi^.width;
+    Result.height := image^.roi^.height;
+  end
+  else
+  begin
+    Result.width := image^.width;
+    Result.height := image^.height;
+  end;
+end;
+
+procedure cvSet; external DllName;
+procedure cvInitFont; external DllName;
+procedure cvPutText; external DllName;
+
+function CV_RGB(const r, g, B: Double): TCvScalar; inline;
+begin
+  Result := CvScalar(B, g, r, 0);
+end;
 
 end.

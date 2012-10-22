@@ -28,7 +28,7 @@ var
   // declate state variable
   need_creation: boolean;
 
-  C: CvSize;
+  C: TCvSize;
   P: pCvArr;
 
 begin

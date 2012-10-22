@@ -33,8 +33,8 @@ interface
 *)
 
 uses
-//  {C2PTypes,} Windows, Messages, SysUtils, Classes,
-  Core.types_c, Core_C;
+  // {C2PTypes,} Windows, Messages, SysUtils, Classes,
+  core.types_c, Core_C;
 
 (* M///////////////////////////////////////////////////////////////////////////////////////
   //
@@ -146,18 +146,18 @@ const
   CV_WINDOW_FREERATIO = $00000100; // the image expends as much as it can (no ratio raint)
   CV_WINDOW_KEEPRATIO = $00000000; // the ration image is respected.;
   (* create window *)
-function cvNamedWindow(const name: PCVChar; flags: Integer = CV_WINDOW_AUTOSIZE): Integer; cdecl;
+function cvNamedWindow(const name: pCVChar; flags: Integer = CV_WINDOW_AUTOSIZE): Integer; cdecl;
 (* Set and Get Property of the window *)
 // CVAPI(procedure)cvSetWindowProperty(name: PCVChar; prop_id: Integer; prop_value: Double);
 // CVAPI(Double)cvGetWindowProperty(PCVChar name, Integer prop_id);
 
 (* display image within window (highgui windows remember their content) *)
-procedure cvShowImage(const name: PCVChar; const image: CvArr); cdecl;
+procedure cvShowImage(const name: pCVChar; const image: TCvArr); cdecl;
 (* resize/move window *)
 // CVAPI(procedure)cvResizeWindow(name: PCVChar; width: Integer; height: Integer);
 // CVAPI(procedure)cvMoveWindow(name: PCVChar; x: Integer; y: Integer);
 (* destroy window and all the trackers associated with it *)
-procedure cvDestroyWindow(const name: PCVChar); cdecl;
+procedure cvDestroyWindow(const name: pCVChar); cdecl;
 procedure cvDestroyAllWindows; cdecl;
 (* get native window handle (HWND in case of Win32 and Widget in case of X Window) *)
 // CVAPI(procedure)cvGetWindowHandle(name: PCVChar);
@@ -165,11 +165,11 @@ procedure cvDestroyAllWindows; cdecl;
 // CVAPI(char)cvGetWindowName(Pointer window_handle);
 
 type
-  CvTrackbarCallback = procedure(pos: Integer); cdecl;
+  TCvTrackbarCallback = procedure(pos: Integer); cdecl;
 
   (* create trackbar and display it on top of given window, set callback *)
-  // CVAPI(Integer)cvCreateTrackbar(PCVChar trackbar_name, PCVChar window_name,
-  // function value, Integer count, CvTrackbarCallback on_change CV_DEFAULT(v1: 0)): Integer;
+function cvCreateTrackbar(const trackbar_name: pCVChar; const window_name: pCVChar; value: PInteger;
+  count: Integer; on_change: TCvTrackbarCallback): Integer; cdecl;
 
 type
   CvTrackbarCallback2 = procedure(pos: Integer; userdata: Pointer); cdecl;
@@ -223,7 +223,7 @@ const
     using CV_LOAD_IMAGE_ANYCOLOR alone is equivalent to CV_LOAD_IMAGE_UNCHANGED
     unless CV_LOAD_IMAGE_ANYDEPTH is specified images are converted to 8bit *)
   // CVAPI(IplImage*) cvLoadImage(const char* filename,int iscolor CV_DEFAULT(CV_LOAD_IMAGE_COLOR));
-function cvLoadImage(const filename: PCVChar; iscolor: Integer = CV_LOAD_IMAGE_COLOR)
+function cvLoadImage(const filename: pCVChar; iscolor: Integer = CV_LOAD_IMAGE_COLOR)
   : pIplImage; cdecl;
 
 // const (;
@@ -282,8 +282,8 @@ type
   pCvCapture = ^CvCapture;
 
   (* start capturing frames from video file *)
-//CVAPI(CvCapture*) cvCreateFileCapture( const char* filename );
-function cvCreateFileCapture(const filename: PCVChar): pCvCapture; cdecl;
+  // CVAPI(CvCapture*) cvCreateFileCapture( const char* filename );
+function cvCreateFileCapture(const filename: pCVChar): pCvCapture; cdecl;
 
 const
   CV_CAP_ANY = 0; // autodetect
@@ -328,7 +328,7 @@ const
 
   (* Just a combination of cvGrabFrame and cvRetrieveFrame
     not  not  not DO NOT RELEASE or MODIFY the retrieved frame not  not  not *)
-//CVAPI(IplImage*) cvQueryFrame( CvCapture* capture );
+  // CVAPI(IplImage*) cvQueryFrame( CvCapture* capture );
 function cvQueryFrame(capture: pCvCapture): pIplImage; cdecl;
 
 (* stop capturing/reading and free resources *)
@@ -673,21 +673,22 @@ const
   CV_CAP_ANDROID_ANTIBANDING_OFF = 2;
 
   (* retrieve or set capture properties *)
-  // CVAPI(Double)cvGetCaptureProperty(CvCapture * capture, Integer property_id);
-  // CVAPI(Integer)cvSetCaptureProperty(CvCapture * capture, Integer property_id, Double value);
+function cvGetCaptureProperty(capture: pCvCapture; property_id: Integer): Double; cdecl;
+function cvSetCaptureProperty(capture: pCvCapture; property_id: Integer; value: Double)
+  : Integer; cdecl;
 
-  // Return the type of the capturer (eg, CV_CAP_V4W, CV_CAP_UNICAP), which is unknown if created with CV_CAP_ANY
-  // CVAPI(Integer)cvGetCaptureDomain(CvCapture * capture);
+// Return the type of the capturer (eg, CV_CAP_V4W, CV_CAP_UNICAP), which is unknown if created with CV_CAP_ANY
+// CVAPI(Integer)cvGetCaptureDomain(CvCapture * capture);
 
-  (* "black box" video file writer structure *)
-  // type
-  // type
-  // CvVideoWriter = deoWriter;
-  //
-  // CV_INLINE
-  // function CV_FOURCC(and 255) + ((c2 and 255) shl 8) + ((c3 and 255) shl 16) +
-  // ((c4 and 255) shl 24: c1): Integer;
-  // end;
+(* "black box" video file writer structure *)
+// type
+// type
+// CvVideoWriter = deoWriter;
+//
+// CV_INLINE
+// function CV_FOURCC(and 255) + ((c2 and 255) shl 8) + ((c3 and 255) shl 16) +
+// ((c4 and 255) shl 24: c1): Integer;
+// end;
 
 const
   CV_FOURCC_PROMPT = -1; (* Open Codec Selection Dialog (Windows only) *)
@@ -782,14 +783,17 @@ const
 {$ELSE}
   DllName = 'opencv_highgui242.dll';
 {$ENDIF}
-function cvNamedWindow(const name: PCVChar; flags: Integer): Integer; external DllName; cdecl;
+function cvNamedWindow(const name: pCVChar; flags: Integer): Integer; external DllName; cdecl;
 procedure cvShowImage; external DllName; cdecl;
 function cvWaitKey(delay: Integer): Integer; external DllName; cdecl;
-procedure cvDestroyWindow(const name: PCVChar); external DllName; cdecl;
+procedure cvDestroyWindow(const name: pCVChar); external DllName; cdecl;
 procedure cvDestroyAllWindows; external DllName; cdecl;
-function cvLoadImage(const filename: PCVChar; iscolor: Integer): pIplImage; external DllName; cdecl;
-function cvCreateFileCapture(const filename: PCVChar): pCvCapture; external DllName; cdecl;
+function cvLoadImage(const filename: pCVChar; iscolor: Integer): pIplImage; external DllName; cdecl;
+function cvCreateFileCapture(const filename: pCVChar): pCvCapture; external DllName; cdecl;
 function cvQueryFrame(capture: pCvCapture): pIplImage; external DllName; cdecl;
 procedure cvReleaseCapture(Var capture: pCvCapture); external DllName; cdecl;
+function cvSetCaptureProperty; external DllName;
+function cvGetCaptureProperty; external DllName;
+function cvCreateTrackbar; external DllName;
 
 end.

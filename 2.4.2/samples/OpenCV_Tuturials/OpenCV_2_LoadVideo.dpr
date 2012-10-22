@@ -3,7 +3,7 @@ program OpenCV_2_LoadVideo;
 
 uses
   core_c in '..\..\include\сore\core_c.pas',
-  types_c in '..\..\include\сore\types_c.pas',
+  core.types_c in '..\..\include\сore\core.types_c.pas',
   highgui_c in '..\..\include\highgui\highgui_c.pas';
 
 const

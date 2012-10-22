@@ -32,8 +32,8 @@ interface
   ** Consult the Windows and Delphi help files for more information about defined data types
 *)
 
-//uses
-//  {C2PTypes,} Windows, Messages, SysUtils, Classes;
+// uses
+// {C2PTypes,} Windows, Messages, SysUtils, Classes;
 
 (* M///////////////////////////////////////////////////////////////////////////////////////
   //
@@ -180,7 +180,7 @@ interface
 // {$EXTERNALSYM int64}
 
 Type
-  PCVChar = PAnsiChar;
+  pCVChar = PAnsiChar;
   CVChar = AnsiChar;
 
 type
@@ -246,7 +246,8 @@ type
   *)
 type
   CvArr = Pointer;
-  pCvArr = ^CvArr;
+  TCvArr = CvArr;
+  pCvArr = ^TCvArr;
 {$EXTERNALSYM CvArr}
 
 type
@@ -417,12 +418,12 @@ type
   IplTileInfo = packed record
     callBack: iplCallBack;
     id: Pointer;
-    tileData: PCVChar;
+    tileData: pCVChar;
     width: Integer;
     height: Integer;
   end;
 
-  IplImage = {packed} record
+  IplImage = { packed } record
     nSize: Integer; (* sizeof(IplImage) *)
     id: Integer; (* version (=0) *)
     nChannels: Integer; (* Most of OpenCV functions support 1,2,3 or 4 channels *)
@@ -440,11 +441,11 @@ type
     imageId: Pointer; (* "           " *)
     tileInfo: pIplTileInfo; (* "           " *)
     imageSize: Integer; (* Image data size in bytes *)
-    imageData: PCVChar; (* Pointer to aligned image data. *)
+    imageData: pCVChar; (* Pointer to aligned image data. *)
     widthStep: Integer; (* Size of aligned image row in bytes. *)
     BorderMode: array [0 .. 3] of Integer; (* Ignored by OpenCV. *)
     BorderConst: array [0 .. 3] of Integer; (* Ditto. *)
-    imageDataOrigin: PCVChar; (* Pointer to very origin of image data *)
+    imageDataOrigin: pCVChar; (* Pointer to very origin of image data *)
   end;
 
   // type       _IplTileInfo IplTileInfo = ;
@@ -802,7 +803,7 @@ const
 type
   CvHistogram = packed record
     cType: Integer;
-    bins: ^CvArr;
+    bins: ^TCvArr;
     thresh: array [0 .. CV_MAX_DIM - 1, 0 .. 1] of Single;
     (* For uniform histograms. *)
     thresh2: ^Single; (* For non-uniform histograms. *)
@@ -816,7 +817,7 @@ type
   (* ************************************** CvRect **************************************** *)
 
 type
-  CvRect = packed record
+  TCvRect = packed record
     x: Integer;
     y: Integer;
     width: Integer;
@@ -843,9 +844,9 @@ type
   (* ****************************** CvPoint and variants ********************************** *)
 
 type
-  pCvPoint = ^CvPoint;
+  pCvPoint = ^TCvPoint;
 
-  CvPoint = packed record
+  TCvPoint = packed record
     x: Integer;
     y: Integer;
   end;
@@ -875,7 +876,7 @@ type
   (* ******************************* CvSize's & CvBox **************************************/ *)
 
 type
-  CvSize = packed record
+  TCvSize = packed record
     width: Integer;
     height: Integer;
   end;
@@ -919,7 +920,7 @@ const
   (* ************************************ CvScalar **************************************** *)
 
 type
-  CvScalar = packed record
+  TCvScalar = packed record
     val: array [0 .. 3] of Double;
   end;
 
@@ -1001,14 +1002,14 @@ const
     The MSB(most-significant or sign bit) of the first field (flags) is 0 iff the element exists.
   *)
 type
-  pCvSetElem = ^CvSetElem;
+  pCvSetElem = ^TCvSetElem;
 
-  CvSetElem = packed record
+  TCvSetElem = packed record
     flags: Integer;
     next_free: pCvSetElem;
   end;
 
-  CvSet = packed record
+  TCvSet = packed record
     flags: Integer; (* Miscellaneous flags. *)
     header_size: Integer; (* Size of sequence header. *)
     h_prev: pCvSeq; (* Previous sequence. *)
@@ -1108,7 +1109,7 @@ const
 type
 
   CvChain = packed record
-    origin: CvPoint;
+    origin: TCvPoint;
   end;
 
   // >> Following declaration is a macro definition!
@@ -1426,7 +1427,7 @@ const
 type
 
   CvAttrList = packed record
-    attr: ^PCVChar; (* NULL-terminated array of (attribute_name,attribute_value) pairs. *)
+    attr: ^pCVChar; (* NULL-terminated array of (attribute_name,attribute_value) pairs. *)
     next: ^CvAttrList; (* Pointer to next chunk of the attributes list. *)
   end;
 
@@ -1506,7 +1507,7 @@ type
 
   CvString = packed record
     len: Integer;
-    ptr: PCVChar;
+    ptr: pCVChar;
   end;
 
   (* All the keys (names) of elements in the readed file storage
@@ -1932,7 +1933,6 @@ Type
     // (* ****************************** CvPoint and variants ********************************** *)
     //
     // (*
-    class function _CvPoint(const x, y: Integer): CvPoint; inline;
     //
     // CV_INLINE CvPoint2D32f CvPoint2D32f(Double x, Double y)
     //
@@ -1998,7 +1998,6 @@ Type
     // *)
     // (* ******************************* CvSize's & CvBox **************************************/ *)
     // (*
-    class function _CvSize(const width, height: Integer): CvSize; inline;
     // CV_INLINE CvSize2D32f CvSize2D32f(Double width, Double height)
     //
     // begin
@@ -2029,8 +2028,6 @@ Type
     //
     // (* ************************************ CvScalar **************************************** *)
     // (*
-    class function _cvScalar(const val0: Double; const val1: Double = 0; const val2: Double = 0;
-      const val3: Double = 0): CvScalar; inline;
     //
     // CV_INLINE  CvScalar  cvRealScalar( double val0 )
     // {
@@ -2070,17 +2067,22 @@ Type
     // *)
   end;
 
+function CvPoint(const x, y: Integer): TCvPoint; inline;
+function CvSize(const width, height: Integer): TCvSize; inline;
+function cvScalar(const val0: Double; const val1: Double = 0; const val2: Double = 0;
+  const val3: Double = 0): TCvScalar; inline;
+
 implementation
 
 { CV }
 
-class function CV._CvPoint(const x, y: Integer): CvPoint;
+function CvPoint(const x, y: Integer): TCvPoint;
 begin
   Result.x := x;
   Result.y := y;
 end;
 
-class function CV._cvScalar(const val0, val1, val2, val3: Double): CvScalar;
+function cvScalar(const val0, val1, val2, val3: Double): TCvScalar;
 begin
   Result.val[0] := val0;
   Result.val[1] := val1;
@@ -2088,7 +2090,7 @@ begin
   Result.val[3] := val3;
 end;
 
-class function CV._CvSize(const width, height: Integer): CvSize;
+function CvSize(const width, height: Integer): TCvSize;
 begin
   Result.width := width;
   Result.height := height;

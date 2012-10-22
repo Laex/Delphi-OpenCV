@@ -4,7 +4,7 @@ program OpenCV_1_LoadImage;
 
 uses
   core_c in '..\..\include\ñore\core_c.pas',
-  types_c in '..\..\include\ñore\types_c.pas',
+  core.types_c in '..\..\include\ñore\core.types_c.pas',
   highgui_c in '..\..\include\highgui\highgui_c.pas';
 
 const

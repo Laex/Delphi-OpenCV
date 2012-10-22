@@ -92,8 +92,8 @@ uses
 type
   CvConnectedComp = packed record
     area: Double; (* area of the connected component *)
-    value: CvScalar; (* average color of the connected component *)
-    rect: CvRect; (* ROI of the component *)
+    value: TCvScalar; (* average color of the connected component *)
+    rect: TCvRect; (* ROI of the component *)
     contour: ^CvSeq; (* optional component boundary *)
   end;
 
@@ -376,7 +376,7 @@ type
   (* Freeman chain reader state *)
   CvChainPtReader = packed record
     code: char;
-    pt: CvPoint;
+    pt: TCvPoint;
     deltas: array [0 .. 7, 0 .. 1] of schar;
   end;
 

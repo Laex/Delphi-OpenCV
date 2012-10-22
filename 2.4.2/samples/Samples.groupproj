@@ -1,0 +1,96 @@
+﻿	<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+		<PropertyGroup>
+			<ProjectGuid>{B60C1EC9-9E41-4775-B815-D209C1C377DD}</ProjectGuid>
+		</PropertyGroup>
+		<ItemGroup>
+			<Projects Include="Hello World\HelloWorld.dproj">
+				<Dependencies/>
+			</Projects>
+			<Projects Include="OpenCV_Tuturials\OpenCV_1_LoadImage.dproj">
+				<Dependencies/>
+			</Projects>
+			<Projects Include="OpenCV_Tuturials\OpenCV_2_LoadVideo.dproj">
+				<Dependencies/>
+			</Projects>
+			<Projects Include="OpenCV_Tuturials\OpenCV_3_VideoProcessing.dproj">
+				<Dependencies/>
+			</Projects>
+			<Projects Include="LoadImage\LoadImage.dproj">
+				<Dependencies/>
+			</Projects>
+			<Projects Include="Trackbar\Trackbar.dproj">
+				<Dependencies/>
+			</Projects>
+		</ItemGroup>
+		<ProjectExtensions>
+			<Borland.Personality>Default.Personality.12</Borland.Personality>
+			<Borland.ProjectType/>
+			<BorlandProject>
+				<Default.Personality/>
+			</BorlandProject>
+		</ProjectExtensions>
+		<Target Name="HelloWorld">
+			<MSBuild Projects="Hello World\HelloWorld.dproj"/>
+		</Target>
+		<Target Name="HelloWorld:Clean">
+			<MSBuild Targets="Clean" Projects="Hello World\HelloWorld.dproj"/>
+		</Target>
+		<Target Name="HelloWorld:Make">
+			<MSBuild Targets="Make" Projects="Hello World\HelloWorld.dproj"/>
+		</Target>
+		<Target Name="OpenCV_1_LoadImage">
+			<MSBuild Projects="OpenCV_Tuturials\OpenCV_1_LoadImage.dproj"/>
+		</Target>
+		<Target Name="OpenCV_1_LoadImage:Clean">
+			<MSBuild Targets="Clean" Projects="OpenCV_Tuturials\OpenCV_1_LoadImage.dproj"/>
+		</Target>
+		<Target Name="OpenCV_1_LoadImage:Make">
+			<MSBuild Targets="Make" Projects="OpenCV_Tuturials\OpenCV_1_LoadImage.dproj"/>
+		</Target>
+		<Target Name="OpenCV_2_LoadVideo">
+			<MSBuild Projects="OpenCV_Tuturials\OpenCV_2_LoadVideo.dproj"/>
+		</Target>
+		<Target Name="OpenCV_2_LoadVideo:Clean">
+			<MSBuild Targets="Clean" Projects="OpenCV_Tuturials\OpenCV_2_LoadVideo.dproj"/>
+		</Target>
+		<Target Name="OpenCV_2_LoadVideo:Make">
+			<MSBuild Targets="Make" Projects="OpenCV_Tuturials\OpenCV_2_LoadVideo.dproj"/>
+		</Target>
+		<Target Name="OpenCV_3_VideoProcessing">
+			<MSBuild Projects="OpenCV_Tuturials\OpenCV_3_VideoProcessing.dproj"/>
+		</Target>
+		<Target Name="OpenCV_3_VideoProcessing:Clean">
+			<MSBuild Targets="Clean" Projects="OpenCV_Tuturials\OpenCV_3_VideoProcessing.dproj"/>
+		</Target>
+		<Target Name="OpenCV_3_VideoProcessing:Make">
+			<MSBuild Targets="Make" Projects="OpenCV_Tuturials\OpenCV_3_VideoProcessing.dproj"/>
+		</Target>
+		<Target Name="LoadImage">
+			<MSBuild Projects="LoadImage\LoadImage.dproj"/>
+		</Target>
+		<Target Name="LoadImage:Clean">
+			<MSBuild Targets="Clean" Projects="LoadImage\LoadImage.dproj"/>
+		</Target>
+		<Target Name="LoadImage:Make">
+			<MSBuild Targets="Make" Projects="LoadImage\LoadImage.dproj"/>
+		</Target>
+		<Target Name="Trackbar">
+			<MSBuild Projects="Trackbar\Trackbar.dproj"/>
+		</Target>
+		<Target Name="Trackbar:Clean">
+			<MSBuild Targets="Clean" Projects="Trackbar\Trackbar.dproj"/>
+		</Target>
+		<Target Name="Trackbar:Make">
+			<MSBuild Targets="Make" Projects="Trackbar\Trackbar.dproj"/>
+		</Target>
+		<Target Name="Build">
+			<CallTarget Targets="HelloWorld;OpenCV_1_LoadImage;OpenCV_2_LoadVideo;OpenCV_3_VideoProcessing;LoadImage;Trackbar"/>
+		</Target>
+		<Target Name="Clean">
+			<CallTarget Targets="HelloWorld:Clean;OpenCV_1_LoadImage:Clean;OpenCV_2_LoadVideo:Clean;OpenCV_3_VideoProcessing:Clean;LoadImage:Clean;Trackbar:Clean"/>
+		</Target>
+		<Target Name="Make">
+			<CallTarget Targets="HelloWorld:Make;OpenCV_1_LoadImage:Make;OpenCV_2_LoadVideo:Make;OpenCV_3_VideoProcessing:Make;LoadImage:Make;Trackbar:Make"/>
+		</Target>
+		<Import Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')" Project="$(BDS)\Bin\CodeGear.Group.Targets"/>
+	</Project>

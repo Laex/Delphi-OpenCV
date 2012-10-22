@@ -1,16 +1,21 @@
 ﻿	<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 		<PropertyGroup>
-			<ProjectGuid>{85F4E4E3-0463-4B0A-B291-B194658FD6A4}</ProjectGuid>
-			<MainSource>OpenCV_1_LoadImage.dpr</MainSource>
+			<ProjectGuid>{D17FA9EE-9826-44D3-B04B-9BE2A4AAEBEA}</ProjectGuid>
+			<ProjectVersion>13.4</ProjectVersion>
+			<FrameworkType>None</FrameworkType>
+			<MainSource>LoadImage.dpr</MainSource>
 			<Base>True</Base>
 			<Config Condition="'$(Config)'==''">Debug</Config>
+			<Platform Condition="'$(Platform)'==''">Win32</Platform>
 			<TargetedPlatforms>1</TargetedPlatforms>
 			<AppType>Console</AppType>
-			<FrameworkType>None</FrameworkType>
-			<ProjectVersion>13.4</ProjectVersion>
-			<Platform Condition="'$(Platform)'==''">Win32</Platform>
 		</PropertyGroup>
 		<PropertyGroup Condition="'$(Config)'=='Base' or '$(Base)'!=''">
+			<Base>true</Base>
+		</PropertyGroup>
+		<PropertyGroup Condition="('$(Platform)'=='Win64' and '$(Base)'=='true') or '$(Base_Win64)'!=''">
+			<Base_Win64>true</Base_Win64>
+			<CfgParent>Base</CfgParent>
 			<Base>true</Base>
 		</PropertyGroup>
 		<PropertyGroup Condition="('$(Platform)'=='Win32' and '$(Base)'=='true') or '$(Base_Win32)'!=''">
@@ -18,7 +23,7 @@
 			<CfgParent>Base</CfgParent>
 			<Base>true</Base>
 		</PropertyGroup>
-		<PropertyGroup Condition="'$(Config)'=='Release' or '$(Cfg_1)'!=''">
+		<PropertyGroup Condition="'$(Config)'=='Debug' or '$(Cfg_1)'!=''">
 			<Cfg_1>true</Cfg_1>
 			<CfgParent>Base</CfgParent>
 			<Base>true</Base>
@@ -29,67 +34,67 @@
 			<Cfg_1>true</Cfg_1>
 			<Base>true</Base>
 		</PropertyGroup>
-		<PropertyGroup Condition="'$(Config)'=='Debug' or '$(Cfg_2)'!=''">
+		<PropertyGroup Condition="'$(Config)'=='Release' or '$(Cfg_2)'!=''">
 			<Cfg_2>true</Cfg_2>
 			<CfgParent>Base</CfgParent>
 			<Base>true</Base>
 		</PropertyGroup>
-		<PropertyGroup Condition="('$(Platform)'=='Win32' and '$(Cfg_2)'=='true') or '$(Cfg_2_Win32)'!=''">
-			<Cfg_2_Win32>true</Cfg_2_Win32>
-			<CfgParent>Cfg_2</CfgParent>
-			<Cfg_2>true</Cfg_2>
-			<Base>true</Base>
-		</PropertyGroup>
 		<PropertyGroup Condition="'$(Base)'!=''">
-			<VerInfo_Locale>1049</VerInfo_Locale>
+			<DCC_Namespace>System;Xml;Data;Datasnap;Web;Soap;$(DCC_Namespace)</DCC_Namespace>
 			<Manifest_File>None</Manifest_File>
+			<VerInfo_Locale>1049</VerInfo_Locale>
+			<VerInfo_Keys>CompanyName=;FileDescription=;FileVersion=1.0.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductName=;ProductVersion=1.0.0.0;Comments=</VerInfo_Keys>
+			<DCC_UsePackage>DBXInterBaseDriver;DataSnapServer;DataSnapCommon;DbxCommonDriver;dbxcds;CustomIPTransport;dsnap;IndyCore;CloudService;FmxTeeUI;IPIndyImpl;bindcompfmx;dbrtl;bindcomp;inetdb;xmlrtl;ibxpress;bindengine;FMXTee;soaprtl;DBXInformixDriver;DBXFirebirdDriver;inet;DBXSybaseASADriver;dbexpress;fmx;IndySystem;DataSnapClient;DataSnapProviderClient;DBXOracleDriver;fmxase;inetdbxpress;rtl;DbxClientDriver;IndyProtocols;DBXMySQLDriver;fmxobj;fmxdae;DataSnapIndy10ServerTransport;$(DCC_UsePackage)</DCC_UsePackage>
+			<DCC_DcuOutput>.\$(Platform)\$(Config)</DCC_DcuOutput>
 			<DCC_ExeOutput>..\..\Bin</DCC_ExeOutput>
-			<DCC_K>false</DCC_K>
-			<DCC_F>false</DCC_F>
-			<DCC_S>false</DCC_S>
 			<DCC_E>false</DCC_E>
 			<DCC_N>false</DCC_N>
-			<VerInfo_Keys>CompanyName=;FileDescription=;FileVersion=1.0.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductName=;ProductVersion=1.0.0.0;Comments=</VerInfo_Keys>
-			<DCC_ImageBase>00400000</DCC_ImageBase>
-			<DCC_Namespace>System;Xml;Data;Datasnap;Web;Soap;$(DCC_Namespace)</DCC_Namespace>
+			<DCC_S>false</DCC_S>
+			<DCC_F>false</DCC_F>
+			<DCC_K>false</DCC_K>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Base_Win64)'!=''">
+			<DCC_UsePackage>officeXPrt;vclimg;vcldb;OverbyteIcsDXe2Run;DBXOdbcDriver;vclactnband;bindcompvcl;vclie;dsnapcon;vclx;TeeDB;vclib;DBXSybaseASEDriver;vcldsnap;DBXDb2Driver;vclribbon;vcl;DBXMSSQLDriver;webdsnap;adortl;Tee;TeeUI;vcltouch;websnap;VclSmp;DataSnapConnectors;$(DCC_UsePackage)</DCC_UsePackage>
 		</PropertyGroup>
 		<PropertyGroup Condition="'$(Base_Win32)'!=''">
-			<VerInfo_Locale>1033</VerInfo_Locale>
 			<DCC_Namespace>Winapi;System.Win;Data.Win;Datasnap.Win;Web.Win;Soap.Win;Xml.Win;Bde;$(DCC_Namespace)</DCC_Namespace>
+			<VerInfo_Locale>1033</VerInfo_Locale>
+			<DCC_UsePackage>fsADO16;JvGlobus;JvMM;JvManagedThreads;SignalLabScopePkgD16;cxPageControlD16;dxComnD16;JvCrypt;dxPSCoreD16;frxBDE16;dcldxSkinsCoreD16;JvNet;cxSpreadSheetD16;dxSkinLiquidSkyD16;dxSkinSilverD16;officeXPrt;fsIBX16;JvDotNetCtrls;vclimg;fmi;dxSkinOffice2010SilverD16;dxSkinOffice2010BlackD16;JvXPCtrls;vcldb;cxPivotGridChartD16;dxRibbonD16;unidacvcl160;cxVerticalGridD16;dxSkinLilianD16;dxThemeD16;dxSkinBlueD16;AudioLabBasicPkgD16;cxSchedulerGridD16;SignalLabBasicPkgD16;cxTreeListdxBarPopupMenuD16;dxSkinOffice2010BlueD16;AudioLabGenericBasicPkgD16;dxGDIPlusD16;dxPSdxDBTVLnkD16;NxCollectionRun_xe;dxSkinSevenD16;cxTreeListD16;JvDB;cxLibraryD16;dxPSdxDBOCLnkD16;JvRuntimeDesign;dxPScxSchedulerLnkD16;JclDeveloperTools;dxSkinPumpkinD16;dxBarExtItemsD16;NxCommonDsgn_xe;OpenWirePkgD16;dxLayoutControlD16;dxDockingD16;vcldbx;dxSkinXmas2008BlueD16;dxSkinMcSkinD16;cxPivotGridD16;dxPSTeeChartD16;cxEditorsD16;OverbyteIcsDXe2Run;dxPScxCommonD16;PackMSAgent;JvPluginSystem;DBXOdbcDriver;JvCmp;dxPSLnksD16;JvTimeFramework;dxBarExtDBItemsD16;dxSkinsCoreD16;dxmdsD16;VideoLabGenericBasicPkgD16;fsBDE16;frxDB16;intrawebdb_120_160;NxCollectionDsgn_xe;fs16;vclactnband;bindcompvcl;dxSkinSummer2008D16;dxTabbedMDID16;vclie;Jcl;dacvcl160;dxPSdxLCLnkD16;SignalLabAdditionalPkgD16;dxSkinBlackD16;dclfrxTee16;unidacfmx160;dsnapcon;JvPascalInterpreter;vclx;NxDBGridRun_xe;dxSkinsdxBarPainterD16;dxPScxTLLnkD16;cxSchedulerD16;dxSkinValentineD16;frxIBX16;VisionLabPkgD16;JvBDE;cxPageControldxBarPopupMenuD16;dxSkinOffice2007SilverD16;dxPSdxFCLnkD16;JvDlgs;cxBarEditItemD16;TeeDB;dxNavBarD16;dxSkinSpringTimeD16;frxTee16;Rave100VCL;vclib;inetdbbde;dxSkinOffice2007BlueD16;dxPSDBTeeChartD16;dacfmx160;dxSkinsdxNavBarPainterD16;cxPivotGridOLAPD16;VideoLabPkgD16;dxdbtrD16;dxSpellCheckerD16;DBXSybaseASEDriver;dxBarDBNavD16;dxSkinGlassOceansD16;dxSkinStardustD16;dxCoreD16;dxorgcD16;vcldsnap;dxSkinDarkSideD16;dac160;dxSkinscxPCPainterD16;dxPScxExtCommonD16;DBXDb2Driver;Intraweb_120_160;SimpleGraph;JvCore;frxADO16;vclribbon;frxe16;dxdborD16;vcl;dxSkinscxSchedulerPainterD16;dxPSdxOCLnkD16;dxPScxSSLnkD16;DBXMSSQLDriver;CodeSiteExpressPkg;dxSkinCoffeeD16;IPCamThread;unidac160;fsTee16;NxSheetRun_xe;dxSkinDarkRoomD16;dxPScxVGridLnkD16;dxPScxPivotGridLnkD16;JvAppFrm;webdsnap;dxBarD16;dxtrmdD16;dxPScxPCProdD16;dxSkiniMaginaryD16;dxSkinOffice2007BlackD16;JvDocking;adortl;dxPScxGridLnkD16;JvWizards;JvHMI;dxSkinLondonLiquidSkyD16;frxDBX16;MediaLabBasicPkgD16;JvBands;frx16;dxPsPrVwAdvD16;NxDBGridDsgn_xe;dxSkinOffice2007GreenD16;NxInspectorDsgn_xe;dxSkinSharpD16;crcontrols160;Tee;JclContainers;TimingLabBasicPkgD16;NxGridRun_xe;NxAddonsRun_xe;CPortLibDXE;JvSystem;svnui;dxSkinsdxDLPainterD16;JvControls;dxPSPrVwRibbonD16;TeeUI;JvJans;dxSkinMoneyTwinsD16;JvPageComps;JvPrintPreview;JvStdCtrls;VideoLabBasicPkgD16;JvCustom;dxSkinCaramelD16;vcltouch;websnap;ExceptionExpert16;dxSkinFoggyD16;VclSmp;fsDB16;dxFlowChartD16;dxSkinsdxRibbonPainterD16;NxGridDsgn_xe;DataSnapConnectors;NxInspectorRun_xe;JclVcl;cxGridD16;dxSkinOffice2007PinkD16;SignalLabGenericBasicPkgD16;VideoLabAdditionalPkgD16;svn;bdertl;NxCommonRun_xe;$(DCC_UsePackage)</DCC_UsePackage>
 			<VerInfo_Keys>CompanyName=;FileDescription=;FileVersion=1.0.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductName=;ProductVersion=1.0.0.0;Comments=</VerInfo_Keys>
 		</PropertyGroup>
 		<PropertyGroup Condition="'$(Cfg_1)'!=''">
-			<DCC_SymbolReferenceInfo>0</DCC_SymbolReferenceInfo>
-			<DCC_DebugInformation>false</DCC_DebugInformation>
-			<DCC_Define>RELEASE;$(DCC_Define)</DCC_Define>
-			<DCC_LocalDebugSymbols>false</DCC_LocalDebugSymbols>
+			<DCC_Define>DEBUG;$(DCC_Define)</DCC_Define>
+			<DCC_Optimize>false</DCC_Optimize>
+			<DCC_GenerateStackFrames>true</DCC_GenerateStackFrames>
+			<DCC_DebugInfoInExe>true</DCC_DebugInfoInExe>
+			<DCC_RemoteDebug>true</DCC_RemoteDebug>
 		</PropertyGroup>
 		<PropertyGroup Condition="'$(Cfg_1_Win32)'!=''">
 			<VerInfo_Locale>1033</VerInfo_Locale>
+			<Manifest_File>None</Manifest_File>
+			<DCC_RemoteDebug>false</DCC_RemoteDebug>
 		</PropertyGroup>
 		<PropertyGroup Condition="'$(Cfg_2)'!=''">
-			<DCC_GenerateStackFrames>true</DCC_GenerateStackFrames>
-			<DCC_Define>DEBUG;$(DCC_Define)</DCC_Define>
-			<DCC_Optimize>false</DCC_Optimize>
-		</PropertyGroup>
-		<PropertyGroup Condition="'$(Cfg_2_Win32)'!=''">
-			<VerInfo_Locale>1033</VerInfo_Locale>
+			<DCC_LocalDebugSymbols>false</DCC_LocalDebugSymbols>
+			<DCC_Define>RELEASE;$(DCC_Define)</DCC_Define>
+			<DCC_SymbolReferenceInfo>0</DCC_SymbolReferenceInfo>
+			<DCC_DebugInformation>false</DCC_DebugInformation>
 		</PropertyGroup>
 		<ItemGroup>
 			<DelphiCompile Include="$(MainSource)">
 				<MainSource>MainSource</MainSource>
 			</DelphiCompile>
+			<DCCReference Include="..\..\include\сore\Core.types_c.pas"/>
 			<DCCReference Include="..\..\include\сore\core_c.pas"/>
-			<DCCReference Include="..\..\include\сore\core.types_c.pas"/>
 			<DCCReference Include="..\..\include\highgui\highgui_c.pas"/>
-			<BuildConfiguration Include="Debug">
+			<BuildConfiguration Include="Release">
 				<Key>Cfg_2</Key>
 				<CfgParent>Base</CfgParent>
 			</BuildConfiguration>
 			<BuildConfiguration Include="Base">
 				<Key>Base</Key>
 			</BuildConfiguration>
-			<BuildConfiguration Include="Release">
+			<BuildConfiguration Include="Debug">
 				<Key>Cfg_1</Key>
 				<CfgParent>Base</CfgParent>
 			</BuildConfiguration>
@@ -99,9 +104,6 @@
 			<Borland.ProjectType/>
 			<BorlandProject>
 				<Delphi.Personality>
-					<Source>
-						<Source Name="MainSource">OpenCV_1_LoadImage.dpr</Source>
-					</Source>
 					<VersionInfo>
 						<VersionInfo Name="IncludeVerInfo">False</VersionInfo>
 						<VersionInfo Name="AutoIncBuild">False</VersionInfo>
@@ -129,6 +131,9 @@
 						<VersionInfoKeys Name="ProductVersion">1.0.0.0</VersionInfoKeys>
 						<VersionInfoKeys Name="Comments"/>
 					</VersionInfoKeys>
+					<Source>
+						<Source Name="MainSource">LoadImage.dpr</Source>
+					</Source>
 					<Excluded_Packages>
 						<Excluded_Packages Name="C:\Windows\system32\FMX.SignalLabScopeDsnD16.bpl">Mitov - FireMonkey SignalLab Scope Design Package</Excluded_Packages>
 						<Excluded_Packages Name="C:\Windows\system32\FMX.VideoLabBasicDsnD16.bpl">Mitov - FireMonkey VideoLab Basic Design Package</Excluded_Packages>
@@ -136,6 +141,7 @@
 						<Excluded_Packages Name="C:\Windows\system32\FMX.MediaLabBasicDsnD16.bpl">Mitov - FireMonkey MediaLab Basic Design Package</Excluded_Packages>
 					</Excluded_Packages>
 				</Delphi.Personality>
+				<Deployment/>
 				<Platforms>
 					<Platform value="Win64">False</Platform>
 					<Platform value="OSX32">False</Platform>
@@ -156,7 +162,7 @@ Activate Handle=1
 Save Log File=1
 Foreground Tab=0
 Freeze Activate=0
-Freeze Timeout=0
+Freeze Timeout=60
 SMTP From=eurekalog@email.com
 SMTP Host=
 SMTP Port=25
