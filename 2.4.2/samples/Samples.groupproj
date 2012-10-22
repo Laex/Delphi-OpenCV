@@ -33,6 +33,18 @@
 			<Projects Include="Smooth\Smooth.dproj">
 				<Dependencies/>
 			</Projects>
+			<Projects Include="Resize\Resize.dproj">
+				<Dependencies/>
+			</Projects>
+			<Projects Include="ROI\ROI.dproj">
+				<Dependencies/>
+			</Projects>
+			<Projects Include="ROI2\ROI2.dproj">
+				<Dependencies/>
+			</Projects>
+			<Projects Include="XML\XML.dproj">
+				<Dependencies/>
+			</Projects>
 		</ItemGroup>
 		<ProjectExtensions>
 			<Borland.Personality>Default.Personality.12</Borland.Personality>
@@ -131,14 +143,50 @@
 		<Target Name="Smooth:Make">
 			<MSBuild Targets="Make" Projects="Smooth\Smooth.dproj"/>
 		</Target>
+		<Target Name="Resize">
+			<MSBuild Projects="Resize\Resize.dproj"/>
+		</Target>
+		<Target Name="Resize:Clean">
+			<MSBuild Targets="Clean" Projects="Resize\Resize.dproj"/>
+		</Target>
+		<Target Name="Resize:Make">
+			<MSBuild Targets="Make" Projects="Resize\Resize.dproj"/>
+		</Target>
+		<Target Name="ROI">
+			<MSBuild Projects="ROI\ROI.dproj"/>
+		</Target>
+		<Target Name="ROI:Clean">
+			<MSBuild Targets="Clean" Projects="ROI\ROI.dproj"/>
+		</Target>
+		<Target Name="ROI:Make">
+			<MSBuild Targets="Make" Projects="ROI\ROI.dproj"/>
+		</Target>
+		<Target Name="ROI2">
+			<MSBuild Projects="ROI2\ROI2.dproj"/>
+		</Target>
+		<Target Name="ROI2:Clean">
+			<MSBuild Targets="Clean" Projects="ROI2\ROI2.dproj"/>
+		</Target>
+		<Target Name="ROI2:Make">
+			<MSBuild Targets="Make" Projects="ROI2\ROI2.dproj"/>
+		</Target>
+		<Target Name="XML">
+			<MSBuild Projects="XML\XML.dproj"/>
+		</Target>
+		<Target Name="XML:Clean">
+			<MSBuild Targets="Clean" Projects="XML\XML.dproj"/>
+		</Target>
+		<Target Name="XML:Make">
+			<MSBuild Targets="Make" Projects="XML\XML.dproj"/>
+		</Target>
 		<Target Name="Build">
-			<CallTarget Targets="HelloWorld;OpenCV_1_LoadImage;OpenCV_2_LoadVideo;OpenCV_3_VideoProcessing;LoadImage;Trackbar;CameraCapture;VideoWriter;MouseCallback;Smooth"/>
+			<CallTarget Targets="HelloWorld;OpenCV_1_LoadImage;OpenCV_2_LoadVideo;OpenCV_3_VideoProcessing;LoadImage;Trackbar;CameraCapture;VideoWriter;MouseCallback;Smooth;Resize;ROI;ROI2;XML"/>
 		</Target>
 		<Target Name="Clean">
-			<CallTarget Targets="HelloWorld:Clean;OpenCV_1_LoadImage:Clean;OpenCV_2_LoadVideo:Clean;OpenCV_3_VideoProcessing:Clean;LoadImage:Clean;Trackbar:Clean;CameraCapture:Clean;VideoWriter:Clean;MouseCallback:Clean;Smooth:Clean"/>
+			<CallTarget Targets="HelloWorld:Clean;OpenCV_1_LoadImage:Clean;OpenCV_2_LoadVideo:Clean;OpenCV_3_VideoProcessing:Clean;LoadImage:Clean;Trackbar:Clean;CameraCapture:Clean;VideoWriter:Clean;MouseCallback:Clean;Smooth:Clean;Resize:Clean;ROI:Clean;ROI2:Clean;XML:Clean"/>
 		</Target>
 		<Target Name="Make">
-			<CallTarget Targets="HelloWorld:Make;OpenCV_1_LoadImage:Make;OpenCV_2_LoadVideo:Make;OpenCV_3_VideoProcessing:Make;LoadImage:Make;Trackbar:Make;CameraCapture:Make;VideoWriter:Make;MouseCallback:Make;Smooth:Make"/>
+			<CallTarget Targets="HelloWorld:Make;OpenCV_1_LoadImage:Make;OpenCV_2_LoadVideo:Make;OpenCV_3_VideoProcessing:Make;LoadImage:Make;Trackbar:Make;CameraCapture:Make;VideoWriter:Make;MouseCallback:Make;Smooth:Make;Resize:Make;ROI:Make;ROI2:Make;XML:Make"/>
 		</Target>
 		<Import Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')" Project="$(BDS)\Bin\CodeGear.Group.Targets"/>
 	</Project>

@@ -167,11 +167,20 @@ procedure cvSmooth(const src: pIplImage; dst: pIplImage; smoothtype: integer = C
 procedure cvCvtColor(const src: pIplImage; dst: pIplImage; code: integer); cdecl;
 //
 // (* Resizes image (input array is resized to fit the destination array) *)
-// CVAPI(procedure)cvResize(var Warps image with affine transform * )CVAPI(procedure)cvWarpAffine(CvArr
+// CVAPI(procedure)cvResize(var Warps image with affine transform * )
+{
+  CVAPI(void)  cvResize( const CvArr* src, CvArr* dst,
+  int interpolation CV_DEFAULT( CV_INTER_LINEAR ));
+}
+procedure cvResize(const src: TCvArr; dst: TCvArr; interpolation: integer = CV_INTER_LINEAR); cdecl;
+
+// CVAPI(procedure)cvWarpAffine(CvArr
 // * src: ): CV_INTER_LINEAR): Integer; (; var dst: CvArr; var map_matrix: CvMat;
 // Computes affine transform matrix for mapping src: array [0 .. I - 1] of var to dst[I]
 // (I = 0 function flags CV_DEFAULT(v1: cvScalarAll(
-// 0))): Integer; (; :; var)CVAPI(CvMat)cvGetAffineTransform(CvPoint2D32f * src: );
+// 0))): Integer; (; :; var)
+
+// CVAPI(CvMat)cvGetAffineTransform(CvPoint2D32f * src: );
 // var dst: vPoint2D32f; var map_matrix: CvMat);
 //
 // (* Computes rotation_matrix matrix *)
@@ -596,8 +605,9 @@ const
 {$ELSE}
   DllName = 'opencv_imgproc242.dll';
 {$ENDIF}
-procedure cvCvtColor; external DllName; cdecl;
-function cvThreshold; external DllName; cdecl;
-procedure cvSmooth; external DllName; cdecl;
+procedure cvCvtColor; external DllName;
+function cvThreshold; external DllName;
+procedure cvSmooth; external DllName;
+procedure cvResize; external DllName;
 
 end.

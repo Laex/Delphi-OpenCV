@@ -180,7 +180,8 @@ interface
 // {$EXTERNALSYM int64}
 
 Type
-  pCVChar = PAnsiChar;
+  pCVChar = pAnsiChar;
+  ppCVChar = ^pCVChar;
   CVChar = AnsiChar;
 
 type
@@ -423,7 +424,7 @@ type
     height: Integer;
   end;
 
-  TIplImage =  packed  record
+  TIplImage = packed record
     nSize: Integer; (* sizeof(IplImage) *)
     id: Integer; (* version (=0) *)
     nChannels: Integer; (* Most of OpenCV functions support 1,2,3 or 4 channels *)
@@ -651,34 +652,50 @@ const
 {$EXTERNALSYM CV_TYPE_NAME_MAT}
 
 type
-  CvMat = packed record
-    cType: Integer;
+
+  pCvMat = ^TCvMat;
+
+  TCvMat = packed record
+    _type: Integer;
     step: Integer;
-    refcount: ^Integer;
+
+    refcount: PInteger;
     hdr_refcount: Integer;
-    { *    case data:integer of
-      ptr: ^uchar;
-      s: ^SmallInt;
-      i: ^Integer;
-      fl: ^Single;
-      db: ^Double;
-      data = CvMat;*)
 
-      //{$EXTERNALSYM data }
-    // {$IFDEF __cplusplus}
-    (*
-      union
-      begin
-      Integer rows;
-      Integer height;);
+    data: Pointer;
 
-      union begin Integer cols; Integer width;);
-      {$ELSE}
-      Integer rows;
-      Integer cols;
-      {$ENDIF}
-    *)
+    rows: Integer;
+    cols: Integer;
   end;
+
+  // TCvMat = packed record
+  // cType: Integer;
+  // step: Integer;
+  // refcount: ^Integer;
+  // hdr_refcount: Integer;
+  // { *    case data:integer of
+  // ptr: ^uchar;
+  // s: ^SmallInt;
+  // i: ^Integer;
+  // fl: ^Single;
+  // db: ^Double;
+  // data = CvMat;*)
+  //
+  // //{$EXTERNALSYM data }
+  // // {$IFDEF __cplusplus}
+  // (*
+  // union
+  // begin
+  // Integer rows;
+  // Integer height;);
+  //
+  // union begin Integer cols; Integer width;);
+  // {$ELSE}
+  // Integer rows;
+  // Integer cols;
+  // {$ENDIF}
+  // *)
+  // end;
 
   (* ***************************************************************************************\
     *                       Multi-dimensional dense cArray (CvMatND)                          *
@@ -1426,20 +1443,24 @@ const
   (* List of attributes: *)
 type
 
-  CvAttrList = packed record
-    attr: ^pCVChar; (* NULL-terminated array of (attribute_name,attribute_value) pairs. *)
-    next: ^CvAttrList; (* Pointer to next chunk of the attributes list. *)
-  end;
+  pCvAttrList = ^TCvAttrList;
 
-  // CV_INLINE CvAttrList CvAttrList(PCVChar * attr CV_DEFAULT(0), CvAttrList * next CV_DEFAULT(0))
-  //
-  // begin
-  // CvAttrList l;
-  // l.attr := attr;
-  // l.next := next;
-  //
-  // result := l;
-  // end;
+  TCvAttrList = packed record
+    attr: ppCVChar; (* NULL-terminated array of (attribute_name,attribute_value) pairs. *)
+    next: pCvAttrList; (* Pointer to next chunk of the attributes list. *)
+  end;
+  (*
+    CV_INLINE CvAttrList cvAttrList( const char** attr CV_DEFAULT(NULL),
+    CvAttrList* next CV_DEFAULT(NULL) )
+    {   CvAttrList l;
+    l.attr = attr;
+    l.next = next;
+    return l;} *)
+
+Const
+  ZeroCvAttrList: TCvAttrList = (attr: nil; next: nil);
+
+function CvAttrList(const attr: ppCVChar = nil; next: pCvAttrList = nil): TCvAttrList;
 
 type
   CvTypeInfo = packed record
@@ -1833,20 +1854,6 @@ Type
     // (CV_8S shl 20) + (CV_16S shl 24) + (CV_32S shl 28)) shr ((((depth) and $F0) shr 2) +
     // (((depth) and IPL_DEPTH_SIGN)? 20: 0))) and 15); *)
     //
-    // (* Inline constructor. No data is allocated internally!!!
-    // * (Use together with cvCreateData, or use cvCreateMat instead to
-    // * get a matrix with allocated data):
-    // *)
-    // (* CV_INLINE CvMat CvMat(Integer rows, Integer cols, Integer cType,
-    // Pointer data CV_DEFAULT(0))begin CvMat m;
-    //
-    // Assert((Cardinal)CV_MAT_DEPTH(cType) < := CV_64F); cType := CV_MAT_TYPE(cType);
-    // m.cType := CV_MAT_MAGIC_VAL or CV_MAT_CONT_FLAG or cType; m.cols := cols; m.rows := rows;
-    // m.step := m.cols * CV_ELEM_SIZE(cType); m.data.ptr := (uchar)data; m.refcount := 0;
-    // m.hdr_refcount := 0;
-    //
-    // result := m; end;
-    //
     // // >> Following declaration is a macro definition!
     // const CV_MAT_ELEM_PTR_FAST(mat, row, col, pix_size)(Assert((Cardinal(row) < (Cardinal(mat)
     // .rows and (Cardinal(col) < (Cardinal(mat).cols), (mat).data.ptr + (size_t(mat).step * (row) +
@@ -1910,11 +1917,6 @@ Type
     // *************************************************************************************** *)
     //
     // (* ************************************** CvRect **************************************** *)
-    // (* CV_INLINE CvRect CvRect(Integer x, Integer y, Integer width, Integer height)begin CvRect r;
-    //
-    // r.x := x; r.y := y; r.width := width; r.height := height;
-    //
-    // result := r; end;
     //
     // CV_INLINE IplROI cvRectToROI(CvRect rect, Integer coi)begin IplROI roi; roi.xOffset := rect.x;
     // roi.yOffset := rect.y; roi.width := rect.width; roi.height := rect.height; roi.coi := coi;
@@ -2071,10 +2073,107 @@ function CvPoint(const x, y: Integer): TCvPoint; inline;
 function CvSize(const width, height: Integer): TCvSize; inline;
 function cvScalar(const val0: Double; const val1: Double = 0; const val2: Double = 0;
   const val3: Double = 0): TCvScalar; inline;
+function CvRect(Const x, y, width, height: Integer): TCvRect; inline;
+(* Inline constructor. No data is allocated internally!!!
+  * (Use together with cvCreateData, or use cvCreateMat instead to
+  * get a matrix with allocated data):
+*)
+{
+  CV_INLINE CvMat cvMat( int rows, int cols, int type, void* data CV_DEFAULT(NULL))
+  {
+  CvMat m;
+
+  assert( (unsigned)CV_MAT_DEPTH(type) <= CV_64F );
+  type = CV_MAT_TYPE(type);
+  m.type = CV_MAT_MAGIC_VAL | CV_MAT_CONT_FLAG | type;
+  m.cols = cols;
+  m.rows = rows;
+  m.step = m.cols*CV_ELEM_SIZE(type);
+  m.data.ptr = (uchar*)data;
+  m.refcount = NULL;
+  m.hdr_refcount = 0;
+
+  return m;
+}
+function cvMat(rows: Integer; cols: Integer; etype: Integer; data: Pointer = nil): TCvMat;
+function CV_MAT_DEPTH(flags: Integer): Integer;
+function CV_MAT_TYPE(flags: Integer): Integer;
+function CV_ELEM_SIZE(_type: Integer): Integer;
+function CV_MAT_CN(flags: Integer): Integer;
+function CV_32FC1: Integer;
+function CV_MAKETYPE(depth, cn: Integer): Integer;
+// #define CV_MAT_ELEM( mat, elemtype, row, col )           \
+// (*(elemtype*)CV_MAT_ELEM_PTR_FAST( mat, row, col, sizeof(elemtype)))
+function CV_MAT_ELEM(const mat: TCvMat; const elemtype: Integer; const row, col: Integer): Pointer;
+// #define CV_MAT_ELEM_PTR_FAST( mat, row, col, pix_size )  \
+// (assert( (unsigned)(row) < (unsigned)(mat).rows &&   \
+// (unsigned)(col) < (unsigned)(mat).cols ),   \
+// (mat).data.ptr + (size_t)(mat).step*(row) + (pix_size)*(col))
+function CV_MAT_ELEM_PTR_FAST(const mat: TCvMat; const row, col, pix_size: Integer): Pointer;
 
 implementation
 
-{ CV }
+function CV_MAT_ELEM_PTR_FAST(const mat: TCvMat; const row, col, pix_size: Integer): Pointer;
+begin
+  Assert((Cardinal(row) < mat.rows) and (Cardinal(col) < mat.cols));
+  Result := Pointer(Integer(mat.data) + mat.step * row + pix_size * col);
+end;
+
+function CV_MAT_ELEM(const mat: TCvMat; const elemtype: Integer; const row, col: Integer): Pointer;
+begin
+  Result := CV_MAT_ELEM_PTR_FAST(mat, row, col, CV_ELEM_SIZE(elemtype));
+end;
+
+function CvAttrList(const attr: ppCVChar = nil; next: pCvAttrList = nil): TCvAttrList;
+begin
+  Result.attr := attr;
+  Result.next := next;
+end;
+
+function CV_MAT_DEPTH(flags: Integer): Integer;
+begin
+  Result := flags and CV_MAT_DEPTH_MASK;
+end;
+
+function CV_MAT_TYPE(flags: Integer): Integer;
+begin
+  Result := flags and CV_MAT_TYPE_MASK;
+end;
+
+function CV_MAT_CN(flags: Integer): Integer;
+begin
+  Result := ((((flags) and CV_MAT_CN_MASK) shr CV_CN_SHIFT) + 1);
+end;
+
+function CV_ELEM_SIZE(_type: Integer): Integer;
+begin
+  Result := (CV_MAT_CN(_type) shl ((((SizeOf(Integer) div 4 + 1) * 16384 or $3A50)
+    shr CV_MAT_DEPTH(_type) * 2) and 3));
+end;
+
+function CV_32FC1: Integer;
+begin
+  Result := CV_MAKETYPE(CV_32F, 1);
+end;
+
+function CV_MAKETYPE(depth, cn: Integer): Integer;
+begin
+  Result := (CV_MAT_DEPTH(depth) + (((cn) - 1) shl CV_CN_SHIFT));
+end;
+
+function cvMat(rows: Integer; cols: Integer; etype: Integer; data: Pointer = nil): TCvMat;
+begin
+  if not(CV_MAT_DEPTH(etype) <= CV_64F) then
+    exit;
+  etype := CV_MAT_TYPE(etype);
+  Result._type := CV_MAT_MAGIC_VAL or CV_MAT_CONT_FLAG or etype;
+  Result.cols := cols;
+  Result.rows := rows;
+  Result.step := Result.cols * CV_ELEM_SIZE(etype);
+  Result.data := data;
+  Result.refcount := nil;
+  Result.hdr_refcount := 0;
+end;
 
 function CvPoint(const x, y: Integer): TCvPoint;
 begin
@@ -2092,6 +2191,14 @@ end;
 
 function CvSize(const width, height: Integer): TCvSize;
 begin
+  Result.width := width;
+  Result.height := height;
+end;
+
+function CvRect(Const x, y, width, height: Integer): TCvRect;
+begin
+  Result.x := x;
+  Result.y := y;
   Result.width := width;
   Result.height := height;
 end;
