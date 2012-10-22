@@ -206,6 +206,17 @@ type
 
   (* assign callback for mouse events *)
   // CVAPI(procedure)cvSetMouseCallback(var 8 bit = 0; color or not * )
+  {
+    CVAPI(void) cvSetMouseCallback( const char* window_name, CvMouseCallback on_mouse,
+    void* param CV_DEFAULT(NULL));
+  }
+
+Type
+  // typedef void (CV_CDECL *CvMouseCallback )(int event, int x, int y, int flags, void* param);
+  TCvMouseCallback = procedure(event: Integer; x, y, flags: Integer; param: Pointer); cdecl;
+
+procedure cvSetMouseCallback(const window_name: pCVChar; on_mouse: TCvMouseCallback;
+  param: Pointer = nil); cdecl;
 
 const
   CV_LOAD_IMAGE_UNCHANGED = -1;
@@ -244,14 +255,20 @@ const
   (* save image to file *)
   // CVAPI(Integer)cvSaveImage(PCVChar filename, CvArr * image,
   // function params CV_DEFAULT(v1: 0)): Integer;
+  {
+    CVAPI(int) cvSaveImage( const char* filename, const CvArr* image, const int* params CV_DEFAULT(0) );
+  }
 
-  (* decode image stored in the buffer *)
-  // CVAPI(IplImage)cvDecodeImage(CvMat * buf, Integer iscolor CV_DEFAULT(CV_LOAD_IMAGE_COLOR));
-  // CVAPI(CvMat)cvDecodeImageM(CvMat * buf, Integer iscolor CV_DEFAULT(CV_LOAD_IMAGE_COLOR));
+function cvSaveImage(const filename: pCVChar; const image: pIplImage; const params: PInteger = nil)
+  : Integer; cdecl;
 
-  (* encode image and store the result as a byte vector (single-row 8uC1 matrix) *)
-  // CVAPI(CvMat)cvEncodeImage(PCVChar ext, CvArr * image,
-  // function params CV_DEFAULT(v1: 0)): Integer;
+(* decode image stored in the buffer *)
+// CVAPI(IplImage)cvDecodeImage(CvMat * buf, Integer iscolor CV_DEFAULT(CV_LOAD_IMAGE_COLOR));
+// CVAPI(CvMat)cvDecodeImageM(CvMat * buf, Integer iscolor CV_DEFAULT(CV_LOAD_IMAGE_COLOR));
+
+(* encode image and store the result as a byte vector (single-row 8uC1 matrix) *)
+// CVAPI(CvMat)cvEncodeImage(PCVChar ext, CvArr * image,
+// function params CV_DEFAULT(v1: 0)): Integer;
 
 const
   CV_CVTIMG_FLIP = 1;
@@ -278,8 +295,8 @@ function cvWaitKey(delay: Integer = 0): Integer; cdecl;
 
 (* "black box" capture structure *)
 type
-  CvCapture = Integer;
-  pCvCapture = ^CvCapture;
+  TCvCapture = Integer;
+  pCvCapture = ^TCvCapture;
 
   (* start capturing frames from video file *)
   // CVAPI(CvCapture*) cvCreateFileCapture( const char* filename );
@@ -315,20 +332,21 @@ const
 
   (* start capturing frames from camera: index = camera_index + domain_offset (CV_CAP_ *)
   // CVAPI(CvCapture)cvCreateCameraCapture(Integer index);
+function cvCreateCameraCapture(index: Longint): pCvCapture; cdecl;
 
-  (* grab a frame, return 1 on success, 0 on fail.
-    this cFunction is thought to be fast *)
-  // CVAPI(Integer)cvGrabFrame(CvCapture * capture);
+(* grab a frame, return 1 on success, 0 on fail.
+  this cFunction is thought to be fast *)
+// CVAPI(Integer)cvGrabFrame(CvCapture * capture);
 
-  (* get the frame grabbed with cvGrabFrame(..)
-    This cFunction may apply some frame processing like
-    frame decompression, flipping etc.
-    not  not  not DO NOT RELEASE or MODIFY the retrieved frame not  not  not *)
-  // CVAPI(IplImage)cvRetrieveFrame(CvCapture * capture, Integer streamIdx CV_DEFAULT(0));
+(* get the frame grabbed with cvGrabFrame(..)
+  This cFunction may apply some frame processing like
+  frame decompression, flipping etc.
+  not  not  not DO NOT RELEASE or MODIFY the retrieved frame not  not  not *)
+// CVAPI(IplImage)cvRetrieveFrame(CvCapture * capture, Integer streamIdx CV_DEFAULT(0));
 
-  (* Just a combination of cvGrabFrame and cvRetrieveFrame
-    not  not  not DO NOT RELEASE or MODIFY the retrieved frame not  not  not *)
-  // CVAPI(IplImage*) cvQueryFrame( CvCapture* capture );
+(* Just a combination of cvGrabFrame and cvRetrieveFrame
+  not  not  not DO NOT RELEASE or MODIFY the retrieved frame not  not  not *)
+// CVAPI(IplImage*) cvQueryFrame( CvCapture* capture );
 function cvQueryFrame(capture: pCvCapture): pIplImage; cdecl;
 
 (* stop capturing/reading and free resources *)
@@ -684,11 +702,15 @@ function cvSetCaptureProperty(capture: pCvCapture; property_id: Integer; value: 
 // type
 // type
 // CvVideoWriter = deoWriter;
-//
-// CV_INLINE
-// function CV_FOURCC(and 255) + ((c2 and 255) shl 8) + ((c3 and 255) shl 16) +
-// ((c4 and 255) shl 24: c1): Integer;
-// end;
+type
+  TCvVideoWriter = Integer;
+  pCvVideoWriter = ^TCvVideoWriter;
+  ppCvVideoWriter = ^pCvVideoWriter;
+  //
+  // CV_INLINE
+  // function CV_FOURCC(and 255) + ((c2 and 255) shl 8) + ((c3 and 255) shl 16) +
+  // ((c4 and 255) shl 24: c1): Integer;
+  // end;
 
 const
   CV_FOURCC_PROMPT = -1; (* Open Codec Selection Dialog (Windows only) *)
@@ -698,83 +720,96 @@ const
   // 'V'( / * Use default codec for specified filename(Linux only) * /;
   // {$EXTERNALSYM CV_FOURCC_DEFAULT}
   // (* initialize video file writer *)
+
   // CVAPI(CvVideoWriter)cvCreateVideoWriter(PCVChar filename, Integer fourcc, Double fps,
   // CvSize frame_size,
   // function is_color CV_DEFAULT(v1: 1)): Integer;
+  {
+    CVAPI(CvVideoWriter*) cvCreateVideoWriter( const char* filename, int fourcc,
+    double fps, CvSize frame_size,
+    int is_color CV_DEFAULT(1));
+  }
+function cvCreateVideoWriter(const filename: pCVChar; fourcc: Integer; fps: Double;
+  frame_size: TCvSize; is_color: Integer = 1): pCvVideoWriter; cdecl;
 
-  // CVAPI(CvVideoWriter*) cvCreateImageSequenceWriter( const char* filename,
-  // int is_color CV_DEFAULT(1));
+function CV_FOURCC(const c1, c2, c3, c4: CVChar): Integer; inline;
 
-  (* write frame to video file *)
-  // CVAPI(Integer)cvWriteFrame(CvVideoWriter * writer, IplImage * image);
 
-  (* close video file writer *)
-  // CVAPI(procedure)cvReleaseVideoWriter(writer: array of CvVideoWriter);
+// CVAPI(CvVideoWriter*) cvCreateImageSequenceWriter( const char* filename,
+// int is_color CV_DEFAULT(1));
 
-  (* ***************************************************************************************\
-    *                              Obsolete functions/synonyms                               *
-    *************************************************************************************** *)
+(* write frame to video file *)
+// CVAPI(Integer)cvWriteFrame(CvVideoWriter * writer, IplImage * image);
+function cvWriteFrame(writer: pCvVideoWriter; image: pIplImage): Integer; cdecl;
 
-  // const cvCaptureFromFile = cvCreateFileCapture;
-  // {$EXTERNALSYM cvCaptureFromFile}
-  // const cvCaptureFromCAM = cvCreateCameraCapture;
-  // {$EXTERNALSYM cvCaptureFromCAM}
-  // const cvCaptureFromAVI = cvCaptureFromFile;
-  // {$EXTERNALSYM cvCaptureFromAVI}
-  // const cvCreateAVIWriter = cvCreateVideoWriter;
-  // {$EXTERNALSYM cvCreateAVIWriter}
-  // const cvWriteToAVI = cvWriteFrame;
-  // {$EXTERNALSYM cvWriteToAVI}
-  // {$DEFINE cvAddSearchPath(path)}
-  // const cvvInitSystem = cvInitSystem;
-  // {$EXTERNALSYM cvvInitSystem}
-  // const cvvNamedWindow = cvNamedWindow;
-  // {$EXTERNALSYM cvvNamedWindow}
-  // const cvvShowImage = cvShowImage;
-  // {$EXTERNALSYM cvvShowImage}
-  // const cvvResizeWindow = cvResizeWindow;
-  // {$EXTERNALSYM cvvResizeWindow}
-  // const cvvDestroyWindow = cvDestroyWindow;
-  // {$EXTERNALSYM cvvDestroyWindow}
-  // const cvvCreateTrackbar = cvCreateTrackbar;
-  // {$EXTERNALSYM cvvCreateTrackbar}
-  /// / >> Following declaration is a macro definition!
-  // const cvvLoadImage(name)cvLoadImage((name), 1);
-  //
-  // const cvvSaveImage = cvSaveImage;
-  // {$EXTERNALSYM cvvSaveImage}
-  // const cvvAddSearchPath = cvAddSearchPath;
-  // {$EXTERNALSYM cvvAddSearchPath}
-  /// / >> Following declaration is a macro definition!
-  // const cvvWaitKey(name)cvWaitKey(0);
-  //
-  /// / >> Following declaration is a macro definition!
-  // const cvvWaitKeyEx(name, delay)cvWaitKey(delay);
-  //
-  // const cvvConvertImage = cvConvertImage;
-  // {$EXTERNALSYM cvvConvertImage}
-  // const HG_AUTOSIZE = CV_WINDOW_AUTOSIZE;
-  // {$EXTERNALSYM HG_AUTOSIZE}
-  // const set_preprocess_func = cvSetPreprocessFuncWin32;
-  // {$EXTERNALSYM set_preprocess_func}
-  // const set_postprocess_func = cvSetPostprocessFuncWin32;
-  // {$EXTERNALSYM set_postprocess_func}
-  // {$IFNDEF  WIN32 || defined _WIN32}
-  // CVAPI(
-  // procedure)cvSetPreprocessFuncWin32_(callback: Pointer); CVAPI(
-  // procedure)cvSetPostprocessFuncWin32_(callback: Pointer);
-  //
-  /// / >> Following declaration is a macro definition!
-  // const cvSetPreprocessFuncWin32(callback)cvSetPreprocessFuncWin32_
-  // ((# define cvSetPreprocessFuncWin32(callback)cvSetPreprocessFuncWin32_((
-  // procedure((callback): ();
+(* close video file writer *)
+// CVAPI(procedure)cvReleaseVideoWriter(writer: array of CvVideoWriter);
+procedure cvReleaseVideoWriter(Var writer: pCvVideoWriter); cdecl;
 
-  // {$ENDIF}
-  // {$IFDEF __cplusplus}
-  // end;
+(* ***************************************************************************************\
+  *                              Obsolete functions/synonyms                               *
+  *************************************************************************************** *)
 
-  // {$ENDIF}
-  // {$ENDIF}
+// const cvCaptureFromFile = cvCreateFileCapture;
+// {$EXTERNALSYM cvCaptureFromFile}
+// const cvCaptureFromCAM = cvCreateCameraCapture;
+// {$EXTERNALSYM cvCaptureFromCAM}
+// const cvCaptureFromAVI = cvCaptureFromFile;
+// {$EXTERNALSYM cvCaptureFromAVI}
+// const cvCreateAVIWriter = cvCreateVideoWriter;
+// {$EXTERNALSYM cvCreateAVIWriter}
+// const cvWriteToAVI = cvWriteFrame;
+// {$EXTERNALSYM cvWriteToAVI}
+// {$DEFINE cvAddSearchPath(path)}
+// const cvvInitSystem = cvInitSystem;
+// {$EXTERNALSYM cvvInitSystem}
+// const cvvNamedWindow = cvNamedWindow;
+// {$EXTERNALSYM cvvNamedWindow}
+// const cvvShowImage = cvShowImage;
+// {$EXTERNALSYM cvvShowImage}
+// const cvvResizeWindow = cvResizeWindow;
+// {$EXTERNALSYM cvvResizeWindow}
+// const cvvDestroyWindow = cvDestroyWindow;
+// {$EXTERNALSYM cvvDestroyWindow}
+// const cvvCreateTrackbar = cvCreateTrackbar;
+// {$EXTERNALSYM cvvCreateTrackbar}
+/// / >> Following declaration is a macro definition!
+// const cvvLoadImage(name)cvLoadImage((name), 1);
+//
+// const cvvSaveImage = cvSaveImage;
+// {$EXTERNALSYM cvvSaveImage}
+// const cvvAddSearchPath = cvAddSearchPath;
+// {$EXTERNALSYM cvvAddSearchPath}
+/// / >> Following declaration is a macro definition!
+// const cvvWaitKey(name)cvWaitKey(0);
+//
+/// / >> Following declaration is a macro definition!
+// const cvvWaitKeyEx(name, delay)cvWaitKey(delay);
+//
+// const cvvConvertImage = cvConvertImage;
+// {$EXTERNALSYM cvvConvertImage}
+// const HG_AUTOSIZE = CV_WINDOW_AUTOSIZE;
+// {$EXTERNALSYM HG_AUTOSIZE}
+// const set_preprocess_func = cvSetPreprocessFuncWin32;
+// {$EXTERNALSYM set_preprocess_func}
+// const set_postprocess_func = cvSetPostprocessFuncWin32;
+// {$EXTERNALSYM set_postprocess_func}
+// {$IFNDEF  WIN32 || defined _WIN32}
+// CVAPI(
+// procedure)cvSetPreprocessFuncWin32_(callback: Pointer); CVAPI(
+// procedure)cvSetPostprocessFuncWin32_(callback: Pointer);
+//
+/// / >> Following declaration is a macro definition!
+// const cvSetPreprocessFuncWin32(callback)cvSetPreprocessFuncWin32_
+// ((# define cvSetPreprocessFuncWin32(callback)cvSetPreprocessFuncWin32_((
+// procedure((callback): ();
+
+// {$ENDIF}
+// {$IFDEF __cplusplus}
+// end;
+
+// {$ENDIF}
+// {$ENDIF}
 implementation
 
 const
@@ -783,17 +818,28 @@ const
 {$ELSE}
   DllName = 'opencv_highgui242.dll';
 {$ENDIF}
-function cvNamedWindow(const name: pCVChar; flags: Integer): Integer; external DllName; cdecl;
-procedure cvShowImage; external DllName; cdecl;
-function cvWaitKey(delay: Integer): Integer; external DllName; cdecl;
-procedure cvDestroyWindow(const name: pCVChar); external DllName; cdecl;
-procedure cvDestroyAllWindows; external DllName; cdecl;
-function cvLoadImage(const filename: pCVChar; iscolor: Integer): pIplImage; external DllName; cdecl;
-function cvCreateFileCapture(const filename: pCVChar): pCvCapture; external DllName; cdecl;
-function cvQueryFrame(capture: pCvCapture): pIplImage; external DllName; cdecl;
-procedure cvReleaseCapture(Var capture: pCvCapture); external DllName; cdecl;
+function cvNamedWindow; external DllName;
+procedure cvShowImage; external DllName;
+function cvWaitKey; external DllName;
+procedure cvDestroyWindow; external DllName;
+procedure cvDestroyAllWindows; external DllName;
+function cvLoadImage; external DllName;
+function cvCreateFileCapture; external DllName;
+function cvQueryFrame; external DllName;
+procedure cvReleaseCapture; external DllName;
 function cvSetCaptureProperty; external DllName;
 function cvGetCaptureProperty; external DllName;
 function cvCreateTrackbar; external DllName;
+function cvCreateCameraCapture; external DllName;
+function cvSaveImage; external DllName;
+function cvCreateVideoWriter; external DllName;
+function cvWriteFrame; external DllName;
+procedure cvReleaseVideoWriter; external DllName;
+procedure cvSetMouseCallback; external DllName;
+
+function CV_FOURCC(const c1, c2, c3, c4: CVChar): Integer; inline;
+begin
+  Result := Integer(c1) + (Integer(c2) shl 8) + (Integer(c3) shl 16) + (Integer(c4) shl 24);
+end;
 
 end.

@@ -115,7 +115,18 @@ uses
 // smoothtype CV_DEFAULT(v1: 3:
 // function); size2 CV_DEFAULT(0): Integer; sigma1 CV_DEFAULT(0):
 // function; sigma2 CV_DEFAULT(0): Double): Integer;
-//
+{
+  CVAPI(void) cvSmooth( const CvArr* src, CvArr* dst,
+  int smoothtype CV_DEFAULT(CV_GAUSSIAN),
+  int size1 CV_DEFAULT(3),
+  int size2 CV_DEFAULT(0),
+  double sigma1 CV_DEFAULT(0),
+  double sigma2 CV_DEFAULT(0));
+}
+procedure cvSmooth(const src: pIplImage; dst: pIplImage; smoothtype: integer = CV_GAUSSIAN;
+  param1: integer = 3; param2: integer = 0; param3: double = 0; param4: double = 0); cdecl;
+
+
 // (* Convolves the image with the kernel *)
 // CVAPI(
 // procedure)cvFilter2D(v1: CvPoint(-1;
@@ -499,7 +510,8 @@ procedure cvCvtColor(const src: pIplImage; dst: pIplImage; code: integer); cdecl
 // (* Applies fixed-level threshold to grayscale image.
 // This is a basic operation applied before retrieving contours *)
 // CVAPI(double)  cvThreshold( const CvArr*  src, CvArr*  dst, double  threshold, double  max_value, int threshold_type );
-function cvThreshold(const src, dst: pIplImage; threshold, max_value: Double; threshold_type: integer): Double; cdecl;
+function cvThreshold(const src, dst: pIplImage; threshold, max_value: double;
+  threshold_type: integer): double; cdecl;
 
 //
 // (* Applies adaptive threshold to grayscale image.
@@ -584,8 +596,8 @@ const
 {$ELSE}
   DllName = 'opencv_imgproc242.dll';
 {$ENDIF}
-procedure cvCvtColor(const src: pIplImage; dst: pIplImage; code: integer); external DllName; cdecl;
-function cvThreshold(const src, dst: pIplImage; threshold, max_value: Double; threshold_type: integer)
-  : Double; external DllName; cdecl;
+procedure cvCvtColor; external DllName; cdecl;
+function cvThreshold; external DllName; cdecl;
+procedure cvSmooth; external DllName; cdecl;
 
 end.

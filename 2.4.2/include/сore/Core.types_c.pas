@@ -400,12 +400,12 @@ const
 
 type
 
-  pIplImage = ^IplImage;
+  pIplImage = ^TIplImage;
   ppIplImage = ^pIplImage;
-  pIplROI = ^IplROI;
-  pIplTileInfo = ^IplTileInfo;
+  pIplROI = ^TIplROI;
+  pIplTileInfo = ^TIplTileInfo;
 
-  IplROI = packed record
+  TIplROI = packed record
     coi: Integer; (* 0 - no COI (all channels are selected), 1 - 0th channel is selected ... *)
     xOffset: Integer;
     yOffset: Integer;
@@ -413,17 +413,17 @@ type
     height: Integer;
   end;
 
-  iplCallBack = procedure(img: pIplImage; xIndex: Integer; yIndex: Integer; mode: Integer);
+  TiplCallBack = procedure(img: pIplImage; xIndex: Integer; yIndex: Integer; mode: Integer);
 
-  IplTileInfo = packed record
-    callBack: iplCallBack;
+  TIplTileInfo = packed record
+    callBack: TiplCallBack;
     id: Pointer;
     tileData: pCVChar;
     width: Integer;
     height: Integer;
   end;
 
-  IplImage = { packed } record
+  TIplImage =  packed  record
     nSize: Integer; (* sizeof(IplImage) *)
     id: Integer; (* version (=0) *)
     nChannels: Integer; (* Most of OpenCV functions support 1,2,3 or 4 channels *)
@@ -480,7 +480,7 @@ const
 {$EXTERNALSYM IPL_BORDER_REFLECT_101}
   IPL_BORDER_TRANSPARENT = 5;
 {$EXTERNALSYM IPL_BORDER_TRANSPARENT}
-  IPL_IMAGE_MAGIC_VAL = SizeOf(IplImage);
+  IPL_IMAGE_MAGIC_VAL = SizeOf(TIplImage);
 {$EXTERNALSYM IPL_IMAGE_MAGIC_VAL}
   CV_TYPE_NAME_IMAGE = 'opencv-image';
 

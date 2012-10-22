@@ -8,3 +8,4 @@ __history
 *.~*
 *.h
 /2.4.2/!include
+*.tvsconfig

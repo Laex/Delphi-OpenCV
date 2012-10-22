@@ -109,7 +109,7 @@ procedure cvFree_(ptr: Pointer); cdecl;
 {$DEFINE cvFree(ptr(cvFree_}	(* (ptr)), *(ptr)=0)
 
   (* Allocates and initializes IplImage header *)
-function cvCreateImageHeader(size: TCvSize; depth: Integer; channels: Integer): IplImage; cdecl;
+function cvCreateImageHeader(size: TCvSize; depth: Integer; channels: Integer): pIplImage; cdecl;
 
 (* Inializes IplImage header *)
 // function cvInitImageHeader(IplImage * image, CvSize size, Integer depth, CVAPI(IplImage)channels,
@@ -119,26 +119,31 @@ function cvCreateImageHeader(size: TCvSize; depth: Integer; channels: Integer): 
 function cvCreateImage(size: TCvSize; depth, channels: Integer): pIplImage; cdecl;
 
 (* Releases (i.e. deallocates) IPL image header *)
-procedure cvReleaseImageHeader(image: array of IplImage); cdecl;
+// CVAPI(void)  cvReleaseImageHeader( IplImage** image );
+procedure cvReleaseImageHeader(image: array of pIplImage); cdecl;
 
 (* Releases IPL image header and data *)
 procedure cvReleaseImage(var image: pIplImage); cdecl;
 
 (* Creates a copy of IPL image (widthStep may differ) *)
-function cvCloneImage(image: pIplImage): pIplImage; cdecl;
+//CVAPI(IplImage*) cvCloneImage( const IplImage* image );
+function cvCloneImage(const image: pIplImage): pIplImage; cdecl;
 
 (* Sets a Channel Of Interest (only a few functions support COI) -
   use cvCopy to extract the selected channel and/or put it back *)
-procedure cvSetImageCOI(var image: IplImage; coi: Integer); cdecl;
+// CVAPI(void)  cvSetImageCOI( IplImage* image, int coi );
+procedure cvSetImageCOI(image: pIplImage; coi: Integer); cdecl;
 
 (* Retrieves image Channel Of Interest *)
 function cvGetImageCOI(image: pIplImage): Integer; cdecl;
 
 (* Sets image ROI (region of interest) (COI is not changed) *)
-procedure cvSetImageROI(var image: IplImage; rect: TCvRect); cdecl;
+// CVAPI(void)  cvSetImageROI( IplImage* image, CvRect rect );
+procedure cvSetImageROI(image: pIplImage; rect: TCvRect); cdecl;
 
 (* Resets image ROI and COI *)
-procedure cvResetImageROI(var image: IplImage); cdecl;
+// CVAPI(void)  cvResetImageROI( IplImage* image );
+procedure cvResetImageROI(image: pIplImage); cdecl;
 
 (* Retrieves image ROI *)
 function cvGetImageROI(image: pIplImage): TCvRect; cdecl;
@@ -1151,75 +1156,94 @@ const
   // {$EXTERNALSYM CV_AA}
   // (* Draws 4-connected, 8-connected or antialiased line segment connecting two points *)
   // procedure cvLine(8: v1: ); shift CV_DEFAULT(0): Integer): Integer;
-  //
-  // (* Draws a rectangle given two opposite corners of the rectangle (pt1 & pt2),
-  // if thickness<0 (e.g. thickness = CV_FILLED), the filled box is drawn *) then
-  // procedure cvRectangle(8: v1: ); shift CV_DEFAULT(0): Integer): Integer;
-  //
-  // (* Draws a rectangle specified by a CvRect structure *)
-  // procedure cvRectangleR(8: v1: ); shift CV_DEFAULT(0): Integer): Integer;
-  //
-  // (* Draws a circle with specified center and radius.
-  // Thickness works in the same way as with cvRectangle *)
-  // procedure cvCircle(8: v1: ); shift CV_DEFAULT(0): Integer): Integer;
-  //
-  // (* Draws ellipse outline, filled ellipse, elliptic arc or filled elliptic sector,
-  // depending on <thickness>, <start_angle> and <end_angle> parameters. The resultant figure
-  // is rotated by <angle>. All the angles are in degrees *)
-  // procedure cvEllipse(8: v1: ); shift CV_DEFAULT(0): Integer): Integer;
-  //
-  // CV_INLINE CV_INLINE
-  // procedure cvEllipseBox(
-  //
-  // v1: 1);
-  //
-  // var 0.5:
-  // function line_type CV_DEFAULT(var 0.5: 0))begin CvSize axes;
-  // axes.width := cvRound(box.size.width): Integer; axes.height := cvRound(box.size.height);
-  //
-  // cvEllipse(img, cvPointFrom32f(box.center), axes, box.angle, 0, 360, color, thickness, line_type,
-  // shift); end;
-  //
-  // (* Fills convex or monotonous polygon. *)
-  // procedure cvFillConvexPoly(var Fills an area bounded by one or more arbitrary polygons * )
-  // procedure cvFillPoly(CvArr * img: v1: 0)): Integer; (; pts: array of CvPoint; var npts: Integer;
-  // contours: Integer; color: CvScalar; var Draws one or more polygonal curves * )
-  // procedure cvPolyLine(CvArr * img:
-  // function line_type CV_DEFAULT(v1: 0)): Integer; (; pts: array of CvPoint; var npts: Integer;
-  // contours: Integer; is_closed:
-  // function; color: CvScalar; thickness CV_DEFAULT(v1: 8: Integer);
-  // shift CV_DEFAULT(0): Integer): Integer;
-  //
-  // const cvDrawRect = cvRectangle;
-  // {$EXTERNALSYM cvDrawRect}
-  // const cvDrawLine = cvLine;
-  // {$EXTERNALSYM cvDrawLine}
-  // const cvDrawCircle = cvCircle;
-  // {$EXTERNALSYM cvDrawCircle}
-  // const cvDrawEllipse = cvEllipse;
-  // {$EXTERNALSYM cvDrawEllipse}
-  // const cvDrawPolyLine = cvPolyLine;
-  // {$EXTERNALSYM cvDrawPolyLine}
-  // (* Clips the line segment connecting *pt1 and *pt2
-  // by the rectangular window
-  // (0<=x<img_size.width, 0<=y<img_size.height). *)
-  // CVAPI(Integer)cvClipLine(CvSize img_size, CvPoint * pt1, CvPoint * pt2);
-  //
-  // (* Initializes line iterator. Initially, line_iterator->ptr will point
-  // to pt1 (or pt2, see left_to_right description) location in the image.
-  // Returns the number of pixels on the line between the ending points. *)
-  // CVAPI(Integer)cvInitLineIterator(CvArr * image, CvPoint pt1, CvPoint pt2,
-  // CvLineIterator * line_iterator,
-  // function connectivity CV_DEFAULT(v1: 0)): Integer;
-  //
-  // (* Moves iterator to the next line point *)
-  /// / >> Following declaration is a macro definition!
-  // const CV_NEXT_LINE_POINT(line_iterator); begin Integer _line_iterator_mask = (line_iterator).err <
-  // 0 ? - 1: 0; (line_iterator).err := mod +(line_iterator).minus_delta + ((line_iterator)
-  // .plus_delta and _line_iterator_mask); (line_iterator).ptr := mod +(line_iterator).minus_step +
-  // ((line_iterator).plus_step and _line_iterator_mask); end;
-  //
-  (* basic font types *)
+  {
+    CVAPI(void)  cvLine( CvArr* img, CvPoint pt1, CvPoint pt2,
+    CvScalar color, int thickness CV_DEFAULT(1),
+    int line_type CV_DEFAULT(8), int shift CV_DEFAULT(0) );
+  }
+procedure cvLine(img: PIplImage; pt1, pt2: TCvPoint; color: TCvScalar; thickness: Integer = 1;
+  line_type: Integer = 8; shift: Integer = 0); cdecl;
+//
+// (* Draws a rectangle given two opposite corners of the rectangle (pt1 & pt2),
+// if thickness<0 (e.g. thickness = CV_FILLED), the filled box is drawn *) then
+// procedure cvRectangle(8: v1: ); shift CV_DEFAULT(0): Integer): Integer;
+//
+// (* Draws a rectangle specified by a CvRect structure *)
+// procedure cvRectangleR(8: v1: ); shift CV_DEFAULT(0): Integer): Integer;
+//
+// (* Draws a circle with specified center and radius.
+// Thickness works in the same way as with cvRectangle *)
+// procedure cvCircle(8: v1: ); shift CV_DEFAULT(0): Integer): Integer;
+{
+  CVAPI(void)  cvCircle( CvArr* img,
+  CvPoint center,
+  int radius,
+  CvScalar color,
+  int thickness CV_DEFAULT(1),
+  int line_type CV_DEFAULT(8),
+  int shift CV_DEFAULT(0));
+}
+procedure cvCircle(img: PIplImage; center: TCvPoint; radius: Integer; color: TCvScalar;
+  thickness: Integer = 1; line_type: Integer = 8; shift: Integer = 0); cdecl;
+
+//
+// (* Draws ellipse outline, filled ellipse, elliptic arc or filled elliptic sector,
+// depending on <thickness>, <start_angle> and <end_angle> parameters. The resultant figure
+// is rotated by <angle>. All the angles are in degrees *)
+// procedure cvEllipse(8: v1: ); shift CV_DEFAULT(0): Integer): Integer;
+//
+// CV_INLINE CV_INLINE
+// procedure cvEllipseBox(
+//
+// v1: 1);
+//
+// var 0.5:
+// function line_type CV_DEFAULT(var 0.5: 0))begin CvSize axes;
+// axes.width := cvRound(box.size.width): Integer; axes.height := cvRound(box.size.height);
+//
+// cvEllipse(img, cvPointFrom32f(box.center), axes, box.angle, 0, 360, color, thickness, line_type,
+// shift); end;
+//
+// (* Fills convex or monotonous polygon. *)
+// procedure cvFillConvexPoly(var Fills an area bounded by one or more arbitrary polygons * )
+// procedure cvFillPoly(CvArr * img: v1: 0)): Integer; (; pts: array of CvPoint; var npts: Integer;
+// contours: Integer; color: CvScalar; var Draws one or more polygonal curves * )
+// procedure cvPolyLine(CvArr * img:
+// function line_type CV_DEFAULT(v1: 0)): Integer; (; pts: array of CvPoint; var npts: Integer;
+// contours: Integer; is_closed:
+// function; color: CvScalar; thickness CV_DEFAULT(v1: 8: Integer);
+// shift CV_DEFAULT(0): Integer): Integer;
+//
+// const cvDrawRect = cvRectangle;
+// {$EXTERNALSYM cvDrawRect}
+// const cvDrawLine = cvLine;
+// {$EXTERNALSYM cvDrawLine}
+// const cvDrawCircle = cvCircle;
+// {$EXTERNALSYM cvDrawCircle}
+// const cvDrawEllipse = cvEllipse;
+// {$EXTERNALSYM cvDrawEllipse}
+// const cvDrawPolyLine = cvPolyLine;
+// {$EXTERNALSYM cvDrawPolyLine}
+// (* Clips the line segment connecting *pt1 and *pt2
+// by the rectangular window
+// (0<=x<img_size.width, 0<=y<img_size.height). *)
+// CVAPI(Integer)cvClipLine(CvSize img_size, CvPoint * pt1, CvPoint * pt2);
+//
+// (* Initializes line iterator. Initially, line_iterator->ptr will point
+// to pt1 (or pt2, see left_to_right description) location in the image.
+// Returns the number of pixels on the line between the ending points. *)
+// CVAPI(Integer)cvInitLineIterator(CvArr * image, CvPoint pt1, CvPoint pt2,
+// CvLineIterator * line_iterator,
+// function connectivity CV_DEFAULT(v1: 0)): Integer;
+//
+// (* Moves iterator to the next line point *)
+/// / >> Following declaration is a macro definition!
+// const CV_NEXT_LINE_POINT(line_iterator); begin Integer _line_iterator_mask = (line_iterator).err <
+// 0 ? - 1: 0; (line_iterator).err := mod +(line_iterator).minus_delta + ((line_iterator)
+// .plus_delta and _line_iterator_mask); (line_iterator).ptr := mod +(line_iterator).minus_step +
+// ((line_iterator).plus_step and _line_iterator_mask); end;
+//
+(* basic font types *)
 const
   CV_FONT_HERSHEY_SIMPLEX = 0;
 {$EXTERNALSYM CV_FONT_HERSHEY_SIMPLEX}
@@ -1615,20 +1639,17 @@ const
 {$ENDIF}
 procedure cvAlloc(size: size_t); external DllName; cdecl;
 procedure cvFree_(ptr: Pointer); external DllName; cdecl;
-function cvCreateImageHeader(size: TCvSize; depth: Integer; channels: Integer): IplImage;
-  external DllName; cdecl;
-function cvCreateImage(size: TCvSize; depth, channels: Integer): pIplImage; external DllName; cdecl;
-procedure cvReleaseImageHeader(image: array of IplImage); external DllName; cdecl;
-// procedure cvReleaseImage(image: array of IplImage); external DllName; cdecl;
-procedure cvReleaseImage(var image: pIplImage); external DllName; cdecl;
+function cvCreateImageHeader; external DllName; cdecl;
+function cvCreateImage; external DllName; cdecl;
+procedure cvReleaseImageHeader; external DllName; cdecl;
+procedure cvReleaseImage; external DllName; cdecl;
 function cvCloneImage; external DllName; cdecl;
-procedure cvSetImageCOI(var image: IplImage; coi: Integer); external DllName; cdecl;
-function cvGetImageCOI(image: pIplImage): Integer; external DllName; cdecl;
-procedure cvSetImageROI(var image: IplImage; rect: TCvRect); external DllName; cdecl;
-procedure cvResetImageROI(var image: IplImage); external DllName; cdecl;
-function cvGetImageROI(image: pIplImage): TCvRect; external DllName; cdecl;
-function cvCreateMatHeader(rows: Integer; cols: Integer; cType: Integer): CvMat;
-  external DllName; cdecl;
+procedure cvSetImageCOI; external DllName; cdecl;
+function cvGetImageCOI; external DllName; cdecl;
+procedure cvSetImageROI; external DllName; cdecl;
+procedure cvResetImageROI; external DllName; cdecl;
+function cvGetImageROI; external DllName; cdecl;
+function cvCreateMatHeader; external DllName; cdecl;
 
 // function cvGetSize; external DllName; cdecl;
 function cvGetSize(const image: pIplImage): TCvSize;
@@ -1648,6 +1669,9 @@ end;
 procedure cvSet; external DllName;
 procedure cvInitFont; external DllName;
 procedure cvPutText; external DllName;
+
+procedure cvCircle; external DllName;
+procedure cvLine; external DllName;
 
 function CV_RGB(const r, g, B: Double): TCvScalar; inline;
 begin

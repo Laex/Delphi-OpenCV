@@ -21,6 +21,18 @@
 			<Projects Include="Trackbar\Trackbar.dproj">
 				<Dependencies/>
 			</Projects>
+			<Projects Include="CameraCapture\CameraCapture.dproj">
+				<Dependencies/>
+			</Projects>
+			<Projects Include="VideoWriter\VideoWriter.dproj">
+				<Dependencies/>
+			</Projects>
+			<Projects Include="MouseCallback\MouseCallback.dproj">
+				<Dependencies/>
+			</Projects>
+			<Projects Include="Smooth\Smooth.dproj">
+				<Dependencies/>
+			</Projects>
 		</ItemGroup>
 		<ProjectExtensions>
 			<Borland.Personality>Default.Personality.12</Borland.Personality>
@@ -83,14 +95,50 @@
 		<Target Name="Trackbar:Make">
 			<MSBuild Targets="Make" Projects="Trackbar\Trackbar.dproj"/>
 		</Target>
+		<Target Name="CameraCapture">
+			<MSBuild Projects="CameraCapture\CameraCapture.dproj"/>
+		</Target>
+		<Target Name="CameraCapture:Clean">
+			<MSBuild Targets="Clean" Projects="CameraCapture\CameraCapture.dproj"/>
+		</Target>
+		<Target Name="CameraCapture:Make">
+			<MSBuild Targets="Make" Projects="CameraCapture\CameraCapture.dproj"/>
+		</Target>
+		<Target Name="VideoWriter">
+			<MSBuild Projects="VideoWriter\VideoWriter.dproj"/>
+		</Target>
+		<Target Name="VideoWriter:Clean">
+			<MSBuild Targets="Clean" Projects="VideoWriter\VideoWriter.dproj"/>
+		</Target>
+		<Target Name="VideoWriter:Make">
+			<MSBuild Targets="Make" Projects="VideoWriter\VideoWriter.dproj"/>
+		</Target>
+		<Target Name="MouseCallback">
+			<MSBuild Projects="MouseCallback\MouseCallback.dproj"/>
+		</Target>
+		<Target Name="MouseCallback:Clean">
+			<MSBuild Targets="Clean" Projects="MouseCallback\MouseCallback.dproj"/>
+		</Target>
+		<Target Name="MouseCallback:Make">
+			<MSBuild Targets="Make" Projects="MouseCallback\MouseCallback.dproj"/>
+		</Target>
+		<Target Name="Smooth">
+			<MSBuild Projects="Smooth\Smooth.dproj"/>
+		</Target>
+		<Target Name="Smooth:Clean">
+			<MSBuild Targets="Clean" Projects="Smooth\Smooth.dproj"/>
+		</Target>
+		<Target Name="Smooth:Make">
+			<MSBuild Targets="Make" Projects="Smooth\Smooth.dproj"/>
+		</Target>
 		<Target Name="Build">
-			<CallTarget Targets="HelloWorld;OpenCV_1_LoadImage;OpenCV_2_LoadVideo;OpenCV_3_VideoProcessing;LoadImage;Trackbar"/>
+			<CallTarget Targets="HelloWorld;OpenCV_1_LoadImage;OpenCV_2_LoadVideo;OpenCV_3_VideoProcessing;LoadImage;Trackbar;CameraCapture;VideoWriter;MouseCallback;Smooth"/>
 		</Target>
 		<Target Name="Clean">
-			<CallTarget Targets="HelloWorld:Clean;OpenCV_1_LoadImage:Clean;OpenCV_2_LoadVideo:Clean;OpenCV_3_VideoProcessing:Clean;LoadImage:Clean;Trackbar:Clean"/>
+			<CallTarget Targets="HelloWorld:Clean;OpenCV_1_LoadImage:Clean;OpenCV_2_LoadVideo:Clean;OpenCV_3_VideoProcessing:Clean;LoadImage:Clean;Trackbar:Clean;CameraCapture:Clean;VideoWriter:Clean;MouseCallback:Clean;Smooth:Clean"/>
 		</Target>
 		<Target Name="Make">
-			<CallTarget Targets="HelloWorld:Make;OpenCV_1_LoadImage:Make;OpenCV_2_LoadVideo:Make;OpenCV_3_VideoProcessing:Make;LoadImage:Make;Trackbar:Make"/>
+			<CallTarget Targets="HelloWorld:Make;OpenCV_1_LoadImage:Make;OpenCV_2_LoadVideo:Make;OpenCV_3_VideoProcessing:Make;LoadImage:Make;Trackbar:Make;CameraCapture:Make;VideoWriter:Make;MouseCallback:Make;Smooth:Make"/>
 		</Target>
 		<Import Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')" Project="$(BDS)\Bin\CodeGear.Group.Targets"/>
 	</Project>
