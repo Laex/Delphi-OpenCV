@@ -45,6 +45,15 @@
 			<Projects Include="XML\XML.dproj">
 				<Dependencies/>
 			</Projects>
+			<Projects Include="Rand\Rand.dproj">
+				<Dependencies/>
+			</Projects>
+			<Projects Include="ErodeAndDilate\ErodeAndDilate.dproj">
+				<Dependencies/>
+			</Projects>
+			<Projects Include="MorphologyEx\MorphologyEx.dproj">
+				<Dependencies/>
+			</Projects>
 		</ItemGroup>
 		<ProjectExtensions>
 			<Borland.Personality>Default.Personality.12</Borland.Personality>
@@ -179,14 +188,41 @@
 		<Target Name="XML:Make">
 			<MSBuild Targets="Make" Projects="XML\XML.dproj"/>
 		</Target>
+		<Target Name="Rand">
+			<MSBuild Projects="Rand\Rand.dproj"/>
+		</Target>
+		<Target Name="Rand:Clean">
+			<MSBuild Targets="Clean" Projects="Rand\Rand.dproj"/>
+		</Target>
+		<Target Name="Rand:Make">
+			<MSBuild Targets="Make" Projects="Rand\Rand.dproj"/>
+		</Target>
+		<Target Name="ErodeAndDilate">
+			<MSBuild Projects="ErodeAndDilate\ErodeAndDilate.dproj"/>
+		</Target>
+		<Target Name="ErodeAndDilate:Clean">
+			<MSBuild Targets="Clean" Projects="ErodeAndDilate\ErodeAndDilate.dproj"/>
+		</Target>
+		<Target Name="ErodeAndDilate:Make">
+			<MSBuild Targets="Make" Projects="ErodeAndDilate\ErodeAndDilate.dproj"/>
+		</Target>
+		<Target Name="MorphologyEx">
+			<MSBuild Projects="MorphologyEx\MorphologyEx.dproj"/>
+		</Target>
+		<Target Name="MorphologyEx:Clean">
+			<MSBuild Targets="Clean" Projects="MorphologyEx\MorphologyEx.dproj"/>
+		</Target>
+		<Target Name="MorphologyEx:Make">
+			<MSBuild Targets="Make" Projects="MorphologyEx\MorphologyEx.dproj"/>
+		</Target>
 		<Target Name="Build">
-			<CallTarget Targets="HelloWorld;OpenCV_1_LoadImage;OpenCV_2_LoadVideo;OpenCV_3_VideoProcessing;LoadImage;Trackbar;CameraCapture;VideoWriter;MouseCallback;Smooth;Resize;ROI;ROI2;XML"/>
+			<CallTarget Targets="HelloWorld;OpenCV_1_LoadImage;OpenCV_2_LoadVideo;OpenCV_3_VideoProcessing;LoadImage;Trackbar;CameraCapture;VideoWriter;MouseCallback;Smooth;Resize;ROI;ROI2;XML;Rand;ErodeAndDilate;MorphologyEx"/>
 		</Target>
 		<Target Name="Clean">
-			<CallTarget Targets="HelloWorld:Clean;OpenCV_1_LoadImage:Clean;OpenCV_2_LoadVideo:Clean;OpenCV_3_VideoProcessing:Clean;LoadImage:Clean;Trackbar:Clean;CameraCapture:Clean;VideoWriter:Clean;MouseCallback:Clean;Smooth:Clean;Resize:Clean;ROI:Clean;ROI2:Clean;XML:Clean"/>
+			<CallTarget Targets="HelloWorld:Clean;OpenCV_1_LoadImage:Clean;OpenCV_2_LoadVideo:Clean;OpenCV_3_VideoProcessing:Clean;LoadImage:Clean;Trackbar:Clean;CameraCapture:Clean;VideoWriter:Clean;MouseCallback:Clean;Smooth:Clean;Resize:Clean;ROI:Clean;ROI2:Clean;XML:Clean;Rand:Clean;ErodeAndDilate:Clean;MorphologyEx:Clean"/>
 		</Target>
 		<Target Name="Make">
-			<CallTarget Targets="HelloWorld:Make;OpenCV_1_LoadImage:Make;OpenCV_2_LoadVideo:Make;OpenCV_3_VideoProcessing:Make;LoadImage:Make;Trackbar:Make;CameraCapture:Make;VideoWriter:Make;MouseCallback:Make;Smooth:Make;Resize:Make;ROI:Make;ROI2:Make;XML:Make"/>
+			<CallTarget Targets="HelloWorld:Make;OpenCV_1_LoadImage:Make;OpenCV_2_LoadVideo:Make;OpenCV_3_VideoProcessing:Make;LoadImage:Make;Trackbar:Make;CameraCapture:Make;VideoWriter:Make;MouseCallback:Make;Smooth:Make;Resize:Make;ROI:Make;ROI2:Make;XML:Make;Rand:Make;ErodeAndDilate:Make;MorphologyEx:Make"/>
 		</Target>
 		<Import Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')" Project="$(BDS)\Bin\CodeGear.Group.Targets"/>
 	</Project>

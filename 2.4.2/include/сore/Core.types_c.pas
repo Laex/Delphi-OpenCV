@@ -336,8 +336,8 @@ const
 
   { ************** Random number generation ****************** }
 type
-  CvRNG = uint64;
-{$EXTERNALSYM CvRNG}
+  TCvRNG = uint64;
+{EXTERNALSYM CvRNG}
 
 const
   CV_RNG_COEFF = Cardinal(4164903690);
@@ -364,7 +364,7 @@ const
 {$EXTERNALSYM IPL_DEPTH_16U}
   IPL_DEPTH_32F = 32;
 {$EXTERNALSYM IPL_DEPTH_32F}
-  IPL_DEPTH_8S: CvRNG = (IPL_DEPTH_SIGN or 8);
+  IPL_DEPTH_8S: TCvRNG = (IPL_DEPTH_SIGN or 8);
 {$EXTERNALSYM IPL_DEPTH_8S}
   IPL_DEPTH_16S = (IPL_DEPTH_SIGN or 16);
 {$EXTERNALSYM IPL_DEPTH_16S}
@@ -450,7 +450,8 @@ type
   end;
 
   // type       _IplTileInfo IplTileInfo = ;
-  IplConvKernel = packed record
+  pIplConvKernel=^TIplConvKernel;
+  TIplConvKernel = packed record
     nCols: Integer;
     nRows: Integer;
     anchorX: Integer;
@@ -1748,6 +1749,17 @@ Type
     // temp := (uint64(Cardinal)temp * CV_RNG_COEFF + (temp shr 32: - 1))begin CvRNG rng := seed ?(uint64)
     // seed: (uint64(int64) - 1; result := rng; end; (): Cardinal; * rng := temp;
     // result := (Cardinal)temp; end;
+
+    (*
+      CV_INLINE unsigned cvRandInt( CvRNG* rng )
+      {
+      uint64 temp = *rng;
+      temp = (uint64)(unsigned)temp*CV_RNG_COEFF + (temp >> 32);
+      *rng = temp;
+      return (unsigned)temp;
+      }
+    *)
+
     //
     // { Returns random floating-point number between 0 and 1: }
     // CV_INLINE
@@ -2073,6 +2085,7 @@ function CvPoint(const x, y: Integer): TCvPoint; inline;
 function CvSize(const width, height: Integer): TCvSize; inline;
 function cvScalar(const val0: Double; const val1: Double = 0; const val2: Double = 0;
   const val3: Double = 0): TCvScalar; inline;
+function cvRandInt(Var rng: TCvRNG): Cardinal; inline;
 function CvRect(Const x, y, width, height: Integer): TCvRect; inline;
 (* Inline constructor. No data is allocated internally!!!
   * (Use together with cvCreateData, or use cvCreateMat instead to
@@ -2201,6 +2214,14 @@ begin
   Result.y := y;
   Result.width := width;
   Result.height := height;
+end;
+
+function cvRandInt(Var rng: TCvRNG): Cardinal;
+begin
+{$Q-}
+  rng := TCvRNG(rng * CV_RNG_COEFF + (rng shr 32));
+{$Q+}
+  Result := Cardinal(rng);
 end;
 
 end.

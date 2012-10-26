@@ -232,26 +232,67 @@ procedure cvResize(const src: TCvArr; dst: TCvArr; interpolation: integer = CV_I
 // CVAPI(IplConvKernel)  cvCreateStructuringElementEx(
 // Integer cols, Integer  rows, Integer  anchor_x, Integer  anchor_y,
 // function shape, Integer values CV_DEFAULT(v1: 0)): Integer;
-//
+
+// CVAPI(IplConvKernel*)  cvCreateStructuringElementEx(
+// int cols, int  rows, int  anchor_x, int  anchor_y,
+// int shape, int* values CV_DEFAULT(NULL) );
+function cvCreateStructuringElementEx(cols: integer; rows: integer; anchor_x: integer;
+  anchor_y: integer; shape: integer; values: pInteger = nil): pIplConvKernel; cdecl;
+
 // (* releases structuring element *)
 // CVAPI(procedure)  cvReleaseStructuringElement( element: array of IplConvKernel);
+// CVAPI(void)  cvReleaseStructuringElement( IplConvKernel** element );
+procedure cvReleaseStructuringElement(Var element: pIplConvKernel); cdecl;
+
+
 //
 // (* erodes input image (applies minimum filter) one or more times.
 // If element cPointer is 0, 3x3 rectangular element is used *)
 // CVAPI(procedure)  cvErode(
 // v1: 0);
 // var dilates input image (applies maximum filter) one or more times.   If element cPointer is 0: function iterations CV_DEFAULT(v1: 1)): Integer;(;
-// var )CVAPI(procedure)  cvDilate(  CvArr* src: 3x3 rectangular element is used;
+// var )
+
+// CVAPI(procedure)  cvDilate(  CvArr* src: 3x3 rectangular element is used;
 // var dst: CvArr;
 // var element CV_DEFAULT(0): IplConvKernel;
-// var Performs complex morphological transformation *)CVAPI(procedure)  cvMorphologyEx(  CvArr* src: function iterations CV_DEFAULT(v1: 1)): Integer;(;
+// var Performs complex morphological transformation *)
+
+// CVAPI(procedure)  cvMorphologyEx(  CvArr* src: function iterations CV_DEFAULT(v1: 1)): Integer;(;
 // var dst: CvArr;
 // var temp: CvArr;
 // var element: IplConvKernel;
 // operation: function;
-// var Calculates all spatial and central moments up to the 3rd order *)CVAPI(procedure) cvMoments(  CvArr* arr: Integer iterations CV_DEFAULT(v1: 1)): Integer;(;
+// var Calculates all spatial and central moments up to the 3rd order *)
+
+{ Performs complex morphological transformation }
+// CVAPI(void)  cvMorphologyEx( const CvArr* src, CvArr* dst,
+// CvArr* temp, IplConvKernel* element,
+// int operation, int iterations CV_DEFAULT(1) );
+procedure cvMorphologyEx(const src: pIplImage; dst: pIplImage; temp: pIplImage;
+  element: pIplConvKernel; operation: integer; iterations: integer = 1); cdecl;
+
+
+// CVAPI(procedure) cvMoments(  CvArr* arr: Integer iterations CV_DEFAULT(v1: 1)): Integer;(;
 // var moments: CvMoments;
 // binary CV_DEFAULT(0): Integer);
+
+{ erodes input image (applies minimum filter) one or more times.
+  If element pointer is NULL, 3x3 rectangular element is used }
+// CVAPI(void)  cvErode( const CvArr* src, CvArr* dst,
+// IplConvKernel* element CV_DEFAULT(NULL),
+// int iterations CV_DEFAULT(1) );
+procedure cvErode(const src: pIplImage; dst: pIplImage; element: pIplConvKernel = nil;
+  iterations: integer = 1); cdecl;
+
+{ dilates input image (applies maximum filter) one or more times.
+  If element pointer is NULL, 3x3 rectangular element is used }
+// CVAPI(void)  cvDilate( const CvArr* src, CvArr* dst,
+// IplConvKernel* element CV_DEFAULT(NULL),
+// int iterations CV_DEFAULT(1) );
+procedure cvDilate(const src: pIplImage; dst: pIplImage; element: pIplConvKernel = nil;
+  iterations: integer = 1); cdecl;
+
 //
 // (* Retrieve particular spatial, central or normalized central moments *)
 // CVAPI(Double)  cvGetSpatialMoment( CvMoments* moments, Integer x_order, Integer y_order );
@@ -609,5 +650,10 @@ procedure cvCvtColor; external DllName;
 function cvThreshold; external DllName;
 procedure cvSmooth; external DllName;
 procedure cvResize; external DllName;
+function cvCreateStructuringElementEx; external DllName;
+procedure cvErode; external DllName;
+procedure cvDilate; external DllName;
+procedure cvReleaseStructuringElement; external DllName;
+procedure cvMorphologyEx; external DllName;
 
 end.

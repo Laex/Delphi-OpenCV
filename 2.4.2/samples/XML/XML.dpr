@@ -63,6 +63,50 @@ begin
 
       // освобождаем ресурсы
         cvReleaseMat(matrix);
+
+
+//Чтение XML
+//printf("Example 3_19 Reading in cfg.xml\n");
+//
+//	// открываем файл для чтения
+//	CvFileStorage* fs = cvOpenFileStorage(
+//		"cfg.xml",
+//		0,
+//		CV_STORAGE_READ
+//		);
+//
+//	//
+//	// считываем значения
+//	//
+//	int frame_count = cvReadIntByName(
+//		fs,
+//		0,
+//		"frame_count",
+//		5 // значение по-умолчанию
+//		);
+//
+//	CvSeq* s = cvGetFileNodeByName(fs,0,"frame_size")->data.seq;
+//
+//	int frame_width = cvReadInt(
+//		(CvFileNode*)cvGetSeqElem(s,0)
+//		);
+//
+//	int frame_height = cvReadInt(
+//		(CvFileNode*)cvGetSeqElem(s,1)
+//		);
+//
+//	CvMat* color_cvt_matrix = (CvMat*) cvRead(
+//		fs,
+//		0
+//		);
+//
+//	// показываем
+//	printf("frame_count=%d, frame_width=%d, frame_height=%d\n",frame_count,frame_width,frame_height);
+//
+//	cvReleaseFileStorage( &fs );
+
+
+
   except
     on E: Exception do
       Writeln(E.ClassName, ': ', E.Message);
