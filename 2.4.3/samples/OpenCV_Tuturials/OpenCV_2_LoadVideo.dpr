@@ -8,7 +8,7 @@ uses
 
 const
   // declare video filename
-  VIDEO_FILE_NAME = 'clock.avi';
+  VIDEO_FILE_NAME = '768x576.avi';
   // declare escape char
   ESCAPE_CHAR = 27;
 

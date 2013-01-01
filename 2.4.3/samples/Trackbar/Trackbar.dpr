@@ -10,7 +10,7 @@ uses
   highgui_c in '..\..\include\highgui\highgui_c.pas';
 
 Const
-  filename = 'clock.avi';
+  filename = '768x576.avi';
 
 Var
   capture: pCvCapture = nil;

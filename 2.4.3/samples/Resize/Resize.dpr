@@ -13,7 +13,7 @@ uses
 
 Const
   // имя картинки
-  filename = 'opencv_logo_with_text.png';
+  filename = 'cat2.jpg';
 
 Var
   // исходная

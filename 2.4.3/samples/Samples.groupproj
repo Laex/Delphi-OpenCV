@@ -54,6 +54,36 @@
 			<Projects Include="MorphologyEx\MorphologyEx.dproj">
 				<Dependencies/>
 			</Projects>
+			<Projects Include="LoadAndTransformImage\LoadAndTransformImage.dproj">
+				<Dependencies/>
+			</Projects>
+			<Projects Include="Weighted\Weighted.dproj">
+				<Dependencies/>
+			</Projects>
+			<Projects Include="FloodFill\FloodFill.dproj">
+				<Dependencies/>
+			</Projects>
+			<Projects Include="Weighted2\Weighted2.dproj">
+				<Dependencies/>
+			</Projects>
+			<Projects Include="cvThreshold\Threshold.dproj">
+				<Dependencies/>
+			</Projects>
+			<Projects Include="cvInRange\InRange.dproj">
+				<Dependencies/>
+			</Projects>
+			<Projects Include="SplitMerge\SplitMerge.dproj">
+				<Dependencies/>
+			</Projects>
+			<Projects Include="cvAnd\cv_And.dproj">
+				<Dependencies/>
+			</Projects>
+			<Projects Include="CvtPixToPlane\CvtPixToPlane.dproj">
+				<Dependencies/>
+			</Projects>
+			<Projects Include="cvCopyMakeBorder\CopyMakeBorder.dproj">
+				<Dependencies/>
+			</Projects>
 		</ItemGroup>
 		<ProjectExtensions>
 			<Borland.Personality>Default.Personality.12</Borland.Personality>
@@ -215,14 +245,104 @@
 		<Target Name="MorphologyEx:Make">
 			<MSBuild Targets="Make" Projects="MorphologyEx\MorphologyEx.dproj"/>
 		</Target>
+		<Target Name="LoadAndTransformImage">
+			<MSBuild Projects="LoadAndTransformImage\LoadAndTransformImage.dproj"/>
+		</Target>
+		<Target Name="LoadAndTransformImage:Clean">
+			<MSBuild Targets="Clean" Projects="LoadAndTransformImage\LoadAndTransformImage.dproj"/>
+		</Target>
+		<Target Name="LoadAndTransformImage:Make">
+			<MSBuild Targets="Make" Projects="LoadAndTransformImage\LoadAndTransformImage.dproj"/>
+		</Target>
+		<Target Name="Weighted">
+			<MSBuild Projects="Weighted\Weighted.dproj"/>
+		</Target>
+		<Target Name="Weighted:Clean">
+			<MSBuild Targets="Clean" Projects="Weighted\Weighted.dproj"/>
+		</Target>
+		<Target Name="Weighted:Make">
+			<MSBuild Targets="Make" Projects="Weighted\Weighted.dproj"/>
+		</Target>
+		<Target Name="FloodFill">
+			<MSBuild Projects="FloodFill\FloodFill.dproj"/>
+		</Target>
+		<Target Name="FloodFill:Clean">
+			<MSBuild Targets="Clean" Projects="FloodFill\FloodFill.dproj"/>
+		</Target>
+		<Target Name="FloodFill:Make">
+			<MSBuild Targets="Make" Projects="FloodFill\FloodFill.dproj"/>
+		</Target>
+		<Target Name="Weighted2">
+			<MSBuild Projects="Weighted2\Weighted2.dproj"/>
+		</Target>
+		<Target Name="Weighted2:Clean">
+			<MSBuild Targets="Clean" Projects="Weighted2\Weighted2.dproj"/>
+		</Target>
+		<Target Name="Weighted2:Make">
+			<MSBuild Targets="Make" Projects="Weighted2\Weighted2.dproj"/>
+		</Target>
+		<Target Name="Threshold">
+			<MSBuild Projects="cvThreshold\Threshold.dproj"/>
+		</Target>
+		<Target Name="Threshold:Clean">
+			<MSBuild Targets="Clean" Projects="cvThreshold\Threshold.dproj"/>
+		</Target>
+		<Target Name="Threshold:Make">
+			<MSBuild Targets="Make" Projects="cvThreshold\Threshold.dproj"/>
+		</Target>
+		<Target Name="InRange">
+			<MSBuild Projects="cvInRange\InRange.dproj"/>
+		</Target>
+		<Target Name="InRange:Clean">
+			<MSBuild Targets="Clean" Projects="cvInRange\InRange.dproj"/>
+		</Target>
+		<Target Name="InRange:Make">
+			<MSBuild Targets="Make" Projects="cvInRange\InRange.dproj"/>
+		</Target>
+		<Target Name="SplitMerge">
+			<MSBuild Projects="SplitMerge\SplitMerge.dproj"/>
+		</Target>
+		<Target Name="SplitMerge:Clean">
+			<MSBuild Targets="Clean" Projects="SplitMerge\SplitMerge.dproj"/>
+		</Target>
+		<Target Name="SplitMerge:Make">
+			<MSBuild Targets="Make" Projects="SplitMerge\SplitMerge.dproj"/>
+		</Target>
+		<Target Name="cv_And">
+			<MSBuild Projects="cvAnd\cv_And.dproj"/>
+		</Target>
+		<Target Name="cv_And:Clean">
+			<MSBuild Targets="Clean" Projects="cvAnd\cv_And.dproj"/>
+		</Target>
+		<Target Name="cv_And:Make">
+			<MSBuild Targets="Make" Projects="cvAnd\cv_And.dproj"/>
+		</Target>
+		<Target Name="CvtPixToPlane">
+			<MSBuild Projects="CvtPixToPlane\CvtPixToPlane.dproj"/>
+		</Target>
+		<Target Name="CvtPixToPlane:Clean">
+			<MSBuild Targets="Clean" Projects="CvtPixToPlane\CvtPixToPlane.dproj"/>
+		</Target>
+		<Target Name="CvtPixToPlane:Make">
+			<MSBuild Targets="Make" Projects="CvtPixToPlane\CvtPixToPlane.dproj"/>
+		</Target>
+		<Target Name="CopyMakeBorder">
+			<MSBuild Projects="cvCopyMakeBorder\CopyMakeBorder.dproj"/>
+		</Target>
+		<Target Name="CopyMakeBorder:Clean">
+			<MSBuild Targets="Clean" Projects="cvCopyMakeBorder\CopyMakeBorder.dproj"/>
+		</Target>
+		<Target Name="CopyMakeBorder:Make">
+			<MSBuild Targets="Make" Projects="cvCopyMakeBorder\CopyMakeBorder.dproj"/>
+		</Target>
 		<Target Name="Build">
-			<CallTarget Targets="HelloWorld;OpenCV_1_LoadImage;OpenCV_2_LoadVideo;OpenCV_3_VideoProcessing;LoadImage;Trackbar;CameraCapture;VideoWriter;MouseCallback;Smooth;Resize;ROI;ROI2;XML;Rand;ErodeAndDilate;MorphologyEx"/>
+			<CallTarget Targets="HelloWorld;OpenCV_1_LoadImage;OpenCV_2_LoadVideo;OpenCV_3_VideoProcessing;LoadImage;Trackbar;CameraCapture;VideoWriter;MouseCallback;Smooth;Resize;ROI;ROI2;XML;Rand;ErodeAndDilate;MorphologyEx;LoadAndTransformImage;Weighted;FloodFill;Weighted2;Threshold;InRange;SplitMerge;cv_And;CvtPixToPlane;CopyMakeBorder"/>
 		</Target>
 		<Target Name="Clean">
-			<CallTarget Targets="HelloWorld:Clean;OpenCV_1_LoadImage:Clean;OpenCV_2_LoadVideo:Clean;OpenCV_3_VideoProcessing:Clean;LoadImage:Clean;Trackbar:Clean;CameraCapture:Clean;VideoWriter:Clean;MouseCallback:Clean;Smooth:Clean;Resize:Clean;ROI:Clean;ROI2:Clean;XML:Clean;Rand:Clean;ErodeAndDilate:Clean;MorphologyEx:Clean"/>
+			<CallTarget Targets="HelloWorld:Clean;OpenCV_1_LoadImage:Clean;OpenCV_2_LoadVideo:Clean;OpenCV_3_VideoProcessing:Clean;LoadImage:Clean;Trackbar:Clean;CameraCapture:Clean;VideoWriter:Clean;MouseCallback:Clean;Smooth:Clean;Resize:Clean;ROI:Clean;ROI2:Clean;XML:Clean;Rand:Clean;ErodeAndDilate:Clean;MorphologyEx:Clean;LoadAndTransformImage:Clean;Weighted:Clean;FloodFill:Clean;Weighted2:Clean;Threshold:Clean;InRange:Clean;SplitMerge:Clean;cv_And:Clean;CvtPixToPlane:Clean;CopyMakeBorder:Clean"/>
 		</Target>
 		<Target Name="Make">
-			<CallTarget Targets="HelloWorld:Make;OpenCV_1_LoadImage:Make;OpenCV_2_LoadVideo:Make;OpenCV_3_VideoProcessing:Make;LoadImage:Make;Trackbar:Make;CameraCapture:Make;VideoWriter:Make;MouseCallback:Make;Smooth:Make;Resize:Make;ROI:Make;ROI2:Make;XML:Make;Rand:Make;ErodeAndDilate:Make;MorphologyEx:Make"/>
+			<CallTarget Targets="HelloWorld:Make;OpenCV_1_LoadImage:Make;OpenCV_2_LoadVideo:Make;OpenCV_3_VideoProcessing:Make;LoadImage:Make;Trackbar:Make;CameraCapture:Make;VideoWriter:Make;MouseCallback:Make;Smooth:Make;Resize:Make;ROI:Make;ROI2:Make;XML:Make;Rand:Make;ErodeAndDilate:Make;MorphologyEx:Make;LoadAndTransformImage:Make;Weighted:Make;FloodFill:Make;Weighted2:Make;Threshold:Make;InRange:Make;SplitMerge:Make;cv_And:Make;CvtPixToPlane:Make;CopyMakeBorder:Make"/>
 		</Target>
 		<Import Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')" Project="$(BDS)\Bin\CodeGear.Group.Targets"/>
 	</Project>

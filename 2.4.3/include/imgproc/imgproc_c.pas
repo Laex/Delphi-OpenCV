@@ -89,31 +89,50 @@ uses
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * \ * image Processing * * *
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * )
-// (* Copies source 2D array inside of the larger destination array and   makes a border of the specified cType (IPL_BORDER_ *)
-// around the copied area. * / CVAPI(
-// procedure)cvCopyMakeBorder(CvArr * src: array of unction mask CV_DEFAULT(v1: 0)): CvArr; (;
-//
-// var
-// dst: CvArr;
-// offset: CvPoint;
-// bordertype: function;
-//
-// var
-// Smoothes array (removes noise) * )CVAPI(
+
+{
+  /* Copies source 2D array inside of the larger destination array and
+  makes a border of the specified type (IPL_BORDER_*) around the copied area. */
+  CVAPI(void) cvCopyMakeBorder(
+  const CvArr* src,
+  CvArr* dst,
+  CvPoint offset,
+  int bordertype,
+  CvScalar value CV_DEFAULT(cvScalarAll(0)));
+}
+procedure cvCopyMakeBorder(
+  { } const src: pIplImage;
+  { } dst: pIplImage;
+  { } offset: TCvPoint;
+  { } bordertype: Integer;
+  { } value: TCvScalar { * cvScalarAll(0) * } ); cdecl;
+
+// Smoothes array (removes noise) * )
+// CVAPI(
 // procedure)cvSmooth(CvArr * src: CvScalar value CV_DEFAULT(v1: 0))): Integer; (; var dst: CvArr;
 // smoothtype CV_DEFAULT(v1: 3:
 // function); size2 CV_DEFAULT(0): Integer; sigma1 CV_DEFAULT(0):
 // function; sigma2 CV_DEFAULT(0): Double): Integer;
+
 {
-  CVAPI(void) cvSmooth( const CvArr* src, CvArr* dst,
+  // Smoothes array (removes noise)
+  CVAPI(void) cvSmooth(
+  const CvArr* src,
+  CvArr* dst,
   int smoothtype CV_DEFAULT(CV_GAUSSIAN),
   int size1 CV_DEFAULT(3),
   int size2 CV_DEFAULT(0),
   double sigma1 CV_DEFAULT(0),
   double sigma2 CV_DEFAULT(0));
 }
-procedure cvSmooth(const src: pIplImage; dst: pIplImage; smoothtype: integer = CV_GAUSSIAN;
-  param1: integer = 3; param2: integer = 0; param3: double = 0; param4: double = 0); cdecl;
+procedure cvSmooth(
+  { } const src: pIplImage;
+  { } dst: pIplImage;
+  { } smoothtype: Integer = CV_GAUSSIAN;
+  { } size1: Integer = 3;
+  { } size2: Integer = 0;
+  { } sigma1: double = 0;
+  { } sigma2: double = 0); cdecl;
 
 
 // (* Convolves the image with the kernel *)
@@ -153,7 +172,7 @@ procedure cvSmooth(const src: pIplImage; dst: pIplImage; smoothtype: integer = C
 
 (* Converts input array pixels from one color space to another *)
 // CVAPI(void)  cvCvtColor( const CvArr* src, CvArr* dst, int code );
-procedure cvCvtColor(const src: pIplImage; dst: pIplImage; code: integer); cdecl;
+procedure cvCvtColor(const src: pIplImage; dst: pIplImage; code: Integer); cdecl;
 //
 // (* Resizes image (input array is resized to fit the destination array) *)
 // CVAPI(procedure)cvResize(var Warps image with affine transform * )
@@ -161,7 +180,7 @@ procedure cvCvtColor(const src: pIplImage; dst: pIplImage; code: integer); cdecl
   CVAPI(void)  cvResize( const CvArr* src, CvArr* dst,
   int interpolation CV_DEFAULT( CV_INTER_LINEAR ));
 }
-procedure cvResize(const src: TCvArr; dst: TCvArr; interpolation: integer = CV_INTER_LINEAR); cdecl;
+procedure cvResize(const src: TCvArr; dst: TCvArr; interpolation: Integer = CV_INTER_LINEAR); cdecl;
 
 // CVAPI(procedure)cvWarpAffine(CvArr
 // * src: ): CV_INTER_LINEAR): Integer; (; var dst: CvArr; var map_matrix: CvMat;
@@ -225,8 +244,8 @@ procedure cvResize(const src: TCvArr; dst: TCvArr; interpolation: integer = CV_I
 // CVAPI(IplConvKernel*)  cvCreateStructuringElementEx(
 // int cols, int  rows, int  anchor_x, int  anchor_y,
 // int shape, int* values CV_DEFAULT(NULL) );
-function cvCreateStructuringElementEx(cols: integer; rows: integer; anchor_x: integer;
-  anchor_y: integer; shape: integer; values: pInteger = nil): pIplConvKernel; cdecl;
+function cvCreateStructuringElementEx(cols: Integer; rows: Integer; anchor_x: Integer; anchor_y: Integer;
+  shape: Integer; values: pInteger = nil): pIplConvKernel; cdecl;
 
 // (* releases structuring element *)
 // CVAPI(procedure)  cvReleaseStructuringElement( element: array of IplConvKernel);
@@ -258,8 +277,8 @@ procedure cvReleaseStructuringElement(Var element: pIplConvKernel); cdecl;
 // CVAPI(void)  cvMorphologyEx( const CvArr* src, CvArr* dst,
 // CvArr* temp, IplConvKernel* element,
 // int operation, int iterations CV_DEFAULT(1) );
-procedure cvMorphologyEx(const src: pIplImage; dst: pIplImage; temp: pIplImage;
-  element: pIplConvKernel; operation: integer; iterations: integer = 1); cdecl;
+procedure cvMorphologyEx(const src: pIplImage; dst: pIplImage; temp: pIplImage; element: pIplConvKernel;
+  operation: Integer; iterations: Integer = 1); cdecl;
 
 
 // CVAPI(procedure) cvMoments(  CvArr* arr: Integer iterations CV_DEFAULT(v1: 1)): Integer;(;
@@ -271,16 +290,14 @@ procedure cvMorphologyEx(const src: pIplImage; dst: pIplImage; temp: pIplImage;
 // CVAPI(void)  cvErode( const CvArr* src, CvArr* dst,
 // IplConvKernel* element CV_DEFAULT(NULL),
 // int iterations CV_DEFAULT(1) );
-procedure cvErode(const src: pIplImage; dst: pIplImage; element: pIplConvKernel = nil;
-  iterations: integer = 1); cdecl;
+procedure cvErode(const src: pIplImage; dst: pIplImage; element: pIplConvKernel = nil; iterations: Integer = 1); cdecl;
 
 { dilates input image (applies maximum filter) one or more times.
   If element pointer is NULL, 3x3 rectangular element is used }
 // CVAPI(void)  cvDilate( const CvArr* src, CvArr* dst,
 // IplConvKernel* element CV_DEFAULT(NULL),
 // int iterations CV_DEFAULT(1) );
-procedure cvDilate(const src: pIplImage; dst: pIplImage; element: pIplConvKernel = nil;
-  iterations: integer = 1); cdecl;
+procedure cvDilate(const src: pIplImage; dst: pIplImage; element: pIplConvKernel = nil; iterations: Integer = 1); cdecl;
 
 //
 // (* Retrieve particular spatial, central or normalized central moments *)
@@ -549,21 +566,53 @@ procedure cvDilate(const src: pIplImage; dst: pIplImage; element: pIplConvKernel
 // (* Applies fixed-level threshold to grayscale image.
 // This is a basic operation applied before retrieving contours *)
 // CVAPI(double)  cvThreshold( const CvArr*  src, CvArr*  dst, double  threshold, double  max_value, int threshold_type );
-function cvThreshold(const src, dst: pIplImage; threshold, max_value: double;
-  threshold_type: integer): double; cdecl;
+function cvThreshold(const src, dst: pIplImage; threshold, max_value: double; threshold_type: Integer): double; cdecl;
+{
+  /* Applies adaptive threshold to grayscale image.
+  The two parameters for methods CV_ADAPTIVE_THRESH_MEAN_C and
+  CV_ADAPTIVE_THRESH_GAUSSIAN_C are:
+  neighborhood size (3, 5, 7 etc.),
+  and a constant subtracted from mean (...,-3,-2,-1,0,1,2,3,...) */
+  CVAPI(void)  cvAdaptiveThreshold(
+  const CvArr* src,
+  CvArr* dst,
+  double max_value,
+  int adaptive_method CV_DEFAULT(CV_ADAPTIVE_THRESH_MEAN_C),
+  int threshold_type CV_DEFAULT(CV_THRESH_BINARY),
+  int block_size CV_DEFAULT(3),
+  double param1 CV_DEFAULT(5));
+}
+procedure cvAdaptiveThreshold(
+  { } const src: pIplImage;
+  { } dst: pIplImage;
+  { } max_value: double;
+  { } adaptive_method: Integer = CV_ADAPTIVE_THRESH_MEAN_C;
+  { } threshold_type: Integer = CV_THRESH_BINARY;
+  { } block_size: Integer = 3;
+  { } param1: double = 5); cdecl;
 
-//
-// (* Applies adaptive threshold to grayscale image.
-// The two parameters for methods CV_ADAPTIVE_THRESH_MEAN_C and
-// CV_ADAPTIVE_THRESH_GAUSSIAN_C are:
-// neighborhood size (3, 5, 7 etc.),
-// and a constant subtracted from mean (Args: const nt = subtracted from mean (Args: array of const,-3,-2,-1,0,1,2,3,Args: array of const): CvArr;
-// {$EXTERNALSYM nt}r * src, CvArr * dst, Double max_value,
-// function adaptive_method CV_DEFAULT(v1: CV_THRESH_BINARY); block_size CV_DEFAULT(3): Integer;
-// param1 CV_DEFAULT(5):
-// function): Integer;
-//
-// (* Fills the connected component until the color difference gets large enough *)
+{
+  /* Fills the connected component until the color difference gets large enough */
+  CVAPI(void)  cvFloodFill(
+  CvArr* image,
+  CvPoint seed_point,
+  CvScalar new_val,
+  CvScalar lo_diff CV_DEFAULT(cvScalarAll(0)),
+  CvScalar up_diff CV_DEFAULT(cvScalarAll(0)),
+  CvConnectedComp* comp CV_DEFAULT(NULL),
+  int flags CV_DEFAULT(4),
+  CvArr* mask CV_DEFAULT(NULL));
+}
+procedure cvFloodFill(
+  { } image: pIplImage;
+  { } seed_point: TCvPoint;
+  { } new_val: TCvScalar;
+  { } lo_diff: TCvScalar { * cvScalarAll(0) * };
+  { } up_diff: TCvScalar { * cvScalarAll(0) * };
+  { } comp: pCvConnectedComp = NIL;
+  { } flags: Integer = 4;
+  { } mask: PCvArr = NIL); cdecl;
+
 // CVAPI(
 // procedure)cvFloodFill(v1: cvScalarAll(0)); up_diff CV_DEFAULT(cvScalarAll(0)): CvScalar;
 // var comp CV_DEFAULT(0): CvConnectedComp; * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -644,5 +693,8 @@ procedure cvErode; external DllName;
 procedure cvDilate; external DllName;
 procedure cvReleaseStructuringElement; external DllName;
 procedure cvMorphologyEx; external DllName;
+procedure cvFloodFill; external DllName;
+procedure cvAdaptiveThreshold; external DllName;
+procedure cvCopyMakeBorder; external DllName;
 
 end.

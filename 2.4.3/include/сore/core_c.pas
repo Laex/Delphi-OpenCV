@@ -104,7 +104,11 @@ function cvCreateImageHeader(size: TCvSize; depth: Integer; channels: Integer): 
 // function cvInitImageHeader(IplImage * image, CvSize size, Integer depth, CVAPI(IplImage)channels,
 // Integer origin CV_DEFAULT(v1: 4)): Integer): IplImage;
 
-(* Creates IPL image (header and data) *)
+{
+  //Creates IPL image (header and data)
+
+  CVAPI(IplImage*)  cvCreateImage( CvSize size, int depth, int channels );
+}
 function cvCreateImage(size: TCvSize; depth, channels: Integer): pIplImage; cdecl;
 
 (* Releases (i.e. deallocates) IPL image header *)
@@ -401,9 +405,16 @@ const
 
   // CVAPI(CvSize) cvGetSize( const CvArr* arr );
   // function cvGetSize(const arr: CvArr): CvSize; cdecl;
-  // todo -cmedium -oLaex: Использовать процедуру OpenCV (need use OpenCV)
+  { todo -cmedium -oLaex: Использовать процедуру OpenCV (need use OpenCV) }
+  {
+    /* Returns width and height of array in elements */
+    CVAPI(CvSize) cvGetSize( const CvArr* arr );
+  }
+function cvGetSize(const arr: pCvArr): TCvSize; overload;
+function cvGetSize(const arr: pIplImage): TCvSize; overload;
 function _cvGetSize(const arr: pCvArr): TCvSize; cdecl;
-function cvGetSize(const image: pIplImage): TCvSize;
+// procedure _cvGetSize(const arr: pCvArr;var size: TCvSize); cdecl;
+// function _cvGetSize(const image: pIplImage): TCvSize;
 
 //
 // (* Copies source array to destination array *)
@@ -416,14 +427,10 @@ procedure cvCopy(const src: pIplImage; dst: pIplImage; const mask: pIplImage = n
 procedure cvCopyImage(const src: pIplImage; dst: pIplImage; const mask: pIplImage = nil); cdecl;
 
 {
-  /* Sets all or "masked" elements of input array
-  to the same value*/
-  CVAPI(void)  cvSet( CvArr* arr, CvScalar value,
-  const CvArr* mask CV_DEFAULT(NULL) );
-  // procedure cvSet(CvArr * arr: v1: 0)): CvArr; (; value: CvScalar;
-  // var Clears all the array elements(Sets them to 0) * )
+  /* Sets all or "masked" elements of input array to the same value*/
+  CVAPI(void)  cvSet( CvArr* arr, CvScalar value,const CvArr* mask CV_DEFAULT(NULL) );
 }
-procedure cvSet(arr: TCvArr; value: TCvScalar; const mask: TCvArr = Nil); cdecl;
+procedure cvSet(arr: pCvArr; value: TCvScalar; const mask: TCvArr = Nil); cdecl;
 
 // procedure cvSetZero(CvArr * arr: unction mask CV_DEFAULT(v1: 0)): CvArr; ();
 // const cvZero = cvSetZero;
@@ -433,14 +440,52 @@ procedure cvSet(arr: TCvArr; value: TCvScalar; const mask: TCvArr = Nil); cdecl;
 procedure cvSetZero(arr: TCvArr); cdecl;
 procedure cvZero(arr: TCvArr); cdecl;
 
-// (* Splits a multi-channel array into the set of single-channel arrays or
-// particular : array[0..color-1] of extracts plane *)
-// procedure cvSplit(var src: CvArr; var dst0: CvArr; var dst1: CvArr; var dst2: CvArr;
-// var dst3: CvArr);
-//
-// (* Merges a set of single-channel arrays into the single multi-channel array
-// inserts one particular : array[0..color-1] of or plane to the cArray *)
-// procedure cvMerge(var src0: CvArr; var src1: CvArr; var = src3: onst CvArr; var } CvArr * dst:
+{
+  /* Splits a multi-channel array into the set of single-channel arrays or
+  extracts particular [color] plane */
+  CVAPI(void)  cvSplit(
+  const CvArr* src,
+  CvArr* dst0,
+  CvArr* dst1,
+  CvArr* dst2,
+  CvArr* dst3 );
+}
+procedure cvSplit(
+  { } const src: pIplImage;
+  { } dst0: pIplImage;
+  { } dst1: pIplImage;
+  { } dst2: pIplImage;
+  { } dst3: pIplImage); cdecl;
+procedure cvCvtPixToPlane(
+  { } const src: pIplImage;
+  { } dst0: pIplImage;
+  { } dst1: pIplImage;
+  { } dst2: pIplImage;
+  { } dst3: pIplImage); cdecl;
+
+{
+  /* Merges a set of single-channel arrays into the single multi-channel array
+  or inserts one particular [color] plane to the array */
+  CVAPI(void)  cvMerge(
+  const CvArr* src0,
+  const CvArr* src1,
+  const CvArr* src2,
+  const CvArr* src3,
+  CvArr* dst );
+}
+procedure cvMerge(
+  { } const src0: pIplImage;
+  { } const src1: pIplImage;
+  { } const src2: pIplImage;
+  { } const src3: pIplImage;
+  { } dst: pIplImage); cdecl;
+procedure cvCvtPlaneToPix(
+  { } const src0: pIplImage;
+  { } const src1: pIplImage;
+  { } const src2: pIplImage;
+  { } const src3: pIplImage;
+  { } dst: pIplImage); cdecl;
+
 // {$EXTERNALSYM CvArr);
 //
 // (* Copies several channels from input arrays to
@@ -488,8 +533,7 @@ procedure cvZero(arr: TCvArr); cdecl;
   CVAPI(void)  cvAddS( const CvArr* src, CvScalar value, CvArr* dst,
   const CvArr* mask CV_DEFAULT(NULL));
 }
-procedure cvAddS(const src: pIplImage; value: TCvScalar; dst: pIplImage;
-  const mask: pIplImage = nil); cdecl;
+procedure cvAddS(const src: pIplImage; value: TCvScalar; dst: pIplImage; const mask: pIplImage = nil); cdecl;
 
 // procedure cvSub(CvArr * src1: unction mask CV_DEFAULT(v1: 0)): CvArr; (; var src2: CvArr;
 // var dst: CvArr; var dst(mask) = src(mask) - value = src(mask) + (-value) * )CV_INLINE CV_INLINE
@@ -511,16 +555,45 @@ procedure cvAddS(const src: pIplImage; value: TCvScalar; dst: pIplImage;
 // function scale CV_DEFAULT(v1: 1)): Double; (; scale: CvScalar; var src2: vArr; var dst): CvArr;
 /// / >> Following declaration is a macro definition!const cvAXPY( A: CvArr;
 // v11: real_scalar; :;)cvScaleAdd(A: C; v14: cvRealScalar(real_scalar); :; : );
-//
-// (* dst = src1 * alpha + src2 * beta + gamma *)
-// procedure cvAddWeighted(var src1: CvArr; alpha: Double; var src2: vArr; beta: Double; gamma: Double;
-// var dst: CvArr);
+
+{
+  /* dst = src1 * alpha + src2 * beta + gamma */
+  CVAPI(void)  cvAddWeighted(
+  const CvArr* src1,
+  double alpha,
+  const CvArr* src2,
+  double beta,
+  double gamma,
+  CvArr* dst );
+}
+procedure cvAddWeighted(
+  { } const src1: pIplImage;
+  { } alpha: Double;
+  { } const src2: pIplImage;
+  { } beta: Double;
+  { } gamma: Double;
+  { } dst: pIplImage); cdecl;
+
 //
 // (* result = sum_i(src1(i) * src2(i)) (results for all channels are accumulated together) *)
 // CVAPI(Double)cvDotProduct(CvArr * src1, CvArr * src2);
 //
-// (* dst(idx) = src1(idx) & src2(idx) *)
-// procedure cvAnd(var dst(idx) = src(idx)& value * )
+
+{
+  /* dst(idx) = src1(idx) & src2(idx) */
+  CVAPI(void) cvAnd(
+  const CvArr* src1,
+  const CvArr* src2,
+  CvArr* dst,
+  const CvArr* mask CV_DEFAULT(NULL));
+}
+procedure cvAnd(
+  { } const src1: pIplImage;
+  { } const src2: pIplImage;
+  { } dst: pIplImage;
+  { } masl: pIplImage = nil); cdecl;
+
+
 // procedure cvAndS(CvArr * src: v1: 0)): CvArr; (; value: CvScalar; dst: unction;
 // var mask CV_DEFAULT(v1: 0)): CvArr; (* dst(idx) = src1(idx) | src2(idx) *)
 // procedure cvOr(CvArr * src1: CvArr; var src2: CvArr; dst: unction;
@@ -533,11 +606,35 @@ procedure cvAddS(const src: pIplImage; value: TCvScalar; dst: pIplImage;
 // var mask CV_DEFAULT(v1: 0)): CvArr; (* dst(idx) = ~src(idx) *)
 // procedure cvNot(CvArr * src: CvArr; var dst: CvArr);
 //
-// (* dst(idx) = lower(idx) <= src(idx) < upper(idx) *)
-// procedure cvInRange(var src: CvArr; var lower: CvArr; var upper: vArr; var dst: CvArr);
-//
-// (* dst(idx) = lower <= src(idx) < upper *)
-// procedure cvInRangeS(var src: CvArr; lower: CvScalar; upper: CvScalar; var dst: CvArr);
+
+{
+  /* dst(idx) = lower(idx) <= src(idx) < upper(idx) */
+  CVAPI(void) cvInRange(
+  const CvArr* src,
+  const CvArr* lower,
+  const CvArr* upper,
+  CvArr* dst );
+}
+procedure cvInRange(
+  { } const src: pIplImage;
+  { } const lower: pIplImage;
+  { } const upper: pIplImage;
+  { } dst: pIplImage); cdecl;
+
+{
+  /* dst(idx) = lower <= src(idx) < upper */
+  CVAPI(void) cvInRangeS(
+  const CvArr* src,
+  CvScalar lower,
+  CvScalar upper,
+  CvArr* dst );
+}
+procedure cvInRangeS(
+  { } const src: pIplImage;
+  { } lower: TCvScalar;
+  { } upper: TCvScalar;
+  { } dst: pIplImage); cdecl;
+
 //
 // const CV_CMP_EQ = 0;
 // {$EXTERNALSYM CV_CMP_EQ}
@@ -782,6 +879,25 @@ procedure cvAddS(const src: pIplImage; value: TCvScalar; dst: pIplImage;
 //
 // (* Calculates mean and standard deviation of pixel values *)
 // procedure cvAvgSdv(var Finds global minimum: v1: 0)): CvArr; (; var)
+
+{
+  /* Finds global minimum, maximum and their positions */
+  CVAPI(void)  cvMinMaxLoc(
+  const CvArr* arr,
+  double* min_val,
+  double* max_val,
+  CvPoint* min_loc CV_DEFAULT(NULL),
+  CvPoint* max_loc CV_DEFAULT(NULL),
+  const CvArr* mask CV_DEFAULT(NULL) );
+}
+procedure cvMinMaxLoc(
+  { } const arr: pIplImage;
+  { } min_val: pDouble;
+  { } max_val: pDouble;
+  { } min_loc: pCVPoint = nil;
+  { } max_loc: pCVPoint = nil;
+  { } const mask: pIplImage = nil); cdecl;
+
 // procedure cvMinMaxLoc(CvArr * arr: maximum and their positions; var min_val: Double;
 // var max_val: Double; var min_loc CV_DEFAULT(0): CvPoint; var max_loc CV_DEFAULT(0): CvPoint;
 // var types of array norm * )const CV_C = 1; {$EXTERNALSYM CV_C}const CV_L1 = 2;
@@ -1177,8 +1293,8 @@ const
     CvScalar color, int thickness CV_DEFAULT(1),
     int line_type CV_DEFAULT(8), int shift CV_DEFAULT(0) );
   }
-procedure cvLine(img: pIplImage; pt1, pt2: TCvPoint; color: TCvScalar; thickness: Integer = 1;
-  line_type: Integer = 8; shift: Integer = 0); cdecl;
+procedure cvLine(img: pIplImage; pt1, pt2: TCvPoint; color: TCvScalar; thickness: Integer = 1; line_type: Integer = 8;
+  shift: Integer = 0); cdecl;
 //
 // (* Draws a rectangle given two opposite corners of the rectangle (pt1 & pt2),
 // if thickness<0 (e.g. thickness = CV_FILLED), the filled box is drawn *) then
@@ -1199,8 +1315,8 @@ procedure cvLine(img: pIplImage; pt1, pt2: TCvPoint; color: TCvScalar; thickness
   int line_type CV_DEFAULT(8),
   int shift CV_DEFAULT(0));
 }
-procedure cvCircle(img: pIplImage; center: TCvPoint; radius: Integer; color: TCvScalar;
-  thickness: Integer = 1; line_type: Integer = 8; shift: Integer = 0); cdecl;
+procedure cvCircle(img: pIplImage; center: TCvPoint; radius: Integer; color: TCvScalar; thickness: Integer = 1;
+  line_type: Integer = 8; shift: Integer = 0); cdecl;
 
 //
 // (* Draws ellipse outline, filled ellipse, elliptic arc or filled elliptic sector,
@@ -1304,12 +1420,9 @@ type
     line_type: Integer; // Qt: PointSize
   end;
 
-  //
-  // (* Initializes font structure used further in cvPutText *)
-  // procedure cvInitFont(1: v1: ); line_type CV_DEFAULT(8): Integer): Integer;
   {
-    CVAPI(void)
-    cvInitFont(
+    // Initializes font structure used further in cvPutText *)
+    CVAPI(void) cvInitFont(
     CvFont* font,
     int font_face,
     double hscale,
@@ -1318,8 +1431,14 @@ type
     int thickness CV_DEFAULT(1),
     int line_type CV_DEFAULT(8));
   }
-procedure cvInitFont(font: pCvFont; font_face: Integer; hscale: Double; vscale: Double;
-  shear: Double = 0; thickness: Integer = 1; line_type: Integer = 8); cdecl;
+procedure cvInitFont(
+  { } font: pCvFont;
+  { } font_face: Integer;
+  { } hscale: Double;
+  { } vscale: Double;
+  { } shear: Double = 0;
+  { } thickness: Integer = 1;
+  { } line_type: Integer = 8); cdecl;
 
 //
 // CV_INLINE CvFont CvFont(Double scale, Integer thickness CV_DEFAULT(1))begin CvFont font;
@@ -1333,8 +1452,7 @@ procedure cvInitFont(font: pCvFont; font_face: Integer; hscale: Double; vscale: 
   CVAPI(void)  cvPutText( CvArr* img, const char* text, CvPoint org,
   const CvFont* font, CvScalar color );
 }
-procedure cvPutText(img: TCvArr; const text: pCVChar; org: TCvPoint; const font: pCvFont;
-  color: TCvScalar); cdecl;
+procedure cvPutText(img: TCvArr; const text: pCVChar; org: TCvPoint; const font: pCvFont; color: TCvScalar); cdecl;
 
 //
 // (* Calculates bounding box of text stroke (useful for alignment) *)
@@ -1554,8 +1672,8 @@ procedure cvPutText(img: TCvArr; const text: pCVChar; org: TCvPoint; const font:
   const char** real_name CV_DEFAULT(NULL) );
 }
 
-procedure cvSave(const filename: pCVChar; const struct_ptr: Pointer; const name: pCVChar;
-  const comment: pCVChar; attributes: TCvAttrList); cdecl; overload;
+procedure cvSave(const filename: pCVChar; const struct_ptr: Pointer; const name: pCVChar; const comment: pCVChar;
+  attributes: TCvAttrList); cdecl; overload;
 procedure cvSave(const filename: pCVChar; const struct_ptr: Pointer; const name: pCVChar = Nil;
   const comment: pCVChar = Nil); overload; inline;
 function cvLoad(const filename: pCVChar; memstorage: pCvMemStorage = Nil; const name: pCVChar = nil;
@@ -1695,21 +1813,39 @@ procedure cvResetImageROI; external DllName; cdecl;
 function cvGetImageROI; external DllName; cdecl;
 function cvCreateMatHeader; external DllName; cdecl;
 
-function _cvGetSize; external DllName name 'cvGetSize';
-
-function cvGetSize(const image: pIplImage): TCvSize;
-begin
-  if assigned(image^.roi) then
-  begin
-    Result.width := image^.roi^.width;
-    Result.height := image^.roi^.height;
-  end
-  else
-  begin
-    Result.width := image^.width;
-    Result.height := image^.height;
-  end;
+function cvGetSize(const arr: pCvArr): TCvSize; assembler;
+asm
+  // mov eax,arr - в eax уже хранится адрес arr
+  push edx // в edx адрес переменной Result - сохраняем, т.к. _cvGetSize возвращает результат в eax:edx
+  push eax
+  call _cvGetSize
+  pop ecx  // чистим стек
+  mov ecx,edx // сохраняем младшую часть результата _cvGetSize
+  pop edx // восстанавливаем Result
+  mov Result.width,eax
+  mov Result.height,ecx
 end;
+
+function cvGetSize(const arr: pIplImage): TCvSize;
+begin
+  Result := cvGetSize(pCvArr(arr));
+end;
+
+function _cvGetSize; external DllName name 'cvGetSize'; cdecl;
+
+// function _cvGetSize(const image: pIplImage): TCvSize;
+// begin
+// if assigned(image^.roi) then
+// begin
+// Result.width := image^.roi^.width;
+// Result.height := image^.roi^.height;
+// end
+// else
+// begin
+// Result.width := image^.width;
+// Result.height := image^.height;
+// end;
+// end;
 
 procedure cvSet; external DllName;
 procedure cvInitFont; external DllName;
@@ -1730,8 +1866,8 @@ begin
   Result := CvScalar(B, g, r, 0);
 end;
 
-procedure cvSave(const filename: pCVChar; const struct_ptr: Pointer; const name: pCVChar;
-  const comment: pCVChar; attributes: TCvAttrList); external DllName; overload;
+procedure cvSave(const filename: pCVChar; const struct_ptr: Pointer; const name: pCVChar; const comment: pCVChar;
+  attributes: TCvAttrList); external DllName; overload;
 
 procedure cvSave(const filename: pCVChar; const struct_ptr: Pointer; const name: pCVChar = Nil;
   const comment: pCVChar = Nil); overload; inline;
@@ -1742,5 +1878,17 @@ end;
 function cvLoad; external DllName;
 
 procedure cvReleaseMat; external DllName;
+
+procedure cvAddWeighted; external DllName;
+
+procedure cvInRange; external DllName;
+procedure cvInRangeS; external DllName;
+procedure cvSplit; external DllName;
+procedure cvMerge; external DllName;
+procedure cvMinMaxLoc; external DllName;
+procedure cvAnd; external DllName;
+
+procedure cvCvtPixToPlane; external DllName name 'cvSplit';
+procedure cvCvtPlaneToPix; external DllName name 'cvMerge';
 
 end.

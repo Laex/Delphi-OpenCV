@@ -12,7 +12,7 @@ uses
 Const
   // имя картинки
   filename = 'opencv_logo_with_text.png';
-  filename2 = 'opencv_logo_with_text_sm.png';
+  filename2 = 'cat2.jpg';
 
 var
   image: PIplImage = nil;

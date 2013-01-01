@@ -79,7 +79,8 @@ uses
 
   (* Connected component structure *)
 type
-  CvConnectedComp = packed record
+  pCvConnectedComp=^TCvConnectedComp;
+  TCvConnectedComp = packed record
     area: Double; (* area of the connected component *)
     value: TCvScalar; (* average color of the connected component *)
     rect: TCvRect; (* ROI of the component *)

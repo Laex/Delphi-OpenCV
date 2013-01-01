@@ -13,7 +13,7 @@ uses
 
 Const
   // имя картинки
-  filename = 'opencv_logo_with_text.png';
+  filename = 'cat2.jpg';
 
 Var
   image: PIplImage = nil;
@@ -32,16 +32,16 @@ begin
     cvNamedWindow('original', CV_WINDOW_AUTOSIZE);
     cvNamedWindow('Smooth', CV_WINDOW_AUTOSIZE);
     // сглаживаем исходную картинку
-//    cvSmooth(image, dst, CV_GAUSSIAN, 3, 3);
-    cvSmooth(image, dst, CV_BLUR_NO_SCALE, 3, 3);
+     cvSmooth(image, dst, CV_GAUSSIAN, 3, 3);
+//    cvSmooth(image, dst, CV_BLUR_NO_SCALE, 3, 3);
     // показываем картинку
     cvShowImage('original', image);
     cvShowImage('Smooth', dst);
     // ждём нажатия клавиши
     cvWaitKey(0);
     // освобождаем ресурсы
-    cvReleaseImage(&image);
-    cvReleaseImage(&dst);
+    cvReleaseImage(image);
+    cvReleaseImage(dst);
     // удаляем окно
     cvDestroyWindow('original');
     cvDestroyWindow('Smooth');

@@ -1,16 +1,16 @@
 unit Core.types_c;
 
-{$ifdef DEBUG}
-{$A8,B-,C+,D+,E-,F-,G+,H+,I+,J-,K-,L+,M-,N+,O-,P+,Q+,R+,S-,T-,U-,V+,W+,X+,Y+,Z1}
-{$else}
-{$A8,B-,C-,D-,E-,F-,G+,H+,I+,J-,K-,L-,M-,N+,O+,P+,Q-,R-,S-,T-,U-,V+,W-,X+,Y-,Z1}
-{$endif}
-{$WARN SYMBOL_DEPRECATED OFF}
-{$WARN SYMBOL_PLATFORM OFF}
-{$WARN UNIT_PLATFORM OFF}
-{$WARN UNSAFE_TYPE OFF}
-{$WARN UNSAFE_CODE OFF}
-{$WARN UNSAFE_CAST OFF}
+// {$ifdef DEBUG}
+// {$A8,B-,C+,D+,E-,F-,G+,H+,I+,J-,K-,L+,M-,N+,O-,P+,Q+,R+,S-,T-,U-,V+,W+,X+,Y+,Z1}
+// {$else}
+// {$A8,B-,C-,D-,E-,F-,G+,H+,I+,J-,K-,L-,M-,N+,O+,P+,Q-,R-,S-,T-,U-,V+,W-,X+,Y-,Z1}
+// {$endif}
+// {$WARN SYMBOL_DEPRECATED OFF}
+// {$WARN SYMBOL_PLATFORM OFF}
+// {$WARN UNIT_PLATFORM OFF}
+// {$WARN UNSAFE_TYPE OFF}
+// {$WARN UNSAFE_CODE OFF}
+// {$WARN UNSAFE_CAST OFF}
 
 interface
 
@@ -187,11 +187,13 @@ type
 type
   uint64 = uint64_t;
 {$EXTERNALSYM uint64}
-$ HPPEMIT '#  define CV_BIG_INT(n)   n##LL' }
+{$HPPEMIT '#  define CV_BIG_INT(n)   n##LL' }
 {$HPPEMIT '#  define CV_BIG_UINT(n)  n##ULL'}
 {$ENDIF}
 {$IFNDEF HAVE_IPL}
-  type uchar = Byte;
+
+type
+  uchar = Byte;
 {$EXTERNALSYM uchar}
 
 type
@@ -326,7 +328,7 @@ const
   { ************** Random number generation ****************** }
 type
   TCvRNG = uint64;
-{EXTERNALSYM CvRNG}
+  { EXTERNALSYM CvRNG }
 
 const
   CV_RNG_COEFF = Cardinal(4164903690);
@@ -431,15 +433,16 @@ type
     imageId: Pointer; (* "           " *)
     tileInfo: pIplTileInfo; (* "           " *)
     imageSize: Integer; (* Image data size in bytes *)
-    imageData: pCVChar; (* Pointer to aligned image data. *)
+    imageData: pByte; (* Pointer to aligned image data. *)
     widthStep: Integer; (* Size of aligned image row in bytes. *)
     BorderMode: array [0 .. 3] of Integer; (* Ignored by OpenCV. *)
     BorderConst: array [0 .. 3] of Integer; (* Ditto. *)
-    imageDataOrigin: pCVChar; (* Pointer to very origin of image data *)
+    imageDataOrigin: pByte; (* Pointer to very origin of image data *)
   end;
 
   // type       _IplTileInfo IplTileInfo = ;
-  pIplConvKernel=^TIplConvKernel;
+  pIplConvKernel = ^TIplConvKernel;
+
   TIplConvKernel = packed record
     nCols: Integer;
     nRows: Integer;
@@ -883,6 +886,8 @@ type
   (* ******************************* CvSize's & CvBox **************************************/ *)
 
 type
+  pCvSize = ^TCvSize;
+
   TCvSize = packed record
     width: Integer;
     height: Integer;
@@ -2040,15 +2045,6 @@ Type
     // return scalar;
     // }
     //
-    // CV_INLINE  CvScalar  cvScalarAll( double val0123 )
-    // {
-    // CvScalar scalar;
-    // scalar.val[0] = val0123;
-    // scalar.val[1] = val0123;
-    // scalar.val[2] = val0123;
-    // scalar.val[3] = val0123;
-    // return scalar;
-    // }
     // *)
     //
     // (* ************************************************************************************** *)
@@ -2070,10 +2066,11 @@ Type
     // *)
   end;
 
+function cvScalarAll(val0123: Double): TCvScalar; inline;
 function CvPoint(const x, y: Integer): TCvPoint; inline;
 function CvSize(const width, height: Integer): TCvSize; inline;
-function cvScalar(const val0: Double; const val1: Double = 0; const val2: Double = 0;
-  const val3: Double = 0): TCvScalar; inline;
+function CvScalar(const val0: Double; const val1: Double = 0; const val2: Double = 0; const val3: Double = 0)
+  : TCvScalar; inline;
 function cvRandInt(Var rng: TCvRNG): Cardinal; inline;
 function CvRect(Const x, y, width, height: Integer): TCvRect; inline;
 (* Inline constructor. No data is allocated internally!!!
@@ -2149,8 +2146,7 @@ end;
 
 function CV_ELEM_SIZE(_type: Integer): Integer;
 begin
-  Result := (CV_MAT_CN(_type) shl ((((SizeOf(Integer) div 4 + 1) * 16384 or $3A50)
-    shr CV_MAT_DEPTH(_type) * 2) and 3));
+  Result := (CV_MAT_CN(_type) shl ((((SizeOf(Integer) div 4 + 1) * 16384 or $3A50) shr CV_MAT_DEPTH(_type) * 2) and 3));
 end;
 
 function CV_32FC1: Integer;
@@ -2177,13 +2173,21 @@ begin
   Result.hdr_refcount := 0;
 end;
 
+function cvScalarAll(val0123: Double): TCvScalar;
+begin
+  Result.val[0] := val0123;
+  Result.val[1] := val0123;
+  Result.val[2] := val0123;
+  Result.val[3] := val0123;
+end;
+
 function CvPoint(const x, y: Integer): TCvPoint;
 begin
   Result.x := x;
   Result.y := y;
 end;
 
-function cvScalar(const val0, val1, val2, val3: Double): TCvScalar;
+function CvScalar(const val0, val1, val2, val3: Double): TCvScalar;
 begin
   Result.val[0] := val0;
   Result.val[1] := val1;

@@ -140,11 +140,19 @@ function cvNamedWindow(const name: pCVChar; flags: Integer = CV_WINDOW_AUTOSIZE)
 // CVAPI(procedure)cvSetWindowProperty(name: PCVChar; prop_id: Integer; prop_value: Double);
 // CVAPI(Double)cvGetWindowProperty(PCVChar name, Integer prop_id);
 
-(* display image within window (highgui windows remember their content) *)
-procedure cvShowImage(const name: pCVChar; const image: TCvArr); cdecl;
+{
+  //display image within window (highgui windows remember their content)
+
+  CVAPI(void) cvShowImage( const char* name, const CvArr* image );
+}
+procedure cvShowImage(const name: pCVChar; const image: pIplImage); cdecl;
 (* resize/move window *)
 // CVAPI(procedure)cvResizeWindow(name: PCVChar; width: Integer; height: Integer);
-// CVAPI(procedure)cvMoveWindow(name: PCVChar; x: Integer; y: Integer);
+
+//CVAPI(void) cvMoveWindow( const char* name, int x, int y );
+procedure cvMoveWindow( const name : pCVChar; x : Integer; y : Integer);  cdecl;
+
+
 (* destroy window and all the trackers associated with it *)
 procedure cvDestroyWindow(const name: pCVChar); cdecl;
 procedure cvDestroyAllWindows; cdecl;
@@ -157,8 +165,8 @@ type
   TCvTrackbarCallback = procedure(pos: Integer); cdecl;
 
   (* create trackbar and display it on top of given window, set callback *)
-function cvCreateTrackbar(const trackbar_name: pCVChar; const window_name: pCVChar; value: PInteger;
-  count: Integer; on_change: TCvTrackbarCallback): Integer; cdecl;
+function cvCreateTrackbar(const trackbar_name: pCVChar; const window_name: pCVChar; value: PInteger; count: Integer;
+  on_change: TCvTrackbarCallback): Integer; cdecl;
 
 type
   CvTrackbarCallback2 = procedure(pos: Integer; userdata: Pointer); cdecl;
@@ -190,8 +198,7 @@ const
   CV_EVENT_FLAG_ALTKEY = 32;
 
 type
-  CvMouseCallback = procedure(event: Integer; x: Integer; y: Integer; flags: Integer;
-    param: Pointer); cdecl;
+  CvMouseCallback = procedure(event: Integer; x: Integer; y: Integer; flags: Integer; param: Pointer); cdecl;
 
   (* assign callback for mouse events *)
   // CVAPI(procedure)cvSetMouseCallback(var 8 bit = 0; color or not * )
@@ -204,8 +211,7 @@ Type
   // typedef void (CV_CDECL *CvMouseCallback )(int event, int x, int y, int flags, void* param);
   TCvMouseCallback = procedure(event: Integer; x, y, flags: Integer; param: Pointer); cdecl;
 
-procedure cvSetMouseCallback(const window_name: pCVChar; on_mouse: TCvMouseCallback;
-  param: Pointer = nil); cdecl;
+procedure cvSetMouseCallback(const window_name: pCVChar; on_mouse: TCvMouseCallback; param: Pointer = nil); cdecl;
 
 const
   CV_LOAD_IMAGE_UNCHANGED = -1;
@@ -223,8 +229,7 @@ const
     using CV_LOAD_IMAGE_ANYCOLOR alone is equivalent to CV_LOAD_IMAGE_UNCHANGED
     unless CV_LOAD_IMAGE_ANYDEPTH is specified images are converted to 8bit *)
   // CVAPI(IplImage*) cvLoadImage(const char* filename,int iscolor CV_DEFAULT(CV_LOAD_IMAGE_COLOR));
-function cvLoadImage(const filename: pCVChar; iscolor: Integer = CV_LOAD_IMAGE_COLOR)
-  : pIplImage; cdecl;
+function cvLoadImage(const filename: pCVChar; iscolor: Integer = CV_LOAD_IMAGE_COLOR): pIplImage; cdecl;
 
 // const (;
 // iscolor CV_DEFAULT(CV_LOAD_IMAGE_COLOR): Integer); CVAPI(CvMat)cvLoadImageM(PCVChar filename,
@@ -248,8 +253,7 @@ const
     CVAPI(int) cvSaveImage( const char* filename, const CvArr* image, const int* params CV_DEFAULT(0) );
   }
 
-function cvSaveImage(const filename: pCVChar; const image: pIplImage; const params: PInteger = nil)
-  : Integer; cdecl;
+function cvSaveImage(const filename: pCVChar; const image: pIplImage; const params: PInteger = nil): Integer; cdecl;
 
 (* decode image stored in the buffer *)
 // CVAPI(IplImage)cvDecodeImage(CvMat * buf, Integer iscolor CV_DEFAULT(CV_LOAD_IMAGE_COLOR));
@@ -263,10 +267,13 @@ const
   CV_CVTIMG_FLIP = 1;
   CV_CVTIMG_SWAP_RB = 2;
 
-  (* utility function: convert one image to another with optional vertical flip *)
-  // CVAPI(procedure)cvConvertImage(v1: 0));
+  {
+    /* utility function: convert one image to another with optional vertical flip */
+    CVAPI(void) cvConvertImage( const CvArr* src, CvArr* dst, int flags CV_DEFAULT(0));
+  }
+procedure cvConvertImage(const src: pIplImage; dst: pIplImage; flags: Integer = 0); cdecl;
 
-  (* wait for key event infinitely (delay<=0) or for "delay" milliseconds *)
+(* wait for key event infinitely (delay<=0) or for "delay" milliseconds *)
 function cvWaitKey(delay: Integer = 0): Integer; cdecl;
 
 // OpenGL support
@@ -479,20 +486,15 @@ const
 
   CV_CAP_PROP_OPENNI_GENERATOR_PRESENT = 109;
 
-  CV_CAP_OPENNI_IMAGE_GENERATOR_PRESENT = CV_CAP_OPENNI_IMAGE_GENERATOR +
-    CV_CAP_PROP_OPENNI_GENERATOR_PRESENT;
+  CV_CAP_OPENNI_IMAGE_GENERATOR_PRESENT = CV_CAP_OPENNI_IMAGE_GENERATOR + CV_CAP_PROP_OPENNI_GENERATOR_PRESENT;
 
-  CV_CAP_OPENNI_IMAGE_GENERATOR_OUTPUT_MODE = CV_CAP_OPENNI_IMAGE_GENERATOR +
-    CV_CAP_PROP_OPENNI_OUTPUT_MODE;
+  CV_CAP_OPENNI_IMAGE_GENERATOR_OUTPUT_MODE = CV_CAP_OPENNI_IMAGE_GENERATOR + CV_CAP_PROP_OPENNI_OUTPUT_MODE;
 
-  CV_CAP_OPENNI_DEPTH_GENERATOR_BASELINE = CV_CAP_OPENNI_DEPTH_GENERATOR +
-    CV_CAP_PROP_OPENNI_BASELINE;
+  CV_CAP_OPENNI_DEPTH_GENERATOR_BASELINE = CV_CAP_OPENNI_DEPTH_GENERATOR + CV_CAP_PROP_OPENNI_BASELINE;
 
-  CV_CAP_OPENNI_DEPTH_GENERATOR_FOCAL_LENGTH = CV_CAP_OPENNI_DEPTH_GENERATOR +
-    CV_CAP_PROP_OPENNI_FOCAL_LENGTH;
+  CV_CAP_OPENNI_DEPTH_GENERATOR_FOCAL_LENGTH = CV_CAP_OPENNI_DEPTH_GENERATOR + CV_CAP_PROP_OPENNI_FOCAL_LENGTH;
 
-  CV_CAP_OPENNI_DEPTH_GENERATOR_REGISTRATION = CV_CAP_OPENNI_DEPTH_GENERATOR +
-    CV_CAP_PROP_OPENNI_REGISTRATION;
+  CV_CAP_OPENNI_DEPTH_GENERATOR_REGISTRATION = CV_CAP_OPENNI_DEPTH_GENERATOR + CV_CAP_PROP_OPENNI_REGISTRATION;
 
   CV_CAP_OPENNI_DEPTH_GENERATOR_REGISTRATION_ON = CV_CAP_OPENNI_DEPTH_GENERATOR_REGISTRATION;
 
@@ -681,8 +683,7 @@ const
 
   (* retrieve or set capture properties *)
 function cvGetCaptureProperty(capture: pCvCapture; property_id: Integer): Double; cdecl;
-function cvSetCaptureProperty(capture: pCvCapture; property_id: Integer; value: Double)
-  : Integer; cdecl;
+function cvSetCaptureProperty(capture: pCvCapture; property_id: Integer; value: Double): Integer; cdecl;
 
 // Return the type of the capturer (eg, CV_CAP_V4W, CV_CAP_UNICAP), which is unknown if created with CV_CAP_ANY
 // CVAPI(Integer)cvGetCaptureDomain(CvCapture * capture);
@@ -718,8 +719,8 @@ const
     double fps, CvSize frame_size,
     int is_color CV_DEFAULT(1));
   }
-function cvCreateVideoWriter(const filename: pCVChar; fourcc: Integer; fps: Double;
-  frame_size: TCvSize; is_color: Integer = 1): pCvVideoWriter; cdecl;
+function cvCreateVideoWriter(const filename: pCVChar; fourcc: Integer; fps: Double; frame_size: TCvSize;
+  is_color: Integer = 1): pCvVideoWriter; cdecl;
 
 function CV_FOURCC(const c1, c2, c3, c4: CVChar): Integer; inline;
 
@@ -825,6 +826,8 @@ function cvCreateVideoWriter; external DllName;
 function cvWriteFrame; external DllName;
 procedure cvReleaseVideoWriter; external DllName;
 procedure cvSetMouseCallback; external DllName;
+procedure cvConvertImage; external DllName;
+procedure cvMoveWindow; external DllName;
 
 function CV_FOURCC(const c1, c2, c3, c4: CVChar): Integer; inline;
 begin

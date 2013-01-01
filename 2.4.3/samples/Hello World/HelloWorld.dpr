@@ -24,7 +24,7 @@ begin
     // —оздаЄи 8-битную, 3-канальную картинку
     hw := cvCreateImage(CvSize(height, width), 8, 3);
     // заливаем картинку чЄрным цветом
-    CvSet(hw, cvScalar(0, 0, 0));
+    CvSet(pCvArr(hw), cvScalar(0, 0, 0));
     // инициализаци€ шрифта
     cvInitFont(@font, CV_FONT_HERSHEY_COMPLEX, 1.0, 1.0, 0, 1, CV_AA);
     // использу€ шрифт выводим на картинку текст
