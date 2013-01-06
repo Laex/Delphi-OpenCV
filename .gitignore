@@ -10,5 +10,4 @@ __history
 /2.4.2/!include
 *.tvsconfig
 /!DS!
-*.dll
 *.skincfg
