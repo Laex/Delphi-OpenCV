@@ -498,6 +498,7 @@ procedure cvCvtPlaneToPix(
 // var from_to: nteger;
 // pair_count: Integer);
 //
+
 // (* Performs linear transformation on every source array element:
 // dst(x,y,c) = scale*src(x,y,c)+shift.
 // Arbitrary combination of input and output cArray depths are allowed
@@ -507,7 +508,28 @@ procedure cvCvtPlaneToPix(
 // 0)): Double;const cvCvtScale = cvConvertScale;{$EXTERNALSYM cvCvtScale}const cvScale =
 // cvConvertScale; {$EXTERNALSYM cvScale}// >> Following declaration is a macro definition!const cvConvert( src: v1:;
 // )cvConvertScale((src): dst; v3: (dst); :; : );
-//
+
+{
+  /* Performs linear transformation on every source array element:
+  dst(x,y,c) = scale*src(x,y,c)+shift.
+  Arbitrary combination of input and output array depths are allowed
+  (number of channels must be the same), thus the function can be used
+  for type conversion */
+
+  CVAPI(void)  cvConvertScale(
+  const CvArr* src,
+  CvArr* dst,
+  double scale CV_DEFAULT(1),
+  double shift CV_DEFAULT(0) );
+
+  #define cvCvtScale cvConvertScale
+  #define cvScale  cvConvertScale
+  #define cvConvert( src, dst )  cvConvertScale( (src), (dst), 1, 0 )
+}
+
+procedure cvConvertScale(const src: pIplImage; dst: pIplImage; scale: double = 1; shift: double = 0); cdecl;
+procedure cvConvert(const src: pIplImage; dst: pIplImage);
+
 // (* Performs linear transformation on every source array element,
 // stores absolute value of the cResult:
 // dst(x,y,c) = abs(scale*src(x,y,c)+shift).
@@ -529,22 +551,43 @@ procedure cvCvtPlaneToPix(
 
 // procedure cvAddS(CvArr * src: v1: 0)): CvArr; (; value: CvScalar; var dst: CvArr;
 // var dst(mask) = src1(mask) - src2(mask) * )
+
 {
   CVAPI(void)  cvAddS( const CvArr* src, CvScalar value, CvArr* dst,
   const CvArr* mask CV_DEFAULT(NULL));
 }
 procedure cvAddS(const src: pIplImage; value: TCvScalar; dst: pIplImage; const mask: pIplImage = nil); cdecl;
 
-// procedure cvSub(CvArr * src1: unction mask CV_DEFAULT(v1: 0)): CvArr; (; var src2: CvArr;
-// var dst: CvArr; var dst(mask) = src(mask) - value = src(mask) + (-value) * )CV_INLINE CV_INLINE
-// procedure cvSubS(CvArr * src: unction mask CV_DEFAULT(v1: 0)): CvArr; (; value: CvScalar;
-// var dst: CvArr; CV_DEFAULT(0))begin cvAddS(src: k; -value.val: array [0 .. -1] of CvScalar(;
-// -value.val: array [0 .. 0] of v12; -value.val: array [0 .. 1] of v13;
-// -value.val: array [0 .. 2] of v14); v15: dst; v16: mask); end;
-//
+{
+  /* dst(mask) = src1(mask) - src2(mask) */
+  CVAPI(void)  cvSub(
+  const CvArr* src1,
+  const CvArr* src2,
+  CvArr* dst,
+  const CvArr* mask CV_DEFAULT(NULL));
+}
+
+procedure cvSub(const src1, src2: pIplImage; dst: pIplImage; const mask: pIplImage = nil); cdecl;
+
+(*
+  /* dst(mask) = src(mask) - value = src(mask) + (-value) */
+  CV_INLINE  void  cvSubS(
+  const CvArr* src,
+  CvScalar value,
+  CvArr* dst,
+  const CvArr* mask CV_DEFAULT(NULL))
+  {
+  cvAddS( src, cvScalar( -value.val[0], -value.val[1], -value.val[2], -value.val[3]),
+  dst, mask );
+  }
+*)
+procedure cvSubS(const src: pIplImage; value: TCvScalar; dst: pIplImage; const mask: pIplImage = nil); inline;
+
 // (* dst(mask) = value - src(mask) *)
 // procedure cvSubRS(var dst(idx) = src1(idx) * src2(idx) * scale(scaled element -
 // wise multiplication of 2 arrays) * )
+
+
 // procedure cvMul(CvArr * src1: v1: 0)): CvArr; (; var src2: CvArr; dst:
 // function; var element - wise division / inversion with scaling: dst(idx) = src1(idx) * scale /
 // src2(idx) or dst(idx) = scale / src2(idx) if src1 = 0 * ) then
@@ -568,10 +611,10 @@ procedure cvAddS(const src: pIplImage; value: TCvScalar; dst: pIplImage; const m
 }
 procedure cvAddWeighted(
   { } const src1: pIplImage;
-  { } alpha: Double;
+  { } alpha: double;
   { } const src2: pIplImage;
-  { } beta: Double;
-  { } gamma: Double;
+  { } beta: double;
+  { } gamma: double;
   { } dst: pIplImage); cdecl;
 
 //
@@ -958,26 +1001,36 @@ procedure cvMinMaxLoc(
 //
 // (* Discrete Cosine Transform *)
 // procedure cvDCT(var src: CvArr; var dst: CvArr; flags: Integer);
-//
-// (* ***************************************************************************************\
-// *                              Dynamic data structures                                   *
-// *************************************************************************************** *)
-//
+
+
+// ****************************************************************************************
+// *                              Dynamic data structures                                 *
+// ****************************************************************************************
+
 // (* Calculates length of sequence slice (with support of negative indices). *)
 // CVAPI(Integer)cvSliceLength(CvSlice slice, CvSeq * seq);
-//
-// (* Creates new memory storage.
-// block_size = 0 means that default,
-// somewhat optimal size, is used (currently, it is 64K) *)
-// CVAPI(CvMemStorage)cvCreateMemStorage(Integer block_size CV_DEFAULT(0));
-//
+
+{
+  (* Creates new memory storage. block_size = 0 means that default,
+  somewhat optimal size, is used (currently, it is 64K) *)
+
+  CVAPI(CvMemStorage)cvCreateMemStorage(Integer block_size CV_DEFAULT(0));
+}
+
+function cvCreateMemStorage(block_size: integer = 0): pCvMemStorage; cdecl;
+
 // (* Creates a memory storage that will borrow memory blocks from parent storage *)
 // CVAPI(CvMemStorage)cvCreateChildMemStorage(CvMemStorage * parent);
-//
-// (* Releases memory storage. All the children of a parent must be released before
-// the parent. A child storage returns all the blocks to parent when it is released *)
-// procedure cvReleaseMemStorage(storage: array of CvMemStorage);
-//
+
+{
+/* Releases memory storage. All the children of a parent must be released before
+   the parent. A child storage returns all the blocks to parent when it is released */
+CVAPI(void)  cvReleaseMemStorage( CvMemStorage** storage );
+}
+procedure cvReleaseMemStorage(var storage: pCvMemStorage); cdecl;
+
+
+
 // (* Clears memory storage. This is the only way(!!!) (besides cvRestoreMemStoragePos)
 // to reuse memory allocated for the storage - cvClearSeq,cvClearSet Args: array of const
 // do not free any memory.
@@ -1035,12 +1088,18 @@ procedure cvMinMaxLoc(
 // can be reused later only by the same sequence unless cvClearMemStorage
 // or cvRestoreMemStoragePos is called *)
 // procedure cvClearSeq(var seq: CvSeq);
-//
-// (* Retrieves pointer to specified sequence element.
-// Negative indices are supported and mean counting from the end
-// (e.g -1 means the last sequence element) *)
-// CVAPI(schar)cvGetSeqElem(CvSeq * seq, Integer index);
-//
+
+
+{
+/* Retrieves pointer to specified sequence element.
+   Negative indices are supported and mean counting from the end
+   (e.g -1 means the last sequence element) */
+CVAPI(schar*)  cvGetSeqElem( const CvSeq* seq, int index );
+}
+function cvGetSeqElem( const seq : pCvSeq; index : Integer) : pSChar;  cdecl;
+
+
+
 // (* Calculates index of the specified sequence element.
 // Returns -1 if element does not belong to the sequence *)
 // CVAPI(Integer)cvSeqElemIdx(CvSeq * seq, Pointer element, CvSeqBlock * * block CV_DEFAULT(0));
@@ -1276,7 +1335,7 @@ procedure cvMinMaxLoc(
 // *************************************************************************************** *)
 //
 /// / >> Following declaration is a macro definition!
-function CV_RGB(const r, g, B: Double): TCvScalar; inline;
+function CV_RGB(const r, g, B: double): TCvScalar; inline;
 // CvScalar((B), (g), (r), 0);
 
 const
@@ -1434,9 +1493,9 @@ type
 procedure cvInitFont(
   { } font: pCvFont;
   { } font_face: Integer;
-  { } hscale: Double;
-  { } vscale: Double;
-  { } shear: Double = 0;
+  { } hscale: double;
+  { } vscale: double;
+  { } shear: double = 0;
   { } thickness: Integer = 1;
   { } line_type: Integer = 8); cdecl;
 
@@ -1861,7 +1920,7 @@ procedure cvCopyImage; external DllName name 'cvCopy';
 procedure cvSetZero; external DllName;
 procedure cvZero; external DllName name 'cvSetZero';
 
-function CV_RGB(const r, g, B: Double): TCvScalar; inline;
+function CV_RGB(const r, g, B: double): TCvScalar; inline;
 begin
   Result := CvScalar(B, g, r, 0);
 end;
@@ -1890,5 +1949,25 @@ procedure cvAnd; external DllName;
 
 procedure cvCvtPixToPlane; external DllName name 'cvSplit';
 procedure cvCvtPlaneToPix; external DllName name 'cvMerge';
+
+procedure cvConvertScale; external DllName;
+procedure cvScale; external DllName name 'cvConvertScale';
+procedure cvCvtScale; external DllName name 'cvConvertScale';
+
+procedure cvConvert(const src: pIplImage; dst: pIplImage);
+begin
+  cvConvertScale(src, dst, 1, 0);
+end;
+
+procedure cvSub; external DllName;
+
+procedure cvSubS(const src: pIplImage; value: TCvScalar; dst: pIplImage; const mask: pIplImage);
+begin
+  cvAddS(src, CvScalar(-value.val[0], -value.val[1], -value.val[2], -value.val[3]), dst, mask);
+end;
+
+function cvCreateMemStorage; external DllName;
+function cvGetSeqElem; external DllName;
+procedure cvReleaseMemStorage; external DllName;
 
 end.

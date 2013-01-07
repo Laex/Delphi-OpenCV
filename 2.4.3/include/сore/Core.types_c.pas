@@ -861,6 +861,9 @@ type
     y: Integer;
   end;
 
+  TCvPointArray = array [0 .. 100] of TCvPoint;
+  pCvPointArray = ^TCvPointArray;
+
   CvPoint2D32f = packed record
     x: Single;
     y: Single;
@@ -2073,6 +2076,8 @@ function CvScalar(const val0: Double; const val1: Double = 0; const val2: Double
   : TCvScalar; inline;
 function cvRandInt(Var rng: TCvRNG): Cardinal; inline;
 function CvRect(Const x, y, width, height: Integer): TCvRect; inline;
+function cvRound(value: Double): Integer; inline;
+
 (* Inline constructor. No data is allocated internally!!!
   * (Use together with cvCreateData, or use cvCreateMat instead to
   * get a matrix with allocated data):
@@ -2215,6 +2220,11 @@ begin
   rng := TCvRNG(rng * CV_RNG_COEFF + (rng shr 32));
 {$Q+}
   Result := Cardinal(rng);
+end;
+
+function cvRound(value: Double): Integer;
+begin
+  Result := Round(value);
 end;
 
 end.

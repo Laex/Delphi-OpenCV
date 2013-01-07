@@ -163,12 +163,31 @@ procedure cvSmooth(
 // (* Calculates an image derivative using generalized Sobel   (aperture_size = 1: CvArr;
 // : ;
 // : ;
-// var )CVAPI(procedure) cvSobel(  CvArr* src: ) or Scharr (aperture_size = -1) operator.   Scharr can be used only for the first dx or dy derivative;
-// var dst: CvArr;
-// xorder: Integer;
-// yorder: Integer;
-// var Calculates the image Laplacian: (d2/dx + d2/dy)I *) CVAPI(procedure)cvLaplace(CvArr * src
-// : function aperture_size CV_DEFAULT(v1: 3)): Integer; (; var dst: CvArr;
+// var )
+
+{
+  /* Calculates an image derivative using generalized Sobel
+  (aperture_size = 1,3,5,7) or Scharr (aperture_size = -1) operator.
+  Scharr can be used only for the first dx or dy derivative */
+  CVAPI(void) cvSobel(
+  const CvArr* src,
+  CvArr* dst,
+  int xorder,
+  int yorder,
+  int aperture_size CV_DEFAULT(3));
+}
+
+procedure cvSobel(const src: pIplImage; dst: pIplImage; xorder: Integer; yorder: Integer;
+  aperture_size: Integer = 3); cdecl;
+
+{
+  /* Calculates the image Laplacian: (d2/dx + d2/dy)I */
+  CVAPI(void) cvLaplace(
+  const CvArr* src,
+  CvArr* dst,
+  int aperture_size CV_DEFAULT(3) );
+}
+procedure cvLaplace(const src: pIplImage; dst: pIplImage; aperture_size: Integer = 3); cdecl;
 
 (* Converts input array pixels from one color space to another *)
 // CVAPI(void)  cvCvtColor( const CvArr* src, CvArr* dst, int code );
@@ -613,18 +632,28 @@ procedure cvFloodFill(
   { } flags: Integer = 4;
   { } mask: PCvArr = NIL); cdecl;
 
-// CVAPI(
-// procedure)cvFloodFill(v1: cvScalarAll(0)); up_diff CV_DEFAULT(cvScalarAll(0)): CvScalar;
-// var comp CV_DEFAULT(0): CvConnectedComp; * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-// * * * * * * * \ * Feature detection * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-// * * * * * * * * * ) (* Runs canny edge detector *) CVAPI(
+// ****************************************************************************************
+// *                                  Feature detection                                   *
+// ****************************************************************************************
+{
+  /* Runs canny edge detector */
+  CVAPI(void)  cvCanny(
+  const CvArr* image,
+  CvArr* edges,
+  double threshold1,
+  double threshold2,
+  int  aperture_size CV_DEFAULT(3) );
+}
+procedure cvCanny(const image: pIplImage; edges: pIplImage; threshold1: double; threshold2: double;
+  aperture_size: Integer = 3); cdecl;
+
+// (* Runs canny edge detector *) CVAPI(
 // procedure)cvCanny(CvArr * image: array of
 // function flags CV_DEFAULT(v1: 0)): Integer; (; var edges: CvArr; threshold1: Double;
 // threshold2: Double; var Calculates constraint image for corner detection Dx xor 2 * Dyy + Dxx *
 // Dy xor 2 - 2 * Dx * Dy * Dxy.Applying threshold to the cResult gives coordinates of
-// corners * )CVAPI(
+// corners * )
+// CVAPI(
 // procedure)cvPreCornerDetect(CvArr * image:
 // function aperture_size CV_DEFAULT(v1: 3)): Integer; (; var corners: CvArr;
 // var Calculates eigen values and vectors of 2 x2 gradient covariation matrix at every image
@@ -660,13 +689,62 @@ procedure cvFloodFill(
 // CVAPI(CvSeq)cvHoughLines2(CvArr * image, Pointer line_storage, Integer method, Double rho,
 // Double theta, Integer threshold, Double param1 CV_DEFAULT(0), Double param2 CV_DEFAULT(0)
 // ): Double;
-//
-// (* Finds circles in the image *)
-// CVAPI(CvSeq)cvHoughCircles(CvArr * image, Pointer circle_storage, Integer method, Double dp,
-// Double min_dist,
-// function param1 CV_DEFAULT(v1: 100); min_radius CV_DEFAULT(0):
-// function; max_radius CV_DEFAULT(0): Integer): Integer;
-//
+
+{
+  /* Finds lines on binary image using one of several methods.
+  line_storage is either memory storage or 1 x <max number of lines> CvMat, its
+  number of columns is changed by the function.
+  method is one of CV_HOUGH_*;
+  rho, theta and threshold are used for each of those methods;
+  param1 ~ line length, param2 ~ line gap - for probabilistic,
+  param1 ~ srn, param2 ~ stn - for multi-scale */
+
+  CVAPI(CvSeq*)  cvHoughLines2(
+  CvArr* image,
+  void* line_storage,
+  int method,
+  double rho,
+  double theta,
+  int threshold,
+  double param1 CV_DEFAULT(0),
+  double param2 CV_DEFAULT(0));
+}
+
+function cvHoughLines2(
+  { } image: pIplImage;
+  { } line_storage: Pointer;
+  { } method: Integer;
+  { } rho: double;
+  { } theta: double;
+  { } threshold: Integer;
+  { } param1: double = 0;
+  { } param2: double = 0): pCvSeq; cdecl;
+
+{
+  /* Finds circles in the image */
+  CVAPI(CvSeq*) cvHoughCircles(
+  CvArr* image,
+  void* circle_storage,
+  int method,
+  double dp,
+  double min_dist,
+  double param1 CV_DEFAULT(100),
+  double param2 CV_DEFAULT(100),
+  int min_radius CV_DEFAULT(0),
+  int max_radius CV_DEFAULT(0));
+}
+
+function cvHoughCircles(
+  { } image: pIplImage;
+  { } circle_storage: Pointer;
+  { } method: Integer;
+  { } dp: double;
+  { } min_dist: double;
+  { } param1: double = 100;
+  { } param2: double = 100;
+  { } min_radius: Integer = 0;
+  { } max_radius: Integer = 0): pCvSeq; cdecl;
+
 // (* Fits a line into set of 2d or 3d points in a robust way (M-estimator technique) *)
 // CVAPI(
 // procedure)cvFitLine(CvArr * points, Integer dist_type, Double param, Double reps, Double aeps,
@@ -696,5 +774,10 @@ procedure cvMorphologyEx; external DllName;
 procedure cvFloodFill; external DllName;
 procedure cvAdaptiveThreshold; external DllName;
 procedure cvCopyMakeBorder; external DllName;
+procedure cvSobel; external DllName;
+procedure cvLaplace; external DllName;
+procedure cvCanny; external DllName;
+function cvHoughLines2; external DllName;
+function cvHoughCircles; external DllName;
 
 end.
