@@ -1017,15 +1017,15 @@ procedure cvMinMaxLoc(
   CVAPI(CvMemStorage)cvCreateMemStorage(Integer block_size CV_DEFAULT(0));
 }
 
-function cvCreateMemStorage(block_size: integer = 0): pCvMemStorage; cdecl;
+function cvCreateMemStorage(block_size: Integer = 0): pCvMemStorage; cdecl;
 
 // (* Creates a memory storage that will borrow memory blocks from parent storage *)
 // CVAPI(CvMemStorage)cvCreateChildMemStorage(CvMemStorage * parent);
 
 {
-/* Releases memory storage. All the children of a parent must be released before
-   the parent. A child storage returns all the blocks to parent when it is released */
-CVAPI(void)  cvReleaseMemStorage( CvMemStorage** storage );
+  /* Releases memory storage. All the children of a parent must be released before
+  the parent. A child storage returns all the blocks to parent when it is released */
+  CVAPI(void)  cvReleaseMemStorage( CvMemStorage** storage );
 }
 procedure cvReleaseMemStorage(var storage: pCvMemStorage); cdecl;
 
@@ -1089,16 +1089,13 @@ procedure cvReleaseMemStorage(var storage: pCvMemStorage); cdecl;
 // or cvRestoreMemStoragePos is called *)
 // procedure cvClearSeq(var seq: CvSeq);
 
-
 {
-/* Retrieves pointer to specified sequence element.
-   Negative indices are supported and mean counting from the end
-   (e.g -1 means the last sequence element) */
-CVAPI(schar*)  cvGetSeqElem( const CvSeq* seq, int index );
+  /* Retrieves pointer to specified sequence element.
+  Negative indices are supported and mean counting from the end
+  (e.g -1 means the last sequence element) */
+  CVAPI(schar*)  cvGetSeqElem( const CvSeq* seq, int index );
 }
-function cvGetSeqElem( const seq : pCvSeq; index : Integer) : pSChar;  cdecl;
-
-
+function cvGetSeqElem(const seq: pCvSeq; index: Integer): pSChar; cdecl;
 
 // (* Calculates index of the specified sequence element.
 // Returns -1 if element does not belong to the sequence *)
@@ -1340,11 +1337,9 @@ function CV_RGB(const r, g, B: double): TCvScalar; inline;
 
 const
   CV_FILLED = -1;
-  // {$EXTERNALSYM CV_FILLED}
-
+{$EXTERNALSYM CV_FILLED}
   CV_AA = 16;
-
-  // {$EXTERNALSYM CV_AA}
+{$EXTERNALSYM CV_AA}
   // (* Draws 4-connected, 8-connected or antialiased line segment connecting two points *)
   // procedure cvLine(8: v1: ); shift CV_DEFAULT(0): Integer): Integer;
   {
@@ -1532,9 +1527,29 @@ procedure cvPutText(img: TCvArr; const text: pCVChar; org: TCvPoint; const font:
 // CVAPI(Integer)cvEllipse2Poly(CvPoint center, CvSize axes, Integer angle, Integer arc_start,
 // Integer arc_end, CvPoint * pts, Integer delta);
 //
-// (* Draws contour outlines or filled interiors on the image *)
-// procedure cvDrawContours(8: v1: ); offset CV_DEFAULT(CvPoint(0: CvPoint; v3: ))): Integer;
-//
+
+{ /* Draws contour outlines or filled interiors on the image */
+  CVAPI(void)  cvDrawContours(
+  CvArr *img,
+  CvSeq* contour,
+  CvScalar external_color,
+  CvScalar hole_color,
+  int max_level,
+  int thickness CV_DEFAULT(1),
+  int line_type CV_DEFAULT(8),
+  CvPoint offset CV_DEFAULT(cvPoint(0,0)));
+}
+procedure cvDrawContours(
+  { } img: pIplImage;
+  { } contour: pCvSeq;
+  { } external_color: TCvScalar;
+  { } hole_color: TCvScalar;
+  { } max_level: Integer;
+  { } thickness: Integer { =1 };
+  { } line_type: Integer { =8 };
+  { } offset: TCvPoint { =cvPoint(0,0) } ); cdecl;
+
+
 // (* Does look-up transformation. Elements of the source array
 // (that should be 8uC1 or 8sC1) are used as indexes in lutarr 256-element table *)
 // procedure cvLUT(var src: CvArr; var dst: CvArr; var lut: CvArr);
@@ -1969,5 +1984,6 @@ end;
 function cvCreateMemStorage; external DllName;
 function cvGetSeqElem; external DllName;
 procedure cvReleaseMemStorage; external DllName;
+procedure cvDrawContours; external DllName;
 
 end.

@@ -84,7 +84,7 @@ type
     area: Double; (* area of the connected component *)
     value: TCvScalar; (* average color of the connected component *)
     rect: TCvRect; (* ROI of the component *)
-    contour: ^CvSeq; (* optional component boundary *)
+    contour: ^TCvSeq; (* optional component boundary *)
   end;
 
   (* Image smooth methods *)

@@ -355,6 +355,10 @@ const
 {$EXTERNALSYM IPL_DEPTH_16U}
   IPL_DEPTH_32F = 32;
 {$EXTERNALSYM IPL_DEPTH_32F}
+  { for storing double-precision
+    floating point data in IplImage's }
+  IPL_DEPTH_64F = 64;
+{$EXTERNALSYM IPL_DEPTH_64F}
   IPL_DEPTH_8S: TCvRNG = (IPL_DEPTH_SIGN or 8);
 {$EXTERNALSYM IPL_DEPTH_8S}
   IPL_DEPTH_16S = (IPL_DEPTH_SIGN or 16);
@@ -420,7 +424,8 @@ type
     id: Integer; (* version (=0) *)
     nChannels: Integer; (* Most of OpenCV functions support 1,2,3 or 4 channels *)
     alphaChannel: Integer; (* Ignored by OpenCV *)
-    depth: Integer; (* Pixel depth in bits: IPL_DEPTH_8U, IPL_DEPTH_8S, IPL_DEPTH_16S, *)
+    depth: Integer; (* Pixel depth in bits: Pixel depth in bits: IPL_DEPTH_8U, IPL_DEPTH_8S, IPL_DEPTH_16S,
+      IPL_DEPTH_32S, IPL_DEPTH_32F and IPL_DEPTH_64F are supported. *)
     colorModel: array [0 .. 3] of CVChar; (* Ignored by OpenCV *)
     channelSeq: array [0 .. 3] of CVChar; (* ditto *)
     dataOrder: Integer; (* 0 - interleaved color channels, 1 - separate color channels. *)
@@ -984,9 +989,9 @@ type
     data: ^schar; (* Pointer to the first element of the block. *)
   end;
 
-  pCvSeq = ^CvSeq;
+  pCvSeq = ^TCvSeq;
 
-  CvSeq = packed record
+  TCvSeq = packed record
     flags: Integer; (* Miscellaneous flags. *)
     header_size: Integer; (* Size of sequence header. *)
     h_prev: pCvSeq; (* Previous sequence. *)
@@ -1777,8 +1782,7 @@ Type
     // // (CV_IS_IMAGE_HDR(img) and ((IplImage)img)^.imageData <> 0);
     // (* for storing double-precision
     // floating point data in IplImage's */
-    // const IPL_DEPTH_64F = 64;
-    // {$EXTERNALSYM IPL_DEPTH_64F}
+
     // (* get reference to pixel at (col,row),
     // for multi-channel images (col) should be multiplied by number of channels *)
     // // >> Following declaration is a macro definition!

@@ -102,6 +102,15 @@
         <Projects Include="HoughCircles\HoughCircles.dproj">
             <Dependencies/>
         </Projects>
+        <Projects Include="cvInterral\cv_Integral.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="FindContours\FindContours.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="CameraCaptureFindContours\CameraCaptureFindContours.dproj">
+            <Dependencies/>
+        </Projects>
     </ItemGroup>
     <ProjectExtensions>
         <Borland.Personality>Default.Personality.12</Borland.Personality>
@@ -407,14 +416,41 @@
     <Target Name="HoughCircles:Make">
         <MSBuild Projects="HoughCircles\HoughCircles.dproj" Targets="Make"/>
     </Target>
+    <Target Name="cv_Integral">
+        <MSBuild Projects="cvInterral\cv_Integral.dproj"/>
+    </Target>
+    <Target Name="cv_Integral:Clean">
+        <MSBuild Projects="cvInterral\cv_Integral.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="cv_Integral:Make">
+        <MSBuild Projects="cvInterral\cv_Integral.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="FindContours">
+        <MSBuild Projects="FindContours\FindContours.dproj"/>
+    </Target>
+    <Target Name="FindContours:Clean">
+        <MSBuild Projects="FindContours\FindContours.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="FindContours:Make">
+        <MSBuild Projects="FindContours\FindContours.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="CameraCaptureFindContours">
+        <MSBuild Projects="CameraCaptureFindContours\CameraCaptureFindContours.dproj"/>
+    </Target>
+    <Target Name="CameraCaptureFindContours:Clean">
+        <MSBuild Projects="CameraCaptureFindContours\CameraCaptureFindContours.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="CameraCaptureFindContours:Make">
+        <MSBuild Projects="CameraCaptureFindContours\CameraCaptureFindContours.dproj" Targets="Make"/>
+    </Target>
     <Target Name="Build">
-        <CallTarget Targets="HelloWorld;OpenCV_1_LoadImage;OpenCV_2_LoadVideo;OpenCV_3_VideoProcessing;LoadImage;Trackbar;CameraCapture;VideoWriter;MouseCallback;Smooth;Resize;ROI;ROI2;XML;Rand;ErodeAndDilate;MorphologyEx;LoadAndTransformImage;Weighted;FloodFill;Weighted2;Threshold;InRange;SplitMerge;cv_And;CvtPixToPlane;CopyMakeBorder;Sobel;Laplace;Canny;cvSubDemo;HoughLines;HoughCircles"/>
+        <CallTarget Targets="HelloWorld;OpenCV_1_LoadImage;OpenCV_2_LoadVideo;OpenCV_3_VideoProcessing;LoadImage;Trackbar;CameraCapture;VideoWriter;MouseCallback;Smooth;Resize;ROI;ROI2;XML;Rand;ErodeAndDilate;MorphologyEx;LoadAndTransformImage;Weighted;FloodFill;Weighted2;Threshold;InRange;SplitMerge;cv_And;CvtPixToPlane;CopyMakeBorder;Sobel;Laplace;Canny;cvSubDemo;HoughLines;HoughCircles;cv_Integral;FindContours;CameraCaptureFindContours"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="HelloWorld:Clean;OpenCV_1_LoadImage:Clean;OpenCV_2_LoadVideo:Clean;OpenCV_3_VideoProcessing:Clean;LoadImage:Clean;Trackbar:Clean;CameraCapture:Clean;VideoWriter:Clean;MouseCallback:Clean;Smooth:Clean;Resize:Clean;ROI:Clean;ROI2:Clean;XML:Clean;Rand:Clean;ErodeAndDilate:Clean;MorphologyEx:Clean;LoadAndTransformImage:Clean;Weighted:Clean;FloodFill:Clean;Weighted2:Clean;Threshold:Clean;InRange:Clean;SplitMerge:Clean;cv_And:Clean;CvtPixToPlane:Clean;CopyMakeBorder:Clean;Sobel:Clean;Laplace:Clean;Canny:Clean;cvSubDemo:Clean;HoughLines:Clean;HoughCircles:Clean"/>
+        <CallTarget Targets="HelloWorld:Clean;OpenCV_1_LoadImage:Clean;OpenCV_2_LoadVideo:Clean;OpenCV_3_VideoProcessing:Clean;LoadImage:Clean;Trackbar:Clean;CameraCapture:Clean;VideoWriter:Clean;MouseCallback:Clean;Smooth:Clean;Resize:Clean;ROI:Clean;ROI2:Clean;XML:Clean;Rand:Clean;ErodeAndDilate:Clean;MorphologyEx:Clean;LoadAndTransformImage:Clean;Weighted:Clean;FloodFill:Clean;Weighted2:Clean;Threshold:Clean;InRange:Clean;SplitMerge:Clean;cv_And:Clean;CvtPixToPlane:Clean;CopyMakeBorder:Clean;Sobel:Clean;Laplace:Clean;Canny:Clean;cvSubDemo:Clean;HoughLines:Clean;HoughCircles:Clean;cv_Integral:Clean;FindContours:Clean;CameraCaptureFindContours:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="HelloWorld:Make;OpenCV_1_LoadImage:Make;OpenCV_2_LoadVideo:Make;OpenCV_3_VideoProcessing:Make;LoadImage:Make;Trackbar:Make;CameraCapture:Make;VideoWriter:Make;MouseCallback:Make;Smooth:Make;Resize:Make;ROI:Make;ROI2:Make;XML:Make;Rand:Make;ErodeAndDilate:Make;MorphologyEx:Make;LoadAndTransformImage:Make;Weighted:Make;FloodFill:Make;Weighted2:Make;Threshold:Make;InRange:Make;SplitMerge:Make;cv_And:Make;CvtPixToPlane:Make;CopyMakeBorder:Make;Sobel:Make;Laplace:Make;Canny:Make;cvSubDemo:Make;HoughLines:Make;HoughCircles:Make"/>
+        <CallTarget Targets="HelloWorld:Make;OpenCV_1_LoadImage:Make;OpenCV_2_LoadVideo:Make;OpenCV_3_VideoProcessing:Make;LoadImage:Make;Trackbar:Make;CameraCapture:Make;VideoWriter:Make;MouseCallback:Make;Smooth:Make;Resize:Make;ROI:Make;ROI2:Make;XML:Make;Rand:Make;ErodeAndDilate:Make;MorphologyEx:Make;LoadAndTransformImage:Make;Weighted:Make;FloodFill:Make;Weighted2:Make;Threshold:Make;InRange:Make;SplitMerge:Make;cv_And:Make;CvtPixToPlane:Make;CopyMakeBorder:Make;Sobel:Make;Laplace:Make;Canny:Make;cvSubDemo:Make;HoughLines:Make;HoughCircles:Make;cv_Integral:Make;FindContours:Make;CameraCaptureFindContours:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>

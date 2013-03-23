@@ -134,11 +134,25 @@ procedure cvSmooth(
   { } sigma1: double = 0;
   { } sigma2: double = 0); cdecl;
 
-
 // (* Convolves the image with the kernel *)
 // CVAPI(
 // procedure)cvFilter2D(v1: CvPoint(-1;
 //
+{
+  Finds integral image: SUM(X,Y) = sum(x<X,y<Y)I(x,y)
+
+  CVAPI(void) cvIntegral(
+  const CvArr* image,
+  CvArr* sum,
+  CvArr* sqsum CV_DEFAULT(NULL),
+  CvArr* tilted_sum CV_DEFAULT(NULL));
+}
+procedure cvIntegral(
+  { } const image: pIplImage;
+  { } sum: pIplImage;
+  { } sqsum: pIplImage = NIL;
+  { } tilted_sum: pIplImage = NIL); cdecl;
+
 // var
 // Finds integral image: SUM(X: 1))): Double; (; = SUM(X < X: ); v4: < Y)I(X;
 // var)CVAPI(procedure)cvIntegral(CvArr * image: ); var SUM: CvArr;
@@ -373,16 +387,67 @@ procedure cvDilate(const src: pIplImage; dst: pIplImage; element: pIplConvKernel
 // (****************************************************************************************\
 // *                              Contours retrieving                                       *
 // ****************************************************************************************)
-//
-// (* Retrieves outer and optionally inner boundaries of white (non-zero) connected
-// cComponents in the black (zero) background *)
-// CVAPI(Integer)  cvFindContours( CvArr* image, CvMemStorage* storage, CvSeq** first_contour,
-// function header_size CV_DEFAULT(
-// v1: CvContour));
-// mode CV_DEFAULT(CV_RETR_LIST): Integer;
-// method CV_DEFAULT(CV_CHAIN_APPROX_SIMPLE): Integer;
-// offset CV_DEFAULT(cvPoint(0: CvPoint;
-// v5: ))): Integer;
+
+Type
+  PCvContour = ^TCvContour;
+
+  TCvContour = packed record
+    flags: Integer; // * micsellaneous flags */          \
+    header_size: Integer; // * size of sequence header */      \
+    h_prev: PCvSeq; // * previous sequence */        \
+    h_next: PCvSeq; // * next sequence */            \
+    v_prev: PCvSeq; // * 2nd previous sequence */    \
+    v_next: PCvSeq; // * 2nd next sequence */
+    total: Integer; // * total number of elements */            \
+    elem_size: Integer; // * size of sequence element in bytes */   \
+    block_max: PAnsiChar; // * maximal bound of the last block */     \
+    ptr: PAnsiChar; // * current write pointer */               \
+    delta_elems: Integer; // * how many elements allocated when the seq grows */  \
+    storage: PCvMemStorage; // * where the seq is stored */             \
+    free_blocks: PCvSeqBlock; // * free blocks list */                    \
+    first: PCvSeqBlock; // * pointer to the first sequence block */
+    rect: TCvRect;
+    color: Integer;
+    reserved: array [0 .. 2] of Integer;
+  end;
+
+Const
+  // * contour retrieval mode */
+  CV_RETR_EXTERNAL = 0;
+  CV_RETR_LIST = 1;
+  CV_RETR_CCOMP = 2;
+  CV_RETR_TREE = 3;
+
+  // * contour approximation method */
+  CV_CHAIN_CODE = 0;
+  CV_CHAIN_APPROX_NONE = 1;
+  CV_CHAIN_APPROX_SIMPLE = 2;
+  CV_CHAIN_APPROX_TC89_L1 = 3;
+  CV_CHAIN_APPROX_TC89_KCOS = 4;
+  CV_LINK_RUNS = 5;
+
+  {
+    /* Retrieves outer and optionally inner boundaries of white (non-zero) connected
+    components in the black (zero) background */
+    CVAPI(int)  cvFindContours(
+    CvArr* image,
+    CvMemStorage* storage,
+    CvSeq** first_contour,
+    int header_size CV_DEFAULT(sizeof(CvContour)),
+    int mode CV_DEFAULT(CV_RETR_LIST),
+    int method CV_DEFAULT(CV_CHAIN_APPROX_SIMPLE),
+    CvPoint offset CV_DEFAULT(cvPoint(0,0)));
+  }
+
+function cvFindContours(
+  { } image: pIplImage;
+  { } storage: PCvMemStorage;
+  { } first_contour: PCvSeq;
+  { } header_size: Integer { = SizeOf(TCvContour) };
+  { } mode: Integer { = CV_RETR_LIST };
+  { } method: Integer { = CV_CHAIN_APPROX_SIMPLE };
+  { } offset: TCvPoint { =cvPoint(0,0) } ): Integer; cdecl;
+
 //
 // (* Initalizes contour retrieving process.
 // Calls cvStartFindContours.
@@ -423,13 +488,25 @@ procedure cvDilate(const src: pIplImage; dst: pIplImage; element: pIplConvKernel
 // (****************************************************************************************\
 // *                            Contour Processing and Shape Analysis                       *
 // ****************************************************************************************)
-//
-// (* Approximates a single polygonal curve (contour) or
-// a tree of polygonal curves (contours) *)
-// CVAPI(CvSeq)  cvApproxPoly(  Pointer  src_seq,
-// Integer header_size, CvMemStorage* storage,
-// Integer method, Double eps,
-// function recursive CV_DEFAULT(v1: 0)): Integer;
+{
+  /* Approximates a single polygonal curve (contour) or
+  a tree of polygonal curves (contours) */
+  CVAPI(CvSeq*)  cvApproxPoly(
+  const void* src_seq,
+  int header_size,
+  CvMemStorage* storage,
+  int method,
+  double eps,
+  int recursive CV_DEFAULT(0));
+}
+function cvApproxPoly(
+  { } const src_seq: PCvSeq;
+  { } header_size: Integer;
+  { } storage: PCvMemStorage;
+  { } method: Integer;
+  { } eps: double;
+  { } recursive: Integer = 0): PCvSeq; cdecl;
+
 //
 // (* Calculates perimeter of a contour or length of a part of contour *)
 // CVAPI(Double)  cvArcLength(  Pointer  curve,
@@ -718,7 +795,7 @@ function cvHoughLines2(
   { } theta: double;
   { } threshold: Integer;
   { } param1: double = 0;
-  { } param2: double = 0): pCvSeq; cdecl;
+  { } param2: double = 0): PCvSeq; cdecl;
 
 {
   /* Finds circles in the image */
@@ -743,7 +820,7 @@ function cvHoughCircles(
   { } param1: double = 100;
   { } param2: double = 100;
   { } min_radius: Integer = 0;
-  { } max_radius: Integer = 0): pCvSeq; cdecl;
+  { } max_radius: Integer = 0): PCvSeq; cdecl;
 
 // (* Fits a line into set of 2d or 3d points in a robust way (M-estimator technique) *)
 // CVAPI(
@@ -779,5 +856,8 @@ procedure cvLaplace; external DllName;
 procedure cvCanny; external DllName;
 function cvHoughLines2; external DllName;
 function cvHoughCircles; external DllName;
+procedure cvIntegral; external DllName;
+function cvFindContours; external DllName;
+function cvApproxPoly; external DllName;
 
 end.
