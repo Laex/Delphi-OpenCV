@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<opencv_storage>
+<kernel type_id="opencv-matrix">
+  <rows>3</rows>
+  <cols>3</cols>
+  <dt>f</dt>
+  <data>
+    1. 0. 0. 0. 2. 0. 0. 0. 3.</data></kernel>
+</opencv_storage>
