@@ -1,9 +1,17 @@
 Delphi-OpenCV
 
-OpenCV 2.4.2
-* Stopped
+Project is no longer divided by version OpenCL
+Project matching, the latest version of OpenCL
+The current version of OpenCL 2.4.4
 
-OpenCV 2.4.3
-current development
+Development environment Delphi XE3
+
+-----------------------------------------------
+
+Проект больше не разделяется по версиям OpenCL
+Проект соответвует последней версии OpenCL
+Текущая версия OpenCL 2.4.4
+
+Среда разработки Delphi XE3
 
 =============
