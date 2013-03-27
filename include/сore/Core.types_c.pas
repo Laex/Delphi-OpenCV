@@ -832,6 +832,7 @@ type
   (* ************************************** CvRect **************************************** *)
 
 type
+  pCvRect=^TCvRect;
   TCvRect = packed record
     x: Integer;
     y: Integer;
@@ -949,9 +950,10 @@ type
   (* ************************************************************************************** *)
   (* ******************************* Memory storage *************************************** *)
 type
-  CvMemBlock = packed record
-    prev: ^CvMemBlock;
-    next: ^CvMemBlock;
+  pCvMemBlock=^TCvMemBlock;
+  TCvMemBlock = packed record
+    prev: pCvMemBlock;
+    next: pCvMemBlock;
   end;
 
 const
@@ -959,13 +961,13 @@ const
 {$EXTERNALSYM CV_STORAGE_MAGIC_VAL}
 
 type
-  pCvMemStorage = ^CvMemStorage;
+  pCvMemStorage = ^TCvMemStorage;
 
-  CvMemStorage = packed record
+  TCvMemStorage = packed record
     signature: Integer;
-    bottom: ^CvMemBlock;
-    top: ^CvMemBlock; (* First allocated block. *)
-    parent: ^CvMemStorage;
+    bottom: pCvMemBlock;
+    top: pCvMemBlock; (* First allocated block. *)
+    parent: pCvMemStorage;
     (* Current memory block - top of the stack. *)    (* We get new blocks from parent as needed. *)
     block_size: Integer; (* Block size. *)
     free_space: Integer; (* Remaining free space in current block. *)
@@ -973,7 +975,7 @@ type
 
 type
   CvMemStoragePos = packed record
-    top: ^CvMemBlock;
+    top: pCvMemBlock;
     free_space: Integer;
   end;
 

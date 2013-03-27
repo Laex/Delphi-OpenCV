@@ -1,3 +1,6 @@
+// JCL_DEBUG_EXPERT_GENERATEJDBG OFF
+// JCL_DEBUG_EXPERT_INSERTJDBG OFF
+// JCL_DEBUG_EXPERT_DELETEMAPFILE OFF
 program cv_And;
 
 {$APPTYPE CONSOLE}
@@ -9,10 +12,11 @@ uses
   Core.types_c in '..\..\include\ñore\Core.types_c.pas',
   highgui_c in '..\..\include\highgui\highgui_c.pas',
   imgproc.types_c in '..\..\include\imgproc\imgproc.types_c.pas',
-  imgproc_c in '..\..\include\imgproc\imgproc_c.pas';
+  imgproc_c in '..\..\include\imgproc\imgproc_c.pas',
+  LibName in '..\..\include\LibName.pas';
 
 const
-  filename = 'roulette-wheel2-small.jpg';
+  filename = 'Resource\roulette-wheel2-small.jpg';
 
 Var
   Rmin: Integer = 0;

@@ -1,17 +1,11 @@
 Delphi-OpenCV
 
-Project is no longer divided by version OpenCL
-Project matching, the latest version of OpenCL
-The current version of OpenCL 2.4.4
+Project is no longer divided by version OpenCL.
 
-Development environment Delphi XE3
+Project matching, the latest version of OpenCL.
 
------------------------------------------------
+The current version of OpenCL 2.4.4.
 
-Проект больше не разделяется по версиям OpenCL
-Проект соответвует последней версии OpenCL
-Текущая версия OpenCL 2.4.4
-
-Среда разработки Delphi XE3
+Development environment Delphi XE3.
 
 =============

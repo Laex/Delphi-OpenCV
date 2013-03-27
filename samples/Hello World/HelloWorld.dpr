@@ -1,4 +1,7 @@
 {$APPTYPE CONSOLE}
+// JCL_DEBUG_EXPERT_GENERATEJDBG OFF
+// JCL_DEBUG_EXPERT_INSERTJDBG OFF
+// JCL_DEBUG_EXPERT_DELETEMAPFILE OFF
 program HelloWorld;
 
 {$R *.res}
@@ -7,7 +10,8 @@ uses
   System.SysUtils,
   highgui_c in '..\..\include\highgui\highgui_c.pas',
   core_c in '..\..\include\сore\core_c.pas',
-  Core.types_c in '..\..\include\сore\Core.types_c.pas';
+  Core.types_c in '..\..\include\сore\Core.types_c.pas',
+  LibName in '..\..\include\LibName.pas';
 
 Var
   // задаём высоту и ширину картинки
