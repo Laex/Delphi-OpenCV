@@ -7,7 +7,8 @@ uses
   System.SysUtils,
   Core.types_c in '..\..\include\ñore\Core.types_c.pas',
   core_c in '..\..\include\ñore\core_c.pas',
-  highgui_c in '..\..\include\highgui\highgui_c.pas';
+  highgui_c in '..\..\include\highgui\highgui_c.pas',
+  LibName in '..\..\include\LibName.pas';
 
 Var
   capture: PCvCapture;

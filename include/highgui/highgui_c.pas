@@ -802,32 +802,29 @@ procedure cvReleaseVideoWriter(Var writer: pCvVideoWriter); cdecl;
 // {$ENDIF}
 implementation
 
-const
-{$IFDEF DEBUG}
-  DllName = 'opencv_highgui243d.dll';
-{$ELSE}
-  DllName = 'opencv_highgui243.dll';
-{$ENDIF}
-function cvNamedWindow; external DllName;
-procedure cvShowImage; external DllName;
-function cvWaitKey; external DllName;
-procedure cvDestroyWindow; external DllName;
-procedure cvDestroyAllWindows; external DllName;
-function cvLoadImage; external DllName;
-function cvCreateFileCapture; external DllName;
-function cvQueryFrame; external DllName;
-procedure cvReleaseCapture; external DllName;
-function cvSetCaptureProperty; external DllName;
-function cvGetCaptureProperty; external DllName;
-function cvCreateTrackbar; external DllName;
-function cvCreateCameraCapture; external DllName;
-function cvSaveImage; external DllName;
-function cvCreateVideoWriter; external DllName;
-function cvWriteFrame; external DllName;
-procedure cvReleaseVideoWriter; external DllName;
-procedure cvSetMouseCallback; external DllName;
-procedure cvConvertImage; external DllName;
-procedure cvMoveWindow; external DllName;
+uses
+  LibName;
+
+function cvNamedWindow; external highgui_Dll;
+procedure cvShowImage; external highgui_Dll;
+function cvWaitKey; external highgui_Dll;
+procedure cvDestroyWindow; external highgui_Dll;
+procedure cvDestroyAllWindows; external highgui_Dll;
+function cvLoadImage; external highgui_Dll;
+function cvCreateFileCapture; external highgui_Dll;
+function cvQueryFrame; external highgui_Dll;
+procedure cvReleaseCapture; external highgui_Dll;
+function cvSetCaptureProperty; external highgui_Dll;
+function cvGetCaptureProperty; external highgui_Dll;
+function cvCreateTrackbar; external highgui_Dll;
+function cvCreateCameraCapture; external highgui_Dll;
+function cvSaveImage; external highgui_Dll;
+function cvCreateVideoWriter; external highgui_Dll;
+function cvWriteFrame; external highgui_Dll;
+procedure cvReleaseVideoWriter; external highgui_Dll;
+procedure cvSetMouseCallback; external highgui_Dll;
+procedure cvConvertImage; external highgui_Dll;
+procedure cvMoveWindow; external highgui_Dll;
 
 function CV_FOURCC(const c1, c2, c3, c4: CVChar): Integer; inline;
 begin

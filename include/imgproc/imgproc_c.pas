@@ -644,11 +644,19 @@ function cvApproxPoly(
 /// / >> Following declaration is a macro definition!
 // const cvCalcBackProjectPatch( image, dst, range, hist, method, factor )  cvCalcArrBackProjectPatch( (CvArr;
 //
-//
+
+
+
 // (* calculates probabilistic density (divides one histogram by another) *)
 // CVAPI(procedure)  cvCalcProbDensity(
-// var equalizes histogram of 8-bit single-channel image *)CVAPI(procedure)  cvEqualizeHist(  CvArr* src: v1: 255)): Double;(;
-// var dst: CvArr);
+
+
+{/* equalizes histogram of 8-bit single-channel image */
+CVAPI(void)  cvEqualizeHist( const CvArr* src, CvArr* dst );
+}
+
+procedure cvEqualizeHist( const src,dst:pIplImage); cdecl;
+
 //
 //
 // (* Applies distance transform to binary image *)
@@ -833,31 +841,28 @@ function cvHoughCircles(
 // {$ENDIF}
 implementation
 
-const
-{$IFDEF DEBUG}
-  DllName = 'opencv_imgproc243d.dll';
-{$ELSE}
-  DllName = 'opencv_imgproc243.dll';
-{$ENDIF}
-procedure cvCvtColor; external DllName;
-function cvThreshold; external DllName;
-procedure cvSmooth; external DllName;
-procedure cvResize; external DllName;
-function cvCreateStructuringElementEx; external DllName;
-procedure cvErode; external DllName;
-procedure cvDilate; external DllName;
-procedure cvReleaseStructuringElement; external DllName;
-procedure cvMorphologyEx; external DllName;
-procedure cvFloodFill; external DllName;
-procedure cvAdaptiveThreshold; external DllName;
-procedure cvCopyMakeBorder; external DllName;
-procedure cvSobel; external DllName;
-procedure cvLaplace; external DllName;
-procedure cvCanny; external DllName;
-function cvHoughLines2; external DllName;
-function cvHoughCircles; external DllName;
-procedure cvIntegral; external DllName;
-function cvFindContours; external DllName;
-function cvApproxPoly; external DllName;
+Uses LibName;
+
+procedure cvCvtColor; external imgproc_Dll;
+function cvThreshold; external imgproc_Dll;
+procedure cvSmooth; external imgproc_Dll;
+procedure cvResize; external imgproc_Dll;
+function cvCreateStructuringElementEx; external imgproc_Dll;
+procedure cvErode; external imgproc_Dll;
+procedure cvDilate; external imgproc_Dll;
+procedure cvReleaseStructuringElement; external imgproc_Dll;
+procedure cvMorphologyEx; external imgproc_Dll;
+procedure cvFloodFill; external imgproc_Dll;
+procedure cvAdaptiveThreshold; external imgproc_Dll;
+procedure cvCopyMakeBorder; external imgproc_Dll;
+procedure cvSobel; external imgproc_Dll;
+procedure cvLaplace; external imgproc_Dll;
+procedure cvCanny; external imgproc_Dll;
+function cvHoughLines2; external imgproc_Dll;
+function cvHoughCircles; external imgproc_Dll;
+procedure cvIntegral; external imgproc_Dll;
+function cvFindContours; external imgproc_Dll;
+function cvApproxPoly; external imgproc_Dll;
+procedure cvEqualizeHist; external imgproc_Dll;
 
 end.

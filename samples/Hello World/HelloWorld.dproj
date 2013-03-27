@@ -13,13 +13,13 @@
     <PropertyGroup Condition="'$(Config)'=='Base' or '$(Base)'!=''">
         <Base>true</Base>
     </PropertyGroup>
-    <PropertyGroup Condition="('$(Platform)'=='Win64' and '$(Base)'=='true') or '$(Base_Win64)'!=''">
-        <Base_Win64>true</Base_Win64>
+    <PropertyGroup Condition="('$(Platform)'=='Win32' and '$(Base)'=='true') or '$(Base_Win32)'!=''">
+        <Base_Win32>true</Base_Win32>
         <CfgParent>Base</CfgParent>
         <Base>true</Base>
     </PropertyGroup>
-    <PropertyGroup Condition="('$(Platform)'=='Win32' and '$(Base)'=='true') or '$(Base_Win32)'!=''">
-        <Base_Win32>true</Base_Win32>
+    <PropertyGroup Condition="('$(Platform)'=='Win64' and '$(Base)'=='true') or '$(Base_Win64)'!=''">
+        <Base_Win64>true</Base_Win64>
         <CfgParent>Base</CfgParent>
         <Base>true</Base>
     </PropertyGroup>
@@ -53,14 +53,14 @@
         <DCC_F>false</DCC_F>
         <DCC_K>false</DCC_K>
     </PropertyGroup>
-    <PropertyGroup Condition="'$(Base_Win64)'!=''">
-        <DCC_UsePackage>officeXPrt;vclimg;vcldb;OverbyteIcsDXe2Run;DBXOdbcDriver;vclactnband;bindcompvcl;vclie;dsnapcon;vclx;TeeDB;vclib;DBXSybaseASEDriver;vcldsnap;DBXDb2Driver;vclribbon;vcl;DBXMSSQLDriver;webdsnap;adortl;Tee;TeeUI;vcltouch;websnap;VclSmp;DataSnapConnectors;$(DCC_UsePackage)</DCC_UsePackage>
-    </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Win32)'!=''">
         <DCC_Namespace>Winapi;System.Win;Data.Win;Datasnap.Win;Web.Win;Soap.Win;Xml.Win;Bde;$(DCC_Namespace)</DCC_Namespace>
         <VerInfo_Locale>1033</VerInfo_Locale>
         <DCC_UsePackage>fsADO16;JvGlobus;JvMM;JvManagedThreads;SignalLabScopePkgD16;cxPageControlD16;dxComnD16;JvCrypt;dxPSCoreD16;frxBDE16;dcldxSkinsCoreD16;JvNet;cxSpreadSheetD16;dxSkinLiquidSkyD16;dxSkinSilverD16;officeXPrt;fsIBX16;JvDotNetCtrls;vclimg;fmi;dxSkinOffice2010SilverD16;dxSkinOffice2010BlackD16;JvXPCtrls;vcldb;cxPivotGridChartD16;dxRibbonD16;unidacvcl160;cxVerticalGridD16;dxSkinLilianD16;dxThemeD16;dxSkinBlueD16;AudioLabBasicPkgD16;cxSchedulerGridD16;SignalLabBasicPkgD16;cxTreeListdxBarPopupMenuD16;dxSkinOffice2010BlueD16;AudioLabGenericBasicPkgD16;dxGDIPlusD16;dxPSdxDBTVLnkD16;NxCollectionRun_xe;dxSkinSevenD16;cxTreeListD16;JvDB;cxLibraryD16;dxPSdxDBOCLnkD16;JvRuntimeDesign;dxPScxSchedulerLnkD16;JclDeveloperTools;dxSkinPumpkinD16;dxBarExtItemsD16;NxCommonDsgn_xe;OpenWirePkgD16;dxLayoutControlD16;dxDockingD16;vcldbx;dxSkinXmas2008BlueD16;dxSkinMcSkinD16;cxPivotGridD16;dxPSTeeChartD16;cxEditorsD16;OverbyteIcsDXe2Run;dxPScxCommonD16;PackMSAgent;JvPluginSystem;DBXOdbcDriver;JvCmp;dxPSLnksD16;JvTimeFramework;dxBarExtDBItemsD16;dxSkinsCoreD16;dxmdsD16;VideoLabGenericBasicPkgD16;fsBDE16;frxDB16;intrawebdb_120_160;NxCollectionDsgn_xe;fs16;vclactnband;bindcompvcl;dxSkinSummer2008D16;dxTabbedMDID16;vclie;Jcl;dacvcl160;dxPSdxLCLnkD16;SignalLabAdditionalPkgD16;dxSkinBlackD16;dclfrxTee16;unidacfmx160;dsnapcon;JvPascalInterpreter;vclx;NxDBGridRun_xe;dxSkinsdxBarPainterD16;dxPScxTLLnkD16;cxSchedulerD16;dxSkinValentineD16;frxIBX16;VisionLabPkgD16;JvBDE;cxPageControldxBarPopupMenuD16;dxSkinOffice2007SilverD16;dxPSdxFCLnkD16;JvDlgs;cxBarEditItemD16;TeeDB;dxNavBarD16;dxSkinSpringTimeD16;frxTee16;Rave100VCL;vclib;inetdbbde;dxSkinOffice2007BlueD16;dxPSDBTeeChartD16;dacfmx160;dxSkinsdxNavBarPainterD16;cxPivotGridOLAPD16;VideoLabPkgD16;dxdbtrD16;dxSpellCheckerD16;DBXSybaseASEDriver;dxBarDBNavD16;dxSkinGlassOceansD16;dxSkinStardustD16;dxCoreD16;dxorgcD16;vcldsnap;dxSkinDarkSideD16;dac160;dxSkinscxPCPainterD16;dxPScxExtCommonD16;DBXDb2Driver;Intraweb_120_160;SimpleGraph;JvCore;frxADO16;vclribbon;frxe16;dxdborD16;vcl;dxSkinscxSchedulerPainterD16;dxPSdxOCLnkD16;dxPScxSSLnkD16;DBXMSSQLDriver;CodeSiteExpressPkg;dxSkinCoffeeD16;IPCamThread;unidac160;fsTee16;NxSheetRun_xe;dxSkinDarkRoomD16;dxPScxVGridLnkD16;dxPScxPivotGridLnkD16;JvAppFrm;webdsnap;dxBarD16;dxtrmdD16;dxPScxPCProdD16;dxSkiniMaginaryD16;dxSkinOffice2007BlackD16;JvDocking;adortl;dxPScxGridLnkD16;JvWizards;JvHMI;dxSkinLondonLiquidSkyD16;frxDBX16;MediaLabBasicPkgD16;JvBands;frx16;dxPsPrVwAdvD16;NxDBGridDsgn_xe;dxSkinOffice2007GreenD16;NxInspectorDsgn_xe;dxSkinSharpD16;crcontrols160;Tee;JclContainers;TimingLabBasicPkgD16;NxGridRun_xe;NxAddonsRun_xe;CPortLibDXE;JvSystem;svnui;dxSkinsdxDLPainterD16;JvControls;dxPSPrVwRibbonD16;TeeUI;JvJans;dxSkinMoneyTwinsD16;JvPageComps;JvPrintPreview;JvStdCtrls;VideoLabBasicPkgD16;JvCustom;dxSkinCaramelD16;vcltouch;websnap;ExceptionExpert16;dxSkinFoggyD16;VclSmp;fsDB16;dxFlowChartD16;dxSkinsdxRibbonPainterD16;NxGridDsgn_xe;DataSnapConnectors;NxInspectorRun_xe;JclVcl;cxGridD16;dxSkinOffice2007PinkD16;SignalLabGenericBasicPkgD16;VideoLabAdditionalPkgD16;svn;bdertl;NxCommonRun_xe;$(DCC_UsePackage)</DCC_UsePackage>
         <VerInfo_Keys>CompanyName=;FileDescription=;FileVersion=1.0.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductName=;ProductVersion=1.0.0.0;Comments=</VerInfo_Keys>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Base_Win64)'!=''">
+        <DCC_UsePackage>officeXPrt;vclimg;vcldb;OverbyteIcsDXe2Run;DBXOdbcDriver;vclactnband;bindcompvcl;vclie;dsnapcon;vclx;TeeDB;vclib;DBXSybaseASEDriver;vcldsnap;DBXDb2Driver;vclribbon;vcl;DBXMSSQLDriver;webdsnap;adortl;Tee;TeeUI;vcltouch;websnap;VclSmp;DataSnapConnectors;$(DCC_UsePackage)</DCC_UsePackage>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1)'!=''">
         <DCC_Define>DEBUG;$(DCC_Define)</DCC_Define>
@@ -86,6 +86,7 @@
         <DCCReference Include="..\..\include\highgui\highgui_c.pas"/>
         <DCCReference Include="..\..\include\сore\core_c.pas"/>
         <DCCReference Include="..\..\include\сore\Core.types_c.pas"/>
+        <DCCReference Include="..\..\include\LibName.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>
@@ -152,3 +153,8 @@
     <Import Condition="Exists('$(BDS)\Bin\CodeGear.Delphi.Targets')" Project="$(BDS)\Bin\CodeGear.Delphi.Targets"/>
     <Import Condition="Exists('$(APPDATA)\Embarcadero\$(BDSAPPDATABASEDIR)\$(PRODUCTVERSION)\UserTools.proj')" Project="$(APPDATA)\Embarcadero\$(BDSAPPDATABASEDIR)\$(PRODUCTVERSION)\UserTools.proj"/>
 </Project>
+
+<!-- EurekaLog First Line
+[Exception Log]
+EurekaLog Version=7001
+EurekaLog Last Line -->

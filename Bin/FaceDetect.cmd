@@ -1,0 +1,1 @@
+FaceDetect.exe --cascade=resource\haarcascade_frontalface_alt.xml 0

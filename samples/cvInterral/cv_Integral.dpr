@@ -12,10 +12,11 @@ uses
   Core.types_c in '..\..\include\сore\Core.types_c.pas',
   highgui_c in '..\..\include\highgui\highgui_c.pas',
   imgproc.types_c in '..\..\include\imgproc\imgproc.types_c.pas',
-  imgproc_c in '..\..\include\imgproc\imgproc_c.pas';
+  imgproc_c in '..\..\include\imgproc\imgproc_c.pas',
+  LibName in '..\..\include\LibName.pas';
 
 const
-  filename = 'cvIntegral.jpg';
+  filename = 'Resource\cvIntegral.jpg';
 
 Var
   SourceImage: pIplImage = nil;

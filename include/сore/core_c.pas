@@ -192,10 +192,13 @@ procedure cvReleaseMat(Var mat: pCvMat); cdecl;
 // var )
 
 // CVAPI(CvMat) cvCloneMat(  CvMat* mat: step value)): Integer;
+{
+(* Makes a new matrix from <rect> subrectangle of input array.
+No data is copied *)
+CVAPI(CvMat)cvGetSubRect(CvArr * arr, CvMat * submat, CvRect rect);
+}
+function cvGetSubRect(arr:pIplImage; submat:pIplImage; rect:TCvRect):pIplImage; cdecl;
 
-// (* Makes a new matrix from <rect> subrectangle of input array.
-// No data is copied *)
-// CVAPI(CvMat)cvGetSubRect(CvArr * arr, CvMat * submat, CvRect rect);
 
 // const cvGetSubArr = cvGetSubRect;
 // {$EXTERNALSYM cvGetSubArr}
@@ -810,13 +813,17 @@ procedure cvInRangeS(
 // {$EXTERNALSYM cvT}(* Completes the symmetric matrix from the lower (LtoR=0) or from the upper (LtoR!=0) part *)
 // procedure cvCompleteSymm(CvMat * Matrix: CvArr; LtoR CV_DEFAULT(0): Integer);
 //
-// (* Mirror array data around horizontal (flip=0),
-// vertical (flip=1) or both(flip=-1) axises:
-// cvFlip(src) flips images vertically and sequences horizontally (inplace) *)
-// procedure cvFlip(v1: 0); var Performs Singular value Decomposition of A Matrix * )
-// procedure cvSVD(CvArr * A:
-// function flip_mode CV_DEFAULT(v1: 0)): Integer; const cvMirror = cvFlip;
-// {$EXTERNALSYM cvMirror}const CV_SVD_MODIFY_A = 1;
+{
+  /* Mirror array data around horizontal (flip=0),
+  vertical (flip=1) or both(flip=-1) axises:
+  cvFlip(src) flips images vertically and sequences horizontally (inplace) */
+  CVAPI(void)  cvFlip( const CvArr* src, CvArr* dst CV_DEFAULT(NULL),
+  int flip_mode CV_DEFAULT(0));
+  #define cvMirror cvFlip
+}
+procedure cvFlip(const src, dst: pIplImage; flip_mode: Integer = 0); cdecl;
+
+// {$EXTERNALSYM cvMirror} const CV_SVD_MODIFY_A = 1;
 // {$EXTERNALSYM CV_SVD_MODIFY_A}const CV_SVD_U_T = 2; {$EXTERNALSYM CV_SVD_U_T}const CV_SVD_V_T = 4;
 // {$EXTERNALSYM CV_SVD_V_T}(; var W: CvArr; var U CV_DEFAULT(0): CvArr;
 // var Performs Singular value Back Substitution(solves A * x = B): flags must be the same as
@@ -1035,7 +1042,7 @@ procedure cvReleaseMemStorage(var storage: pCvMemStorage); cdecl;
 // to reuse memory allocated for the storage - cvClearSeq,cvClearSet Args: array of const
 // do not free any memory.
 // A child storage returns all the blocks to the parent when it is cleared *)
-// procedure cvClearMemStorage(var storage: CvMemStorage);
+procedure cvClearMemStorage(var storage: TCvMemStorage); cdecl;
 //
 // (* Remember a storage "free memory" position *)
 // procedure cvSaveMemStoragePos(var storage: CvMemStorage; var pos: CvMemStoragePos);
@@ -1350,10 +1357,22 @@ const
 procedure cvLine(img: pIplImage; pt1, pt2: TCvPoint; color: TCvScalar; thickness: Integer = 1; line_type: Integer = 8;
   shift: Integer = 0); cdecl;
 //
-// (* Draws a rectangle given two opposite corners of the rectangle (pt1 & pt2),
-// if thickness<0 (e.g. thickness = CV_FILLED), the filled box is drawn *) then
-// procedure cvRectangle(8: v1: ); shift CV_DEFAULT(0): Integer): Integer;
-//
+{
+/* Draws a rectangle given two opposite corners of the rectangle (pt1 & pt2),
+   if thickness<0 (e.g. thickness == CV_FILLED), the filled box is drawn */
+CVAPI(void)  cvRectangle(
+CvArr* img,
+CvPoint pt1,
+CvPoint pt2,
+CvScalar color,
+int thickness CV_DEFAULT(1),
+int line_type CV_DEFAULT(8),
+int shift CV_DEFAULT(0));
+}
+procedure cvRectangle(img: pIplImage; pt1, pt2: TCvPoint; color: TCvScalar; thickness: Integer = 1; line_type: Integer = 8;
+  shift: Integer = 0); cdecl;
+
+
 // (* Draws a rectangle specified by a CvRect structure *)
 // procedure cvRectangleR(8: v1: ); shift CV_DEFAULT(0): Integer): Integer;
 //
@@ -1753,6 +1772,9 @@ procedure cvSave(const filename: pCVChar; const struct_ptr: Pointer; const name:
 function cvLoad(const filename: pCVChar; memstorage: pCvMemStorage = Nil; const name: pCVChar = nil;
   const real_name: ppChar = nil): Pointer; cdecl;
 
+function cvGetTickCount: int64; inline;
+function cvGetTickFrequency: double;
+
 const
   CV_CPU_NONE = 0;
   CV_CPU_MMX = 1;
@@ -1867,25 +1889,22 @@ const
   // {$ENDIF}
 implementation
 
-const
-{$IFDEF DEBUG}
-  DllName = 'opencv_core243d.dll';
-{$ELSE}
-  DllName = 'opencv_core243.dll';
-{$ENDIF}
-procedure cvAlloc(size: size_t); external DllName; cdecl;
-procedure cvFree_(ptr: Pointer); external DllName; cdecl;
-function cvCreateImageHeader; external DllName; cdecl;
-function cvCreateImage; external DllName; cdecl;
-procedure cvReleaseImageHeader; external DllName; cdecl;
-procedure cvReleaseImage; external DllName; cdecl;
-function cvCloneImage; external DllName; cdecl;
-procedure cvSetImageCOI; external DllName; cdecl;
-function cvGetImageCOI; external DllName; cdecl;
-procedure cvSetImageROI; external DllName; cdecl;
-procedure cvResetImageROI; external DllName; cdecl;
-function cvGetImageROI; external DllName; cdecl;
-function cvCreateMatHeader; external DllName; cdecl;
+uses
+  LibName;
+
+procedure cvAlloc(size: size_t); external Core_Dll; cdecl;
+procedure cvFree_(ptr: Pointer); external Core_Dll; cdecl;
+function cvCreateImageHeader; external Core_Dll; cdecl;
+function cvCreateImage; external Core_Dll; cdecl;
+procedure cvReleaseImageHeader; external Core_Dll; cdecl;
+procedure cvReleaseImage; external Core_Dll; cdecl;
+function cvCloneImage; external Core_Dll; cdecl;
+procedure cvSetImageCOI; external Core_Dll; cdecl;
+function cvGetImageCOI; external Core_Dll; cdecl;
+procedure cvSetImageROI; external Core_Dll; cdecl;
+procedure cvResetImageROI; external Core_Dll; cdecl;
+function cvGetImageROI; external Core_Dll; cdecl;
+function cvCreateMatHeader; external Core_Dll; cdecl;
 
 function cvGetSize(const arr: pCvArr): TCvSize; assembler;
 asm
@@ -1905,7 +1924,7 @@ begin
   Result := cvGetSize(pCvArr(arr));
 end;
 
-function _cvGetSize; external DllName name 'cvGetSize'; cdecl;
+function _cvGetSize; external Core_Dll name 'cvGetSize'; cdecl;
 
 // function _cvGetSize(const image: pIplImage): TCvSize;
 // begin
@@ -1921,19 +1940,19 @@ function _cvGetSize; external DllName name 'cvGetSize'; cdecl;
 // end;
 // end;
 
-procedure cvSet; external DllName;
-procedure cvInitFont; external DllName;
-procedure cvPutText; external DllName;
+procedure cvSet; external Core_Dll;
+procedure cvInitFont; external Core_Dll;
+procedure cvPutText; external Core_Dll;
 
-procedure cvCircle; external DllName;
-procedure cvLine; external DllName;
+procedure cvCircle; external Core_Dll;
+procedure cvLine; external Core_Dll;
 
-procedure cvAddS; external DllName;
-procedure cvCopy; external DllName;
-procedure cvCopyImage; external DllName name 'cvCopy';
+procedure cvAddS; external Core_Dll;
+procedure cvCopy; external Core_Dll;
+procedure cvCopyImage; external Core_Dll name 'cvCopy';
 
-procedure cvSetZero; external DllName;
-procedure cvZero; external DllName name 'cvSetZero';
+procedure cvSetZero; external Core_Dll;
+procedure cvZero; external Core_Dll name 'cvSetZero';
 
 function CV_RGB(const r, g, B: double): TCvScalar; inline;
 begin
@@ -1941,7 +1960,7 @@ begin
 end;
 
 procedure cvSave(const filename: pCVChar; const struct_ptr: Pointer; const name: pCVChar; const comment: pCVChar;
-  attributes: TCvAttrList); external DllName; overload;
+  attributes: TCvAttrList); external Core_Dll; overload;
 
 procedure cvSave(const filename: pCVChar; const struct_ptr: Pointer; const name: pCVChar = Nil;
   const comment: pCVChar = Nil); overload; inline;
@@ -1949,41 +1968,65 @@ begin
   cvSave(filename, struct_ptr, name, comment, ZeroCvAttrList);
 end;
 
-function cvLoad; external DllName;
+function cvLoad; external Core_Dll;
 
-procedure cvReleaseMat; external DllName;
+procedure cvReleaseMat; external Core_Dll;
 
-procedure cvAddWeighted; external DllName;
+procedure cvAddWeighted; external Core_Dll;
 
-procedure cvInRange; external DllName;
-procedure cvInRangeS; external DllName;
-procedure cvSplit; external DllName;
-procedure cvMerge; external DllName;
-procedure cvMinMaxLoc; external DllName;
-procedure cvAnd; external DllName;
+procedure cvInRange; external Core_Dll;
+procedure cvInRangeS; external Core_Dll;
+procedure cvSplit; external Core_Dll;
+procedure cvMerge; external Core_Dll;
+procedure cvMinMaxLoc; external Core_Dll;
+procedure cvAnd; external Core_Dll;
 
-procedure cvCvtPixToPlane; external DllName name 'cvSplit';
-procedure cvCvtPlaneToPix; external DllName name 'cvMerge';
+procedure cvCvtPixToPlane; external Core_Dll name 'cvSplit';
+procedure cvCvtPlaneToPix; external Core_Dll name 'cvMerge';
 
-procedure cvConvertScale; external DllName;
-procedure cvScale; external DllName name 'cvConvertScale';
-procedure cvCvtScale; external DllName name 'cvConvertScale';
+procedure cvConvertScale; external Core_Dll;
+procedure cvScale; external Core_Dll name 'cvConvertScale';
+procedure cvCvtScale; external Core_Dll name 'cvConvertScale';
 
 procedure cvConvert(const src: pIplImage; dst: pIplImage);
 begin
   cvConvertScale(src, dst, 1, 0);
 end;
 
-procedure cvSub; external DllName;
+procedure cvSub; external Core_Dll;
 
 procedure cvSubS(const src: pIplImage; value: TCvScalar; dst: pIplImage; const mask: pIplImage);
 begin
   cvAddS(src, CvScalar(-value.val[0], -value.val[1], -value.val[2], -value.val[3]), dst, mask);
 end;
 
-function cvCreateMemStorage; external DllName;
-function cvGetSeqElem; external DllName;
-procedure cvReleaseMemStorage; external DllName;
-procedure cvDrawContours; external DllName;
+function cvCreateMemStorage; external Core_Dll;
+function cvGetSeqElem; external Core_Dll;
+procedure cvReleaseMemStorage; external Core_Dll;
+procedure cvDrawContours; external Core_Dll;
+
+function cvGetTickCount: int64; inline;
+begin
+  Result := GetTickCount;
+end;
+
+function GetTickFrequency: double;
+Var
+  freq: TLargeInteger;
+begin
+  QueryPerformanceFrequency(freq);
+  Result := freq;
+end;
+
+function cvGetTickFrequency: double;
+begin
+  Result := getTickFrequency() * 1E-6;
+end;
+
+procedure cvFlip; external Core_Dll;
+procedure cvMirror; external Core_Dll name 'cvFlip';
+procedure cvRectangle; external Core_Dll;
+function cvGetSubRect; external Core_Dll;
+procedure cvClearMemStorage; external Core_Dll;
 
 end.
