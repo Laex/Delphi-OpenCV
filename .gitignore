@@ -10,3 +10,6 @@ __history
 *.tvsconfig
 /!DS!
 *.skincfg
+
+/bin/StereoSample/*.zip
+/bin/StereoSample/Aloe

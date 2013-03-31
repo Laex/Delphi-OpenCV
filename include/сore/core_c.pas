@@ -154,13 +154,15 @@ const
   // function
   // function CV_DEFAULT(v1: CV_AUTOSTEP)): Integer;
 
+  {
+    (* Allocates and initializes CvMat header and allocates data *)
+    CVAPI(CvMat)cvCreateMat(Integer rows, Integer cols, Integer cType): Pointer;
+  }
+function cvCreateMat(rows: Integer; cols: Integer; cType: Integer): pCvMat; cdecl;
 
-  // (* Allocates and initializes CvMat header and allocates data *)
-  // CVAPI(CvMat)cvCreateMat(Integer rows, Integer cols, Integer cType): Pointer;
-
-  /// * Releases CvMat header and deallocates matrix data
-  // (reference counting is used for data) */
-  // CVAPI(void)  cvReleaseMat( CvMat** mat );
+/// * Releases CvMat header and deallocates matrix data
+// (reference counting is used for data) */
+// CVAPI(void)  cvReleaseMat( CvMat** mat );
 procedure cvReleaseMat(Var mat: pCvMat); cdecl;
 
 
@@ -193,11 +195,11 @@ procedure cvReleaseMat(Var mat: pCvMat); cdecl;
 
 // CVAPI(CvMat) cvCloneMat(  CvMat* mat: step value)): Integer;
 {
-(* Makes a new matrix from <rect> subrectangle of input array.
-No data is copied *)
-CVAPI(CvMat)cvGetSubRect(CvArr * arr, CvMat * submat, CvRect rect);
+  (* Makes a new matrix from <rect> subrectangle of input array.
+  No data is copied *)
+  CVAPI(CvMat)cvGetSubRect(CvArr * arr, CvMat * submat, CvRect rect);
 }
-function cvGetSubRect(arr:pIplImage; submat:pIplImage; rect:TCvRect):pIplImage; cdecl;
+function cvGetSubRect(arr: pIplImage; submat: pIplImage; rect: TCvRect): pIplImage; cdecl;
 
 
 // const cvGetSubArr = cvGetSubRect;
@@ -530,7 +532,8 @@ procedure cvCvtPlaneToPix(
   #define cvConvert( src, dst )  cvConvertScale( (src), (dst), 1, 0 )
 }
 
-procedure cvConvertScale(const src: pIplImage; dst: pIplImage; scale: double = 1; shift: double = 0); cdecl;
+procedure cvConvertScale(const src: pIplImage; dst: pIplImage; scale: double = 1; shift: double = 0); cdecl; overload;
+procedure cvConvertScale(const src: pCvMat; dst: pCvMat; scale: double = 1; shift: double = 0); cdecl; overload;
 procedure cvConvert(const src: pIplImage; dst: pIplImage);
 
 // (* Performs linear transformation on every source array element,
@@ -1036,8 +1039,6 @@ function cvCreateMemStorage(block_size: Integer = 0): pCvMemStorage; cdecl;
 }
 procedure cvReleaseMemStorage(var storage: pCvMemStorage); cdecl;
 
-
-
 // (* Clears memory storage. This is the only way(!!!) (besides cvRestoreMemStoragePos)
 // to reuse memory allocated for the storage - cvClearSeq,cvClearSet Args: array of const
 // do not free any memory.
@@ -1358,20 +1359,19 @@ procedure cvLine(img: pIplImage; pt1, pt2: TCvPoint; color: TCvScalar; thickness
   shift: Integer = 0); cdecl;
 //
 {
-/* Draws a rectangle given two opposite corners of the rectangle (pt1 & pt2),
-   if thickness<0 (e.g. thickness == CV_FILLED), the filled box is drawn */
-CVAPI(void)  cvRectangle(
-CvArr* img,
-CvPoint pt1,
-CvPoint pt2,
-CvScalar color,
-int thickness CV_DEFAULT(1),
-int line_type CV_DEFAULT(8),
-int shift CV_DEFAULT(0));
+  /* Draws a rectangle given two opposite corners of the rectangle (pt1 & pt2),
+  if thickness<0 (e.g. thickness == CV_FILLED), the filled box is drawn */
+  CVAPI(void)  cvRectangle(
+  CvArr* img,
+  CvPoint pt1,
+  CvPoint pt2,
+  CvScalar color,
+  int thickness CV_DEFAULT(1),
+  int line_type CV_DEFAULT(8),
+  int shift CV_DEFAULT(0));
 }
-procedure cvRectangle(img: pIplImage; pt1, pt2: TCvPoint; color: TCvScalar; thickness: Integer = 1; line_type: Integer = 8;
-  shift: Integer = 0); cdecl;
-
+procedure cvRectangle(img: pIplImage; pt1, pt2: TCvPoint; color: TCvScalar; thickness: Integer = 1;
+  line_type: Integer = 8; shift: Integer = 0); cdecl;
 
 // (* Draws a rectangle specified by a CvRect structure *)
 // procedure cvRectangleR(8: v1: ); shift CV_DEFAULT(0): Integer): Integer;
@@ -1984,7 +1984,12 @@ procedure cvAnd; external Core_Dll;
 procedure cvCvtPixToPlane; external Core_Dll name 'cvSplit';
 procedure cvCvtPlaneToPix; external Core_Dll name 'cvMerge';
 
-procedure cvConvertScale; external Core_Dll;
+// procedure cvConvertScale; external Core_Dll;
+procedure cvConvertScale(const src: pIplImage; dst: pIplImage; scale: double = 1; shift: double = 0); cdecl;
+  external Core_Dll name 'cvConvertScale';
+procedure cvConvertScale(const src: pCvMat; dst: pCvMat; scale: double = 1; shift: double = 0); cdecl;
+  external Core_Dll name 'cvConvertScale';
+
 procedure cvScale; external Core_Dll name 'cvConvertScale';
 procedure cvCvtScale; external Core_Dll name 'cvConvertScale';
 
@@ -2020,7 +2025,7 @@ end;
 
 function cvGetTickFrequency: double;
 begin
-  Result := getTickFrequency() * 1E-6;
+  Result := GetTickFrequency() * 1E-6;
 end;
 
 procedure cvFlip; external Core_Dll;
@@ -2028,5 +2033,6 @@ procedure cvMirror; external Core_Dll name 'cvFlip';
 procedure cvRectangle; external Core_Dll;
 function cvGetSubRect; external Core_Dll;
 procedure cvClearMemStorage; external Core_Dll;
+function cvCreateMat; external Core_Dll;
 
 end.

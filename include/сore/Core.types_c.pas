@@ -506,7 +506,7 @@ const
 {$EXTERNALSYM CV_32S}
   CV_32F = 5;
 {$EXTERNALSYM CV_32F}
-  CV_64F = 6;
+  CV_64F = 6; // Double
 {$EXTERNALSYM CV_64F}
   CV_USRTYPE1 = 7;
 {$EXTERNALSYM CV_USRTYPE1}
@@ -557,10 +557,6 @@ const
     // >> Following declaration is a macro definition!
     const
     CV_16SC(n)CV_MAKETYPE(CV_16S, (n));
-
-    const
-    CV_32SC1 = CV_MAKETYPE(CV_32S, 1);
-    {$EXTERNALSYM CV_32SC1}
 
     const
     CV_32SC2 = CV_MAKETYPE(CV_32S, 2);
@@ -832,7 +828,8 @@ type
   (* ************************************** CvRect **************************************** *)
 
 type
-  pCvRect=^TCvRect;
+  pCvRect = ^TCvRect;
+
   TCvRect = packed record
     x: Integer;
     y: Integer;
@@ -950,7 +947,8 @@ type
   (* ************************************************************************************** *)
   (* ******************************* Memory storage *************************************** *)
 type
-  pCvMemBlock=^TCvMemBlock;
+  pCvMemBlock = ^TCvMemBlock;
+
   TCvMemBlock = packed record
     prev: pCvMemBlock;
     next: pCvMemBlock;
@@ -2111,6 +2109,7 @@ function CV_MAT_TYPE(flags: Integer): Integer;
 function CV_ELEM_SIZE(_type: Integer): Integer;
 function CV_MAT_CN(flags: Integer): Integer;
 function CV_32FC1: Integer;
+function CV_32SC1: Integer;
 function CV_MAKETYPE(depth, cn: Integer): Integer;
 // #define CV_MAT_ELEM( mat, elemtype, row, col )           \
 // (*(elemtype*)CV_MAT_ELEM_PTR_FAST( mat, row, col, sizeof(elemtype)))
@@ -2158,6 +2157,11 @@ end;
 function CV_ELEM_SIZE(_type: Integer): Integer;
 begin
   Result := (CV_MAT_CN(_type) shl ((((SizeOf(Integer) div 4 + 1) * 16384 or $3A50) shr CV_MAT_DEPTH(_type) * 2) and 3));
+end;
+
+function CV_32SC1: Integer;
+begin
+  Result := CV_MAKETYPE(CV_32S, 1);
 end;
 
 function CV_32FC1: Integer;

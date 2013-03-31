@@ -117,6 +117,12 @@
         <Projects Include="FaceDetect\FaceDetect.dproj">
             <Dependencies/>
         </Projects>
+        <Projects Include="Stereo\Stereo.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="CameraCalibrate\CameraCalibrate.dproj">
+            <Dependencies/>
+        </Projects>
     </ItemGroup>
     <ProjectExtensions>
         <Borland.Personality>Default.Personality.12</Borland.Personality>
@@ -467,14 +473,32 @@
     <Target Name="FaceDetect:Make">
         <MSBuild Projects="FaceDetect\FaceDetect.dproj" Targets="Make"/>
     </Target>
+    <Target Name="Stereo">
+        <MSBuild Projects="Stereo\Stereo.dproj"/>
+    </Target>
+    <Target Name="Stereo:Clean">
+        <MSBuild Projects="Stereo\Stereo.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="Stereo:Make">
+        <MSBuild Projects="Stereo\Stereo.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="CameraCalibrate">
+        <MSBuild Projects="CameraCalibrate\CameraCalibrate.dproj"/>
+    </Target>
+    <Target Name="CameraCalibrate:Clean">
+        <MSBuild Projects="CameraCalibrate\CameraCalibrate.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="CameraCalibrate:Make">
+        <MSBuild Projects="CameraCalibrate\CameraCalibrate.dproj" Targets="Make"/>
+    </Target>
     <Target Name="Build">
-        <CallTarget Targets="HelloWorld;cv_LoadImage;cv_LoadVideo;VideoProcessing;cv_LoadImage2;cv_CreateTrackbar;cv_CreateCameraCapture;cv_CreateVideoWriter;cv_SetMouseCallback;cv_Smooth;cv_Resize;cv_SetImageROI;cv_SetImageROI2;cv_Save;cv_RandInt;cv_Erode__cv_Dilate;cv_MorphologyEx;cv_CvtColor;cv_AddWeighted;cv_FloodFill;cv_SetImageROI__cv_AddWeighted;cv_Threshold__cv_AdaptiveThreshold;cv_InRangeS;ImageTransform_SplitMerge;cv_And;cv_CvtPixToPlane;cv_CopyMakeBorder;cv_Sobel;cv_Laplace;cv_Canny;cv_Sub;cv_HoughLines2;cv_HoughCircles;cv_Integral;cv_FindContours;CameraCaptureAndFindContours;cv_GetSubRect;FaceDetect"/>
+        <CallTarget Targets="HelloWorld;cv_LoadImage;cv_LoadVideo;VideoProcessing;cv_LoadImage2;cv_CreateTrackbar;cv_CreateCameraCapture;cv_CreateVideoWriter;cv_SetMouseCallback;cv_Smooth;cv_Resize;cv_SetImageROI;cv_SetImageROI2;cv_Save;cv_RandInt;cv_Erode__cv_Dilate;cv_MorphologyEx;cv_CvtColor;cv_AddWeighted;cv_FloodFill;cv_SetImageROI__cv_AddWeighted;cv_Threshold__cv_AdaptiveThreshold;cv_InRangeS;ImageTransform_SplitMerge;cv_And;cv_CvtPixToPlane;cv_CopyMakeBorder;cv_Sobel;cv_Laplace;cv_Canny;cv_Sub;cv_HoughLines2;cv_HoughCircles;cv_Integral;cv_FindContours;CameraCaptureAndFindContours;cv_GetSubRect;FaceDetect;Stereo;CameraCalibrate"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="HelloWorld:Clean;cv_LoadImage:Clean;cv_LoadVideo:Clean;VideoProcessing:Clean;cv_LoadImage2:Clean;cv_CreateTrackbar:Clean;cv_CreateCameraCapture:Clean;cv_CreateVideoWriter:Clean;cv_SetMouseCallback:Clean;cv_Smooth:Clean;cv_Resize:Clean;cv_SetImageROI:Clean;cv_SetImageROI2:Clean;cv_Save:Clean;cv_RandInt:Clean;cv_Erode__cv_Dilate:Clean;cv_MorphologyEx:Clean;cv_CvtColor:Clean;cv_AddWeighted:Clean;cv_FloodFill:Clean;cv_SetImageROI__cv_AddWeighted:Clean;cv_Threshold__cv_AdaptiveThreshold:Clean;cv_InRangeS:Clean;ImageTransform_SplitMerge:Clean;cv_And:Clean;cv_CvtPixToPlane:Clean;cv_CopyMakeBorder:Clean;cv_Sobel:Clean;cv_Laplace:Clean;cv_Canny:Clean;cv_Sub:Clean;cv_HoughLines2:Clean;cv_HoughCircles:Clean;cv_Integral:Clean;cv_FindContours:Clean;CameraCaptureAndFindContours:Clean;cv_GetSubRect:Clean;FaceDetect:Clean"/>
+        <CallTarget Targets="HelloWorld:Clean;cv_LoadImage:Clean;cv_LoadVideo:Clean;VideoProcessing:Clean;cv_LoadImage2:Clean;cv_CreateTrackbar:Clean;cv_CreateCameraCapture:Clean;cv_CreateVideoWriter:Clean;cv_SetMouseCallback:Clean;cv_Smooth:Clean;cv_Resize:Clean;cv_SetImageROI:Clean;cv_SetImageROI2:Clean;cv_Save:Clean;cv_RandInt:Clean;cv_Erode__cv_Dilate:Clean;cv_MorphologyEx:Clean;cv_CvtColor:Clean;cv_AddWeighted:Clean;cv_FloodFill:Clean;cv_SetImageROI__cv_AddWeighted:Clean;cv_Threshold__cv_AdaptiveThreshold:Clean;cv_InRangeS:Clean;ImageTransform_SplitMerge:Clean;cv_And:Clean;cv_CvtPixToPlane:Clean;cv_CopyMakeBorder:Clean;cv_Sobel:Clean;cv_Laplace:Clean;cv_Canny:Clean;cv_Sub:Clean;cv_HoughLines2:Clean;cv_HoughCircles:Clean;cv_Integral:Clean;cv_FindContours:Clean;CameraCaptureAndFindContours:Clean;cv_GetSubRect:Clean;FaceDetect:Clean;Stereo:Clean;CameraCalibrate:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="HelloWorld:Make;cv_LoadImage:Make;cv_LoadVideo:Make;VideoProcessing:Make;cv_LoadImage2:Make;cv_CreateTrackbar:Make;cv_CreateCameraCapture:Make;cv_CreateVideoWriter:Make;cv_SetMouseCallback:Make;cv_Smooth:Make;cv_Resize:Make;cv_SetImageROI:Make;cv_SetImageROI2:Make;cv_Save:Make;cv_RandInt:Make;cv_Erode__cv_Dilate:Make;cv_MorphologyEx:Make;cv_CvtColor:Make;cv_AddWeighted:Make;cv_FloodFill:Make;cv_SetImageROI__cv_AddWeighted:Make;cv_Threshold__cv_AdaptiveThreshold:Make;cv_InRangeS:Make;ImageTransform_SplitMerge:Make;cv_And:Make;cv_CvtPixToPlane:Make;cv_CopyMakeBorder:Make;cv_Sobel:Make;cv_Laplace:Make;cv_Canny:Make;cv_Sub:Make;cv_HoughLines2:Make;cv_HoughCircles:Make;cv_Integral:Make;cv_FindContours:Make;CameraCaptureAndFindContours:Make;cv_GetSubRect:Make;FaceDetect:Make"/>
+        <CallTarget Targets="HelloWorld:Make;cv_LoadImage:Make;cv_LoadVideo:Make;VideoProcessing:Make;cv_LoadImage2:Make;cv_CreateTrackbar:Make;cv_CreateCameraCapture:Make;cv_CreateVideoWriter:Make;cv_SetMouseCallback:Make;cv_Smooth:Make;cv_Resize:Make;cv_SetImageROI:Make;cv_SetImageROI2:Make;cv_Save:Make;cv_RandInt:Make;cv_Erode__cv_Dilate:Make;cv_MorphologyEx:Make;cv_CvtColor:Make;cv_AddWeighted:Make;cv_FloodFill:Make;cv_SetImageROI__cv_AddWeighted:Make;cv_Threshold__cv_AdaptiveThreshold:Make;cv_InRangeS:Make;ImageTransform_SplitMerge:Make;cv_And:Make;cv_CvtPixToPlane:Make;cv_CopyMakeBorder:Make;cv_Sobel:Make;cv_Laplace:Make;cv_Canny:Make;cv_Sub:Make;cv_HoughLines2:Make;cv_HoughCircles:Make;cv_Integral:Make;cv_FindContours:Make;CameraCaptureAndFindContours:Make;cv_GetSubRect:Make;FaceDetect:Make;Stereo:Make;CameraCalibrate:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>
