@@ -22,7 +22,7 @@ interface
 *)
 
 uses
-  Core.types_c, imgproc.types_c;
+  Core.types_c, imgproc.types_c, types_c;
 
 (* M///////////////////////////////////////////////////////////////////////////////////////
   //
@@ -234,13 +234,22 @@ procedure cvResize(const src: TCvArr; dst: TCvArr; interpolation: Integer = CV_I
 // var)CVAPI(CvMat)cvGetPerspectiveTransform(CvPoint2D32f * src: ); var dst: vPoint2D32f;
 // var map_matrix: CvMat);
 //
-// (* Performs generic geometric transformation using the specified coordinate maps *)
-// CVAPI(
-// procedure)cvRemap(var Converts mapx & mapy from floating -
-// point to Integer formats for cvRemap * )CVAPI(
-// procedure)cvConvertMaps(CvArr * mapx: v1: cvScalarAll(0))): Integer; (; var mapy: CvArr;
-// var mapxy: CvArr; var mapalpha: CvArr);
-//
+
+{
+  /* Performs generic geometric transformation using the specified coordinate maps */
+  CVAPI(void)  cvRemap(
+  const CvArr* src,
+  CvArr* dst,
+  const CvArr* mapx,
+  const CvArr* mapy,
+  int flags CV_DEFAULT(CV_INTER_LINEAR+CV_WARP_FILL_OUTLIERS),
+  CvScalar fillval CV_DEFAULT(cvScalarAll(0)) );
+}
+procedure cvRemap(const src: pIplImage; dst: pIplImage; const mapx: pIplImage; const mapy: pIplImage;
+  flags: Integer { =CV_INTER_LINEAR+CV_WARP_FILL_OUTLIERS }; fillval: TCvScalar { =cvScalarAll(0) }
+  ); cdecl;
+
+
 // (* Performs forward or inverse log-polar image transform *)
 // CVAPI(
 // procedure)cvLogPolar(var Performs forward or inverse linear - polar image transform * )CVAPI(
@@ -251,12 +260,20 @@ procedure cvResize(const src: TCvArr; dst: TCvArr; interpolation: Integer = CV_I
 // function flags CV_DEFAULT(v1: CV_INTER_LINEAR + CV_WARP_FILL_OUTLIERS)): Integer; (; var dst: CvArr;
 // var camera_matrix: vMat; var distortion_coeffs: vMat; var new_camera_matrix CV_DEFAULT(0): vMat);
 //
-// (* Computes transformation map from intrinsic camera parameters
-// that can used by cvRemap *)
-// CVAPI(
-// procedure)cvInitUndistortMap(var camera_matrix: CvMat; var distortion_coeffs: vMat; var mapx: CvArr;
-// var mapy: CvArr);
-//
+
+{
+  /* Computes transformation map from intrinsic camera parameters
+  that can used by cvRemap */
+  CVAPI(void) cvInitUndistortMap(
+  const CvMat* camera_matrix,
+  const CvMat* distortion_coeffs,
+  CvArr* mapx,
+  CvArr* mapy );
+}
+procedure cvInitUndistortMap(const camera_matrix: pCvMat; const distortion_coeffs: pCvMat; mapx: pIplImage;
+  mapy: pIplImage); cdecl;
+
+
 // (* Computes undistortion+rectification map for a head of stereo camera *)
 // CVAPI(
 // procedure)cvInitUndistortRectifyMap(var camera_matrix: CvMat; var dist_coeffs: vMat;
@@ -650,12 +667,11 @@ function cvApproxPoly(
 // (* calculates probabilistic density (divides one histogram by another) *)
 // CVAPI(procedure)  cvCalcProbDensity(
 
-
-{/* equalizes histogram of 8-bit single-channel image */
-CVAPI(void)  cvEqualizeHist( const CvArr* src, CvArr* dst );
+{ /* equalizes histogram of 8-bit single-channel image */
+  CVAPI(void)  cvEqualizeHist( const CvArr* src, CvArr* dst );
 }
 
-procedure cvEqualizeHist( const src,dst:pIplImage); cdecl;
+procedure cvEqualizeHist(const src, dst: pIplImage); cdecl;
 
 //
 //
@@ -753,6 +769,21 @@ procedure cvCanny(const image: pIplImage; edges: pIplImage; threshold1: double; 
 // : Integer aperture_size CV_DEFAULT(v1: 3)): Integer; (; var)CVAPI(
 // procedure)cvCornerHarris(CvArr * image: where M is 2 x2 gradient covariation matrix for each pixel;
 // var harris_responce: CvArr; block_size:
+
+{
+  /* Adjust corner position using some sort of gradient search */
+  CVAPI(void)  cvFindCornerSubPix(
+  const CvArr* image,
+  CvPoint2D32f* corners,
+  int count,
+  CvSize win,
+  CvSize zero_zone,
+  CvTermCriteria  criteria );
+}
+procedure cvFindCornerSubPix(const image: pIplImage; corners: pCvPoint2D32f; count: Integer; win: TCvSize;
+  zero_zone: TCvSize; criteria: TCvTermCriteria); cdecl;
+
+
 // function; var Adjust corner position using some sort of gradient search * )CVAPI(
 // procedure)cvFindCornerSubPix(CvArr * image: Integer aperture_size CV_DEFAULT(v1: 0.04)): Integer; (;
 // var corners: CvPoint2D32f; count: Integer; win: CvSize; zero_zone: CvSize;
@@ -864,5 +895,8 @@ procedure cvIntegral; external imgproc_Dll;
 function cvFindContours; external imgproc_Dll;
 function cvApproxPoly; external imgproc_Dll;
 procedure cvEqualizeHist; external imgproc_Dll;
+procedure cvFindCornerSubPix; external imgproc_Dll;
+procedure cvInitUndistortMap; external imgproc_Dll;
+procedure cvRemap; external imgproc_Dll;
 
 end.

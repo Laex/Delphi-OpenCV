@@ -253,7 +253,8 @@ const
     CVAPI(int) cvSaveImage( const char* filename, const CvArr* image, const int* params CV_DEFAULT(0) );
   }
 
-function cvSaveImage(const filename: pCVChar; const image: pIplImage; const params: PInteger = nil): Integer; cdecl;
+//function cvSaveImage(const filename: pCVChar; const image: pIplImage; const params: PInteger = nil): Integer; cdecl;
+function cvSaveImage(const filename: pCVChar; const image: pointer; const params: PInteger = nil): Integer; cdecl;
 
 (* decode image stored in the buffer *)
 // CVAPI(IplImage)cvDecodeImage(CvMat * buf, Integer iscolor CV_DEFAULT(CV_LOAD_IMAGE_COLOR));
