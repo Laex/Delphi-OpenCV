@@ -170,7 +170,8 @@ interface
 
 Type
   pCVChar = pAnsiChar;
-  ppCVChar = ^pCVChar;
+  TpCVCharArray = array [0 .. 1] of pCVChar;
+  ppCVChar = ^TpCVCharArray;
   CVChar = AnsiChar;
 
 type
@@ -237,10 +238,9 @@ type
     * cArray cType is recognized at runtime:
   *)
 type
-  CvArr = Pointer;
-  TCvArr = CvArr;
+  TCvArr = Pointer;
   pCvArr = ^TCvArr;
-{$EXTERNALSYM CvArr}
+{EXTERNALSYM CvArr}
 
 type
   Cv32suf = packed record
@@ -494,19 +494,19 @@ const
 {$EXTERNALSYM CV_CN_SHIFT}
   CV_DEPTH_MAX = (1 shl CV_CN_SHIFT);
 {$EXTERNALSYM CV_DEPTH_MAX}
-  CV_8U = 0;
+  CV_8U = 0; // byte - 1-byte unsigned
 {$EXTERNALSYM CV_8U}
-  CV_8S = 1;
+  CV_8S = 1; // ShortInt - 1-byte signed
 {$EXTERNALSYM CV_8S}
-  CV_16U = 2;
+  CV_16U = 2; // word - 2-byte unsigned
 {$EXTERNALSYM CV_16U}
-  CV_16S = 3;
+  CV_16S = 3; // SmallInt - 2-byte signed
 {$EXTERNALSYM CV_16S}
-  CV_32S = 4;
+  CV_32S = 4; // integer - 4-byte signed integer
 {$EXTERNALSYM CV_32S}
-  CV_32F = 5;
+  CV_32F = 5; // single - 4-byte floating point
 {$EXTERNALSYM CV_32F}
-  CV_64F = 6; // Double
+  CV_64F = 6; // double - 8-byte floating point
 {$EXTERNALSYM CV_64F}
   CV_USRTYPE1 = 7;
 {$EXTERNALSYM CV_USRTYPE1}
@@ -867,23 +867,23 @@ type
   TCvPointArray = array [0 .. 100] of TCvPoint;
   pCvPointArray = ^TCvPointArray;
 
-  CvPoint2D32f = packed record
+  TCvPoint2D32f = packed record
     x: Single;
     y: Single;
   end;
 
-  CvPoint3D32f = packed record
+  TCvPoint3D32f = packed record
     x: Single;
     y: Single;
     z: Single;
   end;
 
-  CvPoint2D64f = packed record
+  TCvPoint2D64f = packed record
     x: Double;
     y: Double;
   end;
 
-  CvPoint3D64f = packed record
+  TCvPoint3D64f = packed record
     x: Double;
     y: Double;
     z: Double;
@@ -900,21 +900,21 @@ type
   end;
 
 type
-  CvSize2D32f = packed record
+  TCvSize2D32f = packed record
     width: Single;
     height: Single;
   end;
 
 type
-  CvBox2D = packed record
-    center: CvPoint2D32f; (* Center of the box. *)
-    size: CvSize2D32f; (* Box width and length. *)
+  TCvBox2D = packed record
+    center: TCvPoint2D32f; (* Center of the box. *)
+    size: TCvSize2D32f; (* Box width and length. *)
     angle: Single; (* Angle between the horizontal axis *)
   end;
 
   (* Line iterator state: *)
 type
-  CvLineIterator = packed record
+  TCvLineIterator = packed record
     ptr: ^uchar;
     err: Integer;
     plus_delta: Integer;
@@ -926,14 +926,14 @@ type
   (* ************************************ CvSlice ***************************************** *)
 
 type
-  cvSlice = packed record
+  TCvSlice = packed record
     start_index, end_index: Integer;
   end;
 
 const
   CV_WHOLE_SEQ_END_INDEX = $3FFFFFFF;
 {$EXTERNALSYM CV_WHOLE_SEQ_END_INDEX}
-  CV_WHOLE_SEQ: cvSlice = (start_index: 0; end_index: CV_WHOLE_SEQ_END_INDEX);
+  CV_WHOLE_SEQ: TCvSlice = (start_index: 0; end_index: CV_WHOLE_SEQ_END_INDEX);
 {$EXTERNALSYM CV_WHOLE_SEQ}
   (* ************************************ CvScalar **************************************** *)
 
@@ -1419,6 +1419,11 @@ const
 
   (* "black box" file storage *)
   // type type CvFileStorage = leStorage;
+type
+  pCvFileStorage = ^TCvFileStorage;
+
+  TCvFileStorage = packed record
+  end;
 
   (* Storage flags: *)
 const
@@ -1465,8 +1470,77 @@ Const
 
 function CvAttrList(const attr: ppCVChar = nil; next: pCvAttrList = nil): TCvAttrList;
 
-type
-  CvTypeInfo = packed record
+(*
+  /* Basic element of the file storage - scalar or collection: */
+  typedef struct CvFileNode
+  {
+  int tag;
+  struct CvTypeInfo* info; /* type information
+  (only for user-defined object, for others it is 0) */
+  union
+  {
+  double f; /* scalar floating-point number */
+  int i;    /* scalar integer number */
+  CvString str; /* text string */
+  CvSeq* seq; /* sequence (ordered collection of file nodes) */
+  CvFileNodeHash* map; /* map (collection of named file nodes) */
+  } data;
+  }
+  CvFileNode;
+*)
+Type
+
+  pCvString = ^TCvString;
+
+  TCvString = packed record
+    len: Integer;
+    ptr: pCVChar;
+  end;
+
+  pCvFileNode = ^TCvFileNode;
+  pCvTypeInfo = ^TCvTypeInfo;
+
+  pCvFileNodeHash = Pointer;
+
+  TCvFileNode = packed record
+    tag: Integer;
+    info: pCvTypeInfo;
+    case Integer of
+      0:
+        (f: Double); // * scalar floating-point number */
+      1:
+        (i: Integer); // * scalar integer number */
+      2:
+        (str: TCvString); // * text string */
+      3:
+        (seq: pCvSeq); // * sequence (ordered collection of file nodes) */
+      4:
+        (map: pCvFileNodeHash); // * map (collection of named file nodes) */
+  end;
+
+  // typedef int (CV_CDECL *CvIsInstanceFunc)( const void* struct_ptr );
+  TCvIsInstanceFunc = function(var struct_ptr: Pointer): Integer; cdecl;
+  // typedef void (CV_CDECL *CvReleaseFunc)( void** struct_dblptr );
+  TCvReleaseFunc = procedure(struct_dblptr: pPointer); cdecl;
+  // typedef void* (CV_CDECL *CvReadFunc)( CvFileStorage* storage, CvFileNode* node );
+  TCvReadFunc = function(storage: pCvFileStorage; node: pCvFileNode): Pointer; cdecl;
+  // typedef void (CV_CDECL *CvWriteFunc)( CvFileStorage* storage, const char* name,const void* struct_ptr, CvAttrList attributes );
+  TCvWriteFunc = procedure(storage: pCvFileStorage; const name: pCVChar; const struct_ptr: pPointer;
+    attributes: TCvAttrList); cdecl;
+  // typedef void* (CV_CDECL *CvCloneFunc)( const void* struct_ptr );
+  TCvCloneFunc = function(const struct_ptr: pPointer): Pointer; cdecl;
+
+  TCvTypeInfo = packed record
+    flags: Integer;
+    header_size: Integer;
+    prev: pCvTypeInfo;
+    next: pCvTypeInfo;
+    type_name: pCVChar;
+    is_instance: TCvIsInstanceFunc;
+    release: TCvReleaseFunc;
+    read: TCvReadFunc;
+    write: TCvWriteFunc;
+    clone: TCvCloneFunc;
   end;
 
 const
@@ -1494,6 +1568,9 @@ const
 {$EXTERNALSYM CV_NODE_TYPE_MASK}
   // >> Following declaration is a macro definition!
   // CV_NODE_TYPE(flags)((flags) and CV_NODE_TYPE_MASK);
+function CV_NODE_TYPE(const flags: Integer): Integer; inline;
+
+const
   (* file node flags *)
   CV_NODE_FLOW = 8; (* Used only for writing structures in YAML format. *)
 {$EXTERNALSYM CV_NODE_FLOW}
@@ -1503,6 +1580,10 @@ const
 {$EXTERNALSYM CV_NODE_EMPTY}
   CV_NODE_NAMED = 64;
 {$EXTERNALSYM CV_NODE_NAMED}
+  // CV_NODE_IS_INT(flags)        (CV_NODE_TYPE(flags) == CV_NODE_INT)
+function CV_NODE_IS_INT(const flags: Integer): Boolean; inline;
+// CV_NODE_IS_REAL(flags)       (CV_NODE_TYPE(flags) == CV_NODE_REAL)
+function CV_NODE_IS_REAL(const flags: Integer): Boolean; inline;
 
 const
   // CV_NODE_IS_INT(flags)(CV_NODE_TYPE(flags) = CV_NODE_INT)const CV_NODE_IS_REAL(flags)
@@ -1554,23 +1635,6 @@ type
   // type
   // type
   // CvFileNodeHash = nericHash;
-
-  (* Basic element of the file storage - scalar or collection: *)
-  // type
-  // CvFileNode = packed record
-  // tag: Integer;
-  // info: ^CvTypeInfo; (* cType information
-  // f: Double; (* scalar floating-point number *)
-  // i: Integer; (* scalar integer number *)
-  // str: CvString; (* text cString *)
-  // seq: ^CvSeq; (* sequence (ordered collection of file nodes) *)
-  // map: ^CvFileNodeHash; (* map (collection of named cFile nodes) *)
-  // end;
-  //
-  // data = CvFileNode;
-  // {$EXTERNALSYM data}
-  // end;
-  // CvFileNode;
 
 {$IFDEF __cplusplus}
   // extern "C" {
@@ -2120,11 +2184,13 @@ function CV_MAT_ELEM(const mat: TCvMat; const elemtype: Integer; const row, col:
 // (mat).data.ptr + (size_t)(mat).step*(row) + (pix_size)*(col))
 function CV_MAT_ELEM_PTR_FAST(const mat: TCvMat; const row, col, pix_size: Integer): Pointer;
 
+function iif(const Conditional: Boolean; const ifTrue, ifFalse: Variant): Variant; inline;
+
 implementation
 
 function CV_MAT_ELEM_PTR_FAST(const mat: TCvMat; const row, col, pix_size: Integer): Pointer;
 begin
-  Assert((Cardinal(row) < mat.rows) and (Cardinal(col) < mat.cols));
+  Assert((row < mat.rows) and (col < mat.cols) and (row >= 0) and (col >= 0));
   Result := Pointer(Integer(mat.data) + mat.step * row + pix_size * col);
 end;
 
@@ -2156,7 +2222,8 @@ end;
 
 function CV_ELEM_SIZE(_type: Integer): Integer;
 begin
-  Result := (CV_MAT_CN(_type) shl ((((SizeOf(Integer) div 4 + 1) * 16384 or $3A50) shr CV_MAT_DEPTH(_type) * 2) and 3));
+  Result := (CV_MAT_CN(_type) shl ((((SizeOf(NativeInt) div 4 + 1) * (16384 or $3A50)) shr CV_MAT_DEPTH(_type) *
+    2) and 3));
 end;
 
 function CV_32SC1: Integer;
@@ -2235,6 +2302,32 @@ end;
 function cvRound(value: Double): Integer;
 begin
   Result := Round(value);
+end;
+
+function iif(const Conditional: Boolean; const ifTrue, ifFalse: Variant): Variant; inline;
+begin
+  if Conditional then
+    Result := ifTrue
+  else
+    Result := ifFalse;
+end;
+
+// CV_NODE_TYPE(flags)((flags) and CV_NODE_TYPE_MASK);
+function CV_NODE_TYPE(const flags: Integer): Integer; inline;
+begin
+  Result := flags and CV_NODE_TYPE_MASK;
+end;
+
+// CV_NODE_IS_INT(flags)        (CV_NODE_TYPE(flags) == CV_NODE_INT)
+function CV_NODE_IS_INT(const flags: Integer): Boolean; inline;
+begin
+  Result := CV_NODE_TYPE(flags) = CV_NODE_INT;
+end;
+
+// CV_NODE_IS_REAL(flags)       (CV_NODE_TYPE(flags) == CV_NODE_REAL)
+function CV_NODE_IS_REAL(const flags: Integer): Boolean; inline;
+begin
+  Result := CV_NODE_TYPE(flags) = CV_NODE_REAL;
 end;
 
 end.

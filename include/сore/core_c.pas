@@ -330,91 +330,102 @@ const
   // indices order should match the cArray dimension order. *)
   // CVAPI(uchar)cvPtrND(CvArr * arr, Integer * idx, Integer * cType CV_DEFAULT(0),
   // function create_node CV_DEFAULT(v1: 0)): Cardinal;
-  //
-  // (* value = arr(idx0,idx1,...) *)
-  // CVAPI(CvScalar)cvGet1D(CvArr * arr, Integer idx0): Integer; CVAPI(CvScalar)cvGet2D(CvArr * arr,
-  // Integer idx0, Integer idx1); CVAPI(CvScalar)cvGet3D(CvArr * arr, Integer idx0, Integer idx1,
-  // Integer idx2); CVAPI(CvScalar)cvGetND(CvArr * arr, Integer * idx);
-  //
-  // (* for 1-channel arrays *)
-  // CVAPI(Double)cvGetReal1D(CvArr * arr, Integer idx0); CVAPI(Double)cvGetReal2D(CvArr * arr,
-  // Integer idx0, Integer idx1); CVAPI(Double)cvGetReal3D(CvArr * arr, Integer idx0, Integer idx1,
-  // Integer idx2); CVAPI(Double)cvGetRealND(CvArr * arr, Integer * idx);
-  //
-  // (* arr(idx0,idx1,...) = value *)
-  // procedure cvSet1D(var arr: CvArr; idx0: Integer; value: CvScalar);
-  // procedure cvSet2D(var arr: CvArr; idx0: Integer; idx1: Integer; value: CvScalar);
-  // procedure cvSet3D(var arr: CvArr; idx0: Integer; idx1: Integer; idx2: Integer; value: CvScalar);
-  // procedure cvSetND(var arr: CvArr; var idx: Integer; value: CvScalar);
-  //
-  // (* for 1-channel arrays *)
-  // procedure cvSetReal1D(var arr: CvArr; idx0: Integer; value: Double);
-  // procedure cvSetReal2D(var arr: CvArr; idx0: Integer; idx1: Integer; value: Double);
-  // procedure cvSetReal3D(var arr: CvArr; idx0: Integer; idx1: Integer; idx2: Integer; value: Double);
-  // procedure cvSetRealND(var arr: CvArr; var idx: Integer; value: Double);
-  //
-  // (* clears element of ND dense array,
-  // in  of sparse arrays it deletes the specified node *)
-  // procedure cvClearND(var arr: CvArr; var idx: Integer);
-  //
-  // (* Converts CvArr (IplImage or CvMat,...) to CvMat.
-  // If the last parameter is non-zero, cFunction can
-  // convert multi(>2)-dimensional cArray to CvMat as LongInt as
-  // the last array's dimension is continous. The resultant
-  // matrix will be have appropriate (a huge) number of rows *)
-  // CVAPI(CvMat)cvGetMat(CvArr * arr, CvMat * header,
-  // function coi CV_DEFAULT(v1: 0)): Integer;
-  //
-  // (* Converts CvArr (IplImage or CvMat) to IplImage *)
-  // function cvGetImage(CvArr * arr, IplImage * image_header);
-  //
-  // (* Changes a shape of multi-dimensional array.
-  // new_cn = 0 means that number of channels remains unchanged.
-  // new_dims = 0 means that number and sizes of dimensions remain the same
-  // (unless they need to be changed to set the new number of channels)
-  // if new_dims = 1, there is no need to specify new dimension sizes
-  // The resultant configuration should be achievable w/o data copying.
-  // If the resultant cArray is sparse, CvSparseMat header should be passed
-  // to the cFunction else if the cResult is 1 or 2 dimensional,
-  // CvMat header should be passed to the cFunction
-  // else CvMatND header should be passed *)
-  // CVAPI(CvArr)cvReshapeMatND(CvArr * arr, Integer sizeof_header, CvArr * header, Integer new_cn,
-  // Integer new_dims, Integer * new_sizes);
-  //
-  /// / >> Following declaration is a macro definition!
-  // const cvReshapeND(arr, header, new_cn, new_dims, new_sizes)cvReshapeMatND((arr), SizeOf((header)),
-  // (header), (new_cn), (new_dims), (new_sizes));
-  //
-  // CVAPI(CvMat)cvReshape(CvArr * arr, CvMat * header,
-  // function new_cn, Integer new_rows CV_DEFAULT(v1: 0)): Integer;
-  //
-  // (* Repeats source 2d array several times in both horizontal and
-  // vertical direction to fill destination cArray *)
-  // procedure cvRepeat(var src: CvArr; var dst: CvArr);
-  //
-  // (* Allocates array data *)
-  // procedure cvCreateData(var arr: CvArr);
-  //
-  // (* Releases array data *)
-  // procedure cvReleaseData(var arr: CvArr);
-  //
-  // (* Attaches user data to the array header. The step is reffered to
-  // the pre-last dimension. That is, all the planes of the cArray
-  // must be joint (w/o gaps) *)
-  // procedure cvSetData(var arr: CvArr; data: Pointer; step: Integer);
-  //
-  // (* Retrieves raw data of CvMat, IplImage or CvMatND.
-  // In the latter  the cFunction raises an error if
-  // the cArray can not be represented as a matrix *)
-  // procedure cvGetRawData(var Returns width and height of array in elements * )
 
-  // CVAPI(CvSize) cvGetSize( const CvArr* arr );
-  // function cvGetSize(const arr: CvArr): CvSize; cdecl;
-  { todo -cmedium -oLaex: Использовать процедуру OpenCV (need use OpenCV) }
-  {
-    /* Returns width and height of array in elements */
-    CVAPI(CvSize) cvGetSize( const CvArr* arr );
-  }
+  // * value = arr(idx0,idx1,...) */
+  // CVAPI(CvScalar) cvGet1D( const CvArr* arr, int idx0 );
+  // CVAPI(CvScalar) cvGet2D( const CvArr* arr, int idx0, int idx1 );
+function cvGet2D(const arr: pCvMat; idx0, idx1: Integer): TCvScalar; cdecl;
+{
+  CVAPI(CvScalar) cvGet3D( const CvArr* arr, int idx0, int idx1, int idx2 );
+  CVAPI(CvScalar) cvGetND( const CvArr* arr, const int* idx );
+
+  /* for 1-channel arrays */
+  CVAPI(double) cvGetReal1D( const CvArr* arr, int idx0 );
+}
+// CVAPI(double) cvGetReal2D( const CvArr* arr, int idx0, int idx1 );
+function cvGetReal2D(const arr: pCvMat; idx0, idx1: Integer): double; cdecl;
+
+{
+  CVAPI(double) cvGetReal3D( const CvArr* arr, int idx0, int idx1, int idx2 );
+  CVAPI(double) cvGetRealND( const CvArr* arr, const int* idx );
+
+  /* arr(idx0,idx1,...) = value */
+  CVAPI(void) cvSet1D( CvArr* arr, int idx0, CvScalar value );
+  CVAPI(void) cvSet2D( CvArr* arr, int idx0, int idx1, CvScalar value );
+  CVAPI(void) cvSet3D( CvArr* arr, int idx0, int idx1, int idx2, CvScalar value );
+  CVAPI(void) cvSetND( CvArr* arr, const int* idx, CvScalar value );
+
+  /* for 1-channel arrays */
+  CVAPI(void) cvSetReal1D( CvArr* arr, int idx0, double value );
+  CVAPI(void) cvSetReal2D( CvArr* arr, int idx0, int idx1, double value );
+  CVAPI(void) cvSetReal3D( CvArr* arr, int idx0,
+  int idx1, int idx2, double value );
+  CVAPI(void) cvSetRealND( CvArr* arr, const int* idx, double value );
+}
+
+
+// (* clears element of ND dense array,
+// in  of sparse arrays it deletes the specified node *)
+// procedure cvClearND(var arr: CvArr; var idx: Integer);
+//
+// (* Converts CvArr (IplImage or CvMat,...) to CvMat.
+// If the last parameter is non-zero, cFunction can
+// convert multi(>2)-dimensional cArray to CvMat as LongInt as
+// the last array's dimension is continous. The resultant
+// matrix will be have appropriate (a huge) number of rows *)
+// CVAPI(CvMat)cvGetMat(CvArr * arr, CvMat * header,
+// function coi CV_DEFAULT(v1: 0)): Integer;
+//
+// (* Converts CvArr (IplImage or CvMat) to IplImage *)
+// function cvGetImage(CvArr * arr, IplImage * image_header);
+//
+// (* Changes a shape of multi-dimensional array.
+// new_cn = 0 means that number of channels remains unchanged.
+// new_dims = 0 means that number and sizes of dimensions remain the same
+// (unless they need to be changed to set the new number of channels)
+// if new_dims = 1, there is no need to specify new dimension sizes
+// The resultant configuration should be achievable w/o data copying.
+// If the resultant cArray is sparse, CvSparseMat header should be passed
+// to the cFunction else if the cResult is 1 or 2 dimensional,
+// CvMat header should be passed to the cFunction
+// else CvMatND header should be passed *)
+// CVAPI(CvArr)cvReshapeMatND(CvArr * arr, Integer sizeof_header, CvArr * header, Integer new_cn,
+// Integer new_dims, Integer * new_sizes);
+//
+/// / >> Following declaration is a macro definition!
+// const cvReshapeND(arr, header, new_cn, new_dims, new_sizes)cvReshapeMatND((arr), SizeOf((header)),
+// (header), (new_cn), (new_dims), (new_sizes));
+//
+// CVAPI(CvMat)cvReshape(CvArr * arr, CvMat * header,
+// function new_cn, Integer new_rows CV_DEFAULT(v1: 0)): Integer;
+//
+// (* Repeats source 2d array several times in both horizontal and
+// vertical direction to fill destination cArray *)
+// procedure cvRepeat(var src: CvArr; var dst: CvArr);
+//
+// (* Allocates array data *)
+// procedure cvCreateData(var arr: CvArr);
+//
+// (* Releases array data *)
+// procedure cvReleaseData(var arr: CvArr);
+//
+// (* Attaches user data to the array header. The step is reffered to
+// the pre-last dimension. That is, all the planes of the cArray
+// must be joint (w/o gaps) *)
+// procedure cvSetData(var arr: CvArr; data: Pointer; step: Integer);
+//
+// (* Retrieves raw data of CvMat, IplImage or CvMatND.
+// In the latter  the cFunction raises an error if
+// the cArray can not be represented as a matrix *)
+// procedure cvGetRawData(var Returns width and height of array in elements * )
+
+// CVAPI(CvSize) cvGetSize( const CvArr* arr );
+// function cvGetSize(const arr: CvArr): CvSize; cdecl;
+{ todo -cmedium -oLaex: Использовать процедуру OpenCV (need use OpenCV) }
+{
+  /* Returns width and height of array in elements */
+  CVAPI(CvSize) cvGetSize( const CvArr* arr );
+}
 function cvGetSize(const arr: pCvArr): TCvSize; overload;
 function cvGetSize(const arr: pIplImage): TCvSize; overload;
 function _cvGetSize(const arr: pCvArr): TCvSize; cdecl;
@@ -1647,17 +1658,20 @@ procedure cvDrawContours(
 // *************************************************************************************** *)
 //
 // (* ********************************* High-level functions ******************************* *)
-//
-// (* opens existing or creates new file storage *)
-// CVAPI(CvFileStorage)cvOpenFileStorage(PCVChar filename, CvMemStorage * memstorage,
-// function flags,
-// function encoding CV_DEFAULT(v1: 0)): Integer;
-//
-// (* closes file storage and deallocates buffers *)
-// procedure cvReleaseFileStorage(v1: var Returns attribute value or
-// 0(NULL) if there is no such attribute * )CVAPI(Char)cvAttrValue(CvAttrList * attr;
-// attr_name: PCVChar);
-//
+
+{
+  /* opens existing or creates new file storage */
+  CVAPI(CvFileStorage*)  cvOpenFileStorage( const char* filename, CvMemStorage* memstorage,
+  int flags, const char* encoding CV_DEFAULT(NULL) );
+}
+function cvOpenFileStorage(const filename: pCVChar; memstorage: pCvMemStorage; flags: Integer;
+  const encoding: pCVChar = nil): pCvFileStorage; cdecl;
+{
+  /* closes file storage and deallocates buffers */
+  CVAPI(void) cvReleaseFileStorage( CvFileStorage** fs );
+}
+procedure cvReleaseFileStorage(Var fs: pCvFileStorage); cdecl;
+
 // (* starts writing compound structure (map or sequence) *)
 // procedure cvStartWriteStruct(var finishes writing compound structure * )
 // procedure cvEndWriteStruct(CvFileStorage * fs): PCVChar; (* writes an integer *)
@@ -1696,16 +1710,35 @@ procedure cvDrawContours(
 // CVAPI(CvFileNode)cvGetFileNode(CvFileStorage * fs, CvFileNode * map, CvStringHashNode * key,
 // function create_missing CV_DEFAULT(v1: 0)): Integer;
 //
-// (* this is a slower version of cvGetFileNode that takes the key as a literal string *)
-// CVAPI(CvFileNode)cvGetFileNodeByName(CvFileStorage * fs, CvFileNode * map, PCVChar name);
-//
-// CV_INLINE
-// function cvReadInt(var fs: 0))begin result := not node ? default_value: CV_NODE_IS_INT(node^.tag)
-// ? node^.data.i: CV_NODE_IS_REAL(node^.tag)? cvRound(node^.data.f): $7FFFFFFF; end;
-// CV_INLINE Integer cvReadIntByName(CvFileStorage; var map: CvFileNode; name: unction;
-// default_value CV_DEFAULT(0))begin result := cvReadInt(cvGetFileNodeByName(fs: Integer; v5: map;
-// ): name; v7: default_value): Integer; end;
-//
+{
+  /* this is a slower version of cvGetFileNode that takes the key as a literal string */
+  CVAPI(CvFileNode*) cvGetFileNodeByName( const CvFileStorage* fs,
+  const CvFileNode* map,
+  const char* name );
+}
+function cvGetFileNodeByName(const fs: pCvFileStorage; const map: pCvFileNode; const name: pCVChar): pCvFileNode; cdecl;
+
+(*
+  CV_INLINE int cvReadInt( const CvFileNode* node, int default_value CV_DEFAULT(0) )
+  {
+  return !node ? default_value :
+  CV_NODE_IS_INT(node->tag) ? node->data.i :
+  CV_NODE_IS_REAL(node->tag) ? cvRound(node->data.f) : 0x7fffffff;
+  }
+*)
+function cvReadInt(const node: pCvFileNode; default_value: Integer = 0): Integer; inline;
+
+(*
+  CV_INLINE int cvReadIntByName( const CvFileStorage* fs, const CvFileNode* map,
+  const char* name, int default_value CV_DEFAULT(0) )
+  {
+  return cvReadInt( cvGetFileNodeByName( fs, map, name ), default_value );
+  }
+*)
+function cvReadIntByName(const fs: pCvFileStorage; const map: pCvFileNode; const name: pCVChar;
+  default_value: Integer = 0): Integer; inline;
+
+
 // CV_INLINE
 // function cvReadReal(var fs: 0. ))begin result := not node ? default_value: CV_NODE_IS_INT(node^.tag)
 // ?(Double)node^.data.i: CV_NODE_IS_REAL(node^.tag)? node^.data.f: 1E300; end;
@@ -1721,8 +1754,14 @@ procedure cvDrawContours(
 // {$EXTERNALSYM PCVChar}
 // begin result := cvReadString(cvGetFileNodeByName(fs, map, name), default_value); end;
 //
-// (* decodes standard or user-defined object and returns it *)
-// procedure cvRead(v1: 0));
+
+{
+  /* decodes standard or user-defined object and returns it */
+  CVAPI(void*) cvRead( CvFileStorage* fs, CvFileNode* node,
+  CvAttrList* attributes CV_DEFAULT(NULL));
+}
+function cvRead(fs:pCvFileStorage; node:pCvFileNode; attributes:pCvAttrList=nil): pPointer; cdecl;
+
 //
 // (* decodes standard or user-defined object and returns it *)
 // CV_INLINE
@@ -1890,7 +1929,7 @@ const
 implementation
 
 uses
-  LibName;
+  uLibName;
 
 procedure cvAlloc(size: size_t); external Core_Dll; cdecl;
 procedure cvFree_(ptr: Pointer); external Core_Dll; cdecl;
@@ -2034,5 +2073,28 @@ procedure cvRectangle; external Core_Dll;
 function cvGetSubRect; external Core_Dll;
 procedure cvClearMemStorage; external Core_Dll;
 function cvCreateMat; external Core_Dll;
+function cvGet2D; external Core_Dll;
+function cvGetReal2D; external Core_Dll;
+function cvOpenFileStorage; external Core_Dll;
+procedure cvReleaseFileStorage; external Core_Dll;
+
+function cvReadInt(const node: pCvFileNode; default_value: Integer = 0): Integer; inline;
+begin
+  // return !node ? default_value :
+  // CV_NODE_IS_INT(node->tag) ? node->data.i :
+  // CV_NODE_IS_REAL(node->tag) ? cvRound(node->data.f) : 0x7fffffff;
+  Result := iif(not Assigned(node), default_value, iif(CV_NODE_IS_INT(node^.tag), node^.i,
+    iif(CV_NODE_IS_REAL(node^.tag), node^.f, $7FFFFFFF)));
+end;
+
+function cvReadIntByName(const fs: pCvFileStorage; const map: pCvFileNode; const name: pCVChar;
+  default_value: Integer = 0): Integer; inline;
+begin
+  // return cvReadInt( cvGetFileNodeByName( fs, map, name ), default_value );
+  Result := cvReadInt(cvGetFileNodeByName(fs, map, name), default_value);
+end;
+
+function cvGetFileNodeByName; external Core_Dll;
+function cvRead; external Core_Dll;
 
 end.

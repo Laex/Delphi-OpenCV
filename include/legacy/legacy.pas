@@ -46,7 +46,7 @@ procedure cvReleaseStereoGCState(Var state: pCvStereoGCState); cdecl;
 
 implementation
 
-Uses LibName;
+Uses uLibName;
 
 function cvCreateStereoGCState; external legacy_Dll;
 procedure cvFindStereoCorrespondenceGC; external legacy_Dll;
