@@ -14,6 +14,9 @@ Type
     y: Single;
   end;
 
+  pCvPoint2D32fArray = ^TCvPoint2D32fArray;
+  TCvPoint2D32fArray = array [0 .. 1] of TCvPoint2D32f;
+
   // *********************************** CvTermCriteria *************************************/
 
 const

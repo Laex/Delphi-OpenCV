@@ -1109,7 +1109,7 @@ Type
 implementation
 
 uses
-  LibName;
+  uLibName;
 
 function cvLoadHaarClassifierCascade; external objdetect_dll;
 procedure cvReleaseHaarClassifierCascade; external objdetect_dll;

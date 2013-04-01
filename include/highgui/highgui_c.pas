@@ -804,7 +804,7 @@ procedure cvReleaseVideoWriter(Var writer: pCvVideoWriter); cdecl;
 implementation
 
 uses
-  LibName;
+  uLibName;
 
 function cvNamedWindow; external highgui_Dll;
 procedure cvShowImage; external highgui_Dll;

@@ -872,7 +872,7 @@ function cvHoughCircles(
 // {$ENDIF}
 implementation
 
-Uses LibName;
+Uses uLibName;
 
 procedure cvCvtColor; external imgproc_Dll;
 function cvThreshold; external imgproc_Dll;

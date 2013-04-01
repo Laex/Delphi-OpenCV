@@ -8,8 +8,12 @@ __history
 *.~*
 *.h
 *.tvsconfig
-/!DS!
 *.skincfg
-
-/bin/StereoSample/*.zip
-/bin/StereoSample/Aloe
+*.otares
+/!DS!
+/bin/StereoSample/Aloe/*.png
+/bin/StereoSample/Aloe/dmin.txt
+/bin/Result/*.jpg
+/bin/Result/*.avi
+/bin/Result/*.xml
+/bin/Result/*.png

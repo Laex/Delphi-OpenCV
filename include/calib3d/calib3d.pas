@@ -38,15 +38,31 @@ function cvFindChessboardCorners(const image: Pointer; pattern_size: TCvSize; co
   corner_count: pInteger = nil; flags: Integer = CV_CALIB_CB_ADAPTIVE_THRESH + CV_CALIB_CB_NORMALIZE_IMAGE)
   : Integer; cdecl;
 
-{
-  /* Draws individual chessboard corners or the whole chessboard detected */
-  CVAPI(void) cvDrawChessboardCorners(
-  CvArr* image,
-  CvSize pattern_size,
-  CvPoint2D32f* corners,
-  int count,
-  int pattern_was_found );
-}
+const
+  CV_CALIB_USE_INTRINSIC_GUESS = 1;
+  CV_CALIB_FIX_ASPECT_RATIO = 2;
+  CV_CALIB_FIX_PRINCIPAL_POINT = 4;
+  CV_CALIB_ZERO_TANGENT_DIST = 8;
+  CV_CALIB_FIX_FOCAL_LENGTH = 16;
+  CV_CALIB_FIX_K1 = 32;
+  CV_CALIB_FIX_K2 = 64;
+  CV_CALIB_FIX_K3 = 128;
+  CV_CALIB_FIX_K4 = 2048;
+  CV_CALIB_FIX_K5 = 4096;
+  CV_CALIB_FIX_K6 = 8192;
+  CV_CALIB_RATIONAL_MODEL = 16384;
+  CV_CALIB_THIN_PRISM_MODEL = 32768;
+  CV_CALIB_FIX_S1_S2_S3_S4 = 65536;
+
+  {
+    /* Draws individual chessboard corners or the whole chessboard detected */
+    CVAPI(void) cvDrawChessboardCorners(
+    CvArr* image,
+    CvSize pattern_size,
+    CvPoint2D32f* corners,
+    int count,
+    int pattern_was_found );
+  }
 procedure cvDrawChessboardCorners(image: pIplImage; pattern_size: TCvSize; corners: pCvPoint2D32f; count: Integer;
   pattern_was_found: Integer); cdecl;
 
@@ -66,15 +82,22 @@ procedure cvDrawChessboardCorners(image: pIplImage; pattern_size: TCvSize; corne
   CvTermCriteria term_crit CV_DEFAULT(cvTermCriteria(CV_TERMCRIT_ITER+CV_TERMCRIT_EPS,30,DBL_EPSILON)) );
 }
 
-function cvCalibrateCamera2(const object_points: pCvMat; const image_points: pCvMat; const point_counts: pCvMat;
-  image_size: TCvSize; camera_matrix: pCvMat; distortion_coeffs: pCvMat; rotation_vectors: pCvMat { =nil };
-  translation_vectors: pCvMat { =nil }; flags: Integer { =0 };
-  term_crit: TCvTermCriteria { =cvTermCriteria(CV_TERMCRIT_ITER+CV_TERMCRIT_EPS,30,DBL_EPSILON) }
+function cvCalibrateCamera2(
+  { } const object_points: pCvMat;
+  { } const image_points: pCvMat;
+  { } const point_counts: pCvMat;
+  { } image_size: TCvSize;
+  { } camera_matrix: pCvMat;
+  { } distortion_coeffs: pCvMat;
+  { } rotation_vectors: pCvMat { =nil };
+  { } translation_vectors: pCvMat { =nil };
+  { } flags: Integer { =0 };
+  { } term_crit: TCvTermCriteria { =cvTermCriteria(CV_TERMCRIT_ITER+CV_TERMCRIT_EPS,30,DBL_EPSILON) }
   ): Double; cdecl;
 
 implementation
 
-Uses LibName;
+Uses uLibName;
 
 procedure cvReprojectImageTo3D; external calib3d_dll;
 function cvFindChessboardCorners; external calib3d_dll;
