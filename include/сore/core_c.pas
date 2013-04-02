@@ -1141,13 +1141,14 @@ function cvGetSeqElem(const seq: pCvSeq; index: Integer): pSChar; cdecl;
 // The sequence can be read in forward or backward direction *)
 // procedure cvStartReadSeq(var Returns current sequence reader position(currently observed sequence
 // element) * )CVAPI(Integer)cvGetSeqReaderPos(CvSeqReader * reader: v1: 0)): Integer; ();
-//
-// (* Changes sequence reader position. It may seek to an absolute or
-// to relative to the current position *)
-// procedure cvSetSeqReaderPos(var Copies sequence content to A continuous piece of memory * )
-// procedure cvCvtSeqToArray(CvSeq * seq: v1: 0)): Integer; (; var elements: void;
-// slice CV_DEFAULT(CV_WHOLE_SEQ): CvSlice);
-//
+
+{
+  /* Copies sequence content to a continuous piece of memory */
+  CVAPI(void*)  cvCvtSeqToArray( const CvSeq* seq, void* elements,
+  CvSlice slice CV_DEFAULT(CV_WHOLE_SEQ) );
+}
+function cvCvtSeqToArray(const seq: pCvSeq; elements: Pointer; slice: TCvSlice { =CV_WHOLE_SEQ } ): Pointer; cdecl;
+
 // (* Creates sequence header for array.
 // After that all the operations on sequences that do not alter the content
 // can be applied to the resultant sequence *)
@@ -1760,7 +1761,7 @@ function cvReadIntByName(const fs: pCvFileStorage; const map: pCvFileNode; const
   CVAPI(void*) cvRead( CvFileStorage* fs, CvFileNode* node,
   CvAttrList* attributes CV_DEFAULT(NULL));
 }
-function cvRead(fs:pCvFileStorage; node:pCvFileNode; attributes:pCvAttrList=nil): pPointer; cdecl;
+function cvRead(fs: pCvFileStorage; node: pCvFileNode; attributes: pCvAttrList = nil): pPointer; cdecl;
 
 //
 // (* decodes standard or user-defined object and returns it *)
@@ -2096,5 +2097,6 @@ end;
 
 function cvGetFileNodeByName; external Core_Dll;
 function cvRead; external Core_Dll;
+function cvCvtSeqToArray; external Core_Dll;
 
 end.

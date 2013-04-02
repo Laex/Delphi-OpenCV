@@ -662,35 +662,6 @@ type
     cols: Integer;
   end;
 
-  // TCvMat = packed record
-  // cType: Integer;
-  // step: Integer;
-  // refcount: ^Integer;
-  // hdr_refcount: Integer;
-  // { *    case data:integer of
-  // ptr: ^uchar;
-  // s: ^SmallInt;
-  // i: ^Integer;
-  // fl: ^Single;
-  // db: ^Double;
-  // data = CvMat;*)
-  //
-  // //{$EXTERNALSYM data }
-  // // {$IFDEF __cplusplus}
-  // (*
-  // union
-  // begin
-  // Integer rows;
-  // Integer height;);
-  //
-  // union begin Integer cols; Integer width;);
-  // {$ELSE}
-  // Integer rows;
-  // Integer cols;
-  // {$ENDIF}
-  // *)
-  // end;
-
   (* ***************************************************************************************\
     *                       Multi-dimensional dense cArray (CvMatND)                          *
     *************************************************************************************** *)
@@ -706,7 +677,7 @@ const
 {$EXTERNALSYM CV_MAX_DIM_HEAP}
 
 type
-  CvMatND = packed record
+  TCvMatND = packed record
     cType: Integer;
     dims: Integer;
     refcount: ^Integer;
@@ -814,11 +785,11 @@ const
 type
   CvHistogram = packed record
     cType: Integer;
-    bins: ^TCvArr;
+    bins: pCvArr;
     thresh: array [0 .. CV_MAX_DIM - 1, 0 .. 1] of Single;
     (* For uniform histograms. *)
-    thresh2: ^Single; (* For non-uniform histograms. *)
-    mat: CvMatND; (* Embedded matrix header for array histograms. *)
+    thresh2: pSingle; (* For non-uniform histograms. *)
+    mat: TCvMatND; (* Embedded matrix header for array histograms. *)
   end;
 
   (* ***************************************************************************************\
