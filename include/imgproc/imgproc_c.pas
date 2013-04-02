@@ -215,26 +215,41 @@ procedure cvCvtColor(const src: pIplImage; dst: pIplImage; code: Integer); cdecl
 }
 procedure cvResize(const src: TCvArr; dst: TCvArr; interpolation: Integer = CV_INTER_LINEAR); cdecl;
 
-// CVAPI(procedure)cvWarpAffine(CvArr
-// * src: ): CV_INTER_LINEAR): Integer; (; var dst: CvArr; var map_matrix: CvMat;
-// Computes affine transform matrix for mapping src: array [0 .. I - 1] of var to dst[I]
-// (I = 0 function flags CV_DEFAULT(v1: cvScalarAll(
-// 0))): Integer; (; :; var)
+{
+  /* Warps image with affine transform */
+  CVAPI(void)  cvWarpAffine( const CvArr* src, CvArr* dst, const CvMat* map_matrix,
+  int flags CV_DEFAULT(CV_INTER_LINEAR+CV_WARP_FILL_OUTLIERS),
+  CvScalar fillval CV_DEFAULT(cvScalarAll(0)) );
+}
+procedure cvWarpAffine(const src: pIplImage; dst: pIplImage; const map_matrix: pCvMat;
+  flags: Integer { = CV_INTER_LINEAR+CV_WARP_FILL_OUTLIERS }; fillval: TCvScalar { = cvScalarAll(0) } ); cdecl;
 
 // CVAPI(CvMat)cvGetAffineTransform(CvPoint2D32f * src: );
 // var dst: vPoint2D32f; var map_matrix: CvMat);
 //
-// (* Computes rotation_matrix matrix *)
-// CVAPI(CvMat)cv2DRotationMatrix(CvPoint2D32f center, Double angle, Double scale, CvMat * map_matrix);
-//
-// (* Warps image with perspective (projective) transform *)
-// CVAPI(
-// procedure)cvWarpPerspective(Computes perspective transform matrix for mapping src: array [0 .. I -
-// 1] of var to dst[I](I = 0 v1: cvScalarAll(0))): Integer; (; :; :;
-// var)CVAPI(CvMat)cvGetPerspectiveTransform(CvPoint2D32f * src: ); var dst: vPoint2D32f;
-// var map_matrix: CvMat);
-//
+{
+  (* Computes rotation_matrix matrix *)
+  CVAPI(CvMat)cv2DRotationMatrix(CvPoint2D32f center, Double angle, Double scale, CvMat * map_matrix);
+}
+function cv2DRotationMatrix(center: TCvPoint2D32f; angle: double; scale: double; map_matrix: pCvMat): pCvMat; cdecl;
 
+{
+  /* Warps image with perspective (projective) transform */
+  CVAPI(void)  cvWarpPerspective( const CvArr* src, CvArr* dst, const CvMat* map_matrix,
+  int flags CV_DEFAULT(CV_INTER_LINEAR+CV_WARP_FILL_OUTLIERS),
+  CvScalar fillval CV_DEFAULT(cvScalarAll(0)) );
+}
+procedure cvWarpPerspective(const src: pIplImage; dst: pIplImage; const map_matrix: pCvMat;
+  flags: Integer { =CV_INTER_LINEAR+CV_WARP_FILL_OUTLIERS }; fillval: TCvScalar { =cvScalarAll(0) } ); cdecl;
+{
+  /* Computes perspective transform matrix for mapping src[i] to dst[i] (i=0,1,2,3) */
+  CVAPI(CvMat*) cvGetPerspectiveTransform( const CvPoint2D32f* src,
+  const CvPoint2D32f* dst,
+  CvMat* map_matrix );
+
+}
+function cvGetPerspectiveTransform(const src: pCvPoint2D32f; const dst: pCvPoint2D32f; map_matrix: pCvMat)
+  : pCvMat; cdecl;
 {
   /* Performs generic geometric transformation using the specified coordinate maps */
   CVAPI(void)  cvRemap(
@@ -524,25 +539,38 @@ function cvApproxPoly(
   { } eps: double;
   { } recursive: Integer = 0): PCvSeq; cdecl;
 
-//
-// (* Calculates perimeter of a contour or length of a part of contour *)
-// CVAPI(Double)  cvArcLength(  Pointer  curve,
-// CvSlice slice CV_DEFAULT(CV_WHOLE_SEQ),
-// function is_closed CV_DEFAULT(v1: -1)): Integer;
-//
-// CV_INLINE function cvContourPerimeter(v1: contour; v2: CV_WHOLE_SEQ; : ): Double;
-// end;
-//
-//
+(*
+  /* Calculates perimeter of a contour or length of a part of contour */
+  CVAPI(double)  cvArcLength( const void* curve,
+  CvSlice slice CV_DEFAULT(CV_WHOLE_SEQ),
+  int is_closed CV_DEFAULT(-1));
+*)
+
+function cvArcLength(const curve: Pointer; slice: TCvSlice { = CV_WHOLE_SEQ }; is_closed: Integer { = 1 } )
+  : double; cdecl;
+
+(*
+  CV_INLINE double cvContourPerimeter( const void* contour )
+  {
+  return cvArcLength( contour, CV_WHOLE_SEQ, 1 );
+  }
+*)
+
+function cvContourPerimeter(const contour: Pointer): double; inline;
+
 // (* Calculates contour boundning rectangle (update=1) or
 // just retrieves pre-calculated rectangle (update=0) *)
 // CVAPI(CvRect)  cvBoundingRect( CvArr* points, Integer update CV_DEFAULT(0) );
-//
-// (* Calculates area of a contour or contour segment *)
-// CVAPI(Double)  cvContourArea(  CvArr* contour,
-// CvSlice slice CV_DEFAULT(CV_WHOLE_SEQ),
-// function oriented CV_DEFAULT(v1: 0)): Integer;
-//
+
+{
+  /* Calculates area of a contour or contour segment */
+  CVAPI(double)  cvContourArea( const CvArr* contour,
+  CvSlice slice CV_DEFAULT(CV_WHOLE_SEQ),
+  int oriented CV_DEFAULT(0));
+}
+function cvContourArea(const contour: PCvSeq; slice: TCvSlice { = CV_WHOLE_SEQ }; oriented: Integer { = 0 } )
+  : double; cdecl;
+
 // (* Finds minimum area rotated rectangle bounding a set of points *)
 // CVAPI(CvBox2D)  cvMinAreaRect2(  CvArr* points,
 // CvMemStorage* storage CV_DEFAULT(0));
@@ -551,24 +579,34 @@ function cvApproxPoly(
 // CVAPI(Integer)  cvMinEnclosingCircle(  CvArr* points,
 // CvPoint2D32f* center, Single* radius );
 //
-// (* Compares two contours by matching their moments *)
-// CVAPI(Double)  cvMatchShapes(  Pointer  object1,  Pointer  object2,
-// function method, function parameter CV_DEFAULT(v1: 0)): Integer;
-//
-// (* Calculates exact convex hull of 2d point set *)
-// CVAPI(CvSeq) cvConvexHull2(  CvArr* input,
-// function hull_storage CV_DEFAULT(
-// v1: CV_CLOCKWISE);
-// return_points CV_DEFAULT(0): Integer): Integer;
-//
+{
+  /* Compares two contours by matching their moments */
+  CVAPI(double)  cvMatchShapes( const void* object1, const void* object2,
+  int method, double parameter CV_DEFAULT(0));
+}
+function cvMatchShapes(const object1: Pointer; const object2: Pointer; method: Integer; parameter: double = 0)
+  : double; cdecl;
+
+{
+  /* Calculates exact convex hull of 2d point set */
+  CVAPI(CvSeq*) cvConvexHull2( const CvArr* input,
+  void* hull_storage CV_DEFAULT(NULL),
+  int orientation CV_DEFAULT(CV_CLOCKWISE),
+  int return_points CV_DEFAULT(0));
+}
+function cvConvexHull2(const input: PCvSeq; hull_storage: Pointer = nil; orientation: Integer = CV_CLOCKWISE;
+  return_points: Integer = 0): PCvSeq; cdecl;
+
 // (* Checks whether the contour is convex or not (returns 1 if convex, 0 if not) *)
 // CVAPI(Integer)  cvCheckContourConvexity(  CvArr* contour ): Double;
 //
-//
-// (* Finds convexity defects for the contour *)
-// CVAPI(CvSeq)  cvConvexityDefects(  CvArr* contour,  CvArr* convexhull,
-// CvMemStorage* storage CV_DEFAULT(0)): Pointer;
-//
+{
+  (* Finds convexity defects for the contour *)
+  CVAPI(CvSeq)  cvConvexityDefects(  CvArr* contour,  CvArr* convexhull,
+  CvMemStorage* storage CV_DEFAULT(0)): Pointer;
+}
+function cvConvexityDefects(contour: PCvSeq; convexhull: pCvSeq; storage: PCvMemStorage = nil): PCvSeq; cdecl;
+
 // (* Fits ellipse into a set of 2d points *)
 // CVAPI(CvBox2D) cvFitEllipse2(  CvArr* points );
 //
@@ -731,7 +769,7 @@ procedure cvFloodFill(
   { } up_diff: TCvScalar { * cvScalarAll(0) * };
   { } comp: pCvConnectedComp = NIL;
   { } flags: Integer = 4;
-  { } mask: PCvArr = NIL); cdecl;
+  { } mask: pCvArr = NIL); cdecl;
 
 // ****************************************************************************************
 // *                                  Feature detection                                   *
@@ -898,5 +936,20 @@ procedure cvEqualizeHist; external imgproc_Dll;
 procedure cvFindCornerSubPix; external imgproc_Dll;
 procedure cvInitUndistortMap; external imgproc_Dll;
 procedure cvRemap; external imgproc_Dll;
+function cvArcLength; external imgproc_Dll;
+
+function cvContourPerimeter(const contour: Pointer): double; inline;
+begin
+  Result := cvArcLength(contour, CV_WHOLE_SEQ, 1);
+end;
+
+function cvMatchShapes; external imgproc_Dll;
+function cv2DRotationMatrix; external imgproc_Dll;
+procedure cvWarpAffine; external imgproc_Dll;
+function cvGetPerspectiveTransform; external imgproc_Dll;
+procedure cvWarpPerspective; external imgproc_Dll;
+function cvContourArea; external imgproc_Dll;
+function cvConvexHull2; external imgproc_Dll;
+function cvConvexityDefects; external imgproc_Dll;
 
 end.

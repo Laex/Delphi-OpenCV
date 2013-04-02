@@ -17,3 +17,7 @@ __history
 /bin/Result/*.avi
 /bin/Result/*.xml
 /bin/Result/*.png
+
+*.drc
+
+*.jdbg

@@ -458,7 +458,8 @@ const
 
   (* Convexity defect *)
 type
-  CvConvexityDefect = packed record
+  pCvConvexityDefect=^TCvConvexityDefect;
+  TCvConvexityDefect = packed record
     start: PCvPoint; (* point of the contour where the defect begins *)
     cend: PCvPoint; (* point of the contour where the defect ends *)
     depth_point: PCvPoint; (* the farthest from the convex hull point within the defect *)
