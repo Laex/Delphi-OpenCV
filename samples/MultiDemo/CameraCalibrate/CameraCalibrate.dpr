@@ -19,7 +19,19 @@ program CameraCalibrate;
 
 uses
   System.SysUtils,
-{$I ..\..\uses_include.inc}
+uLibName in '..\..\..\include\uLibName.pas',
+highgui_c in '..\..\..\include\highgui\highgui_c.pas',
+core_c in '..\..\..\include\ñore\core_c.pas',
+Core.types_c in '..\..\..\include\ñore\Core.types_c.pas',
+imgproc.types_c in '..\..\..\include\imgproc\imgproc.types_c.pas',
+imgproc_c in '..\..\..\include\imgproc\imgproc_c.pas',
+legacy in '..\..\..\include\legacy\legacy.pas',
+calib3d in '..\..\..\include\calib3d\calib3d.pas',
+imgproc in '..\..\..\include\imgproc\imgproc.pas',
+haar in '..\..\..\include\objdetect\haar.pas',
+objdetect in '..\..\..\include\objdetect\objdetect.pas',
+tracking in '..\..\..\include\video\tracking.pas',
+Core in '..\..\..\include\ñore\core.pas'
   ;
 
 Var
@@ -126,15 +138,15 @@ begin
           j := 0;
           while i < board_n do
           begin
-            pSingle(CV_MAT_ELEM(image_points^, CV_32FC1, i, 0))^ := corners[j].x;
-            pSingle(CV_MAT_ELEM(image_points^, CV_32FC1, i, 1))^ := corners[j].y;
-            pSingle(CV_MAT_ELEM(object_points^, CV_32FC1, i, 0))^ := j / board_w;
-            pSingle(CV_MAT_ELEM(object_points^, CV_32FC1, i, 1))^ := j div board_w;
-            pSingle(CV_MAT_ELEM(object_points^, CV_32FC1, i, 2))^ := 0;
+            pSingle(CV_MAT_ELEM(image_points^, SizeOf(single), i, 0))^ := corners[j].x;
+            pSingle(CV_MAT_ELEM(image_points^, SizeOf(single), i, 1))^ := corners[j].y;
+            pSingle(CV_MAT_ELEM(object_points^, SizeOf(single), i, 0))^ := j / board_w;
+            pSingle(CV_MAT_ELEM(object_points^, SizeOf(single), i, 1))^ := j div board_w;
+            pSingle(CV_MAT_ELEM(object_points^, SizeOf(single), i, 2))^ := 0;
             Inc(i);
             Inc(j);
           end;
-          pInteger(CV_MAT_ELEM(point_counts^, CV_32SC1, successes, 0))^ := board_n;
+          pInteger(CV_MAT_ELEM(point_counts^, SizeOf(integer), successes, 0))^ := board_n;
           Inc(successes);
         end;
       end; // end skip board_dt between chessboard capture
@@ -166,17 +178,17 @@ begin
     i := 0;
     While i < successes * board_n do
     begin
-      pSingle(CV_MAT_ELEM(image_points2^, CV_32FC1, i, 0))^ := pSingle(CV_MAT_ELEM(image_points^, CV_32FC1, i, 0))^;
-      pSingle(CV_MAT_ELEM(image_points2^, CV_32FC1, i, 1))^ := pSingle(CV_MAT_ELEM(image_points^, CV_32FC1, i, 1))^;
-      pSingle(CV_MAT_ELEM(object_points2^, CV_32FC1, i, 0))^ := pSingle(CV_MAT_ELEM(object_points^, CV_32FC1, i, 0))^;
-      pSingle(CV_MAT_ELEM(object_points2^, CV_32FC1, i, 1))^ := pSingle(CV_MAT_ELEM(object_points^, CV_32FC1, i, 1))^;
-      pSingle(CV_MAT_ELEM(object_points2^, CV_32FC1, i, 2))^ := pSingle(CV_MAT_ELEM(object_points^, CV_32FC1, i, 2))^;
+      pSingle(CV_MAT_ELEM(image_points2^, SizeOf(single), i, 0))^ := pSingle(CV_MAT_ELEM(image_points^, SizeOf(single), i, 0))^;
+      pSingle(CV_MAT_ELEM(image_points2^, SizeOf(single), i, 1))^ := pSingle(CV_MAT_ELEM(image_points^, SizeOf(single), i, 1))^;
+      pSingle(CV_MAT_ELEM(object_points2^, SizeOf(single), i, 0))^ := pSingle(CV_MAT_ELEM(object_points^, SizeOf(single), i, 0))^;
+      pSingle(CV_MAT_ELEM(object_points2^, SizeOf(single), i, 1))^ := pSingle(CV_MAT_ELEM(object_points^, SizeOf(single), i, 1))^;
+      pSingle(CV_MAT_ELEM(object_points2^, SizeOf(single), i, 2))^ := pSingle(CV_MAT_ELEM(object_points^, SizeOf(single), i, 2))^;
       Inc(i);
     end;
     i := 0;
     While i < successes do
     begin // Çäåñü âñå òå æå ÷èñëà
-      pInteger(CV_MAT_ELEM(point_counts2^, CV_32SC1, i, 0))^ := pInteger(CV_MAT_ELEM(point_counts^, CV_32SC1, i, 0))^;
+      pInteger(CV_MAT_ELEM(point_counts2^, SizeOf(Integer), i, 0))^ := pInteger(CV_MAT_ELEM(point_counts^, SizeOf(Integer), i, 0))^;
       Inc(i);
     end;
     cvReleaseMat(object_points);
@@ -192,16 +204,16 @@ begin
     // pSingle(CV_MAT_ELEM(intrinsic_matrix^, CV_32FC1, 1, 1))^ := 1;
     // pSingle(CV_MAT_ELEM(intrinsic_matrix^, CV_32FC1, 2, 2))^ := 1;
 
-    pSingle(CV_MAT_ELEM(intrinsic_matrix^, CV_32FC1, 0, 0))^ := 520.0;
-    pSingle(CV_MAT_ELEM(intrinsic_matrix^, CV_32FC1, 1, 1))^ := 520.0;
-    pSingle(CV_MAT_ELEM(intrinsic_matrix^, CV_32FC1, 2, 2))^ := 1;
-    pSingle(CV_MAT_ELEM(intrinsic_matrix^, CV_32FC1, 0, 2))^ := 70.0;
-    pSingle(CV_MAT_ELEM(intrinsic_matrix^, CV_32FC1, 1, 2))^ := 70.0;
+    pSingle(CV_MAT_ELEM(intrinsic_matrix^, SizeOf(single), 0, 0))^ := 520.0;
+    pSingle(CV_MAT_ELEM(intrinsic_matrix^, SizeOf(single), 1, 1))^ := 520.0;
+    pSingle(CV_MAT_ELEM(intrinsic_matrix^, SizeOf(single), 2, 2))^ := 1;
+    pSingle(CV_MAT_ELEM(intrinsic_matrix^, SizeOf(single), 0, 2))^ := 70.0;
+    pSingle(CV_MAT_ELEM(intrinsic_matrix^, SizeOf(single), 1, 2))^ := 70.0;
 
     for i := 0 to intrinsic_matrix^.rows - 1 do
     begin
       for j := 0 to intrinsic_matrix^.cols - 1 do
-        Write(Format('%.0f ', [pSingle(CV_MAT_ELEM(intrinsic_matrix^, CV_32FC1, i, j))^]));
+        Write(Format('%.0f ', [pSingle(CV_MAT_ELEM(intrinsic_matrix^, SizeOf(single), i, j))^]));
       Writeln;
     end;
     Writeln;

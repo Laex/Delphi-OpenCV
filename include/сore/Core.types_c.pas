@@ -51,6 +51,7 @@
 {$WARN UNSAFE_TYPE OFF}
 {$WARN UNSAFE_CODE OFF}
 {$WARN UNSAFE_CAST OFF}
+{$POINTERMATH ON}
 unit Core.types_c;
 
 interface
@@ -367,107 +368,110 @@ const
 {$EXTERNALSYM CV_USRTYPE1}
   CV_MAT_DEPTH_MASK = (CV_DEPTH_MAX - 1);
 {$EXTERNALSYM CV_MAT_DEPTH_MASK}
-  (*
-    const
-    CV_8UC1 = CV_MAKETYPE(CV_8U, 1);
-    {$EXTERNALSYM CV_8UC1}
-    CV_8UC2 = CV_MAKETYPE(CV_8U, 2);
-    {$EXTERNALSYM CV_8UC2}
-    CV_8UC3 = CV_MAKETYPE(CV_8U, 3);
-    {$EXTERNALSYM CV_8UC3}
-    CV_8UC4 = CV_MAKETYPE(CV_8U, 4);
-    {$EXTERNALSYM CV_8UC4}
-    CV_8SC1 = CV_MAKETYPE(CV_8S, 1);
-    {$EXTERNALSYM CV_8SC1}
-    CV_8SC2 = CV_MAKETYPE(CV_8S, 2);
-    {$EXTERNALSYM CV_8SC2}
-    CV_8SC3 = CV_MAKETYPE(CV_8S, 3);
-    {$EXTERNALSYM CV_8SC3}
-    CV_8SC4 = CV_MAKETYPE(CV_8S, 4);
-    {$EXTERNALSYM CV_8SC4}
-    CV_16UC1 = CV_MAKETYPE(CV_16U, 1);
-    {$EXTERNALSYM CV_16UC1}
-    CV_16UC2 = CV_MAKETYPE(CV_16U, 2);
-    {$EXTERNALSYM CV_16UC2}
-    CV_16UC3 = CV_MAKETYPE(CV_16U, 3);
-    {$EXTERNALSYM CV_16UC3}
-    CV_16UC4 = CV_MAKETYPE(CV_16U, 4);
-    {$EXTERNALSYM CV_16UC4}
-    CV_16SC1 = CV_MAKETYPE(CV_16S, 1);
-    {$EXTERNALSYM CV_16SC1}
+function CV_8UC1: Integer; inline;
 
-    const
-    CV_16SC2 = CV_MAKETYPE(CV_16S, 2);
-    {$EXTERNALSYM CV_16SC2}
+{$EXTERNALSYM CV_8UC1}
+(*
+  CV_8UC2 = CV_MAKETYPE(CV_8U, 2);
+  {$EXTERNALSYM CV_8UC2}
+*)
+function CV_8UC3: Integer; inline;
+{$EXTERNALSYM CV_8UC3}
+(*
+  CV_8UC4 = CV_MAKETYPE(CV_8U, 4);
+  {$EXTERNALSYM CV_8UC4}
+  CV_8SC1 = CV_MAKETYPE(CV_8S, 1);
+  {$EXTERNALSYM CV_8SC1}
+  CV_8SC2 = CV_MAKETYPE(CV_8S, 2);
+  {$EXTERNALSYM CV_8SC2}
+  CV_8SC3 = CV_MAKETYPE(CV_8S, 3);
+  {$EXTERNALSYM CV_8SC3}
+  CV_8SC4 = CV_MAKETYPE(CV_8S, 4);
+  {$EXTERNALSYM CV_8SC4}
+  CV_16UC1 = CV_MAKETYPE(CV_16U, 1);
+  {$EXTERNALSYM CV_16UC1}
+  CV_16UC2 = CV_MAKETYPE(CV_16U, 2);
+  {$EXTERNALSYM CV_16UC2}
+  CV_16UC3 = CV_MAKETYPE(CV_16U, 3);
+  {$EXTERNALSYM CV_16UC3}
+  CV_16UC4 = CV_MAKETYPE(CV_16U, 4);
+  {$EXTERNALSYM CV_16UC4}
+  CV_16SC1 = CV_MAKETYPE(CV_16S, 1);
+  {$EXTERNALSYM CV_16SC1}
 
-    const
-    CV_16SC3 = CV_MAKETYPE(CV_16S, 3);
-    {$EXTERNALSYM CV_16SC3}
+  const
+  CV_16SC2 = CV_MAKETYPE(CV_16S, 2);
+  {$EXTERNALSYM CV_16SC2}
 
-    const
-    CV_16SC4 = CV_MAKETYPE(CV_16S, 4);
-    {$EXTERNALSYM CV_16SC4}
+  const
+  CV_16SC3 = CV_MAKETYPE(CV_16S, 3);
+  {$EXTERNALSYM CV_16SC3}
 
-    // >> Following declaration is a macro definition!
-    const
-    CV_16SC(n)CV_MAKETYPE(CV_16S, (n));
+  const
+  CV_16SC4 = CV_MAKETYPE(CV_16S, 4);
+  {$EXTERNALSYM CV_16SC4}
 
-    const
-    CV_32SC2 = CV_MAKETYPE(CV_32S, 2);
-    {$EXTERNALSYM CV_32SC2}
+  // >> Following declaration is a macro definition!
+  const
+  CV_16SC(n)CV_MAKETYPE(CV_16S, (n));
+*)
+// const
+// CV_32SC2 = CV_MAKETYPE(CV_32S, 2);
+{$EXTERNALSYM CV_32SC2}
+function CV_32SC2: Integer; inline;
 
-    const
-    CV_32SC3 = CV_MAKETYPE(CV_32S, 3);
-    {$EXTERNALSYM CV_32SC3}
+(*
+  const
+  CV_32SC3 = CV_MAKETYPE(CV_32S, 3);
+  {$EXTERNALSYM CV_32SC3}
 
-    const
-    CV_32SC4 = CV_MAKETYPE(CV_32S, 4);
-    {$EXTERNALSYM CV_32SC4}
+  const
+  CV_32SC4 = CV_MAKETYPE(CV_32S, 4);
+  {$EXTERNALSYM CV_32SC4}
 
-    // >> Following declaration is a macro definition!
-    const
-    CV_32SC(n)CV_MAKETYPE(CV_32S, (n));
+  // >> Following declaration is a macro definition!
+  const
+  CV_32SC(n)CV_MAKETYPE(CV_32S, (n));
 
-    const
-    CV_32FC1 = CV_MAKETYPE(CV_32F, 1);
-    {$EXTERNALSYM CV_32FC1}
+  const
+  CV_32FC1 = CV_MAKETYPE(CV_32F, 1);
+  {$EXTERNALSYM CV_32FC1}
+*)
+function CV_32FC2: Integer; inline;
+{$EXTERNALSYM CV_32FC2}
+(*
+  const
+  CV_32FC3 = CV_MAKETYPE(CV_32F, 3);
+  {$EXTERNALSYM CV_32FC3}
 
-    const
-    CV_32FC2 = CV_MAKETYPE(CV_32F, 2);
-    {$EXTERNALSYM CV_32FC2}
+  const
+  CV_32FC4 = CV_MAKETYPE(CV_32F, 4);
+  {$EXTERNALSYM CV_32FC4}
 
-    const
-    CV_32FC3 = CV_MAKETYPE(CV_32F, 3);
-    {$EXTERNALSYM CV_32FC3}
+  // >> Following declaration is a macro definition!
+  const
+  CV_32FC(n)CV_MAKETYPE(CV_32F, (n));
 
-    const
-    CV_32FC4 = CV_MAKETYPE(CV_32F, 4);
-    {$EXTERNALSYM CV_32FC4}
+  const
+  CV_64FC1 = CV_MAKETYPE(CV_64F, 1);
+  {$EXTERNALSYM CV_64FC1}
 
-    // >> Following declaration is a macro definition!
-    const
-    CV_32FC(n)CV_MAKETYPE(CV_32F, (n));
+  const
+  CV_64FC2 = CV_MAKETYPE(CV_64F, 2);
+  {$EXTERNALSYM CV_64FC2}
 
-    const
-    CV_64FC1 = CV_MAKETYPE(CV_64F, 1);
-    {$EXTERNALSYM CV_64FC1}
+  const
+  CV_64FC3 = CV_MAKETYPE(CV_64F, 3);
+  {$EXTERNALSYM CV_64FC3}
 
-    const
-    CV_64FC2 = CV_MAKETYPE(CV_64F, 2);
-    {$EXTERNALSYM CV_64FC2}
+  const
+  CV_64FC4 = CV_MAKETYPE(CV_64F, 4);
+  {$EXTERNALSYM CV_64FC4}
 
-    const
-    CV_64FC3 = CV_MAKETYPE(CV_64F, 3);
-    {$EXTERNALSYM CV_64FC3}
-
-    const
-    CV_64FC4 = CV_MAKETYPE(CV_64F, 4);
-    {$EXTERNALSYM CV_64FC4}
-
-    // >> Following declaration is a macro definition!
-    const
-    CV_64FC(n)CV_MAKETYPE(CV_64F, (n));
-  *)
+  // >> Following declaration is a macro definition!
+  const
+  CV_64FC(n)CV_MAKETYPE(CV_64F, (n));
+*)
 
 const
   CV_AUTO_STEP = $7FFFFFFF;
@@ -1186,46 +1190,46 @@ type
     prev_elem: Pointer; // * pointer to previous element */
   end;
 
+  // ****************************************************************************************/
+  // *                                Operations on sequences                               */
+  // ****************************************************************************************/
+  {
+    #define  CV_SEQ_ELEM( seq, elem_type, index )                    \
+    /* assert gives some guarantee that <seq> parameter is valid */  \
+    (   assert(sizeof((seq)->first[0]) == sizeof(CvSeqBlock) &&      \
+    (seq)->elem_size == sizeof(elem_type)),                      \
+    (elem_type*)((seq)->first && (unsigned)index <               \
+    (unsigned)((seq)->first->count) ?                            \
+    (seq)->first->data + (index) * sizeof(elem_type) :           \
+    cvGetSeqElem( (CvSeq*)(seq), (index) )))
+  }
+function CV_SEQ_ELEM(seq: pCvSeq; const size_of_elem: Integer; index: Integer): Pointer; inline;
+{ #define CV_GET_SEQ_ELEM( elem_type, seq, index ) CV_SEQ_ELEM( (seq), elem_type, (index) ) }
+function CV_GET_SEQ_ELEM(const size_of_elem: Integer; seq: pCvSeq; index: Integer): Pointer; inline;
 
-  // (* ************************************************************************************** *)
-  // (* Operations on sequences *)
-  // (* ************************************************************************************** *)
-  //
-  // // >> Following declaration is a macro definition!
-  // const CV_SEQ_ELEM(seq, elem_type, index);
-  // (* assert gives some guarantee that <seq> parameter is valid *) \
-  // (Assert(SizeOf((seq)^.first[0 .. -1] of) = SizeOf(CvSeqBlock) and
-  // (seq)^.elem_size = SizeOf(elem_type = array));
-  // {$EXTERNALSYM }
-  // (elem_type(seq)^.first and (Cardinal)index < (Cardinal(seq)^.first^.count)?(seq)^.first^.data +
-  // (index)SizeOf(elem_type)cvGetSeqElem((CvSeq(seq), (index)))) = ^;
-  // {$EXTERNALSYM (elem_type(seq)^.first and (Cardinal)index <                (Cardinal(seq)^.first^.count) ?                             (seq)^.first^.data + (index)  SizeOf(elem_type)             cvGetSeqElem( (CvSeq(seq), (index) )))}
-  // // >> Following declaration is a macro definition!
-  // const CV_GET_SEQ_ELEM(elem_type, seq, index)CV_SEQ_ELEM((seq), elem_type, (index));
-  //
-  // (* Add element to sequence: *)
-  // // >> Following declaration is a macro definition!
-  // const CV_WRITE_SEQ_ELEM_VAR(elem_ptr, writer);
-  // begin if ((writer).ptr >= (writer).block_max)begin cvCreateSeqBlock(and writer); end;
-  // memcpy((writer).ptr, elem_ptr, (writer).seq^.elem_size);
-  // (writer).ptr := mod +(writer) then .seq^.elem_size; end;
-  //
-  // // >> Following declaration is a macro definition!
-  // const CV_WRITE_SEQ_ELEM(elem, writer); begin Assert((writer).seq^.elem_size = SizeOf(elem));
-  // if ((writer).ptr >= (writer).block_max)begin cvCreateSeqBlock(and writer); end;
-  // Assert((writer).ptr <= (writer).block_max - SizeOf(elem));
-  // memcpy((writer).ptr, and (elem), SizeOf(elem)); (writer).ptr := mod +SizeOf(elem) then; end;
+// (* Add element to sequence: *)
+// // >> Following declaration is a macro definition!
+// const CV_WRITE_SEQ_ELEM_VAR(elem_ptr, writer);
+// begin if ((writer).ptr >= (writer).block_max)begin cvCreateSeqBlock(and writer); end;
+// memcpy((writer).ptr, elem_ptr, (writer).seq^.elem_size);
+// (writer).ptr := mod +(writer) then .seq^.elem_size; end;
+//
+// // >> Following declaration is a macro definition!
+// const CV_WRITE_SEQ_ELEM(elem, writer); begin Assert((writer).seq^.elem_size = SizeOf(elem));
+// if ((writer).ptr >= (writer).block_max)begin cvCreateSeqBlock(and writer); end;
+// Assert((writer).ptr <= (writer).block_max - SizeOf(elem));
+// memcpy((writer).ptr, and (elem), SizeOf(elem)); (writer).ptr := mod +SizeOf(elem) then; end;
 
-  (*
-    /* Move reader position forward: */
-    #define CV_NEXT_SEQ_ELEM( elem_size, reader )                 \
-    {                                                             \
-    if( ((reader).ptr += (elem_size)) >= (reader).block_max ) \
-    {                                                         \
-    cvChangeSeqBlock( &(reader), 1 );                     \
-    }                                                         \
-    }
-  *)
+(*
+  /* Move reader position forward: */
+  #define CV_NEXT_SEQ_ELEM( elem_size, reader )                 \
+  {                                                             \
+  if( ((reader).ptr += (elem_size)) >= (reader).block_max ) \
+  {                                                         \
+  cvChangeSeqBlock( &(reader), 1 );                     \
+  }                                                         \
+  }
+*)
 procedure CV_NEXT_SEQ_ELEM(const elem_size: Integer; const Reader: TCvSeqReader); inline;
 
 // (* Move reader position backward: *)
@@ -1550,6 +1554,7 @@ type
   // #define CV_SWAP(a,b,t) ((t) = (a), (a) = (b), (b) = (t))
 procedure CV_SWAP(var a, b, t: pIplImage); inline; overload;
 procedure CV_SWAP(var a, b, t: pCvPoint2D32f); inline; overload;
+procedure CV_SWAP(var a, b, t: pCvMat); inline; overload;
 procedure CV_SWAP(var a, b, t: Pointer); inline; overload;
 
 
@@ -2024,7 +2029,7 @@ function CV_32SC1: Integer;
 function CV_MAKETYPE(depth, cn: Integer): Integer;
 // #define CV_MAT_ELEM( mat, elemtype, row, col )           \
 // (*(elemtype*)CV_MAT_ELEM_PTR_FAST( mat, row, col, sizeof(elemtype)))
-function CV_MAT_ELEM(const mat: TCvMat; const elemtype: Integer; const row, col: Integer): Pointer;
+function CV_MAT_ELEM(const mat: TCvMat; const elemsize: Integer; const row, col: Integer): Pointer;
 // #define CV_MAT_ELEM_PTR_FAST( mat, row, col, pix_size )  \
 // (assert( (unsigned)(row) < (unsigned)(mat).rows &&   \
 // (unsigned)(col) < (unsigned)(mat).cols ),   \
@@ -2043,10 +2048,15 @@ begin
   Result := Pointer(Integer(mat.data) + mat.step * row + pix_size * col);
 end;
 
-function CV_MAT_ELEM(const mat: TCvMat; const elemtype: Integer; const row, col: Integer): Pointer;
+function CV_MAT_ELEM(const mat: TCvMat; const elemsize: Integer; const row, col: Integer): Pointer;
 begin
-  Result := CV_MAT_ELEM_PTR_FAST(mat, row, col, CV_ELEM_SIZE(elemtype));
+  Result := CV_MAT_ELEM_PTR_FAST(mat, row, col, elemsize);
 end;
+
+// function CV_MAT_ELEM(const mat: TCvMat; const elemtype: Integer; const row, col: Integer): Pointer;
+// begin
+// Result := CV_MAT_ELEM_PTR_FAST(mat, row, col, CV_ELEM_SIZE(elemtype));
+// end;
 
 function CvAttrList(const attr: ppCVChar = nil; next: pCvAttrList = nil): TCvAttrList;
 begin
@@ -2240,6 +2250,11 @@ begin
   b := t;
 end;
 
+procedure CV_SWAP(var a, b, t: pCvMat);
+begin
+ CV_SWAP(Pointer(a), Pointer(b), Pointer(t));
+end;
+
 procedure CV_SWAP(var a, b, t: pIplImage);
 begin
   CV_SWAP(Pointer(a), Pointer(b), Pointer(t));
@@ -2248,6 +2263,41 @@ end;
 procedure CV_SWAP(var a, b, t: pCvPoint2D32f);
 begin
   CV_SWAP(Pointer(a), Pointer(b), Pointer(t));
+end;
+
+function CV_32SC2;
+begin
+  Result := CV_MAKETYPE(CV_32S, 2);
+end;
+
+function CV_GET_SEQ_ELEM;
+begin
+  { #define CV_GET_SEQ_ELEM( elem_type, seq, index ) CV_SEQ_ELEM( (seq), elem_type, (index) ) }
+  Result := CV_SEQ_ELEM(seq, size_of_elem, index);
+end;
+
+function CV_SEQ_ELEM(seq: pCvSeq; const size_of_elem: Integer; index: Integer): Pointer; inline;
+begin
+  Assert((SizeOf(seq^.first[0]) = SizeOf(TCvSeqBlock)) and (seq^.elem_size = size_of_elem));
+  if Assigned(seq^.first) and (index < seq^.first^.count) then
+    Result := Pointer(Integer(seq^.first^.data) + index * size_of_elem)
+  else
+    Result := cvGetSeqElem(seq, index);
+end;
+
+function CV_8UC1: Integer; inline;
+begin
+  Result := CV_MAKETYPE(CV_8U, 1);
+end;
+
+function CV_32FC2: Integer; inline;
+begin
+  Result := CV_MAKETYPE(CV_32F, 2);
+end;
+
+function CV_8UC3: Integer; inline;
+begin
+  Result := CV_MAKETYPE(CV_8U, 3);
 end;
 
 end.

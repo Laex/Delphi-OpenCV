@@ -131,7 +131,8 @@ function cvGetWindowProperty(name: pCVChar; prop_id: Integer): Double; cdecl;
   //display image within window (highgui windows remember their content)
   CVAPI(void) cvShowImage( const char* name, const CvArr* image );
 }
-procedure cvShowImage(const name: pCVChar; const image: pIplImage); cdecl;
+procedure cvShowImage(const name: pCVChar; const image: pIplImage); cdecl; overload;
+procedure cvShowImage(const name: pCVChar; const image: pCvMat); cdecl;overload;
 
 (* resize/move window *)
 procedure cvResizeWindow(name: pCVChar; width: Integer; height: Integer); cdecl;
@@ -792,7 +793,9 @@ uses
   uLibName;
 
 function cvNamedWindow; external highgui_Dll;
-procedure cvShowImage; external highgui_Dll;
+//procedure cvShowImage; external highgui_Dll;
+procedure cvShowImage(const name: pCVChar; const image: pIplImage); external highgui_Dll name 'cvShowImage';
+procedure cvShowImage(const name: pCVChar; const image: pCvMat); external highgui_Dll name 'cvShowImage';
 function cvWaitKey; external highgui_Dll;
 procedure cvDestroyWindow; external highgui_Dll;
 procedure cvDestroyAllWindows; external highgui_Dll;

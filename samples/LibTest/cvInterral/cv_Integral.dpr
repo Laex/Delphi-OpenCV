@@ -8,7 +8,19 @@ program cv_Integral;
 
 uses
   System.SysUtils,
-{$I ..\..\uses_include.inc}
+uLibName in '..\..\..\include\uLibName.pas',
+highgui_c in '..\..\..\include\highgui\highgui_c.pas',
+core_c in '..\..\..\include\сore\core_c.pas',
+Core.types_c in '..\..\..\include\сore\Core.types_c.pas',
+imgproc.types_c in '..\..\..\include\imgproc\imgproc.types_c.pas',
+imgproc_c in '..\..\..\include\imgproc\imgproc_c.pas',
+legacy in '..\..\..\include\legacy\legacy.pas',
+calib3d in '..\..\..\include\calib3d\calib3d.pas',
+imgproc in '..\..\..\include\imgproc\imgproc.pas',
+haar in '..\..\..\include\objdetect\haar.pas',
+objdetect in '..\..\..\include\objdetect\objdetect.pas',
+tracking in '..\..\..\include\video\tracking.pas',
+Core in '..\..\..\include\сore\core.pas'
   ;
 
 const
