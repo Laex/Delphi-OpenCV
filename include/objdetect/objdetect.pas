@@ -46,7 +46,7 @@ Unit ObjDetect;
 
 interface
 
-Uses core_c, Core.types_c, haar, System.Types, System.Generics.Collections, Xml.XMLDoc;
+Uses core_c, Core.types_c, haar, System.Types, Xml.XMLDoc;
 
 (*
   //****************************************************************************************\
@@ -421,7 +421,7 @@ Type
     // Size maxSize=Size() );
     procedure detectMultiScale(
       { } const image: pIplImage;
-      { } const objects: TList<TcvRect>;
+      { } const objects: TArray<TcvRect>;
       { } scaleFactor: double { =1.1 };
       { } minNeighbors: Integer { =3 };
       { } flags: Integer { =0 };
@@ -438,9 +438,9 @@ Type
     // bool outputRejectLevels=false );
     procedure detectMultiScale(
       { } const image: pIplImage;
-      { } const objects: TList<TcvRect>;
-      { } const rejectLevels: TList<Integer>;
-      { } const levelWeights: TList<double>;
+      { } const objects: TArray<TcvRect>;
+      { } const rejectLevels: TArray<Integer>;
+      { } const levelWeights: TArray<double>;
       { } scaleFactor: double { =1.1 };
       { } minNeighbors: Integer { =3 };
       { } flags: Integer { =0 };
@@ -461,8 +461,8 @@ Type
     // int stripSize, int yStep, double factor, std::vector<Rect>& candidates,
     // std::vector<int>& rejectLevels, std::vector<double>& levelWeights, bool outputRejectLevels=false);
     function detectSingleScale(const image: pIplImage; stripCount: Integer; processingRectSize: TCvSize;
-      stripSize: Integer; yStep: Integer; factor: double; candidates: TList<TcvRect>; rejectLevels: TList<Integer>;
-      levelWeights: TList<double>; outputRejectLevels: Boolean = false): Boolean; virtual;
+      stripSize: Integer; yStep: Integer; factor: double; candidates: TArray<TcvRect>; rejectLevels: TArray<Integer>;
+      levelWeights: TArray<double>; outputRejectLevels: Boolean = false): Boolean; virtual;
 
     const
      BOOST = 0;
@@ -1135,15 +1135,15 @@ begin
 end;
 
 procedure TCascadeClassifier.detectMultiScale(const image: pIplImage;
-  const objects: TList<TcvRect>; const rejectLevels: TList<Integer>;
-  const levelWeights: TList<double>; scaleFactor: double; minNeighbors,
+  const objects: TArray<TcvRect>; const rejectLevels: TArray<Integer>;
+  const levelWeights: TArray<double>; scaleFactor: double; minNeighbors,
   flags: Integer; minSize, maxSize: TCvSize; outputRejectLevels: Boolean);
 begin
 
 end;
 
 procedure TCascadeClassifier.detectMultiScale(const image: pIplImage;
-  const objects: TList<TcvRect>; scaleFactor: double; minNeighbors,
+  const objects: TArray<TcvRect>; scaleFactor: double; minNeighbors,
   flags: Integer; minSize, maxSize: TCvSize);
 begin
 
@@ -1151,8 +1151,8 @@ end;
 
 function TCascadeClassifier.detectSingleScale(const image: pIplImage;
   stripCount: Integer; processingRectSize: TCvSize; stripSize,
-  yStep: Integer; factor: double; candidates: TList<TcvRect>;
-  rejectLevels: TList<Integer>; levelWeights: TList<double>;
+  yStep: Integer; factor: double; candidates: TArray<TcvRect>;
+  rejectLevels: TArray<Integer>; levelWeights: TArray<double>;
   outputRejectLevels: Boolean): Boolean;
 begin
 

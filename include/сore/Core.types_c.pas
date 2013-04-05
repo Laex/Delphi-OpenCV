@@ -1,30 +1,4 @@
-unit Core.types_c;
-
-// {$ifdef DEBUG}
-// {$A8,B-,C+,D+,E-,F-,G+,H+,I+,J-,K-,L+,M-,N+,O-,P+,Q+,R+,S-,T-,U-,V+,W+,X+,Y+,Z1}
-// {$else}
-// {$A8,B-,C-,D-,E-,F-,G+,H+,I+,J-,K-,L-,M-,N+,O+,P+,Q-,R-,S-,T-,U-,V+,W-,X+,Y-,Z1}
-// {$endif}
-// {$WARN SYMBOL_DEPRECATED OFF}
-// {$WARN SYMBOL_PLATFORM OFF}
-// {$WARN UNIT_PLATFORM OFF}
-// {$WARN UNSAFE_TYPE OFF}
-// {$WARN UNSAFE_CODE OFF}
-// {$WARN UNSAFE_CAST OFF}
-
-interface
-
-(*
-  ** 'C2PTypes.pas' declares external windows data types for the conversion purposes.
-  ** It's created by the CtoPas converter and saved under
-  ** "\Program Files\Common Files\AlGun Shared\CToPas 2.0\P_Files" folder.
-  ** Consult the Windows and Delphi help files for more information about defined data types
-*)
-
-// uses
-// {C2PTypes,} Windows, Messages, SysUtils, Classes;
-
-(* M///////////////////////////////////////////////////////////////////////////////////////
+(* ///////////////////////////////////////////////////////////////////////////////////////
   //
   //  IMPORTANT: READ BEFORE DOWNLOADING, COPYING, INSTALLING OR USING.
   //
@@ -64,173 +38,46 @@ interface
   // or tort (including negligence or otherwise) arising in any way out of
   // the use of this software, even if advised of the possibility of such damage.
   //
-  //M *)
+  // *)
 
-{$IFNDEF __OPENCV_CORE_TYPES_H__}
-{$DEFINE __OPENCV_CORE_TYPES_H__}
-{$IFNDEF  _CRT_SECURE_NO_DEPRECATE && defined _MSC_VER}
-{$HPPEMIT '#  if _MSC_VER > 1300'}
-{$HPPEMIT '#    define _CRT_SECURE_NO_DEPRECATE'}	(* to avoid multiple Visual Studio 2005 warnings *)
-{$HPPEMIT '#  endif'}
-{$ENDIF}
-{$IFNDEF SKIP_INCLUDES}
-{$HPPEMIT '#include <assert.h>'}
-{$HPPEMIT '#include <stdlib.h>'}
-{$HPPEMIT '#include <cString.h>'}
-{$HPPEMIT '#include <float.h>'}
-{$IFNDEF  _MSC_VER && !defined __BORLANDC__}
-{$HPPEMIT '#  include <stdint.h>'}
-{$ENDIF}
-{$IFNDEF  __ICL}
-{$HPPEMIT '#  define CV_ICC   __ICL'}
-{$HPPEMIT '#elif defined __ICC'}
-{$HPPEMIT '#  define CV_ICC   __ICC'}
-{$HPPEMIT '#elif defined __ECL'}
-{$HPPEMIT '#  define CV_ICC   __ECL'}
-{$HPPEMIT '#elif defined __ECC'}
-{$HPPEMIT '#  define CV_ICC   __ECC'}
-{$HPPEMIT '#elif defined __INTEL_COMPILER'}
-{$HPPEMIT '#  define CV_ICC   __INTEL_COMPILER'}
-{$ENDIF}
-{$IFNDEF CV_ICC && !defined CV_ENABLE_UNROLLED}
-{$HPPEMIT '#  define CV_ENABLE_UNROLLED 0'}
+{$IFDEF DEBUG}
+{$A8,B-,C+,D+,E-,F-,G+,H+,I+,J-,K-,L+,M-,N+,O-,P+,Q+,R+,S-,T-,U-,V+,W+,X+,Y+,Z1}
 {$ELSE}
-{$HPPEMIT '#  define CV_ENABLE_UNROLLED 1'}
+{$A8,B-,C-,D-,E-,F-,G+,H+,I+,J-,K-,L-,M-,N+,O+,P+,Q-,R-,S-,T-,U-,V+,W-,X+,Y-,Z1}
 {$ENDIF}
-{$IFNDEF  _M_X64 && defined _MSC_VER && _MSC_VER >= 1400 || __GNUC__ >= 4 && defined __x86_64__}
-{$HPPEMIT '#  if defined WIN32'}
-{$HPPEMIT '#    include <intrin.h>'}
-{$HPPEMIT '#  endif'}
-{$HPPEMIT '#  if defined __SSE2__ || !defined __GNUC__'}
-{$HPPEMIT '#    include <emmintrin.h>'}
-{$HPPEMIT '#  endif'}
-{$ENDIF}
-{$IFNDEF  __BORLANDC__}
-{$HPPEMIT '#  include <fastmath.h>'}
-{$ELSE}
-{$HPPEMIT '#  include <math.h>'}
-{$ENDIF}
-{$IFDEF HAVE_IPL}
-{$HPPEMIT '#  ifndef __IPL_H__'}
-{$HPPEMIT '#    if defined WIN32 || defined _WIN32'}
-{$HPPEMIT '#      include <ipl.h>'}
-{$HPPEMIT '#    else'}
-{$HPPEMIT '#      include <ipl/ipl.h>'}
-{$HPPEMIT '#    endif'}
-{$HPPEMIT '#  endif'}
-{$HPPEMIT '#elif defined __IPL_H__'}
-{$HPPEMIT '#  define HAVE_IPL'}
-{$ENDIF}
-{$ENDIF}	// SKIP_INCLUDES
+{$WARN SYMBOL_DEPRECATED OFF}
+{$WARN SYMBOL_PLATFORM OFF}
+{$WARN UNIT_PLATFORM OFF}
+{$WARN UNSAFE_TYPE OFF}
+{$WARN UNSAFE_CODE OFF}
+{$WARN UNSAFE_CAST OFF}
+unit Core.types_c;
 
-{$IFNDEF  WIN32 || defined _WIN32}
-{$HPPEMIT '#  define CV_CDECL __cdecl'}
-{$HPPEMIT '#  define CV_STDCALL __stdcall'}
-{$ELSE}
-{$HPPEMIT '#  define CV_CDECL'}
-{$HPPEMIT '#  define CV_STDCALL'}
-{$ENDIF}
-{$IFNDEF CV_EXTERN_C}
-{$HPPEMIT '#  ifdef __cplusplus'}
-{$HPPEMIT '#    define CV_EXTERN_C'}	// extern "C"
-{$HPPEMIT '#    define CV_DEFAULT(val) = val'}
-{$HPPEMIT '#  else'}
-{$HPPEMIT '#    define CV_EXTERN_C'}
-{$HPPEMIT '#    define CV_DEFAULT(val)'}
-{$HPPEMIT '#  endif'}
-{$ENDIF}
-{$IFNDEF CV_EXTERN_C_FUNCPTR}
-{$HPPEMIT '#  ifdef __cplusplus'}
-{$HPPEMIT '#    define CV_EXTERN_C_FUNCPTR(x)'}	// extern "C" { typedef x; }
-{$HPPEMIT '#  else'}
-{$HPPEMIT '#    define CV_EXTERN_C_FUNCPTR(x) typedef x'}
-{$HPPEMIT '#  endif'}
-{$ENDIF}
-{$IFNDEF CV_INLINE}
-{$HPPEMIT '#  if defined __cplusplus'}
-{$HPPEMIT '#    define CV_INLINE'}
-{$HPPEMIT '#  elif (defined WIN32 || defined _WIN32 || defined WINCE) && !defined __GNUC__'}
-{$HPPEMIT '#    define CV_INLINE __inline'}
-{$HPPEMIT '#  else'}
-{$HPPEMIT '#    define CV_INLINE static'}
-{$HPPEMIT '#  endif'}
-{$ENDIF}	(* CV_INLINE *)
-{$IFNDEF  WIN32 || defined _WIN32 || defined WINCE && defined CVAPI_EXPORTS}
-{$HPPEMIT '#  define CV_EXPORTS __declspec(dllexport)'}
-{$ELSE}
-{$HPPEMIT '#  define CV_EXPORTS'}
-{$ENDIF}
-{$IFNDEF CVAPI}
-{$HPPEMIT '#  define CVAPI(rettype) CV_EXTERN_C CV_EXPORTS rettype CV_CDECL'}
-{$ENDIF}
-{$IFNDEF  _MSC_VER || defined __BORLANDC__}
-// type
-// int64 = int64;
-// {$EXTERNALSYM int64}
+interface
+
+const
+  // Ќаименьшее число дл€ которого выполн€етс€ условие 1.0+DBL_EPSILON <> 1.0
+  DBL_EPSILON = 2.2204460492503131E-016;
 
 Type
+  TSingleArray1D = array [0 .. 1] of Single;
+  pSingleArray1D = ^TSingleArray1D;
+  TSingleArray2D = array [0 .. 1] of pSingleArray1D;
+  pSingleArray2D = ^TSingleArray2D;
+
+  TCVChar = AnsiChar;
   pCVChar = pAnsiChar;
   TpCVCharArray = array [0 .. 1] of pCVChar;
   ppCVChar = ^TpCVCharArray;
   CVChar = AnsiChar;
 
-type
-  uint64 = int64;
-{$EXTERNALSYM uint64}
-{$HPPEMIT '#  define CV_BIG_function (n)   n##I64' }
-{$HPPEMIT '#  define CV_BIG_UINT(n)  n##UI64'}
-{$ELSE}
-
-type
-  int64 = int64_t;
-{$EXTERNALSYM int64}
-
-type
-  uint64 = uint64_t;
-{$EXTERNALSYM uint64}
-{$HPPEMIT '#  define CV_BIG_INT(n)   n##LL' }
-{$HPPEMIT '#  define CV_BIG_UINT(n)  n##ULL'}
-{$ENDIF}
-{$IFNDEF HAVE_IPL}
-
-type
   uchar = Byte;
 {$EXTERNALSYM uchar}
-
-type
   ushort = Word;
 {$EXTERNALSYM ushort}
-{$ENDIF }
-
-type
   schar = ShortInt;
-  pschar = ^schar;
-
 {$EXTERNALSYM schar}
-  (* special informative macros for wrapper generators *)
-{$DEFINE CV_CARRAY(counter)}
-{$DEFINE CV_CUSTOM_CARRAY(args)}
-  // const
-  // CV_EXPORTS_W = CV_EXPORTS;
-  // {$EXTERNALSYM CV_EXPORTS_W}
-  // const
-  // CV_EXPORTS_W_SIMPLE = CV_EXPORTS;
-  // {$EXTERNALSYM CV_EXPORTS_W_SIMPLE}
-
-  // >> Following declaration is a macro definition!
-  // const
-  // CV_EXPORTS_AS(synonym)CV_EXPORTS;
-
-  // const
-  // CV_EXPORTS_W_MAP = CV_EXPORTS;
-  // {$EXTERNALSYM CV_EXPORTS_W_MAP}
-{$DEFINE CV_IN_OUT}
-{$DEFINE CV_OUT}
-{$DEFINE CV_PROP}
-{$DEFINE CV_PROP_RW}
-{$DEFINE CV_WRAP}
-{$DEFINE CV_WRAP_AS(synonym)}
-{$DEFINE CV_WRAP_DEFAULT(value)}
+  pschar = ^schar;
 
   (* CvArr* is used to pass arbitrary
     * cArray-like data structures
@@ -238,21 +85,29 @@ type
     * cArray cType is recognized at runtime:
   *)
 type
-  TCvArr = Pointer;
-  pCvArr = ^TCvArr;
-{EXTERNALSYM CvArr}
-
-type
-  Cv32suf = packed record
-    i: Integer;
-    u: Cardinal;
-    f: Single;
+  TCvArr = record
   end;
 
-  Cv64suf = packed record
-    i: int64;
-    u: uint64;
-    f: Double;
+  pCvArr = ^TCvArr;
+
+  TCv32suf = packed record
+    case Byte of
+      0:
+        (i: Integer);
+      1:
+        (u: Cardinal);
+      2:
+        (f: Single);
+  end;
+
+  TCv64suf = packed record
+    case Byte of
+      0:
+        (i: int64);
+      1:
+        (u: uint64);
+      2:
+        (f: Double);
   end;
 
   CVStatus = Integer;
@@ -316,7 +171,7 @@ const
     *************************************************************************************** *)
 
 {$IFDEF HAVE_TEGRA_OPTIMIZATION}
-{$HPPEMIT '#  include 'tegra_round.hpp''}
+{$HPPEMIT '#include 'tegra_round.hpp''}
 {$ENDIF}
 
 const
@@ -340,7 +195,7 @@ const
 {$IFNDEF HAVE_IPL}
 
   (*
-    {$HPPEMIT '* The following definitions (until #endif)'}
+    * The following definitions (until #endif)'
     * is an extract from IPL headers.
     * Copyright (c) 1995 Intel Corporation.
   *)
@@ -483,9 +338,9 @@ const
 {$EXTERNALSYM IPL_IMAGE_MAGIC_VAL}
   CV_TYPE_NAME_IMAGE = 'opencv-image';
 
-  (* ***************************************************************************************\
-    *                                  Matrix cType (CvMat)                                   *
-    *************************************************************************************** *)
+  (* ***************************************************************************************
+    *                                 Matrix cType (CvMat)                                *
+    ************************************************************************************** *)
 
 const
   CV_CN_MAX = 512;
@@ -512,28 +367,27 @@ const
 {$EXTERNALSYM CV_USRTYPE1}
   CV_MAT_DEPTH_MASK = (CV_DEPTH_MAX - 1);
 {$EXTERNALSYM CV_MAT_DEPTH_MASK}
-
   (*
     const
-    CV_8UC1 = CV.CV_MAKETYPE(CV_8U, 1);
+    CV_8UC1 = CV_MAKETYPE(CV_8U, 1);
     {$EXTERNALSYM CV_8UC1}
-    CV_8UC2 = CV.CV_MAKETYPE(CV_8U, 2);
+    CV_8UC2 = CV_MAKETYPE(CV_8U, 2);
     {$EXTERNALSYM CV_8UC2}
-    CV_8UC3 = CV.CV_MAKETYPE(CV_8U, 3);
+    CV_8UC3 = CV_MAKETYPE(CV_8U, 3);
     {$EXTERNALSYM CV_8UC3}
-    CV_8UC4 = CV.CV_MAKETYPE(CV_8U, 4);
+    CV_8UC4 = CV_MAKETYPE(CV_8U, 4);
     {$EXTERNALSYM CV_8UC4}
-    CV_8SC1 = CV.CV_MAKETYPE(CV_8S, 1);
+    CV_8SC1 = CV_MAKETYPE(CV_8S, 1);
     {$EXTERNALSYM CV_8SC1}
-    CV_8SC2 = CV.CV_MAKETYPE(CV_8S, 2);
+    CV_8SC2 = CV_MAKETYPE(CV_8S, 2);
     {$EXTERNALSYM CV_8SC2}
-    CV_8SC3 = CV.CV_MAKETYPE(CV_8S, 3);
+    CV_8SC3 = CV_MAKETYPE(CV_8S, 3);
     {$EXTERNALSYM CV_8SC3}
-    CV_8SC4 = CV.CV_MAKETYPE(CV_8S, 4);
+    CV_8SC4 = CV_MAKETYPE(CV_8S, 4);
     {$EXTERNALSYM CV_8SC4}
-    CV_16UC1 = CV.CV_MAKETYPE(CV_16U, 1);
+    CV_16UC1 = CV_MAKETYPE(CV_16U, 1);
     {$EXTERNALSYM CV_16UC1}
-    CV_16UC2 = CV.CV_MAKETYPE(CV_16U, 2);
+    CV_16UC2 = CV_MAKETYPE(CV_16U, 2);
     {$EXTERNALSYM CV_16UC2}
     CV_16UC3 = CV_MAKETYPE(CV_16U, 3);
     {$EXTERNALSYM CV_16UC3}
@@ -613,11 +467,13 @@ const
     // >> Following declaration is a macro definition!
     const
     CV_64FC(n)CV_MAKETYPE(CV_64F, (n));
+  *)
 
-    const
-    CV_AUTO_STEP = $7FFFFFFF;
-    {$EXTERNALSYM CV_AUTO_STEP}
+const
+  CV_AUTO_STEP = $7FFFFFFF;
+{$EXTERNALSYM CV_AUTO_STEP}
 
+  (*
     const
     CV_WHOLE_ARR = cvSlice(0, $3FFFFFFF);
     {$EXTERNALSYM CV_WHOLE_ARR}
@@ -648,6 +504,7 @@ const
 type
 
   pCvMat = ^TCvMat;
+  ppCvMat = ^pCvMat;
 
   TCvMat = packed record
     _type: Integer;
@@ -677,39 +534,46 @@ const
 {$EXTERNALSYM CV_MAX_DIM_HEAP}
 
 type
+  TCvMatNDdim = packed record
+    size: Integer;
+    step: Integer;
+  end;
+
+  TCvMatNDdata = packed record
+    ptr: pByte;
+    fl: pSingle;
+    db: pDouble;
+    i: PInteger;
+    s: pSmallInt;
+  end;
+
+  pCvMatND = ^TCvMatND;
+
   TCvMatND = packed record
-    cType: Integer;
+    _type: Integer;
     dims: Integer;
     refcount: ^Integer;
     hdr_refcount: Integer;
-    (*
-      ptr: ^uchar;
-      fl: ^Single;
-      db: ^Double;
-      i: ^Integer;
-      s: ^SmallInt;
-      end;
-
-      data = CvMatND;
-      {$EXTERNALSYM data}
-      begin
-      Integer size;
-      Integer step;
-      end;
-      dim:
-      array [0 .. CV_MAX_DIM - 1] of; *)
+    data: TCvMatNDdata;
+    dim: array [0 .. CV_MAX_DIM - 1] of TCvMatNDdim;
   end;
+
+  // #define CV_IS_MATND_HDR(mat) \
+  // ((mat) != NULL && (((const CvMatND*)(mat))->type & CV_MAGIC_MASK) == CV_MATND_MAGIC_VAL)
+
+  // #define CV_IS_MATND(mat) \
+  // (CV_IS_MATND_HDR(mat) && ((const CvMatND*)(mat))->data.ptr != NULL)
 
   (* ***************************************************************************************\
     *                      Multi-dimensional sparse cArray (CvSparseMat)                      *
     *************************************************************************************** *)
-  (*
-    const
-    CV_SPARSE_MAT_MAGIC_VAL = $42440000;
-    {$EXTERNALSYM CV_SPARSE_MAT_MAGIC_VAL}
-    CV_TYPE_NAME_SPARSE_MAT = 'opencv-sparse-matrix';
-    {$EXTERNALSYM CV_TYPE_NAME_SPARSE_MAT}
 
+const
+  CV_SPARSE_MAT_MAGIC_VAL = $42440000;
+{$EXTERNALSYM CV_SPARSE_MAT_MAGIC_VAL}
+  CV_TYPE_NAME_SPARSE_MAT = 'opencv-sparse-matrix';
+{$EXTERNALSYM CV_TYPE_NAME_SPARSE_MAT}
+  (*
     type
     CvSet = packed record;
 
@@ -760,8 +624,8 @@ type
     *************************************************************************************** *)
 
 type
-  CvHistType = Integer;
-{$EXTERNALSYM CvHistType}
+  TCvHistType = Integer;
+{$EXTERNALSYM TCvHistType}
 
 const
   CV_HIST_MAGIC_VAL = $42450000;
@@ -783,9 +647,11 @@ const
 {$EXTERNALSYM CV_HIST_UNIFORM}
 
 type
-  CvHistogram = packed record
-    cType: Integer;
-    bins: pCvArr;
+  pCvHistogram = ^TCvHistogram;
+
+  TCvHistogram = packed record
+    _type: Integer;
+    bins: pIplImage;
     thresh: array [0 .. CV_MAX_DIM - 1, 0 .. 1] of Single;
     (* For uniform histograms. *)
     thresh2: pSingle; (* For non-uniform histograms. *)
@@ -819,7 +685,9 @@ const
 {$EXTERNALSYM CV_TERMCRIT_EPS}
 
 type
-  CvTermCriteria = packed record
+  pCvTermCriteria = ^TCvTermCriteria;
+
+  TCvTermCriteria = packed record
     cType: Integer; (* may be combination of *)
     max_iter: Integer;
     epsilon: Double;
@@ -838,10 +706,14 @@ type
   TCvPointArray = array [0 .. 100] of TCvPoint;
   pCvPointArray = ^TCvPointArray;
 
+  pCvPoint2D32f = ^TCvPoint2D32f;
+
   TCvPoint2D32f = packed record
     x: Single;
     y: Single;
   end;
+
+  pCvPoint3D32f = ^TCvPoint3D32f;
 
   TCvPoint3D32f = packed record
     x: Single;
@@ -870,13 +742,15 @@ type
     height: Integer;
   end;
 
-type
+  pCvSize2D32f = ^TCvSize2D32f;
+
   TCvSize2D32f = packed record
     width: Single;
     height: Single;
   end;
 
-type
+  pCvBox2D = ^TCvBox2D;
+
   TCvBox2D = packed record
     center: TCvPoint2D32f; (* Center of the box. *)
     size: TCvSize2D32f; (* Box width and length. *)
@@ -950,14 +824,14 @@ type
 
   (* ********************************** Sequence ****************************************** *)
 type
-  pCvSeqBlock = ^CvSeqBlock;
+  pCvSeqBlock = ^TCvSeqBlock;
 
-  CvSeqBlock = packed record
-    prev: ^CvSeqBlock; (* Previous sequence block. *)
-    next: ^CvSeqBlock; (* Next sequence block. *)
+  TCvSeqBlock = packed record
+    prev: pCvSeqBlock; (* Previous sequence block. *)
+    next: pCvSeqBlock; (* Next sequence block. *)
     start_index: Integer; (* Index of the first element in the block + *)
     count: Integer; (* Number of elements in the block. *)
-    data: ^schar; (* Pointer to the first element of the block. *)
+    data: Pointer; (* Pointer to the first element of the block. *)
   end;
 
   pCvSeq = ^TCvSeq;
@@ -971,7 +845,7 @@ type
     v_next: pCvSeq; (* 2nd next sequence. *)
     total: Integer; (* Total number of elements. *)
     elem_size: Integer; (* Size of sequence element in bytes. *)
-    block_max: pschar; (* Maximal bound of the last block. *)
+    block_max: Pointer; (* Maximal bound of the last block. *)
     ptr: pschar; (* Current write pointer. *)
     delta_elems: Integer; (* Grow seq this many at a time. *)
     storage: pCvMemStorage; (* Where the seq is stored. *)
@@ -1009,8 +883,8 @@ type
     v_next: pCvSeq; (* 2nd next sequence. *)
     total: Integer; (* Total number of elements. *)
     elem_size: Integer; (* Size of sequence element in bytes. *)
-    block_max: pschar; (* Maximal bound of the last block. *)
-    ptr: pschar; (* Current write pointer. *)
+    block_max: Pointer; (* Maximal bound of the last block. *)
+    ptr: Pointer; (* Current write pointer. *)
     delta_elems: Integer; (* Grow seq this many at a time. *)
     storage: pCvMemStorage; (* Where the seq is stored. *)
     free_blocks: pCvSeqBlock; (* Free blocks list. *)
@@ -1099,7 +973,7 @@ const
 
 type
 
-  CvChain = packed record
+  TCvChain = packed record
     origin: TCvPoint;
   end;
 
@@ -1284,30 +1158,35 @@ const
   //
   // const CV_IS_SUBDIV2D(seq)(CV_IS_SET(seq) and CV_SEQ_KIND((CvSet(seq)) = CV_SEQ_KIND_SUBDIV2D)
 
-  (* ************************************************************************************** *)
-  (* Sequence writer & reader *)
-  (* ************************************************************************************** *)
+  // ****************************************************************************************/
+  // *                            Sequence writer & reader                                  */
+  // ****************************************************************************************/
+type
+  pCvSeqWriter = ^TCvSeqWriter;
 
-  // // >> Following declaration is a macro definition!
-  // const CV_SEQ_WRITER_FIELDS()Integer header_size; CvSeq * seq;; CvSeqBlock * block;
-  // (* current block *) \ schar * ptr; (* pointer to free space *) \ schar * block_min;
-  // (* pointer to the beginning of block *) \ schar * block_max; (* pointer to the end of block *)
-  //
-  // type
-  //
-  // = packed record end; CvSeqWriter;
-  //
-  // // >> Following declaration is a macro definition!
-  // const CV_SEQ_READER_FIELDS()Integer header_size; CvSeq * seq;; CvSeqBlock * block;
-  // (* current block *) \ schar * ptr; (* pointer to element be read next *) \ schar * block_min;
-  // (* pointer to the beginning of block *) \ schar * block_max;
-  // (* pointer to the end of block *) \ Integer delta_index;
-  // (* = seq->first->start_index *) \ schar * prev_elem; (* pointer to previous element *)
-  //
-  // type
-  //
-  // = packed record end; CvSeqReader;
-  //
+  TCvSeqWriter = packed record
+    header_size: Integer;
+    seq: pCvSeq; // * the sequence written */
+    block: pCvSeqBlock; // * current block */
+    ptr: Pointer; // * pointer to free space */
+    block_min: Pointer; // * pointer to the beginning of block*/
+    block_max: Pointer; // * pointer to the end of block */
+  end;
+
+  pCvSeqReader = ^TCvSeqReader;
+
+  TCvSeqReader = packed record
+    header_size: Integer;
+    seq: pCvSeq; // * sequence, beign read */
+    block: pCvSeqBlock; // * current block */
+    ptr: Pointer; // * pointer to element be read next */
+    block_min: Pointer; // * pointer to the beginning of block */
+    block_max: Pointer; // * pointer to the end of block */
+    delta_index: Integer; // * = seq->first->start_index   */
+    prev_elem: Pointer; // * pointer to previous element */
+  end;
+
+
   // (* ************************************************************************************** *)
   // (* Operations on sequences *)
   // (* ************************************************************************************** *)
@@ -1336,60 +1215,73 @@ const
   // if ((writer).ptr >= (writer).block_max)begin cvCreateSeqBlock(and writer); end;
   // Assert((writer).ptr <= (writer).block_max - SizeOf(elem));
   // memcpy((writer).ptr, and (elem), SizeOf(elem)); (writer).ptr := mod +SizeOf(elem) then; end;
-  //
-  // (* Move reader position forward: *)
-  // // >> Following declaration is a macro definition!
-  // const CV_NEXT_SEQ_ELEM(elem_size, reader);
-  // begin if (((reader).ptr := mod +(elem_size)) >= (reader).block_max)begin cvChangeSeqBlock(and
-  // (reader), 1) then; end; end;
-  //
-  // (* Move reader position backward: *)
-  // // >> Following declaration is a macro definition!
-  // const CV_PREV_SEQ_ELEM(elem_size, reader);
-  // begin if (((reader).ptr := mod -(elem_size)) < (reader).block_min)begin cvChangeSeqBlock(and
-  // (reader), -1) then; end; end;
-  //
-  // (* Read element and move read position forward: *)
-  // // >> Following declaration is a macro definition!
-  // const CV_READ_SEQ_ELEM(elem, reader); begin Assert((reader).seq^.elem_size := SizeOf(elem));
-  // memcpy(and (elem), (reader).ptr, SizeOf((elem))); CV_NEXT_SEQ_ELEM(SizeOf(elem), reader) end;
-  //
-  // (* Read element and move read position backward: *)
-  // // >> Following declaration is a macro definition!
-  // const CV_REV_READ_SEQ_ELEM(elem, reader); begin Assert((reader).seq^.elem_size := SizeOf(elem));
-  // memcpy(and (elem), (reader).ptr, SizeOf((elem))); CV_PREV_SEQ_ELEM(SizeOf(elem), reader) end;
-  //
-  // // >> Following declaration is a macro definition!
-  // const CV_READ_CHAIN_POINT(_pt, reader); (_pt) = (reader).pt;
-  // if ((reader).ptr)begin CV_READ_SEQ_ELEM((reader).code, 0 .. 70009E r));
-  // Assert(((reader).code and ~ 7) = 0);
-  // (reader).pt.x = mod +(reader).deltas: array [0 .. -1(Integer(reader).code, 0] of begin;
-  // (reader).pt.y := mod +(reader).deltas[(Integer(reader) then .code][1]; end; end;
-  //
-  // // >> Following declaration is a macro definition!
-  // const CV_CURRENT_POINT(reader)(((CvPoint(reader).ptr)));
-  // // >> Following declaration is a macro definition!
-  // const CV_PREV_POINT(reader)(((CvPoint(reader).prev_elem)));
-  //
-  // // >> Following declaration is a macro definition!
-  // const CV_READ_EDGE(pt1, pt2, reader);
-  // begin Assert(SizeOf(pt1) := SizeOf(CvPoint) and SizeOf(pt2) = SizeOf(CvPoint) and
-  // reader.seq^.elem_size = SizeOf(CvPoint)); (pt1) = CV_PREV_POINT(reader);
-  // (pt2) = CV_CURRENT_POINT(reader); (reader).prev_elem = (reader).ptr;
-  // CV_NEXT_SEQ_ELEM(SizeOf(CvPoint), (reader)); end;
-  //
-  // (* *********** Graph macros *********** *)
-  //
-  // (* Return next graph edge for given vertex: *)
-  // CV_NEXT_GRAPH_EDGE(edge, vertex)(Assert((edge)^.vtx: array [0 .. -1] of const = (vertex) or
-  // (edge)^.vtx[1] = (vertex)), (edge)^.next[(edge)^.vtx[1] = (vertex)])
 
-  (* ***************************************************************************************\
-    *             Data structures for persistence (a.k.a serialization) functionality        *
-    *************************************************************************************** *)
+  (*
+    /* Move reader position forward: */
+    #define CV_NEXT_SEQ_ELEM( elem_size, reader )                 \
+    {                                                             \
+    if( ((reader).ptr += (elem_size)) >= (reader).block_max ) \
+    {                                                         \
+    cvChangeSeqBlock( &(reader), 1 );                     \
+    }                                                         \
+    }
+  *)
+procedure CV_NEXT_SEQ_ELEM(const elem_size: Integer; const Reader: TCvSeqReader); inline;
 
-  (* "black box" file storage *)
-  // type type CvFileStorage = leStorage;
+// (* Move reader position backward: *)
+// // >> Following declaration is a macro definition!
+// const CV_PREV_SEQ_ELEM(elem_size, reader);
+// begin if (((reader).ptr := mod -(elem_size)) < (reader).block_min)begin cvChangeSeqBlock(and
+// (reader), -1) then; end; end;
+
+(*
+  /* Read element and move read position forward: */
+  #define CV_READ_SEQ_ELEM( elem, reader )                       \
+  {                                                              \
+  assert( (reader).seq->elem_size == sizeof(elem));          \
+  memcpy( &(elem), (reader).ptr, sizeof((elem)));            \
+  CV_NEXT_SEQ_ELEM( sizeof(elem), reader )                   \
+  }
+*)
+procedure CV_READ_SEQ_ELEM(Var Elem; const Reader: TCvSeqReader; const SizeOfElem: Integer); inline;
+
+
+// (* Read element and move read position backward: *)
+// // >> Following declaration is a macro definition!
+// const CV_REV_READ_SEQ_ELEM(elem, reader); begin Assert((reader).seq^.elem_size := SizeOf(elem));
+// memcpy(and (elem), (reader).ptr, SizeOf((elem))); CV_PREV_SEQ_ELEM(SizeOf(elem), reader) end;
+//
+// // >> Following declaration is a macro definition!
+// const CV_READ_CHAIN_POINT(_pt, reader); (_pt) = (reader).pt;
+// if ((reader).ptr)begin CV_READ_SEQ_ELEM((reader).code, 0 .. 70009E r));
+// Assert(((reader).code and ~ 7) = 0);
+// (reader).pt.x = mod +(reader).deltas: array [0 .. -1(Integer(reader).code, 0] of begin;
+// (reader).pt.y := mod +(reader).deltas[(Integer(reader) then .code][1]; end; end;
+//
+// // >> Following declaration is a macro definition!
+// const CV_CURRENT_POINT(reader)(((CvPoint(reader).ptr)));
+// // >> Following declaration is a macro definition!
+// const CV_PREV_POINT(reader)(((CvPoint(reader).prev_elem)));
+//
+// // >> Following declaration is a macro definition!
+// const CV_READ_EDGE(pt1, pt2, reader);
+// begin Assert(SizeOf(pt1) := SizeOf(CvPoint) and SizeOf(pt2) = SizeOf(CvPoint) and
+// reader.seq^.elem_size = SizeOf(CvPoint)); (pt1) = CV_PREV_POINT(reader);
+// (pt2) = CV_CURRENT_POINT(reader); (reader).prev_elem = (reader).ptr;
+// CV_NEXT_SEQ_ELEM(SizeOf(CvPoint), (reader)); end;
+//
+// (* *********** Graph macros *********** *)
+//
+// (* Return next graph edge for given vertex: *)
+// CV_NEXT_GRAPH_EDGE(edge, vertex)(Assert((edge)^.vtx: array [0 .. -1] of const = (vertex) or
+// (edge)^.vtx[1] = (vertex)), (edge)^.next[(edge)^.vtx[1] = (vertex)])
+
+(* ***************************************************************************************\
+  *             Data structures for persistence (a.k.a serialization) functionality        *
+  *************************************************************************************** *)
+
+(* "black box" file storage *)
+// type type CvFileStorage = leStorage;
 type
   pCvFileStorage = ^TCvFileStorage;
 
@@ -1607,9 +1499,6 @@ type
   // type
   // CvFileNodeHash = nericHash;
 
-{$IFDEF __cplusplus}
-  // extern "C" {
-{$ENDIF}
   // type
   // type) =;
   //
@@ -1654,459 +1543,446 @@ type
   // type CvModuleInfo * next = packed record end; PCVChar name; PCVChar version; CvPluginFuncInfo * func_tab;
   // end; CvModuleInfo;
   //
-{$ENDIF}	(* __OPENCV_CORE_TYPES_H__*/
+  (* __OPENCV_CORE_TYPES_H__*/
 
     (* End of file. *)
 
-Type
-  CV = class
-    // // Common
-    // class procedure CV_SWAP<T: packed record >(
-    //
-    // Var a, b: T); inline;
-    // { Var c:T; begin c := a; a := b; b := c; end; }
-    // {$IFNDEF MIN}
-    // {$HPPEMIT '#  define MIN(a,b)  ((a) > (b) ? (b) : (a))'}
-    // {$ENDIF}
-    // {$IFNDEF MAX}
-    // {$HPPEMIT '#  define MAX(a,b)  ((a) < (b) ? (b) : (a))'}
-    // {$ENDIF}
-    // (* min & max without jumps *)
-    // // >> Following declaration is a macro definition!
-    // class function CV_IMIN(
-    //
-    // const a, b: Integer): Integer; inline;
-    // { ((a) xor (((a) xor (b)) and (((a) < (b)) - 1))): INT; }
-    // // >> Following declaration is a macro definition!
-    // class function CV_IMAX(
-    //
-    // const a, b: Integer): Integer; inline;
-    // { ((a) xor (((a) xor (b)) and (((a) > (b)) - 1))); }
-    //
-    // (* absolute value without jumps *)
-    // {$IFNDEF __cplusplus}
-    // {$HPPEMIT '#  define  CV_IABS(a)     (((a) ^ ((a) < 0 ? -1 : 0)) - ((a) < 0 ? -1 : 0))'}
-    // {$ELSE}
-    // {$HPPEMIT '#  define  CV_IABS(a)     abs(a)'}
-    // {$ENDIF}
-    // // >> Following declaration is a macro definition!
-    // class function CV_CMP(
-    //
-    // const a, b: Integer): Integer; inline;
-    // { (((a) > (b)) - ((a) < (b))); }
-    // // >> Following declaration is a macro definition!
-    // class function CV_SIGN(
-    //
-    // const a: Integer): Integer; inline;
-    // { PCV_CMP((a), 0); }
-    // // CV_INLINE
-    // class function cvRound<T: packed record >(
-    //
-    // const v1: T): Integer; inline;
-    // (*
-    // result := _mm_cvtsd_si32(T);
-    // {$HPPEMIT '#elif defined _MSC_VER && defined _M_IX86'}
-    // Integer T;
-    // asm
-    // //begin
-    // fld value;
-    // fistp t;
-    // end;
-    // result := T;
-    // {$HPPEMIT '#elif defined HAVE_LRINT || defined CV_ICC || defined __GNUC__'}
-    // {$HPPEMIT '#  ifdef HAVE_TEGRA_OPTIMIZATION'}
-    // TEGRA_ROUND(value);
-    // {$HPPEMIT '#  else'}
-    // result := (Integer)lrint(value);
-    // {$HPPEMIT '#  endif'}
-    // {$ELSE}
-    // // while this is not IEEE754-compliant rounding, it's usually a good enough approximation
-    // result := (Integer(value + (value >= 0 ? 0.5: - 0.5));
-    // {$ENDIF}
-    // end; *)
-    // (*
-    //
-    // //temporary not implemented
-    //
-    // {$IFNDEF  __SSE2__ || defined _M_IX86_FP && 2 == _M_IX86_FP}
-    // {$HPPEMIT '#  include 'emmintrin.h''}
-    // {$ENDIF}
-    //
-    // CV_INLINE
-    // function cvFloor(v1: value): Integer;
-    // Integer i := _mm_cvtsd_si32(T);
-    // result := i - _mm_movemask_pd(_mm_cmplt_sd(T, _mm_cvtsi32_sd(T, i)));
-    // {$HPPEMIT '#elif defined __GNUC__'}
-    // Integer i := (Integer)value;
-    // result := i - (i > value);
-    // {$ELSE}
-    // Integer i := cvRound(value);
-    // Cv32suf diff;
-    // diff.f := (Single(value - i); result := i - (diff.i < 0);
-    // {$ENDIF}
-    // end;
-    //
-    // CV_INLINE
-    // function cvCeil(v1: value): Integer; Integer i := _mm_cvtsd_si32(T);
-    // result := i + _mm_movemask_pd(_mm_cmplt_sd(_mm_cvtsi32_sd(T, i), T));
-    // {$HPPEMIT '#elif defined __GNUC__'}
-    // Integer i := (Integer)value; result := i + (i < value);
-    // {$ELSE}
-    // Integer i := cvRound(value); Cv32suf diff; diff.f := (Single(i - value); result := i + (diff.i < 0);
-    // {$ENDIF}
-    // end;
-    //
-    // {$DEFINE cvInvSqrt(value((float(1./sqrt(value)))}
-    // // >> Following declaration is a macro definition!
-    // const cvSqrt(value)((Single)sqrt(value));
-    //
-    // CV_INLINE
-    // function cvIsNaN(var defined _MSC_VER | | defined __BORLANDC__ result := _isnan(value: ) and
-    // (1)}(): Integer;
-    // {$HPPEMIT '#elif defined __GNUC__'}
-    // result := isnan(value);
-    // {$ELSE} * )Cv64suf ieee754; ieee754.f := value;
-    // result := ((Cardinal(ieee754.u shr 32) and $7FFFFFFF) + ((Cardinal)ieee754.u <> 0) > $7FF00000;
-    // {$ENDIF}
-    // end;
-    //
-    // CV_INLINE
-    // function cvIsInf(var defined _MSC_VER | | defined __BORLANDC__ result := ! _finite(value: ) and
-    // (1)}(): Integer;
-    // {$HPPEMIT '#elif defined __GNUC__'}
-    // result := isinf(value);
-    // {$ELSE} * )Cv64suf ieee754; ieee754.f := value;
-    // result := ((Cardinal(ieee754.u shr 32) and $7FFFFFFF) = $7FF00000 and (Cardinal)ieee754.u := 0;
-    // {$ENDIF}
-    // end;
-    //
-    // CV_INLINE
-    // function CvRNG(var Return random 32 - bit unsigned Integer: * )CV_INLINE
-    // function cvRandInt(CvRNG * rng)begin uint64 temp := * rng;
-    // temp := (uint64(Cardinal)temp * CV_RNG_COEFF + (temp shr 32: - 1))begin CvRNG rng := seed ?(uint64)
-    // seed: (uint64(int64) - 1; result := rng; end; (): Cardinal; * rng := temp;
-    // result := (Cardinal)temp; end;
+  // #define CV_SWAP(a,b,t) ((t) = (a), (a) = (b), (b) = (t))
+procedure CV_SWAP(var a, b, t: pIplImage); inline; overload;
+procedure CV_SWAP(var a, b, t: pCvPoint2D32f); inline; overload;
+procedure CV_SWAP(var a, b, t: Pointer); inline; overload;
 
-    (*
-      CV_INLINE unsigned cvRandInt( CvRNG* rng )
-      {
-      uint64 temp = *rng;
-      temp = (uint64)(unsigned)temp*CV_RNG_COEFF + (temp >> 32);
-      *rng = temp;
-      return (unsigned)temp;
-      }
-    *)
 
-    //
-    // { Returns random floating-point number between 0 and 1: }
-    // CV_INLINE
-    // function cvRandReal(var 2.3283064365386962890625E-10 (* 2^-32 *: rng)): Double;
-    // end;
-    // *)
-    //
-    // // --------- IplImage -----------------
-    // {$EXTERNALSYM CV_TYPE_NAME_IMAGE}
-    // class function CV_IS_IMAGE_HDR(
-    //
-    // const img: pIplImage): Integer; inline;
-    // { ((img) <> 0 and ((IplImage(img))^.nSize = SizeOf(IplImage)) }
-    // // >> Following declaration is a macro definition!
-    // class function CV_IS_IMAGE(
-    //
-    // const img: pIplImage): Integer; inline;
-    // // (CV_IS_IMAGE_HDR(img) and ((IplImage)img)^.imageData <> 0);
-    // (* for storing double-precision
-    // floating point data in IplImage's */
+// {$IFNDEF MIN}
+// {$HPPEMIT '#  define MIN(a,b)  ((a) > (b) ? (b) : (a))'}
+// {$ENDIF}
+// {$IFNDEF MAX}
+// {$HPPEMIT '#  define MAX(a,b)  ((a) < (b) ? (b) : (a))'}
+// {$ENDIF}
+// (* min & max without jumps *)
+// // >> Following declaration is a macro definition!
+// class function CV_IMIN(
+//
+// const a, b: Integer): Integer; inline;
+// { ((a) xor (((a) xor (b)) and (((a) < (b)) - 1))): INT; }
+// // >> Following declaration is a macro definition!
+// class function CV_IMAX(
+//
+// const a, b: Integer): Integer; inline;
+// { ((a) xor (((a) xor (b)) and (((a) > (b)) - 1))); }
+//
+// (* absolute value without jumps *)
+// {$IFNDEF __cplusplus}
+// {$HPPEMIT '#  define  CV_IABS(a)     (((a) ^ ((a) < 0 ? -1 : 0)) - ((a) < 0 ? -1 : 0))'}
+// {$ELSE}
+// {$HPPEMIT '#  define  CV_IABS(a)     abs(a)'}
+// {$ENDIF}
+// // >> Following declaration is a macro definition!
+// class function CV_CMP(
+//
+// const a, b: Integer): Integer; inline;
+// { (((a) > (b)) - ((a) < (b))); }
+// // >> Following declaration is a macro definition!
+// class function CV_SIGN(
+//
+// const a: Integer): Integer; inline;
+// { PCV_CMP((a), 0); }
+// // CV_INLINE
+// class function cvRound<T: packed record >(
+//
+// const v1: T): Integer; inline;
+// (*
+// result := _mm_cvtsd_si32(T);
+// {$HPPEMIT '#elif defined _MSC_VER && defined _M_IX86'}
+// Integer T;
+// asm
+// //begin
+// fld value;
+// fistp t;
+// end;
+// result := T;
+// {$HPPEMIT '#elif defined HAVE_LRINT || defined CV_ICC || defined __GNUC__'}
+// {$HPPEMIT '#  ifdef HAVE_TEGRA_OPTIMIZATION'}
+// TEGRA_ROUND(value);
+// {$HPPEMIT '#  else'}
+// result := (Integer)lrint(value);
+// {$HPPEMIT '#  endif'}
+// {$ELSE}
+// // while this is not IEEE754-compliant rounding, it's usually a good enough approximation
+// result := (Integer(value + (value >= 0 ? 0.5: - 0.5));
+// {$ENDIF}
+// end; *)
+// (*
+//
+// //temporary not implemented
+//
+// {$IFNDEF  __SSE2__ || defined _M_IX86_FP && 2 == _M_IX86_FP}
+// {$HPPEMIT '#  include 'emmintrin.h''}
+// {$ENDIF}
+//
 
-    // (* get reference to pixel at (col,row),
-    // for multi-channel images (col) should be multiplied by number of channels *)
-    // // >> Following declaration is a macro definition!
-    // // ageData + (image)^.widthStep * (row)) * (row)) = array)[0 .. (col) - 1] of;
-    // // {$EXTERNALSYM *(row))}row, col)(((elemtype(image)^.imageData + (image)^.widthStep);
-    // // ---------- Matrix cType (CvMat) ---------
-    // // >> Following declaration is a macro definition!
-    // class function CV_MAT_DEPTH(
-    //
-    // const flags: Integer): Integer; inline;
-    // { ((flags) and CV_MAT_DEPTH_MASK); }
-    // // >> Following declaration is a macro definition!
-    // class function CV_MAKETYPE(
-    //
-    // const depth, cn: Integer): Integer; inline;
-    // // (CV_MAT_DEPTH(depth) + (((cn) - 1) shl CV_CN_SHIFT));
-    // class function CV_MAKE_TYPE(
-    //
-    // const depth, cn: Integer): Integer; inline;
-    // // (CV_MAT_DEPTH(depth) + (((cn) - 1) shl CV_CN_SHIFT));
-    // // >> Following declaration is a macro definition!
-    // class function CV_8UC(
-    //
-    // const n: Integer): Integer; inline;
-    // // CV_MAKETYPE(CV_8U, (n));
-    // // >> Following declaration is a macro definition!
-    // class function CV_8SC(
-    //
-    // const n: Integer): Integer; inline;
-    // // CV_MAKETYPE(CV_8S, (n));
-    // // >> Following declaration is a macro definition!
-    // class function CV_16UC(
-    //
-    // const n: Integer): Integer; inline;
-    // // CV_MAKETYPE(CV_16U, (n));
-    // (*
-    // // >> Following declaration is a macro definition!
-    // const CV_MAT_CN(flags)((((flags) and CV_MAT_CN_MASK) shr CV_CN_SHIFT) + 1);
-    //
-    // // >> Following declaration is a macro definition!
-    // const CV_MAT_TYPE(flags)((flags) and CV_MAT_TYPE_MASK);
-    //
-    // // >> Following declaration is a macro definition!
-    // const CV_IS_MAT_CONT(flags)((flags) and CV_MAT_CONT_FLAG);
-    //
-    // // >> Following declaration is a macro definition!
-    // const CV_IS_SUBMAT(flags)((flags) and CV_MAT_SUBMAT_FLAG);
-    //
-    // const CV_IS_MAT_HDR(mat)((mat) <> 0 and (((CvMat(mat))^.cType and CV_MAGIC_MASK)
-    // = CV_MAT_MAGIC_VAL and ((CvMat(mat))^.cols > 0 and ((CvMat(mat))^.rows > 0)
-    //
-    // const CV_IS_MAT_HDR_Z(mat)((mat) <> 0 and (((CvMat(mat))^.cType and CV_MAGIC_MASK)
-    // = CV_MAT_MAGIC_VAL and ((CvMat(mat))^.cols >= 0 and ((CvMat(mat))^.rows >= 0)
-    //
-    // // >> Following declaration is a macro definition!
-    // const CV_IS_MAT(mat)(CV_IS_MAT_HDR(mat) and ((CvMat(mat))^.data.ptr <> 0);
-    //
-    // const CV_IS_MASK_ARR(mat)(((mat)^.cType and (CV_MAT_TYPE_MASK and ~ CV_8SC1)) = 0)
-    //
-    // const CV_ARE_TYPES_EQ(mat1, mat2)((((mat1)^.cType xor (mat2)^.cType) and CV_MAT_TYPE_MASK) = 0)
-    //
-    // const CV_ARE_CNS_EQ(mat1, mat2)((((mat1)^.cType xor (mat2)^.cType) and CV_MAT_CN_MASK) = 0)
-    //
-    // const CV_ARE_DEPTHS_EQ(mat1, mat2)((((mat1)^.cType xor (mat2)^.cType) and CV_MAT_DEPTH_MASK) = 0)
-    //
-    // const CV_ARE_SIZES_EQ(mat1, mat2)((mat1)^.rows = (mat2)^.rows and (mat1)^.cols = (mat2)^.cols)
-    //
-    // const CV_IS_MAT_CONST(mat)(((mat)^.rows or (mat)^.cols) = 1) *)
-    //
-    // (* Size of each channel item,
-    // $124489 = 1000 0100 0100 0010 0010 0001 0001 ~ cArray of SizeOf(arr_type_elem) *)
-    // // >> Following declaration is a macro definition!
-    // // const CV_ELEM_SIZE1(cType)((((SizeOf(size_t) shl 28) or $8442211) shr CV_MAT_DEPTH(cType) * 4) and 15);
-    //
-    // (* 0x3a50 = 11 10 10 01 01 00 00 ~ array of log2(sizeof(arr_type_elem)) *)
-    // // >> Following declaration is a macro definition!
-    // (* const CV_ELEM_SIZE(cType)(CV_MAT_CN(cType) shl ((((SizeOf(size_t) / 4 + 1) * 16384 or
-    // $3A50) shr CV_MAT_DEPTH(cType) * 2) and 3));
-    //
-    // // >> Following declaration is a macro definition!
-    // const IPL2CV_DEPTH(depth)((((CV_8U) + (CV_16U shl 4) + (CV_32F shl 8) + (CV_64F shl 16) +
-    // (CV_8S shl 20) + (CV_16S shl 24) + (CV_32S shl 28)) shr ((((depth) and $F0) shr 2) +
-    // (((depth) and IPL_DEPTH_SIGN)? 20: 0))) and 15); *)
-    //
-    // // >> Following declaration is a macro definition!
-    // const CV_MAT_ELEM_PTR_FAST(mat, row, col, pix_size)(Assert((Cardinal(row) < (Cardinal(mat)
-    // .rows and (Cardinal(col) < (Cardinal(mat).cols), (mat).data.ptr + (size_t(mat).step * (row) +
-    // (pix_size) * (col));
-    //
-    // // >> Following declaration is a macro definition!
-    // const CV_MAT_ELEM_PTR(mat, row, col)CV_MAT_ELEM_PTR_FAST(mat, row, col,
-    // CV_ELEM_SIZE((mat).cType));
-    //
-    // // >> Following declaration is a macro definition!
-    // const CV_MAT_ELEM(mat, elemtype, row, col)((elemtype)CV_MAT_ELEM_PTR_FAST(mat, row, col,
-    // SizeOf(elemtype)));
-    //
-    // CV_INLINE
-    // function cvmGet(v1: mat^.cType): Double; Assert((Cardinal)row < (Cardinal)mat^.rows and
-    // (Cardinal)col < (Cardinal)mat^.cols);
-    //
-    // if (cType = CV_32FC1) then * row)): array [0 .. col - 1] of result = ((Single(mat^.data.ptr +
-    // (size_t)mat^.step; else begin Assert(cType := CV_64FC1);
-    // * row)): array [0 .. col - 1] of result = ((Double(mat^.data.ptr + (size_t)mat^.step; end; end;
-    //
-    // CV_INLINE CV_INLINE
-    // procedure cvmSet(v1: mat^.cType); Assert((Cardinal)row < (Cardinal)mat^.rows and (Cardinal)col <
-    // (Cardinal)mat^.cols);
-    //
-    // if (cType = CV_32FC1) then * row)): array [0 .. col - 1] of ((Single(mat^.data.ptr + (size_t)
-    // mat^.step = (Single)value; else begin Assert(cType := CV_64FC1);
-    // * row)): array [0 .. col - 1] of ((Double(mat^.data.ptr + (size_t)mat^.step = (Double)
-    // value; end; end;
-    //
-    // CV_INLINE
-    // function cvIplDepth(v1: cType): Integer; result := CV_ELEM_SIZE1(depth) * 8 or (depth = CV_8S or
-    // depth = CV_16S or depth := CV_32S ? IPL_DEPTH_SIGN: 0); end; *)
-    //
-    // (* ***************************************************************************************\
-    // *                       Multi-dimensional dense cArray (CvMatND)                          *
-    // *************************************************************************************** *)
-    // (*
-    // const CV_IS_MATND_HDR(mat)((mat) <> 0 and (((CvMatND(mat))^.cType and CV_MAGIC_MASK)
-    // = CV_MATND_MAGIC_VAL)
-    //
-    // // >> Following declaration is a macro definition!
-    // const CV_IS_MATND(mat)(CV_IS_MATND_HDR(mat) and ((CvMatND(mat))^.data.ptr <> 0); *)
-    //
-    // (* ***************************************************************************************\
-    // *                                         Histogram                                      *
-    // *************************************************************************************** *)
-    // (* const CV_IS_HIST(hist)((hist) <> 0 and (((CvHistogram(hist))^.cType and CV_MAGIC_MASK)
-    // = CV_HIST_MAGIC_VAL and (hist)^.bins <> 0)
-    //
-    // // >> Following declaration is a macro definition!
-    // const CV_IS_UNIFORM_HIST(hist)(((hist)^.cType and CV_HIST_UNIFORM_FLAG) <> 0);
-    //
-    // // >> Following declaration is a macro definition!
-    // const CV_IS_SPARSE_HIST(hist)CV_IS_SPARSE_MAT((hist)^.bins);
-    //
-    // // >> Following declaration is a macro definition!
-    // const CV_HIST_HAS_RANGES(hist)(((hist)^.cType and CV_HIST_RANGES_FLAG) <> 0); *)
-    // (* ***************************************************************************************\
-    // *                      Other supplementary data cType definitions                         *
-    // *************************************************************************************** *)
-    //
-    // (* ************************************** CvRect **************************************** *)
-    //
-    // CV_INLINE IplROI cvRectToROI(CvRect rect, Integer coi)begin IplROI roi; roi.xOffset := rect.x;
-    // roi.yOffset := rect.y; roi.width := rect.width; roi.height := rect.height; roi.coi := coi;
-    //
-    // result := roi; end;
-    //
-    // CV_INLINE CvRect cvROIToRect(IplROI roi)begin result := CvRect(roi.xOffset, roi.yOffset,
-    // roi.width, roi.height); end; *)
-    // (* ********************************** CvTermCriteria ************************************ *)
-    // (* CV_INLINE CvTermCriteria CvTermCriteria(Integer cType, Integer max_iter, Double epsilon)
-    // begin CvTermCriteria T;
-    //
-    // T.cType := cType; T.max_iter := max_iter; T.epsilon := (Single)epsilon;
-    //
-    // result := T; end; *)
-    // (* ****************************** CvPoint and variants ********************************** *)
-    //
-    // (*
-    //
-    // CV_INLINE CvPoint2D32f CvPoint2D32f(Double x, Double y)
-    //
-    // begin
-    // CvPoint2D32f p;
-    //
-    // p.x := (Single)x;
-    // p.y := (Single)y;
-    //
-    // result := p;
-    // end;
-    //
-    // CV_INLINE CvPoint2D32f cvPointTo32f(CvPoint point)
-    //
-    // begin
-    // result := CvPoint2D32f((Single)point.x, (Single)point.y);
-    // end;
-    //
-    // CV_INLINE CvPoint cvPointFrom32f(CvPoint2D32f point)
-    //
-    // begin
-    // CvPoint ipt;
-    // ipt.x := cvRound(point.x);
-    // ipt.y := cvRound(point.y);
-    //
-    // result := ipt;
-    // end;
-    //
-    // CV_INLINE CvPoint3D32f CvPoint3D32f(Double x, Double y, Double z)
-    //
-    // begin
-    // CvPoint3D32f p;
-    //
-    // p.x := (Single)x;
-    // p.y := (Single)y;
-    // p.z := (Single)z;
-    //
-    // result := p;
-    // end;
-    // CV_INLINE CvPoint2D64f CvPoint2D64f(Double x, Double y)
-    //
-    // begin
-    // CvPoint2D64f p;
-    //
-    // p.x := x;
-    // p.y := y;
-    //
-    // result := p;
-    // end;
-    //
-    // CV_INLINE CvPoint3D64f CvPoint3D64f(Double x, Double y, Double z)
-    //
-    // begin
-    // CvPoint3D64f p;
-    //
-    // p.x := x;
-    // p.y := y;
-    // p.z := z;
-    //
-    // result := p;
-    // end;
-    //
-    // *)
-    // (* ******************************* CvSize's & CvBox **************************************/ *)
-    // (*
-    // CV_INLINE CvSize2D32f CvSize2D32f(Double width, Double height)
-    //
-    // begin
-    // CvSize2D32f s;
-    //
-    // s.width := (Single)width;
-    // s.height := (Single)height;
-    //
-    // result := s;
-    // end;
-    // *)
-    //
-    // (* ************************************ CvSlice ***************************************** *)
-    // (*
-    //
-    // CV_INLINE cvSlice cvSlice(Integer start, Integer end)
-    //
-    // begin
-    // cvSlice slice;
-    // slice.start_index := start;
-    // slice.end_index :=
-    // end;
-    //
-    // result := slice;
-    // end;
-    //
-    // *)
-    //
-    // (* ************************************ CvScalar **************************************** *)
-    // (*
-    //
-    // CV_INLINE  CvScalar  cvRealScalar( double val0 )
-    // {
-    // CvScalar scalar;
-    // scalar.val[0] = val0;
-    // scalar.val[1] = scalar.val[2] = scalar.val[3] = 0;
-    // return scalar;
-    // }
-    //
-    // *)
-    //
-    // (* ************************************************************************************** *)
-    // (* Dynamic Data structures *)
-    // (* ************************************************************************************** *)
-    // (* ******************************* Memory storage *************************************** *)
-    // (*
-    // const
-    // CV_IS_STORAGE(storage)((storage) <> 0 and (((CvMemStorage(storage))^.signature and CV_MAGIC_MASK)
-    // = CV_STORAGE_MAGIC_VAL)
-    // *)
-    //
-    // (* ********************************** Sequence ****************************************** *)
-    //
-    // (* ************************************** Set ******************************************* *)
-    // (*
-    // { Checks whether the element pointed by ptr belongs to a set or not }
-    // CV_IS_SET_ELEM(ptr)(((CvSetElem(ptr))^.flags >= 0)
-    // *)
-  end;
+//
+// CV_INLINE
+// function cvCeil(v1: value): Integer; Integer i := _mm_cvtsd_si32(T);
+// result := i + _mm_movemask_pd(_mm_cmplt_sd(_mm_cvtsi32_sd(T, i), T));
+// {$HPPEMIT '#elif defined __GNUC__'}
+// Integer i := (Integer)value; result := i + (i < value);
+// {$ELSE}
+// Integer i := cvRound(value); Cv32suf diff; diff.f := (Single(i - value); result := i + (diff.i < 0);
+// {$ENDIF}
+// end;
+//
+// {$DEFINE cvInvSqrt(value((float(1./sqrt(value)))}
+// // >> Following declaration is a macro definition!
+// const cvSqrt(value)((Single)sqrt(value));
+//
+// CV_INLINE
+// function cvIsNaN(var defined _MSC_VER | | defined __BORLANDC__ result := _isnan(value: ) and
+// (1)}(): Integer;
+// {$HPPEMIT '#elif defined __GNUC__'}
+// result := isnan(value);
+// {$ELSE} * )Cv64suf ieee754; ieee754.f := value;
+// result := ((Cardinal(ieee754.u shr 32) and $7FFFFFFF) + ((Cardinal)ieee754.u <> 0) > $7FF00000;
+// {$ENDIF}
+// end;
+//
+// CV_INLINE
+// function cvIsInf(var defined _MSC_VER | | defined __BORLANDC__ result := ! _finite(value: ) and
+// (1)}(): Integer;
+// {$HPPEMIT '#elif defined __GNUC__'}
+// result := isinf(value);
+// {$ELSE} * )Cv64suf ieee754; ieee754.f := value;
+// result := ((Cardinal(ieee754.u shr 32) and $7FFFFFFF) = $7FF00000 and (Cardinal)ieee754.u := 0;
+// {$ENDIF}
+// end;
+//
+// CV_INLINE
+// function CvRNG(var Return random 32 - bit unsigned Integer: * )CV_INLINE
+// function cvRandInt(CvRNG * rng)begin uint64 temp := * rng;
+// temp := (uint64(Cardinal)temp * CV_RNG_COEFF + (temp shr 32: - 1))begin CvRNG rng := seed ?(uint64)
+// seed: (uint64(int64) - 1; result := rng; end; (): Cardinal; * rng := temp;
+// result := (Cardinal)temp; end;
+
+(*
+  CV_INLINE unsigned cvRandInt( CvRNG* rng )
+  {
+  uint64 temp = *rng;
+  temp = (uint64)(unsigned)temp*CV_RNG_COEFF + (temp >> 32);
+  *rng = temp;
+  return (unsigned)temp;
+  }
+*)
+
+//
+// { Returns random floating-point number between 0 and 1: }
+// CV_INLINE
+// function cvRandReal(var 2.3283064365386962890625E-10 (* 2^-32 *: rng)): Double;
+// end;
+// *)
+//
+// // --------- IplImage -----------------
+// {$EXTERNALSYM CV_TYPE_NAME_IMAGE}
+// class function CV_IS_IMAGE_HDR(
+//
+// const img: pIplImage): Integer; inline;
+// { ((img) <> 0 and ((IplImage(img))^.nSize = SizeOf(IplImage)) }
+// // >> Following declaration is a macro definition!
+// class function CV_IS_IMAGE(
+//
+// const img: pIplImage): Integer; inline;
+// // (CV_IS_IMAGE_HDR(img) and ((IplImage)img)^.imageData <> 0);
+// (* for storing double-precision
+// floating point data in IplImage's */
+
+// (* get reference to pixel at (col,row),
+// for multi-channel images (col) should be multiplied by number of channels *)
+// // >> Following declaration is a macro definition!
+// // ageData + (image)^.widthStep * (row)) * (row)) = array)[0 .. (col) - 1] of;
+// // {$EXTERNALSYM *(row))}row, col)(((elemtype(image)^.imageData + (image)^.widthStep);
+// // ---------- Matrix cType (CvMat) ---------
+// // >> Following declaration is a macro definition!
+// class function CV_MAT_DEPTH(
+//
+// const flags: Integer): Integer; inline;
+// { ((flags) and CV_MAT_DEPTH_MASK); }
+// // >> Following declaration is a macro definition!
+// class function CV_MAKETYPE(
+//
+// const depth, cn: Integer): Integer; inline;
+// // (CV_MAT_DEPTH(depth) + (((cn) - 1) shl CV_CN_SHIFT));
+// class function CV_MAKE_TYPE(
+//
+// const depth, cn: Integer): Integer; inline;
+// // (CV_MAT_DEPTH(depth) + (((cn) - 1) shl CV_CN_SHIFT));
+// // >> Following declaration is a macro definition!
+// class function CV_8UC(
+//
+// const n: Integer): Integer; inline;
+// // CV_MAKETYPE(CV_8U, (n));
+// // >> Following declaration is a macro definition!
+// class function CV_8SC(
+//
+// const n: Integer): Integer; inline;
+// // CV_MAKETYPE(CV_8S, (n));
+// // >> Following declaration is a macro definition!
+// class function CV_16UC(
+//
+// const n: Integer): Integer; inline;
+// // CV_MAKETYPE(CV_16U, (n));
+// (*
+// // >> Following declaration is a macro definition!
+// const CV_MAT_CN(flags)((((flags) and CV_MAT_CN_MASK) shr CV_CN_SHIFT) + 1);
+//
+// // >> Following declaration is a macro definition!
+// const CV_MAT_TYPE(flags)((flags) and CV_MAT_TYPE_MASK);
+//
+// // >> Following declaration is a macro definition!
+// const CV_IS_MAT_CONT(flags)((flags) and CV_MAT_CONT_FLAG);
+//
+// // >> Following declaration is a macro definition!
+// const CV_IS_SUBMAT(flags)((flags) and CV_MAT_SUBMAT_FLAG);
+//
+// const CV_IS_MAT_HDR(mat)((mat) <> 0 and (((CvMat(mat))^.cType and CV_MAGIC_MASK)
+// = CV_MAT_MAGIC_VAL and ((CvMat(mat))^.cols > 0 and ((CvMat(mat))^.rows > 0)
+//
+// const CV_IS_MAT_HDR_Z(mat)((mat) <> 0 and (((CvMat(mat))^.cType and CV_MAGIC_MASK)
+// = CV_MAT_MAGIC_VAL and ((CvMat(mat))^.cols >= 0 and ((CvMat(mat))^.rows >= 0)
+//
+// // >> Following declaration is a macro definition!
+// const CV_IS_MAT(mat)(CV_IS_MAT_HDR(mat) and ((CvMat(mat))^.data.ptr <> 0);
+//
+// const CV_IS_MASK_ARR(mat)(((mat)^.cType and (CV_MAT_TYPE_MASK and ~ CV_8SC1)) = 0)
+//
+// const CV_ARE_TYPES_EQ(mat1, mat2)((((mat1)^.cType xor (mat2)^.cType) and CV_MAT_TYPE_MASK) = 0)
+//
+// const CV_ARE_CNS_EQ(mat1, mat2)((((mat1)^.cType xor (mat2)^.cType) and CV_MAT_CN_MASK) = 0)
+//
+// const CV_ARE_DEPTHS_EQ(mat1, mat2)((((mat1)^.cType xor (mat2)^.cType) and CV_MAT_DEPTH_MASK) = 0)
+//
+// const CV_ARE_SIZES_EQ(mat1, mat2)((mat1)^.rows = (mat2)^.rows and (mat1)^.cols = (mat2)^.cols)
+//
+// const CV_IS_MAT_CONST(mat)(((mat)^.rows or (mat)^.cols) = 1) *)
+//
+// (* Size of each channel item,
+// $124489 = 1000 0100 0100 0010 0010 0001 0001 ~ cArray of SizeOf(arr_type_elem) *)
+// // >> Following declaration is a macro definition!
+// // const CV_ELEM_SIZE1(cType)((((SizeOf(size_t) shl 28) or $8442211) shr CV_MAT_DEPTH(cType) * 4) and 15);
+//
+// (* 0x3a50 = 11 10 10 01 01 00 00 ~ array of log2(sizeof(arr_type_elem)) *)
+// // >> Following declaration is a macro definition!
+// (* const CV_ELEM_SIZE(cType)(CV_MAT_CN(cType) shl ((((SizeOf(size_t) / 4 + 1) * 16384 or
+// $3A50) shr CV_MAT_DEPTH(cType) * 2) and 3));
+//
+// // >> Following declaration is a macro definition!
+// const IPL2CV_DEPTH(depth)((((CV_8U) + (CV_16U shl 4) + (CV_32F shl 8) + (CV_64F shl 16) +
+// (CV_8S shl 20) + (CV_16S shl 24) + (CV_32S shl 28)) shr ((((depth) and $F0) shr 2) +
+// (((depth) and IPL_DEPTH_SIGN)? 20: 0))) and 15); *)
+//
+// // >> Following declaration is a macro definition!
+// const CV_MAT_ELEM_PTR_FAST(mat, row, col, pix_size)(Assert((Cardinal(row) < (Cardinal(mat)
+// .rows and (Cardinal(col) < (Cardinal(mat).cols), (mat).data.ptr + (size_t(mat).step * (row) +
+// (pix_size) * (col));
+//
+// // >> Following declaration is a macro definition!
+// const CV_MAT_ELEM_PTR(mat, row, col)CV_MAT_ELEM_PTR_FAST(mat, row, col,
+// CV_ELEM_SIZE((mat).cType));
+//
+// // >> Following declaration is a macro definition!
+// const CV_MAT_ELEM(mat, elemtype, row, col)((elemtype)CV_MAT_ELEM_PTR_FAST(mat, row, col,
+// SizeOf(elemtype)));
+//
+// CV_INLINE
+// function cvmGet(v1: mat^.cType): Double; Assert((Cardinal)row < (Cardinal)mat^.rows and
+// (Cardinal)col < (Cardinal)mat^.cols);
+//
+// if (cType = CV_32FC1) then * row)): array [0 .. col - 1] of result = ((Single(mat^.data.ptr +
+// (size_t)mat^.step; else begin Assert(cType := CV_64FC1);
+// * row)): array [0 .. col - 1] of result = ((Double(mat^.data.ptr + (size_t)mat^.step; end; end;
+//
+// CV_INLINE CV_INLINE
+// procedure cvmSet(v1: mat^.cType); Assert((Cardinal)row < (Cardinal)mat^.rows and (Cardinal)col <
+// (Cardinal)mat^.cols);
+//
+// if (cType = CV_32FC1) then * row)): array [0 .. col - 1] of ((Single(mat^.data.ptr + (size_t)
+// mat^.step = (Single)value; else begin Assert(cType := CV_64FC1);
+// * row)): array [0 .. col - 1] of ((Double(mat^.data.ptr + (size_t)mat^.step = (Double)
+// value; end; end;
+//
+// CV_INLINE
+// function cvIplDepth(v1: cType): Integer; result := CV_ELEM_SIZE1(depth) * 8 or (depth = CV_8S or
+// depth = CV_16S or depth := CV_32S ? IPL_DEPTH_SIGN: 0); end; *)
+//
+// (* ***************************************************************************************\
+// *                       Multi-dimensional dense cArray (CvMatND)                          *
+// *************************************************************************************** *)
+// (*
+// const CV_IS_MATND_HDR(mat)((mat) <> 0 and (((CvMatND(mat))^.cType and CV_MAGIC_MASK)
+// = CV_MATND_MAGIC_VAL)
+//
+// // >> Following declaration is a macro definition!
+// const CV_IS_MATND(mat)(CV_IS_MATND_HDR(mat) and ((CvMatND(mat))^.data.ptr <> 0); *)
+//
+// (* ***************************************************************************************\
+// *                                         Histogram                                      *
+// *************************************************************************************** *)
+// (* const CV_IS_HIST(hist)((hist) <> 0 and (((CvHistogram(hist))^.cType and CV_MAGIC_MASK)
+// = CV_HIST_MAGIC_VAL and (hist)^.bins <> 0)
+//
+// // >> Following declaration is a macro definition!
+// const CV_IS_UNIFORM_HIST(hist)(((hist)^.cType and CV_HIST_UNIFORM_FLAG) <> 0);
+//
+// // >> Following declaration is a macro definition!
+// const CV_IS_SPARSE_HIST(hist)CV_IS_SPARSE_MAT((hist)^.bins);
+//
+// // >> Following declaration is a macro definition!
+// const CV_HIST_HAS_RANGES(hist)(((hist)^.cType and CV_HIST_RANGES_FLAG) <> 0); *)
+// (* ***************************************************************************************\
+// *                      Other supplementary data cType definitions                         *
+// *************************************************************************************** *)
+//
+// (* ************************************** CvRect **************************************** *)
+//
+// CV_INLINE IplROI cvRectToROI(CvRect rect, Integer coi)begin IplROI roi; roi.xOffset := rect.x;
+// roi.yOffset := rect.y; roi.width := rect.width; roi.height := rect.height; roi.coi := coi;
+//
+// result := roi; end;
+//
+// CV_INLINE CvRect cvROIToRect(IplROI roi)begin result := CvRect(roi.xOffset, roi.yOffset,
+// roi.width, roi.height); end; *)
+
+// (* ****************************** CvPoint and variants ********************************** *)
+
+function CvPoint2D32f(x, y: Double): TCvPoint2D32f; inline;
+
+function cvPointTo32f(point: TCvPoint): TCvPoint2D32f; inline;
+
+function cvPointFrom32f(point: TCvPoint2D32f): TCvPoint; inline;
+
+// CV_INLINE CvPoint3D32f CvPoint3D32f(Double x, Double y, Double z)
+//
+// begin
+// CvPoint3D32f p;
+//
+// p.x := (Single)x;
+// p.y := (Single)y;
+// p.z := (Single)z;
+//
+// result := p;
+// end;
+// CV_INLINE CvPoint2D64f CvPoint2D64f(Double x, Double y)
+//
+// begin
+// CvPoint2D64f p;
+//
+// p.x := x;
+// p.y := y;
+//
+// result := p;
+// end;
+//
+// CV_INLINE CvPoint3D64f CvPoint3D64f(Double x, Double y, Double z)
+//
+// begin
+// CvPoint3D64f p;
+//
+// p.x := x;
+// p.y := y;
+// p.z := z;
+//
+// result := p;
+// end;
+//
+// *)
+// (* ******************************* CvSize's & CvBox **************************************/ *)
+// (*
+// CV_INLINE CvSize2D32f CvSize2D32f(Double width, Double height)
+//
+// begin
+// CvSize2D32f s;
+//
+// s.width := (Single)width;
+// s.height := (Single)height;
+//
+// result := s;
+// end;
+// *)
+//
+// (* ************************************ CvSlice ***************************************** *)
+// (*
+//
+// CV_INLINE cvSlice cvSlice(Integer start, Integer end)
+//
+// begin
+// cvSlice slice;
+// slice.start_index := start;
+// slice.end_index :=
+// end;
+//
+// result := slice;
+// end;
+//
+// *)
+//
+// (* ************************************ CvScalar **************************************** *)
+// (*
+//
+// CV_INLINE  CvScalar  cvRealScalar( double val0 )
+// {
+// CvScalar scalar;
+// scalar.val[0] = val0;
+// scalar.val[1] = scalar.val[2] = scalar.val[3] = 0;
+// return scalar;
+// }
+//
+// *)
+//
+// (* ************************************************************************************** *)
+// (* Dynamic Data structures *)
+// (* ************************************************************************************** *)
+// (* ******************************* Memory storage *************************************** *)
+// (*
+// const
+// CV_IS_STORAGE(storage)((storage) <> 0 and (((CvMemStorage(storage))^.signature and CV_MAGIC_MASK)
+// = CV_STORAGE_MAGIC_VAL)
+// *)
+//
+// (* ********************************** Sequence ****************************************** *)
+//
+// (* ************************************** Set ******************************************* *)
+// (*
+// { Checks whether the element pointed by ptr belongs to a set or not }
+// CV_IS_SET_ELEM(ptr)(((CvSetElem(ptr))^.flags >= 0)
+// *)
+
+// (* ********************************** CvTermCriteria ************************************ *)
+// (* CV_INLINE CvTermCriteria CvTermCriteria(Integer cType, Integer max_iter, Double epsilon)
+function CvTermCriteria(_type: Integer; max_iter: Integer; epsilon: Double): TCvTermCriteria; inline;
+
+(*
+  CV_INLINE  int  cvFloor( double value )
+  {
+  #if defined _MSC_VER && defined _M_X64 || (defined __GNUC__ && defined __SSE2__ && !defined __APPLE__)
+
+  __m128d t = _mm_set_sd( value );
+  int i = _mm_cvtsd_si32(t);
+  return i - _mm_movemask_pd(_mm_cmplt_sd(t, _mm_cvtsi32_sd(t,i)));
+
+  #elif defined __GNUC__
+
+  int i = (int)value;
+  return i - (i > value);
+
+  #else
+
+  int i = cvRound(value);
+  Cv32suf diff;
+  diff.f = (float)(value - i);
+  return i - (diff.i < 0);
+
+  #endif
+  }
+*)
+function cvFloor(value: Double): Integer; inline;
 
 function cvScalarAll(val0123: Double): TCvScalar; inline;
 function CvPoint(const x, y: Integer): TCvPoint; inline;
@@ -2158,6 +2034,8 @@ function CV_MAT_ELEM_PTR_FAST(const mat: TCvMat; const row, col, pix_size: Integ
 function iif(const Conditional: Boolean; const ifTrue, ifFalse: Variant): Variant; inline;
 
 implementation
+
+Uses core_c;
 
 function CV_MAT_ELEM_PTR_FAST(const mat: TCvMat; const row, col, pix_size: Integer): Pointer;
 begin
@@ -2212,7 +2090,7 @@ begin
   Result := (CV_MAT_DEPTH(depth) + (((cn) - 1) shl CV_CN_SHIFT));
 end;
 
-function cvMat(rows: Integer; cols: Integer; etype: Integer; data: Pointer = nil): TCvMat;
+function cvMat;
 begin
   if not(CV_MAT_DEPTH(etype) <= CV_64F) then
     exit;
@@ -2226,7 +2104,7 @@ begin
   Result.hdr_refcount := 0;
 end;
 
-function cvScalarAll(val0123: Double): TCvScalar;
+function cvScalarAll;
 begin
   Result.val[0] := val0123;
   Result.val[1] := val0123;
@@ -2234,13 +2112,13 @@ begin
   Result.val[3] := val0123;
 end;
 
-function CvPoint(const x, y: Integer): TCvPoint;
+function CvPoint;
 begin
   Result.x := x;
   Result.y := y;
 end;
 
-function CvScalar(const val0, val1, val2, val3: Double): TCvScalar;
+function CvScalar;
 begin
   Result.val[0] := val0;
   Result.val[1] := val1;
@@ -2248,13 +2126,13 @@ begin
   Result.val[3] := val3;
 end;
 
-function CvSize(const width, height: Integer): TCvSize;
+function CvSize;
 begin
   Result.width := width;
   Result.height := height;
 end;
 
-function CvRect(Const x, y, width, height: Integer): TCvRect;
+function CvRect;
 begin
   Result.x := x;
   Result.y := y;
@@ -2262,7 +2140,7 @@ begin
   Result.height := height;
 end;
 
-function cvRandInt(Var rng: TCvRNG): Cardinal;
+function cvRandInt;
 begin
 {$Q-}
   rng := TCvRNG(rng * CV_RNG_COEFF + (rng shr 32));
@@ -2270,12 +2148,12 @@ begin
   Result := Cardinal(rng);
 end;
 
-function cvRound(value: Double): Integer;
+function cvRound;
 begin
   Result := Round(value);
 end;
 
-function iif(const Conditional: Boolean; const ifTrue, ifFalse: Variant): Variant; inline;
+function iif;
 begin
   if Conditional then
     Result := ifTrue
@@ -2283,22 +2161,93 @@ begin
     Result := ifFalse;
 end;
 
-// CV_NODE_TYPE(flags)((flags) and CV_NODE_TYPE_MASK);
-function CV_NODE_TYPE(const flags: Integer): Integer; inline;
+function CV_NODE_TYPE;
 begin
+  // CV_NODE_TYPE(flags)((flags) and CV_NODE_TYPE_MASK);
   Result := flags and CV_NODE_TYPE_MASK;
 end;
 
-// CV_NODE_IS_INT(flags)        (CV_NODE_TYPE(flags) == CV_NODE_INT)
-function CV_NODE_IS_INT(const flags: Integer): Boolean; inline;
+function CV_NODE_IS_INT;
 begin
+  // CV_NODE_IS_INT(flags)        (CV_NODE_TYPE(flags) == CV_NODE_INT)
   Result := CV_NODE_TYPE(flags) = CV_NODE_INT;
 end;
 
-// CV_NODE_IS_REAL(flags)       (CV_NODE_TYPE(flags) == CV_NODE_REAL)
-function CV_NODE_IS_REAL(const flags: Integer): Boolean; inline;
+function CV_NODE_IS_REAL;
 begin
+  // CV_NODE_IS_REAL(flags)       (CV_NODE_TYPE(flags) == CV_NODE_REAL)
   Result := CV_NODE_TYPE(flags) = CV_NODE_REAL;
+end;
+
+procedure CV_READ_SEQ_ELEM;
+begin
+  // assert( (reader).seq->elem_size == sizeof(elem));
+  // memcpy( &(elem), (reader).ptr, sizeof((elem)));
+  // CV_NEXT_SEQ_ELEM( sizeof(elem), reader )
+  Assert(Reader.seq^.elem_size = SizeOfElem);
+  Move(Reader.ptr, Elem, SizeOfElem);
+  CV_NEXT_SEQ_ELEM(SizeOf(Elem), Reader);
+end;
+
+procedure CV_NEXT_SEQ_ELEM;
+begin
+  // if( ((reader).ptr += (elem_size)) >= (reader).block_max )
+  // cvChangeSeqBlock( &(reader), 1 );
+  if (Integer(Reader.ptr) + elem_size) < Integer(Reader.block_max) then
+    cvChangeSeqBlock(@Reader, 1);
+end;
+
+function cvFloor;
+Var
+  diff: TCv32suf;
+  i: Integer;
+begin
+  i := cvRound(value);
+  diff.f := (value - i);
+  if diff.i < 0 then
+    Dec(i);
+  Result := i;
+end;
+
+function cvPointFrom32f;
+begin
+  Result.x := cvRound(point.x);
+  Result.y := cvRound(point.y);
+end;
+
+function CvTermCriteria;
+begin
+  Result.cType := _type;
+  Result.max_iter := max_iter;
+  Result.epsilon := epsilon;
+end;
+
+function cvPointTo32f;
+begin
+  Result := CvPoint2D32f(point.x, point.y);
+end;
+
+function CvPoint2D32f;
+begin
+  Result.x := x;
+  Result.y := y;
+end;
+
+procedure CV_SWAP(var a, b, t: Pointer);
+begin
+  t := a;
+  a := b;
+  b := t;
+end;
+
+procedure CV_SWAP(var a, b, t: pIplImage);
+begin
+  CV_SWAP(Pointer(a), Pointer(b), Pointer(t));
+end;
+
+procedure CV_SWAP(var a, b, t: pCvPoint2D32f);
+begin
+  CV_SWAP(Pointer(a), Pointer(b), Pointer(t));
 end;
 
 end.

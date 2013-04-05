@@ -8,13 +8,8 @@ program cvErode_cvDilate;
 
 uses
   System.SysUtils,
-  Core.types_c in '..\..\..\include\сore\Core.types_c.pas',
-  core_c in '..\..\..\include\сore\core_c.pas',
-  highgui_c in '..\..\..\include\highgui\highgui_c.pas',
-  imgproc.types_c in '..\..\..\include\imgproc\imgproc.types_c.pas',
-  imgproc_c in '..\..\..\include\imgproc\imgproc_c.pas',
-  uLibName in '..\..\..\include\uLibName.pas',
-  types_c in '..\..\..\include\сore\types_c.pas';
+{$I ..\..\uses_include.inc}
+  ;
 
 Const
   // имя картинки
@@ -52,7 +47,6 @@ end;
 
 begin
   try
-
     image := cvLoadImage(filename, 1);
     Writeln('[i] image: ', filename);
     if not Assigned(image) then
@@ -74,8 +68,7 @@ begin
       // показываем картинку
       cvShowImage('original', image);
       // создаём ядро
-      Kern := cvCreateStructuringElementEx(radius * 2 + 1, radius * 2 + 1, radius, radius,
-        CV_SHAPE_ELLIPSE);
+      Kern := cvCreateStructuringElementEx(radius * 2 + 1, radius * 2 + 1, radius, radius, CV_SHAPE_ELLIPSE);
       // выполняем преобразования
       cvErode(image, erode, Kern, iterations);
       cvDilate(image, dilate, Kern, iterations);

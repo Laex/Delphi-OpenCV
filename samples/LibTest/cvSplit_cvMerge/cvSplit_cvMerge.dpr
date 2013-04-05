@@ -8,13 +8,8 @@ program cvSplit_cvMerge;
 
 uses
   System.SysUtils,
-  core_c in '..\..\..\include\сore\core_c.pas',
-  Core.types_c in '..\..\..\include\сore\Core.types_c.pas',
-  highgui_c in '..\..\..\include\highgui\highgui_c.pas',
-  imgproc.types_c in '..\..\..\include\imgproc\imgproc.types_c.pas',
-  imgproc_c in '..\..\..\include\imgproc\imgproc_c.pas',
-  uLibName in '..\..\..\include\uLibName.pas',
-  types_c in '..\..\..\include\сore\types_c.pas';
+{$I ..\..\uses_include.inc}
+  ;
 
 const
   filename = 'Resource\cat2.jpg';
@@ -33,6 +28,7 @@ Var
   t1, t2, t3: pIplImage; // для промежуточного хранения
 
 begin
+try
   // получаем картинку
   image := cvLoadImage(filename, 1);
   WriteLn(Format('[i] image: %s', [filename]));
@@ -130,5 +126,8 @@ begin
   cvReleaseImage(b);
   // удаляем окна
   cvDestroyAllWindows();
-
+  except
+    on E: Exception do
+      Writeln(E.ClassName, ': ', E.Message);
+  end;
 end.

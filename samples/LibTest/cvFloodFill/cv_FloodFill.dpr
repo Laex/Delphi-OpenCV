@@ -8,13 +8,8 @@ program cv_FloodFill;
 
 uses
   System.SysUtils,
-  imgproc.types_c in '..\..\..\include\imgproc\imgproc.types_c.pas',
-  imgproc_c in '..\..\..\include\imgproc\imgproc_c.pas',
-  Core.types_c in '..\..\..\include\сore\Core.types_c.pas',
-  core_c in '..\..\..\include\сore\core_c.pas',
-  highgui_c in '..\..\..\include\highgui\highgui_c.pas',
-  uLibName in '..\..\..\include\uLibName.pas',
-  types_c in '..\..\..\include\сore\types_c.pas';
+{$I ..\..\uses_include.inc}
+  ;
 
 // заливка области картинки цветом
 procedure fill(src: pIplImage; seed: TCvPoint; color: TCvScalar); // = CV_RGB(255, 0, 0)
@@ -57,25 +52,31 @@ Var
   c: Integer;
 
 begin
-  // получаем картинку
-  src := cvLoadImage(filename);
-  WriteLn(Format('[i] image: %s', [filename]));
-  // покажем изображение
-  cvNamedWindow('original', 1);
-  // вешаем обработчик мышки
-  cvSetMouseCallback('original', myMouseCallback, src);
+  try
+    // получаем картинку
+    src := cvLoadImage(filename);
+    WriteLn(Format('[i] image: %s', [filename]));
+    // покажем изображение
+    cvNamedWindow('original', 1);
+    // вешаем обработчик мышки
+    cvSetMouseCallback('original', myMouseCallback, src);
 
-  while true do
-  begin
-    // показываем картинку
-    cvShowImage('original', src);
-    c := cvWaitKey(33);
-    if (c = 27) then // если нажата ESC - выходим
-      break;
+    while true do
+    begin
+      // показываем картинку
+      cvShowImage('original', src);
+      c := cvWaitKey(33);
+      if (c = 27) then // если нажата ESC - выходим
+        break;
+    end;
+    // освобождаем ресурсы
+    cvReleaseImage(src);
+    cvReleaseImage(dst);
+    // удаляем окна
+    cvDestroyAllWindows;
+  except
+    on E: Exception do
+      WriteLn(E.ClassName, ': ', E.Message);
   end;
-  // освобождаем ресурсы
-  cvReleaseImage(src);
-  cvReleaseImage(dst);
-  // удаляем окна
-  cvDestroyAllWindows;
+
 end.

@@ -8,11 +8,8 @@ program cv_CreateCameraCapture;
 
 uses
   System.SysUtils,
-  Core.types_c in '..\..\..\include\сore\Core.types_c.pas',
-  core_c in '..\..\..\include\сore\core_c.pas',
-  highgui_c in '..\..\..\include\highgui\highgui_c.pas',
-  uLibName in '..\..\..\include\uLibName.pas',
-  types_c in '..\..\..\include\сore\types_c.pas';
+{$I ..\..\uses_include.inc}
+  ;
 
 Var
   capture: PCvCapture;
@@ -26,7 +23,7 @@ Var
 begin
   try
     // получаем любую подключённую камеру
-    capture := cvCreateCameraCapture(CV_CAP_ANY); // cvCaptureFromCAM( 0 );
+    capture := cvCreateCameraCapture(CV_CAP_ANY);
     if not Assigned(capture) then
       Halt;
     // узнаем ширину и высоту кадра

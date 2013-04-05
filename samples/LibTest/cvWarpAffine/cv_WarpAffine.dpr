@@ -8,13 +8,8 @@ program cv_WarpAffine;
 
 uses
   System.SysUtils,
-  Core.types_c in '..\..\..\include\сore\Core.types_c.pas',
-  core_c in '..\..\..\include\сore\core_c.pas',
-  highgui_c in '..\..\..\include\highgui\highgui_c.pas',
-  imgproc.types_c in '..\..\..\include\imgproc\imgproc.types_c.pas',
-  imgproc_c in '..\..\..\include\imgproc\imgproc_c.pas',
-  uLibName in '..\..\..\include\uLibName.pas',
-  types_c in '..\..\..\include\сore\types_c.pas';
+{$I ..\..\uses_include.inc}
+  ;
 
 const
   filename = 'Resource\cat2.jpg';
@@ -28,47 +23,51 @@ var
   center: TcvPoint2D32f;
 
 begin
+  try
+    // Получаем картинку (цветную)
+    src := cvLoadImage(filename, CV_LOAD_IMAGE_COLOR);
+    WriteLn(Format('[i] image: %s', [filename]));
 
-  // Получаем картинку (цветную)
-  src := cvLoadImage(filename, CV_LOAD_IMAGE_COLOR);
-  WriteLn(Format('[i] image: %s', [filename]));
+    // Выводим оригинал
+    cvNamedWindow('Original', CV_WINDOW_AUTOSIZE);
+    cvShowImage('Original', src);
 
-  // Выводим оригинал
-  cvNamedWindow('Original', CV_WINDOW_AUTOSIZE);
-  cvShowImage('Original', src);
+    // Поворачиваем
+    // Матрица трансформации
+    rot_mat := cvCreateMat(2, 3, CV_32FC1);
+    // Вращение относительно центра изображения
+    center.x := src^.width div 2;
+    center.y := src^.height div 2;
+    scale := 1;
+    cv2DRotationMatrix(center, 60, scale, rot_mat);
 
-  // Поворачиваем
-  // Матрица трансформации
-  rot_mat := cvCreateMat(2, 3, CV_32FC1);
-  // Вращение относительно центра изображения
-  center.x := src^.width div 2;
-  center.y := src^.height div 2;
-  scale := 1;
-  cv2DRotationMatrix(center, 60, scale, rot_mat);
+    // Создаем изображение
+    temp := cvCreateImage(cvSize(src^.width, src^.height), src^.depth, src^.nChannels);
 
-  // Создаем изображение
-  temp := cvCreateImage(cvSize(src^.width, src^.height), src^.depth, src^.nChannels);
+    // Выполняем вращение
+    cvWarpAffine(src, temp, rot_mat, CV_INTER_LINEAR or CV_WARP_FILL_OUTLIERS, cvScalarAll(0));
 
-  // Выполняем вращение
-  cvWarpAffine(src, temp, rot_mat, CV_INTER_LINEAR or CV_WARP_FILL_OUTLIERS, cvScalarAll(0));
+    // Копируем изображение
+    cvCopy(temp, src);
 
-  // Копируем изображение
-  cvCopy(temp, src);
+    // Освобождаем ресурсы
+    cvReleaseImage(temp);
+    cvReleaseMat(rot_mat);
 
-  // Освобождаем ресурсы
-  cvReleaseImage(temp);
-  cvReleaseMat(rot_mat);
+    // Показываем что получилось
+    cvNamedWindow('cvWarpAffine', CV_LOAD_IMAGE_GRAYSCALE);
+    cvShowImage('cvWarpAffine', src);
 
-  // Показываем что получилось
-  cvNamedWindow('cvWarpAffine', CV_LOAD_IMAGE_GRAYSCALE);
-  cvShowImage('cvWarpAffine', src);
+    // Ждём нажатия клавиши
+    cvWaitKey(0);
 
-  // Ждём нажатия клавиши
-  cvWaitKey(0);
-
-  // Освобождаем ресурсы
-  cvReleaseImage(src);
-  cvReleaseImage(dst);
-  cvDestroyAllWindows();
+    // Освобождаем ресурсы
+    cvReleaseImage(src);
+    cvReleaseImage(dst);
+    cvDestroyAllWindows();
+  except
+    on E: Exception do
+      WriteLn(E.ClassName, ': ', E.Message);
+  end;
 
 end.
