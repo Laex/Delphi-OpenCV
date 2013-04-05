@@ -191,8 +191,10 @@ procedure cvLaplace(const src: pIplImage; dst: pIplImage; aperture_size: Integer
 
 (* Converts input array pixels from one color space to another *)
 // CVAPI(void)  cvCvtColor( const CvArr* src, CvArr* dst, int code );
-procedure cvCvtColor(const src: pIplImage; dst: pIplImage; code: Integer); cdecl;
-//
+procedure cvCvtColor(const src: pIplImage; dst: pIplImage; code: Integer); cdecl; overload;
+procedure cvCvtColor(const src: pCvMat; dst: pCvMat; code: Integer); cdecl;overload;
+procedure cvCvtColor(const src: pIplImage; dst: pCvMat; code: Integer); cdecl;overload;
+
 // (* Resizes image (input array is resized to fit the destination array) *)
 // CVAPI(procedure)cvResize(var Warps image with affine transform * )
 {
@@ -558,13 +560,13 @@ function cvContourArea(const contour: PCvSeq; slice: TCvSlice { = CV_WHOLE_SEQ }
   : double; cdecl;
 
 // (* Finds minimum area rotated rectangle bounding a set of points *)
-// CVAPI(CvBox2D)  cvMinAreaRect2(  CvArr* points,
-// CvMemStorage* storage CV_DEFAULT(0));
-//
+// CVAPI(CvBox2D)  cvMinAreaRect2( const CvArr* points, CvMemStorage* storage CV_DEFAULT(NULL));
+function cvMinAreaRect2(points: PCvSeq; storage: PCvMemStorage = nil): TCvBox2D; cdecl;
+
 // (* Finds minimum enclosing circle for a set of points *)
-// CVAPI(Integer)  cvMinEnclosingCircle(  CvArr* points,
-// CvPoint2D32f* center, Single* radius );
-//
+// CVAPI(int)  cvMinEnclosingCircle( const CvArr* points,CvPoint2D32f* center, float* radius );
+function cvMinEnclosingCircle(points: PCvSeq; center: pCvPoint2D32f; radius: pSingle): Integer; cdecl;
+
 {
   /* Compares two contours by matching their moments */
   CVAPI(double)  cvMatchShapes( const void* object1, const void* object2,
@@ -600,10 +602,14 @@ function cvConvexityDefects(contour: PCvSeq; convexhull: PCvSeq; storage: PCvMem
 //
 // (* Finds minimum rectangle containing two given rectangles *)
 // CVAPI(CvRect)  cvMaxRect(  CvRect* rect1,  CvRect* rect2 );
-//
-// (* Finds coordinates of the box vertices *)
-// cvBoxPoints(box CvBox2D; pt : array[0..3] of CVAPI(procedure): CvPoint2D32f);
-//
+
+Type
+  TBoxPoints = array [0 .. 3] of TCvPoint2D32f;
+  // (* Finds coordinates of the box vertices *)
+  // CVAPI(void) cvBoxPoints( CvBox2D box, CvPoint2D32f pt[4] );
+procedure cvBoxPoints(box: TCvBox2D; pt: TBoxPoints); cdecl;
+
+
 // (* Initializes sequence header for a matrix (column or row vector) of points -
 // a wrapper for cvMakeSeqHeaderForArray (it does not initialize bounding rectangle not  not  not ) *)
 // CVAPI(CvSeq) cvPointSeqFromMat( Integer seq_kind,  CvArr* mat,
@@ -940,7 +946,11 @@ implementation
 
 Uses uLibName;
 
-procedure cvCvtColor; external imgproc_Dll;
+//procedure cvCvtColor(const src: pIplImage; dst: pIplImage; code: Integer); external imgproc_Dll;
+procedure cvCvtColor(const src: pIplImage; dst: pIplImage; code: Integer); external imgproc_Dll name 'cvCvtColor';
+procedure cvCvtColor(const src: pCvMat; dst: pCvMat; code: Integer); external imgproc_Dll name 'cvCvtColor';
+procedure cvCvtColor(const src: pIplImage; dst: pCvMat; code: Integer); external imgproc_Dll name 'cvCvtColor';
+
 function cvThreshold; external imgproc_Dll;
 procedure cvSmooth; external imgproc_Dll;
 procedure cvResize; external imgproc_Dll;
@@ -995,5 +1005,8 @@ procedure cvCalcArrHist; external imgproc_Dll;
 procedure cvCalcArrBackProject; external imgproc_Dll;
 procedure cvCalcBackProject; external imgproc_Dll name 'cvCalcArrBackProject';
 procedure cvGoodFeaturesToTrack; external imgproc_Dll;
+function cvMinAreaRect2; external imgproc_Dll;
+function cvMinEnclosingCircle; external imgproc_Dll;
+procedure cvBoxPoints; external imgproc_Dll;
 
 end.

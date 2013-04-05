@@ -1076,7 +1076,8 @@ procedure cvReleaseMemStorage(var storage: pCvMemStorage); cdecl;
 // to reuse memory allocated for the storage - cvClearSeq,cvClearSet Args: array of const
 // do not free any memory.
 // A child storage returns all the blocks to the parent when it is cleared *)
-procedure cvClearMemStorage(var storage: TCvMemStorage); cdecl;
+// CVAPI(void)  cvClearMemStorage( CvMemStorage* storage );
+procedure cvClearMemStorage(storage: pCvMemStorage); cdecl;
 //
 // (* Remember a storage "free memory" position *)
 // procedure cvSaveMemStoragePos(var storage: CvMemStorage; var pos: CvMemStoragePos);
@@ -1405,8 +1406,10 @@ const
     int line_type CV_DEFAULT(8), int shift CV_DEFAULT(0) );
   }
 procedure cvLine(img: pIplImage; pt1, pt2: TCvPoint; color: TCvScalar; thickness: Integer = 1; line_type: Integer = 8;
-  shift: Integer = 0); cdecl;
-//
+  shift: Integer = 0); cdecl; overload;
+procedure cvLine(img: pCvMat; pt1, pt2: TCvPoint; color: TCvScalar; thickness: Integer = 1; line_type: Integer = 8;
+  shift: Integer = 0); cdecl; overload;
+
 {
   /* Draws a rectangle given two opposite corners of the rectangle (pt1 & pt2),
   if thickness<0 (e.g. thickness == CV_FILLED), the filled box is drawn */
@@ -1438,7 +1441,9 @@ procedure cvRectangle(img: pIplImage; pt1, pt2: TCvPoint; color: TCvScalar; thic
   int shift CV_DEFAULT(0));
 }
 procedure cvCircle(img: pIplImage; center: TCvPoint; radius: Integer; color: TCvScalar; thickness: Integer = 1;
-  line_type: Integer = 8; shift: Integer = 0); cdecl;
+  line_type: Integer = 8; shift: Integer = 0); cdecl; overload;
+procedure cvCircle(img: pCvMat; center: TCvPoint; radius: Integer; color: TCvScalar; thickness: Integer = 1;
+  line_type: Integer = 8; shift: Integer = 0); cdecl; overload;
 
 {
   /* Draws ellipse outline, filled ellipse, elliptic arc or filled elliptic sector,
@@ -2041,8 +2046,17 @@ procedure cvSet; external Core_Dll;
 procedure cvInitFont; external Core_Dll;
 procedure cvPutText; external Core_Dll;
 
-procedure cvCircle; external Core_Dll;
-procedure cvLine; external Core_Dll;
+//procedure cvCircle; external Core_Dll;
+procedure cvCircle(img: pIplImage; center: TCvPoint; radius: Integer; color: TCvScalar; thickness: Integer = 1;
+  line_type: Integer = 8; shift: Integer = 0); external Core_Dll name 'cvCircle';
+procedure cvCircle(img: pCvMat; center: TCvPoint; radius: Integer; color: TCvScalar; thickness: Integer = 1;
+  line_type: Integer = 8; shift: Integer = 0); external Core_Dll name 'cvCircle';
+
+//procedure cvLine; external Core_Dll;
+procedure cvLine(img: pIplImage; pt1, pt2: TCvPoint; color: TCvScalar; thickness: Integer = 1; line_type: Integer = 8;
+  shift: Integer = 0); external Core_Dll name 'cvLine';
+procedure cvLine(img: pCvMat; pt1, pt2: TCvPoint; color: TCvScalar; thickness: Integer = 1; line_type: Integer = 8;
+  shift: Integer = 0); external Core_Dll name 'cvLine';
 
 procedure cvAddS; external Core_Dll;
 procedure cvCopy; external Core_Dll;

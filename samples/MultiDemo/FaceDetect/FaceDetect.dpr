@@ -9,7 +9,19 @@ program FaceDetect;
 uses
   System.Character,
   System.SysUtils,
-{$I ..\..\uses_include.inc}
+uLibName in '..\..\..\include\uLibName.pas',
+highgui_c in '..\..\..\include\highgui\highgui_c.pas',
+core_c in '..\..\..\include\ñore\core_c.pas',
+Core.types_c in '..\..\..\include\ñore\Core.types_c.pas',
+imgproc.types_c in '..\..\..\include\imgproc\imgproc.types_c.pas',
+imgproc_c in '..\..\..\include\imgproc\imgproc_c.pas',
+legacy in '..\..\..\include\legacy\legacy.pas',
+calib3d in '..\..\..\include\calib3d\calib3d.pas',
+imgproc in '..\..\..\include\imgproc\imgproc.pas',
+haar in '..\..\..\include\objdetect\haar.pas',
+objdetect in '..\..\..\include\objdetect\objdetect.pas',
+tracking in '..\..\..\include\video\tracking.pas',
+Core in '..\..\..\include\ñore\core.pas'
   ;
 
 Var
@@ -35,7 +47,7 @@ begin
   // Create a new image based on the input image
   temp := cvCreateImage(cvSize(image^.width div scale, image^.height div scale), 8, 3);
   // Clear the memory storage which was used before
-  cvClearMemStorage(storage^);
+  cvClearMemStorage(storage);
 
   // Find whether the cascade is loaded, to find the faces. If yes, then:
   if Assigned(cascade) then

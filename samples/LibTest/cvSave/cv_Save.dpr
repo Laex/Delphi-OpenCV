@@ -9,7 +9,19 @@ program cv_Save;
 
 uses
   System.SysUtils,
-{$I ..\..\uses_include.inc}
+uLibName in '..\..\..\include\uLibName.pas',
+highgui_c in '..\..\..\include\highgui\highgui_c.pas',
+core_c in '..\..\..\include\ñore\core_c.pas',
+Core.types_c in '..\..\..\include\ñore\Core.types_c.pas',
+imgproc.types_c in '..\..\..\include\imgproc\imgproc.types_c.pas',
+imgproc_c in '..\..\..\include\imgproc\imgproc_c.pas',
+legacy in '..\..\..\include\legacy\legacy.pas',
+calib3d in '..\..\..\include\calib3d\calib3d.pas',
+imgproc in '..\..\..\include\imgproc\imgproc.pas',
+haar in '..\..\..\include\objdetect\haar.pas',
+objdetect in '..\..\..\include\objdetect\objdetect.pas',
+tracking in '..\..\..\include\video\tracking.pas',
+Core in '..\..\..\include\ñore\core.pas'
   ;
 
 Const
@@ -52,7 +64,7 @@ begin
     for i := 0 to matrix^.rows - 1 do
     begin
       for j := 0 to matrix^.cols - 1 do
-        Write(Format('%.0f ', [pSingle(CV_MAT_ELEM(matrix^, CV_32FC1, i, j))^]));
+        Write(Format('%.0f ', [pSingle(CV_MAT_ELEM(matrix^, SizeOf(single), i, j))^]));
       Writeln;
     end;
     Writeln;

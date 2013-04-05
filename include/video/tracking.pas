@@ -11,35 +11,34 @@ uses
 //
 /// ************************************ optical flow ***************************************/
 const
-CV_LKFLOW_PYR_A_READY       =1;
-CV_LKFLOW_PYR_B_READY       =2;
-CV_LKFLOW_INITIAL_GUESSES   =4;
-CV_LKFLOW_GET_MIN_EIGENVALS =8;
+  CV_LKFLOW_PYR_A_READY = 1;
+  CV_LKFLOW_PYR_B_READY = 2;
+  CV_LKFLOW_INITIAL_GUESSES = 4;
+  CV_LKFLOW_GET_MIN_EIGENVALS = 8;
 
-/// * It is Lucas & Kanade method, modified to use pyramids.
-// Also it does several iterations to get optical flow for
-// every point at every pyramid level.
-// Calculates optical flow between two images for certain set of points (i.e.
-// it is a "sparse" optical flow, which is opposite to the previous 3 methods) */
+  /// * It is Lucas & Kanade method, modified to use pyramids.
+  // Also it does several iterations to get optical flow for
+  // every point at every pyramid level.
+  // Calculates optical flow between two images for certain set of points (i.e.
+  // it is a "sparse" optical flow, which is opposite to the previous 3 methods) */
 
-// CVAPI(void)  cvCalcOpticalFlowPyrLK(
-//const CvArr*  prev,
-//const CvArr*  curr,
-// CvArr*  prev_pyr, CvArr*  curr_pyr,
-// const CvPoint2D32f* prev_features,
-// CvPoint2D32f* curr_features,
-// int       count,
-// CvSize    win_size,
-// int       level,
-// char*     status,
-// float*    track_error,
-// CvTermCriteria criteria,
-// int       flags );
+  // CVAPI(void)  cvCalcOpticalFlowPyrLK(
+  // const CvArr*  prev,
+  // const CvArr*  curr,
+  // CvArr*  prev_pyr, CvArr*  curr_pyr,
+  // const CvPoint2D32f* prev_features,
+  // CvPoint2D32f* curr_features,
+  // int       count,
+  // CvSize    win_size,
+  // int       level,
+  // char*     status,
+  // float*    track_error,
+  // CvTermCriteria criteria,
+  // int       flags );
 
-procedure cvCalcOpticalFlowPyrLK(const prev: pIplImage; const curr: pIplImage; prev_pyr: pIplImage;
-  curr_pyr: pIplImage; const prev_features: pCvPoint2D32f; curr_features: pCvPoint2D32f; count: Integer;
-  win_size: TCvSize; level: Integer; status: pCVChar; track_error: PSingle; criteria: TCvTermCriteria;
-  flags: Integer); cdecl;
+procedure cvCalcOpticalFlowPyrLK(const prev: pIplImage; const curr: pIplImage; prev_pyr: pIplImage; curr_pyr: pIplImage;
+  const prev_features: pCvPoint2D32f; curr_features: pCvPoint2D32f; count: Integer; win_size: TCvSize; level: Integer;
+  status: pCVChar; track_error: PSingle; criteria: TCvTermCriteria; flags: Integer); cdecl;
 
 /// * Modification of a previous sparse optical flow algorithm to calculate
 // affine flow */
@@ -61,7 +60,9 @@ procedure cvCalcOpticalFlowPyrLK(const prev: pIplImage; const curr: pIplImage; p
 // CvArr* flow, double pyr_scale, int levels,
 // int winsize, int iterations, int poly_n,
 // double poly_sigma, int flags );
-//
+procedure cvCalcOpticalFlowFarneback(const prev: pCvMat; const next: pCvMat; flow: pCvMat; pyr_scale: double;
+  levels: Integer; winsize: Integer; iterations: Integer; poly_n: Integer; poly_sigma: double; flags: Integer); cdecl;
+
 /// ********************************* motion templates *************************************/
 //
 /// ****************************************************************************************\
@@ -368,5 +369,6 @@ Uses
 
 function cvCamShift; external tracking_DLL;
 procedure cvCalcOpticalFlowPyrLK; external tracking_DLL;
+procedure cvCalcOpticalFlowFarneback; external tracking_DLL;
 
 end.
