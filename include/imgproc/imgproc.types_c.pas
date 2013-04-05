@@ -1,32 +1,4 @@
-unit imgproc.types_c;
-
-{$ifdef DEBUG}
-{$A8,B-,C+,D+,E-,F-,G+,H+,I+,J-,K-,L+,M-,N+,O-,P+,Q+,R+,S-,T-,U-,V+,W+,X+,Y+,Z1}
-{$else}
-{$A8,B-,C-,D-,E-,F-,G+,H+,I+,J-,K-,L-,M-,N+,O+,P+,Q-,R-,S-,T-,U-,V+,W-,X+,Y-,Z1}
-{$endif}
-{$WARN SYMBOL_DEPRECATED OFF}
-{$WARN SYMBOL_PLATFORM OFF}
-{$WARN UNIT_PLATFORM OFF}
-{$WARN UNSAFE_TYPE OFF}
-{$WARN UNSAFE_CODE OFF}
-{$WARN UNSAFE_CAST OFF}
-
-interface
-
-(*
-  ** 'C2PTypes.pas' declares external windows data types for the conversion purposes.
-  ** It's created by the CtoPas converter and saved under
-  ** "\Program Files\Common Files\AlGun Shared\CToPas 2.0\P_Files" folder.
-  ** Consult the Windows and Delphi help files for more information about defined data types
-*)
-
-uses
-  Windows,
-  // Messages, SysUtils, Classes,
-  core.types_c;
-
-(* M///////////////////////////////////////////////////////////////////////////////////////
+(*///////////////////////////////////////////////////////////////////////////////////////
   //
   //  IMPORTANT: READ BEFORE DOWNLOADING, COPYING, INSTALLING OR USING.
   //
@@ -66,16 +38,32 @@ uses
   // or tort (including negligence or otherwise) arising in any way out of
   // the use of this software, even if advised of the possibility of such damage.
   //
-  //M*/
+  //
 
-  {$ifndef __OPENCV_IMGPROC_TYPES_C_H__}
-  {$define __OPENCV_IMGPROC_TYPES_C_H__}
+  Transtated from
+  opencv2/core/core_c.h
 
-  {$HPPEMIT '#include 'opencv2/core/core_c.h''}
+  *)
 
-  {$ifdef __cplusplus}
-  //extern "C" {
-  {$endif}
+
+{$ifdef DEBUG}
+{$A8,B-,C+,D+,E-,F-,G+,H+,I+,J-,K-,L+,M-,N+,O-,P+,Q+,R+,S-,T-,U-,V+,W+,X+,Y+,Z1}
+{$else}
+{$A8,B-,C-,D-,E-,F-,G+,H+,I+,J-,K-,L-,M-,N+,O+,P+,Q-,R-,S-,T-,U-,V+,W-,X+,Y-,Z1}
+{$endif}
+{$WARN SYMBOL_DEPRECATED OFF}
+{$WARN SYMBOL_PLATFORM OFF}
+{$WARN UNIT_PLATFORM OFF}
+{$WARN UNSAFE_TYPE OFF}
+{$WARN UNSAFE_CODE OFF}
+{$WARN UNSAFE_CAST OFF}
+
+unit imgproc.types_c;
+
+interface
+
+uses
+  Windows, core.types_c;
 
   (* Connected component structure *)
 type
@@ -381,8 +369,8 @@ type
     *************************************************************************************** *)
 
 type
-  CvSubdiv2DEdge = size_t;
-{$EXTERNALSYM CvSubdiv2DEdge}
+  TCvSubdiv2DEdge = size_t;
+{EXTERNALSYM CvSubdiv2DEdge}
   // // >> Following declaration is a macro definition!
   // const
   // CV_QUADEDGE2D_FIELDS()Integer flags;

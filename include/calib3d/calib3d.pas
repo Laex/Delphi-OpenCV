@@ -2,7 +2,7 @@ unit calib3d;
 
 interface
 
-Uses Core.types_c, types_c;
+Uses Core.types_c;
 
 {
   /* Reprojects the computed disparity image to the 3D space using the specified 4x4 matrix */

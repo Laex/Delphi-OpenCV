@@ -7,13 +7,8 @@ program VideoProcessing;
 
 uses
   System.SysUtils,
-  core_c in '..\..\..\include\ñore\core_c.pas',
-  Core.types_c in '..\..\..\include\ñore\Core.types_c.pas',
-  highgui_c in '..\..\..\include\highgui\highgui_c.pas',
-  imgproc.types_c in '..\..\..\include\imgproc\imgproc.types_c.pas',
-  imgproc_c in '..\..\..\include\imgproc\imgproc_c.pas',
-  uLibName in '..\..\..\include\uLibName.pas',
-  types_c in '..\..\..\include\ñore\types_c.pas';
+{$I ..\..\uses_include.inc}
+  ;
 
 const
   // declare video filename
@@ -36,7 +31,7 @@ var
 
   C: TCvSize;
   P: pCvArr;
-  CC:pCvSize;
+  CC: pCvSize;
 
 begin
   try
@@ -80,7 +75,7 @@ begin
             // done only in greyscale so we need to create a single 8bit channel
             // image but both the conversion and the threshold images
             // P:=pCvArr(@frame);
-            C:=cvGetSize(pCvArr(frame));
+            C := cvGetSize(pCvArr(frame));
             gray := cvCreateImage(C, IPL_DEPTH_8U, 1);
             threshold := cvCreateImage(C, IPL_DEPTH_8U, 1);
             // reset state variable

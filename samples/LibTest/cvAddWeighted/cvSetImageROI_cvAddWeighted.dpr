@@ -8,10 +8,8 @@ program cvSetImageROI_cvAddWeighted;
 
 uses
   System.SysUtils,
-  core_c in '..\..\..\include\ñore\core_c.pas',
-  Core.types_c in '..\..\..\include\ñore\Core.types_c.pas',
-  highgui_c in '..\..\..\include\highgui\highgui_c.pas',
-  uLibName in '..\..\..\include\uLibName.pas';
+{$I ..\..\uses_include.inc}
+  ;
 
 Const
   filename_src1 = 'Resource\cat2-mirror.jpg';
@@ -25,6 +23,7 @@ Var
   alpha, beta: Double;
 
 begin
+try
   image := cvLoadImage(filename_src1);
   WriteLn(Format('[i] image_src1: %s', [filename_src1]));
   templ := cvLoadImage(filename_src2);
@@ -64,5 +63,8 @@ begin
   cvReleaseImage(templ);
   cvReleaseImage(dst);
   cvDestroyAllWindows();
-
+  except
+    on E: Exception do
+      Writeln(E.ClassName, ': ', E.Message);
+  end;
 end.

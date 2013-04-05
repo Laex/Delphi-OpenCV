@@ -1,85 +1,70 @@
-unit highgui_c;
+(*
 
-{$ifdef DEBUG}
+  //    IMPORTANT: READ BEFORE DOWNLOADING, COPYING, INSTALLING OR USING.
+  //
+  //    By downloading, copying, installing or using the software you agree to this license.
+  //    If you do not agree to this license, do not download, install,
+  //    copy or use the software.
+  //
+  //
+  //                          Intel License Agreement
+  //                  For Open Source Computer Vision Library
+  //
+  //   Copyright (C) 2000, Intel Corporation, all rights reserved.
+  //   Third party copyrights are property of their respective owners.
+  //
+  //   Redistribution and use in source and binary forms, with or without modification,
+  //   are permitted provided that the following conditions are met:
+  //
+  //     * Redistribution's of source code must retain the above copyright notice,
+  //       this list of conditions and the following disclaimer.
+  //
+  //     * Redistribution's in binary form must reproduce the above copyright notice,
+  //       this list of conditions and the following disclaimer in the documentation
+  //       and/or other materials provided with the distribution.
+  //
+  //     * The name of Intel Corporation may not be used to endorse or promote products
+  //       derived from this software without specific prior written permission.
+  //
+  //   This software is provided by the copyright holders and contributors "as is" and
+  //   any express or implied warranties, including, but not limited to, the implied
+  //   warranties of merchantability and fitness for a particular purpose are disclaimed.
+  //   In no event shall the Intel Corporation or contributors be liable for any direct,
+  //   indirect, incidental, special, exemplary, or consequential damages
+  //   (including, but not limited to, procurement of substitute goods or services;
+  //   loss of use, data, or profits; or business interruption) however caused
+  //   and on any theory of liability, whether in contract, strict liability,
+  //   or tort (including negligence or otherwise) arising in any way out of
+  //   the use of this software, even if advised of the possibility of such damage.
+
+  Translated from:
+
+  opencv2/core/core_c.h
+
+*)
+
+{$IFDEF DEBUG}
 {$A8,B-,C+,D+,E-,F-,G+,H+,I+,J-,K-,L+,M-,N+,O-,P+,Q+,R+,S-,T-,U-,V+,W+,X+,Y+,Z1}
-{$else}
+{$ELSE}
 {$A8,B-,C-,D-,E-,F-,G+,H+,I+,J-,K-,L-,M-,N+,O+,P+,Q-,R-,S-,T-,U-,V+,W-,X+,Y-,Z1}
-{$endif}
+{$ENDIF}
 {$WARN SYMBOL_DEPRECATED OFF}
 {$WARN SYMBOL_PLATFORM OFF}
 {$WARN UNIT_PLATFORM OFF}
 {$WARN UNSAFE_TYPE OFF}
 {$WARN UNSAFE_CODE OFF}
 {$WARN UNSAFE_CAST OFF}
+unit highgui_c;
 
 interface
 
-(*
-  ** 'C2PTypes.pas' declares external windows data types for the conversion purposes.
-  ** It's created by the CtoPas converter and saved under
-  ** "\Program Files\Common Files\AlGun Shared\CToPas 2.0\P_Files" folder.
-  ** Consult the Windows and Delphi help files for more information about defined data types
-*)
-
 uses
-  // {C2PTypes,} Windows, Messages, SysUtils, Classes,
   core.types_c, Core_C;
-
-(* M///////////////////////////////////////////////////////////////////////////////////////
-  //
-  //  IMPORTANT: READ BEFORE DOWNLOADING, COPYING, INSTALLING OR USING.
-  //
-  //  By downloading, copying, installing or using the software you agree to this license.
-  //  If you do not agree to this license, do not download, install,
-  //  copy or use the software.
-  //
-  //
-  //                        Intel License Agreement
-  //                For Open Source Computer Vision Library
-  //
-  // Copyright (C) 2000, Intel Corporation, all rights reserved.
-  // Third party copyrights are property of their respective owners.
-  //
-  // Redistribution and use in source and binary forms, with or without modification,
-  // are permitted provided that the following conditions are met:
-  //
-  //   * Redistribution's of source code must retain the above copyright notice,
-  //     this list of conditions and the following disclaimer.
-  //
-  //   * Redistribution's in binary form must reproduce the above copyright notice,
-  //     this list of conditions and the following disclaimer in the documentation
-  //     and/or other materials provided with the distribution.
-  //
-  //   * The name of Intel Corporation may not be used to endorse or promote products
-  //     derived from this software without specific prior written permission.
-  //
-  // This software is provided by the copyright holders and contributors "as is" and
-  // any express or implied warranties, including, but not limited to, the implied
-  // warranties of merchantability and fitness for a particular purpose are disclaimed.
-  // In no event shall the Intel Corporation or contributors be liable for any direct,
-  // indirect, incidental, special, exemplary, or consequential damages
-  // (including, but not limited to, procurement of substitute goods or services;
-  // loss of use, data, or profits; or business interruption) however caused
-  // and on any theory of liability, whether in contract, strict liability,
-  // or tort (including negligence or otherwise) arising in any way out of
-  // the use of this software, even if advised of the possibility of such damage.
-  //
-  //M*/
-
-  {$ifndef __OPENCV_HIGHGUI_H__}
-  {$define __OPENCV_HIGHGUI_H__}
-
-  {$HPPEMIT '#include 'opencv2/core/core_c.h''}
-
-  {$ifdef __cplusplus}
-  //extern "C" {
-  {$endif}	(* __cplusplus *)
 
 (* ***************************************************************************************\
   *                                  Basic GUI functions                                   *
   *************************************************************************************** *)
-// YV
-// -----------New for Qt
+
 (* For font *)
 const
   CV_FONT_LIGHT = 25; // QFont::Light;
@@ -134,24 +119,24 @@ const
   CV_WINDOW_FULLSCREEN = 1; // change the window to fullscreen
   CV_WINDOW_FREERATIO = $00000100; // the image expends as much as it can (no ratio raint)
   CV_WINDOW_KEEPRATIO = $00000000; // the ration image is respected.;
+
   (* create window *)
 function cvNamedWindow(const name: pCVChar; flags: Integer = CV_WINDOW_AUTOSIZE): Integer; cdecl;
-(* Set and Get Property of the window *)
-// CVAPI(procedure)cvSetWindowProperty(name: PCVChar; prop_id: Integer; prop_value: Double);
-// CVAPI(Double)cvGetWindowProperty(PCVChar name, Integer prop_id);
+
+// Set and Get Property of the window
+procedure cvSetWindowProperty(name: pCVChar; prop_id: Integer; prop_value: Double); cdecl;
+function cvGetWindowProperty(name: pCVChar; prop_id: Integer): Double; cdecl;
 
 {
   //display image within window (highgui windows remember their content)
-
   CVAPI(void) cvShowImage( const char* name, const CvArr* image );
 }
 procedure cvShowImage(const name: pCVChar; const image: pIplImage); cdecl;
+
 (* resize/move window *)
-// CVAPI(procedure)cvResizeWindow(name: PCVChar; width: Integer; height: Integer);
-
-//CVAPI(void) cvMoveWindow( const char* name, int x, int y );
-procedure cvMoveWindow( const name : pCVChar; x : Integer; y : Integer);  cdecl;
-
+procedure cvResizeWindow(name: pCVChar; width: Integer; height: Integer); cdecl;
+// CVAPI(void) cvMoveWindow( const char* name, int x, int y );
+procedure cvMoveWindow(const name: pCVChar; x: Integer; y: Integer); cdecl;
 
 (* destroy window and all the trackers associated with it *)
 procedure cvDestroyWindow(const name: pCVChar); cdecl;
@@ -253,8 +238,8 @@ const
     CVAPI(int) cvSaveImage( const char* filename, const CvArr* image, const int* params CV_DEFAULT(0) );
   }
 
-//function cvSaveImage(const filename: pCVChar; const image: pIplImage; const params: PInteger = nil): Integer; cdecl;
-function cvSaveImage(const filename: pCVChar; const image: pointer; const params: PInteger = nil): Integer; cdecl;
+  // function cvSaveImage(const filename: pCVChar; const image: pIplImage; const params: PInteger = nil): Integer; cdecl;
+function cvSaveImage(const filename: pCVChar; const image: Pointer; const params: PInteger = nil): Integer; cdecl;
 
 (* decode image stored in the buffer *)
 // CVAPI(IplImage)cvDecodeImage(CvMat * buf, Integer iscolor CV_DEFAULT(CV_LOAD_IMAGE_COLOR));
@@ -831,5 +816,9 @@ function CV_FOURCC(const c1, c2, c3, c4: CVChar): Integer; inline;
 begin
   Result := Integer(c1) + (Integer(c2) shl 8) + (Integer(c3) shl 16) + (Integer(c4) shl 24);
 end;
+
+procedure cvResizeWindow; external highgui_Dll;
+procedure cvSetWindowProperty; external highgui_Dll;
+function cvGetWindowProperty; external highgui_Dll;
 
 end.

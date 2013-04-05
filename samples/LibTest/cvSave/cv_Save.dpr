@@ -9,11 +9,8 @@ program cv_Save;
 
 uses
   System.SysUtils,
-  Core.types_c in '..\..\..\include\ñore\Core.types_c.pas',
-  core_c in '..\..\..\include\ñore\core_c.pas',
-  highgui_c in '..\..\..\include\highgui\highgui_c.pas',
-  uLibName in '..\..\..\include\uLibName.pas',
-  types_c in '..\..\..\include\ñore\types_c.pas';
+{$I ..\..\uses_include.inc}
+  ;
 
 Const
   kernet_filename = 'result\kernel.xml';

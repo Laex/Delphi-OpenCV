@@ -7,17 +7,10 @@ program FaceDetect;
 {$R *.res}
 
 uses
-  System.SysUtils,
   System.Character,
-  highgui_c in '..\..\..\include\highgui\highgui_c.pas',
-  core_c in '..\..\..\include\ñore\core_c.pas',
-  Core.types_c in '..\..\..\include\ñore\Core.types_c.pas',
-  uLibName in '..\..\..\include\uLibName.pas',
-  haar in '..\..\..\include\objdetect\haar.pas',
-  objdetect in '..\..\..\include\objdetect\objdetect.pas',
-  imgproc.types_c in '..\..\..\include\imgproc\imgproc.types_c.pas',
-  imgproc_c in '..\..\..\include\imgproc\imgproc_c.pas',
-  types_c in '..\..\..\include\ñore\types_c.pas';
+  System.SysUtils,
+{$I ..\..\uses_include.inc}
+  ;
 
 Var
   // Create memory for calculations

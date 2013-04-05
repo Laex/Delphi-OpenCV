@@ -6,11 +6,9 @@ program cv_LoadImage;
 {$APPTYPE CONSOLE}
 
 uses
-  core_c in '..\..\..\include\ñore\core_c.pas',
-  core.types_c in '..\..\..\include\ñore\core.types_c.pas',
-  highgui_c in '..\..\..\include\highgui\highgui_c.pas',
-  uLibName in '..\..\..\include\uLibName.pas',
-  types_c in '..\..\..\include\ñore\types_c.pas';
+  System.SysUtils,
+{$I ..\..\uses_include.inc}
+  ;
 
 const
   // declare image filename
@@ -21,19 +19,24 @@ var
   image: pIplImage;
 
 begin
-  // load image from file
-  // REMARK: all opencv strings are PAnsiChar, pay attention to this
-  // when using with Delphi 2010/2009
-  image := cvLoadImage(IMAGE_FILE_NAME);
-  // create display window
-  cvNamedWindow('image');
-  // display image inside "image" window
-  cvShowImage('image', image);
-  // wait until user keypress
-  cvWaitKey();
-  // release image memory
-  cvReleaseImage(image);
-  // close and release all display windows
-  cvDestroyAllWindows;
+  try
+    // load image from file
+    // REMARK: all opencv strings are PAnsiChar, pay attention to this
+    // when using with Delphi 2010/2009
+    image := cvLoadImage(IMAGE_FILE_NAME);
+    // create display window
+    cvNamedWindow('image');
+    // display image inside "image" window
+    cvShowImage('image', image);
+    // wait until user keypress
+    cvWaitKey();
+    // release image memory
+    cvReleaseImage(image);
+    // close and release all display windows
+    cvDestroyAllWindows;
+  except
+    on E: Exception do
+      Writeln(E.ClassName, ': ', E.Message);
+  end;
 
 end.

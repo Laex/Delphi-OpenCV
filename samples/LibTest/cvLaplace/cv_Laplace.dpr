@@ -8,13 +8,8 @@ program cv_Laplace;
 
 uses
   System.SysUtils,
-  core_c in '..\..\..\include\сore\core_c.pas',
-  Core.types_c in '..\..\..\include\сore\Core.types_c.pas',
-  highgui_c in '..\..\..\include\highgui\highgui_c.pas',
-  imgproc.types_c in '..\..\..\include\imgproc\imgproc.types_c.pas',
-  imgproc_c in '..\..\..\include\imgproc\imgproc_c.pas',
-  uLibName in '..\..\..\include\uLibName.pas',
-  types_c in '..\..\..\include\сore\types_c.pas';
+{$I ..\..\uses_include.inc}
+  ;
 
 const
   filename = 'Resource\cat2.jpg';
@@ -26,35 +21,39 @@ Var
   aperture: Integer = 3;
 
 begin
+  try
+    // получаем картинку
+    image := cvLoadImage(filename);
+    WriteLn(Format('[i] image: %s', [filename]));
+    // создаём картинки
+    dst := cvCreateImage(cvGetSize(image), IPL_DEPTH_16S, image^.nChannels);
+    dst2 := cvCreateImage(cvGetSize(image), image^.depth, image^.nChannels);
 
-  // получаем картинку
-  image := cvLoadImage(filename);
-  WriteLn(Format('[i] image: %s', [filename]));
-  // создаём картинки
-  dst := cvCreateImage(cvGetSize(image), IPL_DEPTH_16S, image^.nChannels);
-  dst2 := cvCreateImage(cvGetSize(image), image^.depth, image^.nChannels);
+    // окно для отображения картинки
+    cvNamedWindow('original', CV_WINDOW_AUTOSIZE);
+    cvNamedWindow('cvLaplace', CV_WINDOW_AUTOSIZE);
 
-  // окно для отображения картинки
-  cvNamedWindow('original', CV_WINDOW_AUTOSIZE);
-  cvNamedWindow('cvLaplace', CV_WINDOW_AUTOSIZE);
+    // применяем оператор Лапласа
+    cvLaplace(image, dst, aperture);
 
-  // применяем оператор Лапласа
-  cvLaplace(image, dst, aperture);
+    // преобразуем изображение к 8-битному
+    cvConvertScale(dst, dst2);
 
-  // преобразуем изображение к 8-битному
-  cvConvertScale(dst, dst2);
+    // показываем картинку
+    cvShowImage('original', image);
+    cvShowImage('cvLaplace', dst2);
 
-  // показываем картинку
-  cvShowImage('original', image);
-  cvShowImage('cvLaplace', dst2);
+    cvWaitKey(0);
 
-  cvWaitKey(0);
-
-  // освобождаем ресурсы
-  cvReleaseImage(image);
-  cvReleaseImage(dst);
-  cvReleaseImage(dst2);
-  // удаляем окна
-  cvDestroyAllWindows();
+    // освобождаем ресурсы
+    cvReleaseImage(image);
+    cvReleaseImage(dst);
+    cvReleaseImage(dst2);
+    // удаляем окна
+    cvDestroyAllWindows();
+  except
+    on E: Exception do
+      WriteLn(E.ClassName, ': ', E.Message);
+  end;
 
 end.

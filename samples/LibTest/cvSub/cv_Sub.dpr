@@ -8,13 +8,8 @@ program cv_Sub;
 
 uses
   System.SysUtils,
-  core_c in '..\..\..\include\сore\core_c.pas',
-  Core.types_c in '..\..\..\include\сore\Core.types_c.pas',
-  highgui_c in '..\..\..\include\highgui\highgui_c.pas',
-  imgproc.types_c in '..\..\..\include\imgproc\imgproc.types_c.pas',
-  imgproc_c in '..\..\..\include\imgproc\imgproc_c.pas',
-  uLibName in '..\..\..\include\uLibName.pas',
-  types_c in '..\..\..\include\сore\types_c.pas';
+{$I ..\..\uses_include.inc}
+  ;
 
 const
   filename = 'Resource\cat2.jpg';
@@ -25,6 +20,7 @@ Var
   dst2: pIplImage = nil;
 
 begin
+try
   // получаем картинку в градациях серого
   src := cvLoadImage(filename, CV_LOAD_IMAGE_GRAYSCALE);
   WriteLn(Format('[i] image: %s', [filename]));
@@ -54,5 +50,8 @@ begin
   cvReleaseImage(dst2);
   // удаляем окна
   cvDestroyAllWindows();
-
+  except
+    on E: Exception do
+      Writeln(E.ClassName, ': ', E.Message);
+  end;
 end.
