@@ -1,43 +1,43 @@
-(*///////////////////////////////////////////////////////////////////////////////////////
-//
-//  IMPORTANT: READ BEFORE DOWNLOADING, COPYING, INSTALLING OR USING.
-//
-//  By downloading, copying, installing or using the software you agree to this license.
-//  If you do not agree to this license, do not download, install,
-//  copy or use the software.
-//
-//
-//                        Intel License Agreement
-//                For Open Source Computer Vision Library
-//
-// Copyright (C) 2000, Intel Corporation, all rights reserved.
-// Third party copyrights are property of their respective owners.
-//
-// Redistribution and use in source and binary forms, with or without modification,
-// are permitted provided that the following conditions are met:
-//
-//   * Redistribution's of source code must retain the above copyright notice,
-//     this list of conditions and the following disclaimer.
-//
-//   * Redistribution's in binary form must reproduce the above copyright notice,
-//     this list of conditions and the following disclaimer in the documentation
-//     and/or other materials provided with the distribution.
-//
-//   * The name of Intel Corporation may not be used to endorse or promote products
-//     derived from this software without specific prior written permission.
-//
-// This software is provided by the copyright holders and contributors "as is" and
-// any express or implied warranties, including, but not limited to, the implied
-// warranties of merchantability and fitness for a particular purpose are disclaimed.
-// In no event shall the Intel Corporation or contributors be liable for any direct,
-// indirect, incidental, special, exemplary, or consequential damages
-// (including, but not limited to, procurement of substitute goods or services;
-// loss of use, data, or profits; or business interruption) however caused
-// and on any theory of liability, whether in contract, strict liability,
-// or tort (including negligence or otherwise) arising in any way out of
-// the use of this software, even if advised of the possibility of such damage.
-//
-//*)
+(* ///////////////////////////////////////////////////////////////////////////////////////
+  //
+  //  IMPORTANT: READ BEFORE DOWNLOADING, COPYING, INSTALLING OR USING.
+  //
+  //  By downloading, copying, installing or using the software you agree to this license.
+  //  If you do not agree to this license, do not download, install,
+  //  copy or use the software.
+  //
+  //
+  //                        Intel License Agreement
+  //                For Open Source Computer Vision Library
+  //
+  // Copyright (C) 2000, Intel Corporation, all rights reserved.
+  // Third party copyrights are property of their respective owners.
+  //
+  // Redistribution and use in source and binary forms, with or without modification,
+  // are permitted provided that the following conditions are met:
+  //
+  //   * Redistribution's of source code must retain the above copyright notice,
+  //     this list of conditions and the following disclaimer.
+  //
+  //   * Redistribution's in binary form must reproduce the above copyright notice,
+  //     this list of conditions and the following disclaimer in the documentation
+  //     and/or other materials provided with the distribution.
+  //
+  //   * The name of Intel Corporation may not be used to endorse or promote products
+  //     derived from this software without specific prior written permission.
+  //
+  // This software is provided by the copyright holders and contributors "as is" and
+  // any express or implied warranties, including, but not limited to, the implied
+  // warranties of merchantability and fitness for a particular purpose are disclaimed.
+  // In no event shall the Intel Corporation or contributors be liable for any direct,
+  // indirect, incidental, special, exemplary, or consequential damages
+  // (including, but not limited to, procurement of substitute goods or services;
+  // loss of use, data, or profits; or business interruption) however caused
+  // and on any theory of liability, whether in contract, strict liability,
+  // or tort (including negligence or otherwise) arising in any way out of
+  // the use of this software, even if advised of the possibility of such damage.
+  //
+  // *)
 
 {$IFDEF DEBUG}
 {$A8,B-,C+,D+,E-,F-,G+,H+,I+,J-,K-,L+,M-,N+,O-,P+,Q+,R+,S-,T-,U-,V+,W+,X+,Y+,Z1}
@@ -50,12 +50,11 @@
 {$WARN UNSAFE_TYPE OFF}
 {$WARN UNSAFE_CODE OFF}
 {$WARN UNSAFE_CAST OFF}
-
 unit legacy;
 
 interface
 
-Uses Core.types_c;
+Uses Windows, Core.types_c, imgproc.types_c;
 
 // CVAPI(CvSeq*) cvSegmentImage( const CvArr* srcarr, CvArr* dstarr,
 // double canny_threshold,
@@ -2932,83 +2931,89 @@ procedure cvSnakeImage(const image: pIplImage; points: pCvPointArray; length: In
 /// ****************************************************************************************\
 // *                              Planar subdivisions                                       *
 // \****************************************************************************************/
-//
-// typedef size_t CvSubdiv2DEdge;
-//
-// #define CV_QUADEDGE2D_FIELDS()     \
-// int flags;                     \
-// struct CvSubdiv2DPoint* pt[4]; \
-// CvSubdiv2DEdge  next[4];
-//
-// #define CV_SUBDIV2D_POINT_FIELDS()\
-// int            flags;      \
-// CvSubdiv2DEdge first;      \
-// CvPoint2D32f   pt;         \
-// int id;
-//
-// #define CV_SUBDIV2D_VIRTUAL_POINT_FLAG (1 << 30)
-//
-// typedef struct CvQuadEdge2D
-// {
-// CV_QUADEDGE2D_FIELDS()
-// }
-// CvQuadEdge2D;
-//
-// typedef struct CvSubdiv2DPoint
-// {
-// CV_SUBDIV2D_POINT_FIELDS()
-// }
-// CvSubdiv2DPoint;
-//
-// #define CV_SUBDIV2D_FIELDS()    \
-// CV_GRAPH_FIELDS()           \
-// int  quad_edges;            \
-// int  is_geometry_valid;     \
-// CvSubdiv2DEdge recent_edge; \
-// CvPoint2D32f  topleft;      \
-// CvPoint2D32f  bottomright;
-//
-// typedef struct CvSubdiv2D
-// {
-// CV_SUBDIV2D_FIELDS()
-// }
-// CvSubdiv2D;
-//
-// typedef enum CvSubdiv2DPointLocation
-// {
-// CV_PTLOC_ERROR = -2,
-// CV_PTLOC_OUTSIDE_RECT = -1,
-// CV_PTLOC_INSIDE = 0,
-// CV_PTLOC_VERTEX = 1,
-// CV_PTLOC_ON_EDGE = 2
-// }
-// CvSubdiv2DPointLocation;
-//
-// typedef enum CvNextEdgeType
-// {
-// CV_NEXT_AROUND_ORG   = 0x00,
-// CV_NEXT_AROUND_DST   = 0x22,
-// CV_PREV_AROUND_ORG   = 0x11,
-// CV_PREV_AROUND_DST   = 0x33,
-// CV_NEXT_AROUND_LEFT  = 0x13,
-// CV_NEXT_AROUND_RIGHT = 0x31,
-// CV_PREV_AROUND_LEFT  = 0x20,
-// CV_PREV_AROUND_RIGHT = 0x02
-// }
-// CvNextEdgeType;
-//
-/// * get the next edge with the same origin point (counterwise) */
-// #define  CV_SUBDIV2D_NEXT_EDGE( edge )  (((CvQuadEdge2D*)((edge) & ~3))->next[(edge)&3])
-//
-//
-/// * Initializes Delaunay triangulation */
-// CVAPI(void)  cvInitSubdivDelaunay2D( CvSubdiv2D* subdiv, CvRect rect );
-//
+type
+
+  pCvSubdiv2DEdge = ^TCvSubdiv2DEdge;
+  TCvSubdiv2DEdge = size_t;
+  //
+  // #define CV_QUADEDGE2D_FIELDS()     \
+  // int flags;                     \
+  // struct CvSubdiv2DPoint* pt[4]; \
+  // CvSubdiv2DEdge  next[4];
+  //
+  // #define CV_SUBDIV2D_POINT_FIELDS()\
+  // int            flags;      \
+  // CvSubdiv2DEdge first;      \
+  // CvPoint2D32f   pt;         \
+  // int id;
+  //
+  // #define CV_SUBDIV2D_VIRTUAL_POINT_FLAG (1 << 30)
+  //
+  // typedef struct CvQuadEdge2D
+  // {
+  // CV_QUADEDGE2D_FIELDS()
+  // }
+  // CvQuadEdge2D;
+  //
+  // typedef struct CvSubdiv2DPoint
+  // {
+  // CV_SUBDIV2D_POINT_FIELDS()
+  // }
+  // CvSubdiv2DPoint;
+  //
+  // #define CV_SUBDIV2D_FIELDS()    \
+  // CV_GRAPH_FIELDS()           \
+  // int  quad_edges;            \
+  // int  is_geometry_valid;     \
+  // CvSubdiv2DEdge recent_edge; \
+  // CvPoint2D32f  topleft;      \
+  // CvPoint2D32f  bottomright;
+  //
+  // typedef struct CvSubdiv2D
+  // {
+  // CV_SUBDIV2D_FIELDS()
+  // }
+  // CvSubdiv2D;
+
+Type
+  TCvSubdiv2DPointLocation = Integer;
+
+const
+  { CvSubdiv2DPointLocation enum }
+  CV_PTLOC_ERROR = -2;
+  CV_PTLOC_OUTSIDE_RECT = -1;
+  CV_PTLOC_INSIDE = 0;
+  CV_PTLOC_VERTEX = 1;
+  CV_PTLOC_ON_EDGE = 2;
+
+Type
+  TCvNextEdgeType = Integer;
+
+const
+  { CvNextEdgeType enum }
+  CV_NEXT_AROUND_ORG = $00;
+  CV_NEXT_AROUND_DST = $22;
+  CV_PREV_AROUND_ORG = $11;
+  CV_PREV_AROUND_DST = $33;
+  CV_NEXT_AROUND_LEFT = $13;
+  CV_NEXT_AROUND_RIGHT = $31;
+  CV_PREV_AROUND_LEFT = $20;
+  CV_PREV_AROUND_RIGHT = $02;
+
+  /// * get the next edge with the same origin point (counterwise) */
+  // #define  CV_SUBDIV2D_NEXT_EDGE( edge )  (((CvQuadEdge2D*)((edge) & ~3))->next[(edge)&3])
+
+  /// * Initializes Delaunay triangulation */
+  // CVAPI(void)  cvInitSubdivDelaunay2D( CvSubdiv2D* subdiv, CvRect rect );
+procedure cvInitSubdivDelaunay2D(subdiv: pCvSubdiv2D; rect: TCvRect); cdecl;
+
 /// * Creates new subdivision */
 // CVAPI(CvSubdiv2D*)  cvCreateSubdiv2D( int subdiv_type, int header_size,
 // int vtx_size, int quadedge_size,
 // CvMemStorage* storage );
-//
+function cvCreateSubdiv2D(subdiv_type: Integer; header_size: Integer; vtx_size: Integer; quadedge_size: Integer;
+  storage: pCvMemStorage): pCvSubdiv2D; cdecl;
+
 /// ************************* high-level subdivision functions ***************************/
 //
 /// * Simplified Delaunay diagram creation */
@@ -3020,11 +3025,11 @@ procedure cvSnakeImage(const image: pIplImage; points: pCvPointArray; length: In
 // cvInitSubdivDelaunay2D( subdiv, rect );
 // return subdiv;
 // }
-//
-//
+
 /// * Inserts new point to the Delaunay triangulation */
 // CVAPI(CvSubdiv2DPoint*)  cvSubdivDelaunay2DInsert( CvSubdiv2D* subdiv, CvPoint2D32f pt);
-//
+function cvSubdivDelaunay2DInsert(subdiv: pCvSubdiv2D; pt: TCvPoint2D32f): pCvSubdiv2DPoint; cdecl;
+
 /// * Locates a point within the Delaunay triangulation (finds the edge
 // the point is left to or belongs to, or the triangulation point the given
 // point coinsides with */
@@ -3032,11 +3037,14 @@ procedure cvSnakeImage(const image: pIplImage; points: pCvPointArray; length: In
 // CvSubdiv2D* subdiv, CvPoint2D32f pt,
 // CvSubdiv2DEdge* edge,
 // CvSubdiv2DPoint** vertex CV_DEFAULT(NULL) );
-//
+
+function cvSubdiv2DLocate(subdiv: pCvSubdiv2D; pt: TCvPoint2D32f; edge: pCvSubdiv2DEdge; vertex: pCvSubdiv2DPoint = nil)
+  : TCvSubdiv2DPointLocation; cdecl;
+
 /// * Calculates Voronoi tesselation (i.e. coordinates of Voronoi points) */
 // CVAPI(void)  cvCalcSubdivVoronoi2D( CvSubdiv2D* subdiv );
-//
-//
+procedure cvCalcSubdivVoronoi2D(subdiv: pCvSubdiv2D); cdecl;
+
 /// * Removes all Voronoi points from the tesselation */
 // CVAPI(void)  cvClearSubdivVoronoi2D( CvSubdiv2D* subdiv );
 //
@@ -3051,39 +3059,40 @@ procedure cvSnakeImage(const image: pIplImage; points: pCvPointArray; length: In
 // {
 // return  CV_SUBDIV2D_NEXT_EDGE(edge);
 // }
-//
-//
+
 // CV_INLINE  CvSubdiv2DEdge  cvSubdiv2DRotateEdge( CvSubdiv2DEdge edge, int rotate )
 // {
 // return  (edge & ~3) + ((edge + rotate) & 3);
 // }
-//
+function cvSubdiv2DRotateEdge(edge: TCvSubdiv2DEdge; rotate: Integer): TCvSubdiv2DEdge; inline;
+
 // CV_INLINE  CvSubdiv2DEdge  cvSubdiv2DSymEdge( CvSubdiv2DEdge edge )
 // {
 // return edge ^ 2;
 // }
-//
+
 // CV_INLINE  CvSubdiv2DEdge  cvSubdiv2DGetEdge( CvSubdiv2DEdge edge, CvNextEdgeType type )
 // {
 // CvQuadEdge2D* e = (CvQuadEdge2D*)(edge & ~3);
 // edge = e->next[(edge + (int)type) & 3];
 // return  (edge & ~3) + ((edge + ((int)type >> 4)) & 3);
 // }
-//
-//
+function cvSubdiv2DGetEdge(edge: TCvSubdiv2DEdge; _type: TCvNextEdgeType): TCvSubdiv2DEdge; inline;
+
 // CV_INLINE  CvSubdiv2DPoint*  cvSubdiv2DEdgeOrg( CvSubdiv2DEdge edge )
 // {
 // CvQuadEdge2D* e = (CvQuadEdge2D*)(edge & ~3);
 // return (CvSubdiv2DPoint*)e->pt[edge & 3];
 // }
-//
-//
+function cvSubdiv2DEdgeOrg(edge: TCvSubdiv2DEdge): pCvSubdiv2DPoint; inline;
+
 // CV_INLINE  CvSubdiv2DPoint*  cvSubdiv2DEdgeDst( CvSubdiv2DEdge edge )
 // {
 // CvQuadEdge2D* e = (CvQuadEdge2D*)(edge & ~3);
 // return (CvSubdiv2DPoint*)e->pt[(edge + 2) & 3];
 // }
-//
+function cvSubdiv2DEdgeDst(edge: TCvSubdiv2DEdge): pCvSubdiv2DPoint; inline;
+
 /// ****************************************************************************************\
 // *                           Additional operations on Subdivisions                        *
 // \****************************************************************************************/
@@ -3531,5 +3540,50 @@ function cvCreateStereoGCState; external legacy_Dll;
 procedure cvFindStereoCorrespondenceGC; external legacy_Dll;
 procedure cvReleaseStereoGCState; external legacy_Dll;
 procedure cvSnakeImage; external legacy_Dll;
+function cvCreateSubdiv2D; external legacy_Dll;
+procedure cvInitSubdivDelaunay2D; external legacy_Dll;
+
+function cvSubdiv2DEdgeOrg(edge: TCvSubdiv2DEdge): pCvSubdiv2DPoint; inline;
+Var
+  e: pCvQuadEdge2D;
+begin
+  // CvQuadEdge2D* e = (CvQuadEdge2D*)(edge & ~3);
+  e := pCvQuadEdge2D(edge and (not 3));
+  // return (CvSubdiv2DPoint*)e->pt[edge & 3];
+  Result := pCvSubdiv2DPoint(e^.pt[edge and 3]);
+end;
+
+function cvSubdiv2DEdgeDst(edge: TCvSubdiv2DEdge): pCvSubdiv2DPoint; inline;
+Var
+  e: pCvQuadEdge2D;
+begin
+  // CvQuadEdge2D* e = (CvQuadEdge2D*)(edge & ~3);
+  e := pCvQuadEdge2D(edge and (not 3));
+  // return (CvSubdiv2DPoint*)e->pt[(edge + 2) & 3];
+  Result := pCvSubdiv2DPoint(e^.pt[(edge + 2) and 3]);
+end;
+
+function cvSubdiv2DLocate; external legacy_Dll;
+
+function cvSubdiv2DGetEdge(edge: TCvSubdiv2DEdge; _type: TCvNextEdgeType): TCvSubdiv2DEdge; inline;
+Var
+  e: pCvQuadEdge2D;
+begin
+  // CvQuadEdge2D* e = (CvQuadEdge2D*)(edge & ~3);
+  e := pCvQuadEdge2D(edge and (not 3));
+  // edge = e->next[(edge + (int)type) & 3];
+  edge := e^.next[(edge + _type) and 3];
+  // return  (edge & ~3) + ((edge + ((int)type >> 4)) & 3);
+  Result := (edge and (not 3)) + ((edge + (_type shr 4)) and 3);
+end;
+
+function cvSubdiv2DRotateEdge(edge: TCvSubdiv2DEdge; rotate: Integer): TCvSubdiv2DEdge; inline;
+begin
+  // return  (edge & ~3) + ((edge + rotate) & 3);
+  Result := (edge and (not 3)) + ((edge + rotate) and 3);
+end;
+
+procedure cvCalcSubdivVoronoi2D; external legacy_Dll;
+function cvSubdivDelaunay2DInsert; external legacy_Dll;
 
 end.

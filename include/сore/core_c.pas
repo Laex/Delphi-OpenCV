@@ -439,10 +439,10 @@ function cvGetReal2D(const arr: pCvMat; idx0, idx1: Integer): Double; cdecl;
   /* Returns width and height of array in elements */
   CVAPI(CvSize) cvGetSize( const CvArr* arr );
 }
-function cvGetSize(const arr: pCvArr): TCvSize; overload;
-function cvGetSize(const arr: pIplImage): TCvSize; overload;
-function _cvGetSize(const arr: pCvArr): TCvSize; cdecl;
-// procedure _cvGetSize(const arr: pCvArr;var size: TCvSize); cdecl;
+function cvGetSize(const arr: pCvArr): TCvSize; //overload;
+procedure _cvGetSize(const arr: pCvArr; var size: TCvSize); cdecl;
+// function cvGetSize(const arr: pIplImage): TCvSize; overload;
+// function _cvGetSize(const arr: pCvArr): TCvSize; cdecl;
 // function _cvGetSize(const image: pIplImage): TCvSize;
 
 //
@@ -459,7 +459,8 @@ procedure cvCopyImage(const src: pIplImage; dst: pIplImage; const mask: pIplImag
   /* Sets all or "masked" elements of input array to the same value*/
   CVAPI(void)  cvSet( CvArr* arr, CvScalar value,const CvArr* mask CV_DEFAULT(NULL) );
 }
-procedure cvSet(arr: pCvArr; value: TCvScalar; const mask: pCvArr = Nil); cdecl;
+procedure cvSet(arr: pCvArr; value: TCvScalar; const mask: pCvArr = Nil); cdecl; // overload;
+// procedure cvSet(arr: pIplImage; value: TCvScalar; const mask: pCvArr = Nil); cdecl; overload;
 
 // procedure cvSetZero(CvArr * arr: unction mask CV_DEFAULT(v1: 0)): CvArr; ();
 // const cvZero = cvSetZero;
@@ -467,8 +468,9 @@ procedure cvSet(arr: pCvArr; value: TCvScalar; const mask: pCvArr = Nil); cdecl;
 // CVAPI(void)  cvSetZero( CvArr* arr );
 // #define cvZero  cvSetZero
 procedure cvSetZero(arr: pIplImage); cdecl;
-procedure cvZero(arr: pIplImage); cdecl; overload;
-procedure cvZero(arr: pCvMat); cdecl; overload;
+procedure cvZero(arr: pCvArr); cdecl;
+//procedure cvZero(arr: pIplImage); cdecl; overload;
+//procedure cvZero(arr: pCvMat); cdecl; overload;
 
 {
   /* Splits a multi-channel array into the set of single-channel arrays or
@@ -556,10 +558,11 @@ procedure cvCvtPlaneToPix(
   #define cvScale  cvConvertScale
   #define cvConvert( src, dst )  cvConvertScale( (src), (dst), 1, 0 )
 }
-
-procedure cvConvertScale(const src: pIplImage; dst: pIplImage; scale: Double = 1; shift: Double = 0); cdecl; overload;
-procedure cvConvertScale(const src: pCvMat; dst: pCvMat; scale: Double = 1; shift: Double = 0); cdecl; overload;
-procedure cvConvert(const src: pIplImage; dst: pIplImage); inline;
+procedure cvConvertScale(const src: pCvArr; dst: pCvArr; scale: Double = 1; shift: Double = 0); cdecl;
+// procedure cvConvertScale(const src: pIplImage; dst: pIplImage; scale: Double = 1; shift: Double = 0); cdecl; overload;
+// procedure cvConvertScale(const src: pCvMat; dst: pCvMat; scale: Double = 1; shift: Double = 0); cdecl; overload;
+// procedure cvConvert(const src: pIplImage; dst: pIplImage); inline;
+procedure cvConvert(const src: pCvArr; dst: pCvArr); inline;
 
 // (* Performs linear transformation on every source array element,
 // stores absolute value of the cResult:
@@ -1174,7 +1177,9 @@ function cvGetSeqElem(const seq: pCvSeq; index: Integer): Pointer; cdecl;
   int reverse CV_DEFAULT(0) );
 
 }
-procedure cvStartReadSeq(const seq: pCvSeq; reader: pCvSeqReader; reverse: Integer = 0); cdecl;
+procedure cvStartReadSeq(const seq: Pointer; reader: pCvSeqReader; reverse: Integer = 0); cdecl;
+// procedure cvStartReadSeq(const seq: pCvSeq; reader: pCvSeqReader; reverse: Integer = 0); cdecl; overload;
+// procedure cvStartReadSeq(const seq: pCvSet; reader: pCvSeqReader; reverse: Integer = 0); cdecl; overload;
 
 // CVAPI(Integer)cvGetSeqReaderPos(CvSeqReader * reader: v1: 0)): Integer; ();
 
@@ -1405,10 +1410,12 @@ const
     CvScalar color, int thickness CV_DEFAULT(1),
     int line_type CV_DEFAULT(8), int shift CV_DEFAULT(0) );
   }
-procedure cvLine(img: pIplImage; pt1, pt2: TCvPoint; color: TCvScalar; thickness: Integer = 1; line_type: Integer = 8;
-  shift: Integer = 0); cdecl; overload;
-procedure cvLine(img: pCvMat; pt1, pt2: TCvPoint; color: TCvScalar; thickness: Integer = 1; line_type: Integer = 8;
-  shift: Integer = 0); cdecl; overload;
+procedure cvLine(img: pCvArr; pt1, pt2: TCvPoint; color: TCvScalar; thickness: Integer = 1; line_type: Integer = 8;
+  shift: Integer = 0); cdecl;
+// procedure cvLine(img: pIplImage; pt1, pt2: TCvPoint; color: TCvScalar; thickness: Integer = 1; line_type: Integer = 8;
+// shift: Integer = 0); cdecl; overload;
+// procedure cvLine(img: pCvMat; pt1, pt2: TCvPoint; color: TCvScalar; thickness: Integer = 1; line_type: Integer = 8;
+// shift: Integer = 0); cdecl; overload;
 
 {
   /* Draws a rectangle given two opposite corners of the rectangle (pt1 & pt2),
@@ -1425,14 +1432,10 @@ procedure cvLine(img: pCvMat; pt1, pt2: TCvPoint; color: TCvScalar; thickness: I
 procedure cvRectangle(img: pIplImage; pt1, pt2: TCvPoint; color: TCvScalar; thickness: Integer = 1;
   line_type: Integer = 8; shift: Integer = 0); cdecl;
 
-// (* Draws a rectangle specified by a CvRect structure *)
-// procedure cvRectangleR(8: v1: ); shift CV_DEFAULT(0): Integer): Integer;
-//
-// (* Draws a circle with specified center and radius.
-// Thickness works in the same way as with cvRectangle *)
-// procedure cvCircle(8: v1: ); shift CV_DEFAULT(0): Integer): Integer;
 {
-  CVAPI(void)  cvCircle( CvArr* img,
+  //Draws a circle with specified center and radius.
+  CVAPI(void)  cvCircle(
+  CvArr* img,
   CvPoint center,
   int radius,
   CvScalar color,
@@ -1440,10 +1443,12 @@ procedure cvRectangle(img: pIplImage; pt1, pt2: TCvPoint; color: TCvScalar; thic
   int line_type CV_DEFAULT(8),
   int shift CV_DEFAULT(0));
 }
-procedure cvCircle(img: pIplImage; center: TCvPoint; radius: Integer; color: TCvScalar; thickness: Integer = 1;
-  line_type: Integer = 8; shift: Integer = 0); cdecl; overload;
-procedure cvCircle(img: pCvMat; center: TCvPoint; radius: Integer; color: TCvScalar; thickness: Integer = 1;
-  line_type: Integer = 8; shift: Integer = 0); cdecl; overload;
+procedure cvCircle(img: pCvArr; center: TCvPoint; radius: Integer; color: TCvScalar; thickness: Integer = 1;
+  line_type: Integer = 8; shift: Integer = 0); cdecl;
+// procedure cvCircle(img: pIplImage; center: TCvPoint; radius: Integer; color: TCvScalar; thickness: Integer = 1;
+// line_type: Integer = 8; shift: Integer = 0); cdecl; overload;
+// procedure cvCircle(img: pCvMat; center: TCvPoint; radius: Integer; color: TCvScalar; thickness: Integer = 1;
+// line_type: Integer = 8; shift: Integer = 0); cdecl; overload;
 
 {
   /* Draws ellipse outline, filled ellipse, elliptic arc or filled elliptic sector,
@@ -1475,11 +1480,11 @@ procedure cvEllipse(img: pIplImage; center: TCvPoint; axes: TCvSize; angle: Doub
 procedure cvEllipseBox(img: pIplImage; box: TCvBox2D; color: TCvScalar; thickness: Integer = 1; line_type: Integer = 8;
   shift: Integer = 0); inline;
 
-
-// (* Fills convex or monotonous polygon. *)
-// procedure cvFillConvexPoly(var Fills an area bounded by one or more arbitrary polygons * )
-// procedure cvFillPoly(CvArr * img: v1: 0)): Integer; (; pts: array of CvPoint; var npts: Integer;
-// contours: Integer; color: CvScalar; var
+/// * Fills convex or monotonous polygon. */
+// CVAPI(void)  cvFillConvexPoly( CvArr* img, const CvPoint* pts, int npts, CvScalar color,
+// int line_type CV_DEFAULT(8), int shift CV_DEFAULT(0));
+procedure cvFillConvexPoly(img: pIplImage; const pts: pCVPoint; npts: Integer; color: TCvScalar; line_type: Integer = 8;
+  shift: Integer = 0); cdecl;
 
 {
   /* Draws one or more polygonal curves */
@@ -2021,12 +2026,13 @@ asm
   mov Result.height,ecx
 end;
 
-function cvGetSize(const arr: pIplImage): TCvSize;
-begin
-  Result := cvGetSize(pCvArr(arr));
-end;
+//function cvGetSize(const arr: pIplImage): TCvSize;
+//begin
+//  Result := cvGetSize(pCvArr(arr));
+//end;
 
-function _cvGetSize; external Core_Dll name 'cvGetSize'; cdecl;
+procedure _cvGetSize(const arr: pCvArr; var size: TCvSize); external Core_Dll name 'cvGetSize';
+//function _cvGetSize; external Core_Dll name 'cvGetSize';
 
 // function _cvGetSize(const image: pIplImage): TCvSize;
 // begin
@@ -2046,36 +2052,34 @@ procedure cvSet; external Core_Dll;
 procedure cvInitFont; external Core_Dll;
 procedure cvPutText; external Core_Dll;
 
-//procedure cvCircle; external Core_Dll;
-procedure cvCircle(img: pIplImage; center: TCvPoint; radius: Integer; color: TCvScalar; thickness: Integer = 1;
-  line_type: Integer = 8; shift: Integer = 0); external Core_Dll name 'cvCircle';
-procedure cvCircle(img: pCvMat; center: TCvPoint; radius: Integer; color: TCvScalar; thickness: Integer = 1;
-  line_type: Integer = 8; shift: Integer = 0); external Core_Dll name 'cvCircle';
+procedure cvCircle; external Core_Dll;
+// procedure cvCircle(img: pIplImage; center: TCvPoint; radius: Integer; color: TCvScalar; thickness: Integer = 1;
+// line_type: Integer = 8; shift: Integer = 0); external Core_Dll name 'cvCircle';
+// procedure cvCircle(img: pCvMat; center: TCvPoint; radius: Integer; color: TCvScalar; thickness: Integer = 1;
+// line_type: Integer = 8; shift: Integer = 0); external Core_Dll name 'cvCircle';
 
-//procedure cvLine; external Core_Dll;
-procedure cvLine(img: pIplImage; pt1, pt2: TCvPoint; color: TCvScalar; thickness: Integer = 1; line_type: Integer = 8;
-  shift: Integer = 0); external Core_Dll name 'cvLine';
-procedure cvLine(img: pCvMat; pt1, pt2: TCvPoint; color: TCvScalar; thickness: Integer = 1; line_type: Integer = 8;
-  shift: Integer = 0); external Core_Dll name 'cvLine';
+procedure cvLine; external Core_Dll;
+// procedure cvLine(img: pIplImage; pt1, pt2: TCvPoint; color: TCvScalar; thickness: Integer = 1; line_type: Integer = 8;
+// shift: Integer = 0); external Core_Dll name 'cvLine';
+// procedure cvLine(img: pCvMat; pt1, pt2: TCvPoint; color: TCvScalar; thickness: Integer = 1; line_type: Integer = 8;
+// shift: Integer = 0); external Core_Dll name 'cvLine';
 
 procedure cvAddS; external Core_Dll;
 procedure cvCopy; external Core_Dll;
 procedure cvCopyImage; external Core_Dll name 'cvCopy';
 
 procedure cvSetZero; external Core_Dll;
-procedure cvZero(arr: pIplImage); cdecl; overload; external Core_Dll name 'cvSetZero';
-procedure cvZero(arr: pCvMat); cdecl; overload; external Core_Dll name 'cvSetZero';
+procedure cvZero; external Core_Dll;
+//procedure cvZero(arr: pIplImage); cdecl; overload; external Core_Dll name 'cvSetZero';
+//procedure cvZero(arr: pCvMat); cdecl; overload; external Core_Dll name 'cvSetZero';
 
 function CV_RGB;
 begin
   Result := CvScalar(B, g, r, 0);
 end;
 
-procedure cvSave(const filename: pCVChar; const struct_ptr: Pointer; const name: pCVChar; const comment: pCVChar;
-  attributes: TCvAttrList); external Core_Dll; overload;
-
-procedure cvSave(const filename: pCVChar; const struct_ptr: Pointer; const name: pCVChar = Nil;
-  const comment: pCVChar = Nil); overload; inline;
+procedure cvSave(const filename: pCVChar; const struct_ptr: Pointer; const name: pCVChar; const comment: pCVChar; attributes: TCvAttrList); external Core_Dll; overload;
+procedure cvSave(const filename: pCVChar; const struct_ptr: Pointer; const name: pCVChar = Nil; const comment: pCVChar = Nil); overload; inline;
 begin
   cvSave(filename, struct_ptr, name, comment, ZeroCvAttrList);
 end;
@@ -2096,11 +2100,11 @@ procedure cvAnd; external Core_Dll;
 procedure cvCvtPixToPlane; external Core_Dll name 'cvSplit';
 procedure cvCvtPlaneToPix; external Core_Dll name 'cvMerge';
 
-// procedure cvConvertScale; external Core_Dll;
-procedure cvConvertScale(const src: pIplImage; dst: pIplImage; scale: Double = 1; shift: Double = 0); cdecl;
-  external Core_Dll name 'cvConvertScale';
-procedure cvConvertScale(const src: pCvMat; dst: pCvMat; scale: Double = 1; shift: Double = 0); cdecl;
-  external Core_Dll name 'cvConvertScale';
+procedure cvConvertScale; external Core_Dll;
+// procedure cvConvertScale(const src: pIplImage; dst: pIplImage; scale: Double = 1; shift: Double = 0); cdecl;
+// external Core_Dll name 'cvConvertScale';
+// procedure cvConvertScale(const src: pCvMat; dst: pCvMat; scale: Double = 1; shift: Double = 0); cdecl;
+// external Core_Dll name 'cvConvertScale';
 
 procedure cvScale; external Core_Dll name 'cvConvertScale';
 procedure cvCvtScale; external Core_Dll name 'cvConvertScale';
@@ -2172,6 +2176,10 @@ function cvCvtSeqToArray; external Core_Dll;
 function cvCreateSeq; external Core_Dll;
 procedure cvPolyLine; external Core_Dll;
 procedure cvStartReadSeq; external Core_Dll;
+// procedure cvStartReadSeq(const seq: pCvSeq; reader: pCvSeqReader; reverse: Integer = 0);
+// external Core_Dll name 'cvStartReadSeq';
+// procedure cvStartReadSeq(const seq: pCvSet; reader: pCvSeqReader; reverse: Integer = 0);
+// external Core_Dll name 'cvStartReadSeq';
 procedure cvChangeSeqBlock; external Core_Dll;
 procedure cvCreateSeqBlock; external Core_Dll;
 function cvSeqPush; external Core_Dll;
@@ -2189,9 +2197,9 @@ end;
 procedure cvXorS; external Core_Dll;
 procedure cvEllipse; external Core_Dll;
 
-// #define cvFree(ptr) (cvFree_(*(ptr)), *(ptr)=0)
 procedure cvFree;
 begin
+  // #define cvFree(ptr) (cvFree_(*(ptr)), *(ptr)=0)
   cvFree_(@ptr);
   Pointer(ptr) := nil;
 end;
@@ -2199,5 +2207,6 @@ end;
 function cvInitImageHeader; external Core_Dll;
 function cvInitMatHeader; external Core_Dll;
 function cvCountNonZero; external Core_Dll;
+procedure cvFillConvexPoly; external Core_Dll;
 
 end.
