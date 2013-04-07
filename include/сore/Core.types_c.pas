@@ -86,10 +86,10 @@ Type
     * cArray cType is recognized at runtime:
   *)
 type
-  TCvArr = record
-  end;
+  // TCvArr = record
+  // end;
 
-  pCvArr = ^TCvArr;
+  pCvArr = Pointer;
 
   TCv32suf = packed record
     case Byte of
@@ -878,6 +878,8 @@ type
     next_free: pCvSetElem;
   end;
 
+  pCvSet = ^TCvSet;
+
   TCvSet = packed record
     flags: Integer; (* Miscellaneous flags. *)
     header_size: Integer; (* Size of sequence header. *)
@@ -902,78 +904,82 @@ const
 {$EXTERNALSYM CV_SET_ELEM_IDX_MASK}
   CV_SET_ELEM_FREE_FLAG = 1 shl (SizeOf(Integer) * 8 - 1);
 {$EXTERNALSYM CV_SET_ELEM_FREE_FLAG}
-  (* ************************************ Graph ******************************************* *)
+  // Checks whether the element pointed by ptr belongs to a set or not
+  // #define CV_IS_SET_ELEM( ptr )  (((CvSetElem*)(ptr))->flags >= 0)
+function CV_IS_SET_ELEM(ptr: Pointer): Boolean; inline;
 
-  (*
-    We represent a graph as a set of vertices.
-    Vertices contain their adjacency lists (more exactly, pointers to first incoming or
-    outcoming edge (or 0 if isolated vertex)) then . Edges are stored in another set.
-    There is a singly-linked list of incoming/outcoming edges for each vertex.
+(* ************************************ Graph ******************************************* *)
 
-    Each edge consists of
+(*
+  We represent a graph as a set of vertices.
+  Vertices contain their adjacency lists (more exactly, pointers to first incoming or
+  outcoming edge (or 0 if isolated vertex)) then . Edges are stored in another set.
+  There is a singly-linked list of incoming/outcoming edges for each vertex.
 
-    o   Two pointers to the starting and ending vertices
-    (vtx : array[0..-1] of  and vtx[1] respectively).
+  Each edge consists of
 
-    A graph may be oriented or not. In the latter , edges between
-    vertex i to vertex j are not distinguished during search operations.
+  o   Two pointers to the starting and ending vertices
+  (vtx : array[0..-1] of  and vtx[1] respectively).
 
-    o   Two pointers to next edges for the starting and ending vertices, where
-    next : array[0..-1] of  points to the next edge in the vtx[0] adjacency list and
-    next : array[0..0] of  points to the next edge in the vtx[1] adjacency list.
-  *)
-  // >> Following declaration is a macro definition!
-  // const
-  // CV_GRAPH_EDGE_FIELDS()Integer flags;
-  // Single weight;
-  //
-  // type;
-  //
-  // type
-  // next:
-  // array [0 .. 1] of;
-  // struct CvGraphVtx * vtx[2] = ^RAPH_EDGE_FIELDS()Integer flags;
-  // Single weight;
-  // struct CvGraphEdge;
-  // end;
-  //
-  // type
-  //
-  // = packed record
-  // end;
-  // CvGraphEdge;
-  //
-  // type
-  //
-  // = packed record
-  // end;
-  // CvGraphVtx;
-  //
-  // type
-  //
-  // = packed record ptr: ^CvPoint2D32f;
-  // end;
-  // CvGraphVtx2D;
-  //
-  // (*
-  // Graph is 'derived' from the set (this is set a of vertices)
-  // and includes another set (edges)
-  // *)
-  /// / >> Following declaration is a macro definition!
-  // const
-  // CV_GRAPH_FIELDS()CV_SET_FIELDS()CvSet * edges;;
-  //
-  // type
-  //
-  // = packed record
-  // end;
-  // CvGraph;
-  //
-  // const
-  // CV_TYPE_NAME_GRAPH = 'opencv-graph';
-  // {$EXTERNALSYM CV_TYPE_NAME_GRAPH}
+  A graph may be oriented or not. In the latter , edges between
+  vertex i to vertex j are not distinguished during search operations.
 
-  (* ********************************** Chain/Countour ************************************ *)
+  o   Two pointers to next edges for the starting and ending vertices, where
+  next : array[0..-1] of  points to the next edge in the vtx[0] adjacency list and
+  next : array[0..0] of  points to the next edge in the vtx[1] adjacency list.
+*)
+// >> Following declaration is a macro definition!
+// const
+// CV_GRAPH_EDGE_FIELDS()Integer flags;
+// Single weight;
+//
+// type;
+//
+// type
+// next:
+// array [0 .. 1] of;
+// struct CvGraphVtx * vtx[2] = ^RAPH_EDGE_FIELDS()Integer flags;
+// Single weight;
+// struct CvGraphEdge;
+// end;
+//
+// type
+//
+// = packed record
+// end;
+// CvGraphEdge;
+//
+// type
+//
+// = packed record
+// end;
+// CvGraphVtx;
+//
+// type
+//
+// = packed record ptr: ^CvPoint2D32f;
+// end;
+// CvGraphVtx2D;
+//
+// (*
+// Graph is 'derived' from the set (this is set a of vertices)
+// and includes another set (edges)
+// *)
+/// / >> Following declaration is a macro definition!
+// const
+// CV_GRAPH_FIELDS()CV_SET_FIELDS()CvSet * edges;;
+//
+// type
+//
+// = packed record
+// end;
+// CvGraph;
+//
+// const
+// CV_TYPE_NAME_GRAPH = 'opencv-graph';
+// {$EXTERNALSYM CV_TYPE_NAME_GRAPH}
+
+(* ********************************** Chain/Countour ************************************ *)
 
 type
 
@@ -1557,7 +1563,6 @@ procedure CV_SWAP(var a, b, t: pCvPoint2D32f); inline; overload;
 procedure CV_SWAP(var a, b, t: pCvMat); inline; overload;
 procedure CV_SWAP(var a, b, t: Pointer); inline; overload;
 
-
 // {$IFNDEF MIN}
 // {$HPPEMIT '#  define MIN(a,b)  ((a) > (b) ? (b) : (a))'}
 // {$ENDIF}
@@ -1988,7 +1993,6 @@ function CvTermCriteria(_type: Integer; max_iter: Integer; epsilon: Double): TCv
   }
 *)
 function cvFloor(value: Double): Integer; inline;
-
 function cvScalarAll(val0123: Double): TCvScalar; inline;
 function CvPoint(const x, y: Integer): TCvPoint; inline;
 function CvSize(const width, height: Integer): TCvSize; inline;
@@ -1996,17 +2000,16 @@ function CvScalar(const val0: Double; const val1: Double = 0; const val2: Double
   : TCvScalar; inline;
 function cvRandInt(Var rng: TCvRNG): Cardinal; inline;
 function CvRect(Const x, y, width, height: Integer): TCvRect; inline;
-function cvRound(value: Double): Integer; inline;
+function cvRound(value: Double): Integer;
 
-(* Inline constructor. No data is allocated internally!!!
+{
+  * Inline constructor. No data is allocated internally!!!
   * (Use together with cvCreateData, or use cvCreateMat instead to
   * get a matrix with allocated data):
-*)
-{
+  *
   CV_INLINE CvMat cvMat( int rows, int cols, int type, void* data CV_DEFAULT(NULL))
   {
   CvMat m;
-
   assert( (unsigned)CV_MAT_DEPTH(type) <= CV_64F );
   type = CV_MAT_TYPE(type);
   m.type = CV_MAT_MAGIC_VAL | CV_MAT_CONT_FLAG | type;
@@ -2027,12 +2030,12 @@ function CV_MAT_CN(flags: Integer): Integer;
 function CV_32FC1: Integer;
 function CV_32SC1: Integer;
 function CV_MAKETYPE(depth, cn: Integer): Integer;
-// #define CV_MAT_ELEM( mat, elemtype, row, col )           \
+// #define CV_MAT_ELEM( mat, elemtype, row, col )
 // (*(elemtype*)CV_MAT_ELEM_PTR_FAST( mat, row, col, sizeof(elemtype)))
 function CV_MAT_ELEM(const mat: TCvMat; const elemsize: Integer; const row, col: Integer): Pointer;
-// #define CV_MAT_ELEM_PTR_FAST( mat, row, col, pix_size )  \
-// (assert( (unsigned)(row) < (unsigned)(mat).rows &&   \
-// (unsigned)(col) < (unsigned)(mat).cols ),   \
+// #define CV_MAT_ELEM_PTR_FAST( mat, row, col, pix_size )
+// (assert( (unsigned)(row) < (unsigned)(mat).rows &&
+// (unsigned)(col) < (unsigned)(mat).cols ),
 // (mat).data.ptr + (size_t)(mat).step*(row) + (pix_size)*(col))
 function CV_MAT_ELEM_PTR_FAST(const mat: TCvMat; const row, col, pix_size: Integer): Pointer;
 
@@ -2052,11 +2055,6 @@ function CV_MAT_ELEM(const mat: TCvMat; const elemsize: Integer; const row, col:
 begin
   Result := CV_MAT_ELEM_PTR_FAST(mat, row, col, elemsize);
 end;
-
-// function CV_MAT_ELEM(const mat: TCvMat; const elemtype: Integer; const row, col: Integer): Pointer;
-// begin
-// Result := CV_MAT_ELEM_PTR_FAST(mat, row, col, CV_ELEM_SIZE(elemtype));
-// end;
 
 function CvAttrList(const attr: ppCVChar = nil; next: pCvAttrList = nil): TCvAttrList;
 begin
@@ -2192,14 +2190,14 @@ end;
 procedure CV_READ_SEQ_ELEM;
 begin
   // assert( (reader).seq->elem_size == sizeof(elem));
-  // memcpy( &(elem), (reader).ptr, sizeof((elem)));
-  // CV_NEXT_SEQ_ELEM( sizeof(elem), reader )
   Assert(Reader.seq^.elem_size = SizeOfElem);
+  // memcpy( &(elem), (reader).ptr, sizeof((elem)));
   Move(Reader.ptr, Elem, SizeOfElem);
-  CV_NEXT_SEQ_ELEM(SizeOf(Elem), Reader);
+  // CV_NEXT_SEQ_ELEM( sizeof(elem), reader )
+  CV_NEXT_SEQ_ELEM(SizeOfElem, Reader);
 end;
 
-procedure CV_NEXT_SEQ_ELEM;
+procedure CV_NEXT_SEQ_ELEM(const elem_size: Integer; const Reader: TCvSeqReader); inline;
 begin
   // if( ((reader).ptr += (elem_size)) >= (reader).block_max )
   // cvChangeSeqBlock( &(reader), 1 );
@@ -2252,7 +2250,7 @@ end;
 
 procedure CV_SWAP(var a, b, t: pCvMat);
 begin
- CV_SWAP(Pointer(a), Pointer(b), Pointer(t));
+  CV_SWAP(Pointer(a), Pointer(b), Pointer(t));
 end;
 
 procedure CV_SWAP(var a, b, t: pIplImage);
@@ -2278,10 +2276,14 @@ end;
 
 function CV_SEQ_ELEM(seq: pCvSeq; const size_of_elem: Integer; index: Integer): Pointer; inline;
 begin
-  Assert((SizeOf(seq^.first[0]) = SizeOf(TCvSeqBlock)) and (seq^.elem_size = size_of_elem));
-  if Assigned(seq^.first) and (index < seq^.first^.count) then
+//    assert(sizeof((seq)->first[0]) == sizeof(CvSeqBlock) && (seq)->elem_size == sizeof(elem_type))
+  Assert(Assigned(seq^.first) and (SizeOf(seq^.first^) = SizeOf(TCvSeqBlock)) and (seq^.elem_size = size_of_elem));
+//    (elem_type*)((seq)->first && (unsigned)index <(unsigned)((seq)->first->count) ?
+  if Assigned(seq^.first) and (Cardinal(index) < Cardinal(seq^.first^.count)) then
+//    (seq)->first->data + (index) * sizeof(elem_type) :
     Result := Pointer(Integer(seq^.first^.data) + index * size_of_elem)
   else
+//    cvGetSeqElem( (CvSeq*)(seq), (index) )))
     Result := cvGetSeqElem(seq, index);
 end;
 
@@ -2298,6 +2300,12 @@ end;
 function CV_8UC3: Integer; inline;
 begin
   Result := CV_MAKETYPE(CV_8U, 3);
+end;
+
+function CV_IS_SET_ELEM(ptr: Pointer): Boolean; inline;
+begin
+  // #define CV_IS_SET_ELEM( ptr )  (((CvSetElem*)(ptr))->flags >= 0)
+  Result := pCvSetElem(ptr)^.flags >= 0;
 end;
 
 end.

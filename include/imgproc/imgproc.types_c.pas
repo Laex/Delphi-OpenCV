@@ -1,4 +1,4 @@
-(*///////////////////////////////////////////////////////////////////////////////////////
+(* ///////////////////////////////////////////////////////////////////////////////////////
   //
   //  IMPORTANT: READ BEFORE DOWNLOADING, COPYING, INSTALLING OR USING.
   //
@@ -43,21 +43,19 @@
   Transtated from
   opencv2/core/core_c.h
 
-  *)
+*)
 
-
-{$ifdef DEBUG}
+{$IFDEF DEBUG}
 {$A8,B-,C+,D+,E-,F-,G+,H+,I+,J-,K-,L+,M-,N+,O-,P+,Q+,R+,S-,T-,U-,V+,W+,X+,Y+,Z1}
-{$else}
+{$ELSE}
 {$A8,B-,C-,D-,E-,F-,G+,H+,I+,J-,K-,L-,M-,N+,O+,P+,Q-,R-,S-,T-,U-,V+,W-,X+,Y-,Z1}
-{$endif}
+{$ENDIF}
 {$WARN SYMBOL_DEPRECATED OFF}
 {$WARN SYMBOL_PLATFORM OFF}
 {$WARN UNIT_PLATFORM OFF}
 {$WARN UNSAFE_TYPE OFF}
 {$WARN UNSAFE_CODE OFF}
 {$WARN UNSAFE_CAST OFF}
-
 unit imgproc.types_c;
 
 interface
@@ -65,9 +63,10 @@ interface
 uses
   Windows, core.types_c;
 
-  (* Connected component structure *)
+(* Connected component structure *)
 type
-  pCvConnectedComp=^TCvConnectedComp;
+  pCvConnectedComp = ^TCvConnectedComp;
+
   TCvConnectedComp = packed record
     area: Double; (* area of the connected component *)
     value: TCvScalar; (* average color of the connected component *)
@@ -370,7 +369,7 @@ type
 
 type
   TCvSubdiv2DEdge = size_t;
-{EXTERNALSYM CvSubdiv2DEdge}
+  { EXTERNALSYM CvSubdiv2DEdge }
   // // >> Following declaration is a macro definition!
   // const
   // CV_QUADEDGE2D_FIELDS()Integer flags;
@@ -381,38 +380,58 @@ type
   // pt:
   // array [0 .. 3] of;
   // CvSubdiv2DEdge next[4] = ^UADEDGE2D_FIELDS()Integer flags;
-  // struct CvSubdiv2DPoint;
-  // end;
-  // vSubdiv2DEdge first;
-  // CvPoint2D32f pt;
-  // Integer id;
+
+  pCvSubdiv2DPoint = ^TCvSubdiv2DPoint;
+
+  TCvSubdiv2DPoint = packed record
+    flags: Integer;
+    first: TCvSubdiv2DEdge;
+    pt: TCvPoint2D32f;
+    id: Integer;
+  end;
 
 const
   CV_SUBDIV2D_VIRTUAL_POINT_FLAG = (1 shl 30);
 {$EXTERNALSYM CV_SUBDIV2D_VIRTUAL_POINT_FLAG}
-  // type
-  // = packed record
-  // end;
-  // CvQuadEdge2D;
-  //
-  // type
-  // = packed record
-  // end;
-  // CvSubdiv2DPoint;
-  //
-  /// / >> Following declaration is a macro definition!
-  // const
-  // CV_SUBDIV2D_FIELDS()CV_GRAPH_FIELDS()Integer quad_edges;
-  // Integer is_geometry_valid;
-  // CvSubdiv2DEdge recent_edge;
-  // CvPoint2D32f topleft;
-  // CvPoint2D32f bottomright;;
-  //
-  // type
-  // = packed record
-  // end;
-  // CvSubdiv2D;
 
+Type
+
+  pCvQuadEdge2D = ^TCvQuadEdge2D;
+
+  TCvQuadEdge2D = packed record
+    flags: Integer;
+    pt: array [0 .. 3] of pCvSubdiv2DPoint;
+    next: array [0 .. 3] of TCvSubdiv2DEdge;
+  end;
+
+  pCvSubdiv2D = ^TCvSubdiv2D;
+
+  TCvSubdiv2D = packed record
+    flags: Integer; // Miscellaneous flags.
+    header_size: Integer; // Size of sequence header.
+    h_prev: pCvSeq; // Previous sequence.
+    h_next: pCvSeq; // Next sequence.
+    v_prev: pCvSeq; // 2nd previous sequence.
+    v_next: pCvSeq; // 2nd next sequence.
+    total: Integer; // Total number of elements.
+    elem_size: Integer; // Size of sequence element in bytes.
+    block_max: Pointer; // Maximal bound of the last block.
+    ptr: Pointer; // Current write pointer.
+    delta_elems: Integer; // Grow seq this many at a time.
+    storage: pCvMemStorage; // Where the seq is stored.
+    free_blocks: pCvSeqBlock; // Free blocks list.
+    first: pCvSeqBlock; // Pointer to the first sequence block.
+    free_elems: pCvSetElem;
+    active_count: Integer;
+    edges: pCvSet;
+    quad_edges: Integer;
+    is_geometry_valid: Integer;
+    recent_edge: TCvSubdiv2DEdge;
+    topleft: TCvPoint2D32f;
+    bottomright: TCvPoint2D32f;
+  end;
+
+const
   // Type CvSubdiv2DPointLocation
   CV_PTLOC_ERROR = -2;
   CV_PTLOC_OUTSIDE_RECT = -1;
@@ -446,7 +465,8 @@ const
 
   (* Convexity defect *)
 type
-  pCvConvexityDefect=^TCvConvexityDefect;
+  pCvConvexityDefect = ^TCvConvexityDefect;
+
   TCvConvexityDefect = packed record
     start: PCvPoint; (* point of the contour where the defect begins *)
     cend: PCvPoint; (* point of the contour where the defect ends *)
