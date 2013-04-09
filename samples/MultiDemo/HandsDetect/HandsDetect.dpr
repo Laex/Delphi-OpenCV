@@ -1,3 +1,25 @@
+(* /*****************************************************************
+  //                       Delphi-OpenCV Demo
+  //               Copyright (C) 2013 Project Delphi-OpenCV
+  // ****************************************************************
+  // Contributor:
+  // laentir Valetov
+  // email:laex@bk.ru
+  // ****************************************************************
+  // You may retrieve the latest version of this file at the GitHub,
+  // located at git://github.com/Laex/Delphi-OpenCV.git
+  // ****************************************************************
+  // The contents of this file are used with permission, subject to
+  // the Mozilla Public License Version 1.1 (the "License"); you may
+  // not use this file except in compliance with the License. You may
+  // obtain a copy of the License at
+  // http://www.mozilla.org/MPL/MPL-1_1Final.html
+  //
+  // Software distributed under the License is distributed on an
+  // "AS IS" basis, WITHOUT WARRANTY OF ANY KIND, either express or
+  // implied. See the License for the specific language governing
+  // rights and limitations under the License.
+  ******************************************************************* *)
 ///
 // Стырено у "Header files OpenCV 2.4.3 for Delphi XE3"
 // https://code.google.com/p/opencv-delphi-new/
@@ -6,6 +28,7 @@ program HandsDetect;
 
 {$APPTYPE CONSOLE}
 {$POINTERMATH ON}
+
 {$R *.res}
 
 uses
