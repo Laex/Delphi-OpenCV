@@ -130,6 +130,9 @@ type
   // TCvArr = record
   // end;
 
+  TVoid = record
+  end;
+
   pCvArr = Pointer;
 
   TCv32suf = packed record
@@ -777,6 +780,9 @@ type
     z: Double;
   end;
 
+Const
+  cvZeroPoint: TCvPoint = (x: 0; y: 0);
+
   (* ******************************* CvSize's & CvBox **************************************/ *)
 
 type
@@ -947,7 +953,7 @@ const
 {$EXTERNALSYM CV_SET_ELEM_FREE_FLAG}
   // Checks whether the element pointed by ptr belongs to a set or not
   // #define CV_IS_SET_ELEM( ptr )  (((CvSetElem*)(ptr))->flags >= 0)
-function CV_IS_SET_ELEM(ptr: Pointer): Boolean; inline;
+function CV_IS_SET_ELEM(ptr: Pointer): Boolean; // inline;
 
 (* ************************************ Graph ******************************************* *)
 
@@ -1267,6 +1273,8 @@ function CV_GET_SEQ_ELEM(const size_of_elem: Integer; seq: pCvSeq; index: Intege
 // Assert((writer).ptr <= (writer).block_max - SizeOf(elem));
 // memcpy((writer).ptr, and (elem), SizeOf(elem)); (writer).ptr := mod +SizeOf(elem) then; end;
 
+function CV_CAST_8U(t : Integer) : UCHAR; inline;
+
 (*
   /* Move reader position forward: */
   #define CV_NEXT_SEQ_ELEM( elem_size, reader )                 \
@@ -1277,7 +1285,7 @@ function CV_GET_SEQ_ELEM(const size_of_elem: Integer; seq: pCvSeq; index: Intege
   }                                                         \
   }
 *)
-procedure CV_NEXT_SEQ_ELEM(const elem_size: Integer; const Reader: TCvSeqReader); inline;
+procedure CV_NEXT_SEQ_ELEM(const elem_size: Integer; const Reader: TCvSeqReader); // inline;
 
 // (* Move reader position backward: *)
 // // >> Following declaration is a macro definition!
@@ -2043,26 +2051,29 @@ function cvRandInt(Var rng: TCvRNG): Cardinal; inline;
 function CvRect(Const x, y, width, height: Integer): TCvRect; inline;
 function cvRound(value: Double): Integer;
 
-{
-  * Inline constructor. No data is allocated internally!!!
-  * (Use together with cvCreateData, or use cvCreateMat instead to
-  * get a matrix with allocated data):
-  *
-  CV_INLINE CvMat cvMat( int rows, int cols, int type, void* data CV_DEFAULT(NULL))
-  {
-  CvMat m;
-  assert( (unsigned)CV_MAT_DEPTH(type) <= CV_64F );
-  type = CV_MAT_TYPE(type);
-  m.type = CV_MAT_MAGIC_VAL | CV_MAT_CONT_FLAG | type;
-  m.cols = cols;
-  m.rows = rows;
-  m.step = m.cols*CV_ELEM_SIZE(type);
-  m.data.ptr = (uchar*)data;
-  m.refcount = NULL;
-  m.hdr_refcount = 0;
+const
+  cvZeroRect: TCvRect = (x: 0; y: 0; width: 0; height: 0);
 
-  return m;
-}
+  {
+    * Inline constructor. No data is allocated internally!!!
+    * (Use together with cvCreateData, or use cvCreateMat instead to
+    * get a matrix with allocated data):
+    *
+    CV_INLINE CvMat cvMat( int rows, int cols, int type, void* data CV_DEFAULT(NULL))
+    {
+    CvMat m;
+    assert( (unsigned)CV_MAT_DEPTH(type) <= CV_64F );
+    type = CV_MAT_TYPE(type);
+    m.type = CV_MAT_MAGIC_VAL | CV_MAT_CONT_FLAG | type;
+    m.cols = cols;
+    m.rows = rows;
+    m.step = m.cols*CV_ELEM_SIZE(type);
+    m.data.ptr = (uchar*)data;
+    m.refcount = NULL;
+    m.hdr_refcount = 0;
+
+    return m;
+  }
 function cvMat(rows: Integer; cols: Integer; etype: Integer; data: Pointer = nil): TCvMat;
 function CV_MAT_DEPTH(flags: Integer): Integer;
 function CV_MAT_TYPE(flags: Integer): Integer;
@@ -2238,11 +2249,11 @@ begin
   CV_NEXT_SEQ_ELEM(SizeOfElem, Reader);
 end;
 
-procedure CV_NEXT_SEQ_ELEM(const elem_size: Integer; const Reader: TCvSeqReader); inline;
+procedure CV_NEXT_SEQ_ELEM(const elem_size: Integer; const Reader: TCvSeqReader); // inline;
 begin
   // if( ((reader).ptr += (elem_size)) >= (reader).block_max )
   // cvChangeSeqBlock( &(reader), 1 );
-  if (Integer(Reader.ptr) + elem_size) < Integer(Reader.block_max) then
+  if (Integer(Reader.ptr) + elem_size) >= Integer(Reader.block_max) then
     cvChangeSeqBlock(@Reader, 1);
 end;
 
@@ -2315,6 +2326,16 @@ begin
   Result := CV_SEQ_ELEM(seq, size_of_elem, index);
 end;
 
+function CV_CAST_8U(t : Integer) : UCHAR;
+begin
+  if (not (t and (not 255)) <> 0) then
+    Result := t
+  else if t > 0 then
+    Result := 255
+  else
+    Result := 0;
+end;
+
 function CV_SEQ_ELEM(seq: pCvSeq; const size_of_elem: Integer; index: Integer): Pointer; inline;
 begin
   // assert(sizeof((seq)->first[0]) == sizeof(CvSeqBlock) && (seq)->elem_size == sizeof(elem_type))
@@ -2343,7 +2364,7 @@ begin
   Result := CV_MAKETYPE(CV_8U, 3);
 end;
 
-function CV_IS_SET_ELEM(ptr: Pointer): Boolean; inline;
+function CV_IS_SET_ELEM(ptr: Pointer): Boolean; // inline;
 begin
   // #define CV_IS_SET_ELEM( ptr )  (((CvSetElem*)(ptr))->flags >= 0)
   Result := pCvSetElem(ptr)^.flags >= 0;

@@ -406,16 +406,6 @@ type
 type
   TCvSubdiv2DEdge = size_t;
   { EXTERNALSYM CvSubdiv2DEdge }
-  // // >> Following declaration is a macro definition!
-  // const
-  // CV_QUADEDGE2D_FIELDS()Integer flags;
-  //
-  // type;
-  //
-  // type
-  // pt:
-  // array [0 .. 3] of;
-  // CvSubdiv2DEdge next[4] = ^UADEDGE2D_FIELDS()Integer flags;
 
   pCvSubdiv2DPoint = ^TCvSubdiv2DPoint;
 
@@ -443,20 +433,25 @@ Type
   pCvSubdiv2D = ^TCvSubdiv2D;
 
   TCvSubdiv2D = packed record
-    flags: Integer; // Miscellaneous flags.
-    header_size: Integer; // Size of sequence header.
-    h_prev: pCvSeq; // Previous sequence.
-    h_next: pCvSeq; // Next sequence.
-    v_prev: pCvSeq; // 2nd previous sequence.
-    v_next: pCvSeq; // 2nd next sequence.
-    total: Integer; // Total number of elements.
-    elem_size: Integer; // Size of sequence element in bytes.
-    block_max: Pointer; // Maximal bound of the last block.
-    ptr: Pointer; // Current write pointer.
-    delta_elems: Integer; // Grow seq this many at a time.
-    storage: pCvMemStorage; // Where the seq is stored.
-    free_blocks: pCvSeqBlock; // Free blocks list.
-    first: pCvSeqBlock; // Pointer to the first sequence block.
+    // CV_SUBDIV2D_FIELDS()
+    // -CV_GRAPH_FIELDS()
+    // --CV_SET_FIELDS()
+    // --CV_SEQUENCE_FIELDS()
+    // ---CV_TREE_NODE_FIELDS(CvSeq);
+    flags: Integer; // * Miscellaneous flags.
+    eader_size: Integer; // * Size of sequence header.
+    h_prev: pCvSeq; // * Previous sequence.
+    h_next: pCvSeq; // * Next sequence.
+    v_prev: pCvSeq; // * 2nd previous sequence.
+    v_next: pCvSeq; // * 2nd next sequence.
+    total: Integer; // * Total number of elements.
+    elem_size: Integer; // * Size of sequence element in bytes.
+    block_max: pShortInt; // * Maximal bound of the last block.
+    ptr: pShortInt; // * Current write pointer.
+    delta_elems: Integer; // * Grow seq this many at a time.
+    storage: pCvMemStorage; // * Where the seq is stored.
+    free_blocks: pCvSeqBlock; // * Free blocks list.
+    first: pCvSeqBlock; // * Pointer to the first sequence block.
     free_elems: pCvSetElem;
     active_count: Integer;
     edges: pCvSet;
