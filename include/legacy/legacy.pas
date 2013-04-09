@@ -92,6 +92,7 @@
 {$WARN UNSAFE_TYPE OFF}
 {$WARN UNSAFE_CODE OFF}
 {$WARN UNSAFE_CAST OFF}
+{$POINTERMATH ON}
 unit legacy;
 
 interface
@@ -2976,6 +2977,7 @@ procedure cvSnakeImage(const image: pIplImage; points: pCvPointArray; length: In
 type
 
   pCvSubdiv2DEdge = ^TCvSubdiv2DEdge;
+
   TCvSubdiv2DEdge = size_t;
   //
   // #define CV_QUADEDGE2D_FIELDS()     \
@@ -3106,7 +3108,7 @@ procedure cvCalcSubdivVoronoi2D(subdiv: pCvSubdiv2D); cdecl;
 // {
 // return  (edge & ~3) + ((edge + rotate) & 3);
 // }
-function cvSubdiv2DRotateEdge(edge: TCvSubdiv2DEdge; rotate: Integer): TCvSubdiv2DEdge; inline;
+function cvSubdiv2DRotateEdge(edge: TCvSubdiv2DEdge; rotate: Integer): TCvSubdiv2DEdge; // inline;
 
 // CV_INLINE  CvSubdiv2DEdge  cvSubdiv2DSymEdge( CvSubdiv2DEdge edge )
 // {
@@ -3119,21 +3121,21 @@ function cvSubdiv2DRotateEdge(edge: TCvSubdiv2DEdge; rotate: Integer): TCvSubdiv
 // edge = e->next[(edge + (int)type) & 3];
 // return  (edge & ~3) + ((edge + ((int)type >> 4)) & 3);
 // }
-function cvSubdiv2DGetEdge(edge: TCvSubdiv2DEdge; _type: TCvNextEdgeType): TCvSubdiv2DEdge; inline;
+function cvSubdiv2DGetEdge(edge: TCvSubdiv2DEdge; _type: TCvNextEdgeType): TCvSubdiv2DEdge; // inline;
 
 // CV_INLINE  CvSubdiv2DPoint*  cvSubdiv2DEdgeOrg( CvSubdiv2DEdge edge )
 // {
 // CvQuadEdge2D* e = (CvQuadEdge2D*)(edge & ~3);
 // return (CvSubdiv2DPoint*)e->pt[edge & 3];
 // }
-function cvSubdiv2DEdgeOrg(edge: TCvSubdiv2DEdge): pCvSubdiv2DPoint; inline;
+function cvSubdiv2DEdgeOrg(edge: TCvSubdiv2DEdge): pCvSubdiv2DPoint; // inline;
 
 // CV_INLINE  CvSubdiv2DPoint*  cvSubdiv2DEdgeDst( CvSubdiv2DEdge edge )
 // {
 // CvQuadEdge2D* e = (CvQuadEdge2D*)(edge & ~3);
 // return (CvSubdiv2DPoint*)e->pt[(edge + 2) & 3];
 // }
-function cvSubdiv2DEdgeDst(edge: TCvSubdiv2DEdge): pCvSubdiv2DPoint; inline;
+function cvSubdiv2DEdgeDst(edge: TCvSubdiv2DEdge): pCvSubdiv2DPoint; // inline;
 
 /// ****************************************************************************************\
 // *                           Additional operations on Subdivisions                        *
@@ -3309,42 +3311,55 @@ procedure cvFindStereoCorrespondenceGC(const left: pIplImage; const right: pIplI
 // *       IEEE Transactions on Pattern Analysis and Machine Intelligence 22(8):747-757
 // */
 //
-//
-// #define CV_BG_MODEL_FGD		0
-// #define CV_BG_MODEL_MOG		1			/* "Mixture of Gaussians".	*/
-// #define CV_BG_MODEL_FGD_SIMPLE	2
-//
-// struct CvBGStatModel;
-//
-// typedef void (CV_CDECL * CvReleaseBGStatModel)( struct CvBGStatModel** bg_model );
-// typedef int (CV_CDECL * CvUpdateBGStatModel)( IplImage* curr_frame, struct CvBGStatModel* bg_model,
-// double learningRate );
-//
-// #define CV_BG_STAT_MODEL_FIELDS()                                               \
-// int             type; /*type of BG model*/                                      \
-// CvReleaseBGStatModel release;                                                   \
-// CvUpdateBGStatModel update;                                                     \
-// IplImage*       background;   /*8UC3 reference background image*/               \
-// IplImage*       foreground;   /*8UC1 foreground image*/                         \
-// IplImage**      layers;       /*8UC3 reference background image, can be null */ \
-// int             layer_count;  /* can be zero */                                 \
-// CvMemStorage*   storage;      /*storage for foreground_regions*/                \
-// CvSeq*          foreground_regions /*foreground object contours*/
-//
-// typedef struct CvBGStatModel
-// {
-// CV_BG_STAT_MODEL_FIELDS();
-// } CvBGStatModel;
-//
-/// /
-//
-/// / Releases memory used by BGStatModel
-// CVAPI(void) cvReleaseBGStatModel( CvBGStatModel** bg_model );
-//
-/// / Updates statistical model and returns number of found foreground regions
+const
+  CV_BG_MODEL_FGD = 0;
+  CV_BG_MODEL_MOG = 1; // * "Mixture of Gaussians".	*/
+  CV_BG_MODEL_FGD_SIMPLE = 2;
+
+Type
+
+  ppCvBGStatModel = ^pCvBGStatModel;
+  pCvBGStatModel = ^TCvBGStatModel;
+
+  // typedef void (CV_CDECL * CvReleaseBGStatModel)( struct CvBGStatModel** bg_model );
+  TCvReleaseBGStatModel = procedure(Var bg_model: pCvBGStatModel); cdecl;
+  // typedef int (CV_CDECL * CvUpdateBGStatModel)( IplImage* curr_frame, struct CvBGStatModel* bg_model, double learningRate );
+  TCvUpdateBGStatModel = function(curr_frame: pIplImage; bg_model: pCvBGStatModel; learningRate: double)
+    : Integer; cdecl;
+
+  TCvBGStatModel = packed record
+    _type: Integer; // *type of BG model
+    release: TCvReleaseBGStatModel;
+    update: TCvUpdateBGStatModel;
+    background: pIplImage; // *8UC3 reference background image
+    foreground: pIplImage; // *8UC1 foreground image
+    layers: pIplImage; // *8UC3 reference background image, can be null
+    layer_count: Integer; // * can be zero
+    storage: pCvMemStorage; // *storage for foreground_regions
+    foreground_regions: pCvSeq; // *foreground object contours
+  end;
+
+  // #define CV_BG_STAT_MODEL_FIELDS()                                               \
+  // int             type; /*type of BG model*/                                      \
+  // CvReleaseBGStatModel release;                                                   \
+  // CvUpdateBGStatModel update;                                                     \
+  // IplImage*       background;   /*8UC3 reference background image*/               \
+  // IplImage*       foreground;   /*8UC1 foreground image*/                         \
+  // IplImage**      layers;       /*8UC3 reference background image, can be null */ \
+  // int             layer_count;  /* can be zero */                                 \
+  // CvMemStorage*   storage;      /*storage for foreground_regions*/                \
+  // CvSeq*          foreground_regions /*foreground object contours*/
+
+  /// / Releases memory used by BGStatModel
+  // CVAPI(void) cvReleaseBGStatModel( CvBGStatModel** bg_model );
+procedure cvReleaseBGStatModel(Var bg_model: pCvBGStatModel); cdecl;
+
+// Updates statistical model and returns number of found foreground regions
 // CVAPI(int) cvUpdateBGStatModel( IplImage* current_frame, CvBGStatModel*  bg_model,
 // double learningRate CV_DEFAULT(-1));
-//
+function cvUpdateBGStatModel(current_frame: pIplImage; bg_model: pCvBGStatModel; learningRate: double = -1)
+  : Integer; cdecl;
+
 /// / Performs FG post-processing using segmentation
 /// / (all pixels of a region will be classified as foreground if majority of pixels of the region are FG).
 /// / parameters:
@@ -3356,223 +3371,226 @@ procedure cvFindStereoCorrespondenceGC(const left: pIplImage; const right: pIplI
 // CVAPI(int)  cvChangeDetection( IplImage*  prev_frame,
 // IplImage*  curr_frame,
 // IplImage*  change_mask );
+
 //
-/// *
 // Interface of ACM MM2003 algorithm
-// */
 //
-/// * Default parameters of foreground detection algorithm: */
-// #define  CV_BGFG_FGD_LC              128
-// #define  CV_BGFG_FGD_N1C             15
-// #define  CV_BGFG_FGD_N2C             25
-//
-// #define  CV_BGFG_FGD_LCC             64
-// #define  CV_BGFG_FGD_N1CC            25
-// #define  CV_BGFG_FGD_N2CC            40
-//
-/// * Background reference image update parameter: */
-// #define  CV_BGFG_FGD_ALPHA_1         0.1f
-//
-/// * stat model update parameter
-// * 0.002f ~ 1K frame(~45sec), 0.005 ~ 18sec (if 25fps and absolutely static BG)
-// */
-// #define  CV_BGFG_FGD_ALPHA_2         0.005f
-//
-/// * start value for alpha parameter (to fast initiate statistic model) */
-// #define  CV_BGFG_FGD_ALPHA_3         0.1f
-//
-// #define  CV_BGFG_FGD_DELTA           2
-//
-// #define  CV_BGFG_FGD_T               0.9f
-//
-// #define  CV_BGFG_FGD_MINAREA         15.f
-//
-// #define  CV_BGFG_FGD_BG_UPDATE_TRESH 0.5f
-//
-/// * See the above-referenced Li/Huang/Gu/Tian paper
-// * for a full description of these background-model
-// * tuning parameters.
-// *
-// * Nomenclature:  'c'  == "color", a three-component red/green/blue vector.
-// *                         We use histograms of these to model the range of
-// *                         colors we've seen at a given background pixel.
-// *
-// *                'cc' == "color co-occurrence", a six-component vector giving
-// *                         RGB color for both this frame and preceding frame.
-// *                             We use histograms of these to model the range of
-// *                         color CHANGES we've seen at a given background pixel.
-// */
-// typedef struct CvFGDStatModelParams
-// {
-// int    Lc;			/* Quantized levels per 'color' component. Power of two, typically 32, 64 or 128.				*/
-// int    N1c;			/* Number of color vectors used to model normal background color variation at a given pixel.			*/
-// int    N2c;			/* Number of color vectors retained at given pixel.  Must be > N1c, typically ~ 5/3 of N1c.			*/
-// /* Used to allow the first N1c vectors to adapt over time to changing background.				*/
-//
-// int    Lcc;			/* Quantized levels per 'color co-occurrence' component.  Power of two, typically 16, 32 or 64.			*/
-// int    N1cc;		/* Number of color co-occurrence vectors used to model normal background color variation at a given pixel.	*/
-// int    N2cc;		/* Number of color co-occurrence vectors retained at given pixel.  Must be > N1cc, typically ~ 5/3 of N1cc.	*/
-// /* Used to allow the first N1cc vectors to adapt over time to changing background.				*/
-//
-// int    is_obj_without_holes;/* If TRUE we ignore holes within foreground blobs. Defaults to TRUE.						*/
-// int    perform_morphing;	/* Number of erode-dilate-erode foreground-blob cleanup iterations.						*/
-// /* These erase one-pixel junk blobs and merge almost-touching blobs. Default value is 1.			*/
-//
-// float  alpha1;		/* How quickly we forget old background pixel values seen.  Typically set to 0.1  				*/
-// float  alpha2;		/* "Controls speed of feature learning". Depends on T. Typical value circa 0.005. 				*/
-// float  alpha3;		/* Alternate to alpha2, used (e.g.) for quicker initial convergence. Typical value 0.1.				*/
-//
-// float  delta;		/* Affects color and color co-occurrence quantization, typically set to 2.					*/
-// float  T;			/* "A percentage value which determines when new features can be recognized as new background." (Typically 0.9).*/
-// float  minArea;		/* Discard foreground blobs whose bounding box is smaller than this threshold.					*/
-// } CvFGDStatModelParams;
-//
-// typedef struct CvBGPixelCStatTable
-// {
-// float          Pv, Pvb;
-// uchar          v[3];
-// } CvBGPixelCStatTable;
-//
-// typedef struct CvBGPixelCCStatTable
-// {
-// float          Pv, Pvb;
-// uchar          v[6];
-// } CvBGPixelCCStatTable;
-//
-// typedef struct CvBGPixelStat
-// {
-// float                 Pbc;
-// float                 Pbcc;
-// CvBGPixelCStatTable*  ctable;
-// CvBGPixelCCStatTable* cctable;
-// uchar                 is_trained_st_model;
-// uchar                 is_trained_dyn_model;
-// } CvBGPixelStat;
-//
-//
-// typedef struct CvFGDStatModel
-// {
-// CV_BG_STAT_MODEL_FIELDS();
-// CvBGPixelStat*         pixel_stat;
-// IplImage*              Ftd;
-// IplImage*              Fbd;
-// IplImage*              prev_frame;
-// CvFGDStatModelParams   params;
-// } CvFGDStatModel;
-//
-/// * Creates FGD model */
-// CVAPI(CvBGStatModel*) cvCreateFGDStatModel( IplImage* first_frame,
-// CvFGDStatModelParams* parameters CV_DEFAULT(NULL));
-//
-/// *
+
+const
+  // Default parameters of foreground detection algorithm:
+  CV_BGFG_FGD_LC = 128;
+  CV_BGFG_FGD_N1C = 15;
+  CV_BGFG_FGD_N2C = 25;
+
+  CV_BGFG_FGD_LCC = 64;
+  CV_BGFG_FGD_N1CC = 25;
+  CV_BGFG_FGD_N2CC = 40;
+  // Background reference image update parameter: */
+  CV_BGFG_FGD_ALPHA_1 = 0.1;
+
+  /// * stat model update parameter
+  // * 0.002f ~ 1K frame(~45sec), 0.005 ~ 18sec (if 25fps and absolutely static BG)
+  // */
+  CV_BGFG_FGD_ALPHA_2 = 0.005;
+
+  // * start value for alpha parameter (to fast initiate statistic model) */
+  CV_BGFG_FGD_ALPHA_3 = 0.1;
+  CV_BGFG_FGD_DELTA = 2;
+  CV_BGFG_FGD_T = 0.9;
+  CV_BGFG_FGD_MINAREA = 15;
+  CV_BGFG_FGD_BG_UPDATE_TRESH = 0.5;
+
+  /// * See the above-referenced Li/Huang/Gu/Tian paper
+  // * for a full description of these background-model
+  // * tuning parameters.
+  // *
+  // * Nomenclature:  'c'  == "color", a three-component red/green/blue vector.
+  // *                         We use histograms of these to model the range of
+  // *                         colors we've seen at a given background pixel.
+  // *
+  // *                'cc' == "color co-occurrence", a six-component vector giving
+  // *                         RGB color for both this frame and preceding frame.
+  // *                             We use histograms of these to model the range of
+  // *                         color CHANGES we've seen at a given background pixel.
+  // */
+Type
+  pCvFGDStatModelParams = ^TCvFGDStatModelParams;
+
+  TCvFGDStatModelParams = packed record
+    Lc: Integer; // Quantized levels per 'color' component. Power of two, typically 32, 64 or 128.
+    N1c: Integer; // Number of color vectors used to model normal background color variation at a given pixel.
+    N2c: Integer; // Number of color vectors retained at given pixel.  Must be > N1c, typically ~ 5/3 of N1c.
+    // Used to allow the first N1c vectors to adapt over time to changing background.
+    Lcc: Integer;
+    // Quantized levels per 'color co-occurrence' component.  Power of two, typically 16, 32 or 64.
+    N1cc: Integer;
+    // Number of color co-occurrence vectors used to model normal background color variation at a given pixel.
+    N2cc: Integer;
+    // Number of color co-occurrence vectors retained at given pixel.  Must be > N1cc, typically ~ 5/3 of N1cc.
+    // Used to allow the first N1cc vectors to adapt over time to changing background.
+    is_obj_without_holes: Integer; // If TRUE we ignore holes within foreground blobs. Defaults to TRUE.
+    perform_morphing: Integer; // Number of erode-dilate-erode foreground-blob cleanup iterations.
+    // These erase one-pixel junk blobs and merge almost-touching blobs. Default value is 1.
+    alpha1: Single; // How quickly we forget old background pixel values seen.  Typically set to 0.1
+    alpha2: Single; // "Controls speed of feature learning". Depends on T. Typical value circa 0.005.
+    alpha3: Single; // Alternate to alpha2, used (e.g.) for quicker initial convergence. Typical value 0.1.
+    delta: Single; // Affects color and color co-occurrence quantization, typically set to 2.
+    T: Single;
+    // "A percentage value which determines when new features can be recognized as new background." (Typically 0.9).
+    minArea: Single; // Discard foreground blobs whose bounding box is smaller than this threshold.
+  end;
+  //
+  // typedef struct CvBGPixelCStatTable
+  // {
+  // float          Pv, Pvb;
+  // uchar          v[3];
+  // } CvBGPixelCStatTable;
+  //
+  // typedef struct CvBGPixelCCStatTable
+  // {
+  // float          Pv, Pvb;
+  // uchar          v[6];
+  // } CvBGPixelCCStatTable;
+  //
+  // typedef struct CvBGPixelStat
+  // {
+  // float                 Pbc;
+  // float                 Pbcc;
+  // CvBGPixelCStatTable*  ctable;
+  // CvBGPixelCCStatTable* cctable;
+  // uchar                 is_trained_st_model;
+  // uchar                 is_trained_dyn_model;
+  // } CvBGPixelStat;
+  //
+  //
+  // typedef struct CvFGDStatModel
+  // {
+  // CV_BG_STAT_MODEL_FIELDS();
+  // CvBGPixelStat*         pixel_stat;
+  // IplImage*              Ftd;
+  // IplImage*              Fbd;
+  // IplImage*              prev_frame;
+  // CvFGDStatModelParams   params;
+  // } CvFGDStatModel;
+
+  /// * Creates FGD model */
+  // CVAPI(CvBGStatModel*) cvCreateFGDStatModel( IplImage* first_frame, CvFGDStatModelParams* parameters CV_DEFAULT(NULL));
+function cvCreateFGDStatModel(first_frame: pIplImage; parameters: pCvFGDStatModelParams = nil): pCvBGStatModel;
+cdecl
+
 // Interface of Gaussian mixture algorithm
 //
 // "An improved adaptive background mixture model for real-time tracking with shadow detection"
 // P. KadewTraKuPong and R. Bowden,
 // Proc. 2nd European Workshp on Advanced Video-Based Surveillance Systems, 2001."
 // http://personal.ee.surrey.ac.uk/Personal/R.Bowden/publications/avbs01/avbs01.pdf
-// */
 //
 /// * Note:  "MOG" == "Mixture Of Gaussians": */
-//
-// #define CV_BGFG_MOG_MAX_NGAUSSIANS 500
-//
-/// * default parameters of gaussian background detection algorithm */
-// #define CV_BGFG_MOG_BACKGROUND_THRESHOLD     0.7     /* threshold sum of weights for background test */
-// #define CV_BGFG_MOG_STD_THRESHOLD            2.5     /* lambda=2.5 is 99% */
-// #define CV_BGFG_MOG_WINDOW_SIZE              200     /* Learning rate; alpha = 1/CV_GBG_WINDOW_SIZE */
-// #define CV_BGFG_MOG_NGAUSSIANS               5       /* = K = number of Gaussians in mixture */
-// #define CV_BGFG_MOG_WEIGHT_INIT              0.05
-// #define CV_BGFG_MOG_SIGMA_INIT               30
-// #define CV_BGFG_MOG_MINAREA                  15.f
-//
-//
-// #define CV_BGFG_MOG_NCOLORS                  3
-//
-// typedef struct CvGaussBGStatModelParams
-// {
-// int     win_size;               /* = 1/alpha */
-// int     n_gauss;
-// double  bg_threshold, std_threshold, minArea;
-// double  weight_init, variance_init;
-// }CvGaussBGStatModelParams;
-//
-// typedef struct CvGaussBGValues
-// {
-// int         match_sum;
-// double      weight;
-// double      variance[CV_BGFG_MOG_NCOLORS];
-// double      mean[CV_BGFG_MOG_NCOLORS];
-// } CvGaussBGValues;
-//
-// typedef struct CvGaussBGPoint
-// {
-// CvGaussBGValues* g_values;
-// } CvGaussBGPoint;
-//
-//
-// typedef struct CvGaussBGModel
-// {
-// CV_BG_STAT_MODEL_FIELDS();
-// CvGaussBGStatModelParams   params;
-// CvGaussBGPoint*            g_point;
-// int                        countFrames;
-// void*                      mog;
-// } CvGaussBGModel;
-//
-//
-/// * Creates Gaussian mixture background model */
-// CVAPI(CvBGStatModel*) cvCreateGaussianBGModel( IplImage* first_frame,
-// CvGaussBGStatModelParams* parameters CV_DEFAULT(NULL));
-//
-//
-// typedef struct CvBGCodeBookElem
-// {
-// struct CvBGCodeBookElem* next;
-// int tLastUpdate;
-// int stale;
-// uchar boxMin[3];
-// uchar boxMax[3];
-// uchar learnMin[3];
-// uchar learnMax[3];
-// } CvBGCodeBookElem;
-//
-// typedef struct CvBGCodeBookModel
-// {
-// CvSize size;
-// int t;
-// uchar cbBounds[3];
-// uchar modMin[3];
-// uchar modMax[3];
-// CvBGCodeBookElem** cbmap;
-// CvMemStorage* storage;
-// CvBGCodeBookElem* freeList;
-// } CvBGCodeBookModel;
-//
-// CVAPI(CvBGCodeBookModel*) cvCreateBGCodeBookModel( void );
+const
+  CV_BGFG_MOG_MAX_NGAUSSIANS = 500;
+
+  // * default parameters of gaussian background detection algorithm */
+  CV_BGFG_MOG_BACKGROUND_THRESHOLD = 0.7; // * threshold sum of weights for background test */
+  CV_BGFG_MOG_STD_THRESHOLD = 2.5; // * lambda=2.5 is 99% */
+  CV_BGFG_MOG_WINDOW_SIZE = 200; // * Learning rate; alpha = 1/CV_GBG_WINDOW_SIZE */
+  CV_BGFG_MOG_NGAUSSIANS = 5; // * = K = number of Gaussians in mixture */
+  CV_BGFG_MOG_WEIGHT_INIT = 0.05;
+  CV_BGFG_MOG_SIGMA_INIT = 30;
+  CV_BGFG_MOG_MINAREA = 15;
+
+  CV_BGFG_MOG_NCOLORS = 3;
+
+type
+  pCvGaussBGStatModelParams = ^TCvGaussBGStatModelParams;
+
+  TCvGaussBGStatModelParams = packed record
+    win_size: Integer; // * = 1/alpha
+    n_gauss: Integer;
+    bg_threshold, std_threshold, minArea: double;
+    weight_init, variance_init: double;
+  end;
+
+  pCvGaussBGValues = ^TCvGaussBGValues;
+
+  TCvGaussBGValues = packed record
+    match_sum: Integer;
+    weight: double;
+    variance: array [0 .. CV_BGFG_MOG_NCOLORS - 1] of double;
+    mean: array [0 .. CV_BGFG_MOG_NCOLORS - 1] of double;
+  end;
+
+  pCvGaussBGPoint = ^TCvGaussBGPoint;
+
+  TCvGaussBGPoint = packed record
+    g_values: pCvGaussBGValues;
+  end;
+
+  pCvGaussBGModel = ^TCvGaussBGModel;
+
+  TCvGaussBGModel = packed record
+    // CV_BG_STAT_MODEL_FIELDS();
+    _type: Integer; // type of BG model
+    release: TCvReleaseBGStatModel;
+    update: TCvUpdateBGStatModel;
+    background: pIplImage; // 8UC3 reference background image
+    foreground: pIplImage; // 8UC1 foreground image
+    layers: pIplImage; // 8UC3 reference background image, can be null
+    layer_count: Integer; // can be zero
+    storage: pCvMemStorage; // storage for foreground_regions
+    foreground_regions: pCvSeq; // foreground object contours
+    params: TCvGaussBGStatModelParams;
+    g_point: pCvGaussBGPoint;
+    countFrames: Integer;
+    mog: Pointer;
+  end;
+
+  // * Creates Gaussian mixture background model */
+  // CVAPI(CvBGStatModel*) cvCreateGaussianBGModel( IplImage* first_frame, CvGaussBGStatModelParams* parameters CV_DEFAULT(NULL));
+function cvCreateGaussianBGModel(first_frame: pIplImage; parameters: pCvGaussBGStatModelParams = nil)
+  : pCvBGStatModel; cdecl;
+
+type
+  pCvBGCodeBookElem = ^TCvBGCodeBookElem;
+
+  TCvBGCodeBookElem = packed record
+    next: pCvBGCodeBookElem;
+    tLastUpdate: Integer;
+    stale: Integer;
+    boxMin: array [0 .. 2] of byte;
+    boxMax: array [0 .. 2] of byte;
+    learnMin: array [0 .. 2] of byte;
+    learnMax: array [0 .. 2] of byte;
+  end;
+
+  pCvBGCodeBookModel = ^TCvBGCodeBookModel;
+
+  TCvBGCodeBookModel = packed record
+    size: TCvSize;
+    T: Integer;
+    cbBounds: array [0 .. 2] of byte;
+    modMin: array [0 .. 2] of byte;
+    modMax: array [0 .. 2] of byte;
+    cbmap: pCvBGCodeBookElem;
+    storage: pCvMemStorage;
+    freeList: pCvBGCodeBookElem;
+  end;
+
+  // CVAPI(CvBGCodeBookModel*) cvCreateBGCodeBookModel( void );
+function cvCreateBGCodeBookModel: pCvBGCodeBookModel; cdecl;
 // CVAPI(void) cvReleaseBGCodeBookModel( CvBGCodeBookModel** model );
-//
-// CVAPI(void) cvBGCodeBookUpdate( CvBGCodeBookModel* model, const CvArr* image,
-// CvRect roi CV_DEFAULT(cvRect(0,0,0,0)),
-// const CvArr* mask CV_DEFAULT(0) );
-//
-// CVAPI(int) cvBGCodeBookDiff( const CvBGCodeBookModel* model, const CvArr* image,
-// CvArr* fgmask, CvRect roi CV_DEFAULT(cvRect(0,0,0,0)) );
-//
-// CVAPI(void) cvBGCodeBookClearStale( CvBGCodeBookModel* model, int staleThresh,
-// CvRect roi CV_DEFAULT(cvRect(0,0,0,0)),
-// const CvArr* mask CV_DEFAULT(0) );
-//
-// CVAPI(CvSeq*) cvSegmentFGMask( CvArr *fgmask, int poly1Hull0 CV_DEFAULT(1),
-// float perimScale CV_DEFAULT(4.f),
-// CvMemStorage* storage CV_DEFAULT(0),
-// CvPoint offset CV_DEFAULT(cvPoint(0,0)));
-//
-// #ifdef __cplusplus
-// }
-// #endif
-//
-// #endif
+procedure cvReleaseBGCodeBookModel(model: pCvBGCodeBookModel); cdecl;
+// CVAPI(void) cvBGCodeBookUpdate( CvBGCodeBookModel* model, const CvArr* image, CvRect roi CV_DEFAULT(cvRect(0,0,0,0)),const CvArr* mask CV_DEFAULT(0) );
+procedure cvBGCodeBookUpdate(model: pCvBGCodeBookModel; const image: pIplImage;
+  roi: TCvRect { =CV_DEFAULT(cvRect(0,0,0,0)) }; const mask: pCvArr { =0 } ); cdecl;
+// CVAPI(int) cvBGCodeBookDiff( const CvBGCodeBookModel* model, const CvArr* image, CvArr* fgmask, CvRect roi CV_DEFAULT(cvRect(0,0,0,0)) );
+function cvBGCodeBookDiff(const model: pCvBGCodeBookModel; const image: pCvArr; fgmask: pCvArr;
+  roi: TCvRect { = cvRect(0,0,0,0) } ): Integer; cdecl;
+// CVAPI(void) cvBGCodeBookClearStale( CvBGCodeBookModel* model, int staleThresh, CvRect roi CV_DEFAULT(cvRect(0,0,0,0)), const CvArr* mask CV_DEFAULT(0) );
+procedure cvBGCodeBookClearStale(model: pCvBGCodeBookModel; staleThresh: Integer; roi: TCvRect { =cvRect(0,0,0,0) };
+  const mask: pCvArr  = nil  ); cdecl;
+// CVAPI(CvSeq*) cvSegmentFGMask( CvArr *fgmask, int poly1Hull0 CV_DEFAULT(1), float perimScale CV_DEFAULT(4.f), CvMemStorage* storage CV_DEFAULT(0), CvPoint offset CV_DEFAULT(cvPoint(0,0)));
+function cvSegmentFGMask(fgmask: pCvArr; poly1Hull0: Integer { =1 }; perimScale: Single { = 4 };
+  storage: pCvMemStorage { =nil }; offset: TCvPoint { =cvPoint(0,0) } ): pCvSeq; cdecl;
 
 implementation
 
@@ -3595,7 +3613,7 @@ begin
   Result := pCvSubdiv2DPoint(e^.pt[edge and 3]);
 end;
 
-function cvSubdiv2DEdgeDst(edge: TCvSubdiv2DEdge): pCvSubdiv2DPoint; inline;
+function cvSubdiv2DEdgeDst(edge: TCvSubdiv2DEdge): pCvSubdiv2DPoint;
 Var
   e: pCvQuadEdge2D;
 begin
@@ -3607,7 +3625,7 @@ end;
 
 function cvSubdiv2DLocate; external legacy_Dll;
 
-function cvSubdiv2DGetEdge(edge: TCvSubdiv2DEdge; _type: TCvNextEdgeType): TCvSubdiv2DEdge; inline;
+function cvSubdiv2DGetEdge(edge: TCvSubdiv2DEdge; _type: TCvNextEdgeType): TCvSubdiv2DEdge;
 Var
   e: pCvQuadEdge2D;
 begin
@@ -3619,7 +3637,7 @@ begin
   Result := (edge and (not 3)) + ((edge + (_type shr 4)) and 3);
 end;
 
-function cvSubdiv2DRotateEdge(edge: TCvSubdiv2DEdge; rotate: Integer): TCvSubdiv2DEdge; inline;
+function cvSubdiv2DRotateEdge(edge: TCvSubdiv2DEdge; rotate: Integer): TCvSubdiv2DEdge;
 begin
   // return  (edge & ~3) + ((edge + rotate) & 3);
   Result := (edge and (not 3)) + ((edge + rotate) and 3);
@@ -3627,5 +3645,15 @@ end;
 
 procedure cvCalcSubdivVoronoi2D; external legacy_Dll;
 function cvSubdivDelaunay2DInsert; external legacy_Dll;
+function cvCreateGaussianBGModel; external legacy_Dll;
+function cvUpdateBGStatModel; external legacy_Dll;
+procedure cvReleaseBGStatModel; external legacy_Dll;
+function cvCreateFGDStatModel; external legacy_Dll;
+function cvCreateBGCodeBookModel; external legacy_Dll;
+procedure cvReleaseBGCodeBookModel; external legacy_Dll;
+procedure cvBGCodeBookUpdate; external legacy_Dll;
+function cvBGCodeBookDiff; external legacy_Dll;
+procedure cvBGCodeBookClearStale; external legacy_Dll;
+function cvSegmentFGMask; external legacy_Dll;
 
 end.
