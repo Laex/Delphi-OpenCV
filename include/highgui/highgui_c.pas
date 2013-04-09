@@ -1,15 +1,16 @@
-(* ///////////////////////////////////////////////////////////////////////////////////////
-  //    IMPORTANT: READ BEFORE DOWNLOADING, COPYING, INSTALLING OR USING.
+// --------------------------------- OpenCV license.txt ---------------------------
+(* //    IMPORTANT: READ BEFORE DOWNLOADING, COPYING, INSTALLING OR USING.
   //
   //    By downloading, copying, installing or using the software you agree to this license.
   //    If you do not agree to this license, do not download, install,
   //    copy or use the software.
   //
   //
-  //                          Intel License Agreement
+  //                             License Agreement
   //                  For Open Source Computer Vision Library
   //
-  //   Copyright (C) 2000, Intel Corporation, all rights reserved.
+  //   Copyright (C) 2000-2008, Intel Corporation, all rights reserved.
+  //   Copyright (C) 2009, Willow Garage Inc., all rights reserved.
   //   Third party copyrights are property of their respective owners.
   //
   //   Redistribution and use in source and binary forms, with or without modification,
@@ -22,7 +23,7 @@
   //       this list of conditions and the following disclaimer in the documentation
   //       and/or other materials provided with the distribution.
   //
-  //     * The name of Intel Corporation may not be used to endorse or promote products
+  //     * The name of the copyright holders may not be used to endorse or promote products
   //       derived from this software without specific prior written permission.
   //
   //   This software is provided by the copyright holders and contributors "as is" and
@@ -34,13 +35,51 @@
   //   loss of use, data, or profits; or business interruption) however caused
   //   and on any theory of liability, whether in contract, strict liability,
   //   or tort (including negligence or otherwise) arising in any way out of
-  //   the use of this software, even if advised of the possibility of such damage.
+  //   the use of this software, even if advised of the possibility of such damage. *)
 
-  Translated from:
-
-  opencv2/core/core_c.h
-
-*)
+(* /  **************************************************************************************************
+  //                                 Project Delphi-OpenCV
+  //  **************************************************************************************************
+  //  Contributor:
+  //  laentir Valetov
+  //  email:laex@bk.ru
+  //  **************************************************************************************************
+  //  You may retrieve the latest version of this file at the GitHub,
+  //  located at git://github.com/Laex/Delphi-OpenCV.git
+  //  **************************************************************************************************
+  //  License:
+  //  The contents of this file are subject to the Mozilla Public License Version 1.1 (the "License");
+  //  you may not use this file except in compliance with the License. You may obtain a copy of the
+  //  License at http://www.mozilla.org/MPL/
+  //
+  //  Software distributed under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
+  //  ANY KIND, either express or implied. See the License for the specific language governing rights
+  //  and limitations under the License.
+  //
+  //  Alternatively, the contents of this file may be used under the terms of the
+  //  GNU Lesser General Public License (the  "LGPL License"), in which case the
+  //  provisions of the LGPL License are applicable instead of those above.
+  //  If you wish to allow use of your version of this file only under the terms
+  //  of the LGPL License and not to allow others to use your version of this file
+  //  under the MPL, indicate your decision by deleting  the provisions above and
+  //  replace  them with the notice and other provisions required by the LGPL
+  //  License.  If you do not delete the provisions above, a recipient may use
+  //  your version of this file under either the MPL or the LGPL License.
+  //
+  //  For more information about the LGPL: http://www.gnu.org/copyleft/lesser.html
+  //  **************************************************************************************************
+  //  Warning: Using Delphi XE3 syntax!
+  //  **************************************************************************************************
+  //  The Initial Developer of the Original Code:
+  //  OpenCV: open source computer vision library
+  //  Homepage:    http://opencv.org
+  //  Online docs: http://docs.opencv.org
+  //  Q&A forum:   http://answers.opencv.org
+  //  Dev zone:    http://code.opencv.org
+  //  **************************************************************************************************
+  //  Original file:
+  //  opencv\modules\highgui\include\opencv2\highgui\highgui_c.h
+  //  ************************************************************************************************* *)
 
 {$IFDEF DEBUG}
 {$A8,B-,C+,D+,E-,F-,G+,H+,I+,J-,K-,L+,M-,N+,O-,P+,Q+,R+,S-,T-,U-,V+,W+,X+,Y+,Z1}
@@ -131,8 +170,8 @@ function cvGetWindowProperty(name: pCVChar; prop_id: Integer): Double; cdecl;
   CVAPI(void) cvShowImage( const char* name, const CvArr* image );
 }
 procedure cvShowImage(const name: pCVChar; const image: pCvArr); cdecl;
-//procedure cvShowImage(const name: pCVChar; const image: pIplImage); cdecl; overload;
-//procedure cvShowImage(const name: pCVChar; const image: pCvMat); cdecl; overload;
+// procedure cvShowImage(const name: pCVChar; const image: pIplImage); cdecl; overload;
+// procedure cvShowImage(const name: pCVChar; const image: pCvMat); cdecl; overload;
 
 (* resize/move window *)
 procedure cvResizeWindow(name: pCVChar; width: Integer; height: Integer); cdecl;
@@ -794,8 +833,8 @@ uses
 
 function cvNamedWindow; external highgui_Dll;
 procedure cvShowImage; external highgui_Dll;
-//procedure cvShowImage(const name: pCVChar; const image: pIplImage); external highgui_Dll name 'cvShowImage';
-//procedure cvShowImage(const name: pCVChar; const image: pCvMat); external highgui_Dll name 'cvShowImage';
+// procedure cvShowImage(const name: pCVChar; const image: pIplImage); external highgui_Dll name 'cvShowImage';
+// procedure cvShowImage(const name: pCVChar; const image: pCvMat); external highgui_Dll name 'cvShowImage';
 function cvWaitKey; external highgui_Dll;
 procedure cvDestroyWindow; external highgui_Dll;
 procedure cvDestroyAllWindows; external highgui_Dll;

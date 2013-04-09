@@ -156,5 +156,4 @@
 [Exception Log]
 EurekaLog Version=7001
 DeleteMapAfterCompile=1
-Encrypt Password=""
 EurekaLog Last Line -->

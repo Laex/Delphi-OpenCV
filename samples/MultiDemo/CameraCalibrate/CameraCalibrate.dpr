@@ -1,38 +1,49 @@
-// Чтение ширины и высоты шахматной доски,
-// чтение и коллекционирование запрошенного количества видов
-// и калибровка камеры
-
-// calib.cpp
-// Инициализация входных данных:
-// calib board_w board_h number_of_views
-//
-// Нажатие ‘p’ - установка/выключение паузы, ESC - выход
-
-{$APPTYPE CONSOLE}
-{$POINTERMATH ON}
+(* /*****************************************************************
+  //                       Delphi-OpenCV Demo
+  //               Copyright (C) 2013 Project Delphi-OpenCV
+  // ****************************************************************
+  // Contributor:
+  // laentir Valetov
+  // email:laex@bk.ru
+  // ****************************************************************
+  // You may retrieve the latest version of this file at the GitHub,
+  // located at git://github.com/Laex/Delphi-OpenCV.git
+  // ****************************************************************
+  // The contents of this file are used with permission, subject to
+  // the Mozilla Public License Version 1.1 (the "License"); you may
+  // not use this file except in compliance with the License. You may
+  // obtain a copy of the License at
+  // http://www.mozilla.org/MPL/MPL-1_1Final.html
+  //
+  // Software distributed under the License is distributed on an
+  // "AS IS" basis, WITHOUT WARRANTY OF ANY KIND, either express or
+  // implied. See the License for the specific language governing
+  // rights and limitations under the License.
+  ******************************************************************* *)
 // JCL_DEBUG_EXPERT_GENERATEJDBG OFF
 // JCL_DEBUG_EXPERT_INSERTJDBG OFF
 // JCL_DEBUG_EXPERT_DELETEMAPFILE OFF
 program CameraCalibrate;
 
+{$APPTYPE CONSOLE}
+{$POINTERMATH ON}
 {$R *.res}
 
 uses
   System.SysUtils,
-uLibName in '..\..\..\include\uLibName.pas',
-highgui_c in '..\..\..\include\highgui\highgui_c.pas',
-core_c in '..\..\..\include\сore\core_c.pas',
-Core.types_c in '..\..\..\include\сore\Core.types_c.pas',
-imgproc.types_c in '..\..\..\include\imgproc\imgproc.types_c.pas',
-imgproc_c in '..\..\..\include\imgproc\imgproc_c.pas',
-legacy in '..\..\..\include\legacy\legacy.pas',
-calib3d in '..\..\..\include\calib3d\calib3d.pas',
-imgproc in '..\..\..\include\imgproc\imgproc.pas',
-haar in '..\..\..\include\objdetect\haar.pas',
-objdetect in '..\..\..\include\objdetect\objdetect.pas',
-tracking in '..\..\..\include\video\tracking.pas',
-Core in '..\..\..\include\сore\core.pas'
-  ;
+  uLibName in '..\..\..\include\uLibName.pas',
+  highgui_c in '..\..\..\include\highgui\highgui_c.pas',
+  core_c in '..\..\..\include\сore\core_c.pas',
+  Core.types_c in '..\..\..\include\сore\Core.types_c.pas',
+  imgproc.types_c in '..\..\..\include\imgproc\imgproc.types_c.pas',
+  imgproc_c in '..\..\..\include\imgproc\imgproc_c.pas',
+  legacy in '..\..\..\include\legacy\legacy.pas',
+  calib3d in '..\..\..\include\calib3d\calib3d.pas',
+  imgproc in '..\..\..\include\imgproc\imgproc.pas',
+  haar in '..\..\..\include\objdetect\haar.pas',
+  objdetect in '..\..\..\include\objdetect\objdetect.pas',
+  tracking in '..\..\..\include\video\tracking.pas',
+  Core in '..\..\..\include\сore\core.pas';
 
 Var
   n_boards: Integer = 0; // Установим входной список
@@ -138,15 +149,15 @@ begin
           j := 0;
           while i < board_n do
           begin
-            pSingle(CV_MAT_ELEM(image_points^, SizeOf(single), i, 0))^ := corners[j].x;
-            pSingle(CV_MAT_ELEM(image_points^, SizeOf(single), i, 1))^ := corners[j].y;
-            pSingle(CV_MAT_ELEM(object_points^, SizeOf(single), i, 0))^ := j / board_w;
-            pSingle(CV_MAT_ELEM(object_points^, SizeOf(single), i, 1))^ := j div board_w;
-            pSingle(CV_MAT_ELEM(object_points^, SizeOf(single), i, 2))^ := 0;
+            pSingle(CV_MAT_ELEM(image_points^, SizeOf(Single), i, 0))^ := corners[j].x;
+            pSingle(CV_MAT_ELEM(image_points^, SizeOf(Single), i, 1))^ := corners[j].y;
+            pSingle(CV_MAT_ELEM(object_points^, SizeOf(Single), i, 0))^ := j / board_w;
+            pSingle(CV_MAT_ELEM(object_points^, SizeOf(Single), i, 1))^ := j div board_w;
+            pSingle(CV_MAT_ELEM(object_points^, SizeOf(Single), i, 2))^ := 0;
             Inc(i);
             Inc(j);
           end;
-          pInteger(CV_MAT_ELEM(point_counts^, SizeOf(integer), successes, 0))^ := board_n;
+          pInteger(CV_MAT_ELEM(point_counts^, SizeOf(Integer), successes, 0))^ := board_n;
           Inc(successes);
         end;
       end; // end skip board_dt between chessboard capture
@@ -178,17 +189,23 @@ begin
     i := 0;
     While i < successes * board_n do
     begin
-      pSingle(CV_MAT_ELEM(image_points2^, SizeOf(single), i, 0))^ := pSingle(CV_MAT_ELEM(image_points^, SizeOf(single), i, 0))^;
-      pSingle(CV_MAT_ELEM(image_points2^, SizeOf(single), i, 1))^ := pSingle(CV_MAT_ELEM(image_points^, SizeOf(single), i, 1))^;
-      pSingle(CV_MAT_ELEM(object_points2^, SizeOf(single), i, 0))^ := pSingle(CV_MAT_ELEM(object_points^, SizeOf(single), i, 0))^;
-      pSingle(CV_MAT_ELEM(object_points2^, SizeOf(single), i, 1))^ := pSingle(CV_MAT_ELEM(object_points^, SizeOf(single), i, 1))^;
-      pSingle(CV_MAT_ELEM(object_points2^, SizeOf(single), i, 2))^ := pSingle(CV_MAT_ELEM(object_points^, SizeOf(single), i, 2))^;
+      pSingle(CV_MAT_ELEM(image_points2^, SizeOf(Single), i, 0))^ :=
+        pSingle(CV_MAT_ELEM(image_points^, SizeOf(Single), i, 0))^;
+      pSingle(CV_MAT_ELEM(image_points2^, SizeOf(Single), i, 1))^ :=
+        pSingle(CV_MAT_ELEM(image_points^, SizeOf(Single), i, 1))^;
+      pSingle(CV_MAT_ELEM(object_points2^, SizeOf(Single), i, 0))^ :=
+        pSingle(CV_MAT_ELEM(object_points^, SizeOf(Single), i, 0))^;
+      pSingle(CV_MAT_ELEM(object_points2^, SizeOf(Single), i, 1))^ :=
+        pSingle(CV_MAT_ELEM(object_points^, SizeOf(Single), i, 1))^;
+      pSingle(CV_MAT_ELEM(object_points2^, SizeOf(Single), i, 2))^ :=
+        pSingle(CV_MAT_ELEM(object_points^, SizeOf(Single), i, 2))^;
       Inc(i);
     end;
     i := 0;
     While i < successes do
     begin // Здесь все те же числа
-      pInteger(CV_MAT_ELEM(point_counts2^, SizeOf(Integer), i, 0))^ := pInteger(CV_MAT_ELEM(point_counts^, SizeOf(Integer), i, 0))^;
+      pInteger(CV_MAT_ELEM(point_counts2^, SizeOf(Integer), i, 0))^ :=
+        pInteger(CV_MAT_ELEM(point_counts^, SizeOf(Integer), i, 0))^;
       Inc(i);
     end;
     cvReleaseMat(object_points);
@@ -204,16 +221,16 @@ begin
     // pSingle(CV_MAT_ELEM(intrinsic_matrix^, CV_32FC1, 1, 1))^ := 1;
     // pSingle(CV_MAT_ELEM(intrinsic_matrix^, CV_32FC1, 2, 2))^ := 1;
 
-    pSingle(CV_MAT_ELEM(intrinsic_matrix^, SizeOf(single), 0, 0))^ := 520.0;
-    pSingle(CV_MAT_ELEM(intrinsic_matrix^, SizeOf(single), 1, 1))^ := 520.0;
-    pSingle(CV_MAT_ELEM(intrinsic_matrix^, SizeOf(single), 2, 2))^ := 1;
-    pSingle(CV_MAT_ELEM(intrinsic_matrix^, SizeOf(single), 0, 2))^ := 70.0;
-    pSingle(CV_MAT_ELEM(intrinsic_matrix^, SizeOf(single), 1, 2))^ := 70.0;
+    pSingle(CV_MAT_ELEM(intrinsic_matrix^, SizeOf(Single), 0, 0))^ := 520.0;
+    pSingle(CV_MAT_ELEM(intrinsic_matrix^, SizeOf(Single), 1, 1))^ := 520.0;
+    pSingle(CV_MAT_ELEM(intrinsic_matrix^, SizeOf(Single), 2, 2))^ := 1;
+    pSingle(CV_MAT_ELEM(intrinsic_matrix^, SizeOf(Single), 0, 2))^ := 70.0;
+    pSingle(CV_MAT_ELEM(intrinsic_matrix^, SizeOf(Single), 1, 2))^ := 70.0;
 
     for i := 0 to intrinsic_matrix^.rows - 1 do
     begin
       for j := 0 to intrinsic_matrix^.cols - 1 do
-        Write(Format('%.0f ', [pSingle(CV_MAT_ELEM(intrinsic_matrix^, SizeOf(single), i, j))^]));
+        Write(Format('%.0f ', [pSingle(CV_MAT_ELEM(intrinsic_matrix^, SizeOf(Single), i, j))^]));
       Writeln;
     end;
     Writeln;
