@@ -217,7 +217,7 @@ Uses Core.types_c;
 // CvMat* dr3dr2 CV_DEFAULT(0), CvMat* dr3dt2 CV_DEFAULT(0),
 // CvMat* dt3dr1 CV_DEFAULT(0), CvMat* dt3dt1 CV_DEFAULT(0),
 // CvMat* dt3dr2 CV_DEFAULT(0), CvMat* dt3dt2 CV_DEFAULT(0) );
-//
+
 /// * Projects object points to the view plane using
 // the specified extrinsic and intrinsic camera parameters */
 // CVAPI(void) cvProjectPoints2( const CvMat* object_points, const CvMat* rotation_vector,
@@ -227,8 +227,11 @@ Uses Core.types_c;
 // CvMat* dpdf CV_DEFAULT(NULL), CvMat* dpdc CV_DEFAULT(NULL),
 // CvMat* dpddist CV_DEFAULT(NULL),
 // double aspect_ratio CV_DEFAULT(0));
-//
-/// * Finds extrinsic camera parameters from
+procedure cvProjectPoints2(const object_points: pCvMat; const rotation_vector: pCvMat; const translation_vector: pCvMat;
+  const camera_matrix: pCvMat; const distortion_coeffs: pCvMat; image_points: pCvMat; dpdrot: pCvMat = nil;
+  dpdt: pCvMat = nil; dpdf: pCvMat = nil; dpdc: pCvMat = nil; dpddist: pCvMat = nil; aspect_ratio: double = 0); cdecl;
+
+// * Finds extrinsic camera parameters from
 // a few known corresponding point pairs and intrinsic parameters */
 // CVAPI(void) cvFindExtrinsicCameraParams2( const CvMat* object_points,
 // const CvMat* image_points,
@@ -237,7 +240,10 @@ Uses Core.types_c;
 // CvMat* rotation_vector,
 // CvMat* translation_vector,
 // int use_extrinsic_guess CV_DEFAULT(0) );
-//
+procedure cvFindExtrinsicCameraParams2(const object_points: pCvMat; const image_points: pCvMat;
+  const camera_matrix: pCvMat; const distortion_coeffs: pCvMat; rotation_vector: pCvMat; translation_vector: pCvMat;
+  use_extrinsic_guess: Integer = 0); cdecl;
+
 /// * Computes initial estimate of the intrinsic camera parameters
 // in case of planar calibration target (e.g. chessboard) */
 // CVAPI(void) cvInitIntrinsicParams2D( const CvMat* object_points,
@@ -322,7 +328,7 @@ function cvCalibrateCamera2(
   { } translation_vectors: pCvMat { =nil };
   { } flags: Integer { =0 };
   { } term_crit: TCvTermCriteria { =cvTermCriteria(CV_TERMCRIT_ITER+CV_TERMCRIT_EPS,30,DBL_EPSILON) }
-  ): Double; cdecl;
+  ): double; cdecl;
 
 /// * Computes various useful characteristics of the camera from the data computed by
 // cvCalibrateCamera2 */
@@ -477,5 +483,7 @@ procedure cvReprojectImageTo3D; external calib3d_dll;
 function cvFindChessboardCorners; external calib3d_dll;
 procedure cvDrawChessboardCorners; external calib3d_dll;
 function cvCalibrateCamera2; external calib3d_dll;
+procedure cvProjectPoints2; external calib3d_dll;
+procedure cvFindExtrinsicCameraParams2; external calib3d_dll;
 
 end.

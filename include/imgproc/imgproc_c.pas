@@ -590,14 +590,12 @@ function cvContourPerimeter(const contour: Pointer): double; inline;
 // just retrieves pre-calculated rectangle (update=0) *)
 // CVAPI(CvRect)  cvBoundingRect( CvArr* points, Integer update CV_DEFAULT(0) );
 
-{
-  /* Calculates area of a contour or contour segment */
-  CVAPI(double)  cvContourArea( const CvArr* contour,
-  CvSlice slice CV_DEFAULT(CV_WHOLE_SEQ),
-  int oriented CV_DEFAULT(0));
-}
-function cvContourArea(const contour: PCvSeq; slice: TCvSlice { = CV_WHOLE_SEQ }; oriented: Integer { = 0 } )
-  : double; cdecl;
+
+// * Calculates area of a contour or contour segment */
+// CVAPI(double)  cvContourArea( const CvArr* contour,
+// CvSlice slice CV_DEFAULT(CV_WHOLE_SEQ),
+// int oriented CV_DEFAULT(0));
+function cvContourArea(const contour: PCvSeq; slice: TCvSlice { = CV_WHOLE_SEQ }; oriented: Integer = 0): double; cdecl;
 
 // (* Finds minimum area rotated rectangle bounding a set of points *)
 // CVAPI(CvBox2D)  cvMinAreaRect2( const CvArr* points, CvMemStorage* storage CV_DEFAULT(NULL));

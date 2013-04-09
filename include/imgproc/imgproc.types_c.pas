@@ -341,7 +341,8 @@ const
 
   (* Spatial and central moments *)
 type
-  CvMoments = packed record
+  pCvMoments=^TCvMoments;
+  TCvMoments = packed record
     m00, m10, m01, m20, m11, m02, m30, m21, m12, m03: Double; (* spatial moments *)
     mu20, mu11, mu02, mu30, mu21, mu12, mu03: Double; (* central moments *)
     inv_sqrt_m00: Double; (* m00 != 0 ? 1/sqrt(m00) : 0 *)

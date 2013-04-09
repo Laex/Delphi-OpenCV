@@ -373,20 +373,20 @@ const
 
   // * value = arr(idx0,idx1,...) */
   // CVAPI(CvScalar) cvGet1D( const CvArr* arr, int idx0 );
-  // CVAPI(CvScalar) cvGet2D( const CvArr* arr, int idx0, int idx1 );
+function cvGet1D(const arr: pCvArr; idx0: Integer): TCvScalar; cdecl;
+// CVAPI(CvScalar) cvGet2D( const CvArr* arr, int idx0, int idx1 );
 function cvGet2D(const arr: pCvMat; idx0, idx1: Integer): TCvScalar; cdecl;
 {
   CVAPI(CvScalar) cvGet3D( const CvArr* arr, int idx0, int idx1, int idx2 );
   CVAPI(CvScalar) cvGetND( const CvArr* arr, const int* idx );
 }
-{
-  /* for 1-channel arrays */
-  CVAPI(double) cvGetReal1D( const CvArr* arr, int idx0 );
-}
-function cvGetReal1D(const arr: pIplImage; idx0: Integer): Double; cdecl;
 
+// * for 1-channel arrays */
+// CVAPI(double) cvGetReal1D( const CvArr* arr, int idx0 );
+function cvGetReal1D(const arr: pIplImage; idx0: Integer): Double; cdecl;
 // CVAPI(double) cvGetReal2D( const CvArr* arr, int idx0, int idx1 );
 function cvGetReal2D(const arr: pCvMat; idx0, idx1: Integer): Double; cdecl;
+function cvGet(const mat: pCvMat; i, j: Integer): Single; inline;
 
 {
   CVAPI(double) cvGetReal3D( const CvArr* arr, int idx0, int idx1, int idx2 );
@@ -397,15 +397,16 @@ function cvGetReal2D(const arr: pCvMat; idx0, idx1: Integer): Double; cdecl;
   CVAPI(void) cvSet2D( CvArr* arr, int idx0, int idx1, CvScalar value );
   CVAPI(void) cvSet3D( CvArr* arr, int idx0, int idx1, int idx2, CvScalar value );
   CVAPI(void) cvSetND( CvArr* arr, const int* idx, CvScalar value );
-
-  /* for 1-channel arrays */
-  CVAPI(void) cvSetReal1D( CvArr* arr, int idx0, double value );
-  CVAPI(void) cvSetReal2D( CvArr* arr, int idx0, int idx1, double value );
-  CVAPI(void) cvSetReal3D( CvArr* arr, int idx0,
-  int idx1, int idx2, double value );
-  CVAPI(void) cvSetRealND( CvArr* arr, const int* idx, double value );
 }
-
+// *for 1 - channel arrays * /
+// CVAPI(void) cvSetReal1D( CvArr* arr, int idx0, double value );
+procedure cvSetReal1D(arr: pCvArr; idx0: Integer; value: Double); cdecl;
+// CVAPI(void) cvSetReal2D( CvArr* arr, int idx0, int idx1, double value );
+procedure cvSetReal2D(arr: pCvArr; idx0, idx1: Integer; value: Double); cdecl;
+// CVAPI(void) cvSetReal3D( CvArr* arr, int idx0,int idx1, int idx2, double value );
+procedure cvSetReal3D(arr: pCvArr; idx0, idx1, idx2: Integer; value: Double); cdecl;
+// CVAPI(void) cvSetRealND( CvArr* arr, const int* idx, double value );
+procedure cvSetRealND(arr: pCvArr; const idx: PInteger; value: Double); cdecl;
 
 // (* clears element of ND dense array,
 // in  of sparse arrays it deletes the specified node *)
@@ -485,12 +486,10 @@ procedure _cvGetSize(const arr: pCvArr; var size: TCvSize); cdecl;
 procedure cvCopy(const src: pIplImage; dst: pIplImage; const mask: pIplImage = nil); cdecl;
 procedure cvCopyImage(const src: pIplImage; dst: pIplImage; const mask: pIplImage = nil); cdecl;
 
-{
-  /* Sets all or "masked" elements of input array to the same value*/
-  CVAPI(void)  cvSet( CvArr* arr, CvScalar value,const CvArr* mask CV_DEFAULT(NULL) );
-}
-procedure cvSet(arr: pCvArr; value: TCvScalar; const mask: pCvArr = Nil); cdecl; // overload;
-// procedure cvSet(arr: pIplImage; value: TCvScalar; const mask: pCvArr = Nil); cdecl; overload;
+// * Sets all or "masked" elements of input array to the same value*/
+// CVAPI(void)  cvSet( CvArr* arr, CvScalar value,const CvArr* mask CV_DEFAULT(NULL) );
+procedure cvSet(arr: pCvArr; value: TCvScalar; const mask: pCvArr = Nil); cdecl; overload;
+procedure cvSet(mat: pCvMat; i, j: Integer; val: Single); inline; overload;
 
 // procedure cvSetZero(CvArr * arr: unction mask CV_DEFAULT(v1: 0)): CvArr; ();
 // const cvZero = cvSetZero;
@@ -1523,7 +1522,7 @@ procedure cvFillConvexPoly(img: pIplImage; const pts: pCVPoint; npts: Integer; c
   int line_type CV_DEFAULT(8), int shift CV_DEFAULT(0) );
 }
 
-procedure cvPolyLine(img: pIplImage; pts: pCVPoint; const npts: pInteger; contours: Integer; is_closed: Integer;
+procedure cvPolyLine(img: pIplImage; pts: pCVPoint; const npts: PInteger; contours: Integer; is_closed: Integer;
   color: TCvScalar; thickness: Integer = 1; line_type: Integer = 8; shift: Integer = 0); cdecl;
 
 // const
@@ -1592,9 +1591,9 @@ type
     color: TCvScalar;
     // Qt:ColorFont -> cvScalar(blue_component, green_component, red\_component[, alpha_component])
     font_face: Integer; // Qt: bool italic         /* =CV_FONT_* */
-    ascii: pInteger; // * font data and metrics */
-    greek: pInteger;
-    cyrillic: pInteger;
+    ascii: PInteger; // * font data and metrics */
+    greek: PInteger;
+    cyrillic: PInteger;
     hscale, vscale: Single;
     shear: Single; // * slope coefficient: 0 - normal, >0 - italic */
     thickness: Integer; // Qt: weight               /* letters thickness */
@@ -1887,7 +1886,11 @@ function cvRead(fs: pCvFileStorage; node: pCvFileNode; attributes: pCvAttrList =
 // procedure)cvUnregisterType(type_name: PCVChar); CVAPI(CvTypeInfo)cvFirstType(
 // procedure); CVAPI(type_name: PCVChar);
 // CVAPI(CvTypeInfo)cvTypeOf(Pointer type cvTypeOf(Pointer struct_ptr) = record end:;
-// rocedure)cvRelease(Pointer * type end:; r type end:;
+
+// * universal functions */
+// CVAPI(void) cvRelease( void** struct_ptr );
+procedure cvRelease(Var struct_ptr: Pointer); cdecl; overload;
+procedure cvRelease(Var struct_ptr: pCvSeq); cdecl; overload;
 
 {
   /* simple API for reading/writing data */
@@ -2078,7 +2081,6 @@ procedure _cvGetSize(const arr: pCvArr; var size: TCvSize); external Core_Dll na
 // end;
 // end;
 
-procedure cvSet; external Core_Dll;
 procedure cvInitFont; external Core_Dll;
 procedure cvPutText; external Core_Dll;
 
@@ -2099,7 +2101,7 @@ procedure cvCopy; external Core_Dll;
 procedure cvCopyImage; external Core_Dll name 'cvCopy';
 
 procedure cvSetZero; external Core_Dll;
-procedure cvZero; external Core_Dll;
+procedure cvZero; external Core_Dll name 'cvSetZero';
 // procedure cvZero(arr: pIplImage); cdecl; overload; external Core_Dll name 'cvSetZero';
 // procedure cvZero(arr: pCvMat); cdecl; overload; external Core_Dll name 'cvSetZero';
 
@@ -2241,5 +2243,41 @@ function cvInitImageHeader; external Core_Dll;
 function cvInitMatHeader; external Core_Dll;
 function cvCountNonZero; external Core_Dll;
 procedure cvFillConvexPoly; external Core_Dll;
+function cvGet1D; external Core_Dll;
+procedure cvSetReal1D; external Core_Dll;
+procedure cvSetReal2D; external Core_Dll;
+procedure cvSetReal3D; external Core_Dll;
+procedure cvRelease(Var struct_ptr: Pointer); external Core_Dll name 'cvRelease';
+procedure cvRelease(Var struct_ptr: pCvSeq); external Core_Dll name 'cvRelease';
+procedure cvSetRealND; external Core_Dll;
+
+function cvGet(const mat: pCvMat; i, j: Integer): Single; inline;
+var
+  type_: Integer;
+  ptr: PUCHAR;
+  pf: PSingle;
+begin
+  type_ := CV_MAT_TYPE(mat^._type);
+  assert((i < mat^.rows) and (j < mat^.cols) and (type_ = CV_32FC1));
+  ptr := mat^.data;
+  inc(ptr, mat.step * i + sizeOf(Single) * j);
+  pf := PSingle(ptr);
+  Result := pf^;
+end;
+
+procedure cvSet(arr: pCvArr; value: TCvScalar; const mask: pCvArr = Nil); external Core_Dll;
+procedure cvSet(mat: pCvMat; i, j: Integer; val: Single); inline;
+var
+  type_: Integer;
+  ptr: PUCHAR;
+  pf: PSingle;
+begin
+  type_ := CV_MAT_TYPE(mat._type);
+  assert((i < mat^.rows) and (j < mat^.cols) and (type_ = CV_32FC1));
+  ptr := mat^.data;
+  inc(ptr, mat.step * i + sizeOf(Single) * j);
+  pf := PSingle(ptr);
+  pf^ := val;
+end;
 
 end.

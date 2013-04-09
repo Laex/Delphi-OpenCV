@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<!-- Trust 10007 for 320x240 -->
+<opencv_storage>
+<Intrinsics type_id="opencv-matrix">
+  <rows>3</rows>
+  <cols>3</cols>
+  <dt>f</dt>
+  <data>
+    751.84814453 0. 155.19932556 
+    0. 751.84814453 140.60366821 
+    0. 0. 1.
+  </data></Intrinsics>
+</opencv_storage>
