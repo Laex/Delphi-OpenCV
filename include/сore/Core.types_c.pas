@@ -233,17 +233,24 @@ type
 const
   CV_RNG_COEFF = Cardinal(4164903690);
 {$EXTERNALSYM CV_RNG_COEFF}
-  (* ***************************************************************************************\
-    *                                  Image cType (IplImage)                                 *
-    *************************************************************************************** *)
+  // CV_INLINE CvRNG cvRNG( int64 seed CV_DEFAULT(-1))
+  // {
+  // CvRNG rng = seed ? (uint64)seed : (uint64)(int64)-1;
+  // return rng;
+  // }
+function cvRNG(seed: int64 = -1): TCvRNG; inline;
+
+(* ***************************************************************************************\
+  *                                  Image cType (IplImage)                                 *
+  *************************************************************************************** *)
 
 {$IFNDEF HAVE_IPL}
 
-  (*
-    * The following definitions (until #endif)'
-    * is an extract from IPL headers.
-    * Copyright (c) 1995 Intel Corporation.
-  *)
+(*
+  * The following definitions (until #endif)'
+  * is an extract from IPL headers.
+  * Copyright (c) 1995 Intel Corporation.
+*)
 const
   IPL_DEPTH_SIGN = $80000000;
 {$EXTERNALSYM IPL_DEPTH_SIGN}
@@ -516,6 +523,11 @@ function CV_32FC2: Integer; inline;
   const
   CV_64FC(n)CV_MAKETYPE(CV_64F, (n));
 *)
+
+// * get reference to pixel at (col,row),
+// for multi-channel images (col) should be multiplied by number of channels */
+function CV_IMAGE_ELEM(image: pIplImage; size_elemtype, row, col: Integer): Pointer; inline;
+// (((elemtype*)((image)->imageData + (image)->widthStep*(row)))[(col)])
 
 const
   CV_AUTO_STEP = $7FFFFFFF;
@@ -1273,7 +1285,7 @@ function CV_GET_SEQ_ELEM(const size_of_elem: Integer; seq: pCvSeq; index: Intege
 // Assert((writer).ptr <= (writer).block_max - SizeOf(elem));
 // memcpy((writer).ptr, and (elem), SizeOf(elem)); (writer).ptr := mod +SizeOf(elem) then; end;
 
-function CV_CAST_8U(t : Integer) : UCHAR; inline;
+function CV_CAST_8U(t: Integer): uchar; inline;
 
 (*
   /* Move reader position forward: */
@@ -1984,7 +1996,7 @@ function cvPointFrom32f(point: TCvPoint2D32f): TCvPoint; inline;
 //
 // (* ************************************ CvScalar **************************************** *)
 // (*
-//
+
 // CV_INLINE  CvScalar  cvRealScalar( double val0 )
 // {
 // CvScalar scalar;
@@ -1992,9 +2004,9 @@ function cvPointFrom32f(point: TCvPoint2D32f): TCvPoint; inline;
 // scalar.val[1] = scalar.val[2] = scalar.val[3] = 0;
 // return scalar;
 // }
-//
-// *)
-//
+
+function cvRealScalar(val0: Double): TCvScalar; inline;
+
 // (* ************************************************************************************** *)
 // (* Dynamic Data structures *)
 // (* ************************************************************************************** *)
@@ -2326,9 +2338,9 @@ begin
   Result := CV_SEQ_ELEM(seq, size_of_elem, index);
 end;
 
-function CV_CAST_8U(t : Integer) : UCHAR;
+function CV_CAST_8U(t: Integer): uchar;
 begin
-  if (not (t and (not 255)) <> 0) then
+  if (not(t and (not 255)) <> 0) then
     Result := t
   else if t > 0 then
     Result := 255
@@ -2368,6 +2380,26 @@ function CV_IS_SET_ELEM(ptr: Pointer): Boolean; // inline;
 begin
   // #define CV_IS_SET_ELEM( ptr )  (((CvSetElem*)(ptr))->flags >= 0)
   Result := pCvSetElem(ptr)^.flags >= 0;
+end;
+
+function CV_IMAGE_ELEM(image: pIplImage; size_elemtype, row, col: Integer): Pointer; inline;
+begin
+  // (((elemtype*)((image)->imageData + (image)->widthStep*(row)))[(col)])
+  Result := image^.imageData + image^.widthStep * row + col * size_elemtype;
+end;
+
+function cvRealScalar(val0: Double): TCvScalar; inline;
+begin
+  Result.val[0] := val0;
+  Result.val[1] := 0;
+  Result.val[2] := 0;
+  Result.val[3] := 0;
+end;
+
+function cvRNG(seed: int64 = -1): TCvRNG; inline;
+begin
+  // CvRNG rng = seed ? (uint64)seed : (uint64)(int64)-1;
+  Result := iif(seed>0,seed,uint64(int64(-1)));
 end;
 
 end.
