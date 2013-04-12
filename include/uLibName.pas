@@ -36,7 +36,7 @@ unit uLibName;
 interface
 
 const
-  CV_Version = '244';
+  CV_Version = '245';
 
 {$IFDEF DEBUG}
   Core_Dll = 'opencv_core' + CV_Version + 'd.dll';
