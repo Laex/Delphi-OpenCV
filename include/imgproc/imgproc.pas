@@ -97,7 +97,7 @@ unit imgproc;
 
 interface
 
-Uses core_c, Core.types_c;
+Uses core_c, Core.types_c, imgproc.types_c;
 
 // {
 //
@@ -849,10 +849,12 @@ procedure GaussianBlur(src: pIplImage; dst: pIplImage; ksize: TcvSize; sigmaX: d
 // CV_EXPORTS_W void createHanningWindow(OutputArray dst, Size winSize, int type);
 //
 /// /! type of the threshold operation
-// enum { THRESH_BINARY=CV_THRESH_BINARY, THRESH_BINARY_INV=CV_THRESH_BINARY_INV,
-// THRESH_TRUNC=CV_THRESH_TRUNC, THRESH_TOZERO=CV_THRESH_TOZERO,
-// THRESH_TOZERO_INV=CV_THRESH_TOZERO_INV, THRESH_MASK=CV_THRESH_MASK,
-// THRESH_OTSU=CV_THRESH_OTSU };
+const
+THRESH_BINARY=CV_THRESH_BINARY;
+THRESH_BINARY_INV=CV_THRESH_BINARY_INV;
+ THRESH_TRUNC=CV_THRESH_TRUNC; THRESH_TOZERO=CV_THRESH_TOZERO;
+ THRESH_TOZERO_INV=CV_THRESH_TOZERO_INV; THRESH_MASK=CV_THRESH_MASK;
+ THRESH_OTSU=CV_THRESH_OTSU;
 //
 /// /! applies fixed threshold to the image
 // CV_EXPORTS_W double threshold( InputArray src, OutputArray dst,

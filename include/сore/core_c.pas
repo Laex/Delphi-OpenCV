@@ -233,12 +233,13 @@ procedure cvReleaseMat(Var mat: pCvMat); cdecl;
 // be: may;
 // var )
 
-// CVAPI(CvMat) cvCloneMat(  CvMat* mat: step value)): Integer;
-{
-  (* Makes a new matrix from <rect> subrectangle of input array.
-  No data is copied *)
-  CVAPI(CvMat)cvGetSubRect(CvArr * arr, CvMat * submat, CvRect rect);
-}
+// * Creates an exact copy of the input matrix (except, may be, step value) */
+// CVAPI(CvMat*) cvCloneMat(const CvMat* mat);
+function cvCloneMat(const mat: pCvMat): pCvMat; cdecl;
+
+// (* Makes a new matrix from <rect> subrectangle of input array.
+// No data is copied *)
+// CVAPI(CvMat)cvGetSubRect(CvArr * arr, CvMat * submat, CvRect rect);
 function cvGetSubRect(arr: pIplImage; submat: pIplImage; rect: TCvRect): pIplImage; cdecl;
 
 
@@ -850,10 +851,21 @@ procedure cvInRangeS(
 // (* Calculates cross product of two 3d vectors *)
 // procedure cvCrossProduct(CvArr * src1: array of
 // function maxiter CV_DEFAULT(v1: 100)): Integer; (; var src2: CvArr; var dst: CvArr);
-//
-// (* Matrix transform: dst = A*B + C, C is optional *)
-/// / >> Following declaration is a macro definition!
-// const cvMatMulAdd(src1, src2, src3, dst)cvGEMM((src1), (src2), 1., (src3), 1., (dst), 0);
+
+/// * Extended matrix transform:
+// dst = alpha*op(A)*op(B) + beta*op(C), where op(X) is X or X^T */
+// CVAPI(void)  cvGEMM( const CvArr* src1, const CvArr* src2, double alpha,
+// const CvArr* src3, double beta, CvArr* dst,
+// int tABC CV_DEFAULT(0));
+procedure cvGEMM(const src1: pCvArr; const src2: pCvArr; alpha: Double; const src3: pCvArr; beta: Double; dst: pCvArr;
+  tABC: Integer = 0); cdecl;
+
+/// * Matrix transform: dst = A*B + C, C is optional */
+// #define cvMatMulAdd( src1, src2, src3, dst ) cvGEMM( (src1), (src2), 1., (src3), 1., (dst), 0 )
+procedure cvMatMulAdd(const src1, src2, src3: pCvArr; dst: pCvArr); inline;
+// #define cvMatMul( src1, src2, dst )  cvMatMulAdd( (src1), (src2), NULL, (dst))
+procedure cvMatMul(const src1, src2: pCvArr; dst: pCvArr); inline;
+
 /// / >> Following declaration is a macro definition!
 // const cvMatMul(src1, src2, dst)cvMatMulAdd((src1), (src2), 0, (dst));
 //
@@ -1912,6 +1924,21 @@ procedure cvSave(const filename: pCVChar; const struct_ptr: Pointer; const name:
 function cvLoad(const filename: pCVChar; memstorage: pCvMemStorage = Nil; const name: pCVChar = nil;
   const real_name: ppChar = nil): Pointer; cdecl;
 
+// *********************************** CPU capabilities ***********************************/
+// CVAPI(int) cvCheckHardwareSupport(int feature);
+function cvCheckHardwareSupport(feature: Integer): Integer; cdecl;
+
+// *********************************** Multi-Threading ************************************/
+
+// * retrieve/set the number of threads used in OpenMP implementations */
+// CVAPI(int)  cvGetNumThreads( void );
+function cvGetNumThreads: Integer; cdecl;
+// CVAPI(void) cvSetNumThreads( int threads CV_DEFAULT(0) );
+procedure cvSetNumThreads(threads: Integer = 0); cdecl;
+// * get index of the thread being executed */
+// CVAPI(int)  cvGetThreadNum( void );
+function cvGetThreadNum: Integer; cdecl;
+
 function cvGetTickCount: int64; inline;
 function cvGetTickFrequency: Double;
 
@@ -1928,7 +1955,6 @@ const
   CV_CPU_AVX = 10;
   CV_HARDWARE_MAX_FEATURE = 255;
 
-  // cvCheckHardwareSupport(Integer feature): CVAPI(Integer); cvGetNumThreads(): CVAPI(Integer);
   // procedure cvSetNumThreads(v1: 0)); cvGetThreadNum(): CVAPI(Integer);
   // cvGetErrStatus(): CVAPI(Integer);
   // procedure cvSetErrStatus(status: Integer); CV_ErrModeLeaf = 0: const;
@@ -2266,6 +2292,7 @@ begin
 end;
 
 procedure cvSet(arr: pCvArr; value: TCvScalar; const mask: pCvArr = Nil); external Core_Dll;
+
 procedure cvSet(mat: pCvMat; i, j: Integer; val: Single); inline;
 var
   type_: Integer;
@@ -2278,6 +2305,23 @@ begin
   inc(ptr, mat.step * i + sizeOf(Single) * j);
   pf := PSingle(ptr);
   pf^ := val;
+end;
+
+function cvCloneMat; external Core_Dll;
+function cvCheckHardwareSupport; external Core_Dll;
+function cvGetNumThreads; external Core_Dll;
+procedure cvSetNumThreads; external Core_Dll;
+function cvGetThreadNum; external Core_Dll;
+procedure cvGEMM; external Core_Dll;
+
+procedure cvMatMulAdd(const src1, src2, src3: pCvArr; dst: pCvArr); inline;
+begin
+  cvGEMM(src1, src2, 1, src3, 1, dst, 0);
+end;
+
+procedure cvMatMul(const src1, src2: pCvArr; dst: pCvArr); inline;
+begin
+  cvMatMulAdd(src1, src2, nil, dst);
 end;
 
 end.
