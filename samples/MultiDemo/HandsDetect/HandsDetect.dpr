@@ -24,29 +24,30 @@
 // Стырено у "Header files OpenCV 2.4.3 for Delphi XE3"
 // https://code.google.com/p/opencv-delphi-new/
 ///
+// JCL_DEBUG_EXPERT_GENERATEJDBG OFF
+// JCL_DEBUG_EXPERT_INSERTJDBG OFF
+// JCL_DEBUG_EXPERT_DELETEMAPFILE OFF
 program HandsDetect;
 
 {$APPTYPE CONSOLE}
 {$POINTERMATH ON}
-
 {$R *.res}
 
 uses
   System.SysUtils,
-uLibName in '..\..\..\include\uLibName.pas',
-highgui_c in '..\..\..\include\highgui\highgui_c.pas',
-core_c in '..\..\..\include\сore\core_c.pas',
-Core.types_c in '..\..\..\include\сore\Core.types_c.pas',
-imgproc.types_c in '..\..\..\include\imgproc\imgproc.types_c.pas',
-imgproc_c in '..\..\..\include\imgproc\imgproc_c.pas',
-legacy in '..\..\..\include\legacy\legacy.pas',
-calib3d in '..\..\..\include\calib3d\calib3d.pas',
-imgproc in '..\..\..\include\imgproc\imgproc.pas',
-haar in '..\..\..\include\objdetect\haar.pas',
-objdetect in '..\..\..\include\objdetect\objdetect.pas',
-tracking in '..\..\..\include\video\tracking.pas',
-Core in '..\..\..\include\сore\core.pas'
-  ;
+  uLibName in '..\..\..\include\uLibName.pas',
+  highgui_c in '..\..\..\include\highgui\highgui_c.pas',
+  core_c in '..\..\..\include\сore\core_c.pas',
+  Core.types_c in '..\..\..\include\сore\Core.types_c.pas',
+  imgproc.types_c in '..\..\..\include\imgproc\imgproc.types_c.pas',
+  imgproc_c in '..\..\..\include\imgproc\imgproc_c.pas',
+  legacy in '..\..\..\include\legacy\legacy.pas',
+  calib3d in '..\..\..\include\calib3d\calib3d.pas',
+  imgproc in '..\..\..\include\imgproc\imgproc.pas',
+  haar in '..\..\..\include\objdetect\haar.pas',
+  objdetect in '..\..\..\include\objdetect\objdetect.pas',
+  tracking in '..\..\..\include\video\tracking.pas',
+  Core in '..\..\..\include\сore\core.pas';
 
 const
   NUM_FINGERS = 5;
@@ -94,7 +95,7 @@ begin
   // Узнаем ширину и высоту кадра
   width := cvGetCaptureProperty(Ctx.capture, CV_CAP_PROP_FRAME_WIDTH);
   height := cvGetCaptureProperty(Ctx.capture, CV_CAP_PROP_FRAME_HEIGHT);
-//  WriteLn(Format('[i] %.0f x %.0f', [width, height]));
+  // WriteLn(Format('[i] %.0f x %.0f', [width, height]));
   Ctx.image := cvQueryFrame(Ctx.capture);
   WriteLn('[i] Start capture.');
 end;
@@ -167,7 +168,7 @@ begin
     area := abs(cvContourArea(tmp, CV_WHOLE_SEQ, 0));
     if area > max_area then
     begin
-//      WriteLn(Format('[i] area = %.1f', [area]));
+      // WriteLn(Format('[i] area = %.1f', [area]));
       max_area := area;
       contour := tmp;
     end;
@@ -225,8 +226,8 @@ begin
         y := y + defect_array[i].depth_point.y;
         Ctx.defects[i] := cvPoint(defect_array[i].depth_point.x, defect_array[i].depth_point.y);
         Inc(i);
-//        WriteLn(Format('[i] x = %d, y = %d', [Ctx.defects[i].x, Ctx.defects[i].y]));
-//        WriteLn(Format('[i] defects.total: %d', [defects.total]));
+        // WriteLn(Format('[i] x = %d, y = %d', [Ctx.defects[i].x, Ctx.defects[i].y]));
+        // WriteLn(Format('[i] defects.total: %d', [defects.total]));
       end;
 
       x := x div defects.total;
@@ -234,8 +235,8 @@ begin
 
       Ctx.NUM_DEFECTS := defects.total;
       Ctx.hand_center := cvPoint(x, y);
-//      WriteLn(Format('[i] defects.total: %d', [defects.total]));
-//      WriteLn(Format('[i] hand_center: x = %d, y = %d', [Ctx.hand_center.x, Ctx.hand_center.y]));
+      // WriteLn(Format('[i] defects.total: %d', [defects.total]));
+      // WriteLn(Format('[i] hand_center: x = %d, y = %d', [Ctx.hand_center.x, Ctx.hand_center.y]));
 
       // Compute hand radius as mean of distances of defects' depth point to hand center
       // Вычисляем радиус руки
@@ -247,7 +248,7 @@ begin
       end;
 
       Ctx.hand_radius := Trunc(dist) div defects.total;
-//      WriteLn(Format('[i] hand_radius: %d', [Ctx.hand_radius]));
+      // WriteLn(Format('[i] hand_radius: %d', [Ctx.hand_radius]));
 
       FreeMem(defect_array);
     end;

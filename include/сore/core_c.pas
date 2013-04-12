@@ -499,8 +499,6 @@ procedure cvSet(mat: pCvMat; i, j: Integer; val: Single); inline; overload;
 // #define cvZero  cvSetZero
 procedure cvSetZero(arr: pIplImage); cdecl;
 procedure cvZero(arr: pCvArr); cdecl;
-// procedure cvZero(arr: pIplImage); cdecl; overload;
-// procedure cvZero(arr: pCvMat); cdecl; overload;
 
 {
   /* Splits a multi-channel array into the set of single-channel arrays or
