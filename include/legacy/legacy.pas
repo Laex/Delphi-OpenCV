@@ -2957,11 +2957,7 @@ procedure cvSnakeImage(const image: pIplImage; points: pCvPointArray; length: In
 // };
 //
 // #endif
-//
-// #ifdef __cplusplus
-// extern "C" {
-// #endif
-//
+
 /// * Splits color or grayscale image into multiple connected components
 // of nearly the same color/brightness using modification of Burt algorithm.
 // comp with contain a pointer to sequence (CvSeq)
@@ -2970,7 +2966,9 @@ procedure cvSnakeImage(const image: pIplImage; points: pCvPointArray; length: In
 // CvMemStorage* storage, CvSeq** comp,
 // int level, double threshold1,
 // double threshold2 );
-//
+procedure cvPyrSegmentation(src: pIplImage; dst: pIplImage; storage: pCvMemStorage; var comp: pCvSeq; level: Integer;
+  threshold1: double; threshold2: double); cdecl;
+
 /// ****************************************************************************************\
 // *                              Planar subdivisions                                       *
 // \****************************************************************************************/
@@ -3587,7 +3585,7 @@ function cvBGCodeBookDiff(const model: pCvBGCodeBookModel; const image: pCvArr; 
   roi: TCvRect { = cvRect(0,0,0,0) } ): Integer; cdecl;
 // CVAPI(void) cvBGCodeBookClearStale( CvBGCodeBookModel* model, int staleThresh, CvRect roi CV_DEFAULT(cvRect(0,0,0,0)), const CvArr* mask CV_DEFAULT(0) );
 procedure cvBGCodeBookClearStale(model: pCvBGCodeBookModel; staleThresh: Integer; roi: TCvRect { =cvRect(0,0,0,0) };
-  const mask: pCvArr  = nil  ); cdecl;
+  const mask: pCvArr = nil); cdecl;
 // CVAPI(CvSeq*) cvSegmentFGMask( CvArr *fgmask, int poly1Hull0 CV_DEFAULT(1), float perimScale CV_DEFAULT(4.f), CvMemStorage* storage CV_DEFAULT(0), CvPoint offset CV_DEFAULT(cvPoint(0,0)));
 function cvSegmentFGMask(fgmask: pCvArr; poly1Hull0: Integer { =1 }; perimScale: Single { = 4 };
   storage: pCvMemStorage { =nil }; offset: TCvPoint { =cvPoint(0,0) } ): pCvSeq; cdecl;
@@ -3655,5 +3653,6 @@ procedure cvBGCodeBookUpdate; external legacy_Dll;
 function cvBGCodeBookDiff; external legacy_Dll;
 procedure cvBGCodeBookClearStale; external legacy_Dll;
 function cvSegmentFGMask; external legacy_Dll;
+procedure cvPyrSegmentation; external legacy_Dll;
 
 end.

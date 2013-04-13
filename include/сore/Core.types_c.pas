@@ -304,7 +304,8 @@ const
 type
 
   pIplImage = ^TIplImage;
-  ppIplImage = ^pIplImage;
+  TpIplImageArray = array[0..1] of pIplImage;
+  ppIplImage = ^TpIplImageArray;
   pIplROI = ^TIplROI;
   pIplTileInfo = ^TIplTileInfo;
 
