@@ -357,23 +357,25 @@ const
   // For 2d arrays cvGetDimSize(arr,0) returns number of rows (image height)
   // and cvGetDimSize(arr,1) returns number of columns (image width) *)
   // CVAPI(Integer)cvGetDimSize(CvArr * arr, Integer index);
-  //
-  // (* ptr = &arr(idx0,idx1,...). All indexes are zero-based,
-  // the major dimensions go first (e.g. (y,x) for 2D, (z,y,x) for 3D *)
-  // CVAPI(uchar)cvPtr1D(CvArr * arr, Integer idx0, Integer * cType CV_DEFAULT(0));
-  // CVAPI(uchar)cvPtr2D(CvArr * arr, Integer idx0, Integer idx1, Integer * cType CV_DEFAULT(0));
-  // CVAPI(uchar)cvPtr3D(CvArr * arr, Integer idx0, Integer idx1, Integer idx2,
-  // function cType CV_DEFAULT(v1: 0)): Integer;
-  //
-  // (* For CvMat or IplImage number of indices should be 2
-  // (row index (y) goes first, column index (x) goes next).
-  // For CvMatND or CvSparseMat number of infices should match number of <dims> and
-  // indices order should match the cArray dimension order. *)
-  // CVAPI(uchar)cvPtrND(CvArr * arr, Integer * idx, Integer * cType CV_DEFAULT(0),
-  // function create_node CV_DEFAULT(v1: 0)): Cardinal;
 
-  // * value = arr(idx0,idx1,...) */
-  // CVAPI(CvScalar) cvGet1D( const CvArr* arr, int idx0 );
+  // * ptr = &arr(idx0,idx1,...). All indexes are zero-based,
+  // the major dimensions go first (e.g. (y,x) for 2D, (z,y,x) for 3D */
+  // CVAPI(uchar*) cvPtr1D( const CvArr* arr, int idx0, int* type CV_DEFAULT(NULL));
+function cvPtr1D(const arr: pCvArr; idx0: Integer; _type: PInteger = nil): pointer; cdecl;
+// CVAPI(uchar*) cvPtr2D( const CvArr* arr, int idx0, int idx1, int* type CV_DEFAULT(NULL) );
+function cvPtr2D(const arr: pCvArr; idx0, idx1: Integer; _type: PInteger = nil): pointer; cdecl;
+// CVAPI(uchar*) cvPtr3D( const CvArr* arr, int idx0, int idx1, int idx2,int* type CV_DEFAULT(NULL));
+function cvPtr3D(const arr: pCvArr; idx0, idx1, idx2: Integer; _type: PInteger = nil): pointer; cdecl;
+
+// (* For CvMat or IplImage number of indices should be 2
+// (row index (y) goes first, column index (x) goes next).
+// For CvMatND or CvSparseMat number of infices should match number of <dims> and
+// indices order should match the cArray dimension order. *)
+// CVAPI(uchar)cvPtrND(CvArr * arr, Integer * idx, Integer * cType CV_DEFAULT(0),
+// function create_node CV_DEFAULT(v1: 0)): Cardinal;
+
+// * value = arr(idx0,idx1,...) */
+// CVAPI(CvScalar) cvGet1D( const CvArr* arr, int idx0 );
 function cvGet1D(const arr: pCvArr; idx0: Integer): TCvScalar; cdecl;
 // CVAPI(CvScalar) cvGet2D( const CvArr* arr, int idx0, int idx1 );
 function cvGet2D(const arr: pCvMat; idx0, idx1: Integer): TCvScalar; cdecl;
@@ -559,16 +561,6 @@ procedure cvCvtPlaneToPix(
 // pair_count: Integer);
 //
 
-// (* Performs linear transformation on every source array element:
-// dst(x,y,c) = scale*src(x,y,c)+shift.
-// Arbitrary combination of input and output cArray depths are allowed
-// (number of channels must be the same), thus the cFunction can be used
-// for cType conversion *)
-// procedure  cvConvertScale(
-// 0)): Double;const cvCvtScale = cvConvertScale;{$EXTERNALSYM cvCvtScale}const cvScale =
-// cvConvertScale; {$EXTERNALSYM cvScale}// >> Following declaration is a macro definition!const cvConvert( src: v1:;
-// )cvConvertScale((src): dst; v3: (dst); :; : );
-
 {
   /* Performs linear transformation on every source array element:
   dst(x,y,c) = scale*src(x,y,c)+shift.
@@ -587,10 +579,9 @@ procedure cvCvtPlaneToPix(
   #define cvConvert( src, dst )  cvConvertScale( (src), (dst), 1, 0 )
 }
 procedure cvConvertScale(const src: pCvArr; dst: pCvArr; scale: Double = 1; shift: Double = 0); cdecl;
-// procedure cvConvertScale(const src: pIplImage; dst: pIplImage; scale: Double = 1; shift: Double = 0); cdecl; overload;
-// procedure cvConvertScale(const src: pCvMat; dst: pCvMat; scale: Double = 1; shift: Double = 0); cdecl; overload;
-// procedure cvConvert(const src: pIplImage; dst: pIplImage); inline;
 procedure cvConvert(const src: pCvArr; dst: pCvArr); inline;
+procedure cvCvtScale(const src: pCvArr; dst: pCvArr; scale: Double = 1; shift: Double = 0); cdecl;
+procedure cvScale(const src: pCvArr; dst: pCvArr; scale: Double = 1; shift: Double = 0); cdecl;
 
 // (* Performs linear transformation on every source array element,
 // stores absolute value of the cResult:
@@ -780,10 +771,11 @@ procedure cvInRangeS(
 //
 // (* dst(idx) = max(src(idx),value) *)
 // procedure cvMaxS(var src: CvArr; value: Double; var dst: CvArr);
-//
-// (* dst(x,y,c) = abs(src1(x,y,c) - src2(x,y,c)) *)
-// procedure cvAbsDiff(var src1: CvArr; var src2: CvArr; var dst: CvArr);
-//
+
+// * dst(x,y,c) = abs(src1(x,y,c) - src2(x,y,c)) */
+// CVAPI(void) cvAbsDiff( const CvArr* src1, const CvArr* src2, CvArr* dst );
+procedure cvAbsDiff(const src1: pCvArr; const src2: pCvArr; dst: pCvArr); cdecl;
+
 // (* dst(x,y,c) = abs(src(x,y,c) - value(c)) *)
 // procedure cvAbsDiffS(var src: CvArr; var dst: CvArr; value: CvScalar);
 /// / >> Following declaration is a macro definition!
@@ -1028,27 +1020,31 @@ procedure cvMinMaxLoc(
 
 // procedure cvMinMaxLoc(CvArr * arr: maximum and their positions; var min_val: Double;
 // var max_val: Double; var min_loc CV_DEFAULT(0): CvPoint; var max_loc CV_DEFAULT(0): CvPoint;
-// var types of array norm * )const CV_C = 1; {$EXTERNALSYM CV_C}const CV_L1 = 2;
-// {$EXTERNALSYM CV_L1}const CV_L2 = 4; {$EXTERNALSYM CV_L2}const CV_NORM_MASK = 7;
-// {$EXTERNALSYM CV_NORM_MASK}const CV_RELATIVE = 8; {$EXTERNALSYM CV_RELATIVE}const CV_DIFF = 16;
-// {$EXTERNALSYM CV_DIFF}const CV_MINMAX = 32;
-// {$EXTERNALSYM CV_MINMAX}const CV_DIFF_C = (CV_DIFF or CV_C: unction mask CV_DEFAULT(v1: 0))
-// : CvArr; ();
-// {$EXTERNALSYM CV_DIFF_C}
-// const CV_DIFF_L1 = (CV_DIFF or CV_L1);
-// {$EXTERNALSYM CV_DIFF_L1}
-// const CV_DIFF_L2 = (CV_DIFF or CV_L2);
-// {$EXTERNALSYM CV_DIFF_L2}
-// const CV_RELATIVE_C = (CV_RELATIVE or CV_C);
-// {$EXTERNALSYM CV_RELATIVE_C}
-// const CV_RELATIVE_L1 = (CV_RELATIVE or CV_L1);
-// {$EXTERNALSYM CV_RELATIVE_L1}
-// const CV_RELATIVE_L2 = (CV_RELATIVE or CV_L2);
-// {$EXTERNALSYM CV_RELATIVE_L2}
-// (* Finds norm, difference norm or relative difference norm for an array (or two arrays) *)
-// CVAPI(Double)cvNorm(CvArr * arr1, CvArr * arr2 CV_DEFAULT(0),
-// function norm_type CV_DEFAULT(v1: 0)): Integer;
-//
+// var types of array norm * )
+Const
+  // * types of array norm */
+  CV_C = 1;
+  CV_L1 = 2;
+  CV_L2 = 4;
+  CV_NORM_MASK = 7;
+  CV_RELATIVE = 8;
+  CV_DIFF = 16;
+  CV_MINMAX = 32;
+
+  CV_DIFF_C = (CV_DIFF or CV_C);
+  CV_DIFF_L1 = (CV_DIFF or CV_L1);
+  CV_DIFF_L2 = (CV_DIFF or CV_L2);
+  CV_RELATIVE_C = (CV_RELATIVE or CV_C);
+  CV_RELATIVE_L1 = (CV_RELATIVE or CV_L1);
+  CV_RELATIVE_L2 = (CV_RELATIVE or CV_L2);
+
+  // * Finds norm, difference norm or relative difference norm for an array (or two arrays) */
+  // CVAPI(double)  cvNorm( const CvArr* arr1, const CvArr* arr2 CV_DEFAULT(NULL),
+  // int norm_type CV_DEFAULT(CV_L2),
+  // const CvArr* mask CV_DEFAULT(NULL) );
+function cvNorm(const arr1: pCvArr; const arr2: pCvArr = nil; norm_type: Integer = CV_L2; const mask: pCvArr = nil)
+  : Double; cdecl;
+
 // procedure cvNormalize(0.: v1: ); norm_type CV_DEFAULT(CV_L2):
 // function; var mask CV_DEFAULT(0): vArr): Integer;
 //
@@ -2160,13 +2156,8 @@ procedure cvCvtPixToPlane; external Core_Dll name 'cvSplit';
 procedure cvCvtPlaneToPix; external Core_Dll name 'cvMerge';
 
 procedure cvConvertScale; external Core_Dll;
-// procedure cvConvertScale(const src: pIplImage; dst: pIplImage; scale: Double = 1; shift: Double = 0); cdecl;
-// external Core_Dll name 'cvConvertScale';
-// procedure cvConvertScale(const src: pCvMat; dst: pCvMat; scale: Double = 1; shift: Double = 0); cdecl;
-// external Core_Dll name 'cvConvertScale';
-
-procedure cvScale; external Core_Dll name 'cvConvertScale';
 procedure cvCvtScale; external Core_Dll name 'cvConvertScale';
+procedure cvScale; external Core_Dll name 'cvConvertScale';
 
 procedure cvConvert;
 begin
@@ -2278,7 +2269,7 @@ procedure cvSetRealND; external Core_Dll;
 function cvGet(const mat: pCvMat; i, j: Integer): Single; inline;
 var
   type_: Integer;
-  ptr: PUCHAR;
+  ptr: puchar;
   pf: PSingle;
 begin
   type_ := CV_MAT_TYPE(mat^._type);
@@ -2294,7 +2285,7 @@ procedure cvSet(arr: pCvArr; value: TCvScalar; const mask: pCvArr = Nil); extern
 procedure cvSet(mat: pCvMat; i, j: Integer; val: Single); inline;
 var
   type_: Integer;
-  ptr: PUCHAR;
+  ptr: puchar;
   pf: PSingle;
 begin
   type_ := CV_MAT_TYPE(mat._type);
@@ -2321,5 +2312,11 @@ procedure cvMatMul(const src1, src2: pCvArr; dst: pCvArr); inline;
 begin
   cvMatMulAdd(src1, src2, nil, dst);
 end;
+
+procedure cvAbsDiff; external Core_Dll;
+function cvNorm; external Core_Dll;
+function cvPtr1D; external Core_Dll;
+function cvPtr2D; external Core_Dll;
+function cvPtr3D; external Core_Dll;
 
 end.

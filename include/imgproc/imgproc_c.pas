@@ -292,17 +292,20 @@ procedure cvRemap(const src: pIplImage; dst: pIplImage; const mapx: pIplImage; c
   flags: Integer { =CV_INTER_LINEAR+CV_WARP_FILL_OUTLIERS }; fillval: TCvScalar { =cvScalarAll(0) }
   ); cdecl;
 
+/// * Performs forward or inverse log-polar image transform */
+// CVAPI(void)  cvLogPolar( const CvArr* src, CvArr* dst,
+// CvPoint2D32f center, double M,
+// int flags CV_DEFAULT(CV_INTER_LINEAR+CV_WARP_FILL_OUTLIERS));
+procedure cvLogPolar(const src: pCvArr; dst: pCvArr; center: TCvPoint2D32f; M: double;
+  flags: Integer = CV_INTER_LINEAR + CV_WARP_FILL_OUTLIERS); cdecl;
 
-// (* Performs forward or inverse log-polar image transform *)
-// CVAPI(
-// procedure)cvLogPolar(var Performs forward or inverse linear - polar image transform * )CVAPI(
-// procedure)cvLinearPolar(CvArr * src: v1: CV_INTER_LINEAR + CV_WARP_FILL_OUTLIERS)): Integer; (;
-// var dst: CvArr; center: CvPoint2D32f; maxRadius: Double;
-// var Transforms the input image to compensate lens distortion * )CVAPI(
-// procedure)cvUndistort2(CvArr * src:
-// function flags CV_DEFAULT(v1: CV_INTER_LINEAR + CV_WARP_FILL_OUTLIERS)): Integer; (; var dst: CvArr;
-// var camera_matrix: vMat; var distortion_coeffs: vMat; var new_camera_matrix CV_DEFAULT(0): vMat);
-//
+/// * Performs forward or inverse linear-polar image transform */
+// CVAPI(void)  cvLinearPolar( const CvArr* src, CvArr* dst,
+// CvPoint2D32f center, double maxRadius,
+// int flags CV_DEFAULT(CV_INTER_LINEAR+CV_WARP_FILL_OUTLIERS));
+
+procedure cvLinearPolar(const src: pCvArr; dst: pCvArr; center: TCvPoint2D32f; maxRadius: double;
+  flags: Integer = CV_INTER_LINEAR + CV_WARP_FILL_OUTLIERS); cdecl;
 
 {
   /* Computes transformation map from intrinsic camera parameters
@@ -590,7 +593,6 @@ function cvContourPerimeter(const contour: Pointer): double; inline;
 // just retrieves pre-calculated rectangle (update=0) *)
 // CVAPI(CvRect)  cvBoundingRect( CvArr* points, Integer update CV_DEFAULT(0) );
 
-
 // * Calculates area of a contour or contour segment */
 // CVAPI(double)  cvContourArea( const CvArr* contour,
 // CvSlice slice CV_DEFAULT(CV_WHOLE_SEQ),
@@ -676,11 +678,20 @@ function cvCreateHist(dims: Integer; sizes: pInteger; _type: Integer; ranges: pS
 
 // (* Assignes histogram bin ranges *)
 // CVAPI(procedure)  cvSetHistBinRanges(
-// var Creates histogram header for array *)CVAPI(CvHistogram)  cvMakeHistHeaderForArray(                            Integer  dims: v1: 1)): Integer;(;
+// var Creates histogram header for array *)
+// CVAPI(CvHistogram)  cvMakeHistHeaderForArray(Integer  dims: v1: 1)): Integer;(;
 // var sizes: Integer;
 // var hist: CvHistogram;
 // var function: Single;
-// var ranges CV_DEFAULT(v1: 1)): Integer;(* Releases histogram *)CVAPI(procedure)  cvReleaseHist( CvHistogram** hist ): Single;(* Clears all the histogram bins *)CVAPI(procedure)  cvClearHist( CvHistogram* hist ): data;(* Finds indices and values of minimum and maximum histogram bins *)
+// var ranges CV_DEFAULT(v1: 1)): Integer;
+
+// * Releases histogram */
+// CVAPI(void)  cvReleaseHist( CvHistogram** hist );
+procedure cvReleaseHist(Var hist: pCvHistogram); cdecl;
+
+// * Clears all the histogram bins */
+// CVAPI(void)  cvClearHist( CvHistogram* hist );
+procedure cvClearHist(hist: pCvHistogram); cdecl;
 
 {
   /* Finds indices and values of minimum and maximum histogram bins */
@@ -719,7 +730,7 @@ procedure cvGetMinMaxHistValue(const hist: pCvHistogram; min_value: pSingle; max
   int accumulate CV_DEFAULT(0),
   const CvArr* mask CV_DEFAULT(NULL) );
 }
-procedure cvCalcArrHist(arr: ppIplImage; hist: pCvHistogram; accumulate: Integer = 0;
+procedure cvCalcArrHist(var arr: pIplImage; hist: pCvHistogram; accumulate: Integer = 0;
   const mask: pIplImage = nil); cdecl;
 
 // CV_INLINE  void  cvCalcHist(
@@ -730,7 +741,7 @@ procedure cvCalcArrHist(arr: ppIplImage; hist: pCvHistogram; accumulate: Integer
 // {
 // cvCalcArrHist( (CvArr**)image, hist, accumulate, mask );
 // }
-procedure cvCalcHist(image: ppIplImage; hist: pCvHistogram; accumulate: Integer = 0;
+procedure cvCalcHist(var image: pIplImage; hist: pCvHistogram; accumulate: Integer = 0;
   const mask: pIplImage = nil); inline;
 
 
@@ -1046,5 +1057,9 @@ procedure cvGoodFeaturesToTrack; external imgproc_Dll;
 function cvMinAreaRect2; external imgproc_Dll;
 function cvMinEnclosingCircle; external imgproc_Dll;
 procedure cvBoxPoints; external imgproc_Dll;
+procedure cvLogPolar; external imgproc_Dll;
+procedure cvLinearPolar; external imgproc_Dll;
+procedure cvReleaseHist; external imgproc_Dll;
+procedure cvClearHist; external imgproc_Dll;
 
 end.
