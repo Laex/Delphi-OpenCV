@@ -208,8 +208,9 @@ var
   i: integer;
   count: integer;
   pt: array [0 .. 3] of TCvPoint;
-  rect: PCvPoint absolute pt;
+  rect: PCvPoint;
 begin
+  rect:=@pt;
   cpy := cvCloneImage(img);
 
   // initialize reader of the sequence
@@ -221,10 +222,10 @@ begin
     // CvPoint pt[4], *rect = pt;
     count := 4;
     // read 4 vertices
-    CV_READ_SEQ_ELEM(pt[0], reader, sizeof(TCvPoint));
-    CV_READ_SEQ_ELEM(pt[1], reader, sizeof(TCvPoint));
-    CV_READ_SEQ_ELEM(pt[2], reader, sizeof(TCvPoint));
-    CV_READ_SEQ_ELEM(pt[3], reader, sizeof(TCvPoint));
+    CV_READ_SEQ_ELEM(@pt[0], reader, sizeof(TCvPoint));
+    CV_READ_SEQ_ELEM(@pt[1], reader, sizeof(TCvPoint));
+    CV_READ_SEQ_ELEM(@pt[2], reader, sizeof(TCvPoint));
+    CV_READ_SEQ_ELEM(@pt[3], reader, sizeof(TCvPoint));
 
     // draw the square as a closed polyline
     cvPolyLine(cpy, @rect, @count, 1, 1, CV_RGB(255, 0, 0), 3, CV_AA, 0);

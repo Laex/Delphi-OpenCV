@@ -376,10 +376,9 @@ procedure cvReleaseStructuringElement(Var element: pIplConvKernel); cdecl;
 procedure cvMorphologyEx(const src: pIplImage; dst: pIplImage; temp: pIplImage; element: pIplConvKernel;
   operation: Integer; iterations: Integer = 1); cdecl;
 
-
-// CVAPI(procedure) cvMoments(  CvArr* arr: Integer iterations CV_DEFAULT(v1: 1)): Integer;(;
-// var moments: CvMoments;
-// binary CV_DEFAULT(0): Integer);
+// * Calculates all spatial and central moments up to the 3rd order */
+// CVAPI(void) cvMoments( const CvArr* arr, CvMoments* moments, int binary CV_DEFAULT(0));
+procedure cvMoments(const arr: pCvArr; moments: pCvMoments; binary: Integer = 0); cdecl;
 
 { erodes input image (applies minimum filter) one or more times.
   If element pointer is NULL, 3x3 rectangular element is used }
@@ -395,13 +394,12 @@ procedure cvErode(const src: pIplImage; dst: pIplImage; element: pIplConvKernel 
 // int iterations CV_DEFAULT(1) );
 procedure cvDilate(const src: pIplImage; dst: pIplImage; element: pIplConvKernel = nil; iterations: Integer = 1); cdecl;
 
-//
-// (* Retrieve particular spatial, central or normalized central moments *)
-// CVAPI(Double)  cvGetSpatialMoment( CvMoments* moments, Integer x_order, Integer y_order );
-// CVAPI(Double)  cvGetCentralMoment( CvMoments* moments, Integer x_order, Integer y_order );
-// CVAPI(Double)  cvGetNormalizedCentralMoment( CvMoments* moments,
-// Integer x_order, Integer y_order );
-//
+// * Retrieve particular spatial, central or normalized central moments */
+// CVAPI(double)  cvGetSpatialMoment( CvMoments* moments, int x_order, int y_order );
+function cvGetSpatialMoment(moments: pCvMoments; x_order, y_order: Integer): double; cdecl;
+// CVAPI(double)  cvGetCentralMoment( CvMoments* moments, int x_order, int y_order );
+// CVAPI(double)  cvGetNormalizedCentralMoment( CvMoments* moments, int x_order, int y_order );
+
 // (* Calculates 7 Hu's invariants from precalculated spatial and central moments */
 // CVAPI(procedure) cvGetHuMoments(var moments: CvMoments; var hu_moments: CvHuMoments);
 //
@@ -1061,5 +1059,7 @@ procedure cvLogPolar; external imgproc_Dll;
 procedure cvLinearPolar; external imgproc_Dll;
 procedure cvReleaseHist; external imgproc_Dll;
 procedure cvClearHist; external imgproc_Dll;
+procedure cvMoments; external imgproc_Dll;
+function cvGetSpatialMoment; external imgproc_Dll;
 
 end.

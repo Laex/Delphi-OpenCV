@@ -176,7 +176,7 @@ begin
       max_val := 0.0;
       cvSetImageROI(hue, selection);
       cvSetImageROI(mask, selection);
-      cvCalcHist(@hue, hist, 0, mask);
+      cvCalcHist(hue, hist, 0, mask);
       cvGetMinMaxHistValue(hist, nil, @max_val);
       if (max_val <> 0) then
         cvConvertScale(hist^.bins, hist^.bins, (255.0 / max_val), 0)

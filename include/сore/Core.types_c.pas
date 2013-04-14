@@ -113,6 +113,12 @@ Type
   ppCVChar = ^TpCVCharArray;
   CVChar = AnsiChar;
 
+function strdup(const str: pCVChar): pCVChar;
+function cv_stricmp(const str1, str2: pCVChar): Integer;
+procedure strcpy(var str1: pCVChar; const str2: pCVChar);
+procedure strcat(var str1: pCVChar; const str2: pCVChar);
+
+type
   uchar = Byte;
 {$EXTERNALSYM uchar}
   ushort = Word;
@@ -304,7 +310,7 @@ const
 type
 
   pIplImage = ^TIplImage;
-  TpIplImageArray = array[0..1] of pIplImage;
+  TpIplImageArray = array [0 .. 1] of pIplImage;
   ppIplImage = ^TpIplImageArray;
   pIplROI = ^TIplROI;
   pIplTileInfo = ^TIplTileInfo;
@@ -899,6 +905,8 @@ type
   end;
 
   pCvSeq = ^TCvSeq;
+  pCvSeqArray = array [0 .. 1] of pCvSeq;
+  ppCvSeq = ^pCvSeqArray;
 
   TCvSeq = packed record
     flags: Integer; (* Miscellaneous flags. *)
@@ -1298,7 +1306,7 @@ function CV_CAST_8U(t: Integer): uchar; inline;
   }                                                         \
   }
 *)
-procedure CV_NEXT_SEQ_ELEM(const elem_size: Integer; const Reader: TCvSeqReader); // inline;
+procedure CV_NEXT_SEQ_ELEM(const elem_size: Integer; const Reader: TCvSeqReader); //inline;
 
 // (* Move reader position backward: *)
 // // >> Following declaration is a macro definition!
@@ -1315,7 +1323,7 @@ procedure CV_NEXT_SEQ_ELEM(const elem_size: Integer; const Reader: TCvSeqReader)
   CV_NEXT_SEQ_ELEM( sizeof(elem), reader )                   \
   }
 *)
-procedure CV_READ_SEQ_ELEM(Var Elem; const Reader: TCvSeqReader; const SizeOfElem: Integer); inline;
+procedure CV_READ_SEQ_ELEM(const Elem:Pointer; const Reader: TCvSeqReader; const SizeOfElem: Integer); //inline;
 
 
 // (* Read element and move read position backward: *)
@@ -2104,11 +2112,37 @@ function CV_MAT_ELEM(const mat: TCvMat; const elemsize: Integer; const row, col:
 // (mat).data.ptr + (size_t)(mat).step*(row) + (pix_size)*(col))
 function CV_MAT_ELEM_PTR_FAST(const mat: TCvMat; const row, col, pix_size: Integer): Pointer;
 
-function iif(const Conditional: Boolean; const ifTrue, ifFalse: Variant): Variant; inline;
+function iif(const Conditional: Boolean; const ifTrue, ifFalse: Variant): Variant; inline; overload;
+function iif(const Conditional: Boolean; const ifTrue, ifFalse: Pointer): Pointer; inline; overload;
 
 implementation
 
-Uses core_c;
+Uses core_c, Windows, System.SysUtils;
+
+function strdup(const str: pCVChar): pCVChar;
+begin
+  Result := Allocmem(Length(str) * SizeOf(CVChar));
+  CopyMemory(Result, str, Length(str) * SizeOf(CVChar));
+end;
+
+function cv_stricmp(const str1, str2: pCVChar): Integer;
+begin
+  Result := AnsiCompareStr(str1^, str2^);
+end;
+
+procedure strcpy(var str1: pCVChar; const str2: pCVChar);
+begin
+  str1 := Allocmem(Length(str2) * SizeOf(CVChar));
+end;
+
+procedure strcat(var str1: pCVChar; const str2: pCVChar);
+Var
+  N: Integer;
+begin
+  N := Length(str1) * SizeOf(CVChar);
+  ReallocMem(str1, (Length(str1) + Length(str2)) * SizeOf(CVChar));
+  CopyMemory(str1 + N, str2, Length(str2) * SizeOf(CVChar));
+end;
 
 function CV_MAT_ELEM_PTR_FAST(const mat: TCvMat; const row, col, pix_size: Integer): Pointer;
 begin
@@ -2226,7 +2260,15 @@ begin
   Result := Round(value);
 end;
 
-function iif;
+function iif(const Conditional: Boolean; const ifTrue, ifFalse: Variant): Variant; inline; overload;
+begin
+  if Conditional then
+    Result := ifTrue
+  else
+    Result := ifFalse;
+end;
+
+function iif(const Conditional: Boolean; const ifTrue, ifFalse: Pointer): Pointer; inline; overload;
 begin
   if Conditional then
     Result := ifTrue
@@ -2252,21 +2294,25 @@ begin
   Result := CV_NODE_TYPE(flags) = CV_NODE_REAL;
 end;
 
-procedure CV_READ_SEQ_ELEM;
+procedure CV_READ_SEQ_ELEM(const Elem:Pointer; const Reader: TCvSeqReader; const SizeOfElem: Integer); //inline;
 begin
   // assert( (reader).seq->elem_size == sizeof(elem));
   Assert(Reader.seq^.elem_size = SizeOfElem);
   // memcpy( &(elem), (reader).ptr, sizeof((elem)));
-  Move(Reader.ptr, Elem, SizeOfElem);
+  CopyMemory(Elem, Reader.ptr, SizeOfElem);
   // CV_NEXT_SEQ_ELEM( sizeof(elem), reader )
   CV_NEXT_SEQ_ELEM(SizeOfElem, Reader);
 end;
 
-procedure CV_NEXT_SEQ_ELEM(const elem_size: Integer; const Reader: TCvSeqReader); // inline;
+procedure CV_NEXT_SEQ_ELEM(const elem_size: Integer; const Reader: TCvSeqReader); //inline;
+Var
+  ptr: PInteger;
 begin
   // if( ((reader).ptr += (elem_size)) >= (reader).block_max )
   // cvChangeSeqBlock( &(reader), 1 );
-  if (Integer(Reader.ptr) + elem_size) >= Integer(Reader.block_max) then
+  ptr := @Reader.ptr;
+  ptr^ := ptr^ + elem_size;
+  if Integer(Reader.ptr) >= Integer(Reader.block_max) then
     cvChangeSeqBlock(@Reader, 1);
 end;
 
@@ -2352,7 +2398,7 @@ end;
 function CV_SEQ_ELEM(seq: pCvSeq; const size_of_elem: Integer; index: Integer): Pointer; inline;
 begin
   // assert(sizeof((seq)->first[0]) == sizeof(CvSeqBlock) && (seq)->elem_size == sizeof(elem_type))
-  Assert(Assigned(seq^.first) and (SizeOf(seq^.first^) = SizeOf(TCvSeqBlock)) and (seq^.elem_size = size_of_elem));
+  Assert(Assigned(seq^.first) and (SizeOf(seq^.first[0]) = SizeOf(TCvSeqBlock)) and (seq^.elem_size = size_of_elem));
   // (elem_type*)((seq)->first && (unsigned)index <(unsigned)((seq)->first->count) ?
   if Assigned(seq^.first) and (Cardinal(index) < Cardinal(seq^.first^.count)) then
     // (seq)->first->data + (index) * sizeof(elem_type) :
@@ -2380,7 +2426,7 @@ end;
 function CV_IS_SET_ELEM(ptr: Pointer): Boolean; // inline;
 begin
   // #define CV_IS_SET_ELEM( ptr )  (((CvSetElem*)(ptr))->flags >= 0)
-  Result := pCvSetElem(ptr)^.flags >= 0;
+  Result := Assigned(ptr) and (pCvSetElem(ptr)^.flags >= 0);
 end;
 
 function CV_IMAGE_ELEM(image: pIplImage; size_elemtype, row, col: Integer): Pointer; inline;
@@ -2400,7 +2446,7 @@ end;
 function cvRNG(seed: int64 = -1): TCvRNG; inline;
 begin
   // CvRNG rng = seed ? (uint64)seed : (uint64)(int64)-1;
-  Result := iif(seed>0,seed,uint64(int64(-1)));
+  Result := iif(seed > 0, seed, uint64(int64(-1)));
 end;
 
 end.

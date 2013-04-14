@@ -122,74 +122,75 @@ Uses Core.types_c;
 // int model_points, int max_iters );
 //
 // CVAPI(void) cvConvertPointsHomogeneous( const CvMat* src, CvMat* dst );
-//
-/// * Calculates fundamental matrix given a set of corresponding points */
-// #define CV_FM_7POINT 1
-// #define CV_FM_8POINT 2
-//
-// #define CV_LMEDS 4
-// #define CV_RANSAC 8
-//
-// #define CV_FM_LMEDS_ONLY  CV_LMEDS
-// #define CV_FM_RANSAC_ONLY CV_RANSAC
-// #define CV_FM_LMEDS CV_LMEDS
-// #define CV_FM_RANSAC CV_RANSAC
-//
-// enum
-// {
-// CV_ITERATIVE = 0,
-// CV_EPNP = 1, // F.Moreno-Noguer, V.Lepetit and P.Fua "EPnP: Efficient Perspective-n-Point Camera Pose Estimation"
-// CV_P3P = 2 // X.S. Gao, X.-R. Hou, J. Tang, H.-F. Chang; "Complete Solution Classification for the Perspective-Three-Point Problem"
-// };
-//
-// CVAPI(int) cvFindFundamentalMat( const CvMat* points1, const CvMat* points2,
-// CvMat* fundamental_matrix,
-// int method CV_DEFAULT(CV_FM_RANSAC),
-// double param1 CV_DEFAULT(3.), double param2 CV_DEFAULT(0.99),
-// CvMat* status CV_DEFAULT(NULL) );
-//
-/// * For each input point on one of images
-// computes parameters of the corresponding
-// epipolar line on the other image */
-// CVAPI(void) cvComputeCorrespondEpilines( const CvMat* points,
-// int which_image,
-// const CvMat* fundamental_matrix,
-// CvMat* correspondent_lines );
-//
-/// * Triangulation functions */
-//
-// CVAPI(void) cvTriangulatePoints(CvMat* projMatr1, CvMat* projMatr2,
-// CvMat* projPoints1, CvMat* projPoints2,
-// CvMat* points4D);
-//
-// CVAPI(void) cvCorrectMatches(CvMat* F, CvMat* points1, CvMat* points2,
-// CvMat* new_points1, CvMat* new_points2);
-//
-//
-/// * Computes the optimal new camera matrix according to the free scaling parameter alpha:
-// alpha=0 - only valid pixels will be retained in the undistorted image
-// alpha=1 - all the source image pixels will be retained in the undistorted image
-// */
-// CVAPI(void) cvGetOptimalNewCameraMatrix( const CvMat* camera_matrix,
-// const CvMat* dist_coeffs,
-// CvSize image_size, double alpha,
-// CvMat* new_camera_matrix,
-// CvSize new_imag_size CV_DEFAULT(cvSize(0,0)),
-// CvRect* valid_pixel_ROI CV_DEFAULT(0),
-// int center_principal_point CV_DEFAULT(0));
-//
-/// * Converts rotation vector to rotation matrix or vice versa */
-// CVAPI(int) cvRodrigues2( const CvMat* src, CvMat* dst,
-// CvMat* jacobian CV_DEFAULT(0) );
-//
-/// * Finds perspective transformation between the object plane and image (view) plane */
-// CVAPI(int) cvFindHomography( const CvMat* src_points,
-// const CvMat* dst_points,
-// CvMat* homography,
-// int method CV_DEFAULT(0),
-// double ransacReprojThreshold CV_DEFAULT(3),
-// CvMat* mask CV_DEFAULT(0));
-//
+
+const
+  /// * Calculates fundamental matrix given a set of corresponding points */
+  CV_FM_7POINT = 1;
+  CV_FM_8POINT = 2;
+
+  CV_LMEDS = 4;
+  CV_RANSAC = 8;
+
+  CV_FM_LMEDS_ONLY = CV_LMEDS;
+  CV_FM_RANSAC_ONLY = CV_RANSAC;
+  CV_FM_LMEDS = CV_LMEDS;
+  CV_FM_RANSAC = CV_RANSAC;
+
+  CV_ITERATIVE = 0;
+  CV_EPNP = 1; // F.Moreno-Noguer, V.Lepetit and P.Fua "EPnP: Efficient Perspective-n-Point Camera Pose Estimation"
+  CV_P3P = 2;
+  // X.S. Gao, X.-R. Hou, J. Tang, H.-F. Chang; "Complete Solution Classification for the Perspective-Three-Point Problem"
+
+  // CVAPI(int) cvFindFundamentalMat( const CvMat* points1, const CvMat* points2,
+  // CvMat* fundamental_matrix,
+  // int method CV_DEFAULT(CV_FM_RANSAC),
+  // double param1 CV_DEFAULT(3.), double param2 CV_DEFAULT(0.99),
+  // CvMat* status CV_DEFAULT(NULL) );
+  //
+  /// * For each input point on one of images
+  // computes parameters of the corresponding
+  // epipolar line on the other image */
+  // CVAPI(void) cvComputeCorrespondEpilines( const CvMat* points,
+  // int which_image,
+  // const CvMat* fundamental_matrix,
+  // CvMat* correspondent_lines );
+  //
+  /// * Triangulation functions */
+  //
+  // CVAPI(void) cvTriangulatePoints(CvMat* projMatr1, CvMat* projMatr2,
+  // CvMat* projPoints1, CvMat* projPoints2,
+  // CvMat* points4D);
+  //
+  // CVAPI(void) cvCorrectMatches(CvMat* F, CvMat* points1, CvMat* points2,
+  // CvMat* new_points1, CvMat* new_points2);
+  //
+  //
+  /// * Computes the optimal new camera matrix according to the free scaling parameter alpha:
+  // alpha=0 - only valid pixels will be retained in the undistorted image
+  // alpha=1 - all the source image pixels will be retained in the undistorted image
+  // */
+  // CVAPI(void) cvGetOptimalNewCameraMatrix( const CvMat* camera_matrix,
+  // const CvMat* dist_coeffs,
+  // CvSize image_size, double alpha,
+  // CvMat* new_camera_matrix,
+  // CvSize new_imag_size CV_DEFAULT(cvSize(0,0)),
+  // CvRect* valid_pixel_ROI CV_DEFAULT(0),
+  // int center_principal_point CV_DEFAULT(0));
+  //
+  /// * Converts rotation vector to rotation matrix or vice versa */
+  // CVAPI(int) cvRodrigues2( const CvMat* src, CvMat* dst,
+  // CvMat* jacobian CV_DEFAULT(0) );
+
+  /// * Finds perspective transformation between the object plane and image (view) plane */
+  // CVAPI(int) cvFindHomography( const CvMat* src_points,
+  // const CvMat* dst_points,
+  // CvMat* homography,
+  // int method CV_DEFAULT(0),
+  // double ransacReprojThreshold CV_DEFAULT(3),
+  // CvMat* mask CV_DEFAULT(0));
+function cvFindHomography(const src_points: pCvMat; const dst_points: pCvMat; homography: pCvMat; method: Integer = 0;
+  ransacReprojThreshold: double = 3; mask: pCvMat = nil): Integer; cdecl;
+
 /// * Computes RQ decomposition for 3x3 matrices */
 // CVAPI(void) cvRQDecomp3x3( const CvMat *matrixM, CvMat *matrixR, CvMat *matrixQ,
 // CvMat *matrixQx CV_DEFAULT(NULL),
@@ -485,5 +486,6 @@ procedure cvDrawChessboardCorners; external calib3d_dll;
 function cvCalibrateCamera2; external calib3d_dll;
 procedure cvProjectPoints2; external calib3d_dll;
 procedure cvFindExtrinsicCameraParams2; external calib3d_dll;
+function cvFindHomography; external calib3d_dll;
 
 end.

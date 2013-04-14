@@ -20,3 +20,4 @@ __history
 *.drc
 *.jdbg
 /samples/Work
+*.map

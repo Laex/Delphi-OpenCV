@@ -104,11 +104,12 @@ uses
   *          cArray allocation, deallocation, initialization and access to elements     *
   ************************************************************************************** *)
 
-(* <malloc> wrapper.
-  If there is no enough memory, the cFunction
-  (as well as other OpenCV functions that call cvAlloc)
-  raises an error. *)
-procedure cvAlloc(size: size_t); cdecl;
+// * <malloc> wrapper.
+// If there is no enough memory, the function
+// (as well as other OpenCV functions that call cvAlloc)
+// raises an error. */
+// CVAPI(void*)  cvAlloc( size_t size );
+function cvAlloc(size: size_t): Pointer; cdecl;
 
 (* <free> wrapper.
   Here and further all the memory releasing functions
@@ -240,7 +241,7 @@ function cvCloneMat(const mat: pCvMat): pCvMat; cdecl;
 // (* Makes a new matrix from <rect> subrectangle of input array.
 // No data is copied *)
 // CVAPI(CvMat)cvGetSubRect(CvArr * arr, CvMat * submat, CvRect rect);
-function cvGetSubRect(arr: pIplImage; submat: pIplImage; rect: TCvRect): pIplImage; cdecl;
+function cvGetSubRect(arr: pCvArr; submat: pCvArr; rect: TCvRect): pIplImage; cdecl;
 
 
 // const cvGetSubArr = cvGetSubRect;
@@ -361,11 +362,11 @@ const
   // * ptr = &arr(idx0,idx1,...). All indexes are zero-based,
   // the major dimensions go first (e.g. (y,x) for 2D, (z,y,x) for 3D */
   // CVAPI(uchar*) cvPtr1D( const CvArr* arr, int idx0, int* type CV_DEFAULT(NULL));
-function cvPtr1D(const arr: pCvArr; idx0: Integer; _type: PInteger = nil): pointer; cdecl;
+function cvPtr1D(const arr: pCvArr; idx0: Integer; _type: PInteger = nil): Pointer; cdecl;
 // CVAPI(uchar*) cvPtr2D( const CvArr* arr, int idx0, int idx1, int* type CV_DEFAULT(NULL) );
-function cvPtr2D(const arr: pCvArr; idx0, idx1: Integer; _type: PInteger = nil): pointer; cdecl;
+function cvPtr2D(const arr: pCvArr; idx0, idx1: Integer; _type: PInteger = nil): Pointer; cdecl;
 // CVAPI(uchar*) cvPtr3D( const CvArr* arr, int idx0, int idx1, int idx2,int* type CV_DEFAULT(NULL));
-function cvPtr3D(const arr: pCvArr; idx0, idx1, idx2: Integer; _type: PInteger = nil): pointer; cdecl;
+function cvPtr3D(const arr: pCvArr; idx0, idx1, idx2: Integer; _type: PInteger = nil): Pointer; cdecl;
 
 // (* For CvMat or IplImage number of indices should be 2
 // (row index (y) goes first, column index (x) goes next).
@@ -1168,13 +1169,17 @@ function cvSeqPush(seq: pCvSeq; const element: Pointer = nil): Pointer; cdecl;
 // function; var Inserts A new element in the middle of sequence.cvSeqInsert(seq
 // : Integer in_front CV_DEFAULT(v1: 0)): Integer; (; :; = cvSeqPushFront(seq: lem);
 // var)CVAPI(schar)cvSeqInsert(CvSeq * seq: lem); before_index: Integer;
-// var Removes specified sequence element * )
-// procedure cvSeqRemove(CvSeq * seq: unction element CV_DEFAULT(v1: 0)): Pointer; (; index: Integer);
-//
-// (* Removes all the elements from the sequence. The freed memory
+// var Removes
+
+// * Removes specified sequence element */
+// CVAPI(void)  cvSeqRemove( CvSeq* seq, int index );
+procedure cvSeqRemove(seq: pCvSeq; index: Integer); cdecl;
+
+// * Removes all the elements from the sequence. The freed memory
 // can be reused later only by the same sequence unless cvClearMemStorage
-// or cvRestoreMemStoragePos is called *)
-// procedure cvClearSeq(var seq: CvSeq);
+// or cvRestoreMemStoragePos is called */
+// CVAPI(void)  cvClearSeq( CvSeq* seq );
+procedure cvClearSeq(seq: pCvSeq); cdecl;
 
 {
   /* Retrieves pointer to specified sequence element.
@@ -1243,25 +1248,28 @@ function cvCvtSeqToArray(const seq: pCvSeq; elements: Pointer; slice: TCvSlice {
 //
 // (* Inserts a sequence or array into another sequence *)
 // procedure cvSeqInsertSlice(var seq: CvSeq; before_index: Integer; var from_arr: CvArr);
-//
-// (* a < b ? -1 : a > b ? 1 : 0 *)
-// type CvCmpFunc =
-// function(A: Pointer; B: Pointer; userdata: Pointer): Integer; CV_CDECL *;
-//
-// (* Sorts sequence in-place given element comparison function *)
-// procedure cvSeqSort(v1: 0));
-//
-// (* Finds element in a [sorted] sequence *)
-// CVAPI(schar)cvSeqSearch(CvSeq * seq, Pointer elem, CvCmpFunc func, Integer is_sorted,
-// Integer * elem_idx,
-// function userdata CV_DEFAULT(v1: 0)): Pointer;
-//
-// (* Reverses order of sequence elements in-place *)
-// procedure cvSeqInvert(var seq: CvSeq);
-//
-// (* Splits sequence into one or more equivalence classes using the specified criteria *)
-// CVAPI(Integer)cvSeqPartition(CvSeq * seq, CvMemStorage * storage, CvSeq * * labels,
-// CvCmpFunc is_equal, Pointer userdata);
+
+// * a < b ? -1 : a > b ? 1 : 0 */
+// typedef int (CV_CDECL* CvCmpFunc)(const void* a, const void* b, void* userdata );
+Type
+  TCvCmpFunc = function(const a: Pointer; const b: Pointer; userdata: Pointer): Integer; cdecl;
+
+  // (* Sorts sequence in-place given element comparison function *)
+  // procedure cvSeqSort(v1: 0));
+  //
+  // (* Finds element in a [sorted] sequence *)
+  // CVAPI(schar)cvSeqSearch(CvSeq * seq, Pointer elem, CvCmpFunc func, Integer is_sorted,
+  // Integer * elem_idx,
+  // function userdata CV_DEFAULT(v1: 0)): Pointer;
+  //
+  // (* Reverses order of sequence elements in-place *)
+  // procedure cvSeqInvert(var seq: CvSeq);
+
+  // * Splits sequence into one or more equivalence classes using the specified criteria */
+  // CVAPI(int)  cvSeqPartition( const CvSeq* seq, CvMemStorage* storage,
+  // CvSeq** labels, CvCmpFunc is_equal, void* userdata );
+function cvSeqPartition(const seq: pCvSeq; storage: pCvMemStorage; labels: pCvSeq; is_equal: TCvCmpFunc;
+  userdata: Pointer): Integer; cdecl;
 
 // ************ Internal sequence functions ************/
 // CVAPI(void)  cvChangeSeqBlock( void* reader, int direction );
@@ -1430,7 +1438,7 @@ procedure cvCreateSeqBlock(writer: pCvSeqWriter); cdecl;
 // *************************************************************************************** *)
 //
 /// / >> Following declaration is a macro definition!
-function CV_RGB(const r, g, B: Double): TCvScalar; inline;
+function CV_RGB(const r, g, b: Double): TCvScalar; inline;
 // CvScalar((B), (g), (r), 0);
 
 const
@@ -1789,9 +1797,14 @@ procedure cvReleaseFileStorage(Var fs: pCvFileStorage); cdecl;
 // procedure cvWriteComment(CvFileStorage * fs: v1: 0)): Integer; (; comment: PCVChar;
 // var writes instance of A standard type (Matrix: Integer eol_comment): PCVChar; (; v4: image;
 // v5: sequence; var)
-// procedure cvWrite(CvFileStorage * fs: graph etc.) or user - defined cType; name: Pointer;
-// var ptr: void; attributes CV_DEFAULT(CvAttrList()): CvAttrList);
-//
+
+// * writes instance of a standard type (matrix, image, sequence, graph etc.)
+// or user-defined type */
+// CVAPI(void) cvWrite( CvFileStorage* fs, const char* name, const void* ptr,
+// CvAttrList attributes CV_DEFAULT(cvAttrList()));
+procedure cvWrite(fs: pCvFileStorage; const name: pCVChar; const ptr: Pointer;
+  attributes: TCvAttrList { = cvAttrList() } ); cdecl;
+
 // (* starts the next stream *)
 // procedure cvStartNextStream(var fs: CvFileStorage);
 //
@@ -2052,7 +2065,7 @@ implementation
 uses
   uLibName;
 
-procedure cvAlloc(size: size_t); external Core_Dll; cdecl;
+function cvAlloc(size: size_t): Pointer; external Core_Dll; cdecl;
 procedure cvFree_(ptr: Pointer); external Core_Dll; cdecl;
 function cvCreateImageHeader; external Core_Dll; cdecl;
 function cvCreateImage; external Core_Dll; cdecl;
@@ -2127,7 +2140,7 @@ procedure cvZero; external Core_Dll name 'cvSetZero';
 
 function CV_RGB;
 begin
-  Result := CvScalar(B, g, r, 0);
+  Result := CvScalar(b, g, r, 0);
 end;
 
 procedure cvSave(const filename: pCVChar; const struct_ptr: Pointer; const name: pCVChar; const comment: pCVChar;
@@ -2318,5 +2331,9 @@ function cvNorm; external Core_Dll;
 function cvPtr1D; external Core_Dll;
 function cvPtr2D; external Core_Dll;
 function cvPtr3D; external Core_Dll;
+procedure cvSeqRemove; external Core_Dll;
+procedure cvClearSeq; external Core_Dll;
+procedure cvWrite; external Core_Dll;
+function cvSeqPartition; external Core_Dll;
 
 end.
