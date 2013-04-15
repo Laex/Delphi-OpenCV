@@ -173,7 +173,21 @@ begin
         end;
       end;
       if (c = 27) then
+      begin
+        // освобождаем ресурсы
+        cvReleaseImage(mapx);
+        cvReleaseImage(mapy);
+        cvReleaseImage(gray_image);
+        cvReleaseImage(image);
+        cvReleaseMat(object_points);
+        cvReleaseMat(image_points);
+        cvReleaseMat(point_counts);
+        cvReleaseMat(intrinsic_matrix);
+        cvReleaseMat(distortion_coeffs);
+        cvReleaseCapture(capture);
+        cvDestroyAllWindows;
         Halt;
+      end;
       image := cvQueryFrame(capture); // Получаем следующее изображение
     end; // КОНЕЦ КОЛЛЕКЦИОНИРОВАНИЕ ЦИКЛОМ WHILE.
 
@@ -285,6 +299,19 @@ begin
         break;
       image := cvQueryFrame(capture);
     end;
+
+    // освобождаем ресурсы
+    cvReleaseImage(mapx);
+    cvReleaseImage(mapy);
+    cvReleaseImage(gray_image);
+    cvReleaseImage(image);
+    cvReleaseMat(intrinsic_matrix);
+    cvReleaseMat(distortion_coeffs);
+    cvReleaseMat(object_points2);
+    cvReleaseMat(image_points2);
+    cvReleaseMat(point_counts2);
+    cvReleaseCapture(capture);
+    cvDestroyAllWindows;
 
   except
     on E: Exception do
