@@ -126,6 +126,11 @@ type
   schar = ShortInt;
 {$EXTERNALSYM schar}
   pschar = ^schar;
+{$EXTERNALSYM pschar}
+  unsigned = longint;
+{$EXTERNALSYM unsigned}
+  punsigned = ^longint;
+{$EXTERNALSYM punsigned}
 
   (* CvArr* is used to pass arbitrary
     * cArray-like data structures
@@ -599,6 +604,8 @@ const
 {$EXTERNALSYM CV_MAX_DIM}
   CV_MAX_DIM_HEAP = 1024;
 {$EXTERNALSYM CV_MAX_DIM_HEAP}
+  CV_MAX_ARR = 10;
+{$EXTERNALSYM CV_MAX_ARR}
 
 type
   TCvMatNDdim = packed record
@@ -631,64 +638,9 @@ type
   // #define CV_IS_MATND(mat) \
   // (CV_IS_MATND_HDR(mat) && ((const CvMatND*)(mat))->data.ptr != NULL)
 
-  (* ***************************************************************************************\
-    *                      Multi-dimensional sparse cArray (CvSparseMat)                      *
-    *************************************************************************************** *)
-
-const
-  CV_SPARSE_MAT_MAGIC_VAL = $42440000;
-{$EXTERNALSYM CV_SPARSE_MAT_MAGIC_VAL}
-  CV_TYPE_NAME_SPARSE_MAT = 'opencv-sparse-matrix';
-{$EXTERNALSYM CV_TYPE_NAME_SPARSE_MAT}
-  (*
-    type
-    CvSet = packed record;
-
-    CvSparseMat
-
-    begin
-    Integer cType;
-    CvSparseMat
-
-    begin
-    Integer cType;
-    Integer dims;
-    Integer * refcount;
-    Integer hdr_refcount;
-
-    type
-    CvSet * heap = packed record
-    end;
-    Pointer * hashtable;
-    Integer hashsize;
-    Integer valoffset;
-    Integer idxoffset;
-    size:
-    array [0 .. CV_MAX_DIM - 1] of Integer;
-    end;
-    CvSparseMat;
-
-    const
-    CV_IS_SPARSE_MAT_HDR(mat)((mat) <> 0 and (((CvSparseMat(mat))^.cType and CV_MAGIC_MASK)
-    = CV_SPARSE_MAT_MAGIC_VAL)
-
-    // >> Following declaration is a macro definition!
-    const CV_IS_SPARSE_MAT(mat)CV_IS_SPARSE_MAT_HDR(mat);
-  *)
-  (* *************** iteration through a sparse array **************** *)
-  (*
-    type CvSparseNode begin Cardinal hashval; CvSparseNode begin Cardinal hashval;
-    type CvSparseNode * next = packed record end; end; CvSparseNode;
-
-    type CvSparseMatIterator = packed record mat: ^CvSparseMat; node: ^CvSparseNode; curidx: Integer; end;
-
-    // >> Following declaration is a macro definition!
-    const CV_NODE_VAL(mat, node)# define CV_NODE_VAL(mat, node)((
-    procedure(+(mat)^.valoffset))((Integer(uchar(node) + (mat)^.idxoffset): node));
-  *)
-  (* ***************************************************************************************\
-    *                                         Histogram                                      *
-    *************************************************************************************** *)
+//***************************************************************************************
+//*                                         Histogram                                   *
+//***************************************************************************************
 
 type
   TCvHistType = Integer;
@@ -827,7 +779,17 @@ type
     angle: Single; (* Angle between the horizontal axis *)
   end;
 
-  (* Line iterator state: *)
+  pCvNArrayIterator = ^TCvNArrayIterator;
+  TCvNArrayIterator = record
+    count: Integer;     // number of arrays
+    dims: Integer;      // number of dimensions to iterate
+    size: TCvSize;      // maximal common linear size: { width = size, height = 1 }
+    ptr: Array [0 .. CV_MAX_ARR - 1] of ^uchar;     // pointers to the array slices
+    stack: Array [0 .. CV_MAX_DIM - 1] of Integer;  // for internal use
+    hdr: Array [0 .. CV_MAX_ARR - 1] of ^TCvMatND;   //pointers to the headers of the
+  end;
+
+(* Line iterator state: *)
 type
   TCvLineIterator = packed record
     ptr: ^uchar;
@@ -853,6 +815,7 @@ const
   (* ************************************ CvScalar **************************************** *)
 
 type
+  pCvScalar = ^TCvScalar;
   TCvScalar = packed record
     val: array [0 .. 3] of Double;
   end;
@@ -975,6 +938,55 @@ const
   // Checks whether the element pointed by ptr belongs to a set or not
   // #define CV_IS_SET_ELEM( ptr )  (((CvSetElem*)(ptr))->flags >= 0)
 function CV_IS_SET_ELEM(ptr: Pointer): Boolean; // inline;
+
+//***************************************************************************************
+//*                      Multi-dimensional sparse cArray (CvSparseMat)                  *
+//***************************************************************************************
+
+const
+  CV_SPARSE_MAT_MAGIC_VAL = $42440000;
+{$EXTERNALSYM CV_SPARSE_MAT_MAGIC_VAL}
+  CV_TYPE_NAME_SPARSE_MAT = 'opencv-sparse-matrix';
+{$EXTERNALSYM CV_TYPE_NAME_SPARSE_MAT}
+
+type
+  pCvSparseMat = ^TCvSparseMat;
+  TCvSparseMat = packed record
+    ctype: integer;
+    dims: integer;
+    refcount: ^Integer;
+    hdr_refcount: integer;
+    heap: pCvSet;
+    hashtable: ^pointer;
+    hashsize: integer;
+    valoffset: integer;
+    idxoffset: integer;
+    size: array [0 .. CV_MAX_DIM - 1] of Integer;
+  end;
+
+{#define CV_IS_SPARSE_MAT_HDR(mat) \
+    ((mat) != NULL && \
+    (((const CvSparseMat*)(mat))->type & CV_MAGIC_MASK) == CV_SPARSE_MAT_MAGIC_VAL)}
+
+{#define CV_IS_SPARSE_MAT(mat) \
+    CV_IS_SPARSE_MAT_HDR(mat)}
+
+  // **************** iteration through a sparse array *****************
+  pCvSparseNode = ^TCvSparseNode;
+  TCvSparseNode = packed record
+    hashval: Cardinal;
+    next: pCvSparseNode;
+  end;
+
+  pCvSparseMatIterator = ^TCvSparseMatIterator;
+  TCvSparseMatIterator = packed record
+    mat: pCvSparseMat;
+    node: pCvSparseNode;
+    curidx: integer;
+  end;
+
+//define CV_NODE_VAL(mat,node)   ((void*)((uchar*)(node) + (mat)->valoffset))
+//define CV_NODE_IDX(mat,node)   ((int*)((uchar*)(node) + (mat)->idxoffset))
 
 (* ************************************ Graph ******************************************* *)
 

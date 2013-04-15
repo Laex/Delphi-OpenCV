@@ -1,4 +1,3 @@
-// --------------------------------- OpenCV license.txt ---------------------------
 (* //    IMPORTANT: READ BEFORE DOWNLOADING, COPYING, INSTALLING OR USING.
   //
   //    By downloading, copying, installing or using the software you agree to this license.
@@ -37,50 +36,6 @@
   //   or tort (including negligence or otherwise) arising in any way out of
   //   the use of this software, even if advised of the possibility of such damage. *)
 
-(* /  **************************************************************************************************
-  //                                 Project Delphi-OpenCV
-  //  **************************************************************************************************
-  //  Contributor:
-  //  laentir Valetov
-  //  email:laex@bk.ru
-  //  **************************************************************************************************
-  //  You may retrieve the latest version of this file at the GitHub,
-  //  located at git://github.com/Laex/Delphi-OpenCV.git
-  //  **************************************************************************************************
-  //  License:
-  //  The contents of this file are subject to the Mozilla Public License Version 1.1 (the "License");
-  //  you may not use this file except in compliance with the License. You may obtain a copy of the
-  //  License at http://www.mozilla.org/MPL/
-  //
-  //  Software distributed under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
-  //  ANY KIND, either express or implied. See the License for the specific language governing rights
-  //  and limitations under the License.
-  //
-  //  Alternatively, the contents of this file may be used under the terms of the
-  //  GNU Lesser General Public License (the  "LGPL License"), in which case the
-  //  provisions of the LGPL License are applicable instead of those above.
-  //  If you wish to allow use of your version of this file only under the terms
-  //  of the LGPL License and not to allow others to use your version of this file
-  //  under the MPL, indicate your decision by deleting  the provisions above and
-  //  replace  them with the notice and other provisions required by the LGPL
-  //  License.  If you do not delete the provisions above, a recipient may use
-  //  your version of this file under either the MPL or the LGPL License.
-  //
-  //  For more information about the LGPL: http://www.gnu.org/copyleft/lesser.html
-  //  **************************************************************************************************
-  //  Warning: Using Delphi XE3 syntax!
-  //  **************************************************************************************************
-  //  The Initial Developer of the Original Code:
-  //  OpenCV: open source computer vision library
-  //  Homepage:    http://opencv.org
-  //  Online docs: http://docs.opencv.org
-  //  Q&A forum:   http://answers.opencv.org
-  //  Dev zone:    http://code.opencv.org
-  //  **************************************************************************************************
-  //  Original file:
-  //  opencv\modules\core\include\opencv2\core\core_c.h
-  //  ************************************************************************************************* *)
-
 {$IFDEF DEBUG}
 {$A8,B-,C+,D+,E-,F-,G+,H+,I+,J-,K-,L+,M-,N+,O-,P+,Q+,R+,S-,T-,U-,V+,W+,X+,Y+,Z1}
 {$ELSE}
@@ -92,937 +47,678 @@
 {$WARN UNSAFE_TYPE OFF}
 {$WARN UNSAFE_CODE OFF}
 {$WARN UNSAFE_CAST OFF}
+
 unit core_c;
 
 interface
 
 uses
-  Windows,
-  Core.types_c;
+  Windows, core.types_c;
 
-(* ***************************************************************************************
-  *          cArray allocation, deallocation, initialization and access to elements     *
-  ************************************************************************************** *)
 
-// * <malloc> wrapper.
-// If there is no enough memory, the function
-// (as well as other OpenCV functions that call cvAlloc)
-// raises an error. */
-// CVAPI(void*)  cvAlloc( size_t size );
-function cvAlloc(size: size_t): Pointer; cdecl;
+{ ****************************************************************************************
+ *          cArray allocation, deallocation, initialization and access to elements      *
+ **************************************************************************************** }
 
-(* <free> wrapper.
+{ <malloc> wrapper.
+  If there is no enough memory, the cFunction
+  (as well as other OpenCV functions that call cvAlloc)
+  raises an error.
+}
+procedure cvAlloc(size: size_t); cdecl;
+
+{ <free> wrapper.
   Here and further all the memory releasing functions
   (that all call cvFree) take Double cPointer in order to
   to clear cPointer to the data after releasing it.
   Passing cPointer to 0 cPointer is Ok: nothing happens in this
-*)
-procedure cvFree_(ptr: Pointer); cdecl;
-// #define cvFree(ptr) (cvFree_(*(ptr)), *(ptr)=0)
-procedure cvFree(Var ptr); inline;
-{$DEFINE cvFree(ptr(cvFree_}	(* (ptr)), *(ptr)=0)
+}
+procedure cvFree_(ptr: pointer); cdecl;
+procedure cvFree(var ptr); inline;
 
-  (* Allocates and initializes IplImage header *)
+{ Allocates and initializes IplImage header
+  CVAPI(IplImage*)  cvCreateImageHeader( CvSize size, int depth, int channels );
+}
 function cvCreateImageHeader(size: TCvSize; depth: Integer; channels: Integer): pIplImage; cdecl;
 
-(* Inializes IplImage header *)
-// CVAPI(IplImage*) cvInitImageHeader(
-// IplImage* image,
-// CvSize size,
-// int depth,
-// int channels,
-// int origin CV_DEFAULT(0),
-// int align CV_DEFAULT(4));
-function cvInitImageHeader(
-  { } image: pIplImage;
-  { } size: TCvSize;
-  { } depth: Integer;
-  { } channels: Integer;
-  { } origin: Integer = 0;
-  { } align: Integer = 4): pIplImage; cdecl;
+{ Inializes IplImage header
+  CVAPI(IplImage*) cvInitImageHeader( IplImage* image, CvSize size, int depth,
+                                   int channels, int origin CV_DEFAULT(0),
+                                  int align CV_DEFAULT(4));
+}
+function cvInitImageHeader(image: pIplImage; size: TCvSize; depth: Integer;
+                        channels: Integer; origin: Integer = 0; align: Integer = 4): pIplImage; cdecl;
 
-(* Creates IPL image (header and data *)
-// CVAPI(IplImage*)  cvCreateImage( CvSize size, int depth, int channels ); }
+{ Creates IPL image (header and data
+  CVAPI(IplImage*)  cvCreateImage( CvSize size, int depth, int channels );
+}
 function cvCreateImage(size: TCvSize; depth, channels: Integer): pIplImage; cdecl;
 
-(* Releases (i.e. deallocates) IPL image header *)
-// CVAPI(void)  cvReleaseImageHeader( IplImage** image );
+{ Releases (i.e. deallocates) IPL image header
+  CVAPI(void)  cvReleaseImageHeader( IplImage** image );
+}
 procedure cvReleaseImageHeader(var image: pIplImage); cdecl;
 
-(* Releases IPL image header and data *)
-// CVAPI(void)  cvReleaseImage( IplImage** image );
+{ Releases IPL image header and data
+  CVAPI(void)  cvReleaseImage( IplImage** image );
+}
 procedure cvReleaseImage(var image: pIplImage); cdecl;
 
-(* Creates a copy of IPL image (widthStep may differ) *)
-// CVAPI(IplImage*) cvCloneImage( const IplImage* image );
+{ Creates a copy of IPL image (widthStep may differ)
+  CVAPI(IplImage*) cvCloneImage( const IplImage* image );
+}
 function cvCloneImage(const image: pIplImage): pIplImage; cdecl;
 
-(* Sets a Channel Of Interest (only a few functions support COI) -
-  use cvCopy to extract the selected channel and/or put it back *)
-// CVAPI(void)  cvSetImageCOI( IplImage* image, int coi );
+{ Sets a Channel Of Interest (only a few functions support COI) -
+  use cvCopy to extract the selected channel and/or put it back
+  CVAPI(void)  cvSetImageCOI( IplImage* image, int coi );
+}
 procedure cvSetImageCOI(image: pIplImage; coi: Integer); cdecl;
 
-(* Retrieves image Channel Of Interest *)
-// CVAPI(int)  cvGetImageCOI( const IplImage* image );
+{ Retrieves image Channel Of Interest
+  CVAPI(int)  cvGetImageCOI( const IplImage* image );
+}
 function cvGetImageCOI(const image: pIplImage): Integer; cdecl;
 
-(* Sets image ROI (region of interest) (COI is not changed) *)
-// CVAPI(void)  cvSetImageROI( IplImage* image, CvRect rect );
+{ Sets image ROI (region of interest) (COI is not changed)
+  CVAPI(void)  cvSetImageROI( IplImage* image, CvRect rect );
+}
 procedure cvSetImageROI(image: pIplImage; rect: TCvRect); cdecl;
 
-(* Resets image ROI and COI *)
-// CVAPI(void)  cvResetImageROI( IplImage* image );
+{ Resets image ROI and COI
+  CVAPI(void)  cvResetImageROI( IplImage* image );
+}
 procedure cvResetImageROI(image: pIplImage); cdecl;
 
-(* Retrieves image ROI *)
-// CVAPI(CvRect) cvGetImageROI( const IplImage* image );
+{ Retrieves image ROI
+  CVAPI(CvRect) cvGetImageROI( const IplImage* image );
+}
 function cvGetImageROI(const image: pIplImage): TCvRect; cdecl;
 
-(* Allocates and initalizes CvMat header *)
-// CVAPI(CvMat*)  cvCreateMatHeader( int rows, int cols, int type );
+{ Allocates and initalizes CvMat header
+  CVAPI(CvMat*)  cvCreateMatHeader( int rows, int cols, int type );
+}
 function cvCreateMatHeader(rows: Integer; cols: Integer; cType: Integer): TCvMat; cdecl;
 
 const
   CV_AUTOSTEP = $7FFFFFFF;
 {$EXTERNALSYM CV_AUTOSTEP}
-  (* Initializes CvMat header *)
-function cvInitMatHeader( // CVAPI(CvMat*) cvInitMatHeader(
-  { } mat: pCvMat; // CvMat* mat,
-  { } rows: Integer; // int rows,
-  { } cols: Integer; // int cols,
-  { } _type: Integer; // int type,
-  { } data: Pointer = nil; // void* data CV_DEFAULT(NULL),
-  { } step: Integer = CV_AUTOSTEP // int step CV_DEFAULT(CV_AUTOSTEP) );
-  ): pCvMat; cdecl;
 
-{
-  (* Allocates and initializes CvMat header and allocates data *)
-  CVAPI(CvMat)cvCreateMat(Integer rows, Integer cols, Integer cType): Pointer;
+{ Initializes CvMat header
+  CVAPI(CvMat*) cvInitMatHeader( CvMat* mat, int rows, int cols,
+                              int type, void* data CV_DEFAULT(NULL),
+                              int step CV_DEFAULT(CV_AUTOSTEP) );
 }
-function cvCreateMat(rows: Integer; cols: Integer; cType: Integer): pCvMat; cdecl;
+function cvInitMatHeader(mat: pCvMat; rows: Integer; cols: Integer;
+                      _type: Integer; data: Pointer = nil; step: Integer = CV_AUTOSTEP): pCvMat; cdecl;
 
-/// * Releases CvMat header and deallocates matrix data
-// (reference counting is used for data) */
-// CVAPI(void)  cvReleaseMat( CvMat** mat );
-procedure cvReleaseMat(Var mat: pCvMat); cdecl;
+{ Allocates and initializes CvMat header and allocates data
+  CVAPI(CvMat*)  cvCreateMat( int rows, int cols, int type );
+}
+function cvCreateMat(rows, cols, cType: Integer): pCvMat; cdecl;
 
+{ Releases CvMat header and deallocates matrix data
+  (reference counting is used for data)
+  CVAPI(void)  cvReleaseMat( CvMat** mat );
+}
+procedure cvReleaseMat(var mat: pCvMat); cdecl;
 
-// CV_INLINE CV_INLINE procedure cvDecRefData(CvArr * arr)
-// (CV_IS_MAT(arr))begin CvMat * mat := (CvMat)arr;
-// mat^.data.ptr := 0;
-// if (mat^.refcount <> 0 and - - * mat^.refcount = 0) then
-// cvFree(and mat^.refcount);
-// mat^.refcount := 0;
-// end;
-// else if (CV_IS_MATND(arr)) then
-// begin
-// CvMatND * mat := (CvMatND)arr;
-// mat^.data.ptr := 0;
-// if (mat^.refcount <> 0 and - - * mat^.refcount = 0) then
-// cvFree(and mat^.refcount);
-// mat^.refcount := 0;
-// end;
-// end;
+// Decrements CvMat data reference counter and deallocates the data if
+// it reaches 0 }
+//CV_INLINE  void  cvDecRefData( pCvArr* arr )
+//{
+//    if( CV_IS_MAT( arr ))
+//    {
+//        CvMat* mat = (CvMat*)arr;
+//        mat->data.ptr = NULL;
+//        if( mat->refcount != NULL && --*mat->refcount == 0 )
+//            cvFree( &mat->refcount );
+//        mat->refcount = NULL;
+//    }
+//    else if( CV_IS_MATND( arr ))
+//    {
+//        CvMatND* mat = (CvMatND*)arr;
+//        mat->data.ptr = NULL;
+//        if( mat->refcount != NULL && --*mat->refcount == 0 )
+//            cvFree( &mat->refcount );
+//        mat->refcount = NULL;
+//    }
+//}
 
-// (* Increments CvMat data reference counter *)
-// CV_INLINE
-// function cvIncRefData(var mat := (CvMat)arr;
-// if (mat^.refcount <> 0) then refcount := + + * mat^.refcount; end;
-// else if (CV_IS_MATND(arr)) then begin CvMatND * mat := (CvMatND)arr;
-// if (mat^.refcount <> 0) then refcount := + + * mat^.refcount; end; result := refcount; end;
-// (* Creates an exact copy of the input matrix (except: CV_IS_MAT( arr )) then     begin         CvMat;
-// be: may;
-// var )
+// Increments CvMat data reference counter
+//CV_INLINE  int  cvIncRefData( pCvArr* arr )
+//{
+//    int refcount = 0;
+//    if( CV_IS_MAT( arr ))
+//    {
+//        CvMat* mat = (CvMat*)arr;
+//        if( mat->refcount != NULL )
+//            refcount = ++*mat->refcount;
+//    }
+//    else if( CV_IS_MATND( arr ))
+//    {
+//        CvMatND* mat = (CvMatND*)arr;
+//        if( mat->refcount != NULL )
+//            refcount = ++*mat->refcount;
+//    }
+//    return refcount;
+//}
 
-// * Creates an exact copy of the input matrix (except, may be, step value) */
-// CVAPI(CvMat*) cvCloneMat(const CvMat* mat);
+{ Creates an exact copy of the input matrix (except, may be, step value)
+  CVAPI(CvMat*) cvCloneMat( const CvMat* mat );
+}
 function cvCloneMat(const mat: pCvMat): pCvMat; cdecl;
 
-// (* Makes a new matrix from <rect> subrectangle of input array.
-// No data is copied *)
-// CVAPI(CvMat)cvGetSubRect(CvArr * arr, CvMat * submat, CvRect rect);
+{ Makes a new matrix from <rect> subrectangle of input array.
+  No data is copied
+  CVAPI(CvMat*) cvGetSubRect( const pCvArr* arr, CvMat* submat, CvRect rect );
+  #define cvGetSubArr cvGetSubRect
+}
 function cvGetSubRect(arr: pCvArr; submat: pCvArr; rect: TCvRect): pIplImage; cdecl;
 
+{ Selects row span of the input array: arr(start_row:delta_row:end_row,:)
+  (end_row is not included into the span).
+CVAPI(CvMat*) cvGetRows( const pCvArr* arr, CvMat* submat,
+                        int start_row, int end_row,
+                        int delta_row CV_DEFAULT(1));
+}
+function cvGetRows(const arr: pCvArr; submat: pCvMat; start_row, end_row: integer; delta_row: integer = 1): pCvMat; cdecl;
 
-// const cvGetSubArr = cvGetSubRect;
-// {$EXTERNALSYM cvGetSubArr}
+//CV_INLINE  CvMat*  cvGetRow( const pCvArr* arr, CvMat* submat, int row )
+//{
+//    return cvGetRows( arr, submat, row, row + 1, 1 );
+//}
+function cvGetRow(const arr: pCvArr; submat: pCvMat; row: integer): pCvMat; inline;
 
-// (* Selects row span of the input array: arr(start_row:delta_row:end_row,:)
-// (end_row is not included into the span). *)
-// CVAPI(CvMat)cvGetRows(CvArr * arr, CvMat * submat, Integer start_row, Integer end_row,
-// function delta_row CV_DEFAULT(v1: 1)): Integer;
+{ Selects column span of the input array: arr(:,start_col:end_col)
+   (end_col is not included into the span)
+CVAPI(CvMat*) cvGetCols( const pCvArr* arr, CvMat* submat,
+                        int start_col, int end_col );
+}
+function cvGetCols(const arr: pCvArr; submat: pCvMat; start_col, end_col: integer): pCvMat; cdecl;
 
-// CV_INLINE CvMat * cvGetRow(CvArr * arr, CvMat * submat, Integer row)
-// begin result := cvGetRows(arr, submat, row, row + 1, 1); end;
+//CV_INLINE  CvMat*  cvGetCol( const pCvArr* arr, CvMat* submat, int col )
+//{
+//    return cvGetCols( arr, submat, col, col + 1 );
+//}
+function cvGetCol(const arr: pCvArr; submat: pCvMat; col: integer): pCvMat; inline;
 
-// (* Selects column span of the input array: arr(:,start_col:end_col)
-// (end_col is not included into the span) *)
-// CVAPI(CvMat)cvGetCols(CvArr * arr, CvMat * submat, Integer start_col, Integer end_col);
+{ Select a diagonal of the input array.
+   (diag = 0 means the main diagonal, >0 means a diagonal above the main one,
+   <0 - below the main one).
+   The diagonal will be represented as a column (nx1 matrix).
+CVAPI(CvMat*) cvGetDiag( const pCvArr* arr, CvMat* submat,
+                            int diag CV_DEFAULT(0));
+}
+function cvGetDiag(const arr: pCvArr; submat: pCvMat; diag: integer = 0): pCvMat; cdecl;
 
-// CV_INLINE CvMat * cvGetCol(CvArr * arr, CvMat * submat, Integer col)
-// begin result := cvGetCols(arr, submat, col, col + 1); end;
+{ low-level scalar <-> raw data conversion functions
+  CVAPI(void) cvScalarToRawData( const CvScalar* scalar, void* data, int type,
+                              int extend_to_12 CV_DEFAULT(0) );
+}
+procedure cvScalarToRawData(const scalar: pCvScalar; data: pCvArr; ctype: integer; extend_to_12: integer = 0); cdecl;
 
-// (* Select a diagonal of the input array.
-// (diag = 0 means the main diagonal, >0 means a diagonal above the main one,
-// <0 - below the main one).
-// The diagonal will be represented as a column (nx1 matrix). *)
-// CVAPI(CvMat)cvGetDiag(CvArr * arr, CvMat * submat,
-// function diag CV_DEFAULT(v1: 0)): Integer;
+//CVAPI(void) cvRawDataToScalar( const void* data, int type, CvScalar* scalar );
+procedure cvRawDataToScalar(const data: pCvArr; ctype: integer; scalar: pCvScalar); cdecl;
 
-// (* low-level scalar <-> raw data conversion functions *)
-// procedure cvScalarToRawData(0)): Integer;
+{ Allocates and initializes CvMatND header
+  CVAPI(CvMatND*)  cvCreateMatNDHeader( int dims, const int* sizes, int type );
+}
+function cvCreateMatNDHeader(dims: integer; const sizes: pInteger; ctype: integer): pCvMatND; cdecl;
 
-// procedure cvRawDataToScalar(Pointer data: v1:; cType: Integer; var scalar: CvScalar);
+{ Allocates and initializes CvMatND header and allocates data
+  CVAPI(CvMatND*)  cvCreateMatND( int dims, const int* sizes, int type );
+}
+function cvCreateMatND(dims: integer; const sizes: pInteger; ctype: integer): pCvMatND; cdecl;
 
-// (* Allocates and initializes CvMatND header *)
-// CVAPI(CvMatND)cvCreateMatNDHeader(Integer dims, Integer * sizes, Integer cType);
+{ Initializes preallocated CvMatND header */
+  CVAPI(CvMatND*)  cvInitMatNDHeader( CvMatND* mat, int dims, const int* sizes,
+                                    int type, void* data CV_DEFAULT(NULL) );
+}
+function cvInitMatNDHeader(mat: pCvMatND; dims: integer; const sizes: pInteger; ctype: integer; data: pCvArr = nil): pCvMatND; cdecl;
 
-// (* Allocates and initializes CvMatND header and allocates data *)
-// CVAPI(CvMatND)cvCreateMatND(Integer dims, Integer * sizes, Integer cType);
+// Releases CvMatND
+//CV_INLINE  void  cvReleaseMatND( CvMatND** mat )
+//{
+//    cvReleaseMat( (CvMat**)mat );
+//}
+procedure cvReleaseMatND(var mat: pCvMatND); inline;
 
-// (* Initializes preallocated CvMatND header *)
-// CVAPI(CvMatND)cvInitMatNDHeader(CvMatND * mat, Integer dims, Integer * sizes,
-// function cType,
-// function
-// function CV_DEFAULT(v1: 0)): Integer;
+{ Creates a copy of CvMatND (except, may be, steps)
+CVAPI(CvMatND*) cvCloneMatND( const CvMatND* mat );
+}
+function cvCloneMatND(const mat: pCvMatND): pCvMatND; cdecl;
 
-// (* Releases CvMatND *)
-// CV_INLINE CV_INLINE
-// procedure cvReleaseMatND(var)mat): Pointer; end; (* Creates a copy of CvMatND (except: (CvMat;
-// be: may;
-// var )
+{ Allocates and initializes CvSparseMat header and allocates data
+CVAPI(CvSparseMat*)  cvCreateSparseMat( int dims, const int* sizes, int type );
+}
+function cvCreateSparseMat(dims: integer; sizes: pInteger; ctype: integer): pCvSparseMat; cdecl;
 
-// CVAPI(CvMatND) cvCloneMatND(  CvMatND* mat ): data;
-// (* Allocates and initializes CvSparseMat header and allocates data *)
-// CVAPI(CvSparseMat)cvCreateSparseMat(Integer dims: steps); var sizes: Integer; cType: Integer);
+{ Releases CvSparseMat
+CVAPI(void)  cvReleaseSparseMat( CvSparseMat** mat );
+}
+procedure cvReleaseSparseMat(mat: pCvSparseMat); cdecl;
 
-// (* Releases CvSparseMat *)
-// procedure cvReleaseSparseMat(mat: array of CvSparseMat);
+{ Creates a copy of CvSparseMat (except, may be, zero items)
+CVAPI(CvSparseMat*) cvCloneSparseMat( const CvSparseMat* mat );
+}
+function cvCloneSparseMat(const mat: pCvSparseMat): pCvSparseMat; cdecl;
 
-// (* Creates a copy of CvSparseMat (except, may be, zero items) *)
-// CVAPI(CvSparseMat)cvCloneSparseMat(CvSparseMat * mat);
+{ Initializes sparse array iterator
+   (returns the first node or NULL if the array is empty)
+CVAPI(CvSparseNode*) cvInitSparseMatIterator( const CvSparseMat* mat,
+                                              CvSparseMatIterator* mat_iterator );
+}
+function cvInitSparseMatIterator(const mat: pCvSparseMat; mat_iterator: pCvSparseMatIterator): pCvSparseNode; cdecl;
 
-// (* Initializes sparse array iterator
-// (returns the first node or 0 if the cArray is empty) *) then CVAPI(CvSparseNode)
-// cvInitSparseMatIterator(CvSparseMat * mat, CvSparseMatIterator * mat_iterator);
+// returns next sparse array node (or NULL if there is no more nodes)
+function cvGetNextSparseNode(mat_iterator: pCvSparseMatIterator): pCvSparseNode; inline;
 
-/// / returns next sparse array node (or NULL if there is no more nodes)
-// CV_INLINE CvSparseNode * cvGetNextSparseNode(CvSparseMatIterator * mat_iterator)
-// begin if (mat_iterator^.node^.next) then result := mat_iterator^.node = mat_iterator^.node^.next;
-// else begin Integer idx; for (idx := + + mat_iterator^.curidx; idx < mat_iterator^.mat^.hashsize;
-// idx + +)begin * node = (CvSparseNode)mat_iterator^.mat^.hashtable: array [0 .. idx -
-// 1] of CvSparseNode; if (node) then begin mat_iterator^.curidx := idx;
-// result := mat_iterator^.node = node; end; end; result := 0; end; end;
-//
-// (* *************** matrix iterator: used for n-ary operations on dense arrays ******** *)
-//
+// **************** matrix iterator: used for n-ary operations on dense arrays *********
 const
-  CV_MAX_ARR = 10;
-{$EXTERNALSYM CV_MAX_ARR}
-  // type CvNArrayIterator = record count: Integer; (* number of arrays *)
-  // dims: Integer; (* number of dimensions to iterate *)
-  // size: CvSize; (* maximal common linear size: { width = size, height = 1 } *)
-  // ptr: array [0 .. CV_MAX_ARR - 1] of ^uchar; (* pointers to the array slices *)
-  // stack: array [0 .. CV_MAX_DIM - 1] of Integer; (* for internal use *)
-  // hdr: array [0 .. CV_MAX_ARR - 1] of ^CvMatND; (* pointers to the headers of the
-  // end;
-  //
-  //
-  // const CV_NO_DEPTH_CHECK = 1;
-  // {$EXTERNALSYM CV_NO_DEPTH_CHECK}
-  // const CV_NO_CN_CHECK = 2;
-  // {$EXTERNALSYM CV_NO_CN_CHECK}
-  // const CV_NO_SIZE_CHECK = 4;
-  // {$EXTERNALSYM CV_NO_SIZE_CHECK}
-  //
-  // (* initializes iterator that traverses through several arrays simulteneously
-  // (the cFunction together with cvNextArraySlice is used for
-  // N-ari element-wise operations) *)
-  // CVAPI(Integer)cvInitNArrayIterator(Integer count, CvArr * * arrs, CvArr * mask, CvMatND * stubs,
-  // CvNArrayIterator * array_iterator,
-  // function flags CV_DEFAULT(v1: 0)): Integer;
-  //
-  // (* returns zero value if iteration is finished, non-zero (slice length) otherwise *)
-  // CVAPI(Integer)cvNextNArraySlice(CvNArrayIterator * array_iterator);
-  //
-  // (* Returns type of array elements:
-  // const CV_64FC4 = Args: array of const;
-  // {$EXTERNALSYM CV_64FC4}
-  // CVAPI(Integer) cvGetElemType(  CvArr* arr );
-  //
-  // (* Retrieves number of an array dimensions and
-  // optionally sizes of the dimensions *)
-  // CVAPI(Integer)cvGetDims(CvArr * arr, Integer * sizes CV_DEFAULT(0));
-  //
-  // (* Retrieves size of a particular array dimension.
-  // For 2d arrays cvGetDimSize(arr,0) returns number of rows (image height)
-  // and cvGetDimSize(arr,1) returns number of columns (image width) *)
-  // CVAPI(Integer)cvGetDimSize(CvArr * arr, Integer index);
+  CV_NO_DEPTH_CHECK = 1;
+  {$EXTERNALSYM CV_NO_DEPTH_CHECK}
+  CV_NO_CN_CHECK = 2;
+  {$EXTERNALSYM CV_NO_CN_CHECK}
+  CV_NO_SIZE_CHECK = 4;
+  {$EXTERNALSYM CV_NO_SIZE_CHECK}
 
-  // * ptr = &arr(idx0,idx1,...). All indexes are zero-based,
-  // the major dimensions go first (e.g. (y,x) for 2D, (z,y,x) for 3D */
-  // CVAPI(uchar*) cvPtr1D( const CvArr* arr, int idx0, int* type CV_DEFAULT(NULL));
-function cvPtr1D(const arr: pCvArr; idx0: Integer; _type: PInteger = nil): Pointer; cdecl;
-// CVAPI(uchar*) cvPtr2D( const CvArr* arr, int idx0, int idx1, int* type CV_DEFAULT(NULL) );
-function cvPtr2D(const arr: pCvArr; idx0, idx1: Integer; _type: PInteger = nil): Pointer; cdecl;
-// CVAPI(uchar*) cvPtr3D( const CvArr* arr, int idx0, int idx1, int idx2,int* type CV_DEFAULT(NULL));
-function cvPtr3D(const arr: pCvArr; idx0, idx1, idx2: Integer; _type: PInteger = nil): Pointer; cdecl;
+{ initializes iterator that traverses through several arrays simulteneously
+   (the function together with cvNextArraySlice is used for
+    N-ari element-wise operations)
+  CVAPI(int) cvInitNArrayIterator( int count, pCvArr** arrs,
+                                 const pCvArr* mask, CvMatND* stubs,
+                                 CvNArrayIterator* array_iterator,
+                                 int flags CV_DEFAULT(0) );
+}
+function cvInitNArrayIterator(count: integer; arrs: pCvArr; const mask: pCvArr; stubs: pCvMatND;
+                            array_iterator: pCvNArrayIterator; flags: integer =0): integer; cdecl;
 
-// (* For CvMat or IplImage number of indices should be 2
-// (row index (y) goes first, column index (x) goes next).
-// For CvMatND or CvSparseMat number of infices should match number of <dims> and
-// indices order should match the cArray dimension order. *)
-// CVAPI(uchar)cvPtrND(CvArr * arr, Integer * idx, Integer * cType CV_DEFAULT(0),
-// function create_node CV_DEFAULT(v1: 0)): Cardinal;
+{ returns zero value if iteration is finished, non-zero (slice length) otherwise */
+CVAPI(int) cvNextNArraySlice( CvNArrayIterator* array_iterator );
+}
+function cvNextNArraySlice(array_iterator: pCvNArrayIterator): integer; cdecl;
 
-// * value = arr(idx0,idx1,...) */
-// CVAPI(CvScalar) cvGet1D( const CvArr* arr, int idx0 );
+{ Returns type of array elements:
+   CV_8UC1 ... CV_64FC4 ...
+  CVAPI(int) cvGetElemType( const pCvArr* arr );
+}
+function cvGetElemType(const arr: pCvArr): integer; cdecl;
+
+{ Retrieves number of an array dimensions and
+   optionally sizes of the dimensions */
+  CVAPI(int) cvGetDims( const pCvArr* arr, int* sizes CV_DEFAULT(NULL) );
+}
+function cvGetDims(const arr: pCvArr; sizes: pInteger = nil): integer; cdecl;
+
+{ Retrieves size of a particular array dimension.
+  For 2d arrays cvGetDimSize(arr,0) returns number of rows (image height)
+  and cvGetDimSize(arr,1) returns number of columns (image width) */
+  CVAPI(int) cvGetDimSize( const pCvArr* arr, int index );
+}
+function cvGetDimSize(const arr: pCvArr; index: integer): integer; cdecl;
+
+{ ptr = &arr(idx0,idx1,...). All indexes are zero-based,
+  the major dimensions go first (e.g. (y,x) for 2D, (z,y,x) for 3D
+  CVAPI(uchar*) cvPtr1D( const pCvArr* arr, int idx0, int* type CV_DEFAULT(NULL));
+  CVAPI(uchar*) cvPtr2D( const pCvArr* arr, int idx0, int idx1, int* type CV_DEFAULT(NULL) );
+  CVAPI(uchar*) cvPtr3D( const pCvArr* arr, int idx0, int idx1, int idx2,
+                      int* type CV_DEFAULT(NULL));
+}
+function cvPtr1D(const arr: pCvArr; idx0: Integer; ctype: pInteger = nil): pCvArr; cdecl;
+function cvPtr2D(const arr: pCvArr; idx0, idx1: Integer; ctype: pInteger = nil): pCvArr; cdecl;
+function cvPtr3D(const arr: pCvArr; idx0, idx1, idx2: Integer; ctype: pInteger = nil): pCvArr; cdecl;
+
+{ For CvMat or IplImage number of indices should be 2
+  (row index (y) goes first, column index (x) goes next).
+  For CvMatND or CvSparseMat number of infices should match number of <dims> and
+  indices order should match the array dimension order. */
+  CVAPI(uchar*) cvPtrND( const pCvArr* arr, const int* idx, int* type CV_DEFAULT(NULL),
+                      int create_node CV_DEFAULT(1),
+                      unsigned* precalc_hashval CV_DEFAULT(NULL));
+}
+function cvPtrND(const arr: pCvArr; idx: pInteger; ctype: pInteger = nil;
+                create_node: integer = 1; precalc_hashval: punsigned = nil): pCvArr; cdecl;
+
+{ value = arr(idx0,idx1,...)
+  CVAPI(CvScalar) cvGet1D( const pCvArr* arr, int idx0 );
+  CVAPI(CvScalar) cvGet2D( const pCvArr* arr, int idx0, int idx1 );
+  CVAPI(CvScalar) cvGet3D( const pCvArr* arr, int idx0, int idx1, int idx2 );
+  CVAPI(CvScalar) cvGetND( const pCvArr* arr, const int* idx );
+}
 function cvGet1D(const arr: pCvArr; idx0: Integer): TCvScalar; cdecl;
-// CVAPI(CvScalar) cvGet2D( const CvArr* arr, int idx0, int idx1 );
 function cvGet2D(const arr: pCvMat; idx0, idx1: Integer): TCvScalar; cdecl;
-{
-  CVAPI(CvScalar) cvGet3D( const CvArr* arr, int idx0, int idx1, int idx2 );
-  CVAPI(CvScalar) cvGetND( const CvArr* arr, const int* idx );
+//function cvGet2D(const arr: pCvArr; idx0, idx1: Integer): TCvScalar; cdecl;
+function cvGet3D(const arr: pCvArr; idx0, idx1, idx2: Integer): TCvScalar; cdecl;
+function cvGetND(const arr: pCvArr; idx: pInteger): TCvScalar; cdecl;
+
+{ for 1-channel arrays
+  CVAPI(double) cvGetReal1D( const pCvArr* arr, int idx0 );
+  CVAPI(double) cvGetReal2D( const pCvArr* arr, int idx0, int idx1 );
+  CVAPI(double) cvGetReal3D( const pCvArr* arr, int idx0, int idx1, int idx2 );
+  CVAPI(double) cvGetRealND( const pCvArr* arr, const int* idx );
 }
+function cvGetReal1D(const arr: pIplImage; idx0: Integer): double; cdecl;
+function cvGetReal2D(const arr: pCvMat; idx0, idx1: Integer): double; cdecl;
+function cvGetReal3D(const arr: pCvArr; idx0, idx1, idx2: Integer): double; cdecl;
+function cvGetRealND(const arr: pCvArr; idx: pInteger): double; cdecl;
 
-// * for 1-channel arrays */
-// CVAPI(double) cvGetReal1D( const CvArr* arr, int idx0 );
-function cvGetReal1D(const arr: pIplImage; idx0: Integer): Double; cdecl;
-// CVAPI(double) cvGetReal2D( const CvArr* arr, int idx0, int idx1 );
-function cvGetReal2D(const arr: pCvMat; idx0, idx1: Integer): Double; cdecl;
-function cvGet(const mat: pCvMat; i, j: Integer): Single; inline;
-
-{
-  CVAPI(double) cvGetReal3D( const CvArr* arr, int idx0, int idx1, int idx2 );
-  CVAPI(double) cvGetRealND( const CvArr* arr, const int* idx );
-
-  /* arr(idx0,idx1,...) = value */
-  CVAPI(void) cvSet1D( CvArr* arr, int idx0, CvScalar value );
-  CVAPI(void) cvSet2D( CvArr* arr, int idx0, int idx1, CvScalar value );
-  CVAPI(void) cvSet3D( CvArr* arr, int idx0, int idx1, int idx2, CvScalar value );
-  CVAPI(void) cvSetND( CvArr* arr, const int* idx, CvScalar value );
+{ arr(idx0,idx1,...) = value
+  CVAPI(void) cvSet1D( pCvArr* arr, int idx0, CvScalar value );
+  CVAPI(void) cvSet2D( pCvArr* arr, int idx0, int idx1, CvScalar value );
+  CVAPI(void) cvSet3D( pCvArr* arr, int idx0, int idx1, int idx2, CvScalar value );
+  CVAPI(void) cvSetND( pCvArr* arr, const int* idx, CvScalar value );
 }
-// *for 1 - channel arrays * /
-// CVAPI(void) cvSetReal1D( CvArr* arr, int idx0, double value );
-procedure cvSetReal1D(arr: pCvArr; idx0: Integer; value: Double); cdecl;
-// CVAPI(void) cvSetReal2D( CvArr* arr, int idx0, int idx1, double value );
-procedure cvSetReal2D(arr: pCvArr; idx0, idx1: Integer; value: Double); cdecl;
-// CVAPI(void) cvSetReal3D( CvArr* arr, int idx0,int idx1, int idx2, double value );
-procedure cvSetReal3D(arr: pCvArr; idx0, idx1, idx2: Integer; value: Double); cdecl;
-// CVAPI(void) cvSetRealND( CvArr* arr, const int* idx, double value );
-procedure cvSetRealND(arr: pCvArr; const idx: PInteger; value: Double); cdecl;
+procedure cvSet1D(arr: pCvArr; idx0: Integer; var value: TCvScalar); cdecl;
+procedure cvSet2D(arr: pCvArr; idx0, idx1: Integer; var value: TCvScalar); cdecl;
+procedure cvSet3D(arr: pCvArr; idx0, idx1, idx2: Integer; var value: TCvScalar); cdecl;
+procedure cvSetND(arr: pCvArr; idx: pInteger; var value: TCvScalar); cdecl;
 
-// (* clears element of ND dense array,
-// in  of sparse arrays it deletes the specified node *)
-// procedure cvClearND(var arr: CvArr; var idx: Integer);
-//
-// (* Converts CvArr (IplImage or CvMat,...) to CvMat.
-// If the last parameter is non-zero, cFunction can
-// convert multi(>2)-dimensional cArray to CvMat as LongInt as
-// the last array's dimension is continous. The resultant
-// matrix will be have appropriate (a huge) number of rows *)
-// CVAPI(CvMat)cvGetMat(CvArr * arr, CvMat * header,
-// function coi CV_DEFAULT(v1: 0)): Integer;
-//
-// (* Converts CvArr (IplImage or CvMat) to IplImage *)
-// function cvGetImage(CvArr * arr, IplImage * image_header);
-//
-// (* Changes a shape of multi-dimensional array.
-// new_cn = 0 means that number of channels remains unchanged.
-// new_dims = 0 means that number and sizes of dimensions remain the same
-// (unless they need to be changed to set the new number of channels)
-// if new_dims = 1, there is no need to specify new dimension sizes
-// The resultant configuration should be achievable w/o data copying.
-// If the resultant cArray is sparse, CvSparseMat header should be passed
-// to the cFunction else if the cResult is 1 or 2 dimensional,
-// CvMat header should be passed to the cFunction
-// else CvMatND header should be passed *)
-// CVAPI(CvArr)cvReshapeMatND(CvArr * arr, Integer sizeof_header, CvArr * header, Integer new_cn,
-// Integer new_dims, Integer * new_sizes);
-//
-/// / >> Following declaration is a macro definition!
-// const cvReshapeND(arr, header, new_cn, new_dims, new_sizes)cvReshapeMatND((arr), SizeOf((header)),
-// (header), (new_cn), (new_dims), (new_sizes));
-//
-// CVAPI(CvMat)cvReshape(CvArr * arr, CvMat * header,
-// function new_cn, Integer new_rows CV_DEFAULT(v1: 0)): Integer;
-//
-// (* Repeats source 2d array several times in both horizontal and
-// vertical direction to fill destination cArray *)
-// procedure cvRepeat(var src: CvArr; var dst: CvArr);
-//
-// (* Allocates array data *)
-// procedure cvCreateData(var arr: CvArr);
-//
-// (* Releases array data *)
-// procedure cvReleaseData(var arr: CvArr);
-//
-// (* Attaches user data to the array header. The step is reffered to
-// the pre-last dimension. That is, all the planes of the cArray
-// must be joint (w/o gaps) *)
-// procedure cvSetData(var arr: CvArr; data: Pointer; step: Integer);
-//
-// (* Retrieves raw data of CvMat, IplImage or CvMatND.
-// In the latter  the cFunction raises an error if
-// the cArray can not be represented as a matrix *)
-// procedure cvGetRawData(var Returns width and height of array in elements * )
-
-// CVAPI(CvSize) cvGetSize( const CvArr* arr );
-// function cvGetSize(const arr: CvArr): CvSize; cdecl;
-{ todo -cmedium -oLaex: Использовать процедуру OpenCV (need use OpenCV) }
-{
-  /* Returns width and height of array in elements */
-  CVAPI(CvSize) cvGetSize( const CvArr* arr );
+{ for 1-channel arrays */
+  CVAPI(void) cvSetReal1D( pCvArr* arr, int idx0, double value );
+  CVAPI(void) cvSetReal2D( pCvArr* arr, int idx0, int idx1, double value );
+  CVAPI(void) cvSetReal3D( pCvArr* arr, int idx0, int idx1, int idx2, double value );
+  CVAPI(void) cvSetRealND( pCvArr* arr, const int* idx, double value );
 }
-function cvGetSize(const arr: pCvArr): TCvSize; // overload;
+procedure cvSetReal1D(arr: pCvArr; idx0: Integer; var value: double); cdecl;
+procedure cvSetReal2D(arr: pCvArr; idx0, idx1: Integer; var value: double); cdecl;
+procedure cvSetReal3D(arr: pCvArr; idx0, idx1, idx2: Integer; var value: double); cdecl;
+procedure cvSetRealND(arr: pCvArr; idx: pInteger; var value: double); cdecl;
+
+{ clears element of ND dense array,
+  in case of sparse arrays it deletes the specified node */
+  CVAPI(void) cvClearND( pCvArr* arr, const int* idx );
+}
+procedure cvClearND(arr: pCvArr; idx: pInteger); cdecl;
+
+{ Converts pCvArr (IplImage or CvMat,...) to CvMat.
+  If the last parameter is non-zero, function can
+  convert multi(>2)-dimensional array to CvMat as long as
+  the last array's dimension is continous. The resultant
+  matrix will be have appropriate (a huge) number of rows */
+  CVAPI(CvMat*) cvGetMat( const pCvArr* arr, CvMat* header,
+                       int* coi CV_DEFAULT(NULL),
+                       int allowND CV_DEFAULT(0));
+}
+function cvGetMat(const arr: pCvArr; header: pCvMat; coi: pInteger = nil; allowND: integer = 0): pCvMat; cdecl;
+
+{ Converts pCvArr (IplImage or CvMat) to IplImage
+  CVAPI(IplImage*) cvGetImage( const pCvArr* arr, IplImage* image_header );
+}
+function cvGetImage(const arr: pCvArr; image_header: pIplImage): pIplImage; cdecl;
+
+{ Changes a shape of multi-dimensional array.
+  new_cn == 0 means that number of channels remains unchanged.
+  new_dims == 0 means that number and sizes of dimensions remain the same
+  (unless they need to be changed to set the new number of channels)
+  if new_dims == 1, there is no need to specify new dimension sizes
+  The resultant configuration should be achievable w/o data copying.
+  If the resultant array is sparse, CvSparseMat header should be passed
+  to the function else if the result is 1 or 2 dimensional,
+  CvMat header should be passed to the function
+  else CvMatND header should be passed */
+  CVAPI(pCvArr*) cvReshapeMatND( const pCvArr* arr,
+                             int sizeof_header, pCvArr* header,
+                             int new_cn, int new_dims, int* new_sizes );
+  #define cvReshapeND( arr, header, new_cn, new_dims, new_sizes )   \
+      cvReshapeMatND( (arr), sizeof(*(header)), (header),         \
+                      (new_cn), (new_dims), (new_sizes))
+}
+function cvReshapeMatND(const arr: pCvArr; sizeof_header: integer; header: pCvArr;
+                        new_cn, new_dims: integer; new_sizes: pInteger): pCvArr; cdecl;
+function cvReshapeND(const arr: pCvArr; sizeof_header: integer; header: pCvArr;
+                        new_cn, new_dims: integer; new_sizes: pInteger): pCvArr; inline;
+
+{ CVAPI(CvMat*) cvReshape( const pCvArr* arr, CvMat* header,
+                        int new_cn, int new_rows CV_DEFAULT(0) );
+}
+function cvReshape(const arr: pCvArr; header: pCvMat; new_cn: integer; new_rows: integer = 0): pCvMat; cdecl;
+
+{ Repeats source 2d array several times in both horizontal and
+  vertical direction to fill destination array
+  CVAPI(void) cvRepeat( const pCvArr* src, pCvArr* dst );
+}
+procedure cvRepeat(src, dst: pCvArr); cdecl;
+
+{ Allocates array data
+  CVAPI(void)  cvCreateData( pCvArr* arr );
+}
+procedure cvCreateData(arr: pCvArr); cdecl;
+
+{ Releases array data
+  CVAPI(void)  cvReleaseData( pCvArr* arr );
+}
+procedure cvReleaseData(arr: pCvArr); cdecl;
+
+{ Attaches user data to the array header. The step is reffered to
+  the pre-last dimension. That is, all the planes of the array
+  must be joint (w/o gaps) */
+  CVAPI(void)  cvSetData( pCvArr* arr, void* data, int step );
+}
+procedure cvSetData(arr: pCvArr; data: Pointer; step: integer); cdecl;
+
+{ Retrieves raw data of CvMat, IplImage or CvMatND.
+  In the latter case the function raises an error if
+  the array can not be represented as a matrix */
+  CVAPI(void) cvGetRawData( const pCvArr* arr, uchar** data,
+                         int* step CV_DEFAULT(NULL),
+                         CvSize* roi_size CV_DEFAULT(NULL));
+}
+procedure cvGetRawData(arr: pCvArr; data: puchar; step: pInteger = nil; roi_size: pCvSize = nil); cdecl;
+
+{ Returns width and height of array in elements
+  CVAPI(CvSize) cvGetSize( const pCvArr* arr );
+}
+function cvGetSize(const arr: pCvArr): TCvSize;
 procedure _cvGetSize(const arr: pCvArr; var size: TCvSize); cdecl;
-// function cvGetSize(const arr: pIplImage): TCvSize; overload;
-// function _cvGetSize(const arr: pCvArr): TCvSize; cdecl;
-// function _cvGetSize(const image: pIplImage): TCvSize;
 
-//
-// (* Copies source array to destination array *)
-// procedure cvCopy(var Sets all or " masked " elements of input array to the same value * )
-{
-  CVAPI(void)  cvCopy( const CvArr* src, CvArr* dst,
-  const CvArr* mask CV_DEFAULT(NULL) );
+{ Copies source array to destination array */
+  CVAPI(void)  cvCopy( const pCvArr* src, pCvArr* dst,
+                     const pCvArr* mask CV_DEFAULT(NULL) );
 }
 procedure cvCopy(const src: pIplImage; dst: pIplImage; const mask: pIplImage = nil); cdecl;
-procedure cvCopyImage(const src: pIplImage; dst: pIplImage; const mask: pIplImage = nil); cdecl;
 
-// * Sets all or "masked" elements of input array to the same value*/
-// CVAPI(void)  cvSet( CvArr* arr, CvScalar value,const CvArr* mask CV_DEFAULT(NULL) );
-procedure cvSet(arr: pCvArr; value: TCvScalar; const mask: pCvArr = Nil); cdecl; overload;
+{ Sets all or "masked" elements of input array
+  to the same value
+  CVAPI(void)  cvSet( pCvArr* arr, CvScalar value,
+                    const pCvArr* mask CV_DEFAULT(NULL) );
+}
+procedure cvSet(arr: pCvArr; value: TCvScalar; const mask: pCvArr = nil); cdecl; overload;
 procedure cvSet(mat: pCvMat; i, j: Integer; val: Single); inline; overload;
 
-// procedure cvSetZero(CvArr * arr: unction mask CV_DEFAULT(v1: 0)): CvArr; ();
-// const cvZero = cvSetZero;
-// {$EXTERNALSYM cvZero}
-// CVAPI(void)  cvSetZero( CvArr* arr );
-// #define cvZero  cvSetZero
-procedure cvSetZero(arr: pIplImage); cdecl;
+{ Clears all the array elements (sets them to 0)
+  CVAPI(void)  cvSetZero( pCvArr* arr );
+  #define cvZero  cvSetZero
+}
+procedure cvSetZero(arr: pCvArr); cdecl;
 procedure cvZero(arr: pCvArr); cdecl;
 
-{
-  /* Splits a multi-channel array into the set of single-channel arrays or
+{ Splits a multi-channel array into the set of single-channel arrays or
   extracts particular [color] plane */
-  CVAPI(void)  cvSplit(
-  const CvArr* src,
-  CvArr* dst0,
-  CvArr* dst1,
-  CvArr* dst2,
-  CvArr* dst3 );
+  CVAPI(void)  cvSplit( const pCvArr* src, pCvArr* dst0, pCvArr* dst1,
+                      pCvArr* dst2, pCvArr* dst3 );
 }
-procedure cvSplit(
-  { } const src: pIplImage;
-  { } dst0: pIplImage;
-  { } dst1: pIplImage;
-  { } dst2: pIplImage;
-  { } dst3: pIplImage); cdecl;
-procedure cvCvtPixToPlane(
-  { } const src: pIplImage;
-  { } dst0: pIplImage;
-  { } dst1: pIplImage;
-  { } dst2: pIplImage;
-  { } dst3: pIplImage); cdecl;
+procedure cvSplit(const src: pIplImage; dst0: pIplImage; dst1: pIplImage;
+                  dst2: pIplImage; dst3: pIplImage); cdecl;
 
-{
-  /* Merges a set of single-channel arrays into the single multi-channel array
+{ Merges a set of single-channel arrays into the single multi-channel array
   or inserts one particular [color] plane to the array */
-  CVAPI(void)  cvMerge(
-  const CvArr* src0,
-  const CvArr* src1,
-  const CvArr* src2,
-  const CvArr* src3,
-  CvArr* dst );
+  CVAPI(void)  cvMerge( const pCvArr* src0, const pCvArr* src1,
+                      const pCvArr* src2, const pCvArr* src3,
+                      pCvArr* dst );
 }
-procedure cvMerge(
-  { } const src0: pIplImage;
-  { } const src1: pIplImage;
-  { } const src2: pIplImage;
-  { } const src3: pIplImage;
-  { } dst: pIplImage); cdecl;
-procedure cvCvtPlaneToPix(
-  { } const src0: pIplImage;
-  { } const src1: pIplImage;
-  { } const src2: pIplImage;
-  { } const src3: pIplImage;
-  { } dst: pIplImage); cdecl;
+procedure cvMerge(const src0: pIplImage; const src1: pIplImage; const src2: pIplImage;
+                  const src3: pIplImage; dst: pIplImage); cdecl;
 
-// {$EXTERNALSYM CvArr);
-//
-// (* Copies several channels from input arrays to
-// certain channels of output arrays *)
-// procedure  cvMixChannels(
-// src: array of CvArr;
-// src_count: Integer;
-// dst: array of CvArr;
-// dst_count: Integer;
-// var from_to: nteger;
-// pair_count: Integer);
-//
+{ Copies several channels from input arrays to
+  certain channels of output arrays */
+  CVAPI(void)  cvMixChannels( const pCvArr** src, int src_count,
+                            pCvArr** dst, int dst_count,
+                            const int* from_to, int pair_count );
+}
+procedure cvMixChannels(src: Array of pCvArr; src_count: integer; dst: Array of pCvArr;
+                        dst_count: integer; const from_to: pInteger; pair_count: integer); cdecl;
 
-{
-  /* Performs linear transformation on every source array element:
+{ Performs linear transformation on every source array element:
   dst(x,y,c) = scale*src(x,y,c)+shift.
   Arbitrary combination of input and output array depths are allowed
   (number of channels must be the same), thus the function can be used
-  for type conversion */
-
-  CVAPI(void)  cvConvertScale(
-  const CvArr* src,
-  CvArr* dst,
-  double scale CV_DEFAULT(1),
-  double shift CV_DEFAULT(0) );
-
+  for type conversion
+  CVAPI(void)  cvConvertScale( const pCvArr* src, pCvArr* dst,
+                             double scale CV_DEFAULT(1),
+                             double shift CV_DEFAULT(0) );
   #define cvCvtScale cvConvertScale
   #define cvScale  cvConvertScale
   #define cvConvert( src, dst )  cvConvertScale( (src), (dst), 1, 0 )
 }
-procedure cvConvertScale(const src: pCvArr; dst: pCvArr; scale: Double = 1; shift: Double = 0); cdecl;
-procedure cvConvert(const src: pCvArr; dst: pCvArr); inline;
+procedure cvConvertScale(const src: pCvArr; dst: pCvArr; scale: double = 1; shift: double = 0); cdecl;
 procedure cvCvtScale(const src: pCvArr; dst: pCvArr; scale: Double = 1; shift: Double = 0); cdecl;
-procedure cvScale(const src: pCvArr; dst: pCvArr; scale: Double = 1; shift: Double = 0); cdecl;
+procedure cvConvert(const src: pCvArr; dst: pCvArr); inline;
 
-// (* Performs linear transformation on every source array element,
-// stores absolute value of the cResult:
-// dst(x,y,c) = abs(scale*src(x,y,c)+shift).
-// destination cArray must have 8u cType.
-// In other cases one may use cvConvertScale + cvAbsDiffS *)
-// procedure cvConvertScaleAbs(var checks termination criteria validity and
-// Sets eps to default_eps(if it is not set) then : v1: 0)): Double;
-// const cvCvtScaleAbs = cvConvertScaleAbs;
-// {$EXTERNALSYM cvCvtScaleAbs}(; var)CVAPI(CvTermCriteria)cvCheckTermCriteria(CvTermCriteria criteria
-// : max_iter to default_max_iters(if it is not set) then; default_eps: Double;
-// default_max_iters: Integer);
-//
-// (* ***************************************************************************************\
-// *                   Arithmetic, logic and comparison operations                          *
-// *************************************************************************************** *)
-//
-// (* dst(mask) = src1(mask) + src2(mask) *)
-// procedure cvAdd(var dst(mask) = src(mask) + value * )
+{ Performs linear transformation on every source array element,
+  stores absolute value of the result:
+  dst(x,y,c) = abs(scale*src(x,y,c)+shift).
+  destination array must have 8u type.
+  In other cases one may use cvConvertScale + cvAbsDiffS */
+  CVAPI(void)  cvConvertScaleAbs( const pCvArr* src, pCvArr* dst,
+                                double scale CV_DEFAULT(1),
+                                double shift CV_DEFAULT(0) );
+  #define cvCvtScaleAbs  cvConvertScaleAbs
+}
+procedure cvConvertScaleAbs(const src: pCvArr; dst: pCvArr; scale: double = 1; shift: double = 0); cdecl;
 
-// procedure cvAddS(CvArr * src: v1: 0)): CvArr; (; value: CvScalar; var dst: CvArr;
-// var dst(mask) = src1(mask) - src2(mask) * )
+{ checks termination criteria validity and
+  sets eps to default_eps (if it is not set),
+  max_iter to default_max_iters (if it is not set)
+  CVAPI(CvTermCriteria) cvCheckTermCriteria( CvTermCriteria criteria,
+                                           double default_eps,
+                                           int default_max_iters );
+}
+function cvCheckTermCriteria(criteria: TCvTermCriteria; default_eps: double; default_max_iters: integer): TCvTermCriteria; cdecl;
 
-{
-  CVAPI(void)  cvAddS( const CvArr* src, CvScalar value, CvArr* dst,
-  const CvArr* mask CV_DEFAULT(NULL));
+//***************************************************************************************
+//*                   Arithmetic, logic and comparison operations                       *
+//***************************************************************************************
+
+{ dst(mask) = src1(mask) + src2(mask)
+  CVAPI(void)  cvAdd( const pCvArr* src1, const pCvArr* src2, pCvArr* dst,
+                    const pCvArr* mask CV_DEFAULT(NULL));
+}
+procedure cvAdd(const src1, src2: pIplImage; dst: pIplImage; const mask: pIplImage = nil); cdecl;
+
+{ dst(mask) = src(mask) + value
+  CVAPI(void)  cvAddS( const pCvArr* src, CvScalar value, pCvArr* dst,
+                     const pCvArr* mask CV_DEFAULT(NULL));
 }
 procedure cvAddS(const src: pIplImage; value: TCvScalar; dst: pIplImage; const mask: pIplImage = nil); cdecl;
 
-{
-  /* dst(mask) = src1(mask) - src2(mask) */
-  CVAPI(void)  cvSub(
-  const CvArr* src1,
-  const CvArr* src2,
-  CvArr* dst,
-  const CvArr* mask CV_DEFAULT(NULL));
+{ dst(mask) = src1(mask) - src2(mask)
+  CVAPI(void)  cvSub( const pCvArr* src1, const pCvArr* src2, pCvArr* dst,
+                    const pCvArr* mask CV_DEFAULT(NULL));
 }
-
 procedure cvSub(const src1, src2: pIplImage; dst: pIplImage; const mask: pIplImage = nil); cdecl;
 
-(*
-  /* dst(mask) = src(mask) - value = src(mask) + (-value) */
-  CV_INLINE  void  cvSubS(
-  const CvArr* src,
-  CvScalar value,
-  CvArr* dst,
-  const CvArr* mask CV_DEFAULT(NULL))
-  {
-  cvAddS( src, cvScalar( -value.val[0], -value.val[1], -value.val[2], -value.val[3]),
-  dst, mask );
-  }
-*)
+// dst(mask) = src(mask) - value = src(mask) + (-value)
+//CV_INLINE  void  cvSubS( const pCvArr* src, CvScalar value, pCvArr* dst,
+//                         const pCvArr* mask CV_DEFAULT(NULL))
+//{
+//    cvAddS( src, cvScalar( -value.val[0], -value.val[1], -value.val[2], -value.val[3]),
+//            dst, mask );
+//}
 procedure cvSubS(const src: pIplImage; value: TCvScalar; dst: pIplImage; const mask: pIplImage = nil); inline;
 
-// (* dst(mask) = value - src(mask) *)
-// procedure cvSubRS(var dst(idx) = src1(idx) * src2(idx) * scale(scaled element -
-// wise multiplication of 2 arrays) * )
-
-
-// procedure cvMul(CvArr * src1: v1: 0)): CvArr; (; var src2: CvArr; dst:
-// function; var element - wise division / inversion with scaling: dst(idx) = src1(idx) * scale /
-// src2(idx) or dst(idx) = scale / src2(idx) if src1 = 0 * ) then
-// procedure cvDiv(CvArr * src1:
-// function scale CV_DEFAULT(v1: 1)): Double; (; var src2: CvArr; var dst: CvArr;
-// var dst = src1 * scale + src2 * )
-// procedure cvScaleAdd(CvArr * src1:
-// function scale CV_DEFAULT(v1: 1)): Double; (; scale: CvScalar; var src2: vArr; var dst): CvArr;
-/// / >> Following declaration is a macro definition!const cvAXPY( A: CvArr;
-// v11: real_scalar; :;)cvScaleAdd(A: C; v14: cvRealScalar(real_scalar); :; : );
-
-{
-  /* dst = src1 * alpha + src2 * beta + gamma */
-  CVAPI(void)  cvAddWeighted(
-  const CvArr* src1,
-  double alpha,
-  const CvArr* src2,
-  double beta,
-  double gamma,
-  CvArr* dst );
+{ dst(mask) = value - src(mask)
+CVAPI(void)  cvSubRS( const pCvArr* src, CvScalar value, pCvArr* dst,
+                      const pCvArr* mask CV_DEFAULT(NULL));
 }
-procedure cvAddWeighted(
-  { } const src1: pIplImage;
-  { } alpha: Double;
-  { } const src2: pIplImage;
-  { } beta: Double;
-  { } gamma: Double;
-  { } dst: pIplImage); cdecl;
+procedure cvSubRS(const src: pIplImage; value: TCvScalar; dst: pIplImage; const mask: pIplImage = nil); cdecl;
 
-//
-// (* result = sum_i(src1(i) * src2(i)) (results for all channels are accumulated together) *)
-// CVAPI(Double)cvDotProduct(CvArr * src1, CvArr * src2);
-//
-
-{
-  /* dst(idx) = src1(idx) & src2(idx) */
-  CVAPI(void) cvAnd(
-  const CvArr* src1,
-  const CvArr* src2,
-  CvArr* dst,
-  const CvArr* mask CV_DEFAULT(NULL));
+{ dst(idx) = src1(idx) * src2(idx) * scale
+  (scaled element-wise multiplication of 2 arrays) */
+  CVAPI(void)  cvMul( const pCvArr* src1, const pCvArr* src2,
+                    pCvArr* dst, double scale CV_DEFAULT(1) );
 }
-procedure cvAnd(
-  { } const src1: pIplImage;
-  { } const src2: pIplImage;
-  { } dst: pIplImage;
-  { } masl: pIplImage = nil); cdecl;
+procedure cvMul(const src1, src2: pIplImage; dst: pIplImage; scale: double = 1); cdecl;
+
+{ element-wise division/inversion with scaling:
+  dst(idx) = src1(idx) * scale / src2(idx)
+  or dst(idx) = scale / src2(idx) if src1 == 0 */
+  CVAPI(void)  cvDiv( const pCvArr* src1, const pCvArr* src2,
+                    pCvArr* dst, double scale CV_DEFAULT(1));
+}
+procedure cvDiv(const src1, src2: pIplImage; dst: pIplImage; scale: double = 1); cdecl;
+
+{ dst = src1 * scale + src2
+  CVAPI(void)  cvScaleAdd( const pCvArr* src1, CvScalar scale,
+                         const pCvArr* src2, pCvArr* dst );
+  #define cvAXPY( A, real_scalar, B, C ) cvScaleAdd(A, cvRealScalar(real_scalar), B, C)
+}
+procedure cvScaleAdd(const src1: pIplImage; scale: TCvScalar; const src2: pIplImage; dst: pIplImage); cdecl;
+procedure cvAXPY(A: pIplImage; real_scalar: double; B,C: pIplImage); inline;
+
+{ dst = src1 * alpha + src2 * beta + gamma
+  CVAPI(void)  cvAddWeighted( const pCvArr* src1, double alpha,
+                            const pCvArr* src2, double beta,
+                            double gamma, pCvArr* dst );
+}
+procedure cvAddWeighted(const src1: pIplImage; alpha: double;
+                    const src2: pIplImage; beta: double;
+                    gamma: double; dst: pIplImage); cdecl;
+
+{ result = sum_i(src1(i) * src2(i)) (results for all channels are accumulated together)
+  CVAPI(double)  cvDotProduct( const pCvArr* src1, const pCvArr* src2 );
+}
+function cvDotProduct(const src1, src2: pCvArr): double; cdecl;
+
+{ dst(idx) = src1(idx) & src2(idx)
+  CVAPI(void) cvAnd( const pCvArr* src1, const pCvArr* src2,
+                  pCvArr* dst, const pCvArr* mask CV_DEFAULT(NULL));
+}
+procedure cvAnd(const src1: pIplImage; const src2: pIplImage;
+                dst: pIplImage; masl: pIplImage = nil); cdecl;
 
 
-// procedure cvAndS(CvArr * src: v1: 0)): CvArr; (; value: CvScalar; dst: unction;
-// var mask CV_DEFAULT(v1: 0)): CvArr; (* dst(idx) = src1(idx) | src2(idx) *)
-// procedure cvOr(CvArr * src1: CvArr; var src2: CvArr; dst: unction;
-// var mask CV_DEFAULT(v1: 0)): CvArr; (* dst(idx) = src(idx) | value *)
-// procedure cvOrS(CvArr * src: CvArr; value: CvScalar; dst: unction;
-// var mask CV_DEFAULT(v1: 0)): CvArr; (* dst(idx) = src1(idx) ^ src2(idx) *)
-// procedure cvXor(CvArr * src1: CvArr; var src2: CvArr; dst: unction;
-// var mask CV_DEFAULT(v1: 0)): CvArr;
+// dst(x,y,c) = abs(src1(x,y,c) - src2(x,y,c))
+// CVAPI(void) cvAbsDiff( const pCvArr* src1, const pCvArr* src2, pCvArr* dst );
+procedure cvAbsDiff(const src1: pCvArr; const src2: pCvArr; dst: pCvArr); cdecl;
 
-{
-  /* dst(idx) = src(idx) ^ value */
-  CVAPI(void) cvXorS( const CvArr* src, CvScalar value,
-  CvArr* dst, const CvArr* mask CV_DEFAULT(NULL));
+
+function cvGet(const mat: pCvMat; i, j: Integer): Single; inline;
+procedure cvCopyImage(const src: pIplImage; dst: pIplImage; const mask: pIplImage = nil); cdecl;
+procedure cvCvtPixToPlane(const src: pIplImage; dst0: pIplImage; dst1: pIplImage;
+                          dst2: pIplImage; dst3: pIplImage); cdecl;
+procedure cvCvtPlaneToPix(const src0: pIplImage; const src1: pIplImage;
+                          const src2: pIplImage; const src3: pIplImage; dst: pIplImage); cdecl;
+
+{ dst(idx) = src(idx) ^ value
+  CVAPI(void) cvXorS( const pCvArr* src, CvScalar value, pCvArr* dst, const pCvArr* mask CV_DEFAULT(NULL));
 }
 procedure cvXorS(const src: pIplImage; value: TCvScalar; dst: pIplImage; const mask: pCvArr = nil); cdecl;
 
-(* dst(idx) = ~src(idx) *)
-// procedure cvNot(CvArr * src: CvArr; var dst: CvArr);
-//
-
-{
-  /* dst(idx) = lower(idx) <= src(idx) < upper(idx) */
-  CVAPI(void) cvInRange(
-  const CvArr* src,
-  const CvArr* lower,
-  const CvArr* upper,
-  CvArr* dst );
+{ dst(idx) = lower(idx) <= src(idx) < upper(idx)
+  CVAPI(void) cvInRange( const pCvArr* src, const pCvArr* lower, const pCvArr* upper, pCvArr* dst );
 }
-procedure cvInRange(
-  { } const src: pIplImage;
-  { } const lower: pIplImage;
-  { } const upper: pIplImage;
-  { } dst: pIplImage); cdecl;
+procedure cvInRange(const src: pIplImage; const lower: pIplImage;
+                    const upper: pIplImage; dst: pIplImage); cdecl;
 
-{
-  /* dst(idx) = lower <= src(idx) < upper */
-  CVAPI(void) cvInRangeS(
-  const CvArr* src,
-  CvScalar lower,
-  CvScalar upper,
-  CvArr* dst );
+{ dst(idx) = lower <= src(idx) < upper
+  CVAPI(void) cvInRangeS( const pCvArr* src, CvScalar lower, CvScalar upper, pCvArr* dst );
 }
-procedure cvInRangeS(
-  { } const src: pIplImage;
-  { } lower: TCvScalar;
-  { } upper: TCvScalar;
-  { } dst: pIplImage); cdecl;
+procedure cvInRangeS(const src: pIplImage; lower: TCvScalar;
+                      upper: TCvScalar; dst: pIplImage); cdecl;
 
-//
-// const CV_CMP_EQ = 0;
-// {$EXTERNALSYM CV_CMP_EQ}
-// const CV_CMP_GT = 1;
-// {$EXTERNALSYM CV_CMP_GT}
-// const CV_CMP_GE = 2;
-// {$EXTERNALSYM CV_CMP_GE}
-// const CV_CMP_LT = 3;
-// {$EXTERNALSYM CV_CMP_LT}
-// const CV_CMP_LE = 4;
-// {$EXTERNALSYM CV_CMP_LE}
-// const CV_CMP_NE = 5;
-// {$EXTERNALSYM CV_CMP_NE}
-// (* The comparison operation support single-channel arrays only.
-// Destination image should be 8uC1 or 8sC1 *)
-//
-// (* dst(idx) = src1(idx) _cmp_op_ src2(idx) *)
-// procedure cvCmp(var src1: CvArr; var src2: CvArr; var dst: CvArr; cmp_op: Integer);
-//
-// (* dst(idx) = src1(idx) _cmp_op_ value *)
-// procedure cvCmpS(var src: CvArr; value: Double; var dst: CvArr; cmp_op: Integer);
-//
-// (* dst(idx) = min(src1(idx),src2(idx)) *)
-// procedure cvMin(var src1: CvArr; var src2: CvArr; var dst: CvArr);
-//
-// (* dst(idx) = max(src1(idx),src2(idx)) *)
-// procedure cvMax(var src1: CvArr; var src2: CvArr; var dst: CvArr);
-//
-// (* dst(idx) = min(src(idx),value) *)
-// procedure cvMinS(var src: CvArr; value: Double; var dst: CvArr);
-//
-// (* dst(idx) = max(src(idx),value) *)
-// procedure cvMaxS(var src: CvArr; value: Double; var dst: CvArr);
-
-// * dst(x,y,c) = abs(src1(x,y,c) - src2(x,y,c)) */
-// CVAPI(void) cvAbsDiff( const CvArr* src1, const CvArr* src2, CvArr* dst );
-procedure cvAbsDiff(const src1: pCvArr; const src2: pCvArr; dst: pCvArr); cdecl;
-
-// (* dst(x,y,c) = abs(src(x,y,c) - value(c)) *)
-// procedure cvAbsDiffS(var src: CvArr; var dst: CvArr; value: CvScalar);
-/// / >> Following declaration is a macro definition!
-// const cvAbs(src, dst)cvAbsDiffS((src), (dst), cvScalarAll(0));
-//
 // (* ***************************************************************************************\
 // *                                Math operations                                         *
 // *************************************************************************************** *)
-//
-// (* Does cartesian->polar coordinates conversion.
-// Either of output cComponents (magnitude or angle) is optional *)
-// procedure cvCartToPolar(var Does polar - > cartesian coordinates conversion.Either of output
-// cComponents(magnitude or angle) is optional.If magnitude is missing it is assumed to be all 1
-// 's */procedure  cvPolarToCart(  CvArr* magnitude: v1: 0)): Integer;(;var angle: CvArr;var x
-// : CvArr; var y: CvArr; var Does powering: dst(idx) = src(idx)^power * )
-// procedure cvPow(CvArr * src:
-// function angle_in_degrees CV_DEFAULT(v1: 0)): Integer; (; var dst: CvArr;
-// var Does exponention: dst(idx) = exp(src(idx)).Overflow is not handled yet.Underflow is handled.
-// Maximal relative error is ~ 7E-6 for single - precision input * )
-// procedure cvExp(CvArr * src: Double power): CvArr; (; var dst: CvArr);
-//
-// (* Calculates natural logarithms: dst(idx) = log(abs(src(idx))).
-// Logarithm of 0 gives large negative number(~-700)
-// Maximal relative error is ~3e-7 for single-precision output
-// *)
-// procedure cvLog(var src: CvArr; var dst: CvArr);
-//
-// (* Fast arctangent calculation *)
-// CVAPI(single)cvFastArctan(single y, single x);
-//
-// (* Fast cubic root calculation *)
-// CVAPI(single)cvCbrt(single value);
-//
-// (* Checks array values for NaNs, Infs or simply for too large numbers
-// (if CV_CHECK_RANGE is set) then . If CV_CHECK_QUIET is set,
-// no runtime errors is raised (cFunction returns zero value in  of 'bad' values).
-// Otherwise cvError is called *)
-// const CV_CHECK_RANGE = 1;
-// {$EXTERNALSYM CV_CHECK_RANGE}
-// const CV_CHECK_QUIET = 2;
-// {$EXTERNALSYM CV_CHECK_QUIET}
-// CVAPI(Integer)cvCheckArr(CvArr * arr, Integer flags CV_DEFAULT(0),
-// function min_val CV_DEFAULT(v1: 0)): Double; const cvCheckArray = cvCheckArr;
-// {$EXTERNALSYM cvCheckArray}
-// const CV_RAND_UNI = 0;
-// {$EXTERNALSYM CV_RAND_UNI}
-// const CV_RAND_NORMAL = 1;
-// {$EXTERNALSYM CV_RAND_NORMAL}
-// procedure cvRandArr(var rng: CvRNG; var arr: CvArr; dist_type: Integer; param1: CvScalar;
-// param2: CvScalar);
-//
-// procedure cvRandShuffle(var src: v1: 1. )): Double; const CV_SORT_EVERY_ROW = 0;
-// {$EXTERNALSYM CV_SORT_EVERY_ROW}const CV_SORT_EVERY_COLUMN = 1;
-// {$EXTERNALSYM CV_SORT_EVERY_COLUMN}const CV_SORT_ASCENDING = 0;
-// {$EXTERNALSYM CV_SORT_ASCENDING}const CV_SORT_DESCENDING = 16; {$EXTERNALSYM CV_SORT_DESCENDING} procedure cvSort(CvArr; var dst CV_DEFAULT(0): CvArr; var Finds real roots of A cubic equation * )CVAPI(Integer)cvSolveCubic(CvMat * coeffs:
-// function idxmat CV_DEFAULT(v1: 0)): Integer; (; var roots): CvArr;
-// (* Finds all real and complex roots of a polynomial equation *)
-// procedure cvSolvePoly(CvMat * coeffs: CvMat; var roots2: CvMat;
-// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * \ * Matrix operations *
-// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * )
-// (* Calculates cross product of two 3d vectors *)
-// procedure cvCrossProduct(CvArr * src1: array of
-// function maxiter CV_DEFAULT(v1: 100)): Integer; (; var src2: CvArr; var dst: CvArr);
 
-/// * Extended matrix transform:
-// dst = alpha*op(A)*op(B) + beta*op(C), where op(X) is X or X^T */
-// CVAPI(void)  cvGEMM( const CvArr* src1, const CvArr* src2, double alpha,
-// const CvArr* src3, double beta, CvArr* dst,
-// int tABC CV_DEFAULT(0));
-procedure cvGEMM(const src1: pCvArr; const src2: pCvArr; alpha: Double; const src3: pCvArr; beta: Double; dst: pCvArr;
-  tABC: Integer = 0); cdecl;
+// (* Mirror array data around horizontal (flip=0),
+// vertical (flip=1) or both(flip=-1) axises:
+// cvFlip(src) flips images vertically and sequences horizontally (inplace) *)
+// procedure cvFlip(v1: 0); var Performs Singular value Decomposition of A Matrix * )
 
-/// * Matrix transform: dst = A*B + C, C is optional */
-// #define cvMatMulAdd( src1, src2, src3, dst ) cvGEMM( (src1), (src2), 1., (src3), 1., (dst), 0 )
-procedure cvMatMulAdd(const src1, src2, src3: pCvArr; dst: pCvArr); inline;
-// #define cvMatMul( src1, src2, dst )  cvMatMulAdd( (src1), (src2), NULL, (dst))
-procedure cvMatMul(const src1, src2: pCvArr; dst: pCvArr); inline;
+procedure cvFlip(const src: pCvArr; dst: pCvArr = nil; flip_mode: Integer = 0); cdecl;
 
-/// / >> Following declaration is a macro definition!
-// const cvMatMul(src1, src2, dst)cvMatMulAdd((src1), (src2), 0, (dst));
-//
-// const CV_GEMM_A_T = 1;
-// {$EXTERNALSYM CV_GEMM_A_T}
-// const CV_GEMM_B_T = 2;
-// {$EXTERNALSYM CV_GEMM_B_T}
-// const CV_GEMM_C_T = 4;
-// {$EXTERNALSYM CV_GEMM_C_T}
-// (* Extended matrix transform:
-// dst = alpha*op(A)*op(B) + beta*op(C), where op(X) is X or X xor T *)
-// procedure cvGEMM(var Transforms each element of source array and stores resultant vectors
-// in destination cArray * )
-// procedure cvTransform(CvArr * src: v1: 0)): Integer; const cvMatMulAddEx = cvGEMM;
-// {$EXTERNALSYM cvMatMulAddEx}(; var dst: CvArr; var transmat: vMat;
-// var shiftvec CV_DEFAULT(0): vMat); const cvMatMulAddS = cvTransform;
-// {$EXTERNALSYM cvMatMulAddS}
-// (* Does perspective transform on every element of input array *)
-// procedure cvPerspectiveTransform(var src: CvArr; var dst: CvArr; var mat: vMat);
-//
-// (* Calculates (A-delta)*(A-delta)^T (order=0) or (A-delta)^T*(A-delta) (order=1) *)
-// procedure cvMulTransposed(var Tranposes Matrix.Square matrices can be transposed in - place * )
-// procedure cvTranspose(CvArr * src: v1: 1. )): Double; (; var dst): CvArr; const cvT = cvTranspose;
-// {$EXTERNALSYM cvT}(* Completes the symmetric matrix from the lower (LtoR=0) or from the upper (LtoR!=0) part *)
-// procedure cvCompleteSymm(CvMat * Matrix: CvArr; LtoR CV_DEFAULT(0): Integer);
-//
-{
-  /* Mirror array data around horizontal (flip=0),
-  vertical (flip=1) or both(flip=-1) axises:
-  cvFlip(src) flips images vertically and sequences horizontally (inplace) */
-  CVAPI(void)  cvFlip( const CvArr* src, CvArr* dst CV_DEFAULT(NULL),
-  int flip_mode CV_DEFAULT(0));
-  #define cvMirror cvFlip
-}
-procedure cvFlip(const src, dst: pIplImage; flip_mode: Integer = 0); cdecl;
-
-// {$EXTERNALSYM cvMirror} const CV_SVD_MODIFY_A = 1;
-// {$EXTERNALSYM CV_SVD_MODIFY_A}const CV_SVD_U_T = 2; {$EXTERNALSYM CV_SVD_U_T}const CV_SVD_V_T = 4;
-// {$EXTERNALSYM CV_SVD_V_T}(; var W: CvArr; var U CV_DEFAULT(0): CvArr;
-// var Performs Singular value Back Substitution(solves A * x = B): flags must be the same as
-// in cvSVD * )
-// procedure cvSVBkSb(CvArr * W:
-// function V CV_DEFAULT(v1: 0)): CvArr; (; var U: CvArr; var = B: onst CvArr; var } CvArr * x:
-// {$EXTERNALSYM CvArr;
-// flags: Integer);
-//
-// const CV_LU = 0;
-// {$EXTERNALSYM CV_LU}
-// const CV_SVD = 1;
-// {$EXTERNALSYM CV_SVD}
-// const CV_SVD_SYM = 2;
-// {$EXTERNALSYM CV_SVD_SYM}
-// const CV_CHOLESKY = 3;
-// {$EXTERNALSYM CV_CHOLESKY}
-// const CV_QR = 4;
-// {$EXTERNALSYM CV_QR}
-// const CV_NORMAL = 16;
-// {$EXTERNALSYM CV_NORMAL}
-// (* Inverts matrix *)
-// CVAPI(Double)cvInvert(CvArr * src, CvArr * dst,
-// function method CV_DEFAULT(v1: CV_LU)): Integer; const cvInv = cvInvert;
-// {$EXTERNALSYM cvInv}
-// (* Solves linear system (src1)*(dst) = (src2)
-// (returns 0 if src1 is a singular and CV_LU method is used) *) then CVAPI(Integer)cvSolve(CvArr *
-// src1, CvArr * src2, CvArr * dst,
-// function method CV_DEFAULT(v1: CV_LU)): Integer;
-//
-// (* Calculates determinant of input matrix *)
-// CVAPI(Double)cvDet(CvArr * mat);
-//
-// (* Calculates trace of the matrix (sum of elements on the main diagonal) *)
-// CVAPI(CvScalar)cvTrace(CvArr * mat);
-//
-// (* Finds eigen values and vectors of a symmetric matrix *)
-// procedure cvEigenVV(-1: v1: ); highindex CV_DEFAULT(-1): Integer): Integer;
-//
-/// // * Finds selected eigen values and vectors of a symmetric matrix */
-/// / CVAPI(void)  cvSelectedEigenVV( CvArr* mat, CvArr* evects, CvArr* evals,
-/// / int lowindex, int highindex ): Double;
-//
-// (* Makes an identity matrix (mat_ij = i == j) *)
-// procedure cvSetIdentity(v1: cvRealScalar(1)));
-//
-// (* Fills matrix with given range of numbers *)
-// CVAPI(CvArr)cvRange(CvArr * mat, Double start, Double end);
-//
-// (* Calculates covariation matrix for a set of vectors *)
-// (* transpose([v1-avg, v2-avg,...]) * [v1-avg,v2-avg,...] *)
-// const CV_COVAR_SCRAMBLED = 0;
-// {$EXTERNALSYM CV_COVAR_SCRAMBLED}
-// (* [v1-avg, v2-avg,...] * transpose([v1-avg,v2-avg,...]) *)
-// const CV_COVAR_NORMAL = 1;
-// {$EXTERNALSYM CV_COVAR_NORMAL}
-// (* do not calc average (i.e. mean vector) - use the input vector instead
-// (useful for calculating covariance matrix by parts) *)
-// const CV_COVAR_USE_AVG = 2;
-// {$EXTERNALSYM CV_COVAR_USE_AVG}
-// (* scale the covariance matrix coefficients by number of the vectors *)
-// const CV_COVAR_SCALE = 4;
-// {$EXTERNALSYM CV_COVAR_SCALE}
-// (* all the input vectors are stored in a single matrix, as its rows *)
-// const CV_COVAR_ROWS = 8;
-// {$EXTERNALSYM CV_COVAR_ROWS}
-// (* all the input vectors are stored in a single matrix, as its columns *)
-// const CV_COVAR_COLS = 16;
-// {$EXTERNALSYM CV_COVAR_COLS}
-// procedure cvCalcCovarMatrix(vects: array of CvArr; count: Integer; var cov_mat: CvArr;
-// var avg: CvArr; flags: Integer);
-//
-// const CV_PCA_DATA_AS_ROW = 0;
-// {$EXTERNALSYM CV_PCA_DATA_AS_ROW}
-// const CV_PCA_DATA_AS_COL = 1;
-// {$EXTERNALSYM CV_PCA_DATA_AS_COL}
-// const CV_PCA_USE_AVG = 2;
-// {$EXTERNALSYM CV_PCA_USE_AVG}
-// procedure cvCalcPCA(var data: CvArr; var mean: CvArr; var eigenvals: CvArr; var eigenvects: CvArr;
-// flags: Integer);
-//
-// procedure cvProjectPCA(var data: CvArr; var mean: CvArr; var eigenvects: vArr; var cResult: CvArr);
-//
-// procedure cvBackProjectPCA(var proj: CvArr; var mean: CvArr; var eigenvects: vArr;
-// var cResult: CvArr);
-//
-// (* Calculates Mahalanobis(weighted) distance *)
-// CVAPI(Double)cvMahalanobis(CvArr * vec1, CvArr * vec2, CvArr * mat);
-// const cvMahalonobis = cvMahalanobis;
-// {$EXTERNALSYM cvMahalonobis}
-// (* ***************************************************************************************\
-// *                                    cArray Statistics                                    *
-// *************************************************************************************** *)
-//
-// (* Finds sum of array elements *)
-// CVAPI(CvScalar)cvSum(CvArr * arr);
-
-// (* Calculates number of non-zero pixels *)
-// CVAPI(Integer)cvCountNonZero(CvArr * arr);
-function cvCountNonZero(arr: pIplImage): Integer; cdecl;
-
-// (* Calculates mean value of array elements *)
-// CVAPI(CvScalar)cvAvg(CvArr * arr, CvArr * mask CV_DEFAULT(0));
-//
-// (* Calculates mean and standard deviation of pixel values *)
-// procedure cvAvgSdv(var Finds global minimum: v1: 0)): CvArr; (; var)
-
-{
-  /* Finds global minimum, maximum and their positions */
-  CVAPI(void)  cvMinMaxLoc(
-  const CvArr* arr,
-  double* min_val,
-  double* max_val,
-  CvPoint* min_loc CV_DEFAULT(NULL),
-  CvPoint* max_loc CV_DEFAULT(NULL),
-  const CvArr* mask CV_DEFAULT(NULL) );
-}
-procedure cvMinMaxLoc(
-  { } const arr: pIplImage;
-  { } min_val: pDouble;
-  { } max_val: pDouble;
-  { } min_loc: pCVPoint = nil;
-  { } max_loc: pCVPoint = nil;
-  { } const mask: pIplImage = nil); cdecl;
-
-// procedure cvMinMaxLoc(CvArr * arr: maximum and their positions; var min_val: Double;
-// var max_val: Double; var min_loc CV_DEFAULT(0): CvPoint; var max_loc CV_DEFAULT(0): CvPoint;
-// var types of array norm * )
-Const
+const
   // * types of array norm */
   CV_C = 1;
   CV_L1 = 2;
@@ -1040,537 +736,193 @@ Const
   CV_RELATIVE_L2 = (CV_RELATIVE or CV_L2);
 
   // * Finds norm, difference norm or relative difference norm for an array (or two arrays) */
-  // CVAPI(double)  cvNorm( const CvArr* arr1, const CvArr* arr2 CV_DEFAULT(NULL),
+  // CVAPI(double)  cvNorm( const pCvArr* arr1, const pCvArr* arr2 CV_DEFAULT(NULL),
   // int norm_type CV_DEFAULT(CV_L2),
-  // const CvArr* mask CV_DEFAULT(NULL) );
-function cvNorm(const arr1: pCvArr; const arr2: pCvArr = nil; norm_type: Integer = CV_L2; const mask: pCvArr = nil)
-  : Double; cdecl;
+  // const pCvArr* mask CV_DEFAULT(NULL) );
+function cvNorm(const arr1: pCvArr; const arr2: pCvArr = nil; norm_type: Integer = CV_L2; const mask: pCvArr = nil): Double; cdecl;
 
-// procedure cvNormalize(0.: v1: ); norm_type CV_DEFAULT(CV_L2):
-// function; var mask CV_DEFAULT(0): vArr): Integer;
-//
-// const CV_REDUCE_SUM = 0;
-// {$EXTERNALSYM CV_REDUCE_SUM}
-// const CV_REDUCE_AVG = 1;
-// {$EXTERNALSYM CV_REDUCE_AVG}
-// const CV_REDUCE_MAX = 2;
-// {$EXTERNALSYM CV_REDUCE_MAX}
-// const CV_REDUCE_MIN = 3;
-// {$EXTERNALSYM CV_REDUCE_MIN}
-// procedure cvReduce(v1: - 1); * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-// * \ * Discrete Linear Transforms and Related Functions * * * * * * * * * * * * * * * * * * * * * *
-// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-// * * * * * * * * * * * * * * * * * * )const CV_DXT_FORWARD = 0;
-// {$EXTERNALSYM CV_DXT_FORWARD}const CV_DXT_INVERSE = 1;
-// {$EXTERNALSYM CV_DXT_INVERSE}const CV_DXT_SCALE = 2;
-// (* divide result by size of array *){$EXTERNALSYM CV_DXT_SCALE}const CV_DXT_INV_SCALE =
-// (CV_DXT_INVERSE + CV_DXT_SCALE): Double;
-// {$EXTERNALSYM CV_DXT_INV_SCALE}const CV_DXT_INVERSE_SCALE = CV_DXT_INV_SCALE;
-// {$EXTERNALSYM CV_DXT_INVERSE_SCALE}const CV_DXT_ROWS = 4;
-// (* transform each row individually *){$EXTERNALSYM CV_DXT_ROWS}const CV_DXT_MUL_CONJ = 8;
-// (* conjugate the second argument of cvMulSpectrums *){$EXTERNALSYM CV_DXT_MUL_CONJ}(* Discrete Fourier Transform:    complex^.complex: array of function op CV_DEFAULT(v1: CV_REDUCE_SUM)): Integer;(;
-// (forward): cReal^.ccs;
-// var )procedure  cvDFT(  CvArr* src: ccs^.cReal (inverse);
-// var dst: CvArr;
-// flags: Integer;
-// var Multiply results of DFTs: DFT(X)*DFT(Y) or DFT(X)*conj(DFT(Y)) *)
-// procedure cvMulSpectrums(CvArr * src1:
-// function nonzero_rows CV_DEFAULT(v1: 0)): Integer; const cvFFT = cvDFT;
-// {$EXTERNALSYM cvFFT}(; var src2: CvArr; var dst: CvArr;
-// var Finds optimal DFT vector size >= size0 * )CVAPI(Integer)cvGetOptimalDFTSize(Integer size0
-// : Integer flags): CvArr; ();
-//
-// (* Discrete Cosine Transform *)
-// procedure cvDCT(var src: CvArr; var dst: CvArr; flags: Integer);
 
+// (* ***************************************************************************************\
+// *                                    cArray Statistics                                    *
+// *************************************************************************************** *)
+
+{ Calculates number of non-zero pixels
+  CVAPI(Integer)cvCountNonZero(pCvArr * arr);
+}
+function cvCountNonZero(arr: pIplImage): Integer; cdecl;
+
+{ Finds global minimum, maximum and their positions
+  CVAPI(void)  cvMinMaxLoc(const pCvArr* arr, double* min_val, double* max_val, CvPoint* min_loc CV_DEFAULT(NULL), CvPoint* max_loc CV_DEFAULT(NULL), const pCvArr* mask CV_DEFAULT(NULL) );
+}
+procedure cvMinMaxLoc(const arr: pIplImage; min_val: pDouble;
+                      max_val: pDouble; min_loc: pCVPoint = nil;
+                      max_loc: pCVPoint = nil; const mask: pIplImage = nil); cdecl;
 
 // ****************************************************************************************
 // *                              Dynamic data structures                                 *
 // ****************************************************************************************
 
-// (* Calculates length of sequence slice (with support of negative indices). *)
-// CVAPI(Integer)cvSliceLength(CvSlice slice, CvSeq * seq);
-
-{
-  (* Creates new memory storage. block_size = 0 means that default,
-  somewhat optimal size, is used (currently, it is 64K) *)
-
-  CVAPI(CvMemStorage)cvCreateMemStorage(Integer block_size CV_DEFAULT(0));
+{ Creates new memory storage.
+   block_size == 0 means that default,
+   somewhat optimal size, is used (currently, it is 64K)
+   CVAPI(CvMemStorage*)  cvCreateMemStorage( int block_size CV_DEFAULT(0));
 }
+function cvCreateMemStorage(block_size: integer = 0): pCvMemStorage; cdecl;
 
-function cvCreateMemStorage(block_size: Integer = 0): pCvMemStorage; cdecl;
+{ Creates a memory storage that will borrow memory blocks from parent storage
+  CVAPI(CvMemStorage*)  cvCreateChildMemStorage( CvMemStorage* parent );
+}
+function cvCreateChildMemStorage(block_size: integer = 0): pCvMemStorage; cdecl;
 
-// (* Creates a memory storage that will borrow memory blocks from parent storage *)
-// CVAPI(CvMemStorage)cvCreateChildMemStorage(CvMemStorage * parent);
-
-{
-  /* Releases memory storage. All the children of a parent must be released before
-  the parent. A child storage returns all the blocks to parent when it is released */
+{ Releases memory storage. All the children of a parent must be released before
+  the parent. A child storage returns all the blocks to parent when it is released
   CVAPI(void)  cvReleaseMemStorage( CvMemStorage** storage );
 }
 procedure cvReleaseMemStorage(var storage: pCvMemStorage); cdecl;
 
-// (* Clears memory storage. This is the only way(!!!) (besides cvRestoreMemStoragePos)
-// to reuse memory allocated for the storage - cvClearSeq,cvClearSet Args: array of const
-// do not free any memory.
-// A child storage returns all the blocks to the parent when it is cleared *)
-// CVAPI(void)  cvClearMemStorage( CvMemStorage* storage );
+{ Clears memory storage. This is the only way(!!!) (besides cvRestoreMemStoragePos)
+  to reuse memory allocated for the storage - cvClearSeq,cvClearSet ...
+  do not free any memory.
+  A child storage returns all the blocks to the parent when it is cleared
+  CVAPI(void)  cvClearMemStorage( CvMemStorage* storage );
+}
 procedure cvClearMemStorage(storage: pCvMemStorage); cdecl;
-//
-// (* Remember a storage "free memory" position *)
-// procedure cvSaveMemStoragePos(var storage: CvMemStorage; var pos: CvMemStoragePos);
-//
-// (* Restore a storage "free memory" position *)
-// procedure cvRestoreMemStoragePos(var storage: CvMemStorage; var pos: CvMemStoragePos);
-//
-// (* Allocates continuous buffer of the specified size in the storage *)
-// procedure cvMemStorageAlloc(var storage: CvMemStorage; size: size_t);
-//
-// (* Allocates string in memory storage *)
-// CVAPI(CvString)cvMemStorageAllocString(CvMemStorage * storage, PCVChar ptr,
-// function len CV_DEFAULT(v1: - 1)): Integer;
 
-{
-  /* Creates new empty sequence that will reside in the specified storage */
+{ Creates new empty sequence that will reside in the specified storage
   CVAPI(CvSeq*)  cvCreateSeq( int seq_flags, size_t header_size,
   size_t elem_size, CvMemStorage* storage );
 }
 function cvCreateSeq(seq_flags: Integer; header_size: size_t; elem_size: size_t; storage: pCvMemStorage): pCvSeq; cdecl;
 
-// (* Changes default size (granularity) of sequence blocks.
-// The default size is ~1Kbyte *)
-// procedure cvSetSeqBlockSize(var seq: CvSeq; delta_elems: Integer);
-//
+// Removes specified sequence element
+// CVAPI(void)  cvSeqRemove( CvSeq* seq, int index );
+procedure cvSeqRemove(seq: pCvSeq; index: Integer); cdecl; 
 
-{
-  /* Adds new element to the end of sequence. Returns pointer to the element */
+// or cvRestoreMemStoragePos is called
+// CVAPI(void)  cvClearSeq( CvSeq* seq );
+procedure cvClearSeq(seq: pCvSeq); cdecl;
+
+{ Adds new element to the end of sequence. Returns pointer to the element
   CVAPI(schar*)  cvSeqPush( CvSeq* seq, const void* element CV_DEFAULT(NULL));
 }
 function cvSeqPush(seq: pCvSeq; const element: Pointer = nil): Pointer; cdecl;
 
-// (* Adds new element to the beginning of sequence. Returns pointer to it *)
-// CVAPI(schar)cvSeqPushFront(CvSeq * seq, Pointer element CV_DEFAULT(0));
-//
-// (* Removes the last element from sequence and optionally saves it *)
-// procedure cvSeqPop(v1: 0));
-//
-// (* Removes the first element from sequence and optioanally saves it *)
-// procedure cvSeqPopFront(v1: 0));
-//
-// const CV_FRONT = 1;
-// {$EXTERNALSYM CV_FRONT}
-// const CV_BACK = 0;
-// {$EXTERNALSYM CV_BACK}
-// (* Adds several new elements to the end of sequence *)
-// procedure cvSeqPushMulti(var Removes several elements from the end of sequence and
-// optionally saves them * )
-// procedure cvSeqPopMulti(CvSeq * seq: v1: 0)): Integer; (; var elements: void; count:
-// function; var Inserts A new element in the middle of sequence.cvSeqInsert(seq
-// : Integer in_front CV_DEFAULT(v1: 0)): Integer; (; :; = cvSeqPushFront(seq: lem);
-// var)CVAPI(schar)cvSeqInsert(CvSeq * seq: lem); before_index: Integer;
-// var Removes
-
-// * Removes specified sequence element */
-// CVAPI(void)  cvSeqRemove( CvSeq* seq, int index );
-procedure cvSeqRemove(seq: pCvSeq; index: Integer); cdecl;
-
-// * Removes all the elements from the sequence. The freed memory
-// can be reused later only by the same sequence unless cvClearMemStorage
-// or cvRestoreMemStoragePos is called */
-// CVAPI(void)  cvClearSeq( CvSeq* seq );
-procedure cvClearSeq(seq: pCvSeq); cdecl;
-
-{
-  /* Retrieves pointer to specified sequence element.
+{ Retrieves pointer to specified sequence element.
   Negative indices are supported and mean counting from the end
-  (e.g -1 means the last sequence element) */
+  (e.g -1 means the last sequence element)
   CVAPI(schar*)  cvGetSeqElem( const CvSeq* seq, int index );
 }
 function cvGetSeqElem(const seq: pCvSeq; index: Integer): Pointer; cdecl;
 
-// (* Calculates index of the specified sequence element.
-// Returns -1 if element does not belong to the sequence *)
-// CVAPI(Integer)cvSeqElemIdx(CvSeq * seq, Pointer element, CvSeqBlock * * block CV_DEFAULT(0));
-//
-// (* Initializes sequence writer. The new elements will be added to the end of sequence *)
-// procedure cvStartAppendToSeq(var seq: CvSeq; var writer: CvSeqWriter);
-//
-// (* Combination of cvCreateSeq and cvStartAppendToSeq *)
-// procedure cvStartWriteSeq(seq_flags: Integer; header_size: Integer; elem_size: Integer;
-// var storage: CvMemStorage; var writer: CvSeqWriter);
-//
-// (* Closes sequence writer, updates sequence header and returns pointer
-// to the resultant sequence
-// (which may be useful if the sequence was created using cvStartWriteSeq)) then
-// *)
-// CVAPI(CvSeq)cvEndWriteSeq(CvSeqWriter * writer);
-//
-// (* Updates sequence header. May be useful to get access to some of previously
-// written elements via cvGetSeqElem or sequence reader *)
-// procedure cvFlushSeqWriter(var writer: CvSeqWriter);
-
-{
-  /* Initializes sequence reader.
-  The sequence can be read in forward or backward direction */
-  CVAPI(void) cvStartReadSeq( const CvSeq* seq, CvSeqReader* reader,
-  int reverse CV_DEFAULT(0) );
-
+{ Initializes sequence reader.
+  The sequence can be read in forward or backward direction
+  CVAPI(void) cvStartReadSeq( const CvSeq* seq, CvSeqReader* reader, int reverse CV_DEFAULT(0) );
 }
 procedure cvStartReadSeq(const seq: Pointer; reader: pCvSeqReader; reverse: Integer = 0); cdecl;
-// procedure cvStartReadSeq(const seq: pCvSeq; reader: pCvSeqReader; reverse: Integer = 0); cdecl; overload;
-// procedure cvStartReadSeq(const seq: pCvSet; reader: pCvSeqReader; reverse: Integer = 0); cdecl; overload;
 
-// CVAPI(Integer)cvGetSeqReaderPos(CvSeqReader * reader: v1: 0)): Integer; ();
 
-{
-  /* Copies sequence content to a continuous piece of memory */
-  CVAPI(void*)  cvCvtSeqToArray( const CvSeq* seq, void* elements,
-  CvSlice slice CV_DEFAULT(CV_WHOLE_SEQ) );
+{ Copies sequence content to a continuous piece of memory
+  CVAPI(void*)  cvCvtSeqToArray( const CvSeq* seq, void* elements, CvSlice slice CV_DEFAULT(CV_WHOLE_SEQ));
 }
-function cvCvtSeqToArray(const seq: pCvSeq; elements: Pointer; slice: TCvSlice { =CV_WHOLE_SEQ } ): Pointer; cdecl;
-
-// (* Creates sequence header for array.
-// After that all the operations on sequences that do not alter the content
-// can be applied to the resultant sequence *)
-// CVAPI(CvSeq)cvMakeSeqHeaderForArray(Integer seq_type, Integer header_size, Integer elem_size,
-// Pointer elements, Integer total, CvSeq * seq, CvSeqBlock * block);
-//
-// (* Extracts sequence slice (with or without copying sequence elements) *)
-// CVAPI(CvSeq)cvSeqSlice(CvSeq * seq, CvSlice slice, CvMemStorage * storage CV_DEFAULT(0),
-// function copy_function CV_DEFAULT(v1: 0)): Integer;
-//
-// CV_INLINE CvSeq * cvCloneSeq(CvSeq * seq, CvMemStorage * storage CV_DEFAULT(0))begin result :=
-// cvSeqSlice(seq, CV_WHOLE_SEQ, storage, 1): data; end;
-//
-// (* Removes sequence slice *)
-// procedure cvSeqRemoveSlice(var seq: CvSeq; slice: CvSlice);
-//
-// (* Inserts a sequence or array into another sequence *)
-// procedure cvSeqInsertSlice(var seq: CvSeq; before_index: Integer; var from_arr: CvArr);
-
-// * a < b ? -1 : a > b ? 1 : 0 */
-// typedef int (CV_CDECL* CvCmpFunc)(const void* a, const void* b, void* userdata );
-Type
-  TCvCmpFunc = function(const a: Pointer; const b: Pointer; userdata: Pointer): Integer; cdecl;
-
-  // (* Sorts sequence in-place given element comparison function *)
-  // procedure cvSeqSort(v1: 0));
-  //
-  // (* Finds element in a [sorted] sequence *)
-  // CVAPI(schar)cvSeqSearch(CvSeq * seq, Pointer elem, CvCmpFunc func, Integer is_sorted,
-  // Integer * elem_idx,
-  // function userdata CV_DEFAULT(v1: 0)): Pointer;
-  //
-  // (* Reverses order of sequence elements in-place *)
-  // procedure cvSeqInvert(var seq: CvSeq);
-
-  // * Splits sequence into one or more equivalence classes using the specified criteria */
-  // CVAPI(int)  cvSeqPartition( const CvSeq* seq, CvMemStorage* storage,
-  // CvSeq** labels, CvCmpFunc is_equal, void* userdata );
-function cvSeqPartition(const seq: pCvSeq; storage: pCvMemStorage; labels: pCvSeq; is_equal: TCvCmpFunc;
-  userdata: Pointer): Integer; cdecl;
+procedure cvCvtSeqToArray(const seq: pCvSeq; elements: pCvArr; slice: TCvSlice); cdecl;
 
 // ************ Internal sequence functions ************/
+
 // CVAPI(void)  cvChangeSeqBlock( void* reader, int direction );
 procedure cvChangeSeqBlock(reader: pCvSeqReader; direction: Integer); cdecl;
 // CVAPI(void)  cvCreateSeqBlock( CvSeqWriter* writer );
 procedure cvCreateSeqBlock(writer: pCvSeqWriter); cdecl;
 
-// (* Creates a new set *)
-// CVAPI(cvSet)cvCreateSet(Integer set_flags, Integer header_size, Integer elem_size,
-// CvMemStorage * storage);
-//
-// (* Adds new element to the set and returns pointer to it *)
-// CVAPI(Integer)cvSetAdd(cvSet * set_header, CvSetElem * elem CV_DEFAULT(0),
-// CvSetElem * * inserted_elem CV_DEFAULT(0));
-//
-// (* Fast variant of cvSetAdd *)
-// CV_INLINE CvSetElem * cvSetNew(cvSet * set_header)begin CvSetElem * elem := set_header^.free_elems;
-// if (elem) then begin set_header^.free_elems := elem^.next_free;
-// elem^.flags := elem^.flags and CV_SET_ELEM_IDX_MASK; set_header^.active_count := mod +1; end;
-// else cvSetAdd(set_header, 0, (CvSetElem * )&elem); result := elem; end;
-//
-// (* Removes set element given its pointer *)
-// CV_INLINE CV_INLINE
-// procedure cvSetRemoveByPtr(var & &(elem - > flags & CV_SET_ELEM_IDX_MASK) < set_header - > total * )
-// : CvSetElem)elem; Assert(_elem^.flags > := 0(); _elem^.next_free := set_header^.free_elems;
-// _elem^.flags := (_elem^.flags and CV_SET_ELEM_IDX_MASK) or CV_SET_ELEM_FREE_FLAG;
-// set_header^.free_elems := _elem; set_header^.active_count := mod -1; end;
-//
-// (* Removes element from the set by its index *)
-// procedure cvSetRemove(var set_header: cvSet; index: Integer);
-//
-// (* Returns a set element by index. If the element doesn't belong to the set,
-// 0 is returned *)
-// CV_INLINE CvSetElem * cvGetSetElem(cvSet * set_header, Integer idx)begin CvSetElem * elem :=
-// (CvSetElem)cvGetSeqElem((CvSeq)set_header, idx);
-// result := elem and CV_IS_SET_ELEM(elem)? elem: 0; end;
-//
-// (* Removes all the elements from the set *)
-// procedure cvClearSet(var set_header: cvSet);
-//
-// (* Creates new graph *)
-// CVAPI(CvGraph)cvCreateGraph(Integer graph_flags, Integer header_size, Integer vtx_size,
-// Integer edge_size, CvMemStorage * storage);
-//
-// (* Adds new vertex to the graph *)
-// CVAPI(Integer)cvGraphAddVtx(CvGraph * graph, CvGraphVtx * vtx CV_DEFAULT(0),
-// CvGraphVtx * * inserted_vtx CV_DEFAULT(0));
-//
-// (* Removes vertex from the graph together with all incident edges *)
-// CVAPI(Integer)cvGraphRemoveVtx(CvGraph * graph, Integer index);
-// CVAPI(Integer)cvGraphRemoveVtxByPtr(CvGraph * graph, CvGraphVtx * vtx);
-//
-// (* Link two vertices specifed by indices or pointers if they
-// are not connected or result:= cPointer to already existing edge
-// connecting the vertices.
-// Functions result:= 1 if a new edge was created, 0 otherwise *)
-// CVAPI(Integer)cvGraphAddEdge(CvGraph * graph, Integer start_idx, Integer end_idx,
-// CvGraphEdge * edge CV_DEFAULT(0), CvGraphEdge * * inserted_edge CV_DEFAULT(0));
-//
-// CVAPI(Integer)cvGraphAddEdgeByPtr(CvGraph * graph, CvGraphVtx * start_vtx, CvGraphVtx * end_vtx,
-// CvGraphEdge * edge CV_DEFAULT(0), CvGraphEdge * * inserted_edge CV_DEFAULT(0));
-//
-// (* Remove edge connecting two vertices *)
-// procedure cvGraphRemoveEdge(var graph: CvGraph; start_idx: Integer; end_idx: Integer);
-// procedure cvGraphRemoveEdgeByPtr(var graph: CvGraph; var start_vtx: CvGraphVtx;
-// var end_vtx: CvGraphVtx);
-//
-// (* Find edge connecting two vertices *)
-// CVAPI(CvGraphEdge)cvFindGraphEdge(CvGraph * graph, Integer start_idx, Integer end_idx);
-// CVAPI(CvGraphEdge)cvFindGraphEdgeByPtr(CvGraph * graph, CvGraphVtx * start_vtx,
-// CvGraphVtx * end_vtx); const cvGraphFindEdge = cvFindGraphEdge;
-// {$EXTERNALSYM cvGraphFindEdge}
-// const cvGraphFindEdgeByPtr = cvFindGraphEdgeByPtr;
-// {$EXTERNALSYM cvGraphFindEdgeByPtr}
-// (* Remove all vertices and edges from the graph *)
-// procedure cvClearGraph(var graph: CvGraph);
-//
-// (* Count number of edges incident to the vertex *)
-// CVAPI(Integer)cvGraphVtxDegree(CvGraph * graph, Integer vtx_idx);
-// CVAPI(Integer)cvGraphVtxDegreeByPtr(CvGraph * graph, CvGraphVtx * vtx);
-//
-// (* Retrieves graph vertex by given index *)
-/// / >> Following declaration is a macro definition!
-// const cvGetGraphVtx(graph, idx(CvGraphVtx)cvGetSetElem((cvSet(graph), (idx));
-//
-// (* Retrieves index of a graph vertex given its pointer *)
-// // >> Following declaration is a macro definition!
-// const cvGraphVtxIdx(graph, vtx((vtx)^.flags and CV_SET_ELEM_IDX_MASK);
-//
-// (* Retrieves index of a graph edge given its pointer *)
-// // >> Following declaration is a macro definition!
-// const cvGraphEdgeIdx(graph, edge((edge)^.flags and CV_SET_ELEM_IDX_MASK);
-//
-// // >> Following declaration is a macro definition!
-// const cvGraphGetVtxCount(graph((graph)^.active_count);
-// // >> Following declaration is a macro definition!
-// const cvGraphGetEdgeCount(graph((graph)^.edges^.active_count);
-//
-// const CV_GRAPH_VERTEX = 1;
-// {$EXTERNALSYM CV_GRAPH_VERTEX}
-// const CV_GRAPH_TREE_EDGE = 2;
-// {$EXTERNALSYM CV_GRAPH_TREE_EDGE}
-// const CV_GRAPH_BACK_EDGE = 4;
-// {$EXTERNALSYM CV_GRAPH_BACK_EDGE}
-// const CV_GRAPH_FORWARD_EDGE = 8;
-// {$EXTERNALSYM CV_GRAPH_FORWARD_EDGE}
-// const CV_GRAPH_CROSS_EDGE = 16;
-// {$EXTERNALSYM CV_GRAPH_CROSS_EDGE}
-// const CV_GRAPH_ANY_EDGE = 30;
-// {$EXTERNALSYM CV_GRAPH_ANY_EDGE}
-// const CV_GRAPH_NEW_TREE = 32;
-// {$EXTERNALSYM CV_GRAPH_NEW_TREE}
-// const CV_GRAPH_BACKTRACKING = 64;
-// {$EXTERNALSYM CV_GRAPH_BACKTRACKING}
-// const CV_GRAPH_OVER = -1;
-// {$EXTERNALSYM CV_GRAPH_OVER}
-// const CV_GRAPH_ALL_ITEMS = -1;
-// {$EXTERNALSYM CV_GRAPH_ALL_ITEMS}
-// (* flags for graph vertices and edges *)
-// const CV_GRAPH_ITEM_VISITED_FLAG = (1 shl 30);
-// {$EXTERNALSYM CV_GRAPH_ITEM_VISITED_FLAG}
-// // >> Following declaration is a macro definition!
-// const CV_IS_GRAPH_VERTEX_VISITED(vtx)(((CvGraphVtx(vtx))^.flags and CV_GRAPH_ITEM_VISITED_FLAG);
-// // >> Following declaration is a macro definition!
-// const CV_IS_GRAPH_EDGE_VISITED(edge)(((CvGraphEdge(edge))^.flags and CV_GRAPH_ITEM_VISITED_FLAG);
-// const CV_GRAPH_SEARCH_TREE_NODE_FLAG = (1 shl 29);
-// {$EXTERNALSYM CV_GRAPH_SEARCH_TREE_NODE_FLAG}
-// const CV_GRAPH_FORWARD_EDGE_FLAG = (1 shl 28);
-// {$EXTERNALSYM CV_GRAPH_FORWARD_EDGE_FLAG}
-// type
-//
-// = record vtx: ^CvGraphVtx; (* current graph vertex (or current edge origin) *)
-// dst: ^CvGraphVtx; (* current graph edge destination vertex *)
-// edge: ^CvGraphEdge; (* current edge *)
-// graph: ^CvGraph; (* the graph *)
-// stack: ^CvSeq; (* the graph vertex stack *)
-// index: Integer; (* the lower bound of certainly visited vertices *)
-// mask: Integer; (* event mask *)
-// end; CvGraphScanner;
-//
-// (* Creates new graph scanner. *)
-// CVAPI(CvGraphScanner)cvCreateGraphScanner(CvGraph * graph, CvGraphVtx * vtx CV_DEFAULT(0),
-// function mask CV_DEFAULT(v1: CV_GRAPH_ALL_ITEMS)): Integer;
-//
-// (* Releases graph scanner. *)
-// procedure cvReleaseGraphScanner(scanner: array of CvGraphScanner);
-//
-// (* Get next graph element *)
-// CVAPI(Integer)cvNextGraphItem(CvGraphScanner * scanner);
-//
-// (* Creates a copy of graph *)
-// CVAPI(CvGraph)cvCloneGraph(CvGraph * graph, CvMemStorage * storage);
-//
-// (* ***************************************************************************************\
-// *                                     Drawing                                            *
-// *************************************************************************************** *)
-//
-// (* ***************************************************************************************\
-// *       Drawing functions work with images/matrices of arbitrary cType.                   *
-// *       For color images the channel order is BGR : array[0..A-1] of                                      *
-// *       Antialiasing is supported only for 8-bit image now.                              *
-// *       All the functions include parameter color that means rgb value (that may be      *
-// *       constructed with CV_RGB macro) for color images and brightness                   *
-// *       for grayscale images.                                                            *
-// *       If a drawn figure is partially or completely outside of the image, it is clipped.*
-// *************************************************************************************** *)
-//
-/// / >> Following declaration is a macro definition!
-function CV_RGB(const r, g, b: Double): TCvScalar; inline;
-// CvScalar((B), (g), (r), 0);
+// writes instance of a standard type (matrix, image, sequence, graph etc.)
+// or user-defined type */
+// CVAPI(void) cvWrite( CvFileStorage* fs, const char* name, const void* ptr,
+// CvAttrList attributes CV_DEFAULT(cvAttrList()));
+procedure cvWrite(fs: pCvFileStorage; const name: pCVChar; const ptr: Pointer;
+  attributes: TCvAttrList { = cvAttrList() } ); cdecl; 
+
+type
+  TCvCmpFunc = function(const a: Pointer; const b: Pointer; userdata: Pointer): Integer; cdecl; 
+
+function cvSeqPartition(const seq: pCvSeq; storage: pCvMemStorage; labels: pCvSeq; is_equal: TCvCmpFunc;
+  userdata: Pointer): Integer; cdecl; 
+
+// ****************************************************************************************
+// *                                     Drawing                                          *
+// ****************************************************************************************
+
+// Following declaration is a macro definition!
+function CV_RGB(const r, g, B: double): TCvScalar; inline;
 
 const
   CV_FILLED = -1;
-{$EXTERNALSYM CV_FILLED}
+  {$EXTERNALSYM CV_FILLED}
+
   CV_AA = 16;
-{$EXTERNALSYM CV_AA}
-  // (* Draws 4-connected, 8-connected or antialiased line segment connecting two points *)
-  // procedure cvLine(8: v1: ); shift CV_DEFAULT(0): Integer): Integer;
-  {
-    CVAPI(void)  cvLine( CvArr* img, CvPoint pt1, CvPoint pt2,
-    CvScalar color, int thickness CV_DEFAULT(1),
-    int line_type CV_DEFAULT(8), int shift CV_DEFAULT(0) );
-  }
-procedure cvLine(img: pCvArr; pt1, pt2: TCvPoint; color: TCvScalar; thickness: Integer = 1; line_type: Integer = 8;
-  shift: Integer = 0); cdecl;
-// procedure cvLine(img: pIplImage; pt1, pt2: TCvPoint; color: TCvScalar; thickness: Integer = 1; line_type: Integer = 8;
-// shift: Integer = 0); cdecl; overload;
-// procedure cvLine(img: pCvMat; pt1, pt2: TCvPoint; color: TCvScalar; thickness: Integer = 1; line_type: Integer = 8;
-// shift: Integer = 0); cdecl; overload;
+  {$EXTERNALSYM CV_AA}
 
-{
-  /* Draws a rectangle given two opposite corners of the rectangle (pt1 & pt2),
-  if thickness<0 (e.g. thickness == CV_FILLED), the filled box is drawn */
-  CVAPI(void)  cvRectangle(
-  CvArr* img,
-  CvPoint pt1,
-  CvPoint pt2,
-  CvScalar color,
-  int thickness CV_DEFAULT(1),
-  int line_type CV_DEFAULT(8),
-  int shift CV_DEFAULT(0));
+{ procedure cvLine(8: v1: ); shift CV_DEFAULT(0): Integer): Integer;
+  CVAPI(void)  cvLine( pCvArr* img, CvPoint pt1, CvPoint pt2,
+  CvScalar color, int thickness CV_DEFAULT(1),
+  int line_type CV_DEFAULT(8), int shift CV_DEFAULT(0) );
 }
-procedure cvRectangle(img: pIplImage; pt1, pt2: TCvPoint; color: TCvScalar; thickness: Integer = 1;
-  line_type: Integer = 8; shift: Integer = 0); cdecl;
+procedure cvLine(img: pCvArr; pt1, pt2: TCvPoint; color: TCvScalar; thickness: Integer = 1; line_type: Integer = 8; shift: Integer = 0); cdecl;
 
-{
-  //Draws a circle with specified center and radius.
-  CVAPI(void)  cvCircle(
-  CvArr* img,
-  CvPoint center,
-  int radius,
-  CvScalar color,
-  int thickness CV_DEFAULT(1),
-  int line_type CV_DEFAULT(8),
-  int shift CV_DEFAULT(0));
+{ Draws a rectangle specified by a CvRect structure
+  procedure cvRectangleR(8: v1: ); shift CV_DEFAULT(0): Integer): Integer;
+}
+procedure cvRectangle(img: pCvArr; pt1: TCvPoint; pt2: TCvPoint;
+                          color: TCvScalar; thickness: integer = 1;
+                          line_type: integer = 8;
+                          shift: integer = 0); cdecl;
+
+{ Draws a circle with specified center and radius.
+  Thickness works in the same way as with cvRectangle
+  CVAPI(void)  cvCircle( pCvArr* img, CvPoint center, int radius,
+  CvScalar color, int thickness CV_DEFAULT(1), int line_type CV_DEFAULT(8), int shift CV_DEFAULT(0));
 }
 procedure cvCircle(img: pCvArr; center: TCvPoint; radius: Integer; color: TCvScalar; thickness: Integer = 1;
-  line_type: Integer = 8; shift: Integer = 0); cdecl;
-// procedure cvCircle(img: pIplImage; center: TCvPoint; radius: Integer; color: TCvScalar; thickness: Integer = 1;
-// line_type: Integer = 8; shift: Integer = 0); cdecl; overload;
-// procedure cvCircle(img: pCvMat; center: TCvPoint; radius: Integer; color: TCvScalar; thickness: Integer = 1;
-// line_type: Integer = 8; shift: Integer = 0); cdecl; overload;
+   line_type: Integer = 8; shift: Integer = 0); cdecl;
 
-{
-  /* Draws ellipse outline, filled ellipse, elliptic arc or filled elliptic sector,
+{ Draws ellipse outline, filled ellipse, elliptic arc or filled elliptic sector,
   depending on <thickness>, <start_angle> and <end_angle> parameters. The resultant figure
-  is rotated by <angle>. All the angles are in degrees */
-  CVAPI(void)  cvEllipse( CvArr* img, CvPoint center, CvSize axes,
+  is rotated by <angle>. All the angles are in degrees
+  CVAPI(void)  cvEllipse( pCvArr* img, CvPoint center, CvSize axes,
   double angle, double start_angle, double end_angle,
   CvScalar color, int thickness CV_DEFAULT(1),
   int line_type CV_DEFAULT(8), int shift CV_DEFAULT(0));
-
 }
-
 procedure cvEllipse(img: pIplImage; center: TCvPoint; axes: TCvSize; angle: Double; start_angle: Double;
   nd_angle: Double; color: TCvScalar; thickness: Integer = 1; line_type: Integer = 8; shift: Integer = 0); cdecl;
 
-(*
-  CV_INLINE  void  cvEllipseBox( CvArr* img, CvBox2D box, CvScalar color,
+{ CV_INLINE  void  cvEllipseBox( pCvArr* img, CvBox2D box, CvScalar color,
   int thickness CV_DEFAULT(1),
   int line_type CV_DEFAULT(8), int shift CV_DEFAULT(0) )
   {
   CvSize axes;
   axes.width = cvRound(box.size.width*0.5);
   axes.height = cvRound(box.size.height*0.5);
-
   cvEllipse( img, cvPointFrom32f( box.center ), axes, box.angle,
   0, 360, color, thickness, line_type, shift );
-  }
-*)
+}
 procedure cvEllipseBox(img: pIplImage; box: TCvBox2D; color: TCvScalar; thickness: Integer = 1; line_type: Integer = 8;
   shift: Integer = 0); inline;
 
-/// * Fills convex or monotonous polygon. */
-// CVAPI(void)  cvFillConvexPoly( CvArr* img, const CvPoint* pts, int npts, CvScalar color,
-// int line_type CV_DEFAULT(8), int shift CV_DEFAULT(0));
+{ Fills convex or monotonous polygon.
+ CVAPI(void)  cvFillConvexPoly( pCvArr* img, const CvPoint* pts, int npts, CvScalar color,
+ int line_type CV_DEFAULT(8), int shift CV_DEFAULT(0));
+}
 procedure cvFillConvexPoly(img: pIplImage; const pts: pCVPoint; npts: Integer; color: TCvScalar; line_type: Integer = 8;
   shift: Integer = 0); cdecl;
 
-{
-  /* Draws one or more polygonal curves */
-  CVAPI(void)  cvPolyLine( CvArr* img, CvPoint** pts, const int* npts, int contours,
+{ Draws one or more polygonal curves
+  CVAPI(void)  cvPolyLine( pCvArr* img, CvPoint** pts, const int* npts, int contours,
   int is_closed, CvScalar color, int thickness CV_DEFAULT(1),
   int line_type CV_DEFAULT(8), int shift CV_DEFAULT(0) );
 }
-
-procedure cvPolyLine(img: pIplImage; pts: pCVPoint; const npts: PInteger; contours: Integer; is_closed: Integer;
+procedure cvPolyLine(img: pIplImage; pts: pCVPoint; const npts: pInteger; contours: Integer; is_closed: Integer;
   color: TCvScalar; thickness: Integer = 1; line_type: Integer = 8; shift: Integer = 0); cdecl;
 
-// const
-// cvDrawRect = cvRectangle;
-// {$EXTERNALSYM cvDrawRect}
-// cvDrawLine = cvLine;
-// {$EXTERNALSYM cvDrawLine}
-// cvDrawCircle = cvCircle;
-// {$EXTERNALSYM cvDrawCircle}
-// cvDrawEllipse = cvEllipse;
-// {$EXTERNALSYM cvDrawEllipse}
-// cvDrawPolyLine = cvPolyLine;
-// {$EXTERNALSYM cvDrawPolyLine}
-
-// (* Clips the line segment connecting *pt1 and *pt2
-// by the rectangular window
-// (0<=x<img_size.width, 0<=y<img_size.height). *)
-// CVAPI(Integer)cvClipLine(CvSize img_size, CvPoint * pt1, CvPoint * pt2);
-//
-// (* Initializes line iterator. Initially, line_iterator->ptr will point
-// to pt1 (or pt2, see left_to_right description) location in the image.
-// Returns the number of pixels on the line between the ending points. *)
-// CVAPI(Integer)cvInitLineIterator(CvArr * image, CvPoint pt1, CvPoint pt2,
-// CvLineIterator * line_iterator,
-// function connectivity CV_DEFAULT(v1: 0)): Integer;
-//
-// (* Moves iterator to the next line point *)
-/// / >> Following declaration is a macro definition!
-// const CV_NEXT_LINE_POINT(line_iterator); begin Integer _line_iterator_mask = (line_iterator).err <
-// 0 ? - 1: 0; (line_iterator).err := mod +(line_iterator).minus_delta + ((line_iterator)
-// .plus_delta and _line_iterator_mask); (line_iterator).ptr := mod +(line_iterator).minus_step +
-// ((line_iterator).plus_step and _line_iterator_mask); end;
-//
-(* basic font types *)
+{ basic font types }
 const
   CV_FONT_HERSHEY_SIMPLEX = 0;
 {$EXTERNALSYM CV_FONT_HERSHEY_SIMPLEX}
@@ -1588,331 +940,107 @@ const
 {$EXTERNALSYM CV_FONT_HERSHEY_SCRIPT_SIMPLEX}
   CV_FONT_HERSHEY_SCRIPT_COMPLEX = 7;
 {$EXTERNALSYM CV_FONT_HERSHEY_SCRIPT_COMPLEX}
-  (* font flags *)
+{ font flags }
   CV_FONT_ITALIC = 16;
 {$EXTERNALSYM CV_FONT_ITALIC}
   CV_FONT_VECTOR0 = CV_FONT_HERSHEY_SIMPLEX;
 {$EXTERNALSYM CV_FONT_VECTOR0}
 
-  (* Font structure *)
-  // type
-  //
+{ Font structure }
 type
   pCvFont = ^TCvFont;
-
   TCvFont = packed record
-    nameFont: pCVChar; // Qt:nameFont
+    nameFont: pCVChar;
     color: TCvScalar;
-    // Qt:ColorFont -> cvScalar(blue_component, green_component, red\_component[, alpha_component])
-    font_face: Integer; // Qt: bool italic         /* =CV_FONT_* */
-    ascii: PInteger; // * font data and metrics */
-    greek: PInteger;
-    cyrillic: PInteger;
+    font_face: Integer;
+    ascii: pInteger;
+    greek: pInteger;
+    cyrillic: pInteger;
     hscale, vscale: Single;
-    shear: Single; // * slope coefficient: 0 - normal, >0 - italic */
-    thickness: Integer; // Qt: weight               /* letters thickness */
-    dx: Single; // * horizontal interval between letters */
-    line_type: Integer; // Qt: PointSize
+    shear: Single;
+    thickness: Integer;
+    dx: Single;
+    line_type: Integer;
   end;
 
-  {
-    // Initializes font structure used further in cvPutText *)
-    CVAPI(void) cvInitFont(
-    CvFont* font,
-    int font_face,
-    double hscale,
-    double vscale,
-    double shear CV_DEFAULT(0),
-    int thickness CV_DEFAULT(1),
-    int line_type CV_DEFAULT(8));
-  }
-procedure cvInitFont(
-  { } font: pCvFont;
-  { } font_face: Integer;
-  { } hscale: Double;
-  { } vscale: Double;
-  { } shear: Double = 0;
-  { } thickness: Integer = 1;
-  { } line_type: Integer = 8); cdecl;
+{ Initializes font structure used further in cvPutText
+  CVAPI(void) cvInitFont(CvFont* font, int font_face,
+    double hscale, double vscale, double shear CV_DEFAULT(0),
+    int thickness CV_DEFAULT(1), int line_type CV_DEFAULT(8));
+}
+procedure cvInitFont(font: pCvFont; font_face: Integer; hscale: double;
+                      vscale: double; shear: double = 0; thickness: Integer = 1;
+                      line_type: Integer = 8); cdecl;
 
-//
-// CV_INLINE CvFont CvFont(Double scale, Integer thickness CV_DEFAULT(1))begin CvFont font;
-// cvInitFont(and font, CV_FONT_HERSHEY_PLAIN, scale, scale, 0, thickness, CV_AA): Double;
-// result := font; end;
-//
-// (* Renders text stroke with specified font and color at specified location.
-// CvFont should be initialized with cvInitFont *)
-// procedure cvPutText(var img: CvArr; text: PCVChar; org: CvPoint; var font: vFont; color: CvScalar);
-{
-  CVAPI(void)  cvPutText( CvArr* img, const char* text, CvPoint org,
+{ CVAPI(void)  cvPutText( pCvArr* img, const char* text, CvPoint org,
   const CvFont* font, CvScalar color );
 }
-procedure cvPutText(img: pIplImage; const text: pCVChar; org: TCvPoint; const font: pCvFont; color: TCvScalar); cdecl;
+procedure cvPutText(img: pCvArr; const text: pCVChar; org: TCvPoint; const font: pCvFont; color: TCvScalar); cdecl;
 
-//
-// (* Calculates bounding box of text stroke (useful for alignment) *)
-// procedure cvGetTextSize(text_string: PCVChar; var font: CvFont; var text_size: CvSize;
-// var baseline: Integer);
-//
-// (* Unpacks color value, if arrtype is CV_8UC?, <color> is treated as
-// packed color value, otherwise the first channels (depending on arrtype)
-// of destination scalar are set to the same value = <color> *)
-// CVAPI(CvScalar)cvColorToScalar(Double packed_color, Integer arrtype);
-//
-// (* Returns the polygon points which make up the given ellipse.  The ellipse is define by
-// the box of size 'axes' rotated 'angle' around the 'center'.  A partial sweep
-// of the ellipse arc can be done by spcifying arc_start and arc_end to be something
-// other than 0 and 360, respectively.  The input cArray 'pts' must be large enough to
-// hold the cResult.  The total number of points stored into 'pts' is returned by this
-// cFunction. *)
-// CVAPI(Integer)cvEllipse2Poly(CvPoint center, CvSize axes, Integer angle, Integer arc_start,
-// Integer arc_end, CvPoint * pts, Integer delta);
-//
-
-{ /* Draws contour outlines or filled interiors on the image */
-  CVAPI(void)  cvDrawContours(
-  CvArr *img,
-  CvSeq* contour,
-  CvScalar external_color,
-  CvScalar hole_color,
-  int max_level,
-  int thickness CV_DEFAULT(1),
-  int line_type CV_DEFAULT(8),
-  CvPoint offset CV_DEFAULT(cvPoint(0,0)));
+{ Draws contour outlines or filled interiors on the image
+CVAPI(void)  cvDrawContours( pCvArr *img, CvSeq* contour,
+                             CvScalar external_color, CvScalar hole_color,
+                             int max_level, int thickness CV_DEFAULT(1),
+                             int line_type CV_DEFAULT(8),
+                             CvPoint offset CV_DEFAULT(cvPoint(0,0)));
 }
-procedure cvDrawContours(
-  { } img: pIplImage;
-  { } contour: pCvSeq;
-  { } external_color: TCvScalar;
-  { } hole_color: TCvScalar;
-  { } max_level: Integer;
-  { } thickness: Integer { =1 };
-  { } line_type: Integer { =8 };
-  { } offset: TCvPoint { =cvPoint(0,0) } ); cdecl;
+procedure cvDrawContours(img: PIplImage; contour: pCvSeq;
+                          external_color,hole_color: TCvScalar;
+                          max_level,thickness,line_type: integer;
+                          offset: TCvPoint); cdecl;
 
+// ****************************************************************************************
+// *                                    Data Persistence                                  *
+// ****************************************************************************************
+// ********************************* High-level functions *********************************
 
-// (* Does look-up transformation. Elements of the source array
-// (that should be 8uC1 or 8sC1) are used as indexes in lutarr 256-element table *)
-// procedure cvLUT(var src: CvArr; var dst: CvArr; var lut: CvArr);
-//
-// (* ****************** Iteration through the sequence tree **************** *)
-// type
-//
-// = record node: Pointer; level: Integer; max_level: Integer; end; CvTreeNodeIterator;
-//
-// procedure cvInitTreeNodeIterator(var tree_iterator: CvTreeNodeIterator; first: ointer;
-// max_level: Integer);
-// procedure cvNextTreeNode(var tree_iterator: CvTreeNodeIterator);
-// procedure cvPrevTreeNode(var tree_iterator: CvTreeNodeIterator);
-//
-// (* Inserts sequence into tree with specified "parent" sequence.
-// If parent is equal to frame (e.g. the most external contour),
-// then added contour will have null cPointer to parent. *)
-// procedure cvInsertNodeIntoTree(node: Pointer; parent: Pointer; frame: Pointer);
-//
-// (* Removes contour from tree (together with the contour children). *)
-// procedure cvRemoveNodeFromTree(node: Pointer; frame: Pointer);
-//
-// (* Gathers pointers to all the sequences,
-// accessible from the <first>, to the single sequence *)
-// CVAPI(CvSeq)cvTreeToNodeSeq(Pointer first, Integer header_size, CvMemStorage * storage);
-//
-// (* The function implements the K-means algorithm for clustering an array of sample
-// vectors in a specified number of classes *)
-// const CV_KMEANS_USE_INITIAL_LABELS = 1;
-// {$EXTERNALSYM CV_KMEANS_USE_INITIAL_LABELS}
-// CVAPI(Integer)cvKMeans2(CvArr * samples, Integer cluster_count, CvArr * labels,
-// CvTermCriteria termcrit,
-// function attempts CV_DEFAULT(v1: 0); flags CV_DEFAULT(0): Integer; _centers CV_DEFAULT(0):
-// function; var compactness CV_DEFAULT(0): Double): Integer;
-//
-// (* ***************************************************************************************\
-// *                                    System functions                                    *
-// *************************************************************************************** *)
-//
-// (* Add the function pointers table with associated information to the IPP primitives list *)
-// CVAPI(Integer)cvRegisterModule(CvModuleInfo * module_info): CvArr;
-//
-// (* Loads optimized functions from IPP, MKL etc. or switches back to pure C code *)
-// CVAPI(Integer)cvUseOptimized(Integer on_off): CvRNG;
-//
-// (* Retrieves information about the registered modules and loaded optimized plugins *)
-// procedure cvGetModuleInfo(module_name: PCVChar; var version: Char; var loaded_addon_plugins: Char);
-//
-// type * CvAllocFunc =
-// function(size: size_t; userdata: Pointer): Pointer; CV_CDECL; type * CvFreeFunc =
-// function(var CvFreetype
-// procedure * pptr: CV_CDECL; userdata: Pointer): Integer; CV_CDECL; =
-// procedure (* Set user-defined memory managment functions (substitutors for malloc and free) that
-// will be called by cvAlloc, cvFree and higher-level functions (e.g. cvCreateImage) *)
-// procedure cvSetMemoryManager(v1: 0); free_func CV_DEFAULT(0): CvFreeFunc;
-// var (CV_STDCALL * Cv_iplCreateImageHeader)(Integer:
-// function userdata CV_DEFAULT(v1: 0)): Pointer; type IplImage; v4: nteger; v5: nteger; teger: Char;
-// v7: nteger; v8: nteger; * : IplROI; * : plImage; plTileInfo: ointer);
-// type CV_STDCALL * Cv_iplAllocateImageData =
-// procedure (* : IplImage; v2: nteger; v3: nteger);
-// type CV_STDCALL* Cv_iplDeallocate = procedure(*: IplImage; v2: nteger);
-// type IplROI* (CV_STDCALL* Cv_iplCreateROI(Integer,Integer,Integer,Integer,Integer);
-// type IplImage* (CV_STDCALL* Cv_iplCloneImage( IplImage);
-//
-// (* Makes OpenCV use IPL functions for IplImage allocation/deallocation *)
-// procedure cvSetIPLAllocators(create_header: Cv_iplCreateImageHeader;
-// allocate_data: Cv_iplAllocateImageData; deallocate: Cv_iplDeallocate; create_roi: Cv_iplCreateROI;
-// clone_image: Cv_iplCloneImage);
-//
-/// / >> Following declaration is a macro definition!
-// const CV_TURN_ON_IPL_COMPATIBILITY()cvSetIPLAllocators(iplCreateImageHeader, iplAllocateImage,
-// iplDeallocate, iplCreateROI, iplCloneImage);
-//
-// (* ***************************************************************************************\
-// *                                    Data Persistence                                    *
-// *************************************************************************************** *)
-//
-// (* ********************************* High-level functions ******************************* *)
-
-{
-  /* opens existing or creates new file storage */
+{ opens existing or creates new file storage
   CVAPI(CvFileStorage*)  cvOpenFileStorage( const char* filename, CvMemStorage* memstorage,
   int flags, const char* encoding CV_DEFAULT(NULL) );
 }
 function cvOpenFileStorage(const filename: pCVChar; memstorage: pCvMemStorage; flags: Integer;
   const encoding: pCVChar = nil): pCvFileStorage; cdecl;
-{
-  /* closes file storage and deallocates buffers */
+
+{ closes file storage and deallocates buffers
   CVAPI(void) cvReleaseFileStorage( CvFileStorage** fs );
 }
 procedure cvReleaseFileStorage(Var fs: pCvFileStorage); cdecl;
 
-// (* starts writing compound structure (map or sequence) *)
-// procedure cvStartWriteStruct(var finishes writing compound structure * )
-// procedure cvEndWriteStruct(CvFileStorage * fs): PCVChar; (* writes an integer *)
-// procedure cvWriteInt(CvFileStorage * fs: v1: CvAttrList())): Integer; (; name: PCVChar;
-// value: Integer);
-//
-// (* writes a floating-point number *)
-// procedure cvWriteReal(var fs: CvFileStorage; name: PCVChar; value: Double);
-//
-// (* writes a string *)
-// procedure cvWriteString(var writes A comment * )
-// procedure cvWriteComment(CvFileStorage * fs: v1: 0)): Integer; (; comment: PCVChar;
-// var writes instance of A standard type (Matrix: Integer eol_comment): PCVChar; (; v4: image;
-// v5: sequence; var)
-
-// * writes instance of a standard type (matrix, image, sequence, graph etc.)
-// or user-defined type */
-// CVAPI(void) cvWrite( CvFileStorage* fs, const char* name, const void* ptr,
-// CvAttrList attributes CV_DEFAULT(cvAttrList()));
-procedure cvWrite(fs: pCvFileStorage; const name: pCVChar; const ptr: Pointer;
-  attributes: TCvAttrList { = cvAttrList() } ); cdecl;
-
-// (* starts the next stream *)
-// procedure cvStartNextStream(var fs: CvFileStorage);
-//
-// (* helper function: writes multiple integer or floating-point numbers *)
-// procedure cvWriteRawData(var fs: CvFileStorage; var src: void; len: nteger; dt: PCVChar);
-//
-// (* returns the hash entry corresponding to the specified literal key string or 0
-// if there is no such a key in the storage *)
-// CVAPI(CvStringHashNode)cvGetHashedKey(CvFileStorage * fs, PCVChar name,
-// function len CV_DEFAULT(v1: 0)): Integer;
-//
-// (* returns file node with the specified key within the specified map
-// (collection of named nodes) *)
-// CVAPI(CvFileNode)cvGetRootFileNode(CvFileStorage * fs,
-// function stream_index CV_DEFAULT(v1: 0)): Integer;
-//
-// (* returns file node with the specified key within the specified map
-// (collection of named nodes) *)
-// CVAPI(CvFileNode)cvGetFileNode(CvFileStorage * fs, CvFileNode * map, CvStringHashNode * key,
-// function create_missing CV_DEFAULT(v1: 0)): Integer;
-//
-{
-  /* this is a slower version of cvGetFileNode that takes the key as a literal string */
+{ this is a slower version of cvGetFileNode that takes the key as a literal string
   CVAPI(CvFileNode*) cvGetFileNodeByName( const CvFileStorage* fs,
-  const CvFileNode* map,
-  const char* name );
+  const CvFileNode* map, const char* name );
 }
 function cvGetFileNodeByName(const fs: pCvFileStorage; const map: pCvFileNode; const name: pCVChar): pCvFileNode; cdecl;
 
-(*
-  CV_INLINE int cvReadInt( const CvFileNode* node, int default_value CV_DEFAULT(0) )
-  {
+{ CV_INLINE int cvReadInt( const CvFileNode* node, int default_value CV_DEFAULT(0) )
   return !node ? default_value :
   CV_NODE_IS_INT(node->tag) ? node->data.i :
   CV_NODE_IS_REAL(node->tag) ? cvRound(node->data.f) : 0x7fffffff;
-  }
-*)
+}
 function cvReadInt(const node: pCvFileNode; default_value: Integer = 0): Integer; inline;
 
-(*
-  CV_INLINE int cvReadIntByName( const CvFileStorage* fs, const CvFileNode* map,
+{ CV_INLINE int cvReadIntByName( const CvFileStorage* fs, const CvFileNode* map,
   const char* name, int default_value CV_DEFAULT(0) )
   {
   return cvReadInt( cvGetFileNodeByName( fs, map, name ), default_value );
-  }
-*)
+}
 function cvReadIntByName(const fs: pCvFileStorage; const map: pCvFileNode; const name: pCVChar;
   default_value: Integer = 0): Integer; inline;
 
-
-// CV_INLINE
-// function cvReadReal(var fs: 0. ))begin result := not node ? default_value: CV_NODE_IS_INT(node^.tag)
-// ?(Double)node^.data.i: CV_NODE_IS_REAL(node^.tag)? node^.data.f: 1E300; end;
-// CV_INLINE Double cvReadRealByName(CvFileStorage; var map: CvFileNode; name: Char;
-// default_value CV_DEFAULT(0. ))begin result := cvReadReal(cvGetFileNodeByName(fs: Double; v5: map;
-// ): name; v7: default_value): Double; end;
-//
-// CV_INLINE PCVChar cvReadString(CvFileNode * node, PCVChar default_value CV_DEFAULT(0))begin result :=
-// not node ? default_value: CV_NODE_IS_STRING(node^.tag)? node^.data.str.ptr: 0; end;
-//
-// CV_INLINE PCVChar cvReadStringByName(CvFileStorage * fs, CvFileNode * map,
-// const PCVChar = default_value CV_DEFAULT(0(): PCVChar;
-// {$EXTERNALSYM PCVChar}
-// begin result := cvReadString(cvGetFileNodeByName(fs, map, name), default_value); end;
-//
-
-{
-  /* decodes standard or user-defined object and returns it */
+{ decodes standard or user-defined object and returns it
   CVAPI(void*) cvRead( CvFileStorage* fs, CvFileNode* node,
   CvAttrList* attributes CV_DEFAULT(NULL));
 }
 function cvRead(fs: pCvFileStorage; node: pCvFileNode; attributes: pCvAttrList = nil): pPointer; cdecl;
 
-//
-// (* decodes standard or user-defined object and returns it *)
-// CV_INLINE
-// function cvReadByName()begin result := cvRead(fs: 0); fs: cvGetFileNodeByName(; v3: map;): name;
-// v5: attributes): PCVChar; end;
-//
-// (* starts reading data from sequence or scalar numeric node *)
-// procedure cvStartReadRawData(v1: var reads multiple numbers and stores them to array * )
-// procedure cvReadRawDataSlice(CvFileStorage * fs; var reader: CvSeqReader; count: nteger;
-// dst: Pointer; dt: PCVChar);
-//
-// (* combination of two previous functions for easier reading of whole sequences *)
-// procedure cvReadRawData(var fs: CvFileStorage; var src: CvFileNode; dst: ointer; dt: PCVChar);
-//
-// (* writes a copy of file node to file storage *)
-// procedure cvWriteFileNode(var fs: CvFileStorage; new_node_name: PCVChar; var node: vFileNode;
-// embed: Integer);
-//
-// (* returns name of file node *)
-// CVAPI(Char)cvGetFileNodeName(CvFileNode * node);
-//
-// (* ********************************** Adding own types ********************************** *)
-//
-// procedure cvRegisterType(var info: CvTypeInfo); CVAPI({$EXTERNALSYM }
-// procedure)cvUnregisterType(type_name: PCVChar); CVAPI(CvTypeInfo)cvFirstType(
-// procedure); CVAPI(type_name: PCVChar);
-// CVAPI(CvTypeInfo)cvTypeOf(Pointer type cvTypeOf(Pointer struct_ptr) = record end:;
+//*********************************** Adding own types ***********************************/
 
 // * universal functions */
 // CVAPI(void) cvRelease( void** struct_ptr );
-procedure cvRelease(Var struct_ptr: Pointer); cdecl; overload;
-procedure cvRelease(Var struct_ptr: pCvSeq); cdecl; overload;
+procedure cvRelease(var struct_ptr: Pointer); cdecl; overload;
+procedure cvRelease(var struct_ptr: pCvSeq); cdecl; overload;
 
-{
-  /* simple API for reading/writing data */
+{ simple API for reading/writing data
   CVAPI(void) cvSave( const char* filename,
   const void* struct_ptr,
   const char* name CV_DEFAULT(NULL),
@@ -1931,6 +1059,13 @@ procedure cvSave(const filename: pCVChar; const struct_ptr: Pointer; const name:
 function cvLoad(const filename: pCVChar; memstorage: pCvMemStorage = Nil; const name: pCVChar = nil;
   const real_name: ppChar = nil): Pointer; cdecl;
 
+//*********************************** Measuring Execution Time ***************************/
+
+{ helper functions for RNG initialization and accurate time measurement:
+  uses internal clock counter on x86 }
+function cvGetTickCount: int64; inline;
+function cvGetTickFrequency: Double;
+
 // *********************************** CPU capabilities ***********************************/
 // CVAPI(int) cvCheckHardwareSupport(int feature);
 function cvCheckHardwareSupport(feature: Integer): Integer; cdecl;
@@ -1944,10 +1079,7 @@ function cvGetNumThreads: Integer; cdecl;
 procedure cvSetNumThreads(threads: Integer = 0); cdecl;
 // * get index of the thread being executed */
 // CVAPI(int)  cvGetThreadNum( void );
-function cvGetThreadNum: Integer; cdecl;
-
-function cvGetTickCount: int64; inline;
-function cvGetTickFrequency: Double;
+function cvGetThreadNum: Integer; cdecl; 
 
 const
   CV_CPU_NONE = 0;
@@ -1962,185 +1094,236 @@ const
   CV_CPU_AVX = 10;
   CV_HARDWARE_MAX_FEATURE = 255;
 
-  // procedure cvSetNumThreads(v1: 0)); cvGetThreadNum(): CVAPI(Integer);
-  // cvGetErrStatus(): CVAPI(Integer);
-  // procedure cvSetErrStatus(status: Integer); CV_ErrModeLeaf = 0: const;
-  // (* Print error and exit program *)
-  // CV_ErrModeParent = 1: const; (* Print error and continue *)
-  // CV_ErrModeSilent = 2: const; (* Don't print and continue */
-  // cvGetErrMode(  ): CVAPI(Integer);
-  // cvSetErrMode( Integer mode ): CVAPI(Integer);
-  // PCVChar = file_name, Integer line ): const;;
-  // char) cvErrorStr( Integer status ): CVAPI(;
-  // filename, Integer* line ): ^PCVChar;
-  // cvErrorFromIppStatus( Integer ipp_status ): CVAPI(Integer);
-  // PCVChar = file_name, Integer line, Pointer  userdata ): const;;
-  // prev_userdata CV_DEFAULT(0) ): ^Pointer;
-  // = ): const;
-  // file_name, Integer line, Pointer  userdata ): PCVChar;
-  // file_name, Integer line, Pointer  userdata ): PCVChar;
-  // file_name, Integer line, Pointer  userdata ): PCVChar;
-  // OPENCV_ERROR(CV_StsBackTrace,(func),(context)): begin;
-  // end; end;
-  //
-  // {$define OPENCV_ASSERT(expr,func,context)}
-  // begin if ( not  (expr)) then
-  // begin OPENCV_ERROR(CV_StsInternal,(func),(context)); end; end;
-  //
-  // {$define OPENCV_RSTERR((cvSetErrStatus(CV_StsOk))}
-  //
-  // // >> Following declaration is a macro definition!
-  // const OPENCV_CALL( Func );
-  // begin
-  // Func;
-  // end;
-  //
-  //
-  // (* CV_FUNCNAME macro defines icvFuncName constant which is used by CV_ERROR macro *)
-  // {$IFDEF CV_NO_FUNC_NAMES}
-  /// / >> Following declaration is a macro definition!
-  // const CV_FUNCNAME(Name); const cvFuncName = '';
-  // {$EXTERNALSYM cvFuncName}
-  // {$ELSE}
-  /// / >> Following declaration is a macro definition!
-  // const CV_FUNCNAME(Name); Char cvFuncName[] = Name
-  // {$ENDIF}
-  // (*
-  // CV_ERROR macro unconditionally raises error with passed code and message.
-  // After raising error, control will be transferred to the exit cLabel.
-  // *)
-  /// / >> Following declaration is a macro definition!
-  // const CV_ERROR(Code, Msg); begin cvError((Code), cvFuncName, Msg, __FILE__, __LINE__);
-  // __CV_EXIT__; end;
-  //
-  // (* Simplified form of CV_ERROR *)
-  /// / >> Following declaration is a macro definition!
-  // const CV_ERROR_FROM_CODE(Code)CV_ERROR(Code, '');
-  //
-  // (*
-  // CV_CHECK macro checks error status after CV (or IPL)
-  // cFunction call. If error detected, control will be transferred to the exit
-  // cLabel.
-  // *)
-  // {$DEFINE CV_CHECK()}
-  // begin if (cvGetErrStatus() < 0)CV_ERROR(CV_StsBackTrace, 'Inner function failed.') then; end;
-  //
-  // (*
-  // CV_CALL macro calls CV (or IPL) cFunction, checks error status and
-  // signals a error if the cFunction failed. Useful in 'parent node'
-  // error procesing mode
-  // *)
-  /// / >> Following declaration is a macro definition!
-  // const CV_CALL(func); begin func; CV_CHECK(); end;
-  //
-  // (* Runtime assertion macro *)
-  /// / >> Following declaration is a macro definition!
-  // const CV_ASSERT(Condition); begin if (not(Condition))CV_ERROR(CV_StsInternal,
-  // 'Assertion: ' # Condition ' failed') then; end;
-  //
-  // const __CV_BEGIN__ = begin;
-  // {$EXTERNALSYM __CV_BEGIN__}
-  // const __CV_END__ = goto exit; exit:; end;;
-  // {$EXTERNALSYM __CV_END__}
-  // const __CV_EXIT__ = goto exit;
-  // {$EXTERNALSYM __CV_EXIT__}
-  // {$IFDEF __cplusplus}
-  // end;
-  //
-  /// / classes for automatic module/RTTI data registration/unregistration
-  // CV_EXPORTS CvModule begin CvModule(CvModuleInfo * _info); ~ CvModule(); CvModuleInfo * info;
-  //
-  // CvModuleInfo * first; CvModuleInfo * last;);
-  //
-  // CV_EXPORTS CvType begin CvType(PCVChar type_name, CvIsInstanceFunc is_instance,
-  // CvReleaseFunc release = 0, CvReadFunc read := 0, CvWriteFunc write = 0, CvCloneFunc clone = 0);
-  // ~ CvType(); CvTypeInfo * info;
-  //
-  // CvTypeInfo * first; CvTypeInfo * last;);
-  //
-  // {$ENDIF}
-  // {$ENDIF}
 implementation
 
-uses
-  uLibName;
+uses ulibname;
 
-function cvAlloc(size: size_t): Pointer; external Core_Dll; cdecl;
-procedure cvFree_(ptr: Pointer); external Core_Dll; cdecl;
-function cvCreateImageHeader; external Core_Dll; cdecl;
-function cvCreateImage; external Core_Dll; cdecl;
-procedure cvReleaseImageHeader; external Core_Dll; cdecl;
-procedure cvReleaseImage; external Core_Dll; cdecl;
-function cvCloneImage; external Core_Dll; cdecl;
-procedure cvSetImageCOI; external Core_Dll; cdecl;
-function cvGetImageCOI; external Core_Dll; cdecl;
-procedure cvSetImageROI; external Core_Dll; cdecl;
-procedure cvResetImageROI; external Core_Dll; cdecl;
-function cvGetImageROI; external Core_Dll; cdecl;
-function cvCreateMatHeader; external Core_Dll; cdecl;
+function cvCreateImageHeader; external Core_Dll;
+function cvInitImageHeader; external Core_Dll;
+function cvCreateImage; external Core_Dll;
+procedure cvReleaseImageHeader; external Core_Dll;
+procedure cvReleaseImage; external Core_Dll;
+function cvCloneImage; external Core_Dll;
+procedure cvSetImageCOI; external Core_Dll;
+function cvGetImageCOI; external Core_Dll;
+procedure cvSetImageROI; external Core_Dll;
+procedure cvResetImageROI; external Core_Dll;
+function cvGetImageROI; external Core_Dll;
+function cvCreateMatHeader; external Core_Dll;
+function cvInitMatHeader; external Core_Dll;
+function cvCreateMat; external Core_Dll;
+procedure cvReleaseMat; external Core_Dll;
+function cvCloneMat; external Core_Dll;
+function cvGetSubRect; external Core_Dll;
+procedure cvGetSubArr; external Core_Dll name 'cvGetSubRect';
+
+function cvGetRow(const arr: pCvArr; submat: pCvMat; row: integer): pCvMat;
+begin
+  Result := cvGetRows(arr, submat, row, row+1, 1);
+end;
+
+function cvGetCols; external Core_Dll;
+
+function cvGetCol(const arr: pCvArr; submat: pCvMat; col: integer): pCvMat;
+begin
+  Result := cvGetCols(arr, submat, col, col+1);
+end;
+
+function cvGetDiag; external Core_Dll;
+procedure cvScalarToRawData; external Core_Dll;
+procedure cvRawDataToScalar; external Core_Dll;
+function cvCreateMatNDHeader; external Core_Dll;
+function cvCreateMatND; external Core_Dll;
+function cvInitMatNDHeader; external Core_Dll;
+
+procedure cvReleaseMatND(var mat: pCvMatND); inline;
+begin
+  cvReleaseMat(pCvMat(mat));
+end;
+
+function cvCloneMatND; external Core_Dll;
+function cvCreateSparseMat; external Core_Dll;
+procedure cvReleaseSparseMat; external Core_Dll;
+function cvCloneSparseMat; external Core_Dll;
+function cvInitSparseMatIterator; external Core_Dll;
+
+// returns next sparse array node (or NULL if there is no more nodes)
+//CV_INLINE CvSparseNode* cvGetNextSparseNode( CvSparseMatIterator* mat_iterator )
+//{
+//    if( mat_iterator->node->next )
+//        return mat_iterator->node = mat_iterator->node->next;
+//    else
+//    {
+//        int idx;
+//        for( idx = ++mat_iterator->curidx; idx < mat_iterator->mat->hashsize; idx++ )
+//        {
+//            CvSparseNode* node = (CvSparseNode*)mat_iterator->mat->hashtable[idx];
+//            if( node )
+//            {
+//                mat_iterator->curidx = idx;
+//                return mat_iterator->node = node;
+//            }
+//        }
+//        return NULL;
+//    }
+//}
+function cvGetNextSparseNode(mat_iterator: pCvSparseMatIterator): pCvSparseNode;
+var
+  idx: integer;
+  node: pCvSparseNode;
+begin
+  if Assigned(mat_iterator.node.next) then
+  begin
+    mat_iterator.node := mat_iterator.node.next;
+    result := mat_iterator.node;
+  end
+  else
+  begin
+    Inc(mat_iterator.curidx);
+    for idx := mat_iterator.curidx to mat_iterator.mat.hashsize-1 do
+    begin
+      node := mat_iterator.mat.hashtable[idx];
+      if Assigned(node) then
+      begin
+        mat_iterator.curidx := idx;
+        mat_iterator.node := node;
+        result := mat_iterator.node;
+        exit;
+      end;
+    end;
+    result := nil;
+  end;
+end;
+
+function cvInitNArrayIterator; external Core_Dll;
+function cvNextNArraySlice; external Core_Dll;
+function cvGetElemType; external Core_Dll;
+function cvGetDims; external Core_Dll;
+function cvGetDimSize; external Core_Dll;
+function cvPtr1D; external Core_Dll;
+function cvPtr2D; external Core_Dll;
+function cvPtr3D; external Core_Dll;
+function cvPtrND; external Core_Dll;
+function cvGet1D; external Core_Dll;
+function cvGet2D; external Core_Dll;
+function cvGet3D; external Core_Dll;
+function cvGetND; external Core_Dll;
+function cvGetReal1D; external Core_Dll;
+function cvGetReal2D; external Core_Dll;
+function cvGetReal3D; external Core_Dll;
+function cvGetRealND; external Core_Dll;
+procedure cvSet1D; external Core_Dll;
+procedure cvSet2D; external Core_Dll;
+procedure cvSet3D; external Core_Dll;
+procedure cvSetND; external Core_Dll;
+procedure cvSetReal1D; external Core_Dll;
+procedure cvSetReal2D; external Core_Dll;
+procedure cvSetReal3D; external Core_Dll;
+procedure cvSetRealND; external Core_Dll;
+procedure cvClearND; external Core_Dll;
+function cvGetMat; external Core_Dll;
+function cvGetImage; external Core_Dll;
+function cvReshapeMatND; external Core_Dll;
+
+function cvReshapeND(const arr: pCvArr; sizeof_header: integer; header: pCvArr;
+                        new_cn, new_dims: integer; new_sizes: pInteger): pCvArr; inline;
+begin
+  Result := cvReshapeMatND(arr, sizeof(sizeof_header), header, new_cn, new_dims, new_sizes);
+end;
+
+function cvReshape; external Core_Dll;
+procedure cvRepeat; external Core_Dll;
+procedure cvCreateData; external Core_Dll;
+procedure cvReleaseData; external Core_Dll;
+procedure cvSetData; external Core_Dll;
+procedure cvGetRawData; external Core_Dll;
 
 function cvGetSize(const arr: pCvArr): TCvSize; assembler;
 asm
   // mov eax,arr - в eax уже хранится адрес arr
-  push edx // в edx адрес переменной Result - сохраняем, т.к. _cvGetSize возвращает результат в eax:edx
+  push edx      // в edx адрес переменной Result - сохраняем, т.к. _cvGetSize возвращает результат в eax:edx
   push eax
   call _cvGetSize
-  pop ecx  // чистим стек
-  mov ecx,edx // сохраняем младшую часть результата _cvGetSize
-  pop edx // восстанавливаем Result
+  pop ecx       // чистим стек
+  mov ecx,edx   // сохраняем младшую часть результата _cvGetSize
+  pop edx       // восстанавливаем Result
   mov Result.width,eax
   mov Result.height,ecx
 end;
 
-// function cvGetSize(const arr: pIplImage): TCvSize;
-// begin
-// Result := cvGetSize(pCvArr(arr));
-// end;
-
 procedure _cvGetSize(const arr: pCvArr; var size: TCvSize); external Core_Dll name 'cvGetSize';
-// function _cvGetSize; external Core_Dll name 'cvGetSize';
+procedure cvCopy; external Core_Dll;
+procedure cvSet(arr: pCvArr; value: TCvScalar; const mask: pCvArr = Nil); external Core_Dll;
 
-// function _cvGetSize(const image: pIplImage): TCvSize;
-// begin
-// if assigned(image^.roi) then
-// begin
-// Result.width := image^.roi^.width;
-// Result.height := image^.roi^.height;
-// end
-// else
-// begin
-// Result.width := image^.width;
-// Result.height := image^.height;
-// end;
-// end;
+procedure cvSet(mat: pCvMat; i, j: Integer; val: Single); inline;
+var
+  type_: Integer;
+  ptr: PUCHAR;
+  pf: PSingle;
+begin
+  type_ := CV_MAT_TYPE(mat._type);
+  assert((i < mat^.rows) and (j < mat^.cols) and (type_ = CV_32FC1));
+  ptr := mat^.data;
+  inc(ptr, mat.step * i + sizeOf(Single) * j);
+  pf := PSingle(ptr);
+  pf^ := val;
+end;
+
+procedure cvSetZero; external Core_Dll;
+procedure cvZero; external Core_Dll name 'cvSetZero';
+procedure cvSplit; external Core_Dll;
+procedure cvMerge; external Core_Dll;
+procedure cvMixChannels; external Core_Dll;
+procedure cvConvertScale; external Core_Dll;
+
+procedure cvConvert(const src: pCvArr; dst: pCvArr); inline;
+begin
+  cvConvertScale(src, dst, 1, 0);
+end;
+
+procedure cvScale; external Core_Dll name 'cvConvertScale';
+procedure cvCvtScale; external Core_Dll name 'cvConvertScale';
+procedure cvConvertScaleAbs; external Core_Dll;
+procedure cvCvtScaleAbs; external Core_Dll name 'cvConvertScaleAbs';
+function cvCheckTermCriteria; external Core_Dll;
+procedure cvAdd; external Core_Dll;
+procedure cvAddS; external Core_Dll;
+procedure cvSub; external Core_Dll;
+
+procedure cvSubS(const src: pIplImage; value: TCvScalar; dst: pIplImage; const mask: pIplImage);
+begin
+  cvAddS(src, CvScalar(-value.val[0], -value.val[1], -value.val[2], -value.val[3]), dst, mask);
+end;
+
+procedure cvSubRS; external Core_Dll;
+procedure cvMul; external Core_Dll;
+procedure cvDiv; external Core_Dll;
+procedure cvScaleAdd; external Core_Dll;
+
+//define cvAXPY( A, real_scalar, B, C ) cvScaleAdd(A, cvRealScalar(real_scalar), B, C)
+procedure cvAXPY(A: pIplImage; real_scalar: double; B,C: pIplImage); inline;
+begin
+  cvScaleAdd(A, cvRealScalar(real_scalar), B, C);
+end;
+
+procedure cvAddWeighted; external Core_Dll;
+function cvDotProduct; external Core_Dll;
+
+
+procedure cvAlloc(size: size_t); external Core_Dll;
+procedure cvFree_(ptr: Pointer); external Core_Dll;
 
 procedure cvInitFont; external Core_Dll;
 procedure cvPutText; external Core_Dll;
 
 procedure cvCircle; external Core_Dll;
-// procedure cvCircle(img: pIplImage; center: TCvPoint; radius: Integer; color: TCvScalar; thickness: Integer = 1;
-// line_type: Integer = 8; shift: Integer = 0); external Core_Dll name 'cvCircle';
-// procedure cvCircle(img: pCvMat; center: TCvPoint; radius: Integer; color: TCvScalar; thickness: Integer = 1;
-// line_type: Integer = 8; shift: Integer = 0); external Core_Dll name 'cvCircle';
-
 procedure cvLine; external Core_Dll;
-// procedure cvLine(img: pIplImage; pt1, pt2: TCvPoint; color: TCvScalar; thickness: Integer = 1; line_type: Integer = 8;
-// shift: Integer = 0); external Core_Dll name 'cvLine';
-// procedure cvLine(img: pCvMat; pt1, pt2: TCvPoint; color: TCvScalar; thickness: Integer = 1; line_type: Integer = 8;
-// shift: Integer = 0); external Core_Dll name 'cvLine';
 
-procedure cvAddS; external Core_Dll;
-procedure cvCopy; external Core_Dll;
 procedure cvCopyImage; external Core_Dll name 'cvCopy';
 
-procedure cvSetZero; external Core_Dll;
-procedure cvZero; external Core_Dll name 'cvSetZero';
-// procedure cvZero(arr: pIplImage); cdecl; overload; external Core_Dll name 'cvSetZero';
-// procedure cvZero(arr: pCvMat); cdecl; overload; external Core_Dll name 'cvSetZero';
-
-function CV_RGB;
+function CV_RGB(const r, g, B: double): TCvScalar; inline;
 begin
-  Result := CvScalar(b, g, r, 0);
+  Result := CvScalar(B, g, r, 0);
 end;
 
 procedure cvSave(const filename: pCVChar; const struct_ptr: Pointer; const name: pCVChar; const comment: pCVChar;
@@ -2154,40 +1337,94 @@ end;
 
 function cvLoad; external Core_Dll;
 
-procedure cvReleaseMat; external Core_Dll;
-
-procedure cvAddWeighted; external Core_Dll;
-
 procedure cvInRange; external Core_Dll;
 procedure cvInRangeS; external Core_Dll;
-procedure cvSplit; external Core_Dll;
-procedure cvMerge; external Core_Dll;
 procedure cvMinMaxLoc; external Core_Dll;
 procedure cvAnd; external Core_Dll;
 
 procedure cvCvtPixToPlane; external Core_Dll name 'cvSplit';
 procedure cvCvtPlaneToPix; external Core_Dll name 'cvMerge';
 
-procedure cvConvertScale; external Core_Dll;
-procedure cvCvtScale; external Core_Dll name 'cvConvertScale';
-procedure cvScale; external Core_Dll name 'cvConvertScale';
-
-procedure cvConvert;
-begin
-  cvConvertScale(src, dst, 1, 0);
-end;
-
-procedure cvSub; external Core_Dll;
-
-procedure cvSubS;
-begin
-  cvAddS(src, CvScalar(-value.val[0], -value.val[1], -value.val[2], -value.val[3]), dst, mask);
-end;
 
 function cvCreateMemStorage; external Core_Dll;
 function cvGetSeqElem; external Core_Dll;
 procedure cvReleaseMemStorage; external Core_Dll;
+procedure cvRectangle; external Core_Dll;
+function cvGetRows; external Core_Dll;
+procedure cvFlip; external Core_Dll;
+procedure cvMirror; external Core_Dll name 'cvFlip';
+procedure cvClearMemStorage; external Core_Dll;
 procedure cvDrawContours; external Core_Dll;
+function cvCreateChildMemStorage; external Core_Dll;
+procedure cvCvtSeqToArray; external Core_Dll;
+
+function cvOpenFileStorage; external Core_Dll;
+procedure cvReleaseFileStorage; external Core_Dll;
+
+function cvGetFileNodeByName; external Core_Dll;
+
+function cvReadInt;
+begin
+  // return !node ? default_value :
+  // CV_NODE_IS_INT(node->tag) ? node->data.i :
+  // CV_NODE_IS_REAL(node->tag) ? cvRound(node->data.f) : 0x7fffffff;
+  Result := iif(not Assigned(node), default_value, iif(CV_NODE_IS_INT(node^.tag), node^.i,
+    iif(CV_NODE_IS_REAL(node^.tag), node^.f, $7FFFFFFF)));
+end;
+
+function cvReadIntByName;
+begin
+  // return cvReadInt( cvGetFileNodeByName( fs, map, name ), default_value );
+  Result := cvReadInt(cvGetFileNodeByName(fs, map, name), default_value);
+end;
+
+function cvRead; external Core_Dll;
+procedure cvStartReadSeq; external Core_Dll;
+procedure cvChangeSeqBlock; external Core_Dll;
+procedure cvFillConvexPoly; external Core_Dll;
+procedure cvPolyLine; external Core_Dll;
+
+function cvCreateSeq; external Core_Dll;
+procedure cvCreateSeqBlock; external Core_Dll;
+function cvSeqPush; external Core_Dll;
+
+procedure cvEllipseBox;
+var
+  axes: TCvSize;
+begin
+  axes.width := cvRound(box.size.width * 0.5);
+  axes.height := cvRound(box.size.height * 0.5);
+  cvEllipse(img, cvPointFrom32f(box.center), axes, box.angle, 0, 360, color, thickness, line_type, shift);
+end;
+
+procedure cvXorS; external Core_Dll;
+procedure cvEllipse; external Core_Dll;
+
+procedure cvFree;
+begin
+  // #define cvFree(ptr) (cvFree_(*(ptr)), *(ptr)=0)
+  cvFree_(@ptr);
+  Pointer(ptr) := nil;
+end;
+
+function cvCountNonZero; external Core_Dll;
+
+function cvGet(const mat: pCvMat; i, j: Integer): Single; inline;
+var
+  type_: Integer;
+  ptr: PUCHAR;
+  pf: PSingle;
+begin
+  type_ := CV_MAT_TYPE(mat^._type);
+  assert((i < mat^.rows) and (j < mat^.cols) and (type_ = CV_32FC1));
+  ptr := mat^.data;
+  inc(ptr, mat.step * i + sizeOf(Single) * j);
+  pf := PSingle(ptr);
+  Result := pf^;
+end;
+
+procedure cvRelease(var struct_ptr: Pointer); external Core_Dll name 'cvRelease';
+procedure cvRelease(var struct_ptr: pCvSeq); external Core_Dll name 'cvRelease';
 
 function cvGetTickCount;
 begin
@@ -2207,133 +1444,17 @@ begin
   Result := GetTickFrequency() * 1E-6;
 end;
 
-procedure cvFlip; external Core_Dll;
-procedure cvMirror; external Core_Dll name 'cvFlip';
-procedure cvRectangle; external Core_Dll;
-function cvGetSubRect; external Core_Dll;
-procedure cvClearMemStorage; external Core_Dll;
-function cvCreateMat; external Core_Dll;
-function cvGet2D; external Core_Dll;
-function cvGetReal2D; external Core_Dll;
-function cvOpenFileStorage; external Core_Dll;
-procedure cvReleaseFileStorage; external Core_Dll;
-
-function cvReadInt;
-begin
-  // return !node ? default_value :
-  // CV_NODE_IS_INT(node->tag) ? node->data.i :
-  // CV_NODE_IS_REAL(node->tag) ? cvRound(node->data.f) : 0x7fffffff;
-  Result := iif(not Assigned(node), default_value, iif(CV_NODE_IS_INT(node^.tag), node^.i,
-    iif(CV_NODE_IS_REAL(node^.tag), node^.f, $7FFFFFFF)));
-end;
-
-function cvReadIntByName;
-begin
-  // return cvReadInt( cvGetFileNodeByName( fs, map, name ), default_value );
-  Result := cvReadInt(cvGetFileNodeByName(fs, map, name), default_value);
-end;
-
-function cvGetFileNodeByName; external Core_Dll;
-function cvRead; external Core_Dll;
-function cvCvtSeqToArray; external Core_Dll;
-function cvCreateSeq; external Core_Dll;
-procedure cvPolyLine; external Core_Dll;
-procedure cvStartReadSeq; external Core_Dll;
-// procedure cvStartReadSeq(const seq: pCvSeq; reader: pCvSeqReader; reverse: Integer = 0);
-// external Core_Dll name 'cvStartReadSeq';
-// procedure cvStartReadSeq(const seq: pCvSet; reader: pCvSeqReader; reverse: Integer = 0);
-// external Core_Dll name 'cvStartReadSeq';
-procedure cvChangeSeqBlock; external Core_Dll;
-procedure cvCreateSeqBlock; external Core_Dll;
-function cvSeqPush; external Core_Dll;
-function cvGetReal1D; external Core_Dll;
-
-procedure cvEllipseBox;
-Var
-  axes: TCvSize;
-begin
-  axes.width := cvRound(box.size.width * 0.5);
-  axes.height := cvRound(box.size.height * 0.5);
-  cvEllipse(img, cvPointFrom32f(box.center), axes, box.angle, 0, 360, color, thickness, line_type, shift);
-end;
-
-procedure cvXorS; external Core_Dll;
-procedure cvEllipse; external Core_Dll;
-
-procedure cvFree;
-begin
-  // #define cvFree(ptr) (cvFree_(*(ptr)), *(ptr)=0)
-  cvFree_(@ptr);
-  Pointer(ptr) := nil;
-end;
-
-function cvInitImageHeader; external Core_Dll;
-function cvInitMatHeader; external Core_Dll;
-function cvCountNonZero; external Core_Dll;
-procedure cvFillConvexPoly; external Core_Dll;
-function cvGet1D; external Core_Dll;
-procedure cvSetReal1D; external Core_Dll;
-procedure cvSetReal2D; external Core_Dll;
-procedure cvSetReal3D; external Core_Dll;
-procedure cvRelease(Var struct_ptr: Pointer); external Core_Dll name 'cvRelease';
-procedure cvRelease(Var struct_ptr: pCvSeq); external Core_Dll name 'cvRelease';
-procedure cvSetRealND; external Core_Dll;
-
-function cvGet(const mat: pCvMat; i, j: Integer): Single; inline;
-var
-  type_: Integer;
-  ptr: puchar;
-  pf: PSingle;
-begin
-  type_ := CV_MAT_TYPE(mat^._type);
-  assert((i < mat^.rows) and (j < mat^.cols) and (type_ = CV_32FC1));
-  ptr := mat^.data;
-  inc(ptr, mat.step * i + sizeOf(Single) * j);
-  pf := PSingle(ptr);
-  Result := pf^;
-end;
-
-procedure cvSet(arr: pCvArr; value: TCvScalar; const mask: pCvArr = Nil); external Core_Dll;
-
-procedure cvSet(mat: pCvMat; i, j: Integer; val: Single); inline;
-var
-  type_: Integer;
-  ptr: puchar;
-  pf: PSingle;
-begin
-  type_ := CV_MAT_TYPE(mat._type);
-  assert((i < mat^.rows) and (j < mat^.cols) and (type_ = CV_32FC1));
-  ptr := mat^.data;
-  inc(ptr, mat.step * i + sizeOf(Single) * j);
-  pf := PSingle(ptr);
-  pf^ := val;
-end;
-
-function cvCloneMat; external Core_Dll;
 function cvCheckHardwareSupport; external Core_Dll;
 function cvGetNumThreads; external Core_Dll;
 procedure cvSetNumThreads; external Core_Dll;
-function cvGetThreadNum; external Core_Dll;
-procedure cvGEMM; external Core_Dll;
-
-procedure cvMatMulAdd(const src1, src2, src3: pCvArr; dst: pCvArr); inline;
-begin
-  cvGEMM(src1, src2, 1, src3, 1, dst, 0);
-end;
-
-procedure cvMatMul(const src1, src2: pCvArr; dst: pCvArr); inline;
-begin
-  cvMatMulAdd(src1, src2, nil, dst);
-end;
+function cvGetThreadNum; external Core_Dll; 
 
 procedure cvAbsDiff; external Core_Dll;
 function cvNorm; external Core_Dll;
-function cvPtr1D; external Core_Dll;
-function cvPtr2D; external Core_Dll;
-function cvPtr3D; external Core_Dll;
+
 procedure cvSeqRemove; external Core_Dll;
 procedure cvClearSeq; external Core_Dll;
 procedure cvWrite; external Core_Dll;
-function cvSeqPartition; external Core_Dll;
+function cvSeqPartition; external Core_Dll; 
 
 end.
