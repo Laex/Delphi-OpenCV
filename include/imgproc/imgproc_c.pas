@@ -425,15 +425,13 @@ function cvGetSpatialMoment(moments: pCvMoments; x_order, y_order: Integer): dou
 // var src: CvArr;
 // var dst: CvArr;
 // var map_matrix: vMat);
-//
-// (* Measures similarity between template and overlapped windows in the source image
-// and fills the resultant image with the measurements *)
-// CVAPI(procedure)  cvMatchTemplate(
-// var image: CvArr;
-// var templ: CvArr;
-// var cResult: CvArr;
-// method: Integer);
-//
+
+// * Measures similarity between template and overlapped windows in the source image
+// and fills the resultant image with the measurements */
+// CVAPI(void)  cvMatchTemplate( const CvArr* image, const CvArr* templ,
+// CvArr* result, int method );
+procedure cvMatchTemplate(const image: pCvArr; const templ: pCvArr; result: pCvArr; method : Integer); cdecl;
+
 // (* Computes earth mover distance between
 // two weighted point sets (called signatures) *)
 // CVAPI(Single)  cvCalcEMD2(  CvArr* signature1,
@@ -1025,7 +1023,7 @@ function cvArcLength; external imgproc_Dll;
 
 function cvContourPerimeter(const contour: Pointer): double; inline;
 begin
-  Result := cvArcLength(contour, CV_WHOLE_SEQ, 1);
+  result := cvArcLength(contour, CV_WHOLE_SEQ, 1);
 end;
 
 function cvMatchShapes; external imgproc_Dll;
@@ -1061,5 +1059,6 @@ procedure cvReleaseHist; external imgproc_Dll;
 procedure cvClearHist; external imgproc_Dll;
 procedure cvMoments; external imgproc_Dll;
 function cvGetSpatialMoment; external imgproc_Dll;
+procedure cvMatchTemplate; external imgproc_Dll;
 
 end.
