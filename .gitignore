@@ -21,3 +21,5 @@ __history
 *.jdbg
 /samples/Work
 *.map
+
+*.log

@@ -53,7 +53,7 @@ Var
 
   board_n: Integer;
   board_sz: TCvSize;
-  capture: pCvCapture;
+  capture: pCvCapture = nil;
 
   image_points: pCvMat;
   object_points: pCvMat;
@@ -175,10 +175,17 @@ begin
       if (c = 27) then
       begin
         // освобождаем ресурсы
-        cvReleaseImage(mapx);
-        cvReleaseImage(mapy);
+        // cvReleaseImage(mapx); - эта еще нулевая
+        // cvReleaseImage(mapy); - эта еще нулевая
         cvReleaseImage(gray_image);
-        cvReleaseImage(image);
+        // cvReleaseImage(image); - этого делать нельзя
+        // см. http://docs.opencv.org/modules/highgui/doc/reading_and_writing_images_and_video.html?highlight=cvqueryframe#IplImage*%20cvQueryFrame%28CvCapture*%20capture%29
+        // Note
+        // OpenCV 1.x functions cvRetrieveFrame and cv.RetrieveFrame return image
+        // stored inside the video capturing structure. It is not allowed to modify
+        // or release the image! You can copy the frame using cvCloneImage()
+        // and then do whatever you want with the copy.
+        //
         cvReleaseMat(object_points);
         cvReleaseMat(image_points);
         cvReleaseMat(point_counts);
@@ -304,7 +311,6 @@ begin
     cvReleaseImage(mapx);
     cvReleaseImage(mapy);
     cvReleaseImage(gray_image);
-    cvReleaseImage(image);
     cvReleaseMat(intrinsic_matrix);
     cvReleaseMat(distortion_coeffs);
     cvReleaseMat(object_points2);

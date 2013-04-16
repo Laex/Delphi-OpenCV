@@ -315,9 +315,11 @@ function cvWaitKey(delay: Integer = 0): Integer; cdecl;
   *                         Working with Video Files and Cameras                           *
   *************************************************************************************** *)
 
-(* "black box" capture structure *)
 type
-  TCvCapture = Integer;
+  (* "black box" capture structure *)
+  TCvCapture = packed record
+  end;
+
   pCvCapture = ^TCvCapture;
 
   (* start capturing frames from video file *)
@@ -372,6 +374,7 @@ function cvCreateCameraCapture(index: Longint): pCvCapture; cdecl;
 function cvQueryFrame(capture: pCvCapture): pIplImage; cdecl;
 
 (* stop capturing/reading and free resources *)
+// CVAPI(void) cvReleaseCapture( CvCapture** capture );
 procedure cvReleaseCapture(Var capture: pCvCapture); cdecl;
 
 // modes of the controlling registers (can be: auto; manual; auto single push; absolute Latter allowed with any other mode)
