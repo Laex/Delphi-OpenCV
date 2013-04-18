@@ -32,8 +32,8 @@ uses
   System.SysUtils,
 uLibName in '..\..\..\include\uLibName.pas',
 highgui_c in '..\..\..\include\highgui\highgui_c.pas',
-core_c in '..\..\..\include\сore\core_c.pas',
-Core.types_c in '..\..\..\include\сore\Core.types_c.pas',
+core_c in '..\..\..\include\core\core_c.pas',
+Core.types_c in '..\..\..\include\core\Core.types_c.pas',
 imgproc.types_c in '..\..\..\include\imgproc\imgproc.types_c.pas',
 imgproc_c in '..\..\..\include\imgproc\imgproc_c.pas',
 legacy in '..\..\..\include\legacy\legacy.pas',
@@ -42,7 +42,7 @@ imgproc in '..\..\..\include\imgproc\imgproc.pas',
 haar in '..\..\..\include\objdetect\haar.pas',
 objdetect in '..\..\..\include\objdetect\objdetect.pas',
 tracking in '..\..\..\include\video\tracking.pas',
-Core in '..\..\..\include\сore\core.pas'
+Core in '..\..\..\include\core\core.pas'
   ;
 
 Const
@@ -77,14 +77,14 @@ try
 
   x := 0;
   y := 0;
-  // задаём весовые коэффициенты
+  // задаём веcовые коэффициенты
   alpha := 0.5;
   beta := 0.5;
-  // устанавливаем область интереса
+  // уcтанавливаем облccть интереcа
   cvSetImageROI(image, cvRect(x, y, width, height));
-  // взвешенная сумма
+  // взвешенная cумма
   cvAddWeighted(image, alpha, templ, beta, 0.0, dst);
-  // освобождаем область интереса
+  // оcвобождаем облccть интереcа
   cvResetImageROI(image);
   // показываем результат
   cvShowImage('res', dst);
@@ -92,7 +92,7 @@ try
   // ждём нажатия клавиши
   cvWaitKey(0);
 
-  // освобождаем ресурсы
+  // оcвобождаем реcурcы
   cvReleaseImage(image);
   cvReleaseImage(templ);
   cvReleaseImage(dst);

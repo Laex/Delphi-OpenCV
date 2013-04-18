@@ -30,20 +30,19 @@ program cv_CreateVideoWriter;
 
 uses
   System.SysUtils,
-uLibName in '..\..\..\include\uLibName.pas',
-highgui_c in '..\..\..\include\highgui\highgui_c.pas',
-core_c in '..\..\..\include\сore\core_c.pas',
-Core.types_c in '..\..\..\include\сore\Core.types_c.pas',
-imgproc.types_c in '..\..\..\include\imgproc\imgproc.types_c.pas',
-imgproc_c in '..\..\..\include\imgproc\imgproc_c.pas',
-legacy in '..\..\..\include\legacy\legacy.pas',
-calib3d in '..\..\..\include\calib3d\calib3d.pas',
-imgproc in '..\..\..\include\imgproc\imgproc.pas',
-haar in '..\..\..\include\objdetect\haar.pas',
-objdetect in '..\..\..\include\objdetect\objdetect.pas',
-tracking in '..\..\..\include\video\tracking.pas',
-Core in '..\..\..\include\сore\core.pas'
-  ;
+  uLibName in '..\..\..\include\uLibName.pas',
+  highgui_c in '..\..\..\include\highgui\highgui_c.pas',
+  core_c in '..\..\..\include\core\core_c.pas',
+  Core.types_c in '..\..\..\include\core\Core.types_c.pas',
+  imgproc.types_c in '..\..\..\include\imgproc\imgproc.types_c.pas',
+  imgproc_c in '..\..\..\include\imgproc\imgproc_c.pas',
+  legacy in '..\..\..\include\legacy\legacy.pas',
+  calib3d in '..\..\..\include\calib3d\calib3d.pas',
+  imgproc in '..\..\..\include\imgproc\imgproc.pas',
+  haar in '..\..\..\include\objdetect\haar.pas',
+  objdetect in '..\..\..\include\objdetect\objdetect.pas',
+  tracking in '..\..\..\include\video\tracking.pas',
+  Core in '..\..\..\include\core\core.pas';
 
 Const
   filename = 'Result\capture.avi';
@@ -63,7 +62,7 @@ begin
     capture := cvCreateCameraCapture(CV_CAP_ANY);
     if not Assigned(capture) then
       Halt;
-    // частота кадров
+    // чccтота кадров
     fps := cvGetCaptureProperty(capture, CV_CAP_PROP_FPS);
     if fps = 0 then
       fps := 15;
@@ -82,15 +81,15 @@ begin
       frame := cvQueryFrame(capture);
       if not Assigned(frame) then
         Break;
-      // сохраняем в файл
+      // cохраняем в файл
       cvWriteFrame(writer, frame);
       // показываем
       cvShowImage('capture', frame);
       c := cvWaitKey(1);
       if (c = 27) then
-        Break; // если нажата ESC - выходим
+        Break; // еcли нажата ESC - выходим
     end;
-    // освобождаем ресурсы
+    // оcвобождаем реcурcы
     cvReleaseVideoWriter(writer);
     cvReleaseCapture(capture);
     cvDestroyWindow('capture');

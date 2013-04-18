@@ -50,7 +50,7 @@
     <PropertyGroup Condition="'$(Base_Win32)'!=''">
         <VerInfo_Locale>1033</VerInfo_Locale>
         <VerInfo_Keys>CompanyName=;FileDescription=;FileVersion=1.0.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductName=;ProductVersion=1.0.0.0;Comments=</VerInfo_Keys>
-        <DCC_Namespace>Winapi;System.Win;Data.Win;Datasnap.Win;Web.Win;Soap.Win;Xml.Win;Bde;$(DCC_Namespace)</DCC_Namespace>
+        <DCC_Namespace>System.Win;Data.Win;Datasnap.Win;Web.Win;Soap.Win;Xml.Win;Bde;$(DCC_Namespace)</DCC_Namespace>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1)'!=''">
         <DCC_SymbolReferenceInfo>0</DCC_SymbolReferenceInfo>
@@ -74,8 +74,8 @@
         </DelphiCompile>
         <DCCReference Include="..\..\..\include\uLibName.pas"/>
         <DCCReference Include="..\..\..\include\highgui\highgui_c.pas"/>
-        <DCCReference Include="..\..\..\include\сore\core_c.pas"/>
-        <DCCReference Include="..\..\..\include\сore\Core.types_c.pas"/>
+        <DCCReference Include="..\..\..\include\core\core_c.pas"/>
+        <DCCReference Include="..\..\..\include\core\Core.types_c.pas"/>
         <DCCReference Include="..\..\..\include\imgproc\imgproc.types_c.pas"/>
         <DCCReference Include="..\..\..\include\imgproc\imgproc_c.pas"/>
         <DCCReference Include="..\..\..\include\legacy\legacy.pas"/>
@@ -84,7 +84,7 @@
         <DCCReference Include="..\..\..\include\objdetect\haar.pas"/>
         <DCCReference Include="..\..\..\include\objdetect\objdetect.pas"/>
         <DCCReference Include="..\..\..\include\video\tracking.pas"/>
-        <DCCReference Include="..\..\..\include\сore\core.pas"/>
+        <DCCReference Include="..\..\..\include\core\core.pas"/>
         <DCCReference Include="..\..\..\include\video\tracking_c.pas"/>
         <BuildConfiguration Include="Debug">
             <Key>Cfg_2</Key>
@@ -158,5 +158,4 @@
 [Exception Log]
 EurekaLog Version=7001
 DeleteMapAfterCompile=1
-Encrypt Password=""
 EurekaLog Last Line -->

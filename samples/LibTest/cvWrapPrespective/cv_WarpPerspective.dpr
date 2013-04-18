@@ -31,20 +31,19 @@ program cv_WarpPerspective;
 
 uses
   System.SysUtils,
-uLibName in '..\..\..\include\uLibName.pas',
-highgui_c in '..\..\..\include\highgui\highgui_c.pas',
-core_c in '..\..\..\include\сore\core_c.pas',
-Core.types_c in '..\..\..\include\сore\Core.types_c.pas',
-imgproc.types_c in '..\..\..\include\imgproc\imgproc.types_c.pas',
-imgproc_c in '..\..\..\include\imgproc\imgproc_c.pas',
-legacy in '..\..\..\include\legacy\legacy.pas',
-calib3d in '..\..\..\include\calib3d\calib3d.pas',
-imgproc in '..\..\..\include\imgproc\imgproc.pas',
-haar in '..\..\..\include\objdetect\haar.pas',
-objdetect in '..\..\..\include\objdetect\objdetect.pas',
-tracking in '..\..\..\include\video\tracking.pas',
-Core in '..\..\..\include\сore\core.pas'
-  ;
+  uLibName in '..\..\..\include\uLibName.pas',
+  highgui_c in '..\..\..\include\highgui\highgui_c.pas',
+  core_c in '..\..\..\include\core\core_c.pas',
+  Core.types_c in '..\..\..\include\core\Core.types_c.pas',
+  imgproc.types_c in '..\..\..\include\imgproc\imgproc.types_c.pas',
+  imgproc_c in '..\..\..\include\imgproc\imgproc_c.pas',
+  legacy in '..\..\..\include\legacy\legacy.pas',
+  calib3d in '..\..\..\include\calib3d\calib3d.pas',
+  imgproc in '..\..\..\include\imgproc\imgproc.pas',
+  haar in '..\..\..\include\objdetect\haar.pas',
+  objdetect in '..\..\..\include\objdetect\objdetect.pas',
+  tracking in '..\..\..\include\video\tracking.pas',
+  Core in '..\..\..\include\core\core.pas';
 
 const
   filename = 'resource\opencv_logo_with_text.png';
@@ -57,7 +56,7 @@ Var
 
 begin
   try
-    // ѕолучаем картинку (в градаци€х серого)
+    // ѕолучаем картинку (в градаци€х cерого)
     src := cvLoadImage(filename, CV_LOAD_IMAGE_GRAYSCALE);
     WriteLn(Format('[i] image: %s', [filename]));
 
@@ -93,10 +92,10 @@ begin
 
     // получаем матрицу преобразовани€
     cvGetPerspectiveTransform(srcQuad, dstQuad, warp_matrix);
-    // преобразование перспективы
-    // CV_WARP_INVERSE_MAP Ч используетс€ обратна€ трансформаци€ из dst в src
-    // CV_WARP_FILL_OUTLIERS Ч заполнить все пиксели целевого изображени€ (если пиксели отсутствуют на исходном изображени используютс€ fillval)
-    // fillval Ч значение дл€ заполнени€ пикселей вне исходного изображени€
+    // преобразование перcпективы
+    // CV_WARP_INVERSE_MAP Ч иcпользуетc€ обратна€ транcформаци€ из dst в src
+    // CV_WARP_FILL_OUTLIERS Ч заполнить вcе пикcели целевого изображени€ (еcли пикcели отcутcтвуют на иcходном изображени иcпользуютc€ fillval)
+    // fillval Ч значение дл€ заполнени€ пикcелей вне иcходного изображени€
     cvWarpPerspective(src, dst, warp_matrix, CV_INTER_LINEAR or CV_WARP_FILL_OUTLIERS, cvScalarAll(0));
 
     // показываем
@@ -106,7 +105,7 @@ begin
     // ждЄм нажати€ клавиши
     cvWaitKey(0);
 
-    // освобождаем ресурсы
+    // оcвобождаем реcурcы
     FreeMem(srcQuad);
     FreeMem(dstQuad);
     cvReleaseImage(src);

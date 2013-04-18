@@ -30,20 +30,19 @@ program cv_Laplace;
 
 uses
   System.SysUtils,
-uLibName in '..\..\..\include\uLibName.pas',
-highgui_c in '..\..\..\include\highgui\highgui_c.pas',
-core_c in '..\..\..\include\сore\core_c.pas',
-Core.types_c in '..\..\..\include\сore\Core.types_c.pas',
-imgproc.types_c in '..\..\..\include\imgproc\imgproc.types_c.pas',
-imgproc_c in '..\..\..\include\imgproc\imgproc_c.pas',
-legacy in '..\..\..\include\legacy\legacy.pas',
-calib3d in '..\..\..\include\calib3d\calib3d.pas',
-imgproc in '..\..\..\include\imgproc\imgproc.pas',
-haar in '..\..\..\include\objdetect\haar.pas',
-objdetect in '..\..\..\include\objdetect\objdetect.pas',
-tracking in '..\..\..\include\video\tracking.pas',
-Core in '..\..\..\include\сore\core.pas'
-  ;
+  uLibName in '..\..\..\include\uLibName.pas',
+  highgui_c in '..\..\..\include\highgui\highgui_c.pas',
+  core_c in '..\..\..\include\core\core_c.pas',
+  Core.types_c in '..\..\..\include\core\Core.types_c.pas',
+  imgproc.types_c in '..\..\..\include\imgproc\imgproc.types_c.pas',
+  imgproc_c in '..\..\..\include\imgproc\imgproc_c.pas',
+  legacy in '..\..\..\include\legacy\legacy.pas',
+  calib3d in '..\..\..\include\calib3d\calib3d.pas',
+  imgproc in '..\..\..\include\imgproc\imgproc.pas',
+  haar in '..\..\..\include\objdetect\haar.pas',
+  objdetect in '..\..\..\include\objdetect\objdetect.pas',
+  tracking in '..\..\..\include\video\tracking.pas',
+  Core in '..\..\..\include\core\core.pas';
 
 const
   filename = 'Resource\cat2.jpg';
@@ -59,7 +58,7 @@ begin
     // получаем картинку
     image := cvLoadImage(filename);
     WriteLn(Format('[i] image: %s', [filename]));
-    // создаём картинки
+    // cоздаём картинки
     dst := cvCreateImage(cvGetSize(image), IPL_DEPTH_16S, image^.nChannels);
     dst2 := cvCreateImage(cvGetSize(image), image^.depth, image^.nChannels);
 
@@ -67,7 +66,7 @@ begin
     cvNamedWindow('original', CV_WINDOW_AUTOSIZE);
     cvNamedWindow('cvLaplace', CV_WINDOW_AUTOSIZE);
 
-    // применяем оператор Лапласа
+    // применяем оператор Лаплccа
     cvLaplace(image, dst, aperture);
 
     // преобразуем изображение к 8-битному
@@ -79,7 +78,7 @@ begin
 
     cvWaitKey(0);
 
-    // освобождаем ресурсы
+    // оcвобождаем реcурcы
     cvReleaseImage(image);
     cvReleaseImage(dst);
     cvReleaseImage(dst2);

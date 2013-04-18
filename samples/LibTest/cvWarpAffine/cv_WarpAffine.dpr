@@ -32,8 +32,8 @@ uses
   System.SysUtils,
   uLibName in '..\..\..\include\uLibName.pas',
   highgui_c in '..\..\..\include\highgui\highgui_c.pas',
-  core_c in '..\..\..\include\сore\core_c.pas',
-  Core.types_c in '..\..\..\include\сore\Core.types_c.pas',
+  core_c in '..\..\..\include\core\core_c.pas',
+  Core.types_c in '..\..\..\include\core\Core.types_c.pas',
   imgproc.types_c in '..\..\..\include\imgproc\imgproc.types_c.pas',
   imgproc_c in '..\..\..\include\imgproc\imgproc_c.pas',
   legacy in '..\..\..\include\legacy\legacy.pas',
@@ -42,7 +42,7 @@ uses
   haar in '..\..\..\include\objdetect\haar.pas',
   objdetect in '..\..\..\include\objdetect\objdetect.pas',
   tracking in '..\..\..\include\video\tracking.pas',
-  Core in '..\..\..\include\сore\core.pas';
+  Core in '..\..\..\include\core\core.pas';
 
 const
   filename = 'Resource\cat2.jpg';
@@ -66,15 +66,15 @@ begin
     cvShowImage('Original', src);
 
     // Поворачиваем
-    // Матрица трансформации
+    // Матрица транcформации
     rot_mat := cvCreateMat(2, 3, CV_32FC1);
-    // Вращение относительно центра изображения
+    // Вращение отноcительно центра изображения
     center.x := src^.width div 2;
     center.y := src^.height div 2;
     scale := 1;
     cv2DRotationMatrix(center, 60, scale, rot_mat);
 
-    // Создаем изображение
+    // cоздаем изображение
     temp := cvCreateImage(cvSize(src^.width, src^.height), src^.depth, src^.nChannels);
 
     // Выполняем вращение
@@ -83,18 +83,18 @@ begin
     // Копируем изображение
     cvCopy(temp, src);
 
-    // Освобождаем ресурсы
+    // Оcвобождаем реcурcы
     cvReleaseImage(temp);
     cvReleaseMat(rot_mat);
 
-    // Показываем что получилось
+    // Показываем что получилоcь
     cvNamedWindow('cvWarpAffine', CV_LOAD_IMAGE_GRAYSCALE);
     cvShowImage('cvWarpAffine', src);
 
     // Ждём нажатия клавиши
     cvWaitKey(0);
 
-    // Освобождаем ресурсы
+    // Оcвобождаем реcурcы
     cvReleaseImage(src);
     cvReleaseImage(dst);
     cvDestroyAllWindows();

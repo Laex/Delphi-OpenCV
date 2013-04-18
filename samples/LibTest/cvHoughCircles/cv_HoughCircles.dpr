@@ -30,20 +30,19 @@ program cv_HoughCircles;
 
 uses
   System.SysUtils,
-uLibName in '..\..\..\include\uLibName.pas',
-highgui_c in '..\..\..\include\highgui\highgui_c.pas',
-core_c in '..\..\..\include\сore\core_c.pas',
-Core.types_c in '..\..\..\include\сore\Core.types_c.pas',
-imgproc.types_c in '..\..\..\include\imgproc\imgproc.types_c.pas',
-imgproc_c in '..\..\..\include\imgproc\imgproc_c.pas',
-legacy in '..\..\..\include\legacy\legacy.pas',
-calib3d in '..\..\..\include\calib3d\calib3d.pas',
-imgproc in '..\..\..\include\imgproc\imgproc.pas',
-haar in '..\..\..\include\objdetect\haar.pas',
-objdetect in '..\..\..\include\objdetect\objdetect.pas',
-tracking in '..\..\..\include\video\tracking.pas',
-Core in '..\..\..\include\сore\core.pas'
-  ;
+  uLibName in '..\..\..\include\uLibName.pas',
+  highgui_c in '..\..\..\include\highgui\highgui_c.pas',
+  core_c in '..\..\..\include\core\core_c.pas',
+  Core.types_c in '..\..\..\include\core\Core.types_c.pas',
+  imgproc.types_c in '..\..\..\include\imgproc\imgproc.types_c.pas',
+  imgproc_c in '..\..\..\include\imgproc\imgproc_c.pas',
+  legacy in '..\..\..\include\legacy\legacy.pas',
+  calib3d in '..\..\..\include\calib3d\calib3d.pas',
+  imgproc in '..\..\..\include\imgproc\imgproc.pas',
+  haar in '..\..\..\include\objdetect\haar.pas',
+  objdetect in '..\..\..\include\objdetect\objdetect.pas',
+  tracking in '..\..\..\include\video\tracking.pas',
+  Core in '..\..\..\include\core\core.pas';
 
 const
   filename = 'Resource\opencv_logo_with_text_sm.png';
@@ -63,7 +62,7 @@ Var
 
 begin
   try
-    // получаем картинку (в градациях серого)
+    // получаем картинку (в градациях cерого)
     image := cvLoadImage(filename, CV_LOAD_IMAGE_GRAYSCALE);
     WriteLn(Format('[i] image: %s', [filename]));
 
@@ -72,13 +71,13 @@ begin
 
     // хранилище памяти для кругов
     storage := cvCreateMemStorage(0);
-    // сглаживаем изображение
+    // cглаживаем изображение
     cvSmooth(image, image, CV_GAUSSIAN, 5, 5);
 
-    // поиск кругов
+    // поиcк кругов
     results := cvHoughCircles(image, storage, CV_HOUGH_GRADIENT, 10, image^.width / 5);
 
-    // пробегаемся по кругам и рисуем их на оригинальном изображении
+    // пробегаемcя по кругам и риcуем их на оригинальном изображении
     for i := 0 to results^.total - 1 do
     begin
       p := pFloatArray(cvGetSeqElem(results, i));
@@ -93,7 +92,7 @@ begin
     // ждём нажатия клавиши
     cvWaitKey(0);
 
-    // освобождаем ресурсы
+    // оcвобождаем реcурcы
     cvReleaseMemStorage(storage);
     cvReleaseImage(image);
     cvReleaseImage(src);

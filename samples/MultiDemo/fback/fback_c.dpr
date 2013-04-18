@@ -27,15 +27,14 @@ program fback_c;
 
 {$APPTYPE CONSOLE}
 {$POINTERMATH ON}
-
 {$R *.res}
 
 uses
   System.SysUtils,
   uLibName in '..\..\..\include\uLibName.pas',
   highgui_c in '..\..\..\include\highgui\highgui_c.pas',
-  core_c in '..\..\..\include\ñore\core_c.pas',
-  Core.types_c in '..\..\..\include\ñore\Core.types_c.pas',
+  core_c in '..\..\..\include\core\core_c.pas',
+  Core.types_c in '..\..\..\include\core\Core.types_c.pas',
   imgproc.types_c in '..\..\..\include\imgproc\imgproc.types_c.pas',
   imgproc_c in '..\..\..\include\imgproc\imgproc_c.pas',
   legacy in '..\..\..\include\legacy\legacy.pas',
@@ -44,7 +43,7 @@ uses
   haar in '..\..\..\include\objdetect\haar.pas',
   objdetect in '..\..\..\include\objdetect\objdetect.pas',
   tracking in '..\..\..\include\video\tracking.pas',
-  Core in '..\..\..\include\ñore\core.pas';
+  Core in '..\..\..\include\core\core.pas';
 
 procedure drawOptFlowMap(const flow: pCvMat; cflowmap: pCvMat; step: Integer; scale: double; color: TCvScalar);
 Var

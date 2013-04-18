@@ -26,32 +26,30 @@
 program Stereo;
 
 {$APPTYPE CONSOLE}
-
 {$R *.res}
 
 uses
   System.SysUtils,
-uLibName in '..\..\..\include\uLibName.pas',
-highgui_c in '..\..\..\include\highgui\highgui_c.pas',
-core_c in '..\..\..\include\сore\core_c.pas',
-Core.types_c in '..\..\..\include\сore\Core.types_c.pas',
-imgproc.types_c in '..\..\..\include\imgproc\imgproc.types_c.pas',
-imgproc_c in '..\..\..\include\imgproc\imgproc_c.pas',
-legacy in '..\..\..\include\legacy\legacy.pas',
-calib3d in '..\..\..\include\calib3d\calib3d.pas',
-imgproc in '..\..\..\include\imgproc\imgproc.pas',
-haar in '..\..\..\include\objdetect\haar.pas',
-objdetect in '..\..\..\include\objdetect\objdetect.pas',
-tracking in '..\..\..\include\video\tracking.pas',
-Core in '..\..\..\include\сore\core.pas'
-  ;
+  uLibName in '..\..\..\include\uLibName.pas',
+  highgui_c in '..\..\..\include\highgui\highgui_c.pas',
+  core_c in '..\..\..\include\core\core_c.pas',
+  Core.types_c in '..\..\..\include\core\Core.types_c.pas',
+  imgproc.types_c in '..\..\..\include\imgproc\imgproc.types_c.pas',
+  imgproc_c in '..\..\..\include\imgproc\imgproc_c.pas',
+  legacy in '..\..\..\include\legacy\legacy.pas',
+  calib3d in '..\..\..\include\calib3d\calib3d.pas',
+  imgproc in '..\..\..\include\imgproc\imgproc.pas',
+  haar in '..\..\..\include\objdetect\haar.pas',
+  objdetect in '..\..\..\include\objdetect\objdetect.pas',
+  tracking in '..\..\..\include\video\tracking.pas',
+  Core in '..\..\..\include\core\core.pas';
 
 Const
   Image_Left = 'StereoSample\Aloe\view0.png';
   Image_Right = 'StereoSample\Aloe\view1.png';
-  // Количество различий
+  // Количеcтво различий
   ndisparity = 16;
-  // Количество итераций
+  // Количеcтво итераций
   mIter = 2;
 
 Type
@@ -73,23 +71,23 @@ Var
 
 begin
   try
-    // загрузка тестовых картинок
+    // загрузка теcтовых картинок
     image_ := cvLoadImage(Image_Left, 1);
     image1_ := cvLoadImage(Image_Right, 1);
-    // создание дополнительных изображений
+    // cоздание дополнительных изображений
     image_g := cvCreateImage(cvSize(image_^.width, image_^.height), 8, 1);
     image1_g := cvCreateImage(cvSize(image_^.width, image_^.height), 8, 1);
     size := cvGetSize(image_);
-    // создание матриц
+    // cоздание матриц
     disparity_left := cvCreateMat(size.height, size.width, CV_16S);
     disparity_right := cvCreateMat(size.height, size.width, CV_16S);
-    // перевод изображений к градациям серого
+    // перевод изображений к градациям cерого
     cvCvtColor(image_, image_g, CV_BGR2GRAY);
     cvCvtColor(image1_, image1_g, CV_BGR2GRAY);
-    // задание начальных параметров стереозрения
+    // задание начальных параметров cтереозрения
     //
     state := cvCreateStereoGCState(ndisparity, mIter);
-    // выполнение основной функции стереозрения, возвращающей матрицу 3d
+    // выполнение оcновной функции cтереозрения, возвращающей матрицу 3d
     cvFindStereoCorrespondenceGC(image_g, image1_g, disparity_left, disparity_right, state, 0);
     cvReleaseStereoGCState(state);
     // вывод матрицы в файл

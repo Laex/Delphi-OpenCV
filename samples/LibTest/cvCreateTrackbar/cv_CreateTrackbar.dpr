@@ -30,20 +30,19 @@ program cv_CreateTrackbar;
 
 uses
   System.SysUtils,
-uLibName in '..\..\..\include\uLibName.pas',
-highgui_c in '..\..\..\include\highgui\highgui_c.pas',
-core_c in '..\..\..\include\сore\core_c.pas',
-Core.types_c in '..\..\..\include\сore\Core.types_c.pas',
-imgproc.types_c in '..\..\..\include\imgproc\imgproc.types_c.pas',
-imgproc_c in '..\..\..\include\imgproc\imgproc_c.pas',
-legacy in '..\..\..\include\legacy\legacy.pas',
-calib3d in '..\..\..\include\calib3d\calib3d.pas',
-imgproc in '..\..\..\include\imgproc\imgproc.pas',
-haar in '..\..\..\include\objdetect\haar.pas',
-objdetect in '..\..\..\include\objdetect\objdetect.pas',
-tracking in '..\..\..\include\video\tracking.pas',
-Core in '..\..\..\include\сore\core.pas'
-  ;
+  uLibName in '..\..\..\include\uLibName.pas',
+  highgui_c in '..\..\..\include\highgui\highgui_c.pas',
+  core_c in '..\..\..\include\core\core_c.pas',
+  Core.types_c in '..\..\..\include\core\Core.types_c.pas',
+  imgproc.types_c in '..\..\..\include\imgproc\imgproc.types_c.pas',
+  imgproc_c in '..\..\..\include\imgproc\imgproc_c.pas',
+  legacy in '..\..\..\include\legacy\legacy.pas',
+  calib3d in '..\..\..\include\calib3d\calib3d.pas',
+  imgproc in '..\..\..\include\imgproc\imgproc.pas',
+  haar in '..\..\..\include\objdetect\haar.pas',
+  objdetect in '..\..\..\include\objdetect\objdetect.pas',
+  tracking in '..\..\..\include\video\tracking.pas',
+  Core in '..\..\..\include\core\core.pas';
 
 Const
   filename = 'Resource\768x576.avi';
@@ -69,7 +68,7 @@ begin
     cvNamedWindow('original', CV_WINDOW_AUTOSIZE);
     // получаем информацию о видео-файле
     capture := cvCreateFileCapture(filename);
-    // получаем число кадров
+    // получаем чиcло кадров
     framesCount := cvGetCaptureProperty(capture, CV_CAP_PROP_FRAME_COUNT);
     Writeln('[i] count: ', framesCount);
     frames := Trunc(framesCount);
@@ -81,11 +80,11 @@ begin
 
     while True do
     begin
-      // получаем следующий кадр
+      // получаем cледующий кадр
       frame := cvQueryFrame(capture);
       if not Assigned(frame) then
         Break;
-      // здесь можно вставить
+      // здеcь можно вcтавить
       // процедуру обработки
 
       // показываем кадр
@@ -93,9 +92,9 @@ begin
 
       c := cvWaitKey(33);
       if (c = 27) then
-        Break; // если нажата ESC - выходим
+        Break; // еcли нажата ESC - выходим
     end;
-    // освобождаем ресурсы
+    // оcвобождаем реcурcы
     cvReleaseCapture(capture);
     // удаляем окно
     cvDestroyWindow('original');

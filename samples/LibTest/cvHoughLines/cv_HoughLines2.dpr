@@ -30,20 +30,19 @@ program cv_HoughLines2;
 
 uses
   System.SysUtils,
-uLibName in '..\..\..\include\uLibName.pas',
-highgui_c in '..\..\..\include\highgui\highgui_c.pas',
-core_c in '..\..\..\include\сore\core_c.pas',
-Core.types_c in '..\..\..\include\сore\Core.types_c.pas',
-imgproc.types_c in '..\..\..\include\imgproc\imgproc.types_c.pas',
-imgproc_c in '..\..\..\include\imgproc\imgproc_c.pas',
-legacy in '..\..\..\include\legacy\legacy.pas',
-calib3d in '..\..\..\include\calib3d\calib3d.pas',
-imgproc in '..\..\..\include\imgproc\imgproc.pas',
-haar in '..\..\..\include\objdetect\haar.pas',
-objdetect in '..\..\..\include\objdetect\objdetect.pas',
-tracking in '..\..\..\include\video\tracking.pas',
-Core in '..\..\..\include\сore\core.pas'
-  ;
+  uLibName in '..\..\..\include\uLibName.pas',
+  highgui_c in '..\..\..\include\highgui\highgui_c.pas',
+  core_c in '..\..\..\include\core\core_c.pas',
+  Core.types_c in '..\..\..\include\core\Core.types_c.pas',
+  imgproc.types_c in '..\..\..\include\imgproc\imgproc.types_c.pas',
+  imgproc_c in '..\..\..\include\imgproc\imgproc_c.pas',
+  legacy in '..\..\..\include\legacy\legacy.pas',
+  calib3d in '..\..\..\include\calib3d\calib3d.pas',
+  imgproc in '..\..\..\include\imgproc\imgproc.pas',
+  haar in '..\..\..\include\objdetect\haar.pas',
+  objdetect in '..\..\..\include\objdetect\objdetect.pas',
+  tracking in '..\..\..\include\video\tracking.pas',
+  Core in '..\..\..\include\core\core.pas';
 
 const
   filename = 'Resource\opencv_logo_with_text_sm.png';
@@ -59,7 +58,7 @@ Var
 
 begin
   try
-    // получаем картинку (в градациях серого)
+    // получаем картинку (в градациях cерого)
     src := cvLoadImage(filename, CV_LOAD_IMAGE_GRAYSCALE);
     WriteLn(Format('[i] image: %s', [filename]));
 
@@ -80,7 +79,7 @@ begin
     // нахождение линий
     lines := cvHoughLines2(dst, storage, CV_HOUGH_PROBABILISTIC, 1, CV_PI / 180, 50, 50, 10);
 
-    // нарисуем найденные линии
+    // нариcуем найденные линии
     for i := 0 to lines^.total - 1 do
     begin
       line := pCvPointArray(cvGetSeqElem(lines, i));
@@ -97,7 +96,7 @@ begin
     // ждём нажатия клавиши
     cvWaitKey(0);
 
-    // освобождаем ресурсы
+    // оcвобождаем реcурcы
     cvReleaseMemStorage(storage);
     cvReleaseImage(src);
     cvReleaseImage(dst);

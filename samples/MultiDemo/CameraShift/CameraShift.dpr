@@ -26,26 +26,24 @@
 program CameraShift;
 
 {$APPTYPE CONSOLE}
-
 {$R *.res}
 
 uses
   System.SysUtils,
   Math,
-uLibName in '..\..\..\include\uLibName.pas',
-highgui_c in '..\..\..\include\highgui\highgui_c.pas',
-core_c in '..\..\..\include\сore\core_c.pas',
-Core.types_c in '..\..\..\include\сore\Core.types_c.pas',
-imgproc.types_c in '..\..\..\include\imgproc\imgproc.types_c.pas',
-imgproc_c in '..\..\..\include\imgproc\imgproc_c.pas',
-legacy in '..\..\..\include\legacy\legacy.pas',
-calib3d in '..\..\..\include\calib3d\calib3d.pas',
-imgproc in '..\..\..\include\imgproc\imgproc.pas',
-haar in '..\..\..\include\objdetect\haar.pas',
-objdetect in '..\..\..\include\objdetect\objdetect.pas',
-tracking in '..\..\..\include\video\tracking.pas',
-Core in '..\..\..\include\сore\core.pas'
-  ;
+  uLibName in '..\..\..\include\uLibName.pas',
+  highgui_c in '..\..\..\include\highgui\highgui_c.pas',
+  core_c in '..\..\..\include\core\core_c.pas',
+  Core.types_c in '..\..\..\include\core\Core.types_c.pas',
+  imgproc.types_c in '..\..\..\include\imgproc\imgproc.types_c.pas',
+  imgproc_c in '..\..\..\include\imgproc\imgproc_c.pas',
+  legacy in '..\..\..\include\legacy\legacy.pas',
+  calib3d in '..\..\..\include\calib3d\calib3d.pas',
+  imgproc in '..\..\..\include\imgproc\imgproc.pas',
+  haar in '..\..\..\include\objdetect\haar.pas',
+  objdetect in '..\..\..\include\objdetect\objdetect.pas',
+  tracking in '..\..\..\include\video\tracking.pas',
+  Core in '..\..\..\include\core\core.pas';
 
 Var
   image: pIplImage = nil;
@@ -66,9 +64,9 @@ Var
   track_box: TCvBox2D;
   track_comp: TCvConnectedComp;
   hdims: integer = 16;
-  SingleArray1D: TSingleArray1D=(0,180);
-  p_SingleArray1D: pSingleArray1D=@SingleArray1D;
-  SingleArray2D:TSingleArray2D;
+  SingleArray1D: TSingleArray1D = (0, 180);
+  p_SingleArray1D: pSingleArray1D = @SingleArray1D;
+  SingleArray2D: TSingleArray2D;
   hranges: pSingleArray2D = @SingleArray2D;
   capture: PCvCapture;
   frame: pIplImage;
@@ -229,7 +227,7 @@ begin
   cvShowImage('Histogram', histimg);
 end;
 
-// обработчик событий от мышки
+// обработчик cобытий от мышки
 procedure myMouseCallback(event: integer; x: integer; y: integer; flags: integer; param: Pointer); cdecl;
 begin
   if event = CV_EVENT_LBUTTONDOWN then
@@ -265,7 +263,7 @@ Var
 
 begin
   // try
-  SingleArray2D[0]:=p_SingleArray1D;
+  SingleArray2D[0] := p_SingleArray1D;
   // окно для отображения
   cvNamedWindow('Capture', CV_WINDOW_AUTOSIZE);
   cvNamedWindow('Histogram', CV_WINDOW_AUTOSIZE);

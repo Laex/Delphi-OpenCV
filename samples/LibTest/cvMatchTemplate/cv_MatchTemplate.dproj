@@ -1,7 +1,7 @@
 ﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <PropertyGroup>
-        <ProjectGuid>{A54CF89B-7F6F-47F5-BBBA-77052931B47D}</ProjectGuid>
-        <MainSource>cv_Integral.dpr</MainSource>
+        <ProjectGuid>{803FE2A1-1903-4D24-B897-1757188B6EAC}</ProjectGuid>
+        <MainSource>cv_MatchTemplate.dpr</MainSource>
         <Base>True</Base>
         <Config Condition="'$(Config)'==''">Debug</Config>
         <TargetedPlatforms>1</TargetedPlatforms>
@@ -35,38 +35,38 @@
         <Base>true</Base>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base)'!=''">
-        <DCC_E>false</DCC_E>
-        <DCC_S>false</DCC_S>
-        <DCC_Namespace>System;Xml;Data;Datasnap;Web;Soap;$(DCC_Namespace)</DCC_Namespace>
+        <DCC_ExeOutput>..\..\..\bin\</DCC_ExeOutput>
         <Manifest_File>None</Manifest_File>
         <DCC_ImageBase>00400000</DCC_ImageBase>
-        <DCC_F>false</DCC_F>
+        <DCC_Namespace>System;Xml;Data;Datasnap;Web;Soap;$(DCC_Namespace)</DCC_Namespace>
         <DCC_K>false</DCC_K>
-        <DCC_ExeOutput>..\..\..\bin\</DCC_ExeOutput>
         <VerInfo_Locale>1049</VerInfo_Locale>
-        <DCC_N>false</DCC_N>
+        <DCC_S>false</DCC_S>
         <VerInfo_Keys>CompanyName=;FileDescription=;FileVersion=1.0.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductName=;ProductVersion=1.0.0.0;Comments=;CFBundleName=;CFBundleDisplayName=;CFBundleIdentifier=;CFBundleVersion=;CFBundlePackageType=;CFBundleSignature=;CFBundleAllowMixedLocalizations=;CFBundleExecutable=</VerInfo_Keys>
+        <DCC_F>false</DCC_F>
+        <DCC_E>false</DCC_E>
+        <DCC_N>false</DCC_N>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Win32)'!=''">
+        <VerInfo_Locale>1033</VerInfo_Locale>
         <DCC_Namespace>Winapi;System.Win;Data.Win;Datasnap.Win;Web.Win;Soap.Win;Xml.Win;Bde;$(DCC_Namespace)</DCC_Namespace>
         <VerInfo_Keys>CompanyName=;FileDescription=;FileVersion=1.0.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductName=;ProductVersion=1.0.0.0;Comments=</VerInfo_Keys>
-        <VerInfo_Locale>1033</VerInfo_Locale>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1)'!=''">
-        <DCC_SymbolReferenceInfo>0</DCC_SymbolReferenceInfo>
-        <DCC_DebugInformation>false</DCC_DebugInformation>
-        <DCC_Define>RELEASE;$(DCC_Define)</DCC_Define>
         <DCC_LocalDebugSymbols>false</DCC_LocalDebugSymbols>
+        <DCC_Define>RELEASE;$(DCC_Define)</DCC_Define>
+        <DCC_DebugInformation>false</DCC_DebugInformation>
+        <DCC_SymbolReferenceInfo>0</DCC_SymbolReferenceInfo>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2)'!=''">
+        <DCC_Define>DEBUG;$(DCC_Define)</DCC_Define>
         <DCC_GenerateStackFrames>true</DCC_GenerateStackFrames>
         <DCC_Optimize>false</DCC_Optimize>
-        <DCC_Define>DEBUG;$(DCC_Define)</DCC_Define>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2_Win32)'!=''">
+        <VerInfo_Locale>1033</VerInfo_Locale>
         <Manifest_File>None</Manifest_File>
         <VerInfo_Keys>CompanyName=;FileDescription=;FileVersion=1.0.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductName=;ProductVersion=1.0.0.0;Comments=</VerInfo_Keys>
-        <VerInfo_Locale>1033</VerInfo_Locale>
     </PropertyGroup>
     <ItemGroup>
         <DelphiCompile Include="$(MainSource)">
@@ -74,17 +74,11 @@
         </DelphiCompile>
         <DCCReference Include="..\..\..\include\uLibName.pas"/>
         <DCCReference Include="..\..\..\include\highgui\highgui_c.pas"/>
-        <DCCReference Include="..\..\..\include\сore\core_c.pas"/>
-        <DCCReference Include="..\..\..\include\сore\Core.types_c.pas"/>
+        <DCCReference Include="..\..\..\include\core\core_c.pas"/>
+        <DCCReference Include="..\..\..\include\core\Core.types_c.pas"/>
         <DCCReference Include="..\..\..\include\imgproc\imgproc.types_c.pas"/>
         <DCCReference Include="..\..\..\include\imgproc\imgproc_c.pas"/>
-        <DCCReference Include="..\..\..\include\legacy\legacy.pas"/>
-        <DCCReference Include="..\..\..\include\calib3d\calib3d.pas"/>
         <DCCReference Include="..\..\..\include\imgproc\imgproc.pas"/>
-        <DCCReference Include="..\..\..\include\objdetect\haar.pas"/>
-        <DCCReference Include="..\..\..\include\objdetect\objdetect.pas"/>
-        <DCCReference Include="..\..\..\include\video\tracking.pas"/>
-        <DCCReference Include="..\..\..\include\сore\core.pas"/>
         <BuildConfiguration Include="Debug">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>
@@ -103,7 +97,7 @@
         <BorlandProject>
             <Delphi.Personality>
                 <Source>
-                    <Source Name="MainSource">cv_Integral.dpr</Source>
+                    <Source Name="MainSource">cv_MatchTemplate.dpr</Source>
                 </Source>
                 <VersionInfo>
                     <VersionInfo Name="IncludeVerInfo">False</VersionInfo>

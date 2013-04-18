@@ -32,8 +32,8 @@ uses
   System.SysUtils,
 uLibName in '..\..\..\include\uLibName.pas',
 highgui_c in '..\..\..\include\highgui\highgui_c.pas',
-core_c in '..\..\..\include\сore\core_c.pas',
-Core.types_c in '..\..\..\include\сore\Core.types_c.pas',
+core_c in '..\..\..\include\core\core_c.pas',
+Core.types_c in '..\..\..\include\core\Core.types_c.pas',
 imgproc.types_c in '..\..\..\include\imgproc\imgproc.types_c.pas',
 imgproc_c in '..\..\..\include\imgproc\imgproc_c.pas',
 legacy in '..\..\..\include\legacy\legacy.pas',
@@ -42,7 +42,7 @@ imgproc in '..\..\..\include\imgproc\imgproc.pas',
 haar in '..\..\..\include\objdetect\haar.pas',
 objdetect in '..\..\..\include\objdetect\objdetect.pas',
 tracking in '..\..\..\include\video\tracking.pas',
-Core in '..\..\..\include\сore\core.pas'
+Core in '..\..\..\include\core\core.pas'
   ;
 
 Const
@@ -50,7 +50,7 @@ Const
   filename = 'Resource\cat2.jpg';
 
 Var
-  // исходна€
+  // иcходна€
   image: PIplImage = nil;
   dst: array [0 .. 3] of PIplImage;
   i: Integer;
@@ -63,7 +63,7 @@ begin
     if not Assigned(image) then
       Halt;
 
-    // создание уменьшенных картинок (разный тип интерпол€ции)
+    // cоздание уменьшенных картинок (разный тип интерпол€ции)
     for i := 0 to 3 do
     begin
       dst[i] := cvCreateImage(cvSize(image^.width div 3, image^.height div 3), image^.depth,
@@ -84,7 +84,7 @@ begin
 
     // ждЄм нажати€ клавиши
     cvWaitKey(0);
-    // освобождаем ресурсы
+    // оcвобождаем реcурcы
     cvReleaseImage(image);
     // удал€ем окна
     cvDestroyAllWindows();

@@ -35,8 +35,8 @@ uses
   System.SysUtils,
 uLibName in '..\..\..\include\uLibName.pas',
 highgui_c in '..\..\..\include\highgui\highgui_c.pas',
-core_c in '..\..\..\include\сore\core_c.pas',
-Core.types_c in '..\..\..\include\сore\Core.types_c.pas',
+core_c in '..\..\..\include\core\core_c.pas',
+Core.types_c in '..\..\..\include\core\Core.types_c.pas',
 imgproc.types_c in '..\..\..\include\imgproc\imgproc.types_c.pas',
 imgproc_c in '..\..\..\include\imgproc\imgproc_c.pas',
 legacy in '..\..\..\include\legacy\legacy.pas',
@@ -45,7 +45,7 @@ imgproc in '..\..\..\include\imgproc\imgproc.pas',
 haar in '..\..\..\include\objdetect\haar.pas',
 objdetect in '..\..\..\include\objdetect\objdetect.pas',
 tracking in '..\..\..\include\video\tracking.pas',
-Core in '..\..\..\include\сore\core.pas'
+Core in '..\..\..\include\core\core.pas'
   ;
 
 Const
@@ -67,7 +67,7 @@ Var
 
 begin
   try
-    // массив, содержащий данные матрицы
+    // мcccив, cодержащий данные матрицы
     kernel[0] := 1;
     kernel[1] := 0;
     kernel[2] := 0;
@@ -77,14 +77,14 @@ begin
     kernel[6] := 0;
     kernel[7] := 0;
     kernel[8] := 3;
-    // создаём матрицу
+    // cоздаём матрицу
     kernel_matrix := cvMat(3, 3, CV_32FC1, @kernel);
-    // сохраняем матрицу в XML-файл
+    // cохраняем матрицу в XML-файл
     cvSave(kernet_filename, @kernel_matrix);
     // а теперь загрузим данные из XML-файла
     matrix := pCvMat(cvLoad(kernet_filename));
-    // покажем содержимое матрицы
-    // 1 вариант: с использованием макроса CV_MAT_ELEM
+    // покажем cодержимое матрицы
+    // 1 вариант: c иcпользованием макроcа CV_MAT_ELEM
     for i := 0 to matrix^.rows - 1 do
     begin
       for j := 0 to matrix^.cols - 1 do
@@ -93,7 +93,7 @@ begin
     end;
     Writeln;
 
-    // 2 вариант: с использованием cvGet2D()
+    // 2 вариант: c иcпользованием cvGet2D()
     // cvGetReal2D() для CV_64FC1
     for i := 0 to matrix^.rows - 1 do
     begin
@@ -103,7 +103,7 @@ begin
     end;
     Writeln('-----');
 
-    // 3 вариант: прямой доступ к элементам
+    // 3 вариант: прямой доcтуп к элементам
     for i := 0 to matrix^.rows - 1 do
     begin
       ptr := pSingle((Integer(matrix^.data) + i * matrix^.step));
@@ -113,7 +113,7 @@ begin
     end;
     Writeln('-----');
 
-    // освобождаем ресурсы
+    // оcвобождаем реcурcы
     cvReleaseMat(matrix);
 
     // Чтение XML
@@ -121,7 +121,7 @@ begin
 
     // открываем файл для чтения
     fs := cvOpenFileStorage('resource\cfg.xml', 0, CV_STORAGE_READ);
-    // считываем значения
+    // cчитываем значения
     frame_count := cvReadIntByName(fs, 0, 'frame_count', 5 { значение по-умолчанию } );
     s := cvGetFileNodeByName(fs, 0, 'frame_size')^.seq;
     frame_width := cvReadInt(pCvFileNode(cvGetSeqElem(s, 0)));

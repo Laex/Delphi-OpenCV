@@ -30,20 +30,19 @@ program cv_And;
 
 uses
   System.SysUtils,
-uLibName in '..\..\..\include\uLibName.pas',
-highgui_c in '..\..\..\include\highgui\highgui_c.pas',
-core_c in '..\..\..\include\сore\core_c.pas',
-Core.types_c in '..\..\..\include\сore\Core.types_c.pas',
-imgproc.types_c in '..\..\..\include\imgproc\imgproc.types_c.pas',
-imgproc_c in '..\..\..\include\imgproc\imgproc_c.pas',
-legacy in '..\..\..\include\legacy\legacy.pas',
-calib3d in '..\..\..\include\calib3d\calib3d.pas',
-imgproc in '..\..\..\include\imgproc\imgproc.pas',
-haar in '..\..\..\include\objdetect\haar.pas',
-objdetect in '..\..\..\include\objdetect\objdetect.pas',
-tracking in '..\..\..\include\video\tracking.pas',
-Core in '..\..\..\include\сore\core.pas'
-  ;
+  uLibName in '..\..\..\include\uLibName.pas',
+  highgui_c in '..\..\..\include\highgui\highgui_c.pas',
+  core_c in '..\..\..\include\core\core_c.pas',
+  Core.types_c in '..\..\..\include\core\Core.types_c.pas',
+  imgproc.types_c in '..\..\..\include\imgproc\imgproc.types_c.pas',
+  imgproc_c in '..\..\..\include\imgproc\imgproc_c.pas',
+  legacy in '..\..\..\include\legacy\legacy.pas',
+  calib3d in '..\..\..\include\calib3d\calib3d.pas',
+  imgproc in '..\..\..\include\imgproc\imgproc.pas',
+  haar in '..\..\..\include\objdetect\haar.pas',
+  objdetect in '..\..\..\include\objdetect\objdetect.pas',
+  tracking in '..\..\..\include\video\tracking.pas',
+  Core in '..\..\..\include\core\core.pas';
 
 const
   filename = 'Resource\roulette-wheel2-small.jpg';
@@ -68,11 +67,11 @@ Var
   r_plane: pIplImage = nil;
   g_plane: pIplImage = nil;
   b_plane: pIplImage = nil;
-  // для хранения каналов RGB после преобразования
+  // для хранения каналов RGB поcле преобразования
   r_range: pIplImage = nil;
   g_range: pIplImage = nil;
   b_range: pIplImage = nil;
-  // для хранения суммарной картинки
+  // для хранения cуммарной картинки
   rgb_and: pIplImage = nil;
 
   //
@@ -124,7 +123,7 @@ begin
     image := cvLoadImage(filename);
     WriteLn(Format('[i] image: %s', [filename]));
 
-    // создаём картинки
+    // cоздаём картинки
     rgb := cvCreateImage(cvGetSize(image), IPL_DEPTH_8U, 3);
     r_plane := cvCreateImage(cvGetSize(image), IPL_DEPTH_8U, 1);
     g_plane := cvCreateImage(cvGetSize(image), IPL_DEPTH_8U, 1);
@@ -139,7 +138,7 @@ begin
     cvSplit(rgb, b_plane, g_plane, r_plane, 0);
 
     //
-    // определяем минимальное и максимальное значение
+    // определяем минимальное и макcимальное значение
     // у каналов HSV
     framemin := 0;
     framemax := 0;
@@ -175,7 +174,7 @@ begin
     cvCreateTrackbar('Bmax', 'B range', @Gmax, RGBmax, myTrackbarBmax);
 
     //
-    // разместим окна по рабочему столу
+    // размеcтим окна по рабочему cтолу
     //
     if (image^.width < 1920 / 4) and (image^.height < 1080 / 2) then
     begin
@@ -195,7 +194,7 @@ begin
       // показываем картинку
       cvShowImage('original', image);
 
-      // показываем слои
+      // показываем cлои
       cvShowImage('R', r_plane);
       cvShowImage('G', g_plane);
       cvShowImage('B', b_plane);
@@ -205,7 +204,7 @@ begin
       cvShowImage('G range', g_range);
       cvShowImage('B range', b_range);
 
-      // складываем
+      // cкладываем
       cvAnd(r_range, g_range, rgb_and);
       cvAnd(rgb_and, b_range, rgb_and);
 
@@ -214,7 +213,7 @@ begin
 
       c := cvWaitKey(33);
       if (c = 27) then
-        // если нажата ESC - выходим
+        // еcли нажата ESC - выходим
         break;
 
     end;
@@ -223,7 +222,7 @@ begin
     WriteLn(Format('[i][G] %d : %d', [Gmin, Gmax]));
     WriteLn(Format('[i][B] %d : %d', [Bmin, Bmax]));
 
-    // освобождаем ресурсы
+    // оcвобождаем реcурcы
     cvReleaseImage(image);
     cvReleaseImage(rgb);
     cvReleaseImage(r_plane);

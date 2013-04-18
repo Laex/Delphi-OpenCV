@@ -32,8 +32,8 @@ uses
   System.SysUtils,
   uLibName in '..\..\..\include\uLibName.pas',
   highgui_c in '..\..\..\include\highgui\highgui_c.pas',
-  core_c in '..\..\..\include\сore\core_c.pas',
-  Core.types_c in '..\..\..\include\сore\Core.types_c.pas',
+  core_c in '..\..\..\include\core\core_c.pas',
+  Core.types_c in '..\..\..\include\core\Core.types_c.pas',
   imgproc.types_c in '..\..\..\include\imgproc\imgproc.types_c.pas',
   imgproc_c in '..\..\..\include\imgproc\imgproc_c.pas',
   legacy in '..\..\..\include\legacy\legacy.pas',
@@ -42,7 +42,7 @@ uses
   haar in '..\..\..\include\objdetect\haar.pas',
   objdetect in '..\..\..\include\objdetect\objdetect.pas',
   tracking in '..\..\..\include\video\tracking.pas',
-  Core in '..\..\..\include\сore\core.pas';
+  Core in '..\..\..\include\core\core.pas';
 
 Var
   capture: PCvCapture;
@@ -63,7 +63,7 @@ begin
     capture := cvCreateCameraCapture(CV_CAP_ANY); // cvCaptureFromCAM( 0 );
     if not Assigned(capture) then
       Halt;
-    // узнаем ширину и высоту кадра
+    // узнаем ширину и выcоту кадра
     width := cvGetCaptureProperty(capture, CV_CAP_PROP_FRAME_WIDTH);
     height := cvGetCaptureProperty(capture, CV_CAP_PROP_FRAME_HEIGHT);
     WriteLn(Format('[i] %.0f x %.0f', [width, height]));
@@ -98,14 +98,14 @@ begin
         Break
       else if (cc = 13) then
       begin
-        // сохраняем кадр в файл
+        // cохраняем кадр в файл
         filename := pCVChar(AnsiString(Format('Image %d.jpg'#0, [counter])));
         WriteLn('[i] capture - ', filename);
         cvSaveImage(filename, frame);
         Inc(counter);
       end;
     end;
-    // освобождаем ресурсы
+    // оcвобождаем реcурcы
     cvDestroyWindow('capture');
     cvReleaseCapture(capture);
     cvReleaseImage(gframe);

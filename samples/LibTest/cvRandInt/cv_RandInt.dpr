@@ -32,8 +32,8 @@ uses
   System.SysUtils,
 uLibName in '..\..\..\include\uLibName.pas',
 highgui_c in '..\..\..\include\highgui\highgui_c.pas',
-core_c in '..\..\..\include\сore\core_c.pas',
-Core.types_c in '..\..\..\include\сore\Core.types_c.pas',
+core_c in '..\..\..\include\core\core_c.pas',
+Core.types_c in '..\..\..\include\core\Core.types_c.pas',
 imgproc.types_c in '..\..\..\include\imgproc\imgproc.types_c.pas',
 imgproc_c in '..\..\..\include\imgproc\imgproc_c.pas',
 legacy in '..\..\..\include\legacy\legacy.pas',
@@ -42,7 +42,7 @@ imgproc in '..\..\..\include\imgproc\imgproc.pas',
 haar in '..\..\..\include\objdetect\haar.pas',
 objdetect in '..\..\..\include\objdetect\objdetect.pas',
 tracking in '..\..\..\include\video\tracking.pas',
-Core in '..\..\..\include\сore\core.pas'
+Core in '..\..\..\include\core\core.pas'
   ;
 
 Const
@@ -54,7 +54,7 @@ Type
   pArrayOfByte = ^TArrayOfByte;
 
 Var
-  // исходная
+  // иcходная
   image: PIplImage = nil;
   dst: PIplImage = nil;
   count, x, y: Integer;
@@ -75,10 +75,10 @@ begin
     cvNamedWindow('original', CV_WINDOW_AUTOSIZE);
     cvNamedWindow('noise', CV_WINDOW_AUTOSIZE);
 
-    // инициализация состояния ГПСЧ
+    // инициализация cоcтояния ГПcЧ
     rng := TCvRNG($7FFFFFFF);
 
-    // пробегаемся по всем пикселям изображения
+    // пробегаемcя по вcем пикcелям изображения
     for y := 0 to dst^.height - 1 do
     begin
       ptr := pArrayOfByte(dst^.imageData + y * dst^.widthStep);
@@ -92,7 +92,7 @@ begin
           ptr[3 * x + 2] := cvRandInt(rng) mod 255; // R
           Inc(count);
 
-          // красные пиксели
+          // крccные пикcели
           ptr[3 * x] := 0;
           ptr[3 * x + 1] := 0;
           ptr[3 * x + 2] := 255;
@@ -109,7 +109,7 @@ begin
     // ждём нажатия клавиши
     cvWaitKey(0);
 
-    // освобождаем ресурсы
+    // оcвобождаем реcурcы
     cvReleaseImage(image);
     cvReleaseImage(dst);
     // удаляем окна
