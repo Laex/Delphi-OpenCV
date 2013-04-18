@@ -30,20 +30,19 @@ program cv_FindContours;
 
 uses
   System.SysUtils,
-uLibName in '..\..\..\include\uLibName.pas',
-highgui_c in '..\..\..\include\highgui\highgui_c.pas',
-core_c in '..\..\..\include\сore\core_c.pas',
-Core.types_c in '..\..\..\include\сore\Core.types_c.pas',
-imgproc.types_c in '..\..\..\include\imgproc\imgproc.types_c.pas',
-imgproc_c in '..\..\..\include\imgproc\imgproc_c.pas',
-legacy in '..\..\..\include\legacy\legacy.pas',
-calib3d in '..\..\..\include\calib3d\calib3d.pas',
-imgproc in '..\..\..\include\imgproc\imgproc.pas',
-haar in '..\..\..\include\objdetect\haar.pas',
-objdetect in '..\..\..\include\objdetect\objdetect.pas',
-tracking in '..\..\..\include\video\tracking.pas',
-Core in '..\..\..\include\сore\core.pas'
-  ;
+  uLibName in '..\..\..\include\uLibName.pas',
+  highgui_c in '..\..\..\include\highgui\highgui_c.pas',
+  core_c in '..\..\..\include\core\core_c.pas',
+  Core.types_c in '..\..\..\include\core\Core.types_c.pas',
+  imgproc.types_c in '..\..\..\include\imgproc\imgproc.types_c.pas',
+  imgproc_c in '..\..\..\include\imgproc\imgproc_c.pas',
+  legacy in '..\..\..\include\legacy\legacy.pas',
+  calib3d in '..\..\..\include\calib3d\calib3d.pas',
+  imgproc in '..\..\..\include\imgproc\imgproc.pas',
+  haar in '..\..\..\include\objdetect\haar.pas',
+  objdetect in '..\..\..\include\objdetect\objdetect.pas',
+  tracking in '..\..\..\include\video\tracking.pas',
+  Core in '..\..\..\include\core\core.pas';
 
 Const
   filename = 'Resource\opencv_logo_with_text_sm.png';
@@ -52,7 +51,7 @@ Var
   image: pIplImage = nil;
   dst: pIplImage = nil;
   img_gray: pIplImage = Nil;
-  contours: pCvSeq=nil;
+  contours: pCvSeq = nil;
   storage: pCvMemStorage = nil;
 
 begin
@@ -66,7 +65,7 @@ begin
       cvNamedWindow('Threshold image', CV_WINDOW_AUTOSIZE);
       cvNamedWindow('Contour image', CV_WINDOW_AUTOSIZE);
       cvShowImage('Source image', image);
-      // Создаем изображение в градациях серого
+      // cоздаем изображение в градациях cерого
       img_gray := cvCreateImage(cvSize(image^.width, image^.height), IPL_DEPTH_8U, 1);
       dst := cvCreateImage(cvSize(image^.width, image^.height), IPL_DEPTH_8U, 1);
       cvCvtColor(image, img_gray, CV_BGR2GRAY);
@@ -75,7 +74,7 @@ begin
       cvThreshold(img_gray, dst, 128, 255, CV_THRESH_BINARY_INV);
       // cvAdaptiveThreshold(img_gray, img_gray, 255, CV_ADAPTIVE_THRESH_GAUSSIAN_C, CV_THRESH_BINARY, 21, 7);
       cvShowImage('Threshold image', dst);
-      contours:=AllocMem(SizeOf(TCvSeq));
+      contours := AllocMem(SizeOf(TCvSeq));
       cvFindContours(dst, storage, @contours, SizeOf(TCvContour), CV_RETR_LIST, CV_CHAIN_APPROX_SIMPLE, cvPoint(0, 0));
       cvDrawContours(image, contours, CV_RGB(100, 200, 0), CV_RGB(200, 100, 0), 2, 2, CV_AA, cvPoint(0, 0));
       cvShowImage('Contour image', image);

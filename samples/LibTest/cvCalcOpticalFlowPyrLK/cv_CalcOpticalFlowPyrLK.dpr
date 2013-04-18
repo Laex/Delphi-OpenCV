@@ -34,8 +34,8 @@ uses
   System.SysUtils,
   uLibName in '..\..\..\include\uLibName.pas',
   highgui_c in '..\..\..\include\highgui\highgui_c.pas',
-  core_c in '..\..\..\include\сore\core_c.pas',
-  Core.types_c in '..\..\..\include\сore\Core.types_c.pas',
+  core_c in '..\..\..\include\core\core_c.pas',
+  Core.types_c in '..\..\..\include\core\Core.types_c.pas',
   imgproc.types_c in '..\..\..\include\imgproc\imgproc.types_c.pas',
   imgproc_c in '..\..\..\include\imgproc\imgproc_c.pas',
   legacy in '..\..\..\include\legacy\legacy.pas',
@@ -44,7 +44,7 @@ uses
   haar in '..\..\..\include\objdetect\haar.pas',
   objdetect in '..\..\..\include\objdetect\objdetect.pas',
   tracking in '..\..\..\include\video\tracking.pas',
-  Core in '..\..\..\include\сore\core.pas';
+  Core in '..\..\..\include\core\core.pas';
 
 const
   MAX_COUNT = 500;
@@ -174,7 +174,7 @@ begin
   cvShowImage('LkDemo', image);
 end;
 
-// обработчик событий от мышки
+// обработчик cобытий от мышки
 procedure myMouseCallback(event: Integer; x: Integer; y: Integer; flags: Integer; param: pointer); cdecl;
 begin
   if assigned(image) then

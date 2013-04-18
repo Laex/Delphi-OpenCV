@@ -41,9 +41,9 @@ uses
   haar in '..\..\..\include\objdetect\haar.pas',
   objdetect in '..\..\..\include\objdetect\objdetect.pas',
   tracking in '..\..\..\include\video\tracking.pas',
-  Core.types_c in '..\..\..\include\сore\Core.types_c.pas',
-  core_c in '..\..\..\include\сore\core_c.pas',
-  Core in '..\..\..\include\сore\core.pas';
+  Core.types_c in '..\..\..\include\core\Core.types_c.pas',
+  core_c in '..\..\..\include\core\core_c.pas',
+  Core in '..\..\..\include\core\core.pas';
 
 Var
   k: Integer;

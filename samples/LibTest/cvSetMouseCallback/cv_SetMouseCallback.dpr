@@ -30,20 +30,19 @@ program cv_SetMouseCallback;
 
 uses
   System.SysUtils,
-uLibName in '..\..\..\include\uLibName.pas',
-highgui_c in '..\..\..\include\highgui\highgui_c.pas',
-core_c in '..\..\..\include\сore\core_c.pas',
-Core.types_c in '..\..\..\include\сore\Core.types_c.pas',
-imgproc.types_c in '..\..\..\include\imgproc\imgproc.types_c.pas',
-imgproc_c in '..\..\..\include\imgproc\imgproc_c.pas',
-legacy in '..\..\..\include\legacy\legacy.pas',
-calib3d in '..\..\..\include\calib3d\calib3d.pas',
-imgproc in '..\..\..\include\imgproc\imgproc.pas',
-haar in '..\..\..\include\objdetect\haar.pas',
-objdetect in '..\..\..\include\objdetect\objdetect.pas',
-tracking in '..\..\..\include\video\tracking.pas',
-Core in '..\..\..\include\сore\core.pas'
-  ;
+  uLibName in '..\..\..\include\uLibName.pas',
+  highgui_c in '..\..\..\include\highgui\highgui_c.pas',
+  core_c in '..\..\..\include\core\core_c.pas',
+  Core.types_c in '..\..\..\include\core\Core.types_c.pas',
+  imgproc.types_c in '..\..\..\include\imgproc\imgproc.types_c.pas',
+  imgproc_c in '..\..\..\include\imgproc\imgproc_c.pas',
+  legacy in '..\..\..\include\legacy\legacy.pas',
+  calib3d in '..\..\..\include\calib3d\calib3d.pas',
+  imgproc in '..\..\..\include\imgproc\imgproc.pas',
+  haar in '..\..\..\include\objdetect\haar.pas',
+  objdetect in '..\..\..\include\objdetect\objdetect.pas',
+  tracking in '..\..\..\include\video\tracking.pas',
+  Core in '..\..\..\include\core\core.pas';
 
 Const
   // имя картинки
@@ -53,7 +52,7 @@ Var
   image: PIplImage = nil;
   c: Integer;
 
-  // рисуем целеуказатель
+  // риcуем целеуказатель
 procedure drawTarget(img: PIplImage; x, y, radius: Integer); cdecl;
 begin
   cvCircle(img, cvPoint(x, y), radius, CV_RGB(250, 0, 0), 1, 8);
@@ -63,9 +62,8 @@ begin
     CV_RGB(250, 0, 0), 1, 8);
 end;
 
-// обработчик событий от мышки
-procedure myMouseCallback(event: Integer; x: Integer; y: Integer; flags: Integer;
-  param: Pointer); cdecl;
+// обработчик cобытий от мышки
+procedure myMouseCallback(event: Integer; x: Integer; y: Integer; flags: Integer; param: Pointer); cdecl;
 Var
   img: PIplImage;
 begin
@@ -98,7 +96,7 @@ begin
         break;
     end;
 
-    // освобождаем ресурсы
+    // оcвобождаем реcурcы
     cvReleaseImage(image);
     // удаляем окно
     cvDestroyWindow('original');

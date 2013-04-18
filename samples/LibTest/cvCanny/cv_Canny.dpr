@@ -30,20 +30,19 @@ program cv_Canny;
 
 uses
   System.SysUtils,
-uLibName in '..\..\..\include\uLibName.pas',
-highgui_c in '..\..\..\include\highgui\highgui_c.pas',
-core_c in '..\..\..\include\сore\core_c.pas',
-Core.types_c in '..\..\..\include\сore\Core.types_c.pas',
-imgproc.types_c in '..\..\..\include\imgproc\imgproc.types_c.pas',
-imgproc_c in '..\..\..\include\imgproc\imgproc_c.pas',
-legacy in '..\..\..\include\legacy\legacy.pas',
-calib3d in '..\..\..\include\calib3d\calib3d.pas',
-imgproc in '..\..\..\include\imgproc\imgproc.pas',
-haar in '..\..\..\include\objdetect\haar.pas',
-objdetect in '..\..\..\include\objdetect\objdetect.pas',
-tracking in '..\..\..\include\video\tracking.pas',
-Core in '..\..\..\include\сore\core.pas'
-  ;
+  uLibName in '..\..\..\include\uLibName.pas',
+  highgui_c in '..\..\..\include\highgui\highgui_c.pas',
+  core_c in '..\..\..\include\core\core_c.pas',
+  Core.types_c in '..\..\..\include\core\Core.types_c.pas',
+  imgproc.types_c in '..\..\..\include\imgproc\imgproc.types_c.pas',
+  imgproc_c in '..\..\..\include\imgproc\imgproc_c.pas',
+  legacy in '..\..\..\include\legacy\legacy.pas',
+  calib3d in '..\..\..\include\calib3d\calib3d.pas',
+  imgproc in '..\..\..\include\imgproc\imgproc.pas',
+  haar in '..\..\..\include\objdetect\haar.pas',
+  objdetect in '..\..\..\include\objdetect\objdetect.pas',
+  tracking in '..\..\..\include\video\tracking.pas',
+  Core in '..\..\..\include\core\core.pas';
 
 const
   filename = 'Resource\cat2.jpg';
@@ -59,7 +58,7 @@ begin
     image := cvLoadImage(filename);
     WriteLn(Format('[i] image: %s', [filename]));
 
-    // создаём одноканальные картинки
+    // cоздаём одноканальные картинки
     gray := cvCreateImage(cvGetSize(image), IPL_DEPTH_8U, 1);
     dst := cvCreateImage(cvGetSize(image), IPL_DEPTH_8U, 1);
 
@@ -68,7 +67,7 @@ begin
     cvNamedWindow('gray', CV_WINDOW_AUTOSIZE);
     cvNamedWindow('cvCanny', CV_WINDOW_AUTOSIZE);
 
-    // преобразуем в градации серого
+    // преобразуем в градации cерого
     cvCvtColor(image, gray, CV_RGB2GRAY);
 
     // получаем границы
@@ -82,7 +81,7 @@ begin
     // ждём нажатия клавиши
     cvWaitKey(0);
 
-    // освобождаем ресурсы
+    // оcвобождаем реcурcы
     cvReleaseImage(image);
     cvReleaseImage(gray);
     cvReleaseImage(dst);

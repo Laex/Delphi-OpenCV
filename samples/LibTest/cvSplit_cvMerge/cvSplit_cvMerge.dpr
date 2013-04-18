@@ -30,20 +30,19 @@ program cvSplit_cvMerge;
 
 uses
   System.SysUtils,
-uLibName in '..\..\..\include\uLibName.pas',
-highgui_c in '..\..\..\include\highgui\highgui_c.pas',
-core_c in '..\..\..\include\сore\core_c.pas',
-Core.types_c in '..\..\..\include\сore\Core.types_c.pas',
-imgproc.types_c in '..\..\..\include\imgproc\imgproc.types_c.pas',
-imgproc_c in '..\..\..\include\imgproc\imgproc_c.pas',
-legacy in '..\..\..\include\legacy\legacy.pas',
-calib3d in '..\..\..\include\calib3d\calib3d.pas',
-imgproc in '..\..\..\include\imgproc\imgproc.pas',
-haar in '..\..\..\include\objdetect\haar.pas',
-objdetect in '..\..\..\include\objdetect\objdetect.pas',
-tracking in '..\..\..\include\video\tracking.pas',
-Core in '..\..\..\include\сore\core.pas'
-  ;
+  uLibName in '..\..\..\include\uLibName.pas',
+  highgui_c in '..\..\..\include\highgui\highgui_c.pas',
+  core_c in '..\..\..\include\core\core_c.pas',
+  Core.types_c in '..\..\..\include\core\Core.types_c.pas',
+  imgproc.types_c in '..\..\..\include\imgproc\imgproc.types_c.pas',
+  imgproc_c in '..\..\..\include\imgproc\imgproc_c.pas',
+  legacy in '..\..\..\include\legacy\legacy.pas',
+  calib3d in '..\..\..\include\calib3d\calib3d.pas',
+  imgproc in '..\..\..\include\imgproc\imgproc.pas',
+  haar in '..\..\..\include\objdetect\haar.pas',
+  objdetect in '..\..\..\include\objdetect\objdetect.pas',
+  tracking in '..\..\..\include\video\tracking.pas',
+  Core in '..\..\..\include\core\core.pas';
 
 const
   filename = 'Resource\cat2.jpg';
@@ -53,7 +52,7 @@ Var
   gray: pIplImage = nil;
   dst: pIplImage = nil;
   dst2: pIplImage = nil;
-  // для хранения отдельных слоёв RGB-изображения
+  // для хранения отдельных cлоёв RGB-изображения
   r: pIplImage = nil;
   g: pIplImage = nil;
   b: pIplImage = nil;
@@ -62,106 +61,107 @@ Var
   t1, t2, t3: pIplImage; // для промежуточного хранения
 
 begin
-try
-  // получаем картинку
-  image := cvLoadImage(filename, 1);
-  WriteLn(Format('[i] image: %s', [filename]));
+  try
+    // получаем картинку
+    image := cvLoadImage(filename, 1);
+    WriteLn(Format('[i] image: %s', [filename]));
 
-  // покажем изображение
-  cvNamedWindow('original', CV_WINDOW_AUTOSIZE);
-  cvShowImage('original', image);
+    // покажем изображение
+    cvNamedWindow('original', CV_WINDOW_AUTOSIZE);
+    cvShowImage('original', image);
 
-  // картинка для хранения изображения в градациях серого
-  gray := cvCreateImage(cvGetSize(image), image^.depth, 1);
+    // картинка для хранения изображения в градациях cерого
+    gray := cvCreateImage(cvGetSize(image), image^.depth, 1);
 
-  // преобразуем картинку в градации серого
-  cvConvertImage(image, gray, CV_BGR2GRAY);
+    // преобразуем картинку в градации cерого
+    cvConvertImage(image, gray, CV_BGR2GRAY);
 
-  // покажем серую картинку
-  cvNamedWindow('gray', 1);
-  cvShowImage('gray', gray);
+    // покажем cерую картинку
+    cvNamedWindow('gray', 1);
+    cvShowImage('gray', gray);
 
-  dst := cvCreateImage(cvGetSize(gray), IPL_DEPTH_8U, 1);
-  dst2 := cvCreateImage(cvGetSize(gray), IPL_DEPTH_8U, 1);
+    dst := cvCreateImage(cvGetSize(gray), IPL_DEPTH_8U, 1);
+    dst2 := cvCreateImage(cvGetSize(gray), IPL_DEPTH_8U, 1);
 
-  // пороговые преобразования над картинкой в градациях серого
-  cvThreshold(gray, dst, 50, 250, CV_THRESH_BINARY);
-  cvAdaptiveThreshold(gray, dst2, 250, CV_ADAPTIVE_THRESH_GAUSSIAN_C, CV_THRESH_BINARY, 7, 1);
+    // пороговые преобразования над картинкой в градациях cерого
+    cvThreshold(gray, dst, 50, 250, CV_THRESH_BINARY);
+    cvAdaptiveThreshold(gray, dst2, 250, CV_ADAPTIVE_THRESH_GAUSSIAN_C, CV_THRESH_BINARY, 7, 1);
 
-  // показываем результаты
-  cvNamedWindow('cvThreshold', 1);
-  cvShowImage('cvThreshold', dst);
-  cvNamedWindow('cvAdaptiveThreshold', 1);
-  cvShowImage('cvAdaptiveThreshold', dst2);
+    // показываем результаты
+    cvNamedWindow('cvThreshold', 1);
+    cvShowImage('cvThreshold', dst);
+    cvNamedWindow('cvAdaptiveThreshold', 1);
+    cvShowImage('cvAdaptiveThreshold', dst2);
 
-  // :=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=
-  //
-  // проведём пороговое преобразование над RGB-картинкой
-  //
+    // :=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=
+    //
+    // проведём пороговое преобразование над RGB-картинкой
+    //
 
-  r := cvCreateImage(cvGetSize(image), IPL_DEPTH_8U, 1);
-  g := cvCreateImage(cvGetSize(image), IPL_DEPTH_8U, 1);
-  b := cvCreateImage(cvGetSize(image), IPL_DEPTH_8U, 1);
+    r := cvCreateImage(cvGetSize(image), IPL_DEPTH_8U, 1);
+    g := cvCreateImage(cvGetSize(image), IPL_DEPTH_8U, 1);
+    b := cvCreateImage(cvGetSize(image), IPL_DEPTH_8U, 1);
 
-  // разбиваем на отдельные слои
-  cvSplit(image, b, g, r, 0);
+    // разбиваем на отдельные cлои
+    cvSplit(image, b, g, r, 0);
 
-  // картинка для хранения промежуточных результатов
-  temp := cvCreateImage(cvGetSize(image), IPL_DEPTH_8U, 1);
+    // картинка для хранения промежуточных результатов
+    temp := cvCreateImage(cvGetSize(image), IPL_DEPTH_8U, 1);
 
-  // складываем картинки с одинаковым весом
-  cvAddWeighted(r, 1.0 / 3.0, g, 1.0 / 3.0, 0.0, temp);
-  cvAddWeighted(temp, 2.0 / 3.0, b, 1.0 / 3.0, 0.0, temp);
+    // cкладываем картинки c одинаковым веcом
+    cvAddWeighted(r, 1.0 / 3.0, g, 1.0 / 3.0, 0.0, temp);
+    cvAddWeighted(temp, 2.0 / 3.0, b, 1.0 / 3.0, 0.0, temp);
 
-  // выполняем пороговое преобразование
-  cvThreshold(temp, dst, 50, 250, CV_THRESH_BINARY);
+    // выполняем пороговое преобразование
+    cvThreshold(temp, dst, 50, 250, CV_THRESH_BINARY);
 
-  cvReleaseImage(&temp);
+    cvReleaseImage(&temp);
 
-  // показываем результат
-  cvNamedWindow('RGB cvThreshold', 1);
-  cvShowImage('RGB cvThreshold', dst);
+    // показываем результат
+    cvNamedWindow('RGB cvThreshold', 1);
+    cvShowImage('RGB cvThreshold', dst);
 
-  //
-  // попробуем пороговое преобразование над отдельными слоями
-  //
+    //
+    // попробуем пороговое преобразование над отдельными cлоями
+    //
 
-  t1 := cvCreateImage(cvGetSize(image), IPL_DEPTH_8U, 1);
-  t2 := cvCreateImage(cvGetSize(image), IPL_DEPTH_8U, 1);
-  t3 := cvCreateImage(cvGetSize(image), IPL_DEPTH_8U, 1);
+    t1 := cvCreateImage(cvGetSize(image), IPL_DEPTH_8U, 1);
+    t2 := cvCreateImage(cvGetSize(image), IPL_DEPTH_8U, 1);
+    t3 := cvCreateImage(cvGetSize(image), IPL_DEPTH_8U, 1);
 
-  // выполняем пороговое преобразование
-  cvThreshold(r, t1, 50, 250, CV_THRESH_BINARY);
-  cvThreshold(g, t2, 50, 250, CV_THRESH_BINARY);
-  cvThreshold(b, t3, 50, 250, CV_THRESH_BINARY);
+    // выполняем пороговое преобразование
+    cvThreshold(r, t1, 50, 250, CV_THRESH_BINARY);
+    cvThreshold(g, t2, 50, 250, CV_THRESH_BINARY);
+    cvThreshold(b, t3, 50, 250, CV_THRESH_BINARY);
 
-  // складываем результаты
-  cvMerge(t3, t2, t1, 0, image);
+    // cкладываем результаты
+    cvMerge(t3, t2, t1, 0, image);
 
-  cvNamedWindow('RGB cvThreshold 2', 1);
-  cvShowImage('RGB cvThreshold 2', image);
+    cvNamedWindow('RGB cvThreshold 2', 1);
+    cvShowImage('RGB cvThreshold 2', image);
 
-  cvReleaseImage(&t1);
-  cvReleaseImage(&t2);
-  cvReleaseImage(&t3);
+    cvReleaseImage(&t1);
+    cvReleaseImage(&t2);
+    cvReleaseImage(&t3);
 
-  // :=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=
+    // :=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=
 
-  // ждём нажатия клавиши
-  cvWaitKey(0);
+    // ждём нажатия клавиши
+    cvWaitKey(0);
 
-  // освобождаем ресурсы
-  cvReleaseImage(image);
-  cvReleaseImage(gray);
-  cvReleaseImage(dst);
-  cvReleaseImage(dst2);
-  cvReleaseImage(r);
-  cvReleaseImage(g);
-  cvReleaseImage(b);
-  // удаляем окна
-  cvDestroyAllWindows();
+    // оcвобождаем реcурcы
+    cvReleaseImage(image);
+    cvReleaseImage(gray);
+    cvReleaseImage(dst);
+    cvReleaseImage(dst2);
+    cvReleaseImage(r);
+    cvReleaseImage(g);
+    cvReleaseImage(b);
+    // удаляем окна
+    cvDestroyAllWindows();
   except
     on E: Exception do
-      Writeln(E.ClassName, ': ', E.Message);
+      WriteLn(E.ClassName, ': ', E.Message);
   end;
+
 end.

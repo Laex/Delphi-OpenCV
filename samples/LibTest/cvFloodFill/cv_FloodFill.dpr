@@ -30,34 +30,33 @@ program cv_FloodFill;
 
 uses
   System.SysUtils,
-uLibName in '..\..\..\include\uLibName.pas',
-highgui_c in '..\..\..\include\highgui\highgui_c.pas',
-core_c in '..\..\..\include\сore\core_c.pas',
-Core.types_c in '..\..\..\include\сore\Core.types_c.pas',
-imgproc.types_c in '..\..\..\include\imgproc\imgproc.types_c.pas',
-imgproc_c in '..\..\..\include\imgproc\imgproc_c.pas',
-legacy in '..\..\..\include\legacy\legacy.pas',
-calib3d in '..\..\..\include\calib3d\calib3d.pas',
-imgproc in '..\..\..\include\imgproc\imgproc.pas',
-haar in '..\..\..\include\objdetect\haar.pas',
-objdetect in '..\..\..\include\objdetect\objdetect.pas',
-tracking in '..\..\..\include\video\tracking.pas',
-Core in '..\..\..\include\сore\core.pas'
-  ;
+  uLibName in '..\..\..\include\uLibName.pas',
+  highgui_c in '..\..\..\include\highgui\highgui_c.pas',
+  core_c in '..\..\..\include\core\core_c.pas',
+  Core.types_c in '..\..\..\include\core\Core.types_c.pas',
+  imgproc.types_c in '..\..\..\include\imgproc\imgproc.types_c.pas',
+  imgproc_c in '..\..\..\include\imgproc\imgproc_c.pas',
+  legacy in '..\..\..\include\legacy\legacy.pas',
+  calib3d in '..\..\..\include\calib3d\calib3d.pas',
+  imgproc in '..\..\..\include\imgproc\imgproc.pas',
+  haar in '..\..\..\include\objdetect\haar.pas',
+  objdetect in '..\..\..\include\objdetect\objdetect.pas',
+  tracking in '..\..\..\include\video\tracking.pas',
+  Core in '..\..\..\include\core\core.pas';
 
-// заливка области картинки цветом
+// заливка облccти картинки цветом
 procedure fill(src: pIplImage; seed: TCvPoint; color: TCvScalar); // = CV_RGB(255, 0, 0)
 Var
   comp: TCvConnectedComp;
 begin
-  cvFloodFill(src, seed, color, cvScalarAll(10), // минимальная разность
-    cvScalarAll(10), // максимальная разность
+  cvFloodFill(src, seed, color, cvScalarAll(10), // минимальная разноcть
+    cvScalarAll(10), // макcимальная разноcть
     @comp, CV_FLOODFILL_FIXED_RANGE + 8, 0);
   // покажем площадь заливки
   WriteLn(Format('[filled area]%.2f', [comp.area]));
 end;
 
-// обработчик событий от мышки
+// обработчик cобытий от мышки
 procedure myMouseCallback(event: Integer; x: Integer; y: Integer; flags: Integer; param: Pointer); cdecl;
 Var
   img: pIplImage;
@@ -100,10 +99,10 @@ begin
       // показываем картинку
       cvShowImage('original', src);
       c := cvWaitKey(33);
-      if (c = 27) then // если нажата ESC - выходим
+      if (c = 27) then // еcли нажата ESC - выходим
         break;
     end;
-    // освобождаем ресурсы
+    // оcвобождаем реcурcы
     cvReleaseImage(src);
     cvReleaseImage(dst);
     // удаляем окна

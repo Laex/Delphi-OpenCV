@@ -30,20 +30,19 @@ program cv_MorphologyEx;
 
 uses
   System.SysUtils,
-uLibName in '..\..\..\include\uLibName.pas',
-highgui_c in '..\..\..\include\highgui\highgui_c.pas',
-core_c in '..\..\..\include\сore\core_c.pas',
-Core.types_c in '..\..\..\include\сore\Core.types_c.pas',
-imgproc.types_c in '..\..\..\include\imgproc\imgproc.types_c.pas',
-imgproc_c in '..\..\..\include\imgproc\imgproc_c.pas',
-legacy in '..\..\..\include\legacy\legacy.pas',
-calib3d in '..\..\..\include\calib3d\calib3d.pas',
-imgproc in '..\..\..\include\imgproc\imgproc.pas',
-haar in '..\..\..\include\objdetect\haar.pas',
-objdetect in '..\..\..\include\objdetect\objdetect.pas',
-tracking in '..\..\..\include\video\tracking.pas',
-Core in '..\..\..\include\сore\core.pas'
-  ;
+  uLibName in '..\..\..\include\uLibName.pas',
+  highgui_c in '..\..\..\include\highgui\highgui_c.pas',
+  core_c in '..\..\..\include\core\core_c.pas',
+  Core.types_c in '..\..\..\include\core\Core.types_c.pas',
+  imgproc.types_c in '..\..\..\include\imgproc\imgproc.types_c.pas',
+  imgproc_c in '..\..\..\include\imgproc\imgproc_c.pas',
+  legacy in '..\..\..\include\legacy\legacy.pas',
+  calib3d in '..\..\..\include\calib3d\calib3d.pas',
+  imgproc in '..\..\..\include\imgproc\imgproc.pas',
+  haar in '..\..\..\include\objdetect\haar.pas',
+  objdetect in '..\..\..\include\objdetect\objdetect.pas',
+  tracking in '..\..\..\include\video\tracking.pas',
+  Core in '..\..\..\include\core\core.pas';
 
 Const
   // имя картинки
@@ -65,11 +64,11 @@ Var
 
   Kern: PIplConvKernel;
   Temp: PIplImage;
-  c:Integer;
+  c: Integer;
 
   //
   // функция-обработчик ползунка -
-  // радиус ядра
+  // радиуc ядра
 procedure myTrackbarRadius(pos: Integer); cdecl;
 begin
   radius := pos;
@@ -77,7 +76,7 @@ end;
 
 //
 // функция-обработчик ползунка -
-// число итераций
+// чиcло итераций
 procedure myTrackbarIterations(pos: Integer); cdecl;
 begin
   iterations := pos;
@@ -112,9 +111,8 @@ begin
     begin
       // показываем картинку
       cvShowImage('original', image);
-      // создаём ядро
-      Kern := cvCreateStructuringElementEx(radius * 2 + 1, radius * 2 + 1, radius, radius,
-        CV_SHAPE_ELLIPSE);
+      // cоздаём ядро
+      Kern := cvCreateStructuringElementEx(radius * 2 + 1, radius * 2 + 1, radius, radius, CV_SHAPE_ELLIPSE);
 
       // картинка для промежуточного хранения результатов cvCreateImage
       Temp := cvCreateImage(cvSize(image^.width, image^.height), IPL_DEPTH_8U, 1);
@@ -140,7 +138,7 @@ begin
         Break;
     end;
 
-    // освобождаем ресурсы
+    // оcвобождаем реcурcы
     cvReleaseImage(&image);
     cvReleaseImage(&open);
     cvReleaseImage(&close);

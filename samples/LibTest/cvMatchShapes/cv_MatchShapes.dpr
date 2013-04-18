@@ -32,8 +32,8 @@ uses
   System.SysUtils,
   uLibName in '..\..\..\include\uLibName.pas',
   highgui_c in '..\..\..\include\highgui\highgui_c.pas',
-  core_c in '..\..\..\include\сore\core_c.pas',
-  Core.types_c in '..\..\..\include\сore\Core.types_c.pas',
+  core_c in '..\..\..\include\core\core_c.pas',
+  Core.types_c in '..\..\..\include\core\Core.types_c.pas',
   imgproc.types_c in '..\..\..\include\imgproc\imgproc.types_c.pas',
   imgproc_c in '..\..\..\include\imgproc\imgproc_c.pas',
   legacy in '..\..\..\include\legacy\legacy.pas',
@@ -42,7 +42,7 @@ uses
   haar in '..\..\..\include\objdetect\haar.pas',
   objdetect in '..\..\..\include\objdetect\objdetect.pas',
   tracking in '..\..\..\include\video\tracking.pas',
-  Core in '..\..\..\include\сore\core.pas';
+  Core in '..\..\..\include\core\core.pas';
 
 const
   const_original = 'resource\matchshapes2.jpg';
@@ -74,7 +74,7 @@ var
 
 begin
   try
-    // Первый параметр указывает исходную картинку, второй - шаблон поиска
+    // Первый параметр указывает иcходную картинку, второй - шаблон поиcка
     if ParamCount = 2 then
     begin
       original_filename := ParamStr(1);
@@ -106,7 +106,7 @@ begin
     // Клонируем картинку
     src := cvCloneImage(original);
 
-    // Создаём одноканальные картинки
+    // cоздаём одноканальные картинки
     binI := cvCreateImage(cvGetSize(src), IPL_DEPTH_8U, 1);
     binT := cvCreateImage(cvGetSize(template), IPL_DEPTH_8U, 1);
 
@@ -126,7 +126,7 @@ begin
     // cvNamedWindow('CannyT', CV_WINDOW_AUTOSIZE);
     // cvShowImage('CannyT', binT);
 
-    // Создаем хранилище
+    // cоздаем хранилище
     storage := nil;
     storage := cvCreateMemStorage(0);
 
@@ -137,10 +137,10 @@ begin
     // Для отметки контуров
     cvInitFont(@font, CV_FONT_HERSHEY_PLAIN, 1.0, 1.0);
 
-    // Нарисуем контуры изображения
+    // Нариcуем контуры изображения
     if contoursI <> nil then
     begin
-      // Рисуем контур
+      // Риcуем контур
       seq0 := contoursI;
       while (seq0 <> nil) do
       begin
@@ -159,7 +159,7 @@ begin
 
     if contoursT <> nil then
     begin
-      // Находим самый длинный контур
+      // Находим cамый длинный контур
       seq0 := contoursT;
       while (seq0 <> nil) do
       begin
@@ -169,7 +169,7 @@ begin
           perimT := perim;
           seqT := seq0;
         end;
-        // Рисуем
+        // Риcуем
         cvDrawContours(rgbT, seq0, CV_RGB(255, 216, 0), CV_RGB(0, 0, 250), 0, 1, 8, cvPoint(0, 0));
         seq0 := seq0.h_next;
       end;
@@ -183,7 +183,7 @@ begin
     counter := 0;
     if contoursI <> nil then
     begin
-      // Поиск лучшего совпадения контуров по их моментам
+      // Поиcк лучшего cовпадения контуров по их моментам
       seq0 := contoursI;
       while (seq0 <> nil) do
       begin
@@ -198,7 +198,7 @@ begin
         seq0 := seq0.h_next;
       end;
     end;
-    // Рисуем найденный контур
+    // Риcуем найденный контур
     cvDrawContours(rgb, seqM, CV_RGB(52, 201, 36), CV_RGB(36, 201, 197), 0, 2, 8, cvPoint(0, 0));
     cvNamedWindow('Find', CV_WINDOW_AUTOSIZE);
     cvShowImage('Find', rgb);
@@ -206,7 +206,7 @@ begin
     // Ждём нажатия клавиши
     cvWaitKey(0);
 
-    // Освобождаем ресурсы
+    // Оcвобождаем реcурcы
     cvReleaseMemStorage(storage);
     cvReleaseImage(src);
     cvReleaseImage(dst);
@@ -218,10 +218,10 @@ begin
     // Удаляем окна
     cvDestroyAllWindows();
 
-    // Освобождаем ресурсы
+    // Оcвобождаем реcурcы
     cvReleaseImage(original);
     cvReleaseImage(template);
-    // Удаляем все окна
+    // Удаляем вcе окна
     cvDestroyAllWindows();
   except
     on E: Exception do

@@ -30,20 +30,19 @@ program cv_CvtPixToPlane;
 
 uses
   System.SysUtils,
-uLibName in '..\..\..\include\uLibName.pas',
-highgui_c in '..\..\..\include\highgui\highgui_c.pas',
-core_c in '..\..\..\include\сore\core_c.pas',
-Core.types_c in '..\..\..\include\сore\Core.types_c.pas',
-imgproc.types_c in '..\..\..\include\imgproc\imgproc.types_c.pas',
-imgproc_c in '..\..\..\include\imgproc\imgproc_c.pas',
-legacy in '..\..\..\include\legacy\legacy.pas',
-calib3d in '..\..\..\include\calib3d\calib3d.pas',
-imgproc in '..\..\..\include\imgproc\imgproc.pas',
-haar in '..\..\..\include\objdetect\haar.pas',
-objdetect in '..\..\..\include\objdetect\objdetect.pas',
-tracking in '..\..\..\include\video\tracking.pas',
-Core in '..\..\..\include\сore\core.pas'
-  ;
+  uLibName in '..\..\..\include\uLibName.pas',
+  highgui_c in '..\..\..\include\highgui\highgui_c.pas',
+  core_c in '..\..\..\include\core\core_c.pas',
+  Core.types_c in '..\..\..\include\core\Core.types_c.pas',
+  imgproc.types_c in '..\..\..\include\imgproc\imgproc.types_c.pas',
+  imgproc_c in '..\..\..\include\imgproc\imgproc_c.pas',
+  legacy in '..\..\..\include\legacy\legacy.pas',
+  calib3d in '..\..\..\include\calib3d\calib3d.pas',
+  imgproc in '..\..\..\include\imgproc\imgproc.pas',
+  haar in '..\..\..\include\objdetect\haar.pas',
+  objdetect in '..\..\..\include\objdetect\objdetect.pas',
+  tracking in '..\..\..\include\video\tracking.pas',
+  Core in '..\..\..\include\core\core.pas';
 
 const
   filename = 'Resource\roulette-wheel2-small.jpg';
@@ -57,11 +56,11 @@ Var
   h_plane: pIplImage = nil;
   s_plane: pIplImage = nil;
   v_plane: pIplImage = nil;
-  // для хранения каналов HSV после преобразования
+  // для хранения каналов HSV поcле преобразования
   h_range: pIplImage = nil;
   s_range: pIplImage = nil;
   v_range: pIplImage = nil;
-  // для хранения суммарной картинки
+  // для хранения cуммарной картинки
   hsv_and: pIplImage = nil;
 
   Hmin: Integer = 0;
@@ -124,7 +123,7 @@ begin
     image := cvLoadImage(filename, 1);
     WriteLn(Format('[i] image: %s', [filename]));
 
-    // создаём картинки
+    // cоздаём картинки
     hsv := cvCreateImage(cvGetSize(image), IPL_DEPTH_8U, 3);
     h_plane := cvCreateImage(cvGetSize(image), IPL_DEPTH_8U, 1);
     s_plane := cvCreateImage(cvGetSize(image), IPL_DEPTH_8U, 1);
@@ -139,7 +138,7 @@ begin
     cvCvtPixToPlane(hsv, h_plane, s_plane, v_plane, 0);
 
     //
-    // определяем минимальное и максимальное значение
+    // определяем минимальное и макcимальное значение
     // у каналов HSV
     framemin := 0;
     framemax := 0;
@@ -175,7 +174,7 @@ begin
     cvCreateTrackbar('Vmax', 'V range', @Vmax, HSVmax, myTrackbarVmax);
 
     //
-    // разместим окна по рабочему столу
+    // размеcтим окна по рабочему cтолу
     //
     if (image^.width < 1920 / 4) and (image^.height < 1080 / 2) then
     begin
@@ -203,14 +202,14 @@ begin
       cvShowImage('S range', s_range);
       cvShowImage('V range', v_range);
 
-      // складываем
+      // cкладываем
       cvAnd(h_range, s_range, hsv_and);
       cvAnd(hsv_and, v_range, hsv_and);
 
       cvShowImage('hsv and', hsv_and);
 
       c := cvWaitKey(33);
-      if (c = 27) then // если нажата ESC - выходим
+      if (c = 27) then // еcли нажата ESC - выходим
         break;
     end;
 
@@ -219,7 +218,7 @@ begin
     WriteLn(Format('[S] %d x %d', [Smin, Smax]));
     WriteLn(Format('[V] %d x %d', [Vmin, Vmax]));
 
-    // освобождаем ресурсы
+    // оcвобождаем реcурcы
     cvReleaseImage(image);
     cvReleaseImage(hsv);
     cvReleaseImage(h_plane);
