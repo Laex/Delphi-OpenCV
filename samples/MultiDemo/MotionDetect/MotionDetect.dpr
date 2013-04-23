@@ -1,0 +1,95 @@
+program MotionDetect;
+
+{$APPTYPE CONSOLE}
+{$POINTERMATH ON}
+{$R *.res}
+
+uses
+  System.SysUtils,
+  uLibName in '..\..\..\include\uLibName.pas',
+  highgui_c in '..\..\..\include\highgui\highgui_c.pas',
+  imgproc.types_c in '..\..\..\include\imgproc\imgproc.types_c.pas',
+  imgproc_c in '..\..\..\include\imgproc\imgproc_c.pas',
+  imgproc in '..\..\..\include\imgproc\imgproc.pas',
+  core in '..\..\..\include\core\core.pas',
+  Core.types_c in '..\..\..\include\core\Core.types_c.pas',
+  core_c in '..\..\..\include\core\core_c.pas',
+  Math;
+
+
+var
+  storage: pCvMemStorage = nil;
+  capture: pCvCapture = nil;
+  frame: pIplImage = nil;
+  frame_grey: pIplImage = nil;
+  difference_img: pIplImage = nil;
+  oldframe_grey: pIplImage = nil;
+  contours: pCvSeq = nil;
+  c: pCvSeq = nil;
+  //rect: TCvRect;
+  rect2d: TCvBox2D;
+  key: integer;
+  first: boolean = true;
+begin
+  try
+    capture := cvCreateCameraCapture(0);
+    storage := cvCreateMemStorage(0);
+    frame := cvQueryFrame(capture);
+    frame_grey := cvCreateImage(cvSize(frame^.width, frame^.height), IPL_DEPTH_8U, 1);
+
+    while true do
+    begin
+      frame := cvQueryFrame(capture);
+      if frame = nil then
+        break;
+      cvCvtColor(frame, frame_grey, CV_RGB2GRAY);
+      if first then
+      begin
+        difference_img := cvCloneImage(frame_grey);
+        oldframe_grey := cvCloneImage(frame_grey);
+        cvConvertScale(frame_grey, oldFrame_grey, 1.0, 0.0);
+        first := false;
+      end;
+      cvAbsDiff(oldframe_grey, frame_grey, difference_img);
+      cvSmooth(difference_img, difference_img, CV_BLUR);
+      cvThreshold(difference_img, difference_img, 25, 255, CV_THRESH_BINARY);
+      cvFindContours(difference_img, storage, @contours, SizeOf(TCvContour), CV_RETR_LIST, CV_CHAIN_APPROX_NONE, cvPoint(0,0));
+      c := contours;
+      while (c <> nil) do
+      begin
+        //rect := cvBoundingRect(c, 0);
+        rect2d := cvMinAreaRect2(c);
+        {cvRectangle(frame, cvPoint(rect.x, rect.y),
+                  cvPoint(rect.x+rect.width, rect.y+rect.height),
+                  cvScalar(0, 0, 255, 0), 2, 8, 0);}
+        cvRectangle(frame, cvPoint(Round(rect2d.center.x-rect2d.size.width/2),
+                                    Round(rect2d.center.y-rect2d.size.height/2)),
+                            cvPoint(Round(rect2d.center.x+rect2d.size.width/2),
+                                    Round(rect2d.center.y+rect2d.size.height/2)),
+                          cvScalar(0, 0, 255, 0), 2, 8, 0);
+        c:= c.h_next;
+      end;
+      cvShowImage('Output Image', frame);
+      cvShowImage('Difference Image', difference_img);
+      cvConvertScale(frame_grey, oldframe_grey, 1.0, 0.0);
+      cvClearMemStorage(storage);
+      contours := nil;
+      c := nil;
+      key := cvWaitKey(33);
+      if (key = 27) then
+        Break;
+    end;
+    // Оcвобождаем реcурcы
+    cvReleaseMemStorage(storage);
+    cvReleaseCapture(capture);
+    cvReleaseImage(oldframe_grey);
+    cvReleaseImage(difference_img);
+    cvReleaseImage(frame);
+    cvReleaseImage(frame_grey);
+    cvDestroyAllWindows();
+  except
+    on E: Exception do
+      WriteLn(E.ClassName, ': ', E.Message);
+  end;
+
+end.
