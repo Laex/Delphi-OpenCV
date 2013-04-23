@@ -3,8 +3,8 @@
   //               Copyright (C) 2013 Project Delphi-OpenCV
   // ****************************************************************
   // Contributor:
-  // laentir Valetov
-  // email:laex@bk.ru
+  // Mikhail Grigorev
+  // email: sleuthhound@gmail.com
   // ****************************************************************
   // You may retrieve the latest version of this file at the GitHub,
   // located at git://github.com/Laex/Delphi-OpenCV.git
@@ -20,10 +20,6 @@
   // implied. See the License for the specific language governing
   // rights and limitations under the License.
   ******************************************************************* *)
-///
-// Стырено у "Header files OpenCV 2.4.3 for Delphi XE3"
-// https://code.google.com/p/opencv-delphi-new/
-///
 // JCL_DEBUG_EXPERT_GENERATEJDBG OFF
 // JCL_DEBUG_EXPERT_INSERTJDBG OFF
 // JCL_DEBUG_EXPERT_DELETEMAPFILE OFF
