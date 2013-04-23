@@ -76,6 +76,7 @@ begin
       cvAbsDiff(oldframe_grey, frame_grey, difference_img);
       cvSmooth(difference_img, difference_img, CV_BLUR);
       cvThreshold(difference_img, difference_img, 25, 255, CV_THRESH_BINARY);
+      contours := AllocMem(SizeOf(TCvSeq));
       cvFindContours(difference_img, storage, @contours, SizeOf(TCvContour), CV_RETR_LIST, CV_CHAIN_APPROX_NONE, cvPoint(0,0));
       c := contours;
       while (c <> nil) do
@@ -98,6 +99,7 @@ begin
       cvClearMemStorage(storage);
       contours := nil;
       c := nil;
+      FreeMem(contours, SizeOf(TCvSeq));
       key := cvWaitKey(33);
       if (key = 27) then
         Break;
