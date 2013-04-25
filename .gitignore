@@ -23,3 +23,10 @@ __history
 *.map
 
 *.log
+
+*.tlog
+
+*.lastbuildstate
+/proxywrapper
+/include/opencv_classes
+/include/ml
