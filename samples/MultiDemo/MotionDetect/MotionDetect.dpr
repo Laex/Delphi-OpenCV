@@ -21,6 +21,9 @@
   // rights and limitations under the License.
   ******************************************************************* *)
 
+// JCL_DEBUG_EXPERT_GENERATEJDBG OFF
+// JCL_DEBUG_EXPERT_INSERTJDBG OFF
+// JCL_DEBUG_EXPERT_DELETEMAPFILE OFF
 program MotionDetect;
 
 {$APPTYPE CONSOLE}
@@ -29,16 +32,15 @@ program MotionDetect;
 
 uses
   System.SysUtils,
+  Math,
   uLibName in '..\..\..\include\uLibName.pas',
   highgui_c in '..\..\..\include\highgui\highgui_c.pas',
   imgproc.types_c in '..\..\..\include\imgproc\imgproc.types_c.pas',
   imgproc_c in '..\..\..\include\imgproc\imgproc_c.pas',
   imgproc in '..\..\..\include\imgproc\imgproc.pas',
   core in '..\..\..\include\core\core.pas',
-  Core.types_c in '..\..\..\include\core\Core.types_c.pas',
-  core_c in '..\..\..\include\core\core_c.pas',
-  Math;
-
+  core.types_c in '..\..\..\include\core\Core.types_c.pas',
+  core_c in '..\..\..\include\core\core_c.pas';
 
 var
   storage: pCvMemStorage = nil;
@@ -49,10 +51,11 @@ var
   oldframe_grey: pIplImage = nil;
   contours: pCvSeq = nil;
   c: pCvSeq = nil;
-  //rect: TCvRect;
+  // rect: TCvRect;
   rect2d: TCvBox2D;
   key: integer;
   first: boolean = true;
+
 begin
   try
     capture := cvCreateCameraCapture(0);
@@ -70,28 +73,27 @@ begin
       begin
         difference_img := cvCloneImage(frame_grey);
         oldframe_grey := cvCloneImage(frame_grey);
-        cvConvertScale(frame_grey, oldFrame_grey, 1.0, 0.0);
+        cvConvertScale(frame_grey, oldframe_grey, 1.0, 0.0);
         first := false;
       end;
       cvAbsDiff(oldframe_grey, frame_grey, difference_img);
       cvSmooth(difference_img, difference_img, CV_BLUR);
       cvThreshold(difference_img, difference_img, 25, 255, CV_THRESH_BINARY);
       contours := AllocMem(SizeOf(TCvSeq));
-      cvFindContours(difference_img, storage, @contours, SizeOf(TCvContour), CV_RETR_LIST, CV_CHAIN_APPROX_NONE, cvPoint(0,0));
+      cvFindContours(difference_img, storage, @contours, SizeOf(TCvContour), CV_RETR_LIST, CV_CHAIN_APPROX_NONE,
+        cvPoint(0, 0));
       c := contours;
       while (c <> nil) do
       begin
-        //rect := cvBoundingRect(c, 0);
+        // rect := cvBoundingRect(c, 0);
         rect2d := cvMinAreaRect2(c);
-        {cvRectangle(frame, cvPoint(rect.x, rect.y),
-                  cvPoint(rect.x+rect.width, rect.y+rect.height),
-                  cvScalar(0, 0, 255, 0), 2, 8, 0);}
-        cvRectangle(frame, cvPoint(Round(rect2d.center.x-rect2d.size.width/2),
-                                    Round(rect2d.center.y-rect2d.size.height/2)),
-                            cvPoint(Round(rect2d.center.x+rect2d.size.width/2),
-                                    Round(rect2d.center.y+rect2d.size.height/2)),
-                          cvScalar(0, 0, 255, 0), 2, 8, 0);
-        c:= c.h_next;
+        { cvRectangle(frame, cvPoint(rect.x, rect.y),
+          cvPoint(rect.x+rect.width, rect.y+rect.height),
+          cvScalar(0, 0, 255, 0), 2, 8, 0); }
+        cvRectangle(frame, cvPoint(Round(rect2d.center.x - rect2d.size.width / 2),
+          Round(rect2d.center.y - rect2d.size.height / 2)), cvPoint(Round(rect2d.center.x + rect2d.size.width / 2),
+          Round(rect2d.center.y + rect2d.size.height / 2)), cvScalar(0, 0, 255, 0), 2, 8, 0);
+        c := c.h_next;
       end;
       cvShowImage('Output Image', frame);
       cvShowImage('Difference Image', difference_img);
@@ -102,14 +104,13 @@ begin
       FreeMem(contours, SizeOf(TCvSeq));
       key := cvWaitKey(33);
       if (key = 27) then
-        Break;
+        break;
     end;
     // Оcвобождаем реcурcы
     cvReleaseMemStorage(storage);
     cvReleaseCapture(capture);
     cvReleaseImage(oldframe_grey);
     cvReleaseImage(difference_img);
-    cvReleaseImage(frame);
     cvReleaseImage(frame_grey);
     cvDestroyAllWindows();
   except
