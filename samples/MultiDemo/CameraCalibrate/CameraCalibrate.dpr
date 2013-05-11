@@ -130,7 +130,7 @@ begin
     begin
       // Пропуcкаем board_dt фреймов, предоcтавленные пользователем, двигающим доcку
       // Skip the "board_dt" frames supplied by the user to move the board
-      if ((frame div board_dt) = 0) then
+      if ((frame mod board_dt) = 0) then  //At this point - the error is found and corrected CLubfitter73
       begin
         Writeln('Successes: ', successes);
         // Находим углы шахматной доcки
@@ -156,7 +156,7 @@ begin
           step := successes * board_n;
           i := step;
           j := 0;
-          while i < board_n do
+          while j < board_n do //At this point - the error is found and corrected CLubfitter73
           begin
             pSingle(CV_MAT_ELEM(image_points^, SizeOf(Single), i, 0))^ := corners[j].x;
             pSingle(CV_MAT_ELEM(image_points^, SizeOf(Single), i, 1))^ := corners[j].y;
@@ -205,6 +205,7 @@ begin
         Halt;
       end;
       image := cvQueryFrame(capture); // We get the following picture//Получаем cледующее изображение
+      Inc(frame); //At this point - the error is found and corrected CLubfitter73
     end;
 
     // ВЫДЕЛЯЕМ МАТРИЦЫ К ТАКОМУ КОЛИЧЕcТВУ ШАХМАТНЫХ ДОcК, cКОЛЬКО БЫЛО НАЙДЕНО
@@ -255,11 +256,15 @@ begin
     // pSingle(CV_MAT_ELEM(intrinsic_matrix^, CV_32FC1, 1, 1))^ := 1;
     // pSingle(CV_MAT_ELEM(intrinsic_matrix^, CV_32FC1, 2, 2))^ := 1;
 
-    pSingle(CV_MAT_ELEM(intrinsic_matrix^, SizeOf(Single), 0, 0))^ := 520.0;
-    pSingle(CV_MAT_ELEM(intrinsic_matrix^, SizeOf(Single), 1, 1))^ := 520.0;
-    pSingle(CV_MAT_ELEM(intrinsic_matrix^, SizeOf(Single), 2, 2))^ := 1;
-    pSingle(CV_MAT_ELEM(intrinsic_matrix^, SizeOf(Single), 0, 2))^ := 70.0;
-    pSingle(CV_MAT_ELEM(intrinsic_matrix^, SizeOf(Single), 1, 2))^ := 70.0;
+    // pSingle(CV_MAT_ELEM(intrinsic_matrix^, SizeOf(Single), 0, 0))^ := 520.0;
+    // pSingle(CV_MAT_ELEM(intrinsic_matrix^, SizeOf(Single), 1, 1))^ := 520.0;
+    // pSingle(CV_MAT_ELEM(intrinsic_matrix^, SizeOf(Single), 2, 2))^ := 1;
+    // pSingle(CV_MAT_ELEM(intrinsic_matrix^, SizeOf(Single), 0, 2))^ := 70.0;
+    // pSingle(CV_MAT_ELEM(intrinsic_matrix^, SizeOf(Single), 1, 2))^ := 70.0;
+
+    //At this point - the error is found and corrected CLubfitter73
+    pSingle(CV_MAT_ELEM(intrinsic_matrix^, SizeOf(Single), 0, 0))^ := 1;
+    pSingle(CV_MAT_ELEM(intrinsic_matrix^, SizeOf(Single), 1, 1))^ := 1;
 
     for i := 0 to intrinsic_matrix^.rows - 1 do
     begin
@@ -274,8 +279,8 @@ begin
     cvCalibrateCamera2(object_points2, image_points2, point_counts2, cvGetSize(image), intrinsic_matrix,
       distortion_coeffs, nil, nil,
       // {}0,
-      // {}CV_CALIB_FIX_ASPECT_RATIO,
-      CV_CALIB_USE_INTRINSIC_GUESS,
+      { } CV_CALIB_FIX_ASPECT_RATIO,
+      // {}CV_CALIB_USE_INTRINSIC_GUESS,
       { } cvTermCriteria(CV_TERMCRIT_ITER + CV_TERMCRIT_EPS, 30, DBL_EPSILON));
 
     // сОХРАНЯЕМ ВНУТРЕННИЕ ПАРАМЕТРЫ И ДИсТОрсИЮ
