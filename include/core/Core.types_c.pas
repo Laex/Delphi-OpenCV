@@ -638,9 +638,9 @@ type
   // #define CV_IS_MATND(mat) \
   // (CV_IS_MATND_HDR(mat) && ((const CvMatND*)(mat))->data.ptr != NULL)
 
-//***************************************************************************************
-//*                                         Histogram                                   *
-//***************************************************************************************
+  // ***************************************************************************************
+  // *                                         Histogram                                   *
+  // ***************************************************************************************
 
 type
   TCvHistType = Integer;
@@ -780,16 +780,17 @@ type
   end;
 
   pCvNArrayIterator = ^TCvNArrayIterator;
+
   TCvNArrayIterator = record
-    count: Integer;     // number of arrays
-    dims: Integer;      // number of dimensions to iterate
-    size: TCvSize;      // maximal common linear size: { width = size, height = 1 }
-    ptr: Array [0 .. CV_MAX_ARR - 1] of ^uchar;     // pointers to the array slices
-    stack: Array [0 .. CV_MAX_DIM - 1] of Integer;  // for internal use
-    hdr: Array [0 .. CV_MAX_ARR - 1] of ^TCvMatND;   //pointers to the headers of the
+    count: Integer; // number of arrays
+    dims: Integer; // number of dimensions to iterate
+    size: TCvSize; // maximal common linear size: { width = size, height = 1 }
+    ptr: Array [0 .. CV_MAX_ARR - 1] of ^uchar; // pointers to the array slices
+    stack: Array [0 .. CV_MAX_DIM - 1] of Integer; // for internal use
+    hdr: Array [0 .. CV_MAX_ARR - 1] of ^TCvMatND; // pointers to the headers of the
   end;
 
-(* Line iterator state: *)
+  (* Line iterator state: *)
 type
   TCvLineIterator = packed record
     ptr: ^uchar;
@@ -816,6 +817,7 @@ const
 
 type
   pCvScalar = ^TCvScalar;
+
   TCvScalar = packed record
     val: array [0 .. 3] of Double;
   end;
@@ -939,9 +941,9 @@ const
   // #define CV_IS_SET_ELEM( ptr )  (((CvSetElem*)(ptr))->flags >= 0)
 function CV_IS_SET_ELEM(ptr: Pointer): Boolean; // inline;
 
-//***************************************************************************************
-//*                      Multi-dimensional sparse cArray (CvSparseMat)                  *
-//***************************************************************************************
+// ***************************************************************************************
+// *                      Multi-dimensional sparse cArray (CvSparseMat)                  *
+// ***************************************************************************************
 
 const
   CV_SPARSE_MAT_MAGIC_VAL = $42440000;
@@ -951,115 +953,118 @@ const
 
 type
   pCvSparseMat = ^TCvSparseMat;
+
   TCvSparseMat = packed record
-    ctype: integer;
-    dims: integer;
+    cType: Integer;
+    dims: Integer;
     refcount: ^Integer;
-    hdr_refcount: integer;
+    hdr_refcount: Integer;
     heap: pCvSet;
-    hashtable: ^pointer;
-    hashsize: integer;
-    valoffset: integer;
-    idxoffset: integer;
+    hashtable: ^Pointer;
+    hashsize: Integer;
+    valoffset: Integer;
+    idxoffset: Integer;
     size: array [0 .. CV_MAX_DIM - 1] of Integer;
   end;
 
-{#define CV_IS_SPARSE_MAT_HDR(mat) \
+  { #define CV_IS_SPARSE_MAT_HDR(mat) \
     ((mat) != NULL && \
-    (((const CvSparseMat*)(mat))->type & CV_MAGIC_MASK) == CV_SPARSE_MAT_MAGIC_VAL)}
+    (((const CvSparseMat*)(mat))->type & CV_MAGIC_MASK) == CV_SPARSE_MAT_MAGIC_VAL) }
 
-{#define CV_IS_SPARSE_MAT(mat) \
-    CV_IS_SPARSE_MAT_HDR(mat)}
+  { #define CV_IS_SPARSE_MAT(mat) \
+    CV_IS_SPARSE_MAT_HDR(mat) }
 
   // **************** iteration through a sparse array *****************
   pCvSparseNode = ^TCvSparseNode;
+
   TCvSparseNode = packed record
     hashval: Cardinal;
     next: pCvSparseNode;
   end;
 
   pCvSparseMatIterator = ^TCvSparseMatIterator;
+
   TCvSparseMatIterator = packed record
     mat: pCvSparseMat;
     node: pCvSparseNode;
-    curidx: integer;
+    curidx: Integer;
   end;
 
-//define CV_NODE_VAL(mat,node)   ((void*)((uchar*)(node) + (mat)->valoffset))
-//define CV_NODE_IDX(mat,node)   ((int*)((uchar*)(node) + (mat)->idxoffset))
+  // define CV_NODE_VAL(mat,node)   ((void*)((uchar*)(node) + (mat)->valoffset))
+  // define CV_NODE_IDX(mat,node)   ((int*)((uchar*)(node) + (mat)->idxoffset))
 
-(* ************************************ Graph ******************************************* *)
+  (* ************************************ Graph ******************************************* *)
 
-(*
-  We represent a graph as a set of vertices.
-  Vertices contain their adjacency lists (more exactly, pointers to first incoming or
-  outcoming edge (or 0 if isolated vertex)) then . Edges are stored in another set.
-  There is a singly-linked list of incoming/outcoming edges for each vertex.
+  (*
+    We represent a graph as a set of vertices.
+    Vertices contain their adjacency lists (more exactly, pointers to first incoming or
+    outcoming edge (or 0 if isolated vertex)) then . Edges are stored in another set.
+    There is a singly-linked list of incoming/outcoming edges for each vertex.
 
-  Each edge consists of
+    Each edge consists of
 
-  o   Two pointers to the starting and ending vertices
-  (vtx : array[0..-1] of  and vtx[1] respectively).
+    o   Two pointers to the starting and ending vertices
+    (vtx : array[0..-1] of  and vtx[1] respectively).
 
-  A graph may be oriented or not. In the latter , edges between
-  vertex i to vertex j are not distinguished during search operations.
+    A graph may be oriented or not. In the latter , edges between
+    vertex i to vertex j are not distinguished during search operations.
 
-  o   Two pointers to next edges for the starting and ending vertices, where
-  next : array[0..-1] of  points to the next edge in the vtx[0] adjacency list and
-  next : array[0..0] of  points to the next edge in the vtx[1] adjacency list.
-*)
-// >> Following declaration is a macro definition!
-// const
-// CV_GRAPH_EDGE_FIELDS()Integer flags;
-// Single weight;
-//
-// type;
-//
-// type
-// next:
-// array [0 .. 1] of;
-// struct CvGraphVtx * vtx[2] = ^RAPH_EDGE_FIELDS()Integer flags;
-// Single weight;
-// struct CvGraphEdge;
-// end;
-//
-// type
-//
-// = packed record
-// end;
-// CvGraphEdge;
-//
-// type
-//
-// = packed record
-// end;
-// CvGraphVtx;
-//
-// type
-//
-// = packed record ptr: ^CvPoint2D32f;
-// end;
-// CvGraphVtx2D;
-//
-// (*
-// Graph is 'derived' from the set (this is set a of vertices)
-// and includes another set (edges)
-// *)
-/// / >> Following declaration is a macro definition!
-// const
-// CV_GRAPH_FIELDS()CV_SET_FIELDS()CvSet * edges;;
-//
-// type
-//
-// = packed record
-// end;
-// CvGraph;
-//
-// const
-// CV_TYPE_NAME_GRAPH = 'opencv-graph';
-// {$EXTERNALSYM CV_TYPE_NAME_GRAPH}
+    o   Two pointers to next edges for the starting and ending vertices, where
+    next : array[0..-1] of  points to the next edge in the vtx[0] adjacency list and
+    next : array[0..0] of  points to the next edge in the vtx[1] adjacency list.
+  *)
+  // >> Following declaration is a macro definition!
+  // const
+  // CV_GRAPH_EDGE_FIELDS()Integer flags;
+  // Single weight;
+  //
+  // type;
+  //
+  // type
+  // next:
+  // array [0 .. 1] of;
+  // struct CvGraphVtx * vtx[2] = ^RAPH_EDGE_FIELDS()Integer flags;
+  // Single weight;
+  // struct CvGraphEdge;
+  // end;
+  //
+  // type
+  //
+  // = packed record
+  // end;
+  // CvGraphEdge;
+  //
+  // type
+  //
+  // = packed record
+  // end;
+  // CvGraphVtx;
+  //
+  // type
+  //
+  // = packed record ptr: ^CvPoint2D32f;
+  // end;
+  // CvGraphVtx2D;
+  //
+  // (*
+  // Graph is 'derived' from the set (this is set a of vertices)
+  // and includes another set (edges)
+  // *)
+  /// / >> Following declaration is a macro definition!
+  // const
+  // CV_GRAPH_FIELDS()CV_SET_FIELDS()CvSet * edges;;
+  //
+  // type
+  //
+  // = packed record
+  // end;
+  // CvGraph;
+  //
+  // const
+  // CV_TYPE_NAME_GRAPH = 'opencv-graph';
+  // {$EXTERNALSYM CV_TYPE_NAME_GRAPH}
 
-(* ********************************** Chain/Countour ************************************ *)
+  (* ********************************** Chain/Countour ************************************ *)
 
 type
 
@@ -1318,7 +1323,7 @@ function CV_CAST_8U(t: Integer): uchar; inline;
   }                                                         \
   }
 *)
-procedure CV_NEXT_SEQ_ELEM(const elem_size: Integer; const Reader: TCvSeqReader); //inline;
+procedure CV_NEXT_SEQ_ELEM(const elem_size: Integer; const Reader: TCvSeqReader); // inline;
 
 // (* Move reader position backward: *)
 // // >> Following declaration is a macro definition!
@@ -1335,7 +1340,7 @@ procedure CV_NEXT_SEQ_ELEM(const elem_size: Integer; const Reader: TCvSeqReader)
   CV_NEXT_SEQ_ELEM( sizeof(elem), reader )                   \
   }
 *)
-procedure CV_READ_SEQ_ELEM(const Elem:Pointer; const Reader: TCvSeqReader; const SizeOfElem: Integer); //inline;
+procedure CV_READ_SEQ_ELEM(const Elem: Pointer; const Reader: TCvSeqReader; const SizeOfElem: Integer); // inline;
 
 
 // (* Read element and move read position backward: *)
@@ -1507,7 +1512,7 @@ const
 {$EXTERNALSYM CV_NODE_INTEGER}
   CV_NODE_REAL = 2;
 {$EXTERNALSYM CV_NODE_REAL}
-  CV_NODE_FLOAT = LongInt(CV_NODE_REAL);
+  CV_NODE_FLOAT = longint(CV_NODE_REAL);
 {$EXTERNALSYM CV_NODE_FLOAT}
   CV_NODE_STR = 3;
 {$EXTERNALSYM CV_NODE_STR}
@@ -2107,11 +2112,11 @@ const
 
     return m;
   }
-function cvMat(rows: Integer; cols: Integer; etype: Integer; data: Pointer = nil): TCvMat;
-function CV_MAT_DEPTH(flags: Integer): Integer;
-function CV_MAT_TYPE(flags: Integer): Integer;
-function CV_ELEM_SIZE(_type: Integer): Integer;
-function CV_MAT_CN(flags: Integer): Integer;
+function cvMat(const rows, cols:Integer; etype: Integer; data: Pointer = nil): TCvMat;
+function CV_MAT_DEPTH(const flags: Integer): Integer;
+function CV_MAT_TYPE(const flags: Integer): Integer;
+function CV_ELEM_SIZE(const _type: Integer): Integer;
+function CV_MAT_CN(const flags: Integer): Integer;
 function CV_32FC1: Integer;
 function CV_32SC1: Integer;
 function CV_MAKETYPE(depth, cn: Integer): Integer;
@@ -2143,17 +2148,21 @@ begin
 end;
 
 procedure strcpy(var str1: pCVChar; const str2: pCVChar);
+Var
+  n: Integer;
 begin
-  str1 := Allocmem(Length(str2) * SizeOf(CVChar));
+  n := Length(str2) * SizeOf(CVChar);
+  str1 := Allocmem(n);
+  CopyMemory(str1, str2, n);
 end;
 
 procedure strcat(var str1: pCVChar; const str2: pCVChar);
 Var
-  N: Integer;
+  n: Integer;
 begin
-  N := Length(str1) * SizeOf(CVChar);
+  n := Length(str1) * SizeOf(CVChar);
   ReallocMem(str1, (Length(str1) + Length(str2)) * SizeOf(CVChar));
-  CopyMemory(str1 + N, str2, Length(str2) * SizeOf(CVChar));
+  CopyMemory(str1 + n, str2, Length(str2) * SizeOf(CVChar));
 end;
 
 function CV_MAT_ELEM_PTR_FAST(const mat: TCvMat; const row, col, pix_size: Integer): Pointer;
@@ -2173,22 +2182,22 @@ begin
   Result.next := next;
 end;
 
-function CV_MAT_DEPTH(flags: Integer): Integer;
+function CV_MAT_DEPTH;
 begin
   Result := flags and CV_MAT_DEPTH_MASK;
 end;
 
-function CV_MAT_TYPE(flags: Integer): Integer;
+function CV_MAT_TYPE;
 begin
   Result := flags and CV_MAT_TYPE_MASK;
 end;
 
-function CV_MAT_CN(flags: Integer): Integer;
+function CV_MAT_CN;
 begin
   Result := ((((flags) and CV_MAT_CN_MASK) shr CV_CN_SHIFT) + 1);
 end;
 
-function CV_ELEM_SIZE(_type: Integer): Integer;
+function CV_ELEM_SIZE;
 begin
   Result := (CV_MAT_CN(_type) shl ((((SizeOf(NativeInt) div 4 + 1) * (16384 or $3A50)) shr CV_MAT_DEPTH(_type) *
     2) and 3));
@@ -2306,7 +2315,7 @@ begin
   Result := CV_NODE_TYPE(flags) = CV_NODE_REAL;
 end;
 
-procedure CV_READ_SEQ_ELEM(const Elem:Pointer; const Reader: TCvSeqReader; const SizeOfElem: Integer); //inline;
+procedure CV_READ_SEQ_ELEM(const Elem: Pointer; const Reader: TCvSeqReader; const SizeOfElem: Integer); // inline;
 begin
   // assert( (reader).seq->elem_size == sizeof(elem));
   Assert(Reader.seq^.elem_size = SizeOfElem);
@@ -2316,7 +2325,7 @@ begin
   CV_NEXT_SEQ_ELEM(SizeOfElem, Reader);
 end;
 
-procedure CV_NEXT_SEQ_ELEM(const elem_size: Integer; const Reader: TCvSeqReader); //inline;
+procedure CV_NEXT_SEQ_ELEM(const elem_size: Integer; const Reader: TCvSeqReader); // inline;
 Var
   ptr: PInteger;
 begin
