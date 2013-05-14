@@ -49,6 +49,12 @@ Function hsv2rgb(hue: single): TCvScalar;
 procedure IplImage2Bitmap(iplImg: PIplImage; var bitmap: Vcl.Graphics.TBitmap);
 function cvImage2Bitmap(img: PIplImage): Vcl.Graphics.TBitmap;
 
+Type
+  TAnsiString = record helper for AnsiString
+  public
+    function AsPAnsiChar: pAnsiChar;
+  end;
+
 implementation
 
 Uses WinApi.Windows, System.SysUtils;
@@ -170,6 +176,13 @@ begin
     result := bmp;
     // bmp.Free;
   End;
+end;
+
+{ TAnsiString }
+
+function TAnsiString.AsPAnsiChar: pAnsiChar;
+begin
+  result := pAnsiChar(@Self[1]);
 end;
 
 end.

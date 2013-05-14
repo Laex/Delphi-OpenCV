@@ -1,0 +1,5 @@
+LIBRARY opencv_classes.dll
+
+EXPORTS
+    CreateMat @1
+	CreateMat_rct @2
