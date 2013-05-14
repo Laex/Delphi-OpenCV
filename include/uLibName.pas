@@ -47,6 +47,7 @@ const
   calib3d_dll = 'opencv_calib3d' + CV_Version + 'd.dll';
   tracking_DLL = 'opencv_video' + CV_Version + 'd.dll';
   Nonfree_DLL =  'opencv_nonfree' + CV_Version + 'd.dll';
+  OpenCV_Classes_DLL ='OpenCV_Classes.dll';
 {$ELSE}
   Core_Dll = 'opencv_core' + CV_Version + '.dll';
   highgui_Dll = 'opencv_highgui' + CV_Version + '.dll';
@@ -56,6 +57,7 @@ const
   calib3d_dll = 'opencv_calib3d' + CV_Version + '.dll';
   tracking_DLL = 'opencv_video' + CV_Version + '.dll';
   Nonfree_DLL =  'opencv_nonfree' + CV_Version + '.dll';
+  OpenCV_Classes_DLL ='OpenCV_Classes.dll';
 {$ENDIF}
 
 implementation
