@@ -1,4 +1,4 @@
-unit opencv_classes;
+unit Mat;
 
 interface
 
@@ -15,6 +15,8 @@ Type
     function channels: Integer; stdcall;
     // ! returns true if matrix data is NULL
     function empty: bool; stdcall;
+    // -----------------------------------
+    function getMat(): Pointer; stdcall;
   end;
 
   // ! default constructor

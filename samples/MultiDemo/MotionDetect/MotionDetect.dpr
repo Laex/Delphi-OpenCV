@@ -42,6 +42,10 @@ uses
   core.types_c in '..\..\..\include\core\Core.types_c.pas',
   core_c in '..\..\..\include\core\core_c.pas';
 
+{$DEFINE RECT}
+//{$DEFINE RECT} - using cvBoundingRect - work correctly
+//{DEFINE RECT} - not defined RECT - using cvMinAreaRect2
+
 var
   storage: pCvMemStorage = nil;
   capture: pCvCapture = nil;
@@ -51,7 +55,7 @@ var
   oldframe_grey: pIplImage = nil;
   contours: pCvSeq = nil;
   c: pCvSeq = nil;
-  // rect: TCvRect;
+  rect: TCvRect;
   rect2d: TCvBox2D;
   key: integer;
   first: boolean = true;
@@ -85,14 +89,16 @@ begin
       c := contours;
       while (c <> nil) do
       begin
-        // rect := cvBoundingRect(c, 0);
+{$IFDEF RECT}
+        rect := cvBoundingRect(c, 0);
+        cvRectangle(frame, cvPoint(rect.x, rect.y), cvPoint(rect.x + rect.width, rect.y + rect.height),
+          cvScalar(0, 0, 255, 0), 2, 8, 0);
+{$ELSE}
         rect2d := cvMinAreaRect2(c);
-        { cvRectangle(frame, cvPoint(rect.x, rect.y),
-          cvPoint(rect.x+rect.width, rect.y+rect.height),
-          cvScalar(0, 0, 255, 0), 2, 8, 0); }
         cvRectangle(frame, cvPoint(Round(rect2d.center.x - rect2d.size.width / 2),
           Round(rect2d.center.y - rect2d.size.height / 2)), cvPoint(Round(rect2d.center.x + rect2d.size.width / 2),
           Round(rect2d.center.y + rect2d.size.height / 2)), cvScalar(0, 0, 255, 0), 2, 8, 0);
+{$ENDIF}
         c := c.h_next;
       end;
       cvShowImage('Output Image', frame);

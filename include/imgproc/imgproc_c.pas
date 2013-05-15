@@ -560,10 +560,10 @@ function cvArcLength(const curve: Pointer; slice: TCvSlice { = CV_WHOLE_SEQ }; i
 *)
 function cvContourPerimeter(const contour: Pointer): double; inline;
 
-// (* Calculates contour boundning rectangle (update=1) or
-// just retrieves pre-calculated rectangle (update=0) *)
-// CVAPI(CvRect)  cvBoundingRect( CvArr* points, Integer update CV_DEFAULT(0) );
-function cvBoundingRect(points: pCvArr; update: integer = 0): TCvRect;
+//* Calculates contour boundning rectangle (update=1) or
+//   just retrieves pre-calculated rectangle (update=0) */
+//CVAPI(CvRect)  cvBoundingRect( CvArr* points, int update CV_DEFAULT(0) );
+function cvBoundingRect(points: pCvArr; update: integer = 0): TCvRect; cdecl;
 
 // * Calculates area of a contour or contour segment */
 // CVAPI(double)  cvContourArea( const CvArr* contour,
