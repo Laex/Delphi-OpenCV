@@ -442,35 +442,11 @@ procedure cvMatchTemplate(const image: pCvArr; const templ: pCvArr; result: pCvA
 // v1: 0);
 // lower_bound CV_DEFAULT(0): function;
 // userdata CV_DEFAULT(0): function): Single;
-//
-// (****************************************************************************************\
-// *                              Contours retrieving                                       *
-// ****************************************************************************************)
 
-Type
-  PCvContour = ^TCvContour;
-
-  TCvContour = packed record
-    flags: Integer; // * micsellaneous flags */          \
-    header_size: Integer; // * size of sequence header */      \
-    h_prev: PCvSeq; // * previous sequence */        \
-    h_next: PCvSeq; // * next sequence */            \
-    v_prev: PCvSeq; // * 2nd previous sequence */    \
-    v_next: PCvSeq; // * 2nd next sequence */
-    total: Integer; // * total number of elements */            \
-    elem_size: Integer; // * size of sequence element in bytes */   \
-    block_max: PAnsiChar; // * maximal bound of the last block */     \
-    ptr: PAnsiChar; // * current write pointer */               \
-    delta_elems: Integer; // * how many elements allocated when the seq grows */  \
-    storage: PCvMemStorage; // * where the seq is stored */             \
-    free_blocks: PCvSeqBlock; // * free blocks list */                    \
-    first: PCvSeqBlock; // * pointer to the first sequence block */
-    rect: TCvRect;
-    color: Integer;
-    reserved: array [0 .. 2] of Integer;
-  end;
-
-Const
+// ****************************************************************************************
+// *                              Contours retrieving                                     *
+// ****************************************************************************************
+const
   // * contour retrieval mode */
   CV_RETR_EXTERNAL = 0;
   CV_RETR_LIST = 1;
@@ -501,7 +477,7 @@ Const
 function cvFindContours(
   { } image: pIplImage;
   { } storage: PCvMemStorage;
-  { } first_contour: PCvSeq;
+  { } first_contour: pCvSeq;
   { } header_size: Integer { = SizeOf(TCvContour) };
   { } mode: Integer { = CV_RETR_LIST };
   { } method: Integer { = CV_CHAIN_APPROX_SIMPLE };
@@ -582,26 +558,26 @@ function cvArcLength(const curve: Pointer; slice: TCvSlice { = CV_WHOLE_SEQ }; i
   return cvArcLength( contour, CV_WHOLE_SEQ, 1 );
   }
 *)
-
 function cvContourPerimeter(const contour: Pointer): double; inline;
 
 // (* Calculates contour boundning rectangle (update=1) or
 // just retrieves pre-calculated rectangle (update=0) *)
 // CVAPI(CvRect)  cvBoundingRect( CvArr* points, Integer update CV_DEFAULT(0) );
+function cvBoundingRect(points: pCvArr; update: integer = 0): TCvRect;
 
 // * Calculates area of a contour or contour segment */
 // CVAPI(double)  cvContourArea( const CvArr* contour,
 // CvSlice slice CV_DEFAULT(CV_WHOLE_SEQ),
 // int oriented CV_DEFAULT(0));
-function cvContourArea(const contour: PCvSeq; slice: TCvSlice { = CV_WHOLE_SEQ }; oriented: Integer = 0): double; cdecl;
+function cvContourArea(const contour: pCvArr; slice: TCvSlice { = CV_WHOLE_SEQ }; oriented: Integer = 0): double; cdecl;
 
 // (* Finds minimum area rotated rectangle bounding a set of points *)
 // CVAPI(CvBox2D)  cvMinAreaRect2( const CvArr* points, CvMemStorage* storage CV_DEFAULT(NULL));
-function cvMinAreaRect2(points: PCvSeq; storage: PCvMemStorage = nil): TCvBox2D; cdecl;
+function cvMinAreaRect2(points: pCvArr; storage: PCvMemStorage = nil): TCvBox2D; cdecl;
 
 // (* Finds minimum enclosing circle for a set of points *)
 // CVAPI(int)  cvMinEnclosingCircle( const CvArr* points,CvPoint2D32f* center, float* radius );
-function cvMinEnclosingCircle(points: PCvSeq; center: pCvPoint2D32f; radius: pSingle): Integer; cdecl;
+function cvMinEnclosingCircle(points: pCvArr; center: pCvPoint2D32f; radius: pSingle): Integer; cdecl;
 
 {
   /* Compares two contours by matching their moments */
@@ -1031,6 +1007,7 @@ function cv2DRotationMatrix; external imgproc_Dll;
 procedure cvWarpAffine; external imgproc_Dll;
 function cvGetPerspectiveTransform; external imgproc_Dll;
 procedure cvWarpPerspective; external imgproc_Dll;
+function cvBoundingRect; external imgproc_Dll;
 function cvContourArea; external imgproc_Dll;
 function cvConvexHull2; external imgproc_Dll;
 function cvConvexityDefects; external imgproc_Dll;
