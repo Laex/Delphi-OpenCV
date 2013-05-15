@@ -896,6 +896,32 @@ const
   CV_TYPE_NAME_SEQ_TREE = 'opencv-sequence-tree';
 {$EXTERNALSYM CV_TYPE_NAME_SEQ_TREE}
 
+// ***************************************************************************************
+// *                                         Contours                                    *
+// *************************************************************************************** 
+type
+  pCvContour = ^TCvContour;
+
+  TCvContour = packed record
+    flags: Integer;         // micsellaneous flags
+    header_size: Integer;   // size of sequence header
+    h_prev: pCvArr;         // previous sequence
+    h_next: pCvArr;         // next sequence
+    v_prev: pCvArr;         // 2nd previous sequence
+    v_next: pCvArr;         // 2nd next sequence
+    total: Integer;         // total number of elements
+    elem_size: Integer;     // size of sequence element in bytes
+    block_max: pAnsiChar;   // maximal bound of the last block
+    ptr: pAnsiChar;         // current write pointer
+    delta_elems: Integer;   // how many elements allocated when the seq grows
+    storage: pCvMemStorage; // where the seq is stored
+    free_blocks: pCvSeqBlock; // free blocks list
+    first: pCvSeqBlock;     // pointer to the first sequence block
+    rect: TCvRect;
+    color: Integer;
+    reserved: array [0 .. 2] of Integer;
+  end;
+
   (* ************************************** Set ******************************************* *)
   (*
     Set.
