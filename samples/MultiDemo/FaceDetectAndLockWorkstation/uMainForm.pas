@@ -43,7 +43,7 @@ type
     LWLTotalPCLock: TLabel;
     LWButtonStartStop: TButton;
     LWButtonAbout: TButton;
-    jvtrycn1: TJvTrayIcon;
+    LWJVTrayIcon: TJvTrayIcon;
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure LWTimerRadioGroupClick(Sender: TObject);
@@ -143,7 +143,7 @@ begin
   CanClose := ((LWMainFormHidden) or SessionEnding);
   if not CanClose then
   begin
-    jvtrycn1.HideApplication;
+    LWJVTrayIcon.HideApplication;
     LWMainFormHidden := True;
     LWPopupMenu.Items[0].Caption := 'Show';
   end;
@@ -154,7 +154,7 @@ procedure TMainForm.FormKeyDown(Sender: TObject; var Key: Word;
 begin
   if Key = VK_ESCAPE then
   begin
-    jvtrycn1.HideApplication;
+    LWJVTrayIcon.HideApplication;
     LWMainFormHidden := True;
     LWPopupMenu.Items[0].Caption := 'Show';
   end;
@@ -167,8 +167,8 @@ begin
   WTSRegisterSessionNotification(Handle, NOTIFY_FOR_ALL_SESSIONS);
   FintLockedCount := 0;
   // End
-  jvtrycn1.Hint := ProgramsName;
-  jvtrycn1.IconIndex := 1;
+  LWJVTrayIcon.Hint := ProgramsName;
+  LWJVTrayIcon.IconIndex := 1;
   LWThreadTimer.Interval := LWSpinEditWaitTime.Value*1000;
   // Запуск захвата
   StartCapture;
@@ -289,14 +289,14 @@ procedure TMainForm.LWCoolTrayIconDblClick(Sender: TObject);
 begin
   if LWMainFormHidden then
   begin
-    jvtrycn1.ShowApplication;
+    LWJVTrayIcon.ShowApplication;
     LWMainFormHidden := False;
     LWPopupMenu.Items[0].Caption := 'Hide';
   end
   else
   begin
     Application.Minimize;
-    jvtrycn1.HideApplication;
+    LWJVTrayIcon.HideApplication;
     LWMainFormHidden := True;
     LWPopupMenu.Items[0].Caption := 'Show';
   end;
@@ -330,7 +330,7 @@ begin
     end
     else
       LWThreadTimer.Enabled := True;
-    jvtrycn1.Hint := Format('%s (Total face: %s)', [ProgramsName, IntToStr(MyCtx.TotalFaceDetect)]);
+    LWJVTrayIcon.Hint := Format('%s (Total face: %s)', [ProgramsName, IntToStr(MyCtx.TotalFaceDetect)]);
     LTotalFace.Caption := IntToStr(MyCtx.TotalFaceDetect);
     if not LWMainFormHidden then
     begin
