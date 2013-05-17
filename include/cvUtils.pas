@@ -55,6 +55,13 @@ Type
     function AsPAnsiChar: pAnsiChar;
   end;
 
+  TString = record helper for
+    String public
+    function AsAnsiStaring: AnsiString;
+    function AsPAnsiChar: pAnsiChar;
+    function c_str: pAnsiChar;
+  end;
+
 implementation
 
 Uses WinApi.Windows, System.SysUtils;
@@ -183,6 +190,23 @@ end;
 function TAnsiString.AsPAnsiChar: pAnsiChar;
 begin
   result := pAnsiChar(@Self[1]);
+end;
+
+{ TString }
+
+function TString.AsAnsiStaring: AnsiString;
+begin
+  result := AnsiString(Self);
+end;
+
+function TString.AsPAnsiChar: pAnsiChar;
+begin
+  result := AsAnsiStaring.AsPAnsiChar;
+end;
+
+function TString.c_str: pAnsiChar;
+begin
+  result := AsPAnsiChar;
 end;
 
 end.

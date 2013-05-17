@@ -133,12 +133,17 @@ const
   // const CV_PUSH_BUTTON := 0; CV_CHECKBOX = 1; CV_RADIOBOX = 2
   //
   // CVAPI(Integer) cvCreateButton(  PCVChar  button_name CV_DEFAULT(0),CvButtonCallback on_change CV_DEFAULT(0), Pointer  userdata CV_DEFAULT(0) , Integer button_type CV_DEFAULT(CV_PUSH_BUTTON), Integer initial_button_state CV_DEFAULT(0));
+
   // ----------------------
-  (* this function is used to set some external parameters in case of X Window *)
-  // CVAPI(Integer) cvInitSystem( Integer argc, PCVChar * argv );
-  // CVAPI(Integer) cvStartWindowThread(  );
-  // ---------  YV ---------
-  // These 3 flags are used by cvSet/GetWindowProperty;
+  // * this function is used to set some external parameters in case of X Window */
+  // CVAPI(int) cvInitSystem( int argc, char** argv );
+function cvInitSystem(argc: Integer; argv: ppCVChar): Integer; cdecl;
+
+// CVAPI(int) cvStartWindowThread( void );
+function cvStartWindowThread: Integer; cdecl;
+
+// ---------  YV ---------
+// These 3 flags are used by cvSet/GetWindowProperty;
 const
   CV_WND_PROP_FULLSCREEN = 0; // to change/get window's fullscreen property
   CV_WND_PROP_AUTOSIZE = 1; // to change/get window's autosize property
@@ -865,5 +870,7 @@ end;
 procedure cvResizeWindow; external highgui_Dll;
 procedure cvSetWindowProperty; external highgui_Dll;
 function cvGetWindowProperty; external highgui_Dll;
+function cvInitSystem; external highgui_Dll;
+function cvStartWindowThread; external highgui_Dll;
 
 end.

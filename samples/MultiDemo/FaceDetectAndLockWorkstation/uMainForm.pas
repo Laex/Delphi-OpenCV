@@ -7,8 +7,8 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.StdCtrls, Vcl.Samples.Spin,
-  CoolTrayIcon, core.types_c, core_c, highgui_c, objdetect, cvUtils, Vcl.Menus, Vcl.ImgList,
-  JvComponentBase, JvThreadTimer;
+  core.types_c, core_c, highgui_c, objdetect, cvUtils, Vcl.Menus, Vcl.ImgList,
+  JvComponentBase, JvThreadTimer, JvTrayIcon;
 
 const
   WM_NOFACE = WM_USER+1;
@@ -25,7 +25,6 @@ type
   TMainForm = class(TForm)
     LWFrameOutput: TPaintBox;
     LWTimer: TTimer;
-    LWCoolTrayIcon: TCoolTrayIcon;
     LWPopupMenu: TPopupMenu;
     LWShow: TMenuItem;
     LWExit: TMenuItem;
@@ -44,6 +43,7 @@ type
     LWLTotalPCLock: TLabel;
     LWButtonStartStop: TButton;
     LWButtonAbout: TButton;
+    jvtrycn1: TJvTrayIcon;
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure LWTimerRadioGroupClick(Sender: TObject);
@@ -143,7 +143,7 @@ begin
   CanClose := ((LWMainFormHidden) or SessionEnding);
   if not CanClose then
   begin
-    LWCoolTrayIcon.HideMainForm;
+    jvtrycn1.HideApplication;
     LWMainFormHidden := True;
     LWPopupMenu.Items[0].Caption := 'Show';
   end;
@@ -154,7 +154,7 @@ procedure TMainForm.FormKeyDown(Sender: TObject; var Key: Word;
 begin
   if Key = VK_ESCAPE then
   begin
-    LWCoolTrayIcon.HideMainForm;
+    jvtrycn1.HideApplication;
     LWMainFormHidden := True;
     LWPopupMenu.Items[0].Caption := 'Show';
   end;
@@ -167,8 +167,8 @@ begin
   WTSRegisterSessionNotification(Handle, NOTIFY_FOR_ALL_SESSIONS);
   FintLockedCount := 0;
   // End
-  LWCoolTrayIcon.Hint := ProgramsName;
-  LWCoolTrayIcon.IconIndex := 1;
+  jvtrycn1.Hint := ProgramsName;
+  jvtrycn1.IconIndex := 1;
   LWThreadTimer.Interval := LWSpinEditWaitTime.Value*1000;
   // Запуск захвата
   StartCapture;
@@ -289,14 +289,14 @@ procedure TMainForm.LWCoolTrayIconDblClick(Sender: TObject);
 begin
   if LWMainFormHidden then
   begin
-    LWCoolTrayIcon.ShowMainForm;
+    jvtrycn1.ShowApplication;
     LWMainFormHidden := False;
     LWPopupMenu.Items[0].Caption := 'Hide';
   end
   else
   begin
     Application.Minimize;
-    LWCoolTrayIcon.HideMainForm;
+    jvtrycn1.HideApplication;
     LWMainFormHidden := True;
     LWPopupMenu.Items[0].Caption := 'Show';
   end;
@@ -330,7 +330,7 @@ begin
     end
     else
       LWThreadTimer.Enabled := True;
-    LWCoolTrayIcon.Hint := Format('%s (Total face: %s)', [ProgramsName, IntToStr(MyCtx.TotalFaceDetect)]);
+    jvtrycn1.Hint := Format('%s (Total face: %s)', [ProgramsName, IntToStr(MyCtx.TotalFaceDetect)]);
     LTotalFace.Caption := IntToStr(MyCtx.TotalFaceDetect);
     if not LWMainFormHidden then
     begin
