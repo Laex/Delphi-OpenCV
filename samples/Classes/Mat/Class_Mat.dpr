@@ -24,7 +24,7 @@
 // JCL_DEBUG_EXPERT_GENERATEJDBG OFF
 // JCL_DEBUG_EXPERT_INSERTJDBG OFF
 // JCL_DEBUG_EXPERT_DELETEMAPFILE OFF
-program Mat;
+program Class_Mat;
 
 {$APPTYPE CONSOLE}
 {$POINTERMATH ON}
@@ -33,29 +33,47 @@ program Mat;
 uses
   System.SysUtils,
   uLibName in '..\..\..\include\uLibName.pas',
-  opencv_classes in '..\..\..\include\opencv_classes\opencv_classes.pas',
   Core.types_c in '..\..\..\include\core\Core.types_c.pas',
-  core_c in '..\..\..\include\core\core_c.pas';
+  core_c in '..\..\..\include\core\core_c.pas',
+  Mat in '..\..\..\include\core\Mat.pas';
 
 Var
-  TestMat: IMat;
+  Mat: IMat;
+
+procedure Print(const M: IMat);
+begin
+  With M do
+  begin
+    Writeln('elemSize  = ', elemSize);
+    Writeln('elemSize1 = ', elemSize1);
+    Writeln('type      = ', _type);
+    Writeln('depth     = ', depth);
+    Writeln('channels  = ', channels);
+    Writeln('empty     = ', empty);
+    Writeln('total     = ', total);
+    Writeln('flags     = $', IntToHex(flags, 8));
+    Writeln('dims      = ', dims);
+    Writeln('rows      = ', rows);
+    Writeln('cols      = ', cols);
+    Writeln('data      = $', IntToHex(Integer(data), 8));
+    Writeln('getMat()  = $', IntToHex(Integer(getMat), 8));
+  end;
+end;
 
 begin
   try
-    TestMat := CreateMat;
-    Writeln('Mat._type=', TestMat._type);
-    Writeln('Mat.depth=', TestMat.depth);
-    Writeln('Mat.channels=', TestMat.channels);
-    Writeln('Mat.empty=', TestMat.empty);
+    WriteLn('--------- Create empty MAT');
+    Mat := CreateMat;
+    Print(Mat);
     Readln;
-
-    TestMat := CreateMat(2,2,CV_8UC1);
-    Writeln('Mat._type=', TestMat._type);
-    Writeln('Mat.depth=', TestMat.depth);
-    Writeln('Mat.channels=', TestMat.channels);
-    Writeln('Mat.empty=', TestMat.empty);
+    WriteLn('--------- Create MAT 2x2 CV_8UC1 - 1 byte, 1 channel');
+    Mat := CreateMat(2, 2, CV_8UC1);
+    Print(Mat);
     Readln;
-
+    WriteLn('--------- Create MAT 4x2 CV_32FC2 - single (4-byte floating point), 2 channel');
+    Mat := CreateMat(4, 2, CV_32FC2);
+    Print(Mat);
+    Readln;
   except
     on E: Exception do
       Writeln(E.ClassName, ': ', E.Message);

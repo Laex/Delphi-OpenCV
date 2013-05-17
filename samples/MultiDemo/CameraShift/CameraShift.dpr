@@ -43,7 +43,8 @@ uses
   haar in '..\..\..\include\objdetect\haar.pas',
   objdetect in '..\..\..\include\objdetect\objdetect.pas',
   tracking in '..\..\..\include\video\tracking.pas',
-  Core in '..\..\..\include\core\core.pas';
+  core in '..\..\..\include\core\core.pas',
+  cvUtils in '..\..\..\include\cvUtils.pas';
 
 Var
   image: pIplImage = nil;
@@ -107,27 +108,6 @@ Var
   tbVminPosition: integer = 10;
   tbVmaxPosition: integer = 256;
   tbSMinPosition: integer = 30;
-
-function hsv2rgb(hue: Single): TCvScalar;
-var
-  rgb: array [0 .. 2] of longint;
-  p, sector: longint;
-  // sector_data : array[0..5] of array[0..2] of longint;
-begin
-  hue := hue * 0.033333333333333333333333333333333;
-  sector := cvFloor(hue);
-  p := cvRound(255 * (hue - sector));
-  if (sector and 1) <> 0 then
-    p := p xor 255
-  else
-    p := p xor 0;
-
-  rgb[sector_data[sector][0]] := 255;
-  rgb[sector_data[sector][1]] := 0;
-  rgb[sector_data[sector][2]] := p;
-
-  result := cvScalar(rgb[2], rgb[1], rgb[0], 0);
-end;
 
 procedure main_cycle();
 var
