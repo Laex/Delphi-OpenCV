@@ -163,8 +163,8 @@ object MainForm: TMainForm
     end
   end
   object LWImageList: TImageList
-    Left = 160
-    Top = 136
+    Left = 184
+    Top = 112
     Bitmap = {
       494C010102000500040010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000001000000001002000000000000010
@@ -308,15 +308,15 @@ object MainForm: TMainForm
   object LWThreadTimer: TJvThreadTimer
     Interval = 5000
     OnTimer = LWThreadTimerTimer
-    Left = 80
-    Top = 136
+    Left = 48
+    Top = 112
   end
-  object jvtrycn1: TJvTrayIcon
+  object LWJVTrayIcon: TJvTrayIcon
     Active = True
     IconIndex = 0
     Icons = LWImageList
     PopupMenu = LWPopupMenu
     Left = 116
-    Top = 136
+    Top = 112
   end
 end
