@@ -62,71 +62,40 @@ begin
   Writeln('Loaded camera ', cameraNumber);
 end;
 
-procedure Print(const M: IMat);
-begin
-  With M do
-  begin
-    Writeln('elemSize  = ', elemSize);
-    Writeln('elemSize1 = ', elemSize1);
-    Writeln('type      = ', _type);
-    Writeln('depth     = ', depth);
-    Writeln('channels  = ', channels);
-    Writeln('empty     = ', empty);
-    Writeln('total     = ', total);
-    Writeln('flags     = $', IntToHex(flags, 8));
-    Writeln('dims      = ', dims);
-    Writeln('rows      = ', rows);
-    Writeln('cols      = ', cols);
-    Writeln('data      = $', IntToHex(Integer(data), 8));
-    Writeln('getMat()  = $', IntToHex(Integer(getMat), 8));
-  end;
-end;
-
 Var
   cameraNumber: Integer = CV_CAP_ANY;
   camera: IVideoCapture;
-  cameraFrame: IMat;
-  displayedFrame: IMat;
+  cameraFrame: IMat = nil;
 
 begin
   try
     camera := CreateVideoCapture;
     initWebcam(camera, cameraNumber);
-
     // Try to set the camera resolution. Note that this only works for some cameras on
     // some computers and only for some drivers, so don't rely on it to work!
-    // camera.setValue(CV_CAP_PROP_FRAME_WIDTH, DESIRED_CAMERA_WIDTH);
-    // camera.setValue(CV_CAP_PROP_FRAME_HEIGHT, DESIRED_CAMERA_HEIGHT);
-
+    camera.setValue(CV_CAP_PROP_FRAME_WIDTH, DESIRED_CAMERA_WIDTH);
+    camera.setValue(CV_CAP_PROP_FRAME_HEIGHT, DESIRED_CAMERA_HEIGHT);
     // Create a GUI window for display on the screen.
     namedWindow(windowName); // Resizable window, might not work on Windows.
-
-    cameraFrame := CreateMat;
-    Print(cameraFrame);
-
     // Run forever, until the user hits Escape to "break" out of this loop.
     while true do
     begin
-
       // Grab the next camera frame. Note that you can't modify camera frames.
-      Writeln('Read =', camera.read(cameraFrame));
-      Print(cameraFrame);
-      // if (cameraFrame.empty()) then
-      // begin
-      // Writeln('ERROR: Couldn''t grab the next camera frame.');
-      // Halt(1);
-      // end;
-      // imshow(windowName, cameraFrame);
-
+      camera.read(cameraFrame);
+      if (cameraFrame.empty()) then
+      begin
+        Writeln('ERROR: Couldn''t grab the next camera frame.');
+        Halt(1);
+      end;
+      imshow(windowName, cameraFrame);
       // IMPORTANT: Wait for atleast 20 milliseconds, so that the image can be displayed on the screen!
-      if (waitKey(500) = VK_ESCAPE) then // Escape Key
+      if (waitKey(20) = VK_ESCAPE) then // Escape Key
         break; // Quit the program!
     end;
 
     camera.release;
 
     cvDestroyAllWindows;
-
   except
     on E: Exception do
       Writeln(E.ClassName, ': ', E.Message);

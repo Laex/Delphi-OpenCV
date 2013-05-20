@@ -37,7 +37,8 @@ uses
   imgproc_c in '..\..\..\include\imgproc\imgproc_c.pas',
   Core in '..\..\..\include\core\core.pas',
   objdetect_c in '..\..\..\include\objdetect\objdetect_c.pas',
-  cvUtils in '..\..\..\include\cvUtils.pas';
+  cvUtils in '..\..\..\include\cvUtils.pas',
+  Mat in '..\..\..\include\core\Mat.pas';
 
 procedure help;
 begin

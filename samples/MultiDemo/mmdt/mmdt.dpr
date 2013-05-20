@@ -53,7 +53,8 @@ uses
   Core in '..\..\..\include\core\core.pas',
   nonfree in '..\..\..\include\nonfree\nonfree.pas',
   compat in '..\..\..\include\legacy\compat.pas',
-  tracking_c in '..\..\..\include\video\tracking_c.pas';
+  tracking_c in '..\..\..\include\video\tracking_c.pas',
+  Mat in '..\..\..\include\core\Mat.pas';
 
 const
   MAX_CAMERA = 10;

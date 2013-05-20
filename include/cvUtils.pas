@@ -62,16 +62,21 @@ Type
     function c_str: pAnsiChar;
   end;
 
+  TInteger = record helper for
+    Integer public
+    function AsString: string;
+  end;
+
 implementation
 
 Uses WinApi.Windows, System.SysUtils;
 
 Function hsv2rgb(hue: single): TCvScalar;
 var
-  rgb: array [0 .. 2] of integer;
-  p, sector: integer;
+  rgb: array [0 .. 2] of Integer;
+  p, sector: Integer;
 const
-  sector_data: array [0 .. 5, 0 .. 2] of integer = ((0, 2, 1), (1, 2, 0), (1, 0, 2), (2, 0, 1), (2, 1, 0), (0, 1, 2));
+  sector_data: array [0 .. 5, 0 .. 2] of Integer = ((0, 2, 1), (1, 2, 0), (1, 0, 2), (2, 0, 1), (2, 1, 0), (0, 1, 2));
 Begin
   hue := hue * 0.033333333333333333333333333333333;
   sector := cvFloor(hue);
@@ -97,10 +102,10 @@ End;
   ----------------------------------------------------------------------------- }
 procedure IplImage2Bitmap(iplImg: PIplImage; var bitmap: Vcl.Graphics.TBitmap);
 VAR
-  i, j: integer;
+  i, j: Integer;
   offset: longint;
   dataByte, RowIn: PByteArray;
-  channelsCount: integer;
+  channelsCount: Integer;
 BEGIN
   TRY
     // assert((iplImg.Depth = 8) and (iplImg.NChannels = 3),
@@ -146,8 +151,8 @@ function cvImage2Bitmap(img: PIplImage): Vcl.Graphics.TBitmap;
 var
   info: string;
   bmp: Vcl.Graphics.TBitmap;
-  deep: integer;
-  i, j, K, wStep, Channels: integer;
+  deep: Integer;
+  i, j, K, wStep, Channels: Integer;
   data: PByteArray;
   pb: PByteArray;
 begin
@@ -207,6 +212,13 @@ end;
 function TString.c_str: pAnsiChar;
 begin
   result := AsPAnsiChar;
+end;
+
+{ TInteger }
+
+function TInteger.AsString: string;
+begin
+  result := IntToStr(Self);
 end;
 
 end.

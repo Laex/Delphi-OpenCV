@@ -13,7 +13,8 @@ uses
   haar in '..\..\..\include\objdetect\haar.pas',
   objdetect in '..\..\..\include\objdetect\objdetect.pas',
   core in '..\..\..\include\core\core.pas',
-  cvUtils in '..\..\..\include\cvUtils.pas';
+  cvUtils in '..\..\..\include\cvUtils.pas',
+  Mat in '..\..\..\include\core\Mat.pas';
 
 {$R *.res}
 

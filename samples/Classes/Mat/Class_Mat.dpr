@@ -37,11 +37,9 @@ uses
   core_c in '..\..\..\include\core\core_c.pas',
   Mat in '..\..\..\include\core\Mat.pas';
 
-Var
-  Mat: IMat;
-
 procedure Print(const M: IMat);
 begin
+  Writeln('M         = $', IntToHex(Integer(M), 8));
   With M do
   begin
     Writeln('elemSize  = ', elemSize);
@@ -55,25 +53,54 @@ begin
     Writeln('dims      = ', dims);
     Writeln('rows      = ', rows);
     Writeln('cols      = ', cols);
-    Writeln('data      = $', IntToHex(Integer(data), 8));
+    Write('data      = $', IntToHex(Integer(data), 8));
+    if Assigned(data) then
+      Writeln('($', IntToHex(Integer(data^), 2), ')')
+    else
+      Writeln;
     Writeln('getMat()  = $', IntToHex(Integer(getMat), 8));
+    Write('refcount  = $', IntToHex(Integer(refcount), 8));
+    if Assigned(refcount) then
+      Writeln('(', refcount^, ')')
+    else
+      Writeln;
   end;
 end;
 
+Var
+  Mat: IMat;
+  Mat1: IMat;
+  pMat: Pointer;
+
 begin
   try
-    WriteLn('--------- Create empty MAT');
+    Writeln('--------- Create empty MAT');
     Mat := CreateMat;
     Print(Mat);
     Readln;
-    WriteLn('--------- Create MAT 2x2 CV_8UC1 - 1 byte, 1 channel');
+    Writeln('--------- Create MAT 2x2 CV_8UC1 - 1 byte, 1 channel');
     Mat := CreateMat(2, 2, CV_8UC1);
     Print(Mat);
     Readln;
-    WriteLn('--------- Create MAT 4x2 CV_32FC2 - single (4-byte floating point), 2 channel');
+    Writeln('--------- Create MAT 4x2 CV_32FC2 - single (4-byte floating point), 2 channel');
     Mat := CreateMat(4, 2, CV_32FC2);
     Print(Mat);
     Readln;
+    Writeln('--------- Create 2x2 MAT');
+    Mat := CreateMat(2, 2, CV_8UC1);
+    Print(Mat);
+    Writeln('--------- Create 3x3 MAT');
+    Mat1 := CreateMat(3, 3, CV_8UC1);
+    Print(Mat1);
+    Readln;
+    // WriteLn('--------- Swap Mat');
+    // pMat:=Mat.getMat;
+    // Mat.setMat(Mat1.getMat);
+    // Mat1.setMat(pMat);
+    // Print(Mat);
+    // Print(Mat1);
+    // Readln;
+
   except
     on E: Exception do
       Writeln(E.ClassName, ': ', E.Message);

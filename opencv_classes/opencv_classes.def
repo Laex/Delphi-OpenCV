@@ -6,3 +6,11 @@ EXPORTS
 
 	CreateVideoCapture @100
 	CreateVideoCapture_dvc @101
+
+	CreatePoint @200
+	CreatePoint_xy @201
+	CreateScalar @202
+	CreateScalar_v03 @203
+	CreateScalar_v0 @204
+
+	CString @300

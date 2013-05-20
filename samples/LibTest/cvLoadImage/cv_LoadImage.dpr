@@ -41,8 +41,8 @@ imgproc in '..\..\..\include\imgproc\imgproc.pas',
 haar in '..\..\..\include\objdetect\haar.pas',
 objdetect in '..\..\..\include\objdetect\objdetect.pas',
 tracking in '..\..\..\include\video\tracking.pas',
-Core in '..\..\..\include\Core\core.pas'
-  ;
+Core in '..\..\..\include\Core\core.pas',
+  Mat in '..\..\..\include\core\Mat.pas';
 
 const
   // declare image filename

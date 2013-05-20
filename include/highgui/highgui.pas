@@ -85,7 +85,7 @@ unit highgui;
 
 interface
 
-Uses WinApi.Windows, Mat, Core.types_c;
+Uses WinApi.Windows, Mat, Core.types_c, highgui_c;
 
 Type
 
@@ -100,8 +100,8 @@ Type
     procedure release(); stdcall;
 
     function grab(): bool; stdcall;
-    function retrieve(image: IMat; flag: Integer): bool; stdcall;
-    function read(image: IMat): bool; stdcall;
+    function retrieve(Var image: IMat; flag: Integer): bool; stdcall;
+    function read(Var image: IMat): bool; stdcall;
 
     function setValue(propId: Integer; value: double): bool; stdcall;
     function getValue(propId: Integer): double; stdcall;
@@ -141,10 +141,16 @@ procedure moveWindow(const winname: String; const x, y: Integer);
 procedure setWindowProperty(const winname: String; const prop_id: Integer; const prop_value: double);
 // CV_EXPORTS_W double getWindowProperty(const String& winname, int prop_id);
 function getWindowProperty(const winname: String; const prop_id: Integer): double;
+// CV_EXPORTS int createTrackbar(const String& trackbarname, const String& winname,
+// int* value, int count,
+// TrackbarCallback onChange = 0,
+// void* userdata = 0);
+function createTrackbar(const trackbarname: String; const winname: String; value: PInteger; count: Integer;
+  onChange: CvTrackbarCallback2 = nil; userdata: Pointer = nil):Integer;
 
 implementation
 
-Uses uLibName, cvUtils, highgui_c;
+Uses uLibName, cvUtils, core_c;
 
 function CreateVideoCapture: IVideoCapture; external OpenCV_Classes_DLL index 100;
 function CreateVideoCapture(device: Integer): IVideoCapture; external OpenCV_Classes_DLL index 101;
@@ -176,10 +182,10 @@ end;
 
 procedure imshow(const winname: String; const Mat: IMat);
 Var
-  M: TCvMat;
+  IplImage: TIplImage;
 begin
-  cvMat(Mat.rows, Mat.cols, 0, Mat.data);
-  cvShowImage(winname.c_str(), @M);
+  IplImage._IplImage(Pointer(Mat));
+  cvShowImage(winname.c_str(), @IplImage);
 end;
 
 procedure resizeWindow(const winname: String; const width, height: Integer);
@@ -200,6 +206,12 @@ end;
 function getWindowProperty(const winname: String; const prop_id: Integer): double;
 begin
   Result := cvGetWindowProperty(winname.c_str(), prop_id);
+end;
+
+function createTrackbar(const trackbarname: String; const winname: String; value: PInteger; count: Integer;
+  onChange: CvTrackbarCallback2 = nil; userdata: Pointer = nil):Integer;
+begin
+  Result := cvCreateTrackbar2(trackbarname.c_str(), winname.c_str(), value, count, onChange, userdata);
 end;
 
 end.

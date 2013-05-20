@@ -41,7 +41,8 @@ uses
   core_c in '..\..\..\include\core\core_c.pas',
   Core.types_c in '..\..\..\include\core\Core.types_c.pas',
   imgproc.types_c in '..\..\..\include\imgproc\imgproc.types_c.pas',
-  imgproc_c in '..\..\..\include\imgproc\imgproc_c.pas';
+  imgproc_c in '..\..\..\include\imgproc\imgproc_c.pas',
+  Mat in '..\..\..\include\core\Mat.pas';
 
 Function DrawHist(src_img: pIplImage): pIplImage;
 Var

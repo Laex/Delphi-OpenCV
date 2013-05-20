@@ -398,6 +398,7 @@ procedure cvDilate(const src: pIplImage; dst: pIplImage; element: pIplConvKernel
 // CVAPI(double)  cvGetSpatialMoment( CvMoments* moments, int x_order, int y_order );
 function cvGetSpatialMoment(moments: pCvMoments; x_order, y_order: Integer): double; cdecl;
 // CVAPI(double)  cvGetCentralMoment( CvMoments* moments, int x_order, int y_order );
+function cvGetCentralMoment(moments: pCvMoments; x_order, y_order: Integer): double; cdecl;
 // CVAPI(double)  cvGetNormalizedCentralMoment( CvMoments* moments, int x_order, int y_order );
 
 // (* Calculates 7 Hu's invariants from precalculated spatial and central moments */
@@ -430,7 +431,7 @@ function cvGetSpatialMoment(moments: pCvMoments; x_order, y_order: Integer): dou
 // and fills the resultant image with the measurements */
 // CVAPI(void)  cvMatchTemplate( const CvArr* image, const CvArr* templ,
 // CvArr* result, int method );
-procedure cvMatchTemplate(const image: pCvArr; const templ: pCvArr; result: pCvArr; method : Integer); cdecl;
+procedure cvMatchTemplate(const image: pCvArr; const templ: pCvArr; result: pCvArr; method: Integer); cdecl;
 
 // (* Computes earth mover distance between
 // two weighted point sets (called signatures) *)
@@ -535,12 +536,12 @@ function cvFindContours(
   int recursive CV_DEFAULT(0));
 }
 function cvApproxPoly(
-  { } const src_seq: PCvSeq;
+  { } const src_seq: pCvSeq;
   { } header_size: Integer;
   { } storage: PCvMemStorage;
   { } method: Integer;
   { } eps: double;
-  { } recursive: Integer = 0): PCvSeq; cdecl;
+  { } recursive: Integer = 0): pCvSeq; cdecl;
 
 (*
   /* Calculates perimeter of a contour or length of a part of contour */
@@ -560,10 +561,10 @@ function cvArcLength(const curve: Pointer; slice: TCvSlice { = CV_WHOLE_SEQ }; i
 *)
 function cvContourPerimeter(const contour: Pointer): double; inline;
 
-//* Calculates contour boundning rectangle (update=1) or
-//   just retrieves pre-calculated rectangle (update=0) */
-//CVAPI(CvRect)  cvBoundingRect( CvArr* points, int update CV_DEFAULT(0) );
-function cvBoundingRect(points: pCvArr; update: integer = 0): TCvRect; cdecl;
+// * Calculates contour boundning rectangle (update=1) or
+// just retrieves pre-calculated rectangle (update=0) */
+// CVAPI(CvRect)  cvBoundingRect( CvArr* points, int update CV_DEFAULT(0) );
+function cvBoundingRect(points: pCvArr; update: Integer = 0): TCvRect; cdecl;
 
 // * Calculates area of a contour or contour segment */
 // CVAPI(double)  cvContourArea( const CvArr* contour,
@@ -594,20 +595,20 @@ function cvMatchShapes(const object1: Pointer; const object2: Pointer; method: I
   int orientation CV_DEFAULT(CV_CLOCKWISE),
   int return_points CV_DEFAULT(0));
 }
-function cvConvexHull2(const input: PCvSeq; hull_storage: Pointer = nil; orientation: Integer = CV_CLOCKWISE;
-  return_points: Integer = 0): PCvSeq; cdecl;
+function cvConvexHull2(const input: pCvSeq; hull_storage: Pointer = nil; orientation: Integer = CV_CLOCKWISE;
+  return_points: Integer = 0): pCvSeq; cdecl;
 
 {
   /* Checks whether the contour is convex or not (returns 1 if convex, 0 if not) */
   CVAPI(int)  cvCheckContourConvexity( const CvArr* contour );
 }
-function cvCheckContourConvexity(const contour: PCvSeq): Integer; cdecl;
+function cvCheckContourConvexity(const contour: pCvSeq): Integer; cdecl;
 {
   (* Finds convexity defects for the contour *)
   CVAPI(CvSeq)  cvConvexityDefects(  CvArr* contour,  CvArr* convexhull,
   CvMemStorage* storage CV_DEFAULT(0)): Pointer;
 }
-function cvConvexityDefects(contour: PCvSeq; convexhull: PCvSeq; storage: PCvMemStorage = nil): PCvSeq; cdecl;
+function cvConvexityDefects(contour: pCvSeq; convexhull: pCvSeq; storage: PCvMemStorage = nil): pCvSeq; cdecl;
 
 // (* Fits ellipse into a set of 2d points *)
 // CVAPI(CvBox2D) cvFitEllipse2(  CvArr* points );
@@ -927,7 +928,7 @@ function cvHoughLines2(
   { } theta: double;
   { } threshold: Integer;
   { } param1: double = 0;
-  { } param2: double = 0): PCvSeq; cdecl;
+  { } param2: double = 0): pCvSeq; cdecl;
 
 {
   /* Finds circles in the image */
@@ -952,7 +953,7 @@ function cvHoughCircles(
   { } param1: double = 100;
   { } param2: double = 100;
   { } min_radius: Integer = 0;
-  { } max_radius: Integer = 0): PCvSeq; cdecl;
+  { } max_radius: Integer = 0): pCvSeq; cdecl;
 
 // (* Fits a line into set of 2d or 3d points in a robust way (M-estimator technique) *)
 // CVAPI(
@@ -1037,5 +1038,6 @@ procedure cvClearHist; external imgproc_Dll;
 procedure cvMoments; external imgproc_Dll;
 function cvGetSpatialMoment; external imgproc_Dll;
 procedure cvMatchTemplate; external imgproc_Dll;
+function cvGetCentralMoment; external imgproc_Dll;
 
 end.

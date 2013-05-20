@@ -9,6 +9,9 @@
         <Projects Include="Mat\Class_Mat.dproj">
             <Dependencies/>
         </Projects>
+        <Projects Include="ObjectTracking\Class_JbjectTracking.dproj">
+            <Dependencies/>
+        </Projects>
     </ItemGroup>
     <ProjectExtensions>
         <Borland.Personality>Default.Personality.12</Borland.Personality>
@@ -35,14 +38,23 @@
     <Target Name="Class_Mat:Make">
         <MSBuild Projects="Mat\Class_Mat.dproj" Targets="Make"/>
     </Target>
+    <Target Name="Class_JbjectTracking">
+        <MSBuild Projects="ObjectTracking\Class_JbjectTracking.dproj"/>
+    </Target>
+    <Target Name="Class_JbjectTracking:Clean">
+        <MSBuild Projects="ObjectTracking\Class_JbjectTracking.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="Class_JbjectTracking:Make">
+        <MSBuild Projects="ObjectTracking\Class_JbjectTracking.dproj" Targets="Make"/>
+    </Target>
     <Target Name="Build">
-        <CallTarget Targets="Class_VideoCapture;Class_Mat"/>
+        <CallTarget Targets="Class_VideoCapture;Class_Mat;Class_JbjectTracking"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="Class_VideoCapture:Clean;Class_Mat:Clean"/>
+        <CallTarget Targets="Class_VideoCapture:Clean;Class_Mat:Clean;Class_JbjectTracking:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="Class_VideoCapture:Make;Class_Mat:Make"/>
+        <CallTarget Targets="Class_VideoCapture:Make;Class_Mat:Make;Class_JbjectTracking:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>
