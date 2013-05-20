@@ -49,7 +49,8 @@ uses
   objdetect in '..\..\..\include\objdetect\objdetect.pas',
   tracking in '..\..\..\include\video\tracking.pas',
   Core in '..\..\..\include\core\core.pas',
-  contrib in '..\..\..\include\contrib\contrib.pas';
+  contrib in '..\..\..\include\contrib\contrib.pas',
+  Mat in '..\..\..\include\core\Mat.pas';
 
 Const
   CLOCKS_PER_SEC = 1000;

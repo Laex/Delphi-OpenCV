@@ -97,6 +97,8 @@ unit Core.types_c;
 
 interface
 
+Uses Windows;
+
 const
   // Ќаименьшее число дл€ которого выполн€етс€ условие 1.0+DBL_EPSILON <> 1.0
   DBL_EPSILON = 2.2204460492503131E-016;
@@ -362,6 +364,7 @@ type
     BorderMode: array [0 .. 3] of Integer; (* Ignored by OpenCV. *)
     BorderConst: array [0 .. 3] of Integer; (* Ditto. *)
     imageDataOrigin: pByte; (* Pointer to very origin of image data *)
+    function _IplImage(const Mat: Pointer): TIplImage;
   end;
 
   // type       _IplTileInfo IplTileInfo = ;
@@ -674,7 +677,7 @@ type
     thresh: array [0 .. CV_MAX_DIM - 1, 0 .. 1] of Single;
     (* For uniform histograms. *)
     thresh2: pSingle; (* For non-uniform histograms. *)
-    mat: TCvMatND; (* Embedded matrix header for array histograms. *)
+    Mat: TCvMatND; (* Embedded matrix header for array histograms. *)
   end;
 
   (* ***************************************************************************************\
@@ -896,27 +899,27 @@ const
   CV_TYPE_NAME_SEQ_TREE = 'opencv-sequence-tree';
 {$EXTERNALSYM CV_TYPE_NAME_SEQ_TREE}
 
-// ***************************************************************************************
-// *                                         Contours                                    *
-// *************************************************************************************** 
+  // ***************************************************************************************
+  // *                                         Contours                                    *
+  // ***************************************************************************************
 type
   pCvContour = ^TCvContour;
 
   TCvContour = packed record
-    flags: Integer;         // micsellaneous flags
-    header_size: Integer;   // size of sequence header
-    h_prev: pCvArr;         // previous sequence
-    h_next: pCvArr;         // next sequence
-    v_prev: pCvArr;         // 2nd previous sequence
-    v_next: pCvArr;         // 2nd next sequence
-    total: Integer;         // total number of elements
-    elem_size: Integer;     // size of sequence element in bytes
-    block_max: pAnsiChar;   // maximal bound of the last block
-    ptr: pAnsiChar;         // current write pointer
-    delta_elems: Integer;   // how many elements allocated when the seq grows
+    flags: Integer; // micsellaneous flags
+    header_size: Integer; // size of sequence header
+    h_prev: pCvArr; // previous sequence
+    h_next: pCvArr; // next sequence
+    v_prev: pCvArr; // 2nd previous sequence
+    v_next: pCvArr; // 2nd next sequence
+    total: Integer; // total number of elements
+    elem_size: Integer; // size of sequence element in bytes
+    block_max: pAnsiChar; // maximal bound of the last block
+    ptr: pAnsiChar; // current write pointer
+    delta_elems: Integer; // how many elements allocated when the seq grows
     storage: pCvMemStorage; // where the seq is stored
     free_blocks: pCvSeqBlock; // free blocks list
-    first: pCvSeqBlock;     // pointer to the first sequence block
+    first: pCvSeqBlock; // pointer to the first sequence block
     rect: TCvRect;
     color: Integer;
     reserved: array [0 .. 2] of Integer;
@@ -1011,7 +1014,7 @@ type
   pCvSparseMatIterator = ^TCvSparseMatIterator;
 
   TCvSparseMatIterator = packed record
-    mat: pCvSparseMat;
+    Mat: pCvSparseMat;
     node: pCvSparseNode;
     curidx: Integer;
   end;
@@ -1930,10 +1933,15 @@ procedure CV_SWAP(var a, b, t: Pointer); inline; overload;
 // mat^.step = (Single)value; else begin Assert(cType := CV_64FC1);
 // * row)): array [0 .. col - 1] of ((Double(mat^.data.ptr + (size_t)mat^.step = (Double)
 // value; end; end;
-//
-// CV_INLINE
-// function cvIplDepth(v1: cType): Integer; result := CV_ELEM_SIZE1(depth) * 8 or (depth = CV_8S or
-// depth = CV_16S or depth := CV_32S ? IPL_DEPTH_SIGN: 0); end; *)
+
+// CV_INLINE int cvIplDepth( int type )
+// {
+// int depth = CV_MAT_DEPTH(type);
+// return CV_ELEM_SIZE1(depth)*8 | (depth == CV_8S || depth == CV_16S ||
+// depth == CV_32S ? IPL_DEPTH_SIGN : 0);
+// }
+function cvIplDepth(_type: Integer): Integer; // inline;
+
 //
 // (* ***************************************************************************************\
 // *                       Multi-dimensional dense cArray (CvMatND)                          *
@@ -2138,9 +2146,14 @@ const
 
     return m;
   }
-function cvMat(const rows, cols:Integer; etype: Integer; data: Pointer = nil): TCvMat;
+function cvMat(const rows, cols: Integer; etype: Integer; data: Pointer = nil): TCvMat;
 function CV_MAT_DEPTH(const flags: Integer): Integer;
 function CV_MAT_TYPE(const flags: Integer): Integer;
+// * Size of each channel item,
+// 0x124489 = 1000 0100 0100 0010 0010 0001 0001 ~ array of sizeof(arr_type_elem) */
+// #define CV_ELEM_SIZE1(type) \
+// ((((sizeof(size_t)<<28)|0x8442211) >> CV_MAT_DEPTH(type)*4) & 15)
+function CV_ELEM_SIZE1(const _type: Integer): Integer;
 function CV_ELEM_SIZE(const _type: Integer): Integer;
 function CV_MAT_CN(const flags: Integer): Integer;
 function CV_32FC1: Integer;
@@ -2148,19 +2161,19 @@ function CV_32SC1: Integer;
 function CV_MAKETYPE(depth, cn: Integer): Integer;
 // #define CV_MAT_ELEM( mat, elemtype, row, col )
 // (*(elemtype*)CV_MAT_ELEM_PTR_FAST( mat, row, col, sizeof(elemtype)))
-function CV_MAT_ELEM(const mat: TCvMat; const elemsize: Integer; const row, col: Integer): Pointer;
+function CV_MAT_ELEM(const Mat: TCvMat; const elemsize: Integer; const row, col: Integer): Pointer;
 // #define CV_MAT_ELEM_PTR_FAST( mat, row, col, pix_size )
 // (assert( (unsigned)(row) < (unsigned)(mat).rows &&
 // (unsigned)(col) < (unsigned)(mat).cols ),
 // (mat).data.ptr + (size_t)(mat).step*(row) + (pix_size)*(col))
-function CV_MAT_ELEM_PTR_FAST(const mat: TCvMat; const row, col, pix_size: Integer): Pointer;
+function CV_MAT_ELEM_PTR_FAST(const Mat: TCvMat; const row, col, pix_size: Integer): Pointer;
 
 function iif(const Conditional: Boolean; const ifTrue, ifFalse: Variant): Variant; inline; overload;
 function iif(const Conditional: Boolean; const ifTrue, ifFalse: Pointer): Pointer; inline; overload;
 
 implementation
 
-Uses core_c, Windows, System.SysUtils;
+Uses core_c, System.SysUtils, Mat;
 
 function strdup(const str: pCVChar): pCVChar;
 begin
@@ -2191,15 +2204,15 @@ begin
   CopyMemory(str1 + n, str2, Length(str2) * SizeOf(CVChar));
 end;
 
-function CV_MAT_ELEM_PTR_FAST(const mat: TCvMat; const row, col, pix_size: Integer): Pointer;
+function CV_MAT_ELEM_PTR_FAST(const Mat: TCvMat; const row, col, pix_size: Integer): Pointer;
 begin
-  Assert((row < mat.rows) and (col < mat.cols) and (row >= 0) and (col >= 0));
-  Result := Pointer(Integer(mat.data) + mat.step * row + pix_size * col);
+  Assert((row < Mat.rows) and (col < Mat.cols) and (row >= 0) and (col >= 0));
+  Result := Pointer(Integer(Mat.data) + Mat.step * row + pix_size * col);
 end;
 
-function CV_MAT_ELEM(const mat: TCvMat; const elemsize: Integer; const row, col: Integer): Pointer;
+function CV_MAT_ELEM(const Mat: TCvMat; const elemsize: Integer; const row, col: Integer): Pointer;
 begin
-  Result := CV_MAT_ELEM_PTR_FAST(mat, row, col, elemsize);
+  Result := CV_MAT_ELEM_PTR_FAST(Mat, row, col, elemsize);
 end;
 
 function CvAttrList(const attr: ppCVChar = nil; next: pCvAttrList = nil): TCvAttrList;
@@ -2494,6 +2507,38 @@ function cvRNG(seed: int64 = -1): TCvRNG; inline;
 begin
   // CvRNG rng = seed ? (uint64)seed : (uint64)(int64)-1;
   Result := iif(seed > 0, seed, uint64(int64(-1)));
+end;
+
+function CV_ELEM_SIZE1(const _type: Integer): Integer;
+begin
+  // * Size of each channel item,
+  // 0x124489 = 1000 0100 0100 0010 0010 0001 0001 ~ array of sizeof(arr_type_elem) */
+  // #define CV_ELEM_SIZE1(type) \
+  // ((((sizeof(size_t)<<28)|0x8442211) >> CV_MAT_DEPTH(type)*4) & 15)
+  Result := ((((int64(SizeOf(size_t)) shl 28) or $8442211) shr (CV_MAT_DEPTH(_type) * 4)) and 15);
+end;
+
+function cvIplDepth(_type: Integer): Integer;
+Var
+  depth: Integer;
+begin
+  // return CV_ELEM_SIZE1(depth)*8 | (depth == CV_8S || depth == CV_16S || depth == CV_32S ? IPL_DEPTH_SIGN : 0);
+  depth := CV_MAT_DEPTH(_type);
+  Result := CV_ELEM_SIZE1(depth) * 8;
+  if (depth = CV_8S) or (depth = CV_16S) or (depth = CV_32S) then
+    Result := Result or IPL_DEPTH_SIGN;
+end;
+
+{ TIplImage }
+
+function TIplImage._IplImage(const Mat: Pointer): TIplImage;
+Var
+  IIMat: IMat;
+begin
+  IIMat := IMat(Mat);
+  Assert(IIMat.dims <= 2);
+  cvInitImageHeader(@Self, CvSize(IIMat.cols, IIMat.rows), cvIplDepth(IIMat.flags), IIMat.channels);
+  cvSetData(@Self, IIMat.data, IIMat.step1);
 end;
 
 end.

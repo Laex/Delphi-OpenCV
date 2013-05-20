@@ -201,13 +201,15 @@ function cvCreateTrackbar(const trackbar_name: pCVChar; const window_name: pCVCh
 type
   CvTrackbarCallback2 = procedure(pos: Integer; userdata: Pointer); cdecl;
 
-  // CVAPI(Integer)cvCreateTrackbar2(PCVChar trackbar_name, PCVChar window_name, Integer * value,
-  // Integer count, CvTrackbarCallback2 on_change,
-  // function userdata CV_DEFAULT(v1: 0)): Pointer;
+  // CVAPI(int) cvCreateTrackbar2( const char* trackbar_name, const char* window_name,
+  // int* value, int count, CvTrackbarCallback2 on_change,
+  // void* userdata CV_DEFAULT(0));
+function cvCreateTrackbar2(const trackbar_name: pCVChar; const window_name: pCVChar; value: PInteger; count: Integer;
+  on_change: CvTrackbarCallback2; userdata: Pointer = nil): Integer; cdecl;
 
-  (* retrieve or set trackbar position *)
-  // CVAPI(Integer)cvGetTrackbarPos(PCVChar trackbar_name, PCVChar window_name);
-  // CVAPI(procedure)cvSetTrackbarPos(trackbar_name: PCVChar; window_name: PCVChar; pos: Integer);
+(* retrieve or set trackbar position *)
+// CVAPI(Integer)cvGetTrackbarPos(PCVChar trackbar_name, PCVChar window_name);
+// CVAPI(procedure)cvSetTrackbarPos(trackbar_name: PCVChar; window_name: PCVChar; pos: Integer);
 
 const
   CV_EVENT_MOUSEMOVE = 0;
@@ -872,5 +874,6 @@ procedure cvSetWindowProperty; external highgui_Dll;
 function cvGetWindowProperty; external highgui_Dll;
 function cvInitSystem; external highgui_Dll;
 function cvStartWindowThread; external highgui_Dll;
+function cvCreateTrackbar2; external highgui_Dll;
 
 end.

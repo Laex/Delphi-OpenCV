@@ -35,7 +35,8 @@ uses
   Core.types_c in '..\..\..\include\core\Core.types_c.pas',
   imgproc.types_c in '..\..\..\include\imgproc\imgproc.types_c.pas',
   imgproc_c in '..\..\..\include\imgproc\imgproc_c.pas',
-  imgproc in '..\..\..\include\imgproc\imgproc.pas';
+  imgproc in '..\..\..\include\imgproc\imgproc.pas',
+  Mat in '..\..\..\include\core\Mat.pas';
 
 var
   imgSrc, imgTmp, imgMat: PIplImage;

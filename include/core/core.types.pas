@@ -78,140 +78,65 @@
   //  Dev zone:    http://code.opencv.org
   //  **************************************************************************************************
   //  Original file:
-  //  opencv\modules\highgui\include\opencv2\highgui.hpp
+  //  opencv\modules\core\include\opencv2\core\types.hpp
   //  ************************************************************************************************* *)
 
-unit highgui;
+unit core.types;
 
 interface
 
-Uses WinApi.Windows, Mat, Core.types_c, highgui_c;
+Uses Windows, core.types_c, Mat;
 
 Type
+  /// ///////////////////////////// Point_ ////////////////////////////////
+  (* !
+    //  template 2D point class.
 
-  // Attention!
-  // The sequence of function declarations interface must match the
-  // sequence of function declarations in the project "opencv_classes" (C++)
-
-  IVideoCapture = interface
-    ['{3F605CF0-ECAC-4230-B30B-AF9BFD516C4F}']
-    function open(device: Integer): bool; stdcall;
-    function isOpened(): bool; stdcall;
-    procedure release(); stdcall;
-
-    function grab(): bool; stdcall;
-    function retrieve(Var image: IMat; flag: Integer): bool; stdcall;
-    function read(Var image: IMat): bool; stdcall;
-
-    function setValue(propId: Integer; value: double): bool; stdcall;
-    function getValue(propId: Integer): double; stdcall;
+    //  The class defines a point in 2D space. Data type of the point coordinates is specified
+    //  as a template parameter. There are a few shorter aliases available for user convenience.
+    //  See cv::Point, cv::Point2i, cv::Point2f and cv::Point2d.
+  *)
+  IPoint = interface
+    ['{CA53E78F-F6BF-46E2-B034-7BDD72FFD952}']
+    function get_x(): Integer; stdcall;
+    function get_y(): Integer; stdcall;
+    procedure set_x(x: Integer); stdcall;
+    procedure set_y(y: Integer); stdcall;
+    // ---------------------------------
+    function getPoint(): Pointer;
+    // ---------------------------------
+    property x: Integer read get_x write set_x;
+    property y: Integer read get_y write set_y;
   end;
 
-function CreateVideoCapture: IVideoCapture; overload; safecall;
-function CreateVideoCapture(device: Integer): IVideoCapture; overload; safecall;
+  IScalar = interface
+    ['{0887A2A4-3A75-4739-A6E8-F9CB502B8864}']
+    function isReal(): BOOL; stdcall;
+    // ---------------------------------
+    function getScalar(): Pointer; stdcall;
+  end;
 
-// Flags for namedWindow
-Const
-  WINDOW_NORMAL = $00000000;
-  // the user can resize the window (no constraint) / also use to switch a fullscreen window to a normal size
-  WINDOW_AUTOSIZE = $00000001; // the user cannot resize the window, the size is constrainted by the image displayed
-  WINDOW_OPENGL = $00001000; // window with opengl support
+  IString = interface
+    ['{50C8309F-69B6-4E8C-A2B5-F2530007CCA1}']
+    function getString():Pointer; stdcall;
+  end;
 
-  WINDOW_FULLSCREEN = 1; // change the window to fullscreen
-  WINDOW_FREERATIO = $00000100; // the image expends as much as it can (no ratio constraint)
-  WINDOW_KEEPRATIO = $00000000; // the ratio of the image is respected
-
-  // CV_EXPORTS_W void namedWindow(const String& winname, int flags = WINDOW_AUTOSIZE);
-procedure namedWindow(const winname: String; const flags: Integer = WINDOW_AUTOSIZE);
-// CV_EXPORTS_W void destroyWindow(const String& winname);
-procedure destroyWindow(const winname: String);
-// CV_EXPORTS_W void destroyAllWindows();
-procedure destroyAllWindows();
-// CV_EXPORTS_W int startWindowThread();
-function startWindowThread(): Integer;
-// CV_EXPORTS_W int waitKey(int delay = 0);
-function waitKey(const delay: Integer = 0): Integer;
-// CV_EXPORTS_W void imshow(const String& winname, InputArray mat);
-procedure imshow(const winname: String; const Mat: IMat);
-// CV_EXPORTS_W void resizeWindow(const String& winname, int width, int height);
-procedure resizeWindow(const winname: String; const width, height: Integer);
-// CV_EXPORTS_W void moveWindow(const String& winname, int x, int y);
-procedure moveWindow(const winname: String; const x, y: Integer);
-// CV_EXPORTS_W void setWindowProperty(const String& winname, int prop_id, double prop_value);
-procedure setWindowProperty(const winname: String; const prop_id: Integer; const prop_value: double);
-// CV_EXPORTS_W double getWindowProperty(const String& winname, int prop_id);
-function getWindowProperty(const winname: String; const prop_id: Integer): double;
-// CV_EXPORTS int createTrackbar(const String& trackbarname, const String& winname,
-// int* value, int count,
-// TrackbarCallback onChange = 0,
-// void* userdata = 0);
-function createTrackbar(const trackbarname: String; const winname: String; value: PInteger; count: Integer;
-  onChange: CvTrackbarCallback2 = nil; userdata: Pointer = nil):Integer;
+function Point: IPoint; overload; safecall;
+function Point(x, y: Integer): IPoint; overload; safecall;
+function Scalar: IScalar; overload; safecall;
+function Scalar(v0, v1: Integer; v2: Integer = 0; v3: Integer = 0): IScalar; overload; safecall;
+function Scalar(v0: Integer): IScalar; overload; safecall;
+function CString(const s:pCVChar):Pointer; safecall;
 
 implementation
 
-Uses uLibName, cvUtils, core_c;
+Uses uLibName;
 
-function CreateVideoCapture: IVideoCapture; external OpenCV_Classes_DLL index 100;
-function CreateVideoCapture(device: Integer): IVideoCapture; external OpenCV_Classes_DLL index 101;
-
-procedure namedWindow(const winname: String; const flags: Integer = WINDOW_AUTOSIZE);
-begin
-  cvNamedWindow(winname.c_str(), flags);
-end;
-
-procedure destroyWindow(const winname: String);
-begin
-  cvDestroyWindow(winname.c_str());
-end;
-
-procedure destroyAllWindows();
-begin
-  cvDestroyAllWindows();
-end;
-
-function startWindowThread(): Integer;
-begin
-  Result := cvStartWindowThread();
-end;
-
-function waitKey(const delay: Integer = 0): Integer;
-begin
-  Result := cvWaitKey(delay);
-end;
-
-procedure imshow(const winname: String; const Mat: IMat);
-Var
-  IplImage: TIplImage;
-begin
-  IplImage._IplImage(Pointer(Mat));
-  cvShowImage(winname.c_str(), @IplImage);
-end;
-
-procedure resizeWindow(const winname: String; const width, height: Integer);
-begin
-  cvResizeWindow(winname.c_str(), width, height);
-end;
-
-procedure moveWindow(const winname: String; const x, y: Integer);
-begin
-  cvMoveWindow(winname.c_str(), x, y);
-end;
-
-procedure setWindowProperty(const winname: String; const prop_id: Integer; const prop_value: double);
-begin
-  cvSetWindowProperty(winname.c_str(), prop_id, prop_value);
-end;
-
-function getWindowProperty(const winname: String; const prop_id: Integer): double;
-begin
-  Result := cvGetWindowProperty(winname.c_str(), prop_id);
-end;
-
-function createTrackbar(const trackbarname: String; const winname: String; value: PInteger; count: Integer;
-  onChange: CvTrackbarCallback2 = nil; userdata: Pointer = nil):Integer;
-begin
-  Result := cvCreateTrackbar2(trackbarname.c_str(), winname.c_str(), value, count, onChange, userdata);
-end;
+function Point: IPoint; external OpenCV_Classes_DLL index 200;
+function Point(x, y: Integer): IPoint; external OpenCV_Classes_DLL index 201;
+function Scalar: IScalar; external OpenCV_Classes_DLL index 202;
+function Scalar(v0, v1: Integer; v2: Integer; v3: Integer): IScalar; external OpenCV_Classes_DLL index 203;
+function Scalar(v0: Integer): IScalar; external OpenCV_Classes_DLL index 204;
+function CString; external OpenCV_Classes_DLL index 300;
 
 end.

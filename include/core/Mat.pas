@@ -117,7 +117,7 @@ Type
     // ! returns element type, similar to CV_MAT_CN(cvmat->type)
     function channels: Integer; stdcall;
     // ! returns step/elemSize1()
-    function step1(i: Integer=0): size_t; stdcall;
+    function step1(i: Integer = 0): size_t; stdcall;
     // ! returns true if matrix data is NULL
     function empty: bool; stdcall;
     // ! returns the total number of matrix elements
@@ -137,7 +137,7 @@ Type
 
     // -----------------------------------
     function getMat(): Pointer; stdcall;
-    procedure setMat(mat:Pointer); stdcall;
+    // procedure setMat(mat:Pointer); stdcall;
   end;
 
   // ! default constructor

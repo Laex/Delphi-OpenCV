@@ -44,7 +44,8 @@ uses
   objdetect in '..\..\..\include\objdetect\objdetect.pas',
   tracking in '..\..\..\include\video\tracking.pas',
   core in '..\..\..\include\core\core.pas',
-  cvUtils in '..\..\..\include\cvUtils.pas';
+  cvUtils in '..\..\..\include\cvUtils.pas',
+  Mat in '..\..\..\include\core\Mat.pas';
 
 Var
   image: pIplImage = nil;
@@ -242,7 +243,7 @@ Var
   c: integer;
 
 begin
-  // try
+   try
   SingleArray2D[0] := p_SingleArray1D;
   // окно для отображения
   cvNamedWindow('Capture', CV_WINDOW_AUTOSIZE);
@@ -272,9 +273,9 @@ begin
 
   cvReleaseCapture(capture);
   cvDestroyAllWindows;
-  // except
-  // on E: Exception do
-  // Writeln(E.ClassName, ': ', E.Message);
-  // end;
+  except
+   on E: Exception do
+   Writeln(E.ClassName, ': ', E.Message);
+   end;
 
 end.

@@ -23,7 +23,7 @@
 // JCL_DEBUG_EXPERT_GENERATEJDBG OFF
 // JCL_DEBUG_EXPERT_INSERTJDBG OFF
 // JCL_DEBUG_EXPERT_DELETEMAPFILE OFF
-program cvCodeBook;
+program cv_CodeBook;
 
 {$APPTYPE CONSOLE}
 {$POINTERMATH ON}
@@ -43,7 +43,8 @@ uses
   haar in '..\..\..\include\objdetect\haar.pas',
   objdetect in '..\..\..\include\objdetect\objdetect.pas',
   tracking in '..\..\..\include\video\tracking.pas',
-  Core in '..\..\..\include\core\core.pas';
+  Core in '..\..\..\include\core\core.pas',
+  Mat in '..\..\..\include\core\Mat.pas';
 
 const
   NCHANNELS: Integer = 3;

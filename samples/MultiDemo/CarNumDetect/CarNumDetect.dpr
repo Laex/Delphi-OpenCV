@@ -40,7 +40,8 @@ uses
   core in '..\..\..\include\core\core.pas',
   Core.types_c in '..\..\..\include\core\Core.types_c.pas',
   core_c in '..\..\..\include\core\core_c.pas',
-  Math, IniFiles;
+  Math, IniFiles,
+  Mat in '..\..\..\include\core\Mat.pas';
 
 const
   filename_ini = 'carnumdetect.ini';

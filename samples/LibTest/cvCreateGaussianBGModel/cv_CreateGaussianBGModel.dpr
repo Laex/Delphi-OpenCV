@@ -43,7 +43,8 @@ uses
   tracking in '..\..\..\include\video\tracking.pas',
   Core.types_c in '..\..\..\include\core\Core.types_c.pas',
   core_c in '..\..\..\include\core\core_c.pas',
-  Core in '..\..\..\include\core\core.pas';
+  Core in '..\..\..\include\core\core.pas',
+  Mat in '..\..\..\include\core\Mat.pas';
 
 Var
   k: Integer;

@@ -48,7 +48,8 @@ uses
   tracking in '..\..\..\include\video\tracking.pas',
   Core in '..\..\..\include\Core\core.pas',
   compat in '..\..\..\include\legacy\compat.pas',
-  nonfree in '..\..\..\include\nonfree\nonfree.pas';
+  nonfree in '..\..\..\include\nonfree\nonfree.pas',
+  Mat in '..\..\..\include\core\Mat.pas';
 
 function compareSURFDescriptors(const d1: pSingle; const d2: pSingle; best: Double; length: Integer): Double;
 Var

@@ -27,7 +27,7 @@
 // JCL_DEBUG_EXPERT_GENERATEJDBG OFF
 // JCL_DEBUG_EXPERT_INSERTJDBG OFF
 // JCL_DEBUG_EXPERT_DELETEMAPFILE OFF
-program cvMotion;
+program cv_Motion;
 
 {$APPTYPE CONSOLE}
 {$R *.res}
@@ -49,7 +49,8 @@ uses
   objdetect in '..\..\..\include\objdetect\objdetect.pas',
   tracking in '..\..\..\include\video\tracking.pas',
   Core in '..\..\..\include\core\core.pas',
-  tracking_c in '..\..\..\include\video\tracking_c.pas';
+  tracking_c in '..\..\..\include\video\tracking_c.pas',
+  Mat in '..\..\..\include\core\Mat.pas';
 
 procedure help;
 begin

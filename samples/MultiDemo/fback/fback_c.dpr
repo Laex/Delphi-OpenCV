@@ -43,7 +43,8 @@ uses
   haar in '..\..\..\include\objdetect\haar.pas',
   objdetect in '..\..\..\include\objdetect\objdetect.pas',
   tracking in '..\..\..\include\video\tracking.pas',
-  Core in '..\..\..\include\core\core.pas';
+  Core in '..\..\..\include\core\core.pas',
+  Mat in '..\..\..\include\core\Mat.pas';
 
 procedure drawOptFlowMap(const flow: pCvMat; cflowmap: pCvMat; step: Integer; scale: double; color: TCvScalar);
 Var
