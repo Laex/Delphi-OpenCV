@@ -44,9 +44,11 @@ uses
   Core.types_c in '..\..\..\include\core\Core.types_c.pas',
   core_c in '..\..\..\include\core\core_c.pas',
   Core in '..\..\..\include\core\core.pas',
-  Mat in '..\..\..\include\core\Mat.pas';
+  Mat in '..\..\..\include\core\Mat.pas',
+  core.types in '..\..\..\include\core\core.types.pas',
+  cvUtils in '..\..\..\include\cvUtils.pas';
 
-Var
+var
   k: Integer;
   fr: Integer;
   tmp_frame: pIplImage;

@@ -50,9 +50,11 @@ uses
   tracking in '..\..\..\include\video\tracking.pas',
   Core in '..\..\..\include\core\core.pas',
   contrib in '..\..\..\include\contrib\contrib.pas',
-  Mat in '..\..\..\include\core\Mat.pas';
+  Mat in '..\..\..\include\core\Mat.pas',
+  core.types in '..\..\..\include\core\core.types.pas',
+  cvUtils in '..\..\..\include\cvUtils.pas';
 
-Const
+const
   CLOCKS_PER_SEC = 1000;
 
 procedure help;

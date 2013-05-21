@@ -43,9 +43,11 @@ uses
   objdetect in '..\..\..\include\objdetect\objdetect.pas',
   tracking in '..\..\..\include\video\tracking.pas',
   Core in '..\..\..\include\core\core.pas',
-  Mat in '..\..\..\include\core\Mat.pas';
+  Mat in '..\..\..\include\core\Mat.pas',
+  core.types in '..\..\..\include\core\core.types.pas',
+  cvUtils in '..\..\..\include\cvUtils.pas';
 
-Const
+const
   Image_Left = 'StereoSample\Aloe\view0.png';
   Image_Right = 'StereoSample\Aloe\view1.png';
   // Количеcтво различий
@@ -53,11 +55,11 @@ Const
   // Количеcтво итераций
   mIter = 2;
 
-Type
+type
   TDoubleArray = array [0 .. 15] of Double;
   pDoubleArray = ^TDoubleArray;
 
-Var
+var
   image_: pIplImage = nil;
   image1_: pIplImage = nil;
   image_g: pIplImage = nil;

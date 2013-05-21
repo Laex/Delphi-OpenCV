@@ -40,7 +40,10 @@ uses
   imgproc in '..\..\..\include\imgproc\imgproc.pas',
   core in '..\..\..\include\core\core.pas',
   core.types_c in '..\..\..\include\core\Core.types_c.pas',
-  core_c in '..\..\..\include\core\core_c.pas';
+  core_c in '..\..\..\include\core\core_c.pas',
+  Mat in '..\..\..\include\core\Mat.pas',
+  core.types in '..\..\..\include\core\core.types.pas',
+  cvUtils in '..\..\..\include\cvUtils.pas';
 
 {$DEFINE RECT}
 //{$DEFINE RECT} - using cvBoundingRect - work correctly

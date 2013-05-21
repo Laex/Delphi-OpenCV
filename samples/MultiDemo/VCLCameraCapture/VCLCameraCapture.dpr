@@ -44,8 +44,9 @@ uses
   core in '..\..\..\include\core\core.pas',
   compat in '..\..\..\include\legacy\compat.pas',
   nonfree in '..\..\..\include\nonfree\nonfree.pas',
-  cvUtils in '..\..\..\include\cvUtils.pas',
-  Mat in '..\..\..\include\core\Mat.pas';
+  Mat in '..\..\..\include\core\Mat.pas',
+  core.types in '..\..\..\include\core\core.types.pas',
+  cvUtils in '..\..\..\include\cvUtils.pas';
 
 {$R *.res}
 

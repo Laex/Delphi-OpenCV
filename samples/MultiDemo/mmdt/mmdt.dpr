@@ -54,7 +54,9 @@ uses
   nonfree in '..\..\..\include\nonfree\nonfree.pas',
   compat in '..\..\..\include\legacy\compat.pas',
   tracking_c in '..\..\..\include\video\tracking_c.pas',
-  Mat in '..\..\..\include\core\Mat.pas';
+  Mat in '..\..\..\include\core\Mat.pas',
+  core.types in '..\..\..\include\core\core.types.pas',
+  cvUtils in '..\..\..\include\cvUtils.pas';
 
 const
   MAX_CAMERA = 10;
@@ -62,14 +64,14 @@ const
   MAX_JPG_CAM = 100000;
   CLOCKS_PER_SEC = 1000;
 
-Var
+var
   all_camera: Integer = 0;
   capture: array [0 .. MAX_CAMERA - 1] of pCvCapture;
   allcam: Integer;
-Threadvar
+threadvar
   // thread
   NumMultiThread: Integer;
-Var
+var
   UnloadCapture, WindowCapture: array [0 .. MAX_CAMERA - 1] of Integer;
 
   MHI_DURATION: double = 1;
