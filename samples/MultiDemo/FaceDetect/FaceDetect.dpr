@@ -44,9 +44,11 @@ uses
   objdetect in '..\..\..\include\objdetect\objdetect.pas',
   tracking in '..\..\..\include\video\tracking.pas',
   Core in '..\..\..\include\core\core.pas',
-  Mat in '..\..\..\include\core\Mat.pas';
+  Mat in '..\..\..\include\core\Mat.pas',
+  core.types in '..\..\..\include\core\core.types.pas',
+  cvUtils in '..\..\..\include\cvUtils.pas';
 
-Var
+var
   // Create memory for calculations
   storage: pCvMemStorage = nil;
   // Create a new Haar classifier
@@ -56,7 +58,7 @@ Var
 
   // Function prototype for detecting and drawing an object from an image
 procedure detect_and_draw(image: pIplImage);
-Var
+var
   scale: Integer;
   temp: pIplImage;
   // two points to represent the face locations

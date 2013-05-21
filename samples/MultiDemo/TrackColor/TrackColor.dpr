@@ -78,9 +78,10 @@ begin
   try
     // Initialize capturing live feed from the camera
     capture := cvCreateCameraCapture(CV_CAP_ANY);
-    if not Boolean(capture) then
+    if not Assigned(capture) then
     begin
       Writeln('Could not initialize capturing...');
+      cvReleaseCapture(capture);
       Halt(1);
     end;
 

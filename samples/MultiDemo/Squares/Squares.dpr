@@ -43,7 +43,9 @@ uses
   objdetect in '..\..\..\include\objdetect\objdetect.pas',
   tracking in '..\..\..\include\video\tracking.pas',
   Core in '..\..\..\include\core\core.pas',
-  Mat in '..\..\..\include\core\Mat.pas';
+  Mat in '..\..\..\include\core\Mat.pas',
+  core.types in '..\..\..\include\core\core.types.pas',
+  cvUtils in '..\..\..\include\cvUtils.pas';
 
 const
   filename = 'resource\matchshapes.jpg';

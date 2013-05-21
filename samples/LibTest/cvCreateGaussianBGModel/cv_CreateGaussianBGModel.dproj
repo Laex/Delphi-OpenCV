@@ -2,7 +2,7 @@
     <PropertyGroup>
         <ProjectGuid>{2E9C87AF-103A-430F-9200-123DE8418CC4}</ProjectGuid>
         <ProjectVersion>14.4</ProjectVersion>
-        <FrameworkType>None</FrameworkType>
+        <FrameworkType>VCL</FrameworkType>
         <MainSource>cv_CreateGaussianBGModel.dpr</MainSource>
         <Base>True</Base>
         <Config Condition="'$(Config)'==''">Debug</Config>
@@ -48,7 +48,7 @@
         <VerInfo_Locale>1049</VerInfo_Locale>
         <VerInfo_Keys>CompanyName=;FileDescription=;FileVersion=1.0.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductName=;ProductVersion=1.0.0.0;Comments=</VerInfo_Keys>
         <Manifest_File>None</Manifest_File>
-        <DCC_Namespace>System;Xml;Data;Datasnap;Web;Soap;$(DCC_Namespace)</DCC_Namespace>
+        <DCC_Namespace>System;Xml;Data;Datasnap;Web;Soap;Vcl;Vcl.Imaging;Vcl.Touch;Vcl.Samples;Vcl.Shell;$(DCC_Namespace)</DCC_Namespace>
         <DCC_DcuOutput>.\$(Platform)\$(Config)</DCC_DcuOutput>
         <DCC_ExeOutput>..\..\..\bin\</DCC_ExeOutput>
         <DCC_E>false</DCC_E>
@@ -105,6 +105,9 @@
         <DCCReference Include="..\..\..\include\core\Core.types_c.pas"/>
         <DCCReference Include="..\..\..\include\core\core_c.pas"/>
         <DCCReference Include="..\..\..\include\core\core.pas"/>
+        <DCCReference Include="..\..\..\include\core\Mat.pas"/>
+        <DCCReference Include="..\..\..\include\core\core.types.pas"/>
+        <DCCReference Include="..\..\..\include\cvUtils.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>
@@ -173,9 +176,3 @@
     <Import Project="$(BDS)\Bin\CodeGear.Delphi.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Delphi.Targets')"/>
     <Import Project="$(APPDATA)\Embarcadero\$(BDSAPPDATABASEDIR)\$(PRODUCTVERSION)\UserTools.proj" Condition="Exists('$(APPDATA)\Embarcadero\$(BDSAPPDATABASEDIR)\$(PRODUCTVERSION)\UserTools.proj')"/>
 </Project>
-
-<!-- EurekaLog First Line
-[Exception Log]
-EurekaLog Version=7001
-DeleteMapAfterCompile=1
-EurekaLog Last Line -->

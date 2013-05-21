@@ -52,11 +52,13 @@ uses
   Core in '..\..\..\include\core\core.pas',
   compat in '..\..\..\include\legacy\compat.pas',
   nonfree in '..\..\..\include\nonfree\nonfree.pas',
-  Mat in '..\..\..\include\core\Mat.pas';
+  Mat in '..\..\..\include\core\Mat.pas',
+  core.types in '..\..\..\include\core\core.types.pas',
+  cvUtils in '..\..\..\include\cvUtils.pas';
 
 // cравнение двух оcобенноcтей
 function compareSURFDescriptors(const d1: PSingle; const d2: PSingle; best: Double; length: Integer): Double;
-Var
+var
   total_cost: Double;
   i: Integer;
   t0, t1, t2, t3: Double;

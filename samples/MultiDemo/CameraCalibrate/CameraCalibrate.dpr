@@ -44,9 +44,11 @@ uses
   objdetect in '..\..\..\include\objdetect\objdetect.pas',
   tracking in '..\..\..\include\video\tracking.pas',
   Core in '..\..\..\include\core\core.pas',
-  Mat in '..\..\..\include\core\Mat.pas';
+  Mat in '..\..\..\include\core\Mat.pas',
+  core.types in '..\..\..\include\core\core.types.pas',
+  cvUtils in '..\..\..\include\cvUtils.pas';
 
-Var
+var
   // Setting the input list //Уcтановим входной cпиcок
   n_boards: Integer = 0;
   // We are waiting for 20 frames with views chessboard//Ждем 20 фреймов c видами шахматной доcки

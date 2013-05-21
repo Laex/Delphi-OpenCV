@@ -44,10 +44,11 @@ uses
   objdetect in '..\..\..\include\objdetect\objdetect.pas',
   tracking in '..\..\..\include\video\tracking.pas',
   core in '..\..\..\include\core\core.pas',
-  cvUtils in '..\..\..\include\cvUtils.pas',
-  Mat in '..\..\..\include\core\Mat.pas';
+  Mat in '..\..\..\include\core\Mat.pas',
+  core.types in '..\..\..\include\core\core.types.pas',
+  cvUtils in '..\..\..\include\cvUtils.pas';
 
-Var
+var
   image: pIplImage = nil;
   hsv: pIplImage = nil;
   hue: pIplImage = nil;
