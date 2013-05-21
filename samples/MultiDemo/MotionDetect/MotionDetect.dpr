@@ -40,8 +40,7 @@ uses
   imgproc in '..\..\..\include\imgproc\imgproc.pas',
   core in '..\..\..\include\core\core.pas',
   core.types_c in '..\..\..\include\core\Core.types_c.pas',
-  core_c in '..\..\..\include\core\core_c.pas',
-  Mat in '..\..\..\include\core\Mat.pas';
+  core_c in '..\..\..\include\core\core_c.pas';
 
 {$DEFINE RECT}
 //{$DEFINE RECT} - using cvBoundingRect - work correctly
@@ -56,10 +55,45 @@ var
   oldframe_grey: pIplImage = nil;
   contours: pCvSeq = nil;
   c: pCvSeq = nil;
+{$IFDEF RECT}
   rect: TCvRect;
+{$ELSE}
   rect2d: TCvBox2D;
+{$ENDIF}
   key: integer;
   first: boolean = true;
+
+// Удаление мелких контуров
+function remove_small_objects(img_in: pIplImage; size: integer): pIplImage;
+var
+  img_out: pIplImage;
+  s_storage: pCvMemStorage;
+  s_contours: pCvSeq;
+  black, white: TCvScalar;
+  area: double;
+begin
+  img_out := cvCloneImage(img_in);  // Клонируем изображение
+  s_storage := cvCreateMemStorage(0); // Создаем хранилище
+  s_contours := nil;
+  black := CV_RGB(0, 0, 0);         // Черный цвет
+  white := CV_RGB(255, 255, 255);   // Белый цвет
+  s_contours := AllocMem(SizeOf(TCvSeq));
+  // Ищем контуры на изображении
+  cvFindContours(img_in, s_storage, @s_contours, SizeOf(TCvContour), CV_RETR_LIST, CV_CHAIN_APPROX_SIMPLE, cvPoint(0, 0));
+  while (s_contours <> nil) do
+  begin
+    area := cvContourArea(s_contours, CV_WHOLE_SEQ);
+    if abs(area) <= size then  // Если площадь меньше порога, то удаляем
+      cvDrawContours(img_out, s_contours, black, black, -1, CV_FILLED, 8, cvPoint(0, 0))
+    else
+      cvDrawContours(img_out, s_contours, white, white, -1, CV_FILLED, 8, cvPoint(0, 0));
+    s_contours := s_contours.h_next; // Переходим к следующему контуру
+  end;
+  cvReleaseMemStorage(s_storage); // Удаляем хранилище
+  s_contours := nil;
+  FreeMem(s_contours, SizeOf(TCvSeq));
+  result := img_out; // Результат
+end;
 
 begin
   try
@@ -84,9 +118,11 @@ begin
       cvAbsDiff(oldframe_grey, frame_grey, difference_img);
       cvSmooth(difference_img, difference_img, CV_BLUR);
       cvThreshold(difference_img, difference_img, 25, 255, CV_THRESH_BINARY);
+      // Удаляем мелкие объекты
+      difference_img := remove_small_objects(difference_img, 100);
+      // End
       contours := AllocMem(SizeOf(TCvSeq));
-      cvFindContours(difference_img, storage, @contours, SizeOf(TCvContour), CV_RETR_LIST, CV_CHAIN_APPROX_NONE,
-        cvPoint(0, 0));
+      cvFindContours(difference_img, storage, @contours, SizeOf(TCvContour), CV_RETR_LIST, CV_CHAIN_APPROX_NONE, cvPoint(0, 0));
       c := contours;
       while (c <> nil) do
       begin
