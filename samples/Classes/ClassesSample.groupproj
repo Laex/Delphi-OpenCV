@@ -9,7 +9,7 @@
         <Projects Include="Mat\Class_Mat.dproj">
             <Dependencies/>
         </Projects>
-        <Projects Include="ObjectTracking\Class_JbjectTracking.dproj">
+        <Projects Include="ObjectTracking\Class_ObjectTracking.dproj">
             <Dependencies/>
         </Projects>
     </ItemGroup>
@@ -38,23 +38,23 @@
     <Target Name="Class_Mat:Make">
         <MSBuild Projects="Mat\Class_Mat.dproj" Targets="Make"/>
     </Target>
-    <Target Name="Class_JbjectTracking">
-        <MSBuild Projects="ObjectTracking\Class_JbjectTracking.dproj"/>
+    <Target Name="Class_ObjectTracking">
+        <MSBuild Projects="ObjectTracking\Class_ObjectTracking.dproj"/>
     </Target>
-    <Target Name="Class_JbjectTracking:Clean">
-        <MSBuild Projects="ObjectTracking\Class_JbjectTracking.dproj" Targets="Clean"/>
+    <Target Name="Class_ObjectTracking:Clean">
+        <MSBuild Projects="ObjectTracking\Class_ObjectTracking.dproj" Targets="Clean"/>
     </Target>
-    <Target Name="Class_JbjectTracking:Make">
-        <MSBuild Projects="ObjectTracking\Class_JbjectTracking.dproj" Targets="Make"/>
+    <Target Name="Class_ObjectTracking:Make">
+        <MSBuild Projects="ObjectTracking\Class_ObjectTracking.dproj" Targets="Make"/>
     </Target>
     <Target Name="Build">
-        <CallTarget Targets="Class_VideoCapture;Class_Mat;Class_JbjectTracking"/>
+        <CallTarget Targets="Class_VideoCapture;Class_Mat;Class_ObjectTracking"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="Class_VideoCapture:Clean;Class_Mat:Clean;Class_JbjectTracking:Clean"/>
+        <CallTarget Targets="Class_VideoCapture:Clean;Class_Mat:Clean;Class_ObjectTracking:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="Class_VideoCapture:Make;Class_Mat:Make;Class_JbjectTracking:Make"/>
+        <CallTarget Targets="Class_VideoCapture:Make;Class_Mat:Make;Class_ObjectTracking:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>
