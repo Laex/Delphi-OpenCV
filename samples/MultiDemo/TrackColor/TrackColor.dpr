@@ -37,9 +37,10 @@ uses
   Core.types_c in '..\..\..\include\core\Core.types_c.pas',
   imgproc.types_c in '..\..\..\include\imgproc\imgproc.types_c.pas',
   imgproc_c in '..\..\..\include\imgproc\imgproc_c.pas',
-  Core in '..\..\..\include\core\core.pas',
+  core in '..\..\..\include\core\core.pas',
   cvUtils in '..\..\..\include\cvUtils.pas',
-  Mat in '..\..\..\include\core\Mat.pas';
+  Mat in '..\..\..\include\core\Mat.pas',
+  core.types in '..\..\..\include\core\core.types.pas';
 
 function GetThresholdedImage(img: pIplImage): pIplImage;
 Var
@@ -124,8 +125,16 @@ begin
       lastX := posX;
       lastY := posY;
 
-      posX := Trunc(moment10 / area);
-      posY := Trunc(moment01 / area);
+      if area > 0 then
+      begin
+        posX := Trunc(moment10 / area);
+        posY := Trunc(moment01 / area);
+      end
+      else
+      begin
+        posX := Trunc(moment10);
+        posY := Trunc(moment01);
+      end;
 
       // Print it out for debugging purposes
       Writeln(Format('position (%d,%d)', [posX, posY]));
