@@ -1,7 +1,7 @@
 ﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <PropertyGroup>
         <ProjectGuid>{5F4B5F6D-9B8A-46B6-A4DA-AF491DA31B5B}</ProjectGuid>
-        <MainSource>Class_JbjectTracking.dpr</MainSource>
+        <MainSource>Class_ObjectTracking.dpr</MainSource>
         <Base>True</Base>
         <Config Condition="'$(Config)'==''">Debug</Config>
         <TargetedPlatforms>1</TargetedPlatforms>
@@ -99,7 +99,7 @@
         <BorlandProject>
             <Delphi.Personality>
                 <Source>
-                    <Source Name="MainSource">Class_JbjectTracking.dpr</Source>
+                    <Source Name="MainSource">Class_ObjectTracking.dpr</Source>
                 </Source>
                 <VersionInfo>
                     <VersionInfo Name="IncludeVerInfo">False</VersionInfo>
