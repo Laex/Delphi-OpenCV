@@ -33,26 +33,15 @@ program cv_Motion;
 {$R *.res}
 
 uses
+  WinApi.Windows,
   System.SysUtils,
-  Windows,
   System.Character,
-  uLibName in '..\..\..\include\uLibName.pas',
-  highgui_c in '..\..\..\include\highgui\highgui_c.pas',
-  core_c in '..\..\..\include\core\core_c.pas',
-  Core.types_c in '..\..\..\include\core\Core.types_c.pas',
-  imgproc.types_c in '..\..\..\include\imgproc\imgproc.types_c.pas',
-  imgproc_c in '..\..\..\include\imgproc\imgproc_c.pas',
-  legacy in '..\..\..\include\legacy\legacy.pas',
-  calib3d in '..\..\..\include\calib3d\calib3d.pas',
-  imgproc in '..\..\..\include\imgproc\imgproc.pas',
-  haar in '..\..\..\include\objdetect\haar.pas',
-  objdetect in '..\..\..\include\objdetect\objdetect.pas',
-  tracking in '..\..\..\include\video\tracking.pas',
-  Core in '..\..\..\include\core\core.pas',
-  tracking_c in '..\..\..\include\video\tracking_c.pas',
-  Mat in '..\..\..\include\core\Mat.pas',
-  core.types in '..\..\..\include\core\core.types.pas',
-  cvUtils in '..\..\..\include\cvUtils.pas';
+  highgui_c,
+  core_c,
+  Core.types_c,
+  imgproc_c,
+  imgproc.types_c,
+  tracking_c;
 
 procedure help;
 begin
@@ -217,7 +206,7 @@ Var
   motion: pIplImage = nil;
   capture: pCvCapture = nil;
   image: pIplImage;
-  filename:AnsiString;
+  filename: AnsiString;
 
 begin
   try
@@ -227,7 +216,7 @@ begin
       capture := cvCreateCameraCapture(iif(ParamCount = 1, ParamStr(1), CV_CAP_ANY))
     else if (ParamCount = 1) and FileExists(ParamStr(1)) then
     begin
-      filename:=ParamStr(1);
+      filename := ParamStr(1);
       capture := cvCreateFileCapture(pCvChar(@filename[1]))
     end
     else

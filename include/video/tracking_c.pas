@@ -96,7 +96,7 @@ unit tracking_c;
 
 interface
 
-Uses Core.types_c;
+Uses Core.types_c, imgproc.types_c;
 
 /// ****************************************************************************************\
 // *                                  Motion Analysis                                       *
@@ -125,8 +125,10 @@ const
   // float*    track_error,
   // CvTermCriteria criteria,
   // int       flags );
-  //
-  //
+procedure cvCalcOpticalFlowPyrLK(const prev: pIplImage; const curr: pIplImage; prev_pyr: pIplImage; curr_pyr: pIplImage;
+  const prev_features: pCvPoint2D32f; curr_features: pCvPoint2D32f; count: Integer; win_size: TCvSize; level: Integer;
+  status: pCVChar; track_error: PSingle; criteria: TCvTermCriteria; flags: Integer); cdecl;
+
   /// * Modification of a previous sparse optical flow algorithm to calculate
   // affine flow */
   // CVAPI(void)  cvCalcAffineFlowPyrLK( const CvArr*  prev, const CvArr*  curr,
@@ -147,7 +149,9 @@ const
   // CvArr* flow, double pyr_scale, int levels,
   // int winsize, int iterations, int poly_n,
   // double poly_sigma, int flags );
-  //
+procedure cvCalcOpticalFlowFarneback(const prev: pCvMat; const next: pCvMat; flow: pCvMat; pyr_scale: double;
+  levels: Integer; winsize: Integer; iterations: Integer; poly_n: Integer; poly_sigma: double; flags: Integer); cdecl;
+
   /// ********************************* motion templates *************************************/
   //
   /// ****************************************************************************************\
@@ -199,7 +203,9 @@ function cvSegmentMotion(const mhi: pCvArr; seg_mask: pCvArr; storage: pCvMemSto
 // CVAPI(int)  cvCamShift( const CvArr* prob_image, CvRect  window,
 // CvTermCriteria criteria, CvConnectedComp* comp,
 // CvBox2D* box CV_DEFAULT(NULL) );
-//
+function cvCamShift(const prob_image: pIplImage; window: TCvRect; criteria: TCvTermCriteria; comp: pCvConnectedComp;
+  box: pCvBox2D = nil): Integer; cdecl;
+
 /// * Implements MeanShift algorithm - determines object position
 // from the object histogram back project */
 // CVAPI(int)  cvMeanShift( const CvArr* prob_image, CvRect  window,
@@ -285,6 +291,10 @@ implementation
 
 Uses
   uLibName;
+
+function cvCamShift; external tracking_DLL;
+procedure cvCalcOpticalFlowPyrLK; external tracking_DLL;
+procedure cvCalcOpticalFlowFarneback; external tracking_DLL;
 
 procedure cvUpdateMotionHistory; external tracking_DLL;
 procedure cvCalcMotionGradient; external tracking_DLL;

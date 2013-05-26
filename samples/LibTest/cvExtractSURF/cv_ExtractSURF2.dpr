@@ -31,27 +31,15 @@ program cv_ExtractSURF;
 {$R *.res}
 
 uses
+  WinApi.Windows,
   System.SysUtils,
-  Windows,
-  System.Generics.Collections,
-  uLibName in '..\..\..\include\uLibName.pas',
-  highgui_c in '..\..\..\include\highgui\highgui_c.pas',
-  core_c in '..\..\..\include\Core\core_c.pas',
-  Core.types_c in '..\..\..\include\Core\Core.types_c.pas',
-  imgproc.types_c in '..\..\..\include\imgproc\imgproc.types_c.pas',
-  imgproc_c in '..\..\..\include\imgproc\imgproc_c.pas',
-  legacy in '..\..\..\include\legacy\legacy.pas',
-  calib3d in '..\..\..\include\calib3d\calib3d.pas',
-  imgproc in '..\..\..\include\imgproc\imgproc.pas',
-  haar in '..\..\..\include\objdetect\haar.pas',
-  objdetect in '..\..\..\include\objdetect\objdetect.pas',
-  tracking in '..\..\..\include\video\tracking.pas',
-  Core in '..\..\..\include\Core\core.pas',
-  compat in '..\..\..\include\legacy\compat.pas',
-  nonfree in '..\..\..\include\nonfree\nonfree.pas',
-  Mat in '..\..\..\include\core\Mat.pas',
-  core.types in '..\..\..\include\core\core.types.pas',
-  cvUtils in '..\..\..\include\cvUtils.pas';
+  highgui_c,
+  core_c,
+  Core.types_c,
+  imgproc_c,
+  imgproc.types_c,
+  compat,
+  nonfree;
 
 function compareSURFDescriptors(const d1: pSingle; const d2: pSingle; best: Double; length: Integer): Double;
 var
@@ -93,7 +81,7 @@ begin
   cvStartReadSeq(model_keypoints, @kreader, 0);
   cvStartReadSeq(model_descriptors, @reader, 0);
 
-  for i := 0 to model_descriptors.total-1 do
+  for i := 0 to model_descriptors.total - 1 do
   begin
     kp := pCvSURFPoint(kreader.ptr);
     mvec := pSingle(reader.ptr);

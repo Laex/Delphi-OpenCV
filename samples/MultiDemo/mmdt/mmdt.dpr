@@ -35,28 +35,15 @@ program mmdt;
 {$R *.res}
 
 uses
-  System.SysUtils,
   Winapi.Windows,
+  System.SysUtils,
   System.Generics.Collections,
-  uLibName in '..\..\..\include\uLibName.pas',
-  highgui_c in '..\..\..\include\highgui\highgui_c.pas',
-  core_c in '..\..\..\include\core\core_c.pas',
-  Core.types_c in '..\..\..\include\core\Core.types_c.pas',
-  imgproc.types_c in '..\..\..\include\imgproc\imgproc.types_c.pas',
-  imgproc_c in '..\..\..\include\imgproc\imgproc_c.pas',
-  legacy in '..\..\..\include\legacy\legacy.pas',
-  calib3d in '..\..\..\include\calib3d\calib3d.pas',
-  imgproc in '..\..\..\include\imgproc\imgproc.pas',
-  haar in '..\..\..\include\objdetect\haar.pas',
-  objdetect in '..\..\..\include\objdetect\objdetect.pas',
-  tracking in '..\..\..\include\video\tracking.pas',
-  Core in '..\..\..\include\core\core.pas',
-  nonfree in '..\..\..\include\nonfree\nonfree.pas',
-  compat in '..\..\..\include\legacy\compat.pas',
-  tracking_c in '..\..\..\include\video\tracking_c.pas',
-  Mat in '..\..\..\include\core\Mat.pas',
-  core.types in '..\..\..\include\core\core.types.pas',
-  cvUtils in '..\..\..\include\cvUtils.pas';
+  highgui_c,
+  core_c,
+  Core.types_c,
+  imgproc_c,
+  imgproc.types_c,
+  tracking_c;
 
 const
   MAX_CAMERA = 10;

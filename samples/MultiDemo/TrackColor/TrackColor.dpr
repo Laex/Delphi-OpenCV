@@ -30,17 +30,12 @@ program TrackColor;
 
 uses
   System.SysUtils,
-  Math,
-  uLibName in '..\..\..\include\uLibName.pas',
-  highgui_c in '..\..\..\include\highgui\highgui_c.pas',
-  core_c in '..\..\..\include\core\core_c.pas',
-  Core.types_c in '..\..\..\include\core\Core.types_c.pas',
-  imgproc.types_c in '..\..\..\include\imgproc\imgproc.types_c.pas',
-  imgproc_c in '..\..\..\include\imgproc\imgproc_c.pas',
-  core in '..\..\..\include\core\core.pas',
-  cvUtils in '..\..\..\include\cvUtils.pas',
-  Mat in '..\..\..\include\core\Mat.pas',
-  core.types in '..\..\..\include\core\core.types.pas';
+  System.Math,
+  highgui_c,
+  core_c,
+  Core.types_c,
+  imgproc_c,
+  imgproc.types_c;
 
 function GetThresholdedImage(img: pIplImage): pIplImage;
 Var
@@ -81,7 +76,7 @@ begin
     if not Assigned(capture) then
     begin
       Writeln('Could not initialize capturing...');
-      cvReleaseCapture(capture);
+//      cvReleaseCapture(capture); - not Assigned(capture)
       Halt(1);
     end;
 

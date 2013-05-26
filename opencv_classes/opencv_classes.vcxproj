@@ -39,7 +39,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>..\bin</OutDir>
+    <OutDir>..\bin\</OutDir>
     <IncludePath>C:\OpenCV\build\include;$(IncludePath)</IncludePath>
     <LibraryPath>C:\OpenCV\build\x86\vc10\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>

@@ -35,26 +35,15 @@ program cv_ExtractSURF;
 
 uses
   System.SysUtils,
-  Windows,
-  System.Generics.Collections,
-  uLibName in '..\..\..\include\uLibName.pas',
-  highgui_c in '..\..\..\include\highgui\highgui_c.pas',
-  core_c in '..\..\..\include\core\core_c.pas',
-  Core.types_c in '..\..\..\include\core\Core.types_c.pas',
-  imgproc.types_c in '..\..\..\include\imgproc\imgproc.types_c.pas',
-  imgproc_c in '..\..\..\include\imgproc\imgproc_c.pas',
-  legacy in '..\..\..\include\legacy\legacy.pas',
-  calib3d in '..\..\..\include\calib3d\calib3d.pas',
-  imgproc in '..\..\..\include\imgproc\imgproc.pas',
-  haar in '..\..\..\include\objdetect\haar.pas',
-  objdetect in '..\..\..\include\objdetect\objdetect.pas',
-  tracking in '..\..\..\include\video\tracking.pas',
-  Core in '..\..\..\include\core\core.pas',
-  compat in '..\..\..\include\legacy\compat.pas',
-  nonfree in '..\..\..\include\nonfree\nonfree.pas',
-  Mat in '..\..\..\include\core\Mat.pas',
-  core.types in '..\..\..\include\core\core.types.pas',
-  cvUtils in '..\..\..\include\cvUtils.pas';
+  Winapi.Windows,
+  highgui_c,
+  core_c,
+  Core.types_c,
+  imgproc_c,
+  imgproc.types_c,
+  compat,
+  calib3d_c,
+  nonfree;
 
 // cравнение двух оcобенноcтей
 function compareSURFDescriptors(const d1: PSingle; const d2: PSingle; best: Double; length: Integer): Double;

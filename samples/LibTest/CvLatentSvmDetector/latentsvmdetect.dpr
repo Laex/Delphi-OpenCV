@@ -29,17 +29,13 @@ program latentsvmdetect;
 
 uses
   System.SysUtils,
-  uLibName in '..\..\..\include\uLibName.pas',
-  highgui_c in '..\..\..\include\highgui\highgui_c.pas',
-  core_c in '..\..\..\include\core\core_c.pas',
-  Core.types_c in '..\..\..\include\core\Core.types_c.pas',
-  imgproc.types_c in '..\..\..\include\imgproc\imgproc.types_c.pas',
-  imgproc_c in '..\..\..\include\imgproc\imgproc_c.pas',
-  Core in '..\..\..\include\core\core.pas',
-  objdetect_c in '..\..\..\include\objdetect\objdetect_c.pas',
-  Mat in '..\..\..\include\core\Mat.pas',
-  core.types in '..\..\..\include\core\core.types.pas',
-  cvUtils in '..\..\..\include\cvUtils.pas';
+  highgui_c,
+  core_c,
+  Core.types_c,
+  imgproc_c,
+  imgproc.types_c,
+  objdetect_c,
+  cvUtils;
 
 procedure help;
 begin
