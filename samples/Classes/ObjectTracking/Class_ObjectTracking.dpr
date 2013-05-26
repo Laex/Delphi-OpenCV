@@ -32,15 +32,14 @@ program Class_ObjectTracking;
 
 uses
   System.SysUtils,
-  uLibName in '..\..\..\include\uLibName.pas',
-  Core.types_c in '..\..\..\include\core\Core.types_c.pas',
-  core_c in '..\..\..\include\core\core_c.pas',
-  Mat in '..\..\..\include\core\Mat.pas',
-  highgui in '..\..\..\include\highgui\highgui.pas',
-  highgui_c in '..\..\..\include\highgui\highgui_c.pas',
-  cvUtils in '..\..\..\include\cvUtils.pas',
-  Core in '..\..\..\include\core\core.pas',
-  Core.types in '..\..\..\include\core\core.types.pas';
+  cvUtils,
+  Core.types_c,
+  core_c,
+  Mat,
+  highgui,
+  highgui_c,
+  core.types,
+  core;
 
 Var
   // initial min and max HSV filter values.

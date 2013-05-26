@@ -29,14 +29,11 @@ program cv_MatchTemplate;
 
 uses
   System.SysUtils,
-  uLibName in '..\..\..\include\uLibName.pas',
-  highgui_c in '..\..\..\include\highgui\highgui_c.pas',
-  core_c in '..\..\..\include\core\core_c.pas',
-  Core.types_c in '..\..\..\include\core\Core.types_c.pas',
-  imgproc.types_c in '..\..\..\include\imgproc\imgproc.types_c.pas',
-  imgproc_c in '..\..\..\include\imgproc\imgproc_c.pas',
-  imgproc in '..\..\..\include\imgproc\imgproc.pas',
-  Mat in '..\..\..\include\core\Mat.pas';
+  highgui_c,
+  core_c,
+  Core.types_c,
+  imgproc_c,
+  imgproc.types_c;
 
 var
   imgSrc, imgTmp, imgMat: PIplImage;

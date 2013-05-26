@@ -32,18 +32,12 @@ program MotionDetect;
 
 uses
   System.SysUtils,
-  Math,
-  uLibName in '..\..\..\include\uLibName.pas',
-  highgui_c in '..\..\..\include\highgui\highgui_c.pas',
-  imgproc.types_c in '..\..\..\include\imgproc\imgproc.types_c.pas',
-  imgproc_c in '..\..\..\include\imgproc\imgproc_c.pas',
-  imgproc in '..\..\..\include\imgproc\imgproc.pas',
-  core in '..\..\..\include\core\core.pas',
-  core.types_c in '..\..\..\include\core\Core.types_c.pas',
-  core_c in '..\..\..\include\core\core_c.pas',
-  Mat in '..\..\..\include\core\Mat.pas',
-  core.types in '..\..\..\include\core\core.types.pas',
-  cvUtils in '..\..\..\include\cvUtils.pas';
+  System.Math,
+  highgui_c,
+  core_c,
+  Core.types_c,
+  imgproc_c,
+  imgproc.types_c;
 
 {$DEFINE RECT}
 //{$DEFINE RECT} - using cvBoundingRect - work correctly

@@ -96,7 +96,7 @@ Unit ObjDetect;
 
 interface
 
-Uses core_c, Core.types_c, haar, System.Types, Xml.XMLDoc;
+Uses Core.types_c, haar, System.Types, Xml.XMLDoc;
 
 (*
   //****************************************************************************************\

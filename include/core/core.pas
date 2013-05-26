@@ -96,7 +96,7 @@ unit core;
 
 interface
 
-Uses Windows, core.types_c, Mat, core.types;
+Uses Windows, Mat, core.types;
 
 Const
   FILLED = -1;

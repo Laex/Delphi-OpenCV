@@ -121,6 +121,8 @@ Type
     function getString():Pointer; stdcall;
   end;
 
+
+
 function Point: IPoint; overload; safecall;
 function Point(x, y: Integer): IPoint; overload; safecall;
 function Scalar: IScalar; overload; safecall;

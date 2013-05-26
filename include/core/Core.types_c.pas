@@ -517,11 +517,11 @@ function CV_32FC2: Integer; inline;
   // >> Following declaration is a macro definition!
   const
   CV_32FC(n)CV_MAKETYPE(CV_32F, (n));
+*)
 
-  const
-  CV_64FC1 = CV_MAKETYPE(CV_64F, 1);
-  {$EXTERNALSYM CV_64FC1}
-
+function CV_64FC1: Integer; inline;
+{$EXTERNALSYM CV_64FC1}
+(*
   const
   CV_64FC2 = CV_MAKETYPE(CV_64F, 2);
   {$EXTERNALSYM CV_64FC2}
@@ -2156,17 +2156,17 @@ function CV_MAT_TYPE(const flags: Integer): Integer;
 function CV_ELEM_SIZE1(const _type: Integer): Integer;
 function CV_ELEM_SIZE(const _type: Integer): Integer;
 function CV_MAT_CN(const flags: Integer): Integer;
-function CV_32FC1: Integer;
-function CV_32SC1: Integer;
-function CV_MAKETYPE(depth, cn: Integer): Integer;
+function CV_32FC1: Integer; inline;
+function CV_32SC1: Integer; inline;
+function CV_MAKETYPE(depth, cn: Integer): Integer; inline;
 // #define CV_MAT_ELEM( mat, elemtype, row, col )
 // (*(elemtype*)CV_MAT_ELEM_PTR_FAST( mat, row, col, sizeof(elemtype)))
-function CV_MAT_ELEM(const Mat: TCvMat; const elemsize: Integer; const row, col: Integer): Pointer;
+function CV_MAT_ELEM(const Mat: TCvMat; const elemsize: Integer; const row, col: Integer): Pointer; inline;
 // #define CV_MAT_ELEM_PTR_FAST( mat, row, col, pix_size )
 // (assert( (unsigned)(row) < (unsigned)(mat).rows &&
 // (unsigned)(col) < (unsigned)(mat).cols ),
 // (mat).data.ptr + (size_t)(mat).step*(row) + (pix_size)*(col))
-function CV_MAT_ELEM_PTR_FAST(const Mat: TCvMat; const row, col, pix_size: Integer): Pointer;
+function CV_MAT_ELEM_PTR_FAST(const Mat: TCvMat; const row, col, pix_size: Integer): Pointer; inline;
 
 function iif(const Conditional: Boolean; const ifTrue, ifFalse: Variant): Variant; inline; overload;
 function iif(const Conditional: Boolean; const ifTrue, ifFalse: Pointer): Pointer; inline; overload;
@@ -2473,12 +2473,17 @@ begin
   Result := CV_MAKETYPE(CV_8U, 1);
 end;
 
-function CV_32FC2: Integer; inline;
+function CV_32FC2: Integer;
 begin
   Result := CV_MAKETYPE(CV_32F, 2);
 end;
 
-function CV_8UC3: Integer; inline;
+function CV_64FC1: Integer;
+begin
+  Result := CV_MAKETYPE(CV_64F, 1);
+end;
+
+function CV_8UC3: Integer;
 begin
   Result := CV_MAKETYPE(CV_8U, 3);
 end;

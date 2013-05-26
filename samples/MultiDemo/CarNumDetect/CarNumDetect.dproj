@@ -83,17 +83,6 @@
         <DelphiCompile Include="$(MainSource)">
             <MainSource>MainSource</MainSource>
         </DelphiCompile>
-        <DCCReference Include="..\..\..\include\uLibName.pas"/>
-        <DCCReference Include="..\..\..\include\highgui\highgui_c.pas"/>
-        <DCCReference Include="..\..\..\include\imgproc\imgproc.types_c.pas"/>
-        <DCCReference Include="..\..\..\include\imgproc\imgproc_c.pas"/>
-        <DCCReference Include="..\..\..\include\imgproc\imgproc.pas"/>
-        <DCCReference Include="..\..\..\include\core\core.pas"/>
-        <DCCReference Include="..\..\..\include\core\Core.types_c.pas"/>
-        <DCCReference Include="..\..\..\include\core\core_c.pas"/>
-        <DCCReference Include="..\..\..\include\core\Mat.pas"/>
-        <DCCReference Include="..\..\..\include\core\core.types.pas"/>
-        <DCCReference Include="..\..\..\include\cvUtils.pas"/>
         <BuildConfiguration Include="Debug">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>
@@ -165,3 +154,9 @@
     <Import Project="$(BDS)\Bin\CodeGear.Delphi.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Delphi.Targets')"/>
     <Import Project="$(APPDATA)\Embarcadero\$(BDSAPPDATABASEDIR)\$(PRODUCTVERSION)\UserTools.proj" Condition="Exists('$(APPDATA)\Embarcadero\$(BDSAPPDATABASEDIR)\$(PRODUCTVERSION)\UserTools.proj')"/>
 </Project>
+
+<!-- EurekaLog First Line
+[Exception Log]
+EurekaLog Version=7001
+DeleteMapAfterCompile=1
+EurekaLog Last Line -->

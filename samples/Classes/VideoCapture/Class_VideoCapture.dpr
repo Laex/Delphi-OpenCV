@@ -32,13 +32,9 @@ program Class_VideoCapture;
 
 uses
   System.SysUtils,
-  uLibName in '..\..\..\include\uLibName.pas',
-  Core.types_c in '..\..\..\include\core\Core.types_c.pas',
-  core_c in '..\..\..\include\core\core_c.pas',
-  Mat in '..\..\..\include\core\Mat.pas',
-  highgui in '..\..\..\include\highgui\highgui.pas',
-  highgui_c in '..\..\..\include\highgui\highgui_c.pas',
-  cvUtils in '..\..\..\include\cvUtils.pas';
+  highgui,
+  highgui_c,
+  Mat;
 
 Const
   VK_ESCAPE = 27;

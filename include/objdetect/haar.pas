@@ -96,7 +96,7 @@ Unit haar;
 
 interface
 
-Uses core_c, Core.types_c;
+Uses core.types_c;
 
 Const
   CV_HAAR_FEATURE_MAX = 3;

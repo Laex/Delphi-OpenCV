@@ -32,10 +32,9 @@ program Class_Mat;
 
 uses
   System.SysUtils,
-  uLibName in '..\..\..\include\uLibName.pas',
-  Core.types_c in '..\..\..\include\core\Core.types_c.pas',
-  core_c in '..\..\..\include\core\core_c.pas',
-  Mat in '..\..\..\include\core\Mat.pas';
+  Core.types_c,
+  core_c,
+  Mat;
 
 procedure Print(const M: IMat);
 begin

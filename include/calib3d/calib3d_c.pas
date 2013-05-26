@@ -78,7 +78,7 @@
   //  Dev zone:    http://code.opencv.org
   //  **************************************************************************************************
   //  Original file:
-  //  opencv\modules\imgproc\include\opencv2\imgproc\imgproc_c.h
+  //  opencv\modules\calib3d\include\opencv2\calib3d\calib3d_c.h
   //  ************************************************************************************************* *)
 
 {$IFDEF DEBUG}
@@ -92,36 +92,45 @@
 {$WARN UNSAFE_TYPE OFF}
 {$WARN UNSAFE_CODE OFF}
 {$WARN UNSAFE_CAST OFF}
-unit calib3d;
+unit calib3d_c;
 
 interface
 
-Uses Core.types_c;
+Uses Core.types_c, compat;
 
 /// ****************************************************************************************\
 // *                      Camera Calibration, Pose Estimation and Stereo                    *
 // \****************************************************************************************/
-//
-// typedef struct CvPOSITObject CvPOSITObject;
-//
-/// * Allocates and initializes CvPOSITObject structure before doing cvPOSIT */
-// CVAPI(CvPOSITObject*)  cvCreatePOSITObject( CvPoint3D32f* points, int point_count );
-//
-//
+Type
+  // typedef struct CvPOSITObject CvPOSITObject;
+  PCvPOSITObject = ^TCvPOSITObject;
+
+  TCvPOSITObject = record
+    N: Integer;
+    inv_matr: PSingle;
+    obj_vecs: PSingle;
+    img_vecs: PSingle;
+  end;
+
+  /// * Allocates and initializes CvPOSITObject structure before doing cvPOSIT */
+  // CVAPI(CvPOSITObject*)  cvCreatePOSITObject( CvPoint3D32f* points, int point_count );
+function cvCreatePOSITObject(points: pCvPoint3D32f; point_count: Integer): PCvPOSITObject; cdecl;
 /// * Runs POSIT (POSe from ITeration) algorithm for determining 3d position of
 // an object given its model and projection in a weak-perspective case */
 // CVAPI(void)  cvPOSIT(  CvPOSITObject* posit_object, CvPoint2D32f* image_points,
 // double focal_length, CvTermCriteria criteria,
 // float* rotation_matrix, float* translation_vector);
-//
+procedure cvPOSIT(posit_object: PCvPOSITObject; imagePoints: pCvPoint2D32f; focal_length: double;
+  criteria: TCvTermCriteria; rotation_matrix: TCvMatr32f; translation_vector: TCvVect32f); cdecl;
 /// * Releases CvPOSITObject structure */
 // CVAPI(void)  cvReleasePOSITObject( CvPOSITObject**  posit_object );
-//
+procedure cvReleasePOSITObject(Var posit_object: PCvPOSITObject); cdecl;
 /// * updates the number of RANSAC iterations */
 // CVAPI(int) cvRANSACUpdateNumIters( double p, double err_prob,
 // int model_points, int max_iters );
-//
+function cvRANSACUpdateNumIters(p: double; err_prob: double; model_points: Integer; max_iters: Integer): Integer; cdecl;
 // CVAPI(void) cvConvertPointsHomogeneous( const CvMat* src, CvMat* dst );
+procedure cvConvertPointsHomogeneous(const src: pCvMat; dst: pCvMat); cdecl;
 
 const
   /// * Calculates fundamental matrix given a set of corresponding points */
@@ -487,5 +496,10 @@ function cvCalibrateCamera2; external calib3d_dll;
 procedure cvProjectPoints2; external calib3d_dll;
 procedure cvFindExtrinsicCameraParams2; external calib3d_dll;
 function cvFindHomography; external calib3d_dll;
+function cvCreatePOSITObject; external calib3d_dll;
+procedure cvPOSIT; external calib3d_dll;
+procedure cvReleasePOSITObject; external calib3d_dll;
+function cvRANSACUpdateNumIters; external calib3d_dll;
+procedure cvConvertPointsHomogeneous(const src: pCvMat; dst: pCvMat); external calib3d_dll;
 
 end.

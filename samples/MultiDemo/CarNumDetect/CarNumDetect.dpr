@@ -32,18 +32,13 @@ program CarNumDetect;
 
 uses
   System.SysUtils,
-  uLibName in '..\..\..\include\uLibName.pas',
-  highgui_c in '..\..\..\include\highgui\highgui_c.pas',
-  imgproc.types_c in '..\..\..\include\imgproc\imgproc.types_c.pas',
-  imgproc_c in '..\..\..\include\imgproc\imgproc_c.pas',
-  imgproc in '..\..\..\include\imgproc\imgproc.pas',
-  core in '..\..\..\include\core\core.pas',
-  Core.types_c in '..\..\..\include\core\Core.types_c.pas',
-  core_c in '..\..\..\include\core\core_c.pas',
-  Math, IniFiles,
-  Mat in '..\..\..\include\core\Mat.pas',
-  core.types in '..\..\..\include\core\core.types.pas',
-  cvUtils in '..\..\..\include\cvUtils.pas';
+  System.Math,
+  System.IniFiles,
+  highgui_c,
+  core_c,
+  Core.types_c,
+  imgproc_c,
+  imgproc.types_c;
 
 const
   filename_ini = 'carnumdetect.ini';
@@ -55,14 +50,15 @@ type
   pCtx = ^TCtx;
   ArrCvRect = Array of TCvRect;
   ArrCvBox2D = Array of TCvBox2D;
-  ArrDouble =  Array of Double;
+  ArrDouble = Array of Double;
+
   TCtx = packed record
-    MyCapture: pCvCapture;       // Capture handle
-    MyWriter: pCvVideoWriter;    // Writer handle
-    MyInputImage: pIplImage;     // Input image
+    MyCapture: pCvCapture; // Capture handle
+    MyWriter: pCvVideoWriter; // Writer handle
+    MyInputImage: pIplImage; // Input image
     MyOrigColorImage: pIplImage; // Original Color Image
     MyThresholdImage: pIplImage; // Threshold Image
-    MyStorage: pCvMemStorage;    // Memory storage
+    MyStorage: pCvMemStorage; // Memory storage
     MyCvRect: ArrCvRect;
     MyCvBox2D: ArrCvBox2D;
     MyArea: ArrDouble;
@@ -78,19 +74,21 @@ var
   MinRatio, MaxRatio, MinFillArea, VideoCamWidth, VideoCamHeight: Double;
   MinArea, MaxArea, MinFullArea, MaxFullArea: Integer;
 
-procedure FindBox(const Ctx: pCtx; min_ratio, max_ratio: double; min_area, max_area, minfullarea, maxfullarea: integer; minfillarea: double);
+procedure FindBox(const Ctx: pCtx; min_ratio, max_ratio: Double; min_area, max_area, MinFullArea, MaxFullArea: Integer;
+  MinFillArea: Double);
 var
   c, contours: pCvContour;
   box: TCvBox2D;
   rect: TCvRect;
-  ratio, contourarea: double;
+  ratio, contourarea: Double;
   area: single;
 begin
   contours := nil;
   c := nil;
   contours := AllocMem(SizeOf(TCvContour));
   c := AllocMem(SizeOf(TCvContour));
-  cvFindContours(Ctx.MyThresholdImage, Ctx.MyStorage, @contours, SizeOf(TCvContour), CV_RETR_LIST, CV_CHAIN_APPROX_NONE, cvPoint(0,0));
+  cvFindContours(Ctx.MyThresholdImage, Ctx.MyStorage, @contours, SizeOf(TCvContour), CV_RETR_LIST, CV_CHAIN_APPROX_NONE,
+    cvPoint(0, 0));
   if contours <> nil then
   begin
     c := contours;
@@ -98,8 +96,8 @@ begin
     begin
       { cvMinAreaRect2 — возвращает минимально возможный прямоугольник,
         которым можно обвести контур
-          points — последовательность или массив точек
-          storage — опционально — временное хранилище памяти
+        points — последовательность или массив точек
+        storage — опционально — временное хранилище памяти
         Отличие функции cvMinAreaRect2 от cvBoundingRect в типе возвращаемой структуры.
         cvMinAreaRect2 возвращает CvBox2D, которая описывает прямоугольник, который
         может быть повёрнут относительно системы координат изображения на угол angle.
@@ -115,40 +113,42 @@ begin
           // Фильт по площади
           if (area > min_area) and (area < max_area) then
           begin
-            {if box.size.width > box.size.height then
-            begin
+            { if box.size.width > box.size.height then
+              begin
               WriteLn(Format('[d] Rect size: height=%s, width=%s', [FloatToStr(box.size.height), FloatToStr(box.size.width)]));
               WriteLn(Format('[d] Ratio: %s', [FloatToStr(IfThen(box.size.width < box.size.height, box.size.width/box.size.height, box.size.height/box.size.width))]));
               WriteLn(Format('[d] Full Contour Area: %s', [FloatToStr(abs(cvContourArea(c, CV_WHOLE_SEQ)))]));
               WriteLn(Format('[d] Contour Area: %s', [FloatToStr(abs(cvContourArea(c, CV_WHOLE_SEQ))/(area))]));
               WriteLn('------------------------- ');
               cvRectangle(Ctx.MyOrigColorImage, cvPoint(Round(box.center.x-box.size.width/2),Round(box.center.y-box.size.height/2)), cvPoint(Round(box.center.x+box.size.width/2),Round(box.center.y+box.size.height/2)), CV_RGB(255,255,0), 2);
-            end;}
-            ratio := IfThen(box.size.width < box.size.height, box.size.width/box.size.height, box.size.height/box.size.width);
+              end; }
+            ratio := IfThen(box.size.width < box.size.height, box.size.width / box.size.height,
+              box.size.height / box.size.width);
             // Фильт по соотношению сторон
             if (ratio > min_ratio) and (ratio < max_ratio) then
             begin
               { cvContourArea — возвращает площадь контура
-                  contour — контур (последовательность или массив вершин)
-                  slice — начальная и конечные точки контура (по-умолчанию весь контур)
+                contour — контур (последовательность или массив вершин)
+                slice — начальная и конечные точки контура (по-умолчанию весь контур)
               }
               // Фильт по площади контура
               contourarea := cvContourArea(c, CV_WHOLE_SEQ);
-              if (abs(contourarea) > minfullarea) and (abs(contourarea) < maxfullarea) then
+              if (abs(contourarea) > MinFullArea) and (abs(contourarea) < MaxFullArea) then
               begin
                 // Фильт по соотношению площади контура к площади прямоугольника
-                if abs(contourarea)/(area) > minfillarea then
+                if abs(contourarea) / (area) > MinFillArea then
                 begin
-                  WriteLn(Format('[i] Rect size: height=%s, width=%s', [FloatToStr(box.size.height), FloatToStr(box.size.width)]));
+                  WriteLn(Format('[i] Rect size: height=%s, width=%s', [FloatToStr(box.size.height),
+                    FloatToStr(box.size.width)]));
                   WriteLn(Format('[i] Ratio: %s', [FloatToStr(ratio)]));
                   WriteLn(Format('[i] Full Contour Area: %s', [FloatToStr(abs(contourarea))]));
-                  WriteLn(Format('[i] Contour Area: %s', [FloatToStr(abs(contourarea)/(area))]));
+                  WriteLn(Format('[i] Contour Area: %s', [FloatToStr(abs(contourarea) / (area))]));
                   WriteLn('------------------------- ');
-                  //SetLength(Ctx.MyCvBox2D, length(Ctx.MyCvBox2D)+1);
-                  //Ctx.MyCvBox2D[length(Ctx.MyCvBox2D)+1] := box;
-                  //SetLength(Ctx.MyArea, length(Ctx.MyArea)+1);
-                  //Ctx.MyArea[length(Ctx.MyArea)+1] := cvContourArea(c, CV_WHOLE_SEQ);
-                  //cvRectangle(Ctx.MyOrigColorImage, cvPoint(Round(box.center.x-box.size.width/2),Round(box.center.y-box.size.height/2)), cvPoint(Round(box.center.x+box.size.width/2),Round(box.center.y+box.size.height/2)), CV_RGB(255,255,0), 2);
+                  // SetLength(Ctx.MyCvBox2D, length(Ctx.MyCvBox2D)+1);
+                  // Ctx.MyCvBox2D[length(Ctx.MyCvBox2D)+1] := box;
+                  // SetLength(Ctx.MyArea, length(Ctx.MyArea)+1);
+                  // Ctx.MyArea[length(Ctx.MyArea)+1] := cvContourArea(c, CV_WHOLE_SEQ);
+                  // cvRectangle(Ctx.MyOrigColorImage, cvPoint(Round(box.center.x-box.size.width/2),Round(box.center.y-box.size.height/2)), cvPoint(Round(box.center.x+box.size.width/2),Round(box.center.y+box.size.height/2)), CV_RGB(255,255,0), 2);
                   { cvBoundingRect — возвращает прямоугольник, которым можно обвести контур
                     points — набор 2D-точек — последовательность или вектор (CvMat) точек
                     update — флаг обновления:
@@ -160,9 +160,10 @@ begin
                     горизонтальны (параллельны сторонам(системе координат) изображения).
                   }
                   rect := cvBoundingRect(c);
-                  //SetLength(Ctx.MyCvRect, Length(Ctx.MyCvRect)+1);
-                  //Ctx.MyCvRect[Length(Ctx.MyCvRect)+1] := rect;
-                  cvRectangle(Ctx.MyOrigColorImage, cvPoint(rect.x, rect.y), cvPoint(rect.x+rect.width, rect.y+rect.height), CV_RGB(255,255,0), 2);
+                  // SetLength(Ctx.MyCvRect, Length(Ctx.MyCvRect)+1);
+                  // Ctx.MyCvRect[Length(Ctx.MyCvRect)+1] := rect;
+                  cvRectangle(Ctx.MyOrigColorImage, cvPoint(rect.x, rect.y),
+                    cvPoint(rect.x + rect.width, rect.y + rect.height), CV_RGB(255, 255, 0), 2);
                 end;
               end;
             end;
@@ -180,10 +181,10 @@ begin
 end;
 
 // Функция поворота изображения на заданный угол
-procedure RotateImage(var image: pIplImage; angle: double = 90);
+procedure RotateImage(var image: pIplImage; angle: Double = 90);
 var
   rot_mat: pCvMat;
-  scale: double;
+  scale: Double;
   temp: pIplImage;
   center: TcvPoint2D32f;
 begin
@@ -268,7 +269,8 @@ begin
   WriteLn(Format('[i] VideoCapture FPS: %.0f', [fps]));
   // Создаем изображения
   Ctx.MyInputImage := cvCreateImage(cvSize(Ctx.MyOrigColorImage^.width, Ctx.MyOrigColorImage^.height), IPL_DEPTH_8U, 1);
-  Ctx.MyThresholdImage := cvCreateImage(cvSize(Ctx.MyOrigColorImage^.width, Ctx.MyOrigColorImage^.height), IPL_DEPTH_8U, 1);
+  Ctx.MyThresholdImage := cvCreateImage(cvSize(Ctx.MyOrigColorImage^.width, Ctx.MyOrigColorImage^.height),
+    IPL_DEPTH_8U, 1);
 end;
 
 procedure InitVideoWriter(const Ctx: pCtx);
@@ -277,11 +279,13 @@ var
   fps: Double;
 begin
   // Размер картинки
-  size := cvSize(Trunc(cvGetCaptureProperty(Ctx.MyCapture, CV_CAP_PROP_FRAME_WIDTH)), Trunc(cvGetCaptureProperty(Ctx.MyCapture, CV_CAP_PROP_FRAME_HEIGHT)));
-  fps := 10;//cvGetCaptureProperty(Ctx.MyCapture, CV_CAP_PROP_FPS);
+  size := cvSize(Trunc(cvGetCaptureProperty(Ctx.MyCapture, CV_CAP_PROP_FRAME_WIDTH)),
+    Trunc(cvGetCaptureProperty(Ctx.MyCapture, CV_CAP_PROP_FRAME_HEIGHT)));
+  fps := 10; // cvGetCaptureProperty(Ctx.MyCapture, CV_CAP_PROP_FPS);
   WriteLn(Format('[i] VideoWriter size: %d x %d', [size.width, size.height]));
   WriteLn(Format('[i] VideoWriter FPS: %.0f', [fps]));
-  WriteVideoFileName := IncludeTrailingPathDelimiter(WriteVideoCaptureFileDir) + FormatDateTime('ddmmyyyyhhmmss', Now)+'.avi';
+  WriteVideoFileName := IncludeTrailingPathDelimiter(WriteVideoCaptureFileDir) + FormatDateTime('ddmmyyyyhhmmss',
+    Now) + '.avi';
   WriteLn(Format('[i] VideoWriter filename: %s', [WriteVideoFileName]));
   Ctx.MyWriter := cvCreateVideoWriter(pAnsiChar(WriteVideoFileName), CV_FOURCC('X', 'V', 'I', 'D'), fps, size, 1);
 end;
@@ -295,7 +299,8 @@ begin
   // block_size = 15 - Размер окрестностей пикселя, используемых для вычисления порогового значения.
   // param1 = 0 - Параметр, зависимый от метода. Для CV_ADAPTIVE_THRESH_MEAN_C и CV_ADAPTIVE_THRESH_GAUSSIAN_C это константа, вычитаемая из среднего значения.
   if BinarizationMethod = 0 then
-    cvAdaptiveThreshold(Ctx.MyInputImage, Ctx.MyThresholdImage, ThresholdMaxValue, CV_ADAPTIVE_THRESH_MEAN_C, CV_THRESH_BINARY, AdaptiveThresholdBlockSize, 0)
+    cvAdaptiveThreshold(Ctx.MyInputImage, Ctx.MyThresholdImage, ThresholdMaxValue, CV_ADAPTIVE_THRESH_MEAN_C,
+      CV_THRESH_BINARY, AdaptiveThresholdBlockSize, 0)
   else
     // Выделение монохромного изображения (бинаризация) с использованием порогового метода.
     cvThreshold(Ctx.MyInputImage, Ctx.MyThresholdImage, Threshold, ThresholdMaxValue, CV_THRESH_BINARY_INV);
@@ -311,7 +316,8 @@ begin
   // block_size = 15 - Размер окрестностей пикселя, используемых для вычисления порогового значения.
   // param1 = 0 - Параметр, зависимый от метода. Для CV_ADAPTIVE_THRESH_MEAN_C и CV_ADAPTIVE_THRESH_GAUSSIAN_C это константа, вычитаемая из среднего значения.
   if BinarizationMethod = 0 then
-    cvAdaptiveThreshold(Ctx.MyInputImage, Ctx.MyThresholdImage, ThresholdMaxValue, CV_ADAPTIVE_THRESH_MEAN_C, CV_THRESH_BINARY, AdaptiveThresholdBlockSize, 0)
+    cvAdaptiveThreshold(Ctx.MyInputImage, Ctx.MyThresholdImage, ThresholdMaxValue, CV_ADAPTIVE_THRESH_MEAN_C,
+      CV_THRESH_BINARY, AdaptiveThresholdBlockSize, 0)
   else
     // Выделение монохромного изображения (бинаризация) с использованием порогового метода.
     cvThreshold(Ctx.MyInputImage, Ctx.MyThresholdImage, Threshold, ThresholdMaxValue, CV_THRESH_BINARY_INV);
@@ -393,9 +399,8 @@ begin
     try
       CreateDir(inipath);
     except
-      on e :
-        Exception do
-          WriteLn('Exception in procedure InitSettings: Unable to create directory ' + inipath);
+      on e: Exception do
+        WriteLn('Exception in procedure InitSettings: Unable to create directory ' + inipath);
     end;
   end;
   fullininame := inipath + filename_ini;
@@ -405,7 +410,7 @@ begin
     try
       // 0 - VideoCam, 1 - ImageFile, 2 - VideoFile
       SourceCapture := INI.ReadInteger('Main', 'SourceCapture', 0);
-      VideoCamNum :=INI.ReadInteger('Main', 'VideoCamNum', 0);
+      VideoCamNum := INI.ReadInteger('Main', 'VideoCamNum', 0);
       VideoCamWidth := INI.ReadFloat('Main', 'VideoCamWidth', 0.0);
       VideoCamHeight := INI.ReadFloat('Main', 'VideoCamWidth', 0.0);
       ImageFileCapture := INI.ReadString('Main', 'ImageFileCapture', 'Resource\CarNom1.jpg');
@@ -484,7 +489,7 @@ end;
 
 begin
   try
-    MyCtx := AllocMem(sizeof(TCtx));
+    MyCtx := AllocMem(SizeOf(TCtx));
     InitSettings(IncludeTrailingPathDelimiter(ExtractFilePath(ParamStr(0))));
     InitCtx(MyCtx);
     // Захват из файла картинки
@@ -529,8 +534,8 @@ begin
         // Сохраняем в файл
         if Assigned(MyCtx.MyWriter) then
           cvWriteFrame(MyCtx.MyWriter, MyCtx.MyOrigColorImage);
-        key := cvWaitKey(33);
-        if (key = 27) then
+        Key := cvWaitKey(33);
+        if (Key = 27) then
           Break;
       end;
     end;
@@ -538,7 +543,8 @@ begin
     ClearRes(MyCtx);
     FreeMem(MyCtx, SizeOf(TCtx));
   except
-    on E: Exception do
-      WriteLn(E.ClassName, ': ', E.Message);
+    on e: Exception do
+      WriteLn(e.ClassName, ': ', e.Message);
   end;
+
 end.
