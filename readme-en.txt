@@ -26,16 +26,16 @@ How to install:
 
 3. Add the search path for the modules of the project in Delphi IDE (Tools-Options-Delphi Options-Library-Library path)
 
-<PROJECT_ROOT>\<Delphi-OpenCV-master>\Include
-<PROJECT_ROOT>\<Delphi-OpenCV-master>\Include\core
-<PROJECT_ROOT>\<Delphi-OpenCV-master>\Include\highgui
-<PROJECT_ROOT>\<Delphi-OpenCV-master>\Include\imgproc
-<PROJECT_ROOT>\<Delphi-OpenCV-master>\Include\legacy
-<PROJECT_ROOT>\<Delphi-OpenCV-master>\Include\nonfree
-<PROJECT_ROOT>\<Delphi-OpenCV-master>\Include\objdetect
-<PROJECT_ROOT>\<Delphi-OpenCV-master>\Include\calib3d
-<PROJECT_ROOT>\<Delphi-OpenCV-master>\Include\contrib
-<PROJECT_ROOT>\<Delphi-OpenCV-master>\Include\video
+<PROJECT_ROOT>\Delphi-OpenCV-master\Include
+<PROJECT_ROOT>\Delphi-OpenCV-master\Include\core
+<PROJECT_ROOT>\Delphi-OpenCV-master\Include\highgui
+<PROJECT_ROOT>\Delphi-OpenCV-master\Include\imgproc
+<PROJECT_ROOT>\Delphi-OpenCV-master\Include\legacy
+<PROJECT_ROOT>\Delphi-OpenCV-master\Include\nonfree
+<PROJECT_ROOT>\Delphi-OpenCV-master\Include\objdetect
+<PROJECT_ROOT>\Delphi-OpenCV-master\Include\calib3d
+<PROJECT_ROOT>\Delphi-OpenCV-master\Include\contrib
+<PROJECT_ROOT>\Delphi-OpenCV-master\Include\video
 
 where <PROJECT_ROOT> directory, which was unzipped project.
 

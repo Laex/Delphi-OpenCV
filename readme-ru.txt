@@ -26,16 +26,16 @@ Email: sleuthhound@gmail.com
 
 3. ƒобавьте пути поиска к модул€м проекта в Delphi IDE (Tools-Options-Delphi Options-Library-Library path)
 
-<PROJECT_ROOT>\<Delphi-OpenCV-master>\include
-<PROJECT_ROOT>\<Delphi-OpenCV-master>\include\core
-<PROJECT_ROOT>\<Delphi-OpenCV-master>\include\highgui
-<PROJECT_ROOT>\<Delphi-OpenCV-master>\include\imgproc
-<PROJECT_ROOT>\<Delphi-OpenCV-master>\include\legacy
-<PROJECT_ROOT>\<Delphi-OpenCV-master>\include\nonfree
-<PROJECT_ROOT>\<Delphi-OpenCV-master>\include\objdetect
-<PROJECT_ROOT>\<Delphi-OpenCV-master>\include\calib3d
-<PROJECT_ROOT>\<Delphi-OpenCV-master>\include\contrib
-<PROJECT_ROOT>\<Delphi-OpenCV-master>\include\video
+<PROJECT_ROOT>\Delphi-OpenCV-master\include
+<PROJECT_ROOT>\Delphi-OpenCV-master\include\core
+<PROJECT_ROOT>\Delphi-OpenCV-master\include\highgui
+<PROJECT_ROOT>\Delphi-OpenCV-master\include\imgproc
+<PROJECT_ROOT>\Delphi-OpenCV-master\include\legacy
+<PROJECT_ROOT>\Delphi-OpenCV-master\include\nonfree
+<PROJECT_ROOT>\Delphi-OpenCV-master\include\objdetect
+<PROJECT_ROOT>\Delphi-OpenCV-master\include\calib3d
+<PROJECT_ROOT>\Delphi-OpenCV-master\include\contrib
+<PROJECT_ROOT>\Delphi-OpenCV-master\include\video
 
 где <PROJECT_ROOT> каталог, в который был разархивирован проект.
 
