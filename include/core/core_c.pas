@@ -731,10 +731,27 @@ procedure cvCvtPixToPlane(const src: pIplImage; dst0: pIplImage; dst1: pIplImage
 procedure cvCvtPlaneToPix(const src0: pIplImage; const src1: pIplImage; const src2: pIplImage; const src3: pIplImage;
   dst: pIplImage); cdecl;
 
+{ dst(idx) = src1(idx) | src2(idx) */
+  CVAPI(void) cvOr( const CvArr* src1, const CvArr* src2,
+                 CvArr* dst, const CvArr* mask CV_DEFAULT(NULL));
+}
+procedure cvOr(const src1, src2: pCvArr; dst: pCvArr; const mask: pCvArr = nil); cdecl;
+
+{ dst(idx) = src1(idx) ^ src2(idx) */
+  CVAPI(void) cvXor( const CvArr* src1, const CvArr* src2,
+                  CvArr* dst, const CvArr* mask CV_DEFAULT(NULL));
+}
+procedure cvXor(const src1, src2: pCvArr; dst: pCvArr; const mask: pCvArr = nil); cdecl;
+
 { dst(idx) = src(idx) ^ value
   CVAPI(void) cvXorS( const pCvArr* src, CvScalar value, pCvArr* dst, const pCvArr* mask CV_DEFAULT(NULL));
 }
 procedure cvXorS(const src: pIplImage; value: TCvScalar; dst: pIplImage; const mask: pCvArr = nil); cdecl;
+
+{ dst(idx) = ~src(idx) */
+  CVAPI(void) cvNot( const CvArr* src, CvArr* dst );
+}
+procedure cvNot(const src: pCvArr; dst: pCvArr); cdecl;
 
 { dst(idx) = lower(idx) <= src(idx) < upper(idx)
   CVAPI(void) cvInRange( const pCvArr* src, const pCvArr* lower, const pCvArr* upper, pCvArr* dst );
@@ -1428,7 +1445,10 @@ begin
   cvEllipse(img, cvPointFrom32f(box.center), axes, box.angle, 0, 360, color, thickness, line_type, shift);
 end;
 
+procedure cvOr; external Core_Dll;
+procedure cvXor; external Core_Dll;
 procedure cvXorS; external Core_Dll;
+procedure cvNot; external Core_Dll;
 procedure cvEllipse; external Core_Dll;
 
 procedure cvFree;
