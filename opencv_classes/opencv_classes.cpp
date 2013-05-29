@@ -5,9 +5,6 @@
 #define ICLASS_EXPORTS 1
 #include "opencv_classes.h"
 
-#include "imat.h"
-#include "TMat.h"
-
 #include "Ihighgui.h"
 #include "Thighgui.h"
 
@@ -22,7 +19,7 @@
 // mat.hpp
 HRESULT ICLASS_API CreateMat(LPMat *_Mat)
 {
-    *_Mat = new TMat();
+    *_Mat = new TMatInputArray();
     if (*_Mat)
     {
         (*_Mat)->AddRef();
@@ -34,7 +31,7 @@ HRESULT ICLASS_API CreateMat(LPMat *_Mat)
 
 HRESULT ICLASS_API CreateMat_rct(int rows, int cols, int type, LPMat *_Mat)
 {
-    *_Mat = new TMat(rows,cols,type);
+    *_Mat = new TMatInputArray(rows,cols,type);
     if (*_Mat)
     {
         (*_Mat)->AddRef();
@@ -46,7 +43,7 @@ HRESULT ICLASS_API CreateMat_rct(int rows, int cols, int type, LPMat *_Mat)
 
 HRESULT ICLASS_API CreateMat_Mat(cv::Mat& m, LPMat *_Mat)
 {
-    *_Mat = new TMat(m);
+    *_Mat = new TMatInputArray(m);
     if (*_Mat)
     {
         (*_Mat)->AddRef();
@@ -147,6 +144,41 @@ HRESULT ICLASS_API CString(const char* s, LPString *_String)
     if (*_String)
     {
         (*_String)->AddRef();
+        return S_OK;
+    }
+    else
+        return E_NOINTERFACE;
+}
+
+HRESULT ICLASS_API CreateSize2i(LPSize * _Size2i)
+	{
+    *_Size2i = new TSize2i();
+    if (*_Size2i)
+    {
+        (*_Size2i)->AddRef();
+        return S_OK;
+    }
+    else
+        return E_NOINTERFACE;
+}
+HRESULT ICLASS_API CreateSize2i_wh(int _width, int _height, LPSize * _Size2i)
+	{
+    *_Size2i = new TSize2i(_width,_height);
+    if (*_Size2i)
+    {
+        (*_Size2i)->AddRef();
+        return S_OK;
+    }
+    else
+        return E_NOINTERFACE;
+}
+
+HRESULT ICLASS_API CreateOutputArray(cv::_OutputArray& o, LPOutputArray * _OutputArray)
+	{
+    *_OutputArray = new TOutputArray(o);
+    if (*_OutputArray)
+    {
+        (*_OutputArray)->AddRef();
         return S_OK;
     }
     else

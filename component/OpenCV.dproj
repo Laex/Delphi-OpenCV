@@ -1,16 +1,21 @@
 ﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <PropertyGroup>
-        <ProjectGuid>{156F5A10-1098-4B6E-906F-6F2D4FAC8514}</ProjectGuid>
-        <ProjectVersion>14.6</ProjectVersion>
+        <ProjectGuid>{E592697C-6DA4-47E3-AA09-A7835B707E97}</ProjectGuid>
+        <MainSource>OpenCV.dpk</MainSource>
+        <ProjectVersion>14.4</ProjectVersion>
         <FrameworkType>VCL</FrameworkType>
-        <MainSource>VCLChessboardCorners.dpr</MainSource>
         <Base>True</Base>
         <Config Condition="'$(Config)'==''">Debug</Config>
         <Platform Condition="'$(Platform)'==''">Win32</Platform>
         <TargetedPlatforms>1</TargetedPlatforms>
-        <AppType>Application</AppType>
+        <AppType>Package</AppType>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Config)'=='Base' or '$(Base)'!=''">
+        <Base>true</Base>
+    </PropertyGroup>
+    <PropertyGroup Condition="('$(Platform)'=='OSX32' and '$(Base)'=='true') or '$(Base_OSX32)'!=''">
+        <Base_OSX32>true</Base_OSX32>
+        <CfgParent>Base</CfgParent>
         <Base>true</Base>
     </PropertyGroup>
     <PropertyGroup Condition="('$(Platform)'=='Win32' and '$(Base)'=='true') or '$(Base_Win32)'!=''">
@@ -40,8 +45,10 @@
         <Base>true</Base>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base)'!=''">
-        <Icon_MainIcon>$(BDS)\bin\delphi_PROJECTICON.ico</Icon_MainIcon>
         <DCC_Namespace>System;Xml;Data;Datasnap;Web;Soap;Vcl;Vcl.Imaging;Vcl.Touch;Vcl.Samples;Vcl.Shell;$(DCC_Namespace)</DCC_Namespace>
+        <GenPackage>true</GenPackage>
+        <DCC_CBuilderOutput>All</DCC_CBuilderOutput>
+        <GenDll>true</GenDll>
         <DCC_DcuOutput>.\$(Platform)\$(Config)</DCC_DcuOutput>
         <DCC_ExeOutput>.\$(Platform)\$(Config)</DCC_ExeOutput>
         <DCC_E>false</DCC_E>
@@ -50,16 +57,18 @@
         <DCC_F>false</DCC_F>
         <DCC_K>false</DCC_K>
     </PropertyGroup>
+    <PropertyGroup Condition="'$(Base_OSX32)'!=''">
+        <DCC_UsePackage>rtl;$(DCC_UsePackage)</DCC_UsePackage>
+    </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Win32)'!=''">
-        <DCC_UsePackage>AnyDAC_PhysDb2_D18;AnyDAC_Phys_D18;AnyDAC_PhysADS_D18;AnyDAC_PhysODBC_D18;AnyDAC_GUIxForms_D18;bindcompfmx;AnyDAC_Comp_D18;DBXSqliteDriver;AnyDAC_ComI_D18;vcldbx;AnyDAC_PhysTDBX_D18;fmx;rtl;dbrtl;DbxClientDriver;IndySystem;TeeDB;bindcomp;inetdb;AnyDAC_PhysIB_D18;inetdbbde;DBXInterBaseDriver;DataSnapClient;DataSnapCommon;DBXOdbcDriver;DataSnapServer;Tee;DataSnapProviderClient;xmlrtl;svnui;DBXSybaseASEDriver;DbxCommonDriver;vclimg;IndyProtocols;dbxcds;DBXMySQLDriver;DatasnapConnectorsFreePascal;MetropolisUILiveTile;vclactnband;bindengine;vcldb;soaprtl;bindcompdbx;vcldsnap;bindcompvcl;FMXTee;TeeUI;AnyDAC_PhysMSAcc_D18;vclie;vcltouch;DBXDb2Driver;AnyDAC_PhysASA_D18;DBXOracleDriver;CustomIPTransport;vclribbon;VclSmp;dsnap;IndyIPServer;DBXInformixDriver;Intraweb;fmxase;vcl;IndyCore;DataSnapConnectors;AnyDAC_PhysPg_D18;IndyIPCommon;CloudService;DBXMSSQLDriver;dsnapcon;DBXFirebirdDriver;FmxTeeUI;inet;CodeSiteExpressPkg;fmxobj;AnyDAC_PhysSQLITE_D18;AnyDAC_PhysOracle_D18;AnyDAC_PhysMSSQL_D18;vclx;inetdbxpress;webdsnap;svn;DBXSybaseASADriver;AnyDAC_PhysMySQL_D18;fmxdae;bdertl;dbexpress;adortl;DataSnapIndy10ServerTransport;IndyIPClient;$(DCC_UsePackage)</DCC_UsePackage>
+        <DCC_Namespace>Winapi;System.Win;Data.Win;Datasnap.Win;Web.Win;Soap.Win;Xml.Win;Bde;$(DCC_Namespace)</DCC_Namespace>
+        <DCC_UsePackage>rtl;vcl;$(DCC_UsePackage)</DCC_UsePackage>
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
         <VerInfo_Locale>1033</VerInfo_Locale>
-        <Manifest_File>$(BDS)\bin\default_app.manifest</Manifest_File>
-        <DCC_Namespace>Winapi;System.Win;Data.Win;Datasnap.Win;Web.Win;Soap.Win;Xml.Win;Bde;$(DCC_Namespace)</DCC_Namespace>
         <VerInfo_Keys>CompanyName=;FileDescription=;FileVersion=1.0.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductName=;ProductVersion=1.0.0.0;Comments=</VerInfo_Keys>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Win64)'!=''">
-        <DCC_UsePackage>AnyDAC_PhysDb2_D18;AnyDAC_Phys_D18;AnyDAC_PhysADS_D18;AnyDAC_PhysODBC_D18;AnyDAC_GUIxForms_D18;bindcompfmx;AnyDAC_Comp_D18;DBXSqliteDriver;AnyDAC_ComI_D18;AnyDAC_PhysTDBX_D18;fmx;rtl;dbrtl;DbxClientDriver;IndySystem;TeeDB;bindcomp;inetdb;AnyDAC_PhysIB_D18;DBXInterBaseDriver;DataSnapClient;DataSnapCommon;DBXOdbcDriver;DataSnapServer;Tee;DataSnapProviderClient;xmlrtl;DBXSybaseASEDriver;DbxCommonDriver;vclimg;IndyProtocols;dbxcds;DBXMySQLDriver;DatasnapConnectorsFreePascal;MetropolisUILiveTile;vclactnband;bindengine;vcldb;soaprtl;bindcompdbx;vcldsnap;bindcompvcl;FMXTee;TeeUI;AnyDAC_PhysMSAcc_D18;vclie;vcltouch;DBXDb2Driver;AnyDAC_PhysASA_D18;DBXOracleDriver;CustomIPTransport;vclribbon;VclSmp;dsnap;IndyIPServer;DBXInformixDriver;Intraweb;fmxase;vcl;IndyCore;DataSnapConnectors;AnyDAC_PhysPg_D18;IndyIPCommon;CloudService;DBXMSSQLDriver;dsnapcon;DBXFirebirdDriver;FmxTeeUI;inet;fmxobj;AnyDAC_PhysSQLITE_D18;AnyDAC_PhysOracle_D18;AnyDAC_PhysMSSQL_D18;vclx;inetdbxpress;webdsnap;DBXSybaseASADriver;AnyDAC_PhysMySQL_D18;fmxdae;dbexpress;adortl;DataSnapIndy10ServerTransport;IndyIPClient;$(DCC_UsePackage)</DCC_UsePackage>
+        <DCC_UsePackage>rtl;vcl;$(DCC_UsePackage)</DCC_UsePackage>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1)'!=''">
         <DCC_Define>DEBUG;$(DCC_Define)</DCC_Define>
@@ -70,11 +79,6 @@
         <DCC_RemoteDebug>true</DCC_RemoteDebug>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1_Win32)'!=''">
-        <DCC_IntegerOverflowCheck>true</DCC_IntegerOverflowCheck>
-        <DCC_RangeChecking>true</DCC_RangeChecking>
-        <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
-        <VerInfo_Locale>1033</VerInfo_Locale>
-        <DCC_ExeOutput>..\..\..\bin</DCC_ExeOutput>
         <DCC_RemoteDebug>false</DCC_RemoteDebug>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2)'!=''">
@@ -87,10 +91,12 @@
         <DelphiCompile Include="$(MainSource)">
             <MainSource>MainSource</MainSource>
         </DelphiCompile>
-        <DCCReference Include="MainForm.pas">
-            <Form>FormMain</Form>
-            <FormType>dfm</FormType>
-        </DCCReference>
+        <DCCReference Include="rtl.dcp"/>
+        <DCCReference Include="vcl.dcp"/>
+        <DCCReference Include="TOpenCVView\uOpenCVView.pas"/>
+        <DCCReference Include="TOpenCVCamera\uOpenCVCamera.pas"/>
+        <DCCReference Include="Common\uOpenCVVideoSource.pas"/>
+        <DCCReference Include="Common\uOpenCVVideoReceiver.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>
@@ -105,11 +111,14 @@
     </ItemGroup>
     <ProjectExtensions>
         <Borland.Personality>Delphi.Personality.12</Borland.Personality>
-        <Borland.ProjectType/>
+        <Borland.ProjectType>Package</Borland.ProjectType>
         <BorlandProject>
             <Delphi.Personality>
+                <Source>
+                    <Source Name="MainSource">OpenCV.dpk</Source>
+                </Source>
                 <VersionInfo>
-                    <VersionInfo Name="IncludeVerInfo">False</VersionInfo>
+                    <VersionInfo Name="IncludeVerInfo">True</VersionInfo>
                     <VersionInfo Name="AutoIncBuild">False</VersionInfo>
                     <VersionInfo Name="MajorVer">1</VersionInfo>
                     <VersionInfo Name="MinorVer">0</VersionInfo>
@@ -120,8 +129,8 @@
                     <VersionInfo Name="Special">False</VersionInfo>
                     <VersionInfo Name="Private">False</VersionInfo>
                     <VersionInfo Name="DLL">False</VersionInfo>
-                    <VersionInfo Name="Locale">1040</VersionInfo>
-                    <VersionInfo Name="CodePage">1252</VersionInfo>
+                    <VersionInfo Name="Locale">1049</VersionInfo>
+                    <VersionInfo Name="CodePage">1251</VersionInfo>
                 </VersionInfo>
                 <VersionInfoKeys>
                     <VersionInfoKeys Name="CompanyName"/>
@@ -136,29 +145,18 @@
                     <VersionInfoKeys Name="Comments"/>
                     <VersionInfoKeys Name="CFBundleName"/>
                     <VersionInfoKeys Name="CFBundleDisplayName"/>
-                    <VersionInfoKeys Name="UIDeviceFamily"/>
                     <VersionInfoKeys Name="CFBundleIdentifier"/>
                     <VersionInfoKeys Name="CFBundleVersion"/>
                     <VersionInfoKeys Name="CFBundlePackageType"/>
                     <VersionInfoKeys Name="CFBundleSignature"/>
                     <VersionInfoKeys Name="CFBundleAllowMixedLocalizations"/>
-                    <VersionInfoKeys Name="UISupportedInterfaceOrientations"/>
                     <VersionInfoKeys Name="CFBundleExecutable"/>
-                    <VersionInfoKeys Name="CFBundleResourceSpecification"/>
-                    <VersionInfoKeys Name="LSRequiresIPhoneOS"/>
-                    <VersionInfoKeys Name="CFBundleInfoDictionaryVersion"/>
-                    <VersionInfoKeys Name="CFBundleDevelopmentRegion"/>
+                    <VersionInfoKeys Name="LastCompiledTime">29.05.2013 22:49:25</VersionInfoKeys>
                 </VersionInfoKeys>
-                <Source>
-                    <Source Name="MainSource">VCLChessboardCorners.dpr</Source>
-                </Source>
-                <Excluded_Packages>
-                    <Excluded_Packages Name="$(BDSBIN)\dcloffice2k170.bpl">Microsoft Office 2000 Sample Automation Server Wrapper Components</Excluded_Packages>
-                    <Excluded_Packages Name="$(BDSBIN)\dclofficexp170.bpl">Microsoft Office XP Sample Automation Server Wrapper Components</Excluded_Packages>
-                </Excluded_Packages>
             </Delphi.Personality>
             <Deployment/>
             <Platforms>
+                <Platform value="OSX32">False</Platform>
                 <Platform value="Win32">True</Platform>
                 <Platform value="Win64">False</Platform>
             </Platforms>

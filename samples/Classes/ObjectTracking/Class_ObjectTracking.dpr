@@ -39,7 +39,8 @@ uses
   highgui,
   highgui_c,
   core.types,
-  core;
+  core,
+  imgproc;
 
 Var
   // initial min and max HSV filter values.
