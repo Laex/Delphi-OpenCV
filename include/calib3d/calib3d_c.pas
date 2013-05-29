@@ -275,6 +275,7 @@ procedure cvFindExtrinsicCameraParams2(const object_points: pCvMat; const image_
 /// / 0 if there is no chessboard, -1 in case of error
 // CVAPI(int) cvCheckChessboard(IplImage* src, CvSize size);
 
+function cvCheckChessboard(const image: Pointer; size: TCvSize): Integer; cdecl;
 
 
 // /* Detects corners on a chessboard calibration pattern */
@@ -501,5 +502,6 @@ procedure cvPOSIT; external calib3d_dll;
 procedure cvReleasePOSITObject; external calib3d_dll;
 function cvRANSACUpdateNumIters; external calib3d_dll;
 procedure cvConvertPointsHomogeneous(const src: pCvMat; dst: pCvMat); external calib3d_dll;
+function cvCheckChessboard; external calib3d_dll;
 
 end.
