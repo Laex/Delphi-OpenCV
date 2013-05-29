@@ -267,15 +267,16 @@ procedure cvFindExtrinsicCameraParams2(const object_points: pCvMat; const image_
 // #define CV_CALIB_CB_FILTER_QUADS     4
 // #define CV_CALIB_CB_FAST_CHECK       8
 //
-/// / Performs a fast check if a chessboard is in the input image. This is a workaround to
-/// / a problem of cvFindChessboardCorners being slow on images with no chessboard
-/// / - src: input image
-/// / - size: chessboard size
-/// / Returns 1 if a chessboard can be in this image and findChessboardCorners should be called,
-/// / 0 if there is no chessboard, -1 in case of error
-// CVAPI(int) cvCheckChessboard(IplImage* src, CvSize size);
 
-function cvCheckChessboard(const image: Pointer; size: TCvSize): Integer; cdecl;
+{// Performs a fast check if a chessboard is in the input image. This is a workaround to
+ // a problem of cvFindChessboardCorners being slow on images with no chessboard
+ // - src: input image
+ // - size: chessboard size
+ // Returns 1 if a chessboard can be in this image and findChessboardCorners should be called,
+ // 0 if there is no chessboard, -1 in case of error
+ CVAPI(int) cvCheckChessboard(IplImage* src, CvSize size);
+}
+function cvCheckChessboard(const image: pCvArr; size: TCvSize): Integer; cdecl;
 
 
 // /* Detects corners on a chessboard calibration pattern */
