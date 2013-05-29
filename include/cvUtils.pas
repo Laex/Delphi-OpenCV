@@ -39,15 +39,17 @@
   //  Dev zone:    http://code.opencv.org
   //  ************************************************************************************************** *)
 
+{$POINTERMATH ON}
 unit cvUtils;
 
 interface
 
-Uses core.types_c, Vcl.Graphics;
+Uses WinApi.Windows, core.types_c, Vcl.Graphics;
 
 Function hsv2rgb(hue: single): TCvScalar;
 procedure IplImage2Bitmap(iplImg: PIplImage; var bitmap: Vcl.Graphics.TBitmap);
 function cvImage2Bitmap(img: PIplImage): Vcl.Graphics.TBitmap;
+function ipDraw(dc: HDC; img: PIplImage; const rect: TRect;  const Stretch: Boolean = true): Boolean;
 
 Type
   TAnsiString = record helper for AnsiString
@@ -69,7 +71,7 @@ Type
 
 implementation
 
-Uses WinApi.Windows, System.SysUtils;
+Uses System.SysUtils;
 
 Function hsv2rgb(hue: single): TCvScalar;
 var
@@ -219,6 +221,68 @@ end;
 function TInteger.AsString: string;
 begin
   result := IntToStr(Self);
+end;
+
+
+function ipDraw(dc: HDC; img: PIplImage; const rect: TRect;  const Stretch: Boolean = true): Boolean;
+
+Type
+  pCOLORREF = ^COLORREF;
+  pBITMAPINFOHEADER = ^BITMAPINFOHEADER;
+
+Var
+  isrgb: Boolean;
+  isgray: Boolean;
+  buf: array [1 .. sizeof(BITMAPINFOHEADER) + sizeof(RGBQUAD) * 256] of byte;
+  dibhdr: pBITMAPINFOHEADER;
+  _dibhdr: TBitmapInfo ABSOLUTE buf;
+  _rgb: pCOLORREF;
+  i: Integer;
+begin
+  if (not Assigned(img)) or (not Assigned(img^.ImageData)) then
+    Exit(false);
+  isrgb := ('R' = upcase(img^.colorModel[0])) and ('G' = upcase(img^.colorModel[1])) and
+    ('B' = upcase(img^.colorModel[2]));
+  isgray := 'G' = upcase(img^.colorModel[0]);
+  if (not isgray) and (not isrgb) then
+    Exit(false);
+  if (1 = img^.nChannels) and (not isgray) then
+    Exit(false);
+
+  dibhdr := @buf;
+  _rgb := pCOLORREF(Integer(dibhdr) + sizeof(BITMAPINFOHEADER));
+
+  if (isgray) then
+    for i := 0 to 255 do
+      _rgb[i] := rgb(i, i, i);
+  dibhdr^.biSize := sizeof(BITMAPINFOHEADER);
+  dibhdr^.biWidth := img^.Width;
+  // Check origin for display
+  if img^.Origin = 0 then
+    dibhdr^.biHeight := -img^.Height
+  else
+    dibhdr^.biHeight := img^.Height;
+
+  dibhdr^.biPlanes := 1;
+  dibhdr^.biBitCount := 8 * img^.nChannels;
+  dibhdr^.biCompression := BI_RGB;
+  dibhdr^.biSizeImage := 0; // img^.imageSize;
+  dibhdr^.biXPelsPerMeter := 0;
+  dibhdr^.biYPelsPerMeter := 0;
+  dibhdr^.biClrUsed := 0;
+  dibhdr^.biClrImportant := 0;
+
+  if Stretch then
+  begin
+    SetStretchBltMode(dc, COLORONCOLOR);
+    // Stretch the image to fit the rectangle
+    result := StretchDIBits(dc, rect.left, rect.top, rect.Width, rect.Height, 0, 0, img^.Width, img^.Height,
+      img^.ImageData, _dibhdr, DIB_RGB_COLORS, SRCCOPY) > 0;
+  end
+  else
+    // Draw without scaling
+    result := SetDIBitsToDevice(dc, rect.Left, rect.Top, img^.Width, img^.Height, 0, 0, 0, img^.Height, img^.ImageData,
+      _dibhdr, DIB_RGB_COLORS) > 0;
 end;
 
 end.

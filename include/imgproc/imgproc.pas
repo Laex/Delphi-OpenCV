@@ -419,163 +419,168 @@ const
   // Point anchor=Point(-1,-1), int rowBorderType=BORDER_CONSTANT,
   // int columnBorderType=-1,
   // const Scalar& borderValue=morphologyDefaultBorderValue());
-  //
+
+const
   /// /! shape of the structuring element
   // enum { MORPH_RECT=0, MORPH_CROSS=1, MORPH_ELLIPSE=2 };
+  MORPH_RECT = 0;
+  MORPH_CROSS = 1;
+  MORPH_ELLIPSE = 2;
   /// /! returns structuring element of the specified shape and size
   // CV_EXPORTS_W Mat getStructuringElement(int shape, Size ksize, Point anchor=Point(-1,-1));
-  //
-  // template<> CV_EXPORTS void Ptr<IplConvKernel>::delete_obj();
-  //
-  /// /! copies 2D array to a larger destination array with extrapolation of the outer part of src using the specified border mode
-  // CV_EXPORTS_W void copyMakeBorder( InputArray src, OutputArray dst,
-  // int top, int bottom, int left, int right,
-  // int borderType, const Scalar& value=Scalar() );
-  //
-  /// /! smooths the image using median filter.
-  // CV_EXPORTS_W void medianBlur( InputArray src, OutputArray dst, int ksize );
+function getStructuringElement(shape: Integer; ksize: ISize; anchor: IPoint = nil { =Point(-1,-1) } ): IMat;
 
-  // ! smooths the image using Gaussian filter.
-  // CV_EXPORTS_W void GaussianBlur( InputArray src,
-  // OutputArray dst, Size ksize,
-  // double sigmaX, double sigmaY=0,
-  // int borderType=BORDER_DEFAULT );
-  /// /! smooths the image using bilateral filter
-  // CV_EXPORTS_W void bilateralFilter( InputArray src, OutputArray dst, int d,
-  // double sigmaColor, double sigmaSpace,
-  // int borderType=BORDER_DEFAULT );
-  /// /! smooths the image using the box filter. Each pixel is processed in O(1) time
-  // CV_EXPORTS_W void boxFilter( InputArray src, OutputArray dst, int ddepth,
-  // Size ksize, Point anchor=Point(-1,-1),
-  // bool normalize=true,
-  // int borderType=BORDER_DEFAULT );
-  /// /! a synonym for normalized box filter
-  // CV_EXPORTS_W void blur( InputArray src, OutputArray dst,
-  // Size ksize, Point anchor=Point(-1,-1),
-  // int borderType=BORDER_DEFAULT );
-  //
-  /// /! applies non-separable 2D linear filter to the image
-  // CV_EXPORTS_W void filter2D( InputArray src, OutputArray dst, int ddepth,
-  // InputArray kernel, Point anchor=Point(-1,-1),
-  // double delta=0, int borderType=BORDER_DEFAULT );
-  //
-  /// /! applies separable 2D linear filter to the image
-  // CV_EXPORTS_W void sepFilter2D( InputArray src, OutputArray dst, int ddepth,
-  // InputArray kernelX, InputArray kernelY,
-  // Point anchor=Point(-1,-1),
-  // double delta=0, int borderType=BORDER_DEFAULT );
-  //
-  /// /! applies generalized Sobel operator to the image
-  // CV_EXPORTS_W void Sobel( InputArray src, OutputArray dst, int ddepth,
-  // int dx, int dy, int ksize=3,
-  // double scale=1, double delta=0,
-  // int borderType=BORDER_DEFAULT );
-  //
-  /// /! applies the vertical or horizontal Scharr operator to the image
-  // CV_EXPORTS_W void Scharr( InputArray src, OutputArray dst, int ddepth,
-  // int dx, int dy, double scale=1, double delta=0,
-  // int borderType=BORDER_DEFAULT );
-  //
-  /// /! applies Laplacian operator to the image
-  // CV_EXPORTS_W void Laplacian( InputArray src, OutputArray dst, int ddepth,
-  // int ksize=1, double scale=1, double delta=0,
-  // int borderType=BORDER_DEFAULT );
-  //
-  /// /! applies Canny edge detector and produces the edge map.
-  // CV_EXPORTS_W void Canny( InputArray image, OutputArray edges,
-  // double threshold1, double threshold2,
-  // int apertureSize=3, bool L2gradient=false );
-  //
-  /// /! computes minimum eigen value of 2x2 derivative covariation matrix at each pixel - the cornerness criteria
-  // CV_EXPORTS_W void cornerMinEigenVal( InputArray src, OutputArray dst,
-  // int blockSize, int ksize=3,
-  // int borderType=BORDER_DEFAULT );
-  //
-  /// /! computes Harris cornerness criteria at each image pixel
-  // CV_EXPORTS_W void cornerHarris( InputArray src, OutputArray dst, int blockSize,
-  // int ksize, double k,
-  // int borderType=BORDER_DEFAULT );
-  //
-  /// / low-level function for computing eigenvalues and eigenvectors of 2x2 matrices
-  // CV_EXPORTS void eigen2x2( const float* a, float* e, int n );
-  //
-  /// /! computes both eigenvalues and the eigenvectors of 2x2 derivative covariation matrix  at each pixel. The output is stored as 6-channel matrix.
-  // CV_EXPORTS_W void cornerEigenValsAndVecs( InputArray src, OutputArray dst,
-  // int blockSize, int ksize,
-  // int borderType=BORDER_DEFAULT );
-  //
-  /// /! computes another complex cornerness criteria at each pixel
-  // CV_EXPORTS_W void preCornerDetect( InputArray src, OutputArray dst, int ksize,
-  // int borderType=BORDER_DEFAULT );
-  //
-  /// /! adjusts the corner locations with sub-pixel accuracy to maximize the certain cornerness criteria
-  // CV_EXPORTS_W void cornerSubPix( InputArray image, InputOutputArray corners,
-  // Size winSize, Size zeroZone,
-  // TermCriteria criteria );
-  //
-  /// /! finds the strong enough corners where the cornerMinEigenVal() or cornerHarris() report the local maxima
-  // CV_EXPORTS_W void goodFeaturesToTrack( InputArray image, OutputArray corners,
-  // int maxCorners, double qualityLevel, double minDistance,
-  // InputArray mask=noArray(), int blockSize=3,
-  // bool useHarrisDetector=false, double k=0.04 );
-  //
-  /// /! finds lines in the black-n-white image using the standard or pyramid Hough transform
-  // CV_EXPORTS_W void HoughLines( InputArray image, OutputArray lines,
-  // double rho, double theta, int threshold,
-  // double srn=0, double stn=0 );
-  //
-  /// /! finds line segments in the black-n-white image using probabalistic Hough transform
-  // CV_EXPORTS_W void HoughLinesP( InputArray image, OutputArray lines,
-  // double rho, double theta, int threshold,
-  // double minLineLength=0, double maxLineGap=0 );
-  //
-  /// /! finds circles in the grayscale image using 2+1 gradient Hough transform
-  // CV_EXPORTS_W void HoughCircles( InputArray image, OutputArray circles,
-  // int method, double dp, double minDist,
-  // double param1=100, double param2=100,
-  // int minRadius=0, int maxRadius=0 );
-  //
-  // enum
-  // {
-  // GHT_POSITION = 0,
-  // GHT_SCALE = 1,
-  // GHT_ROTATION = 2
-  // };
-  //
-  /// /! finds arbitrary template in the grayscale image using Generalized Hough Transform
-  /// /! Ballard, D.H. (1981). Generalizing the Hough transform to detect arbitrary shapes. Pattern Recognition 13 (2): 111-122.
-  /// /! Guil, N., González-Linares, J.M. and Zapata, E.L. (1999). Bidimensional shape detection using an invariant approach. Pattern Recognition 32 (6): 1025-1038.
-  // class CV_EXPORTS GeneralizedHough : public Algorithm
-  // {
-  // public:
-  // static Ptr<GeneralizedHough> create(int method);
-  //
-  // virtual ~GeneralizedHough();
-  //
-  // //! set template to search
-  // void setTemplate(InputArray templ, int cannyThreshold = 100, Point templCenter = Point(-1, -1));
-  // void setTemplate(InputArray edges, InputArray dx, InputArray dy, Point templCenter = Point(-1, -1));
-  //
-  // //! find template on image
-  // void detect(InputArray image, OutputArray positions, OutputArray votes = cv::noArray(), int cannyThreshold = 100);
-  // void detect(InputArray edges, InputArray dx, InputArray dy, OutputArray positions, OutputArray votes = cv::noArray());
-  //
-  // void release();
-  //
-  // protected:
-  // virtual void setTemplateImpl(const Mat& edges, const Mat& dx, const Mat& dy, Point templCenter) = 0;
-  // virtual void detectImpl(const Mat& edges, const Mat& dx, const Mat& dy, OutputArray positions, OutputArray votes) = 0;
-  // virtual void releaseImpl() = 0;
-  //
-  // private:
-  // Mat edges_, dx_, dy_;
-  // };
-  //
-  // ! erodes the image (applies the local minimum operator)
-  // CV_EXPORTS_W void erode( InputArray src, OutputArray dst, InputArray kernel,
-  // Point anchor=Point(-1,-1), int iterations=1,
-  // int borderType=BORDER_CONSTANT,
-  // const Scalar& borderValue=morphologyDefaultBorderValue());
+// template<> CV_EXPORTS void Ptr<IplConvKernel>::delete_obj();
+//
+/// /! copies 2D array to a larger destination array with extrapolation of the outer part of src using the specified border mode
+// CV_EXPORTS_W void copyMakeBorder( InputArray src, OutputArray dst,
+// int top, int bottom, int left, int right,
+// int borderType, const Scalar& value=Scalar() );
+//
+/// /! smooths the image using median filter.
+// CV_EXPORTS_W void medianBlur( InputArray src, OutputArray dst, int ksize );
+
+// ! smooths the image using Gaussian filter.
+// CV_EXPORTS_W void GaussianBlur( InputArray src,
+// OutputArray dst, Size ksize,
+// double sigmaX, double sigmaY=0,
+// int borderType=BORDER_DEFAULT );
+/// /! smooths the image using bilateral filter
+// CV_EXPORTS_W void bilateralFilter( InputArray src, OutputArray dst, int d,
+// double sigmaColor, double sigmaSpace,
+// int borderType=BORDER_DEFAULT );
+/// /! smooths the image using the box filter. Each pixel is processed in O(1) time
+// CV_EXPORTS_W void boxFilter( InputArray src, OutputArray dst, int ddepth,
+// Size ksize, Point anchor=Point(-1,-1),
+// bool normalize=true,
+// int borderType=BORDER_DEFAULT );
+/// /! a synonym for normalized box filter
+// CV_EXPORTS_W void blur( InputArray src, OutputArray dst,
+// Size ksize, Point anchor=Point(-1,-1),
+// int borderType=BORDER_DEFAULT );
+//
+/// /! applies non-separable 2D linear filter to the image
+// CV_EXPORTS_W void filter2D( InputArray src, OutputArray dst, int ddepth,
+// InputArray kernel, Point anchor=Point(-1,-1),
+// double delta=0, int borderType=BORDER_DEFAULT );
+//
+/// /! applies separable 2D linear filter to the image
+// CV_EXPORTS_W void sepFilter2D( InputArray src, OutputArray dst, int ddepth,
+// InputArray kernelX, InputArray kernelY,
+// Point anchor=Point(-1,-1),
+// double delta=0, int borderType=BORDER_DEFAULT );
+//
+/// /! applies generalized Sobel operator to the image
+// CV_EXPORTS_W void Sobel( InputArray src, OutputArray dst, int ddepth,
+// int dx, int dy, int ksize=3,
+// double scale=1, double delta=0,
+// int borderType=BORDER_DEFAULT );
+//
+/// /! applies the vertical or horizontal Scharr operator to the image
+// CV_EXPORTS_W void Scharr( InputArray src, OutputArray dst, int ddepth,
+// int dx, int dy, double scale=1, double delta=0,
+// int borderType=BORDER_DEFAULT );
+//
+/// /! applies Laplacian operator to the image
+// CV_EXPORTS_W void Laplacian( InputArray src, OutputArray dst, int ddepth,
+// int ksize=1, double scale=1, double delta=0,
+// int borderType=BORDER_DEFAULT );
+//
+/// /! applies Canny edge detector and produces the edge map.
+// CV_EXPORTS_W void Canny( InputArray image, OutputArray edges,
+// double threshold1, double threshold2,
+// int apertureSize=3, bool L2gradient=false );
+//
+/// /! computes minimum eigen value of 2x2 derivative covariation matrix at each pixel - the cornerness criteria
+// CV_EXPORTS_W void cornerMinEigenVal( InputArray src, OutputArray dst,
+// int blockSize, int ksize=3,
+// int borderType=BORDER_DEFAULT );
+//
+/// /! computes Harris cornerness criteria at each image pixel
+// CV_EXPORTS_W void cornerHarris( InputArray src, OutputArray dst, int blockSize,
+// int ksize, double k,
+// int borderType=BORDER_DEFAULT );
+//
+/// / low-level function for computing eigenvalues and eigenvectors of 2x2 matrices
+// CV_EXPORTS void eigen2x2( const float* a, float* e, int n );
+//
+/// /! computes both eigenvalues and the eigenvectors of 2x2 derivative covariation matrix  at each pixel. The output is stored as 6-channel matrix.
+// CV_EXPORTS_W void cornerEigenValsAndVecs( InputArray src, OutputArray dst,
+// int blockSize, int ksize,
+// int borderType=BORDER_DEFAULT );
+//
+/// /! computes another complex cornerness criteria at each pixel
+// CV_EXPORTS_W void preCornerDetect( InputArray src, OutputArray dst, int ksize,
+// int borderType=BORDER_DEFAULT );
+//
+/// /! adjusts the corner locations with sub-pixel accuracy to maximize the certain cornerness criteria
+// CV_EXPORTS_W void cornerSubPix( InputArray image, InputOutputArray corners,
+// Size winSize, Size zeroZone,
+// TermCriteria criteria );
+//
+/// /! finds the strong enough corners where the cornerMinEigenVal() or cornerHarris() report the local maxima
+// CV_EXPORTS_W void goodFeaturesToTrack( InputArray image, OutputArray corners,
+// int maxCorners, double qualityLevel, double minDistance,
+// InputArray mask=noArray(), int blockSize=3,
+// bool useHarrisDetector=false, double k=0.04 );
+//
+/// /! finds lines in the black-n-white image using the standard or pyramid Hough transform
+// CV_EXPORTS_W void HoughLines( InputArray image, OutputArray lines,
+// double rho, double theta, int threshold,
+// double srn=0, double stn=0 );
+//
+/// /! finds line segments in the black-n-white image using probabalistic Hough transform
+// CV_EXPORTS_W void HoughLinesP( InputArray image, OutputArray lines,
+// double rho, double theta, int threshold,
+// double minLineLength=0, double maxLineGap=0 );
+//
+/// /! finds circles in the grayscale image using 2+1 gradient Hough transform
+// CV_EXPORTS_W void HoughCircles( InputArray image, OutputArray circles,
+// int method, double dp, double minDist,
+// double param1=100, double param2=100,
+// int minRadius=0, int maxRadius=0 );
+//
+// enum
+// {
+// GHT_POSITION = 0,
+// GHT_SCALE = 1,
+// GHT_ROTATION = 2
+// };
+//
+/// /! finds arbitrary template in the grayscale image using Generalized Hough Transform
+/// /! Ballard, D.H. (1981). Generalizing the Hough transform to detect arbitrary shapes. Pattern Recognition 13 (2): 111-122.
+/// /! Guil, N., González-Linares, J.M. and Zapata, E.L. (1999). Bidimensional shape detection using an invariant approach. Pattern Recognition 32 (6): 1025-1038.
+// class CV_EXPORTS GeneralizedHough : public Algorithm
+// {
+// public:
+// static Ptr<GeneralizedHough> create(int method);
+//
+// virtual ~GeneralizedHough();
+//
+// //! set template to search
+// void setTemplate(InputArray templ, int cannyThreshold = 100, Point templCenter = Point(-1, -1));
+// void setTemplate(InputArray edges, InputArray dx, InputArray dy, Point templCenter = Point(-1, -1));
+//
+// //! find template on image
+// void detect(InputArray image, OutputArray positions, OutputArray votes = cv::noArray(), int cannyThreshold = 100);
+// void detect(InputArray edges, InputArray dx, InputArray dy, OutputArray positions, OutputArray votes = cv::noArray());
+//
+// void release();
+//
+// protected:
+// virtual void setTemplateImpl(const Mat& edges, const Mat& dx, const Mat& dy, Point templCenter) = 0;
+// virtual void detectImpl(const Mat& edges, const Mat& dx, const Mat& dy, OutputArray positions, OutputArray votes) = 0;
+// virtual void releaseImpl() = 0;
+//
+// private:
+// Mat edges_, dx_, dy_;
+// };
+//
+// ! erodes the image (applies the local minimum operator)
+// CV_EXPORTS_W void erode( InputArray src, OutputArray dst, InputArray kernel,
+// Point anchor=Point(-1,-1), int iterations=1,
+// int borderType=BORDER_CONSTANT,
+// const Scalar& borderValue=morphologyDefaultBorderValue());
 procedure erode(src: IMat; dst: IMat; kernel: IMat; anchor: IPoint { =Point(-1,-1) }; iterations: Integer { =1 };
   borderType: Integer { =BORDER_CONSTANT }; const borderValue: IScalar { =morphologyDefaultBorderValue() } );
 
@@ -1371,19 +1376,44 @@ const
 
 implementation
 
-
+Uses uLibName;
 
 // CV_EXPORTS_W void erode( InputArray src, OutputArray dst, InputArray kernel,
 // Point anchor=Point(-1,-1), int iterations=1,
 // int borderType=BORDER_CONSTANT,
 // const Scalar& borderValue=morphologyDefaultBorderValue());
-//procedure _erode(src: Pointer; dst: Pointer; kernel: IMat; anchor: IPoint { =Point(-1,-1) }; iterations: Integer { =1 };
-//  borderType: Integer { =BORDER_CONSTANT }; const borderValue: IScalar { =morphologyDefaultBorderValue() } );
+procedure _erode(src: Pointer; dst: Pointer; kernel: Pointer; anchor: Pointer { =Point(-1,-1) };
+  iterations: Integer { =1 }; borderType: Integer { =BORDER_CONSTANT };
+  const borderValue: Pointer { =morphologyDefaultBorderValue() } ); cdecl; external imgproc_Dll name 'erode';
 
 procedure erode(src: IMat; dst: IMat; kernel: IMat; anchor: IPoint { =Point(-1,-1) }; iterations: Integer { =1 };
   borderType: Integer { =BORDER_CONSTANT }; const borderValue: IScalar { =morphologyDefaultBorderValue() } );
 begin
 
+end;
+
+// ! dilates the image (applies the local maximum operator)
+// CV_EXPORTS_W void dilate( InputArray src, OutputArray dst, InputArray kernel,
+// Point anchor=Point(-1,-1), int iterations=1,
+// int borderType=BORDER_CONSTANT,
+// const Scalar& borderValue=morphologyDefaultBorderValue() );
+
+// ! applies an advanced morphological operation to the image
+// CV_EXPORTS_W void morphologyEx( InputArray src, OutputArray dst,
+// int op, InputArray kernel,
+// Point anchor=Point(-1,-1), int iterations=1,
+// int borderType=BORDER_CONSTANT,
+// const Scalar& borderValue=morphologyDefaultBorderValue() );
+
+function _getStructuringElement(shape: Integer; ksize: Pointer; anchor: Pointer): Pointer; cdecl;
+  external imgproc_Dll name 'getStructuringElement';
+
+// CV_EXPORTS_W Mat getStructuringElement(int shape, Size ksize, Point anchor=Point(-1,-1));
+function getStructuringElement(shape: Integer; ksize: ISize; anchor: IPoint { =Point(-1,-1) } ): IMat;
+begin
+  if not Assigned(anchor) then
+    anchor := Point(-1, -1);
+  Result := CreateMat(_getStructuringElement(shape, ksize.getSize, anchor.getPoint));
 end;
 
 end.

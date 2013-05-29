@@ -1,8 +1,9 @@
 LIBRARY opencv_classes.dll
 
 EXPORTS
-    CreateMat @1
+	CreateMat @1
 	CreateMat_rct @2
+	CreateMat_Mat @3
 
 	CreateVideoCapture @100
 	CreateVideoCapture_dvc @101
@@ -12,5 +13,7 @@ EXPORTS
 	CreateScalar @202
 	CreateScalar_v03 @203
 	CreateScalar_v0 @204
+	CreateSize2i @205
+	CreateSize2i_wh @206
 
 	CString @300

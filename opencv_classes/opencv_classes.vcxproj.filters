@@ -27,13 +27,7 @@
     <ClInclude Include="targetver.h">
       <Filter>Заголовочные файлы</Filter>
     </ClInclude>
-    <ClInclude Include="Imat.h">
-      <Filter>Заголовочные файлы</Filter>
-    </ClInclude>
     <ClInclude Include="opencv_classes.h">
-      <Filter>Заголовочные файлы</Filter>
-    </ClInclude>
-    <ClInclude Include="TMat.h">
       <Filter>Заголовочные файлы</Filter>
     </ClInclude>
     <ClInclude Include="Ihighgui.h">

@@ -116,19 +116,28 @@ Type
     function getScalar(): Pointer; stdcall;
   end;
 
-  IString = interface
-    ['{50C8309F-69B6-4E8C-A2B5-F2530007CCA1}']
-    function getString():Pointer; stdcall;
+  ISize2i = interface
+    ['{14B0A243-5E3D-4ECD-9F1E-8AD47CEF0CE0}']
+    // ---------------------------------
+    function getSize(): Pointer; stdcall;
   end;
 
+  ISize = ISize2i;
 
+  IString = interface
+    ['{50C8309F-69B6-4E8C-A2B5-F2530007CCA1}']
+    function getString(): Pointer; stdcall;
+  end;
 
 function Point: IPoint; overload; safecall;
 function Point(x, y: Integer): IPoint; overload; safecall;
 function Scalar: IScalar; overload; safecall;
 function Scalar(v0, v1: Integer; v2: Integer = 0; v3: Integer = 0): IScalar; overload; safecall;
 function Scalar(v0: Integer): IScalar; overload; safecall;
-function CString(const s:pCVChar):Pointer; safecall;
+function CreateSize: ISize; overload; safecall;
+function CreateSize(width, height: Integer): ISize; overload; safecall;
+
+function CString(const s: pCVChar): Pointer; safecall;
 
 implementation
 
@@ -139,6 +148,9 @@ function Point(x, y: Integer): IPoint; external OpenCV_Classes_DLL index 201;
 function Scalar: IScalar; external OpenCV_Classes_DLL index 202;
 function Scalar(v0, v1: Integer; v2: Integer; v3: Integer): IScalar; external OpenCV_Classes_DLL index 203;
 function Scalar(v0: Integer): IScalar; external OpenCV_Classes_DLL index 204;
+function CreateSize: ISize; external OpenCV_Classes_DLL index 205;
+function CreateSize(width, height: Integer): ISize; external OpenCV_Classes_DLL index 206;
+
 function CString; external OpenCV_Classes_DLL index 300;
 
 end.

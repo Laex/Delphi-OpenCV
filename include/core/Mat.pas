@@ -145,12 +145,14 @@ function CreateMat: IMat; overload; safecall;
 // ! constructs 2D matrix of the specified size and type
 // (_type is CV_8UC1, CV_64FC3, CV_32SC(12) etc.)
 function CreateMat(rows, cols, _type: Integer): IMat; overload; safecall;
+function CreateMat(_mat: Pointer): IMat; overload; safecall;
 
 implementation
 
 Uses uLibName;
 
-function CreateMat: IMat; external OpenCV_Classes_DLL index 1;
-function CreateMat(rows, cols, _type: Integer): IMat; external OpenCV_Classes_DLL index 2;
+function CreateMat: IMat; external OpenCV_Classes_DLL name 'CreateMat';
+function CreateMat(rows, cols, _type: Integer): IMat; external OpenCV_Classes_DLL name 'CreateMat_rct';
+function CreateMat(_mat: Pointer): IMat; external OpenCV_Classes_DLL name 'CreateMat_Mat';
 
 end.
