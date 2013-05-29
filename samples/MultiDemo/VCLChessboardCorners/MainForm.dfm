@@ -3,7 +3,7 @@ object FormMain: TFormMain
   Top = 154
   Caption = 'Chessboard Corners'
   ClientHeight = 484
-  ClientWidth = 1368
+  ClientWidth = 1284
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
