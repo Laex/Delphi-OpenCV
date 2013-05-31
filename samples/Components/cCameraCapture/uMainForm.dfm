@@ -1,9 +1,11 @@
-object Form1: TForm1
+object MainForm: TMainForm
   Left = 0
   Top = 0
-  Caption = 'CameraCapture - Component Demo'
-  ClientHeight = 471
-  ClientWidth = 641
+  BorderIcons = [biSystemMenu, biMinimize]
+  BorderStyle = bsSingle
+  Caption = 'OpenCV - Component demo'
+  ClientHeight = 319
+  ClientWidth = 466
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -11,107 +13,56 @@ object Form1: TForm1
   Font.Name = 'Tahoma'
   Font.Style = []
   OldCreateOrder = False
+  Position = poScreenCenter
+  OnCreate = FormCreate
   PixelsPerInch = 96
   TextHeight = 13
-  object grdpnl1: TGridPanel
-    Left = 0
-    Top = 0
-    Width = 641
-    Height = 471
-    Align = alClient
-    Caption = 'grdpnl1'
-    ColumnCollection = <
-      item
-        Value = 50.000000000000000000
-      end
-      item
-        Value = 50.000000000000000000
-      end>
-    ControlCollection = <
-      item
-        Column = 0
-        Control = opncvw1
-        Row = 0
-      end
-      item
-        Column = 1
-        Control = opncvw2
-        Row = 0
-      end
-      item
-        Column = 0
-        Control = opncvw3
-        Row = 1
-      end
-      item
-        Column = 1
-        Control = opncvw4
-        Row = 1
-      end>
-    RowCollection = <
-      item
-        Value = 50.000000000000000000
-      end
-      item
-        Value = 50.000000000000000000
-      end>
-    TabOrder = 0
-    ExplicitLeft = 236
-    ExplicitTop = 160
-    ExplicitWidth = 185
-    ExplicitHeight = 41
-    object opncvw1: TOpenCVView
-      Left = 1
-      Top = 1
-      Width = 319
-      Height = 234
-      VideoSource = opncvcmr1
-      Align = alClient
-      ExplicitLeft = 164
-      ExplicitTop = 100
-      ExplicitWidth = 100
-      ExplicitHeight = 41
-    end
-    object opncvw2: TOpenCVView
-      Left = 320
-      Top = 1
-      Width = 320
-      Height = 234
-      VideoSource = opncvcmr1
-      Align = alClient
-      ExplicitLeft = 164
-      ExplicitTop = 100
-      ExplicitWidth = 100
-      ExplicitHeight = 41
-    end
-    object opncvw3: TOpenCVView
-      Left = 1
-      Top = 235
-      Width = 319
-      Height = 235
-      VideoSource = opncvcmr1
-      Align = alClient
-      ExplicitLeft = 164
-      ExplicitTop = 100
-      ExplicitWidth = 100
-      ExplicitHeight = 41
-    end
-    object opncvw4: TOpenCVView
-      Left = 320
-      Top = 235
-      Width = 320
-      Height = 235
-      VideoSource = opncvcmr1
-      Align = alClient
-      ExplicitLeft = 164
-      ExplicitTop = 100
-      ExplicitWidth = 100
-      ExplicitHeight = 41
-    end
+  object lbl1: TLabel
+    Left = 308
+    Top = 8
+    Width = 79
+    Height = 13
+    Caption = 'Image operation'
   end
-  object opncvcmr1: TOpenCVCamera
-    Enabled = True
-    Left = 188
+  object cbb1: TComboBox
+    Left = 308
+    Top = 24
+    Width = 145
+    Height = 21
+    Style = csDropDownList
+    TabOrder = 1
+    OnChange = cbb1Change
+    Items.Strings = (
+      'None'
+      'Convert to grayscale'
+      'Canny'
+      'Smooth')
+  end
+  object chk1: TCheckBox
+    Left = 308
     Top = 60
+    Width = 97
+    Height = 17
+    Caption = 'Camera enabled'
+    TabOrder = 2
+    OnClick = chk1Click
+  end
+  object ocvw1: TocvView
+    Left = 8
+    Top = 8
+    Width = 289
+    Height = 297
+    VideoSource = ocvmgprtn1
+  end
+  object ocvcmr1: TocvCamera
+    Enabled = True
+    Left = 140
+    Top = 128
+  end
+  object ocvmgprtn1: TocvImageOperation
+    VideoSource = ocvcmr1
+    ImageOperation = ioNone
+    Left = 140
+    Top = 76
   end
 end

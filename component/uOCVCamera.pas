@@ -21,22 +21,19 @@
   // rights and limitations under the License.
   ******************************************************************* *)
 
-unit uOpenCVCamera;
+unit uOCVCamera;
 
 interface
 
 uses
   System.SysUtils,
   System.Classes,
-  System.SyncObjs,
-  System.Generics.Collections,
   core.types_c,
   highgui_c,
-  uOpenCVVideoReceiver,
-  uOpenCVVideoSource;
+  uOCVTypes;
 
 type
-  TOpenCVCameraCaptureSource = //
+  TocvCameraCaptureSource = //
     (CAP_ANY { = 0 } , // autodetect
     CAP_MIL { = 100 } , // MIL proprietary drivers
     CAP_VFW { = 200 } , // platform native
@@ -65,55 +62,41 @@ type
 
 type
 
-  TReceiverList = TList<IOpenCVVideoReceiver>;
+  TocvOnDataNotify = procedure(const IplImage: pIplImage) of object;
 
-  TOpenCVCameraThread = class(TThread)
+  TocvCameraThread = class(TThread)
   private
-    FReceiverList: TReceiverList;
-    ReceiverCS: TCriticalSection;
+    FOnNotifyData: TocvOnDataNotify;
   protected
     FCapture: pCvCapture;
     procedure Execute; override;
-    procedure SendVideoData(const IplImage: pIplImage);
-    procedure DisconnectRecipients;
   public
-    constructor Create(CreateSuspended: Boolean); overload;
-    destructor Destroy; override;
-    procedure AddReceiver(const OpenCVVideoReceiver: IOpenCVVideoReceiver);
-    procedure RemoveReceiver(const OpenCVVideoReceiver: IOpenCVVideoReceiver);
+    property OnNotifyData: TocvOnDataNotify Read FOnNotifyData write FOnNotifyData;
   end;
 
-  TOpenCVCamera = class(TOpenCVVideoSource)
+  TocvCamera = class(TocvDataSource)
   private
     FEnabled: Boolean;
-    FCameraCaptureSource: TOpenCVCameraCaptureSource;
+    FCameraCaptureSource: TocvCameraCaptureSource;
     procedure SetEnabled(const Value: Boolean);
-    procedure SetCameraCaptureSource(const Value: TOpenCVCameraCaptureSource);
+    procedure SetCameraCaptureSource(const Value: TocvCameraCaptureSource);
   protected
     FCapture: pCvCapture;
-    FOpenCVCameraThread: TOpenCVCameraThread;
+    FOpenCVCameraThread: TocvCameraThread;
+    procedure OnNotifyData(const IplImage: pIplImage);
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
-    procedure AddReceiver(const OpenCVVideoReceiver: IOpenCVVideoReceiver); override;
-    procedure RemoveReceiver(const OpenCVVideoReceiver: IOpenCVVideoReceiver); override;
   published
     property Enabled: Boolean Read FEnabled write SetEnabled default False;
-    property CameraCaptureSource: TOpenCVCameraCaptureSource read FCameraCaptureSource write SetCameraCaptureSource
+    property CameraCaptureSource: TocvCameraCaptureSource read FCameraCaptureSource write SetCameraCaptureSource
       default CAP_ANY;
   end;
 
-procedure Register;
-
 implementation
 
-procedure Register;
-begin
-  RegisterComponents('OpenCV', [TOpenCVCamera]);
-end;
-
 const
-  OpenCVCameraCaptureSource: array [TOpenCVCameraCaptureSource] of Longint = //
+  ocvCameraCaptureSource: array [TocvCameraCaptureSource] of Longint = //
     (CV_CAP_ANY, // autodetect
     CV_CAP_MIL, // MIL proprietary drivers
     CV_CAP_VFW, // platform native
@@ -144,103 +127,61 @@ const
 
   { TOpenCVCameraThread }
 
-procedure TOpenCVCameraThread.AddReceiver(const OpenCVVideoReceiver: IOpenCVVideoReceiver);
-begin
-  if FReceiverList.IndexOf(OpenCVVideoReceiver) = -1 then
-    FReceiverList.Add(OpenCVVideoReceiver);
-end;
-
-constructor TOpenCVCameraThread.Create(CreateSuspended: Boolean);
-begin
-  inherited Create(CreateSuspended);
-  FReceiverList := TReceiverList.Create;
-  ReceiverCS := TCriticalSection.Create;
-end;
-
-destructor TOpenCVCameraThread.Destroy;
-begin
-  DisconnectRecipients;
-  FReceiverList.Free;
-  ReceiverCS.Free;
-  inherited;
-end;
-
-procedure TOpenCVCameraThread.DisconnectRecipients;
-Var
-  I: IOpenCVVideoReceiver;
-begin
-  ReceiverCS.Enter;
-  for I in FReceiverList do
-    I.SetVideoSource(nil);
-  ReceiverCS.Leave;
-end;
-
-procedure TOpenCVCameraThread.Execute;
+procedure TocvCameraThread.Execute;
 Var
   frame: pIplImage;
 begin
   while not Terminated do
-  begin
     if Assigned(FCapture) then
     begin
-      frame := cvQueryFrame(FCapture);
-      if Assigned(frame) then
-      begin
-        SendVideoData(frame);
+      try
+        frame := cvQueryFrame(FCapture);
+        if Assigned(frame) and Assigned(OnNotifyData) then
+          Synchronize(
+            procedure
+            begin
+              OnNotifyData(frame);
+            end)
+      except
       end;
-    end;
-  end;
-end;
-
-procedure TOpenCVCameraThread.RemoveReceiver(const OpenCVVideoReceiver: IOpenCVVideoReceiver);
-begin
-  ReceiverCS.Enter;
-  if FReceiverList.IndexOf(OpenCVVideoReceiver) <> -1 then
-    FReceiverList.Remove(OpenCVVideoReceiver);
-  ReceiverCS.Leave;
-end;
-
-procedure TOpenCVCameraThread.SendVideoData(const IplImage: pIplImage);
-var
-  I: Integer;
-begin
-  ReceiverCS.Enter;
-  for I := 0 to FReceiverList.Count - 1 do
-    FReceiverList[I].TakeImage(IplImage);
-  ReceiverCS.Leave;
+    end
+    else
+      Suspend;
 end;
 
 { TOpenCVCamera }
 
-procedure TOpenCVCamera.AddReceiver(const OpenCVVideoReceiver: IOpenCVVideoReceiver);
-begin
-  FOpenCVCameraThread.AddReceiver(OpenCVVideoReceiver);
-end;
-
-constructor TOpenCVCamera.Create(AOwner: TComponent);
+constructor TocvCamera.Create(AOwner: TComponent);
 begin
   inherited;
-  FOpenCVCameraThread := TOpenCVCameraThread.Create(True);
+  if not(csDesigning in ComponentState) then
+  begin
+    FOpenCVCameraThread := TocvCameraThread.Create(True);
+    FOpenCVCameraThread.OnNotifyData := OnNotifyData;
+  end;
 end;
 
-destructor TOpenCVCamera.Destroy;
+destructor TocvCamera.Destroy;
 begin
-  FOpenCVCameraThread.DisconnectRecipients;
-  FOpenCVCameraThread.FCapture := nil;
+  if Assigned(FOpenCVCameraThread) then
+  begin
+    FOpenCVCameraThread.FCapture := nil;
+    FOpenCVCameraThread.Terminate;
+    FOpenCVCameraThread.Resume;
+    FOpenCVCameraThread.WaitFor;
+    FOpenCVCameraThread.Free;
+  end;
   if Assigned(FCapture) then
-  cvReleaseCapture(FCapture);
-  FOpenCVCameraThread.Terminate;
-  FOpenCVCameraThread.WaitFor;
-  FOpenCVCameraThread.Free;
+    cvReleaseCapture(FCapture);
   inherited;
 end;
 
-procedure TOpenCVCamera.RemoveReceiver(const OpenCVVideoReceiver: IOpenCVVideoReceiver);
+procedure TocvCamera.OnNotifyData(const IplImage: pIplImage);
 begin
-  FOpenCVCameraThread.RemoveReceiver(OpenCVVideoReceiver);
+  NotifyRecipients(IplImage);
 end;
 
-procedure TOpenCVCamera.SetCameraCaptureSource(const Value: TOpenCVCameraCaptureSource);
+procedure TocvCamera.SetCameraCaptureSource(const Value: TocvCameraCaptureSource);
 Var
   isEnabled: Boolean;
 begin
@@ -254,12 +195,13 @@ begin
   end;
 end;
 
-procedure TOpenCVCamera.SetEnabled(const Value: Boolean);
+procedure TocvCamera.SetEnabled(const Value: Boolean);
 begin
   if FEnabled <> Value then
   begin
     if not(csDesigning in ComponentState) then
     begin
+
       if Assigned(FCapture) and FEnabled then
       begin
         FOpenCVCameraThread.Suspend;
@@ -267,12 +209,14 @@ begin
         cvReleaseCapture(FCapture);
         FCapture := Nil;
       end;
+
       if Value then
       begin
-        FCapture := cvCreateCameraCapture(OpenCVCameraCaptureSource[FCameraCaptureSource]);
+        FCapture := cvCreateCameraCapture(ocvCameraCaptureSource[FCameraCaptureSource]);
         FOpenCVCameraThread.FCapture := FCapture;
         FOpenCVCameraThread.Resume;
       end;
+
     end;
     FEnabled := Value;
   end;
