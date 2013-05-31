@@ -21,7 +21,7 @@
   // rights and limitations under the License.
   ******************************************************************* *)
 
-unit uOpenCVView;
+unit uOCVView;
 
 interface
 
@@ -31,96 +31,74 @@ uses
   System.SysUtils,
   System.Classes,
   Vcl.Controls,
-  uOpenCVVideoSource,
-  uOpenCVVideoReceiver,
+  uOCVTypes,
   core.types_c;
 
 type
-  TOpenCVView = class(TWinControl, IOpenCVVideoReceiver)
+  TocvView = class(TWinControl, IocvDataReceiver)
   private
-    FOpenCVVideoSource: TOpenCVVideoSource;
+    FocvVideoSource: TocvDataSource;
     procedure WMEraseBkgnd(var Message: TWMEraseBkgnd); message WM_ERASEBKGND;
     procedure WMPaint(var Message: TWMPaint); message WM_PAINT;
-    procedure SetOpenCVVideoSource(const Value: TOpenCVVideoSource);
+    procedure SetOpenCVVideoSource(const Value: TocvDataSource);
   protected
     procedure TakeImage(const IplImage: pIplImage);
     procedure SetVideoSource(const Value: TObject);
-    procedure SetEnabled(Value: Boolean); override;
   public
     destructor Destroy; override;
   published
-    property VideoSource: TOpenCVVideoSource Read FOpenCVVideoSource write SetOpenCVVideoSource;
+    property VideoSource: TocvDataSource Read FocvVideoSource write SetOpenCVVideoSource;
     property Align;
   end;
-
-procedure Register;
 
 implementation
 
 Uses cvUtils;
 
-procedure Register;
-begin
-  RegisterComponents('OpenCV', [TOpenCVView]);
-end;
-
 { TOpenCVView }
 
-destructor TOpenCVView.Destroy;
+destructor TocvView.Destroy;
 begin
-  if Assigned(FOpenCVVideoSource) then
-    FOpenCVVideoSource.RemoveReceiver(Self);
+  if Assigned(FocvVideoSource) then
+    FocvVideoSource.RemoveReceiver(Self);
   inherited;
 end;
 
-procedure TOpenCVView.SetEnabled(Value: Boolean);
+procedure TocvView.SetOpenCVVideoSource(const Value: TocvDataSource);
 begin
-  inherited;
-end;
-
-procedure TOpenCVView.SetOpenCVVideoSource(const Value: TOpenCVVideoSource);
-begin
-  if FOpenCVVideoSource <> Value then
+  if FocvVideoSource <> Value then
   begin
-    if Assigned(FOpenCVVideoSource) then
-    begin
-      FOpenCVVideoSource.RemoveReceiver(Self);
-    end;
-    FOpenCVVideoSource := Value;
-    if Assigned(FOpenCVVideoSource) then
-    begin
-      FOpenCVVideoSource.AddReceiver(Self);
-    end;
+    if Assigned(FocvVideoSource) then
+      FocvVideoSource.RemoveReceiver(Self);
+    FocvVideoSource := Value;
+    if Assigned(FocvVideoSource) then
+      FocvVideoSource.AddReceiver(Self);
   end;
 end;
 
-procedure TOpenCVView.SetVideoSource(const Value: TObject);
+procedure TocvView.SetVideoSource(const Value: TObject);
 begin
-  VideoSource := Value as TOpenCVVideoSource;
+  VideoSource := Value as TocvDataSource;
 end;
 
-procedure TOpenCVView.TakeImage(const IplImage: pIplImage);
+procedure TocvView.TakeImage(const IplImage: pIplImage);
 begin
   if not(csDestroying in ComponentState) then
     ipDraw(GetDC(Handle), IplImage, ClientRect);
 end;
 
-procedure TOpenCVView.WMEraseBkgnd(var Message: TWMEraseBkgnd);
+procedure TocvView.WMEraseBkgnd(var Message: TWMEraseBkgnd);
 begin
-  // if Enabled then
-  // DefaultHandler(Message)
-  // else
   if (csDesigning in ComponentState) then
     inherited;
 end;
 
-procedure TOpenCVView.WMPaint(var Message: TWMPaint);
+procedure TocvView.WMPaint(var Message: TWMPaint);
 begin
-  // if Enabled then
-  // DefaultHandler(Message)
-  // else
   if (csDesigning in ComponentState) then
-    inherited;
+    inherited
+  else
+    DefaultHandler(Message);
 end;
 
 end.
