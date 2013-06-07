@@ -79,6 +79,18 @@ HRESULT ICLASS_API CreateVideoCapture_dvc(int device, LPVideoCapture *_VideoCapt
         return E_NOINTERFACE;
 }
 
+HRESULT ICLASS_API CreateVideoCapture_fln(char* filename, LPVideoCapture *_VideoCapture)
+{
+    *_VideoCapture = new TVideoCapture(filename);
+    if (*_VideoCapture)
+    {
+        (*_VideoCapture)->AddRef();
+        return S_OK;
+    }
+    else
+        return E_NOINTERFACE;
+}
+
 //core/types.hpp
 HRESULT ICLASS_API CreatePoint(LPPoint *_Point)
 {
