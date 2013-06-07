@@ -1,7 +1,7 @@
 ﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <PropertyGroup>
         <ProjectGuid>{E7115B89-5A97-4E3A-9F4A-A32A24B98AEB}</ProjectGuid>
-        <MainSource>Class_VideoCapture.dpr</MainSource>
+        <MainSource>Class_IPCamVideoCapture.dpr</MainSource>
         <Base>True</Base>
         <Config Condition="'$(Config)'==''">Debug</Config>
         <TargetedPlatforms>1</TargetedPlatforms>
@@ -90,7 +90,7 @@
         <BorlandProject>
             <Delphi.Personality>
                 <Source>
-                    <Source Name="MainSource">Class_VideoCapture.dpr</Source>
+                    <Source Name="MainSource">Class_IPCamVideoCapture.dpr</Source>
                 </Source>
                 <VersionInfo>
                     <VersionInfo Name="IncludeVerInfo">False</VersionInfo>

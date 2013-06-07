@@ -55,7 +55,9 @@ begin
     WriteLn(Format('[i] %.0f x %.0f', [width, height]));
     frame := Nil;
     cvNamedWindow('capture', CV_WINDOW_AUTOSIZE);
-    WriteLn('[i] press Enter for capture image and Esc for quit!');
+    WriteLn('[i] press Enter for capture image');
+    WriteLn('[i] press Space for captured image info');
+    WriteLn('[i] press Esc for quit!');
     counter := 0;
     filename := AllocMem(512);
 
@@ -65,16 +67,57 @@ begin
       frame := cvQueryFrame(capture);
       // показываем
       cvShowImage('capture', frame);
-      c := cvWaitKey(33);
-      if (c = 27) then
-        Break
-      else if (c = 13) then
-      begin
-        // cохраняем кадр в файл
-        filename := pCVChar(AnsiString(Format('Image %d.jpg'#0, [counter])));
-        WriteLn('[i] capture - ', filename);
-        cvSaveImage(filename, frame);
-        Inc(counter);
+      case cvWaitKey(33) of
+        13:
+          begin
+            // cохраняем кадр в файл
+            filename := pCVChar(AnsiString(Format('Image %d.jpg'#0, [counter])));
+            WriteLn('[i] capture - ', filename);
+            cvSaveImage(filename, frame);
+            Inc(counter);
+          end;
+        $20:
+          begin
+            WriteLn('-------- Camera info --------');
+            WriteLn('FRAME_WIDTH:               ', Trunc(cvGetCaptureProperty(capture, CV_CAP_PROP_FRAME_WIDTH)));
+            WriteLn('FRAME_HEIGHT:              ', Trunc(cvGetCaptureProperty(capture, CV_CAP_PROP_FRAME_HEIGHT)));
+            WriteLn('FPS:                       ', Trunc(cvGetCaptureProperty(capture, CV_CAP_PROP_FPS)));
+            WriteLn('FRAME_COUNT:               ', Trunc(cvGetCaptureProperty(capture, CV_CAP_PROP_FRAME_COUNT)));
+            WriteLn('PROP_FORMAT:               ', Trunc(cvGetCaptureProperty(capture, CV_CAP_PROP_FORMAT)));
+            WriteLn('PROP_MODE:                 ', Trunc(cvGetCaptureProperty(capture, CV_CAP_PROP_MODE)));
+            WriteLn('PROP_BRIGHTNESS:           ', Trunc(cvGetCaptureProperty(capture, CV_CAP_PROP_BRIGHTNESS)));
+            WriteLn('PROP_CONTRAST:             ', Trunc(cvGetCaptureProperty(capture, CV_CAP_PROP_CONTRAST)));
+            WriteLn('PROP_SATURATION:           ', Trunc(cvGetCaptureProperty(capture, CV_CAP_PROP_SATURATION)));
+            // WriteLn('PROP_HUE:                  ', Trunc(cvGetCaptureProperty(capture, CV_CAP_PROP_HUE)));
+            // WriteLn('PROP_GAIN:                 ', Trunc(cvGetCaptureProperty(capture, CV_CAP_PROP_GAIN)));
+            WriteLn('PROP_EXPOSURE:             ', Trunc(cvGetCaptureProperty(capture, CV_CAP_PROP_EXPOSURE)));
+            WriteLn('PROP_CONVERT_RGB:          ', Trunc(cvGetCaptureProperty(capture, CV_CAP_PROP_CONVERT_RGB)));
+            WriteLn('PROP_WHITE_BALANCE_BLUE_U: ',
+              Trunc(cvGetCaptureProperty(capture, CV_CAP_PROP_WHITE_BALANCE_BLUE_U)));
+            WriteLn('PROP_RECTIFICATION:        ', Trunc(cvGetCaptureProperty(capture, CV_CAP_PROP_RECTIFICATION)));
+            // WriteLn('PROP_MONOCROME:            ', Trunc(cvGetCaptureProperty(capture, CV_CAP_PROP_MONOCROME)));
+            WriteLn('PROP_SHARPNESS:            ', Trunc(cvGetCaptureProperty(capture, CV_CAP_PROP_SHARPNESS)));
+            WriteLn('PROP_AUTO_EXPOSURE:        ', Trunc(cvGetCaptureProperty(capture, CV_CAP_PROP_AUTO_EXPOSURE)));
+            // WriteLn('PROP_GAMMA:                ', Trunc(cvGetCaptureProperty(capture, CV_CAP_PROP_GAMMA)));
+            WriteLn('PROP_TEMPERATURE:          ', Trunc(cvGetCaptureProperty(capture, CV_CAP_PROP_TEMPERATURE)));
+            WriteLn('PROP_TRIGGER:              ', Trunc(cvGetCaptureProperty(capture, CV_CAP_PROP_TRIGGER)));
+            WriteLn('PROP_TRIGGER_DELAY:        ', Trunc(cvGetCaptureProperty(capture, CV_CAP_PROP_TRIGGER_DELAY)));
+            WriteLn('PROP_WHITE_BALANCE_RED_V:  ',
+              Trunc(cvGetCaptureProperty(capture, CV_CAP_PROP_WHITE_BALANCE_RED_V)));
+            WriteLn('PROP_ZOOM:                 ', Trunc(cvGetCaptureProperty(capture, CV_CAP_PROP_ZOOM)));
+            // WriteLn('PROP_FOCUS:                ', Trunc(cvGetCaptureProperty(capture, CV_CAP_PROP_FOCUS)));
+            WriteLn('PROP_GUID:                 ', Trunc(cvGetCaptureProperty(capture, CV_CAP_PROP_GUID)));
+            WriteLn('PROP_ISO_SPEED:            ', Trunc(cvGetCaptureProperty(capture, CV_CAP_PROP_ISO_SPEED)));
+            WriteLn('PROP_MAX_DC1394:           ', Trunc(cvGetCaptureProperty(capture, CV_CAP_PROP_MAX_DC1394)));
+            WriteLn('PROP_BACKLIGHT:            ', Trunc(cvGetCaptureProperty(capture, CV_CAP_PROP_BACKLIGHT)));
+            WriteLn('PROP_PAN:                  ', Trunc(cvGetCaptureProperty(capture, CV_CAP_PROP_PAN)));
+            WriteLn('PROP_TILT:                 ', Trunc(cvGetCaptureProperty(capture, CV_CAP_PROP_TILT)));
+            // WriteLn('PROP_ROLL:                 ', Trunc(cvGetCaptureProperty(capture, CV_CAP_PROP_ROLL)));
+            // WriteLn('PROP_IRIS:                 ', Trunc(cvGetCaptureProperty(capture, CV_CAP_PROP_IRIS)));
+            WriteLn('PROP_SETTINGS:             ', Trunc(cvGetCaptureProperty(capture, CV_CAP_PROP_SETTINGS)));
+          end;
+        27:
+          Break;
       end;
     end;
     // оcвобождаем реcурcы

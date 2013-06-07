@@ -95,7 +95,8 @@ Type
 
   IVideoCapture = interface
     ['{3F605CF0-ECAC-4230-B30B-AF9BFD516C4F}']
-    function open(device: Integer): bool; stdcall;
+    function open(device: Integer): bool; overload; stdcall;
+    function openfilename(filename: pAnsiChar): bool; overload; stdcall;
     function isOpened(): bool; stdcall;
     procedure release(); stdcall;
 
@@ -109,6 +110,7 @@ Type
 
 function CreateVideoCapture: IVideoCapture; overload; safecall;
 function CreateVideoCapture(device: Integer): IVideoCapture; overload; safecall;
+function CreateVideoCapture(filename: pAnsiChar): IVideoCapture; overload; safecall;
 
 // Flags for namedWindow
 Const
@@ -146,14 +148,16 @@ function getWindowProperty(const winname: String; const prop_id: Integer): doubl
 // TrackbarCallback onChange = 0,
 // void* userdata = 0);
 function createTrackbar(const trackbarname: String; const winname: String; value: PInteger; count: Integer;
-  onChange: CvTrackbarCallback2 = nil; userdata: Pointer = nil):Integer;
+  onChange: CvTrackbarCallback2 = nil; userdata: Pointer = nil): Integer;
 
 implementation
 
 Uses uLibName, cvUtils, core_c;
 
-function CreateVideoCapture: IVideoCapture; external OpenCV_Classes_DLL index 100;
-function CreateVideoCapture(device: Integer): IVideoCapture; external OpenCV_Classes_DLL index 101;
+function CreateVideoCapture: IVideoCapture; external OpenCV_Classes_DLL name 'CreateVideoCapture';
+function CreateVideoCapture(device: Integer): IVideoCapture; external OpenCV_Classes_DLL name 'CreateVideoCapture_dvc';
+function CreateVideoCapture(filename: pAnsiChar): IVideoCapture;
+  external OpenCV_Classes_DLL name 'CreateVideoCapture_fln';
 
 procedure namedWindow(const winname: String; const flags: Integer = WINDOW_AUTOSIZE);
 begin
@@ -209,7 +213,7 @@ begin
 end;
 
 function createTrackbar(const trackbarname: String; const winname: String; value: PInteger; count: Integer;
-  onChange: CvTrackbarCallback2 = nil; userdata: Pointer = nil):Integer;
+  onChange: CvTrackbarCallback2 = nil; userdata: Pointer = nil): Integer;
 begin
   Result := cvCreateTrackbar2(trackbarname.c_str(), winname.c_str(), value, count, onChange, userdata);
 end;

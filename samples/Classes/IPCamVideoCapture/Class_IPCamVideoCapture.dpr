@@ -24,7 +24,7 @@
 // JCL_DEBUG_EXPERT_GENERATEJDBG OFF
 // JCL_DEBUG_EXPERT_INSERTJDBG OFF
 // JCL_DEBUG_EXPERT_DELETEMAPFILE OFF
-program Class_VideoCapture;
+program Class_IPCamVideoCapture;
 
 {$APPTYPE CONSOLE}
 {$POINTERMATH ON}
@@ -32,6 +32,7 @@ program Class_VideoCapture;
 
 uses
   System.SysUtils,
+  core.types_c,
   highgui,
   highgui_c,
   Mat;
@@ -39,34 +40,35 @@ uses
 Const
   VK_ESCAPE = 27;
 
-  DESIRED_CAMERA_WIDTH: Integer = 320;
-  DESIRED_CAMERA_HEIGHT: Integer = 200;
+  DESIRED_CAMERA_WIDTH: Integer = 640;
+  DESIRED_CAMERA_HEIGHT: Integer = 480;
 
-  windowName = 'Test VideoCapture'; // Name shown in the GUI window.
+  windowName = 'Test IP camera VideoCapture'; // Name shown in the GUI window.
 
   // Get access to the webcam.
-procedure initWebcam(videoCapture: IVideoCapture; cameraNumber: Integer);
+procedure initWebcam(videoCapture: IVideoCapture; filename: pCVChar);
 begin
   // Get access to the default camera.
   // Surround the OpenCV call by a try/catch block so we can give a useful error message!
-  videoCapture.open(cameraNumber);
+  videoCapture.openfilename(filename);
   if not videoCapture.isOpened() then
   begin
     Writeln('ERROR: Could not access the camera!');
     Halt(1);
   end;
-  Writeln('Loaded camera ', cameraNumber);
+  Writeln('Loaded camera ', filename);
 end;
 
 Var
-  cameraNumber: Integer = CV_CAP_ANY;
+  // See http://www.ispyconnect.com/
+  filename: pCVChar ='rtsp://192.168.0.200:554/mpeg4';
   camera: IVideoCapture;
   cameraFrame: IMat = nil;
 
 begin
   try
     camera := CreateVideoCapture;
-    initWebcam(camera, cameraNumber);
+    initWebcam(camera, filename);
     // Try to set the camera resolution. Note that this only works for some cameras on
     // some computers and only for some drivers, so don't rely on it to work!
     camera.setValue(CV_CAP_PROP_FRAME_WIDTH, DESIRED_CAMERA_WIDTH);
