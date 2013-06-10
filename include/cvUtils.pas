@@ -49,7 +49,7 @@ Uses WinApi.Windows, core.types_c, Vcl.Graphics;
 Function hsv2rgb(hue: single): TCvScalar;
 procedure IplImage2Bitmap(iplImg: PIplImage; var bitmap: Vcl.Graphics.TBitmap);
 function cvImage2Bitmap(img: PIplImage): Vcl.Graphics.TBitmap;
-function ipDraw(dc: HDC; img: PIplImage; const rect: TRect;  const Stretch: Boolean = true): Boolean;
+function ipDraw(dc: HDC; img: PIplImage; const rect: TRect; const Stretch: Boolean = true): Boolean;
 
 Type
   TAnsiString = record helper for AnsiString
@@ -67,6 +67,12 @@ Type
   TInteger = record helper for
     Integer public
     function AsString: string;
+  end;
+
+  TSingle = record helper for
+    Single
+    public
+    function AsInteger: Integer;
   end;
 
 implementation
@@ -223,8 +229,7 @@ begin
   result := IntToStr(Self);
 end;
 
-
-function ipDraw(dc: HDC; img: PIplImage; const rect: TRect;  const Stretch: Boolean = true): Boolean;
+function ipDraw(dc: HDC; img: PIplImage; const rect: TRect; const Stretch: Boolean = true): Boolean;
 
 Type
   pCOLORREF = ^COLORREF;
@@ -281,8 +286,15 @@ begin
   end
   else
     // Draw without scaling
-    result := SetDIBitsToDevice(dc, rect.Left, rect.Top, img^.Width, img^.Height, 0, 0, 0, img^.Height, img^.ImageData,
+    result := SetDIBitsToDevice(dc, rect.left, rect.top, img^.Width, img^.Height, 0, 0, 0, img^.Height, img^.ImageData,
       _dibhdr, DIB_RGB_COLORS) > 0;
+end;
+
+{ TSingle }
+
+function TSingle.AsInteger: Integer;
+begin
+  result := Trunc(Self);
 end;
 
 end.
