@@ -19,7 +19,10 @@
   // "AS IS" basis, WITHOUT WARRANTY OF ANY KIND, either express or
   // implied. See the License for the specific language governing
   // rights and limitations under the License.
-  ******************************************************************* *)
+  *******************************************************************
+  //Original:
+  //http://dsynflo.blogspot.ru/2010/06/simplar-augmented-reality-for-opencv.html
+  //******************************************************************* *)
 // JCL_DEBUG_EXPERT_GENERATEJDBG OFF
 // JCL_DEBUG_EXPERT_INSERTJDBG OFF
 // JCL_DEBUG_EXPERT_DELETEMAPFILE OFF
@@ -40,7 +43,7 @@ uses
   objdetect;
 
 const
-  //Print pattern "resource\chessboard 6x5.jpg"
+  // Print pattern "resource\chessboard 6x5.jpg"
   trailer_filename = 'resource\trailer.avi';
   pic_filename = 'resource\pic.jpg';
 
@@ -48,7 +51,7 @@ Var
   capture: pCvCapture = nil;
   image: pIplImage = nil;
   frame: pIplImage = nil;
-  disp, neg_img, cpy_img: pIplImage;
+  neg_img, cpy_img: pIplImage;
   key: Integer = 0;
   fcount: Integer = 0;
   option: Integer = 0;
@@ -74,6 +77,22 @@ Var
 
 begin
   try
+
+    WriteLn('Select an option to run the program');
+    WriteLn;
+    WriteLn('1. Show an Image over the pattern.');
+    WriteLn('2. Play a Clip over the pattern.');
+    WriteLn('3. Mark the pattern.');
+    Write('>');
+    Readln(option);
+
+    // Quit on invalid entry
+    if (option < 1) or (option > 3) then
+    begin
+      WriteLn('Invalid selection.');
+      Halt;
+    end;
+
     capture := cvCreateCameraCapture(0);
     if not Assigned(capture) then
       Halt;
@@ -95,21 +114,6 @@ begin
     warp_matrix := cvCreateMat(3, 3, CV_32FC1);
     corners := AllocMem(b_squares * SizeOf(TCvPoint2D32f));
 
-    WriteLn('Select an option to run the program');
-    WriteLn;
-    WriteLn('1. Show an Image over the pattern.');
-    WriteLn('2. Play a Clip over the pattern.');
-    WriteLn('3. Mark the pattern.');
-    Write('>');
-    Readln(option);
-
-    // Quit on invalid entry
-    if (option < 1) or (option > 3) then
-    begin
-      WriteLn('Invalid selection.');
-      Halt;
-    end;
-
     cvNamedWindow('Video', CV_WINDOW_AUTOSIZE);
 
     while (key <> 27) do
@@ -119,7 +123,6 @@ begin
         break;
       cvFlip(image, image, 1);
 
-      disp := cvCreateImage(cvGetSize(image), 8, 3);
       cpy_img := cvCreateImage(cvGetSize(image), 8, 3);
       neg_img := cvCreateImage(cvGetSize(image), 8, 3);
 
@@ -170,14 +173,15 @@ begin
           cvZero(neg_img);
           cvZero(cpy_img);
 
-          cvWarpPerspective(pic, neg_img, warp_matrix,CV_INTER_LINEAR+CV_WARP_FILL_OUTLIERS,cvScalarAll(0));
-          cvWarpPerspective(blank, cpy_img, warp_matrix,CV_INTER_LINEAR+CV_WARP_FILL_OUTLIERS,cvScalarAll(0));
+          cvWarpPerspective(pic, neg_img, warp_matrix, CV_INTER_LINEAR + CV_WARP_FILL_OUTLIERS, cvScalarAll(0));
+          cvWarpPerspective(blank, cpy_img, warp_matrix, CV_INTER_LINEAR + CV_WARP_FILL_OUTLIERS, cvScalarAll(0));
           cvNot(cpy_img, cpy_img);
 
           cvAnd(cpy_img, image, cpy_img);
           cvOr(cpy_img, neg_img, image);
 
           cvShowImage('Video', image);
+          cvReleaseImage(blank);
         end
         else if (option = 2) then
         begin
@@ -215,14 +219,15 @@ begin
           cvZero(neg_img);
           cvZero(cpy_img);
 
-          cvWarpPerspective(frame, neg_img, warp_matrix,CV_INTER_LINEAR+CV_WARP_FILL_OUTLIERS,cvScalarAll(0));
-          cvWarpPerspective(blank, cpy_img, warp_matrix,CV_INTER_LINEAR+CV_WARP_FILL_OUTLIERS,cvScalarAll(0));
+          cvWarpPerspective(frame, neg_img, warp_matrix, CV_INTER_LINEAR + CV_WARP_FILL_OUTLIERS, cvScalarAll(0));
+          cvWarpPerspective(blank, cpy_img, warp_matrix, CV_INTER_LINEAR + CV_WARP_FILL_OUTLIERS, cvScalarAll(0));
           cvNot(cpy_img, cpy_img);
 
           cvAnd(cpy_img, image, cpy_img);
           cvOr(cpy_img, neg_img, image);
 
           cvShowImage('Video', image);
+          cvReleaseImage(blank);
         end
         else
         begin
@@ -254,13 +259,16 @@ begin
         cvShowImage('Video', gray);
       end;
       key := cvWaitKey(1);
-
+      cvReleaseImage(cpy_img);
+      cvReleaseImage(neg_img);
+      cvReleaseImage(gray);
     end;
 
     cvDestroyWindow('Video');
     cvReleaseCapture(vid);
     cvReleaseMat(warp_matrix);
     cvReleaseCapture(capture);
+    FreeMem(corners);
 
   except
     on E: Exception do
