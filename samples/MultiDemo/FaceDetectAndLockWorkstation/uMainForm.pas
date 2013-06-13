@@ -5,10 +5,10 @@ unit uMainForm;
 interface
 
 uses
+  core.types_c, core_c, highgui_c, objdetect, cvUtils,
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.StdCtrls, Vcl.Samples.Spin,
-  core.types_c, core_c, highgui_c, objdetect, cvUtils, Vcl.Menus, Vcl.ImgList,
-  JvComponentBase, JvThreadTimer, JvTrayIcon;
+  Vcl.Menus, Vcl.ImgList;
 
 const
   WM_NOFACE = WM_USER+1;
@@ -29,7 +29,6 @@ type
     LWShow: TMenuItem;
     LWExit: TMenuItem;
     LWImageList: TImageList;
-    LWThreadTimer: TJvThreadTimer;
     LWGBFaceDetectSettings: TGroupBox;
     LTotalFaceDetect: TLabel;
     LTotalFace: TLabel;
@@ -43,7 +42,8 @@ type
     LWLTotalPCLock: TLabel;
     LWButtonStartStop: TButton;
     LWButtonAbout: TButton;
-    LWJVTrayIcon: TJvTrayIcon;
+    tmrLWThreadTimer: TTimer;
+    trycn1: TTrayIcon;
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure LWTimerRadioGroupClick(Sender: TObject);
@@ -58,6 +58,7 @@ type
     procedure LWSpinEditWaitTimeChange(Sender: TObject);
     procedure LWButtonStartStopClick(Sender: TObject);
     procedure LWButtonAboutClick(Sender: TObject);
+    procedure tmr1Timer(Sender: TObject);
   private
     MyCtx: pCtx;
     FrameBitmap: TBitmap;
@@ -143,7 +144,8 @@ begin
   CanClose := ((LWMainFormHidden) or SessionEnding);
   if not CanClose then
   begin
-    LWJVTrayIcon.HideApplication;
+    Application.Minimize;
+    Application.MainFormOnTaskBar:=False;
     LWMainFormHidden := True;
     LWPopupMenu.Items[0].Caption := 'Show';
   end;
@@ -154,7 +156,8 @@ procedure TMainForm.FormKeyDown(Sender: TObject; var Key: Word;
 begin
   if Key = VK_ESCAPE then
   begin
-    LWJVTrayIcon.HideApplication;
+    Application.Minimize;
+    Application.MainFormOnTaskBar:=False;
     LWMainFormHidden := True;
     LWPopupMenu.Items[0].Caption := 'Show';
   end;
@@ -167,9 +170,9 @@ begin
   WTSRegisterSessionNotification(Handle, NOTIFY_FOR_ALL_SESSIONS);
   FintLockedCount := 0;
   // End
-  LWJVTrayIcon.Hint := ProgramsName;
-  LWJVTrayIcon.IconIndex := 1;
-  LWThreadTimer.Interval := LWSpinEditWaitTime.Value*1000;
+  trycn1.Hint := ProgramsName;
+  trycn1.IconIndex := 1;
+  tmrLWThreadTimer.Interval := LWSpinEditWaitTime.Value*1000;
   // Запуск захвата
   StartCapture;
 end;
@@ -244,7 +247,7 @@ begin
     if Assigned(MyCtx) then
     begin
       LWTimer.Enabled := False;
-      LWThreadTimer.Enabled := False;
+      tmrLWThreadTimer.Enabled := False;
       LWTimerRadioGroup.Enabled := False;
       LWSpinEdit.Enabled := False;
       LWLTimerMS.Enabled := False;
@@ -265,6 +268,16 @@ begin
     on E: Exception do
       ShowMessage('Exception in procedure StopCapture.' + #13 + E.ClassName + ': '+ E.Message);
   end;
+end;
+
+procedure TMainForm.tmr1Timer(Sender: TObject);
+begin
+  if MyCtx.TotalFaceDetect = 0 then
+    LockWorkStation();
+  {  BlockInput(True)   // Отключить средства ввода (клавиатуру и мышь)
+  else
+    BlockInput(False); // Включить средства ввода (клавиатуру и мышь)
+  }
 end;
 
 procedure TMainForm.LWButtonAboutClick(Sender: TObject);
@@ -289,14 +302,15 @@ procedure TMainForm.LWCoolTrayIconDblClick(Sender: TObject);
 begin
   if LWMainFormHidden then
   begin
-    LWJVTrayIcon.ShowApplication;
+    Application.Restore;
+    Application.MainFormOnTaskBar:=True;
     LWMainFormHidden := False;
     LWPopupMenu.Items[0].Caption := 'Hide';
   end
   else
   begin
     Application.Minimize;
-    LWJVTrayIcon.HideApplication;
+    Application.MainFormOnTaskBar:=False;
     LWMainFormHidden := True;
     LWPopupMenu.Items[0].Caption := 'Show';
   end;
@@ -324,13 +338,13 @@ begin
     if LWStopLockTimer.Checked then
     begin
       if MyCtx.TotalFaceDetect = 0 then
-        LWThreadTimer.Enabled := True
+        tmrLWThreadTimer.Enabled := True
       else
-        LWThreadTimer.Enabled := False;
+        tmrLWThreadTimer.Enabled := False;
     end
     else
-      LWThreadTimer.Enabled := True;
-    LWJVTrayIcon.Hint := Format('%s (Total face: %s)', [ProgramsName, IntToStr(MyCtx.TotalFaceDetect)]);
+      tmrLWThreadTimer.Enabled := True;
+    trycn1.Hint := Format('%s (Total face: %s)', [ProgramsName, IntToStr(MyCtx.TotalFaceDetect)]);
     LTotalFace.Caption := IntToStr(MyCtx.TotalFaceDetect);
     if not LWMainFormHidden then
     begin
@@ -342,7 +356,7 @@ begin
   else
   begin
     Application.OnIdle := nil;
-    LWThreadTimer.Enabled := False;
+    tmrLWThreadTimer.Enabled := False;
   end;
 end;
 
@@ -373,9 +387,9 @@ end;
 
 procedure TMainForm.LWSpinEditWaitTimeChange(Sender: TObject);
 begin
-  LWThreadTimer.Enabled := False;
-  LWThreadTimer.Interval := LWSpinEditWaitTime.Value*1000;
-  LWThreadTimer.Enabled := True;
+  tmrLWThreadTimer.Enabled := False;
+  tmrLWThreadTimer.Interval := LWSpinEditWaitTime.Value*1000;
+  tmrLWThreadTimer.Enabled := True;
 end;
 
 procedure TMainForm.LWTimerTimer(Sender: TObject);

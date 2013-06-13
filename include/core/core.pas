@@ -4603,7 +4603,7 @@ procedure _putText(img: Pointer; const text: Pointer; org: Pointer; fontFace: In
 procedure putText(img: IMat; const text: String; org: IPoint; fontFace: Integer; fontScale: double; color: IScalar;
   thickness: Integer = 1; lineType: Integer = 8; bottomLeftOrigin: ByteBool = false);
 begin
-  _putText(img.getMat, CString(text.c_str), org.getPoint, fontFace, fontScale, color.getScalar, thickness, lineType,
+  _putText(img.getMat, CString(c_str(text)), org.getPoint, fontFace, fontScale, color.getScalar, thickness, lineType,
     bottomLeftOrigin);
 end;
 

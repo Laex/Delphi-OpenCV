@@ -51,33 +51,16 @@ procedure IplImage2Bitmap(iplImg: PIplImage; var bitmap: Vcl.Graphics.TBitmap);
 function cvImage2Bitmap(img: PIplImage): Vcl.Graphics.TBitmap;
 function ipDraw(dc: HDC; img: PIplImage; const rect: TRect; const Stretch: Boolean = true): Boolean;
 
-Type
-  TAnsiString = record helper for AnsiString
-  public
-    function AsPAnsiChar: pAnsiChar;
-  end;
-
-  TString = record helper for
-    String public
-    function AsAnsiStaring: AnsiString;
-    function AsPAnsiChar: pAnsiChar;
-    function c_str: pAnsiChar;
-  end;
-
-  TInteger = record helper for
-    Integer public
-    function AsString: string;
-  end;
-
-  TSingle = record helper for
-    Single
-    public
-    function AsInteger: Integer;
-  end;
+function c_str(const Text: String): pCVChar;
 
 implementation
 
 Uses System.SysUtils;
+
+function c_str(const Text: String): pCVChar;
+begin
+  Result := pCVChar(@(AnsiString(Text)[1]));
+end;
 
 Function hsv2rgb(hue: single): TCvScalar;
 var
@@ -98,7 +81,7 @@ Begin
   rgb[sector_data[sector][1]] := 0;
   rgb[sector_data[sector][2]] := p;
 
-  result := cvScalar(rgb[2], rgb[1], rgb[0], 0);
+  Result := cvScalar(rgb[2], rgb[1], rgb[0], 0);
 End;
 
 { -----------------------------------------------------------------------------
@@ -164,7 +147,7 @@ var
   data: PByteArray;
   pb: PByteArray;
 begin
-  result := NIL;
+  Result := NIL;
   if (img <> NIL) then
   begin
     bmp := Vcl.Graphics.TBitmap.Create;
@@ -193,40 +176,9 @@ begin
           pb[3 * j + K] := data[i * wStep + j * Channels + K]
       End;
     End;
-    result := bmp;
+    Result := bmp;
     // bmp.Free;
   End;
-end;
-
-{ TAnsiString }
-
-function TAnsiString.AsPAnsiChar: pAnsiChar;
-begin
-  result := pAnsiChar(@Self[1]);
-end;
-
-{ TString }
-
-function TString.AsAnsiStaring: AnsiString;
-begin
-  result := AnsiString(Self);
-end;
-
-function TString.AsPAnsiChar: pAnsiChar;
-begin
-  result := AsAnsiStaring.AsPAnsiChar;
-end;
-
-function TString.c_str: pAnsiChar;
-begin
-  result := AsPAnsiChar;
-end;
-
-{ TInteger }
-
-function TInteger.AsString: string;
-begin
-  result := IntToStr(Self);
 end;
 
 function ipDraw(dc: HDC; img: PIplImage; const rect: TRect; const Stretch: Boolean = true): Boolean;
@@ -281,20 +233,13 @@ begin
   begin
     SetStretchBltMode(dc, COLORONCOLOR);
     // Stretch the image to fit the rectangle
-    result := StretchDIBits(dc, rect.left, rect.top, rect.Width, rect.Height, 0, 0, img^.Width, img^.Height,
+    Result := StretchDIBits(dc, rect.left, rect.top, rect.Width, rect.Height, 0, 0, img^.Width, img^.Height,
       img^.ImageData, _dibhdr, DIB_RGB_COLORS, SRCCOPY) > 0;
   end
   else
     // Draw without scaling
-    result := SetDIBitsToDevice(dc, rect.left, rect.top, img^.Width, img^.Height, 0, 0, 0, img^.Height, img^.ImageData,
+    Result := SetDIBitsToDevice(dc, rect.left, rect.top, img^.Width, img^.Height, 0, 0, 0, img^.Height, img^.ImageData,
       _dibhdr, DIB_RGB_COLORS) > 0;
-end;
-
-{ TSingle }
-
-function TSingle.AsInteger: Integer;
-begin
-  result := Trunc(Self);
 end;
 
 end.

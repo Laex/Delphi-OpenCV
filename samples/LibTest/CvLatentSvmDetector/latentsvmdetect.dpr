@@ -92,7 +92,6 @@ begin
     // Есть ошибка. Неправильная работа с памятью.
     // Attention!
     // There is an error. Improper handling of memory.
-
     help();
     if ParamCount > 1 then
     begin
@@ -101,15 +100,15 @@ begin
       if ParamCount > 2 then
         tbbNumThreads := StrToInt(ParamStr(3));
     end;
-    image := cvLoadImage(image_filename.AsPAnsiChar);
-    if not Boolean(image) then
+    image := cvLoadImage(pCVChar(image_filename));
+    if not Assigned(image) then
     begin
       Writeln('Unable to load the image');
       Writeln('Pass it as the first parameter: latentsvmdetect <path to cat.jpg> <path to cat.xml>');
       Halt;
     end;
-    detector := cvLoadLatentSvmDetector(model_filename.AsPAnsiChar);
-    if not Boolean(detector) then
+    detector := cvLoadLatentSvmDetector(pCVChar(model_filename));
+    if not Assigned(detector) then
     begin
       Writeln('Unable to load the model');
       Writeln('Pass it as the second parameter: latentsvmdetect <path to cat.jpg> <path to cat.xml>');
