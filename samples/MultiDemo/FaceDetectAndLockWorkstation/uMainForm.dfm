@@ -305,18 +305,18 @@ object MainForm: TMainForm
       0000000000000000000000000000000000000000000000000000000000000000
       000000000000}
   end
-  object LWThreadTimer: TJvThreadTimer
+  object tmrLWThreadTimer: TTimer
+    Enabled = False
     Interval = 5000
-    OnTimer = LWThreadTimerTimer
-    Left = 48
+    OnTimer = tmr1Timer
+    Left = 44
     Top = 112
   end
-  object LWJVTrayIcon: TJvTrayIcon
-    Active = True
-    IconIndex = 0
+  object trycn1: TTrayIcon
     Icons = LWImageList
     PopupMenu = LWPopupMenu
-    Left = 116
+    Visible = True
+    Left = 112
     Top = 112
   end
 end

@@ -108,7 +108,7 @@ begin
   line(frame, Point(x, y + 5), Point(x, y + 25), Scalar(0, 255, 0), 2);
   line(frame, Point(x - 5, y), Point(x - 25, y), Scalar(0, 255, 0), 2);
   line(frame, Point(x + 5, y), Point(x + 25, y), Scalar(0, 255, 0), 2);
-  PutText(frame, x.AsString + ', ' + y.AsString, Point(x, y + 30), 1, 1, Scalar(0, 255, 0), 2);
+  PutText(frame, IntToStr(x) + ', ' + IntToStr(y), Point(x, y + 30), 1, 1, Scalar(0, 255, 0), 2);
 end;
 
 //procedure morphOps(Mat &thresh);

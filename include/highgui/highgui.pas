@@ -161,12 +161,12 @@ function CreateVideoCapture(filename: pAnsiChar): IVideoCapture;
 
 procedure namedWindow(const winname: String; const flags: Integer = WINDOW_AUTOSIZE);
 begin
-  cvNamedWindow(winname.c_str(), flags);
+  cvNamedWindow(c_str(winname), flags);
 end;
 
 procedure destroyWindow(const winname: String);
 begin
-  cvDestroyWindow(winname.c_str());
+  cvDestroyWindow(c_str(winname));
 end;
 
 procedure destroyAllWindows();
@@ -189,33 +189,33 @@ Var
   IplImage: TIplImage;
 begin
   IplImage._IplImage(Pointer(Mat));
-  cvShowImage(winname.c_str(), @IplImage);
+  cvShowImage(c_str(winname), @IplImage);
 end;
 
 procedure resizeWindow(const winname: String; const width, height: Integer);
 begin
-  cvResizeWindow(winname.c_str(), width, height);
+  cvResizeWindow(c_str(winname), width, height);
 end;
 
 procedure moveWindow(const winname: String; const x, y: Integer);
 begin
-  cvMoveWindow(winname.c_str(), x, y);
+  cvMoveWindow(c_str(winname), x, y);
 end;
 
 procedure setWindowProperty(const winname: String; const prop_id: Integer; const prop_value: double);
 begin
-  cvSetWindowProperty(winname.c_str(), prop_id, prop_value);
+  cvSetWindowProperty(c_str(winname), prop_id, prop_value);
 end;
 
 function getWindowProperty(const winname: String; const prop_id: Integer): double;
 begin
-  Result := cvGetWindowProperty(winname.c_str(), prop_id);
+  Result := cvGetWindowProperty(c_str(winname), prop_id);
 end;
 
 function createTrackbar(const trackbarname: String; const winname: String; value: PInteger; count: Integer;
   onChange: CvTrackbarCallback2 = nil; userdata: Pointer = nil): Integer;
 begin
-  Result := cvCreateTrackbar2(trackbarname.c_str(), winname.c_str(), value, count, onChange, userdata);
+  Result := cvCreateTrackbar2(c_str(trackbarname), c_str(winname), value, count, onChange, userdata);
 end;
 
 end.
