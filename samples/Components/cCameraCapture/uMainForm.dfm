@@ -30,7 +30,7 @@ object MainForm: TMainForm
     Width = 145
     Height = 21
     Style = csDropDownList
-    TabOrder = 1
+    TabOrder = 0
     OnChange = cbb1Change
     Items.Strings = (
       'None'
