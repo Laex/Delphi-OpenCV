@@ -2,7 +2,7 @@
     <PropertyGroup>
         <ProjectGuid>{67FAAD9E-2FAD-44C3-8F98-56827C3D1CE8}</ProjectGuid>
         <MainSource>OpenCV.dpk</MainSource>
-        <ProjectVersion>14.4</ProjectVersion>
+        <ProjectVersion>14.6</ProjectVersion>
         <FrameworkType>VCL</FrameworkType>
         <Base>True</Base>
         <Config Condition="'$(Config)'==''">Debug</Config>
@@ -160,6 +160,8 @@
             </Delphi.Personality>
             <Deployment/>
             <Platforms>
+                <Platform value="iOSDevice">False</Platform>
+                <Platform value="iOSSimulator">False</Platform>
                 <Platform value="OSX32">False</Platform>
                 <Platform value="Win32">True</Platform>
                 <Platform value="Win64">False</Platform>
