@@ -1147,11 +1147,11 @@ const
   //
   // COLOR_COLORCVT_MAX  = 139
   // };
-  //
-  //
-  /// /! converts image from one color space to another
+
+  // converts image from one color space to another
   // CV_EXPORTS_W void cvtColor( InputArray src, OutputArray dst, int code, int dstCn=0 );
-  //
+procedure cvtColor( src:IMat; Var dst:IMat; code:Integer; dstCn:Integer=0);
+
   /// /! raster image moments
   // class CV_EXPORTS_W_MAP Moments
   // {
@@ -1414,6 +1414,11 @@ begin
   if not Assigned(anchor) then
     anchor := Point(-1, -1);
   Result := CreateMat(_getStructuringElement(shape, ksize.getSize, anchor.getPoint));
+end;
+
+procedure cvtColor( src:IMat; Var dst:IMat; code:Integer; dstCn:Integer);
+begin
+
 end;
 
 end.
