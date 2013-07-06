@@ -1,7 +1,15 @@
 Delphi-OpenCV
 ===============
-* OpenCV version - 2.4.5<br>
-* Development environment - Delphi XE3<br>
+* OpenCV version - 2.4.6<br>
+* Development environment - Delphi XE2-XE4<br>
+
+Contributors:
+
+laentir Valetov
+email:laex@bk.ru
+
+Mikhail Grigorev
+email: sleuthhound@gmail.com
 
 How to install:
 ----------------
