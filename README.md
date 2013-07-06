@@ -1,9 +1,8 @@
-Delphi-OpenCV
-===============
+###Delphi-OpenCV
 * OpenCV version - 2.4.6<br>
 * Development environment - Delphi XE2-XE4<br>
 
-Contributors:
+#####Contributors:
 ```
 Laentir Valetov
 email:laex@bk.ru
@@ -11,10 +10,7 @@ email:laex@bk.ru
 Mikhail Grigorev
 email: sleuthhound@gmail.com
 ```
-
-How to install:
-----------------
-
+####How to install:
 1. Download the archive ```Delphi-OpenCV-master.zip```<br>
 2. Unzip it to a convenient directory, thus get the following directory structure
 
