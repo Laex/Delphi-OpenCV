@@ -4,12 +4,13 @@ Delphi-OpenCV
 * Development environment - Delphi XE2-XE4<br>
 
 Contributors:
-
-laentir Valetov
+```
+Laentir Valetov
 email:laex@bk.ru
 
 Mikhail Grigorev
 email: sleuthhound@gmail.com
+```
 
 How to install:
 ----------------
