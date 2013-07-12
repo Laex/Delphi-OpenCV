@@ -1,5 +1,5 @@
 Заголовочные файлы OpenCV 2.4.6 для Delphi XE2-XE4
-==============================================
+==================================================
 
 Разработчики:
 -------------
@@ -61,4 +61,6 @@ Email: sleuthhound@gmail.com
 <PROJECT_ROOT>\include\contrib
 <PROJECT_ROOT>\include\video
 	
-5. Откройте "<PROJECT_ROOT>\samples\Samples.groupproj" в Delphi IDE и скомпилируйте примеры программ.
+5. Откройте "<PROJECT_ROOT>\samples\LibTest.groupproj" или
+   "<PROJECT_ROOT>\samples\MultiDemo.groupproj" в Delphi IDE и скомпилируйте
+   примеры программ.
