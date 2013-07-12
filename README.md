@@ -59,4 +59,6 @@ and path
 <PROJECT_ROOT>\Include\contrib
 <PROJECT_ROOT>\Include\video
 ```
-5. Open ```<PROJECT_ROOT>\samples\Samples.groupproj``` in Delphi IDE and compile the sample programs.
+5. Open ```<PROJECT_ROOT>\samples\LibTest.groupproj``` or
+   ```<PROJECT_ROOT>\samples\MultiDemo.groupproj``` in Delphi IDE and compile
+   the sample programs.
