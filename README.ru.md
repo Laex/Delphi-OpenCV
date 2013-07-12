@@ -1,66 +1,49 @@
-Заголовочные файлы OpenCV 2.4.6 для Delphi XE2-XE4
-==================================================
+###Delphi-OpenCV
+* Р’РµСЂСЃРёСЏ OpenCV - 2.4.6<br>
+* РЎСЂРµРґР° СЂР°Р·СЂР°Р±РѕС‚РєРё - Delphi XE2-XE4<br>
 
-Разработчики:
--------------
+#####Р Р°Р·СЂР°Р±РѕС‚С‡РёРєРё:
+```
+Laentir Valetov
+email:laex@bk.ru
 
-Лаентир Валетов
-Email: laex@bk.ru
+Mikhail Grigorev
+email: sleuthhound@gmail.com
+```
+####РЈСЃС‚Р°РЅРѕРІРєР°:
+1.РЎРєР°С‡Р°Р№С‚Рµ Р°СЂС…РёРІ ```Delphi-OpenCV-master.zip```<br>
+2.Р Р°Р·Р°СЂС…РёРІРёСЂСѓР№С‚Рµ РІ РІС‹Р±СЂР°РЅРЅРѕРµ Р’Р°РјРё РјРµСЃС‚Рѕ, РґРѕР»Р¶РЅР° РїРѕР»СѓС‡РёС‚СЊСЃСЏ СЃР»РµРґСѓСЋС‰Р°СЏ СЃС‚СЂСѓРєС‚СѓСЂР° РєР°С‚Р°Р»РѕРіРѕРІ
 
-Михаил Григорьев
-Email: sleuthhound@gmail.com
-
-
-Инструкция по установке:
-------------------------
-
-1. Скачайте архив Delphi-OpenCV-master.zip
-2. Разархивируйте его в удобный для Вас каталог, при этом получится следующая структура каталогов
-
-<Ваш каталог, например "C:\OpenCV" или просто "C:\" - <PROJECT_ROOT>>
+```
+<РљРѕСЂРЅРµРІР°СЏ РґРёСЂРµРєС‚РѕСЂРёСЏ 'C:\OpenCV' РёР»Рё 'C:\', РґР°Р»РµРµ РѕР±РѕР·РЅР°С‡РµРЅР° <PROJECT_ROOT>>
 	<Delphi-OpenCV-master>
-		<Bin>
+		<bin>
+		<component>
 		<include>
 		<opencv_classes>
 		<samples>
+```
+3.Р”РѕР±Р°РІСЊС‚Рµ РїСѓС‚Рё Рє С„Р°Р№Р»Р°Рј Р±РёР±Р»РёРѕС‚РµРєРё РІ Delphi IDE (Tools-Options-Delphi Options-Library-Library path)
+```
+<PROJECT_ROOT>\Delphi-OpenCV-master\Include
+<PROJECT_ROOT>\Delphi-OpenCV-master\Include\core
+<PROJECT_ROOT>\Delphi-OpenCV-master\Include\highgui
+<PROJECT_ROOT>\Delphi-OpenCV-master\Include\imgproc
+<PROJECT_ROOT>\Delphi-OpenCV-master\Include\legacy
+<PROJECT_ROOT>\Delphi-OpenCV-master\Include\nonfree
+<PROJECT_ROOT>\Delphi-OpenCV-master\Include\objdetect
+<PROJECT_ROOT>\Delphi-OpenCV-master\Include\calib3d
+<PROJECT_ROOT>\Delphi-OpenCV-master\Include\contrib
+<PROJECT_ROOT>\Delphi-OpenCV-master\Include\video
+<PROJECT_ROOT>\Delphi-OpenCV-master\component
+```
+РіРґРµ ```<PROJECT_ROOT>``` РєР°С‚Р°Р»РѕРі РєСѓРґР° СЂР°Р·Р°СЂС…РёРІРёСЂРѕРІР°РЅС‹ С„Р°Р№Р»С‹.
 
-3. Добавьте пути поиска к модулям проекта в Delphi IDE (Tools-Options-Delphi Options-Library-Library path)
-
-<PROJECT_ROOT>\Delphi-OpenCV-master\include
-<PROJECT_ROOT>\Delphi-OpenCV-master\include\core
-<PROJECT_ROOT>\Delphi-OpenCV-master\include\highgui
-<PROJECT_ROOT>\Delphi-OpenCV-master\include\imgproc
-<PROJECT_ROOT>\Delphi-OpenCV-master\include\legacy
-<PROJECT_ROOT>\Delphi-OpenCV-master\include\nonfree
-<PROJECT_ROOT>\Delphi-OpenCV-master\include\objdetect
-<PROJECT_ROOT>\Delphi-OpenCV-master\include\calib3d
-<PROJECT_ROOT>\Delphi-OpenCV-master\include\contrib
-<PROJECT_ROOT>\Delphi-OpenCV-master\include\video
-
-где <PROJECT_ROOT> каталог, в который был разархивирован проект.
-
-4. Вы можете разархивировать фалы проекта без подкаталога <Delphi-OpenCV-master>.
-Тогда структура каталогов проекта будет следующая:
-
-<Ваш каталог, например "C:\OpenCV" - <PROJECT_ROOT>>
-	<Bin>
-	<include>
-	<opencv_classes>
-	<samples>
-
-и пути
-
-<PROJECT_ROOT>\include
-<PROJECT_ROOT>\include\core
-<PROJECT_ROOT>\include\highgui
-<PROJECT_ROOT>\include\imgproc
-<PROJECT_ROOT>\include\legacy
-<PROJECT_ROOT>\include\nonfree
-<PROJECT_ROOT>\include\objdetect
-<PROJECT_ROOT>\include\calib3d
-<PROJECT_ROOT>\include\contrib
-<PROJECT_ROOT>\include\video
-	
-5. Откройте "<PROJECT_ROOT>\samples\LibTest.groupproj" или
-   "<PROJECT_ROOT>\samples\MultiDemo.groupproj" в Delphi IDE и скомпилируйте
-   примеры программ.
+4.РћС‚РєСЂРѕР№С‚Рµ РІ Delphi IDE Рё РѕС‚РєРѕРјРїРёР»РёСЂСѓР№С‚Рµ:<br> 
+```
+<PROJECT_ROOT>\samples\LibTest.groupproj - Р±Р°Р·РѕРІС‹Рµ РїСЂРёРјРµСЂС‹ РёСЃРїРѕР»СЊР·РѕРІР°РЅРёСЏ OpenCV
+<PROJECT_ROOT>\samples\MultiDemo.groupproj - РїСЂРёРјРµСЂС‹ РєРѕРјРїР»РµРєСЃРЅРѕРіРѕ РёСЃРїРѕР»СЊР·РѕРІР°РЅРёСЏ С„СѓРЅРєС†РёР№
+<PROJECT_ROOT>\samples\ClassDemo.groupproj - РїСЂРёРјРµСЂС‹ РёСЃРїРѕР»СЊР·РѕРІР°РЅРёСЏ РёРЅС‚РµСЂС„РµР№СЃРѕРІ Рє РєР»Р°СЃСЃР°Рј OpenCV
+```
+РґР»СЏ РёСЃРїРѕР»СЊР·РѕРІР°РЅРёСЏ OCV РєРѕРјРїРѕРЅРµРЅС‚ - РёРЅСЃС‚Р°Р»РёСЂСѓР№С‚Рµ ```<PROJECT_ROOT>\component\OpenCV.dpk```
+Рё Р·Р°С‚РµРј РѕС‚РєСЂРѕР№С‚Рµ РІ Delphi IDE Рё РѕС‚РєРѕРјРїРёР»РёСЂСѓР№С‚Рµ ```<PROJECT_ROOT>\samples\ComponentDemo.groupproj```
