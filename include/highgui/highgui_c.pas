@@ -41,7 +41,7 @@
   //                                 Project Delphi-OpenCV
   //  **************************************************************************************************
   //  Contributor:
-  //  laentir Valetov
+  //  Laentir Valetov
   //  email:laex@bk.ru
   //  **************************************************************************************************
   //  You may retrieve the latest version of this file at the GitHub,
@@ -68,7 +68,7 @@
   //
   //  For more information about the LGPL: http://www.gnu.org/copyleft/lesser.html
   //  **************************************************************************************************
-  //  Warning: Using Delphi XE3 syntax!
+  //  Warning: Using Delphi XE2 syntax!
   //  **************************************************************************************************
   //  The Initial Developer of the Original Code:
   //  OpenCV: open source computer vision library
