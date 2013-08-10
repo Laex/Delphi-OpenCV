@@ -2,7 +2,7 @@
   //                                 Project Delphi-OpenCV
   //  **************************************************************************************************
   //  Contributor:
-  //  laentir Valetov
+  //  Laentir Valetov
   //  email:laex@bk.ru
   //  **************************************************************************************************
   //  You may retrieve the latest version of this file at the GitHub,
@@ -29,7 +29,7 @@
   //
   //  For more information about the LGPL: http://www.gnu.org/copyleft/lesser.html
   //  **************************************************************************************************
-  //  Warning: Using Delphi XE3 syntax!
+  //  Warning: Using Delphi XE2 syntax!
   //  **************************************************************************************************
   //  The Initial Developer of the Original Code:
   //  OpenCV: open source computer vision library
@@ -44,18 +44,30 @@ unit cvUtils;
 
 interface
 
-Uses WinApi.Windows, core.types_c, Vcl.Graphics;
+Uses
+  WinApi.Windows,
+  core.types_c,
+  Vcl.Graphics;
 
 Function hsv2rgb(hue: single): TCvScalar;
-procedure IplImage2Bitmap(iplImg: PIplImage; var bitmap: Vcl.Graphics.TBitmap);
+procedure IplImage2Bitmap(
+  iplImg: PIplImage;
+  var bitmap: Vcl.Graphics.TBitmap);
+
 function cvImage2Bitmap(img: PIplImage): Vcl.Graphics.TBitmap;
-function ipDraw(dc: HDC; img: PIplImage; const rect: TRect; const Stretch: Boolean = true): Boolean;
+
+function ipDraw(
+  dc: HDC;
+  img: PIplImage;
+  const rect: TRect;
+  const Stretch: Boolean = true): Boolean;
 
 function c_str(const Text: String): pCVChar;
 
 implementation
 
-Uses System.SysUtils;
+Uses
+  System.SysUtils;
 
 function c_str(const Text: String): pCVChar;
 begin
@@ -64,14 +76,14 @@ end;
 
 Function hsv2rgb(hue: single): TCvScalar;
 var
-  rgb: array [0 .. 2] of Integer;
+  rgb      : array [0 .. 2] of Integer;
   p, sector: Integer;
 const
   sector_data: array [0 .. 5, 0 .. 2] of Integer = ((0, 2, 1), (1, 2, 0), (1, 0, 2), (2, 0, 1), (2, 1, 0), (0, 1, 2));
 Begin
-  hue := hue * 0.033333333333333333333333333333333;
+  hue    := hue * 0.033333333333333333333333333333333;
   sector := cvFloor(hue);
-  p := cvRound(255 * (hue - sector));
+  p      := cvRound(255 * (hue - sector));
   if (sector and 1) = 1 then
     p := 255
   else
@@ -81,7 +93,11 @@ Begin
   rgb[sector_data[sector][1]] := 0;
   rgb[sector_data[sector][2]] := p;
 
-  Result := cvScalar(rgb[2], rgb[1], rgb[0], 0);
+  Result := cvScalar(
+    rgb[2],
+    rgb[1],
+    rgb[0],
+    0);
 End;
 
 { -----------------------------------------------------------------------------
@@ -91,19 +107,21 @@ End;
   Arguments:  iplImg: PIplImage; bitmap: TBitmap
   Description: convert a IplImage to a Windows bitmap
   ----------------------------------------------------------------------------- }
-procedure IplImage2Bitmap(iplImg: PIplImage; var bitmap: Vcl.Graphics.TBitmap);
+procedure IplImage2Bitmap(
+  iplImg: PIplImage;
+  var bitmap: Vcl.Graphics.TBitmap);
 VAR
-  i, j: Integer;
-  offset: longint;
+  i, j           : Integer;
+  offset         : longint;
   dataByte, RowIn: PByteArray;
-  channelsCount: Integer;
+  channelsCount  : Integer;
 BEGIN
   TRY
     // assert((iplImg.Depth = 8) and (iplImg.NChannels = 3),
     // 'IplImage2Bitmap: Not a 24 bit color iplImage!');
     bitmap.Height := iplImg.Height;
-    bitmap.Width := iplImg.Width;
-    FOR j := 0 TO bitmap.Height - 1 DO
+    bitmap.Width  := iplImg.Width;
+    FOR j         := 0 TO bitmap.Height - 1 DO
     BEGIN
       // origin BL = Bottom-Left
       if (iplImg.Origin = IPL_ORIGIN_BL) then
@@ -111,25 +129,28 @@ BEGIN
       else
         RowIn := bitmap.Scanline[j];
 
-      offset := longint(iplImg.ImageData) + iplImg.WidthStep * j;
+      offset   := longint(iplImg.ImageData) + iplImg.WidthStep * j;
       dataByte := PByteArray(offset);
 
       if (iplImg.ChannelSeq = 'BGR') then
       begin
         { direct copy of the iplImage row bytes to bitmap row }
-        CopyMemory(RowIn, dataByte, iplImg.WidthStep);
+        CopyMemory(
+          RowIn,
+          dataByte,
+          iplImg.WidthStep);
       End
       else if (iplImg.ChannelSeq = 'GRAY') then
         FOR i := 0 TO bitmap.Width - 1 DO
         begin
-          RowIn[3 * i] := dataByte[i];
+          RowIn[3 * i]     := dataByte[i];
           RowIn[3 * i + 1] := dataByte[i];
           RowIn[3 * i + 2] := dataByte[i];
         End
       else
         FOR i := 0 TO 3 * bitmap.Width - 1 DO
         begin
-          RowIn[i] := dataByte[i + 2];
+          RowIn[i]     := dataByte[i + 2];
           RowIn[i + 1] := dataByte[i + 1];
           RowIn[i + 2] := dataByte[i];
         End;
@@ -140,20 +161,20 @@ END; { IplImage2Bitmap }
 
 function cvImage2Bitmap(img: PIplImage): Vcl.Graphics.TBitmap;
 var
-  info: string;
-  bmp: Vcl.Graphics.TBitmap;
-  deep: Integer;
+  info                    : string;
+  bmp                     : Vcl.Graphics.TBitmap;
+  deep                    : Integer;
   i, j, K, wStep, Channels: Integer;
-  data: PByteArray;
-  pb: PByteArray;
+  data                    : PByteArray;
+  pb                      : PByteArray;
 begin
   Result := NIL;
   if (img <> NIL) then
   begin
-    bmp := Vcl.Graphics.TBitmap.Create;
-    bmp.Width := img^.Width;
+    bmp        := Vcl.Graphics.TBitmap.Create;
+    bmp.Width  := img^.Width;
     bmp.Height := img^.Height;
-    deep := img^.nChannels * img^.depth;
+    deep       := img^.nChannels * img^.depth;
     case deep of
       8:
         bmp.PixelFormat := pf8bit;
@@ -164,15 +185,15 @@ begin
       32:
         bmp.PixelFormat := pf32bit;
     End;
-    wStep := img^.WidthStep;
+    wStep    := img^.WidthStep;
     Channels := img^.nChannels;
-    data := Pointer(img^.ImageData);
-    for i := 0 to img^.Height - 1 do
+    data     := Pointer(img^.ImageData);
+    for i    := 0 to img^.Height - 1 do
     begin
-      pb := bmp.Scanline[i];
+      pb    := bmp.Scanline[i];
       for j := 0 to img^.Width - 1 do
       begin
-        for K := 0 to Channels - 1 do
+        for K           := 0 to Channels - 1 do
           pb[3 * j + K] := data[i * wStep + j * Channels + K]
       End;
     End;
@@ -181,20 +202,24 @@ begin
   End;
 end;
 
-function ipDraw(dc: HDC; img: PIplImage; const rect: TRect; const Stretch: Boolean = true): Boolean;
+function ipDraw(
+  dc: HDC;
+  img: PIplImage;
+  const rect: TRect;
+  const Stretch: Boolean = true): Boolean;
 
 Type
-  pCOLORREF = ^COLORREF;
+  pCOLORREF         = ^COLORREF;
   pBITMAPINFOHEADER = ^BITMAPINFOHEADER;
 
 Var
-  isrgb: Boolean;
-  isgray: Boolean;
-  buf: array [1 .. sizeof(BITMAPINFOHEADER) + sizeof(RGBQUAD) * 256] of byte;
-  dibhdr: pBITMAPINFOHEADER;
+  isrgb  : Boolean;
+  isgray : Boolean;
+  buf    : array [1 .. sizeof(BITMAPINFOHEADER) + sizeof(RGBQUAD) * 256] of byte;
+  dibhdr : pBITMAPINFOHEADER;
   _dibhdr: TBitmapInfo ABSOLUTE buf;
-  _rgb: pCOLORREF;
-  i: Integer;
+  _rgb   : pCOLORREF;
+  i      : Integer;
 begin
   if (not Assigned(img)) or (not Assigned(img^.ImageData)) then
     Exit(false);
@@ -207,12 +232,15 @@ begin
     Exit(false);
 
   dibhdr := @buf;
-  _rgb := pCOLORREF(Integer(dibhdr) + sizeof(BITMAPINFOHEADER));
+  _rgb   := pCOLORREF(Integer(dibhdr) + sizeof(BITMAPINFOHEADER));
 
   if (isgray) then
-    for i := 0 to 255 do
-      _rgb[i] := rgb(i, i, i);
-  dibhdr^.biSize := sizeof(BITMAPINFOHEADER);
+    for i     := 0 to 255 do
+      _rgb[i] := rgb(
+        i,
+        i,
+        i);
+  dibhdr^.biSize  := sizeof(BITMAPINFOHEADER);
   dibhdr^.biWidth := img^.Width;
   // Check origin for display
   if img^.Origin = 0 then
@@ -220,18 +248,20 @@ begin
   else
     dibhdr^.biHeight := img^.Height;
 
-  dibhdr^.biPlanes := 1;
-  dibhdr^.biBitCount := 8 * img^.nChannels;
-  dibhdr^.biCompression := BI_RGB;
-  dibhdr^.biSizeImage := 0; // img^.imageSize;
+  dibhdr^.biPlanes        := 1;
+  dibhdr^.biBitCount      := 8 * img^.nChannels;
+  dibhdr^.biCompression   := BI_RGB;
+  dibhdr^.biSizeImage     := 0; // img^.imageSize;
   dibhdr^.biXPelsPerMeter := 0;
   dibhdr^.biYPelsPerMeter := 0;
-  dibhdr^.biClrUsed := 0;
-  dibhdr^.biClrImportant := 0;
+  dibhdr^.biClrUsed       := 0;
+  dibhdr^.biClrImportant  := 0;
 
   if Stretch then
   begin
-    SetStretchBltMode(dc, COLORONCOLOR);
+    SetStretchBltMode(
+      dc,
+      COLORONCOLOR);
     // Stretch the image to fit the rectangle
     Result := StretchDIBits(dc, rect.left, rect.top, rect.Width, rect.Height, 0, 0, img^.Width, img^.Height,
       img^.ImageData, _dibhdr, DIB_RGB_COLORS, SRCCOPY) > 0;
