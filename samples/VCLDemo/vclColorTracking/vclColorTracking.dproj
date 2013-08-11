@@ -1,6 +1,6 @@
 ﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <PropertyGroup>
-        <ProjectGuid>{B539F149-8AF0-4A5A-A74F-4A3205ED1D16}</ProjectGuid>
+        <ProjectGuid>{D491E4D5-5FA3-459D-9C68-210B7715C29F}</ProjectGuid>
         <ProjectVersion>14.6</ProjectVersion>
         <FrameworkType>VCL</FrameworkType>
         <MainSource>vclColorTracking.dpr</MainSource>
