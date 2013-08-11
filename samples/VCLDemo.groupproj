@@ -1,0 +1,60 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{528B47D4-6A73-4601-B80C-5BDA52BC8048}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="VCLDemo\vclCameraCapture\VCLCameraCapture.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="VCLDemo\vclChessboardCorners\VCLChessboardCorners.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="VCLDemo\vclColorTracking\vclColorTracking.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="VCLCameraCapture">
+        <MSBuild Projects="VCLDemo\vclCameraCapture\VCLCameraCapture.dproj"/>
+    </Target>
+    <Target Name="VCLCameraCapture:Clean">
+        <MSBuild Projects="VCLDemo\vclCameraCapture\VCLCameraCapture.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="VCLCameraCapture:Make">
+        <MSBuild Projects="VCLDemo\vclCameraCapture\VCLCameraCapture.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="VCLChessboardCorners">
+        <MSBuild Projects="VCLDemo\vclChessboardCorners\VCLChessboardCorners.dproj"/>
+    </Target>
+    <Target Name="VCLChessboardCorners:Clean">
+        <MSBuild Projects="VCLDemo\vclChessboardCorners\VCLChessboardCorners.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="VCLChessboardCorners:Make">
+        <MSBuild Projects="VCLDemo\vclChessboardCorners\VCLChessboardCorners.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="vclColorTracking">
+        <MSBuild Projects="VCLDemo\vclColorTracking\vclColorTracking.dproj"/>
+    </Target>
+    <Target Name="vclColorTracking:Clean">
+        <MSBuild Projects="VCLDemo\vclColorTracking\vclColorTracking.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="vclColorTracking:Make">
+        <MSBuild Projects="VCLDemo\vclColorTracking\vclColorTracking.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="VCLCameraCapture;VCLChessboardCorners;vclColorTracking"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="VCLCameraCapture:Clean;VCLChessboardCorners:Clean;vclColorTracking:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="VCLCameraCapture:Make;VCLChessboardCorners:Make;vclColorTracking:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>
