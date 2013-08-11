@@ -42,3 +42,5 @@ __history
 
 *.vlb
 /bin/carnumdetect.ini
+
+/bin/*.bsc
