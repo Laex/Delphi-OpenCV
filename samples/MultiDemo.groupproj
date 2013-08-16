@@ -63,12 +63,6 @@
         <Projects Include="MultiDemo\TwoCameras\TwoCameras_C_Thread.dproj">
             <Dependencies/>
         </Projects>
-        <Projects Include="MultiDemo\VCLCameraCapture\VCLCameraCapture.dproj">
-            <Dependencies/>
-        </Projects>
-        <Projects Include="MultiDemo\VCLChessboardCorners\VCLChessboardCorners.dproj">
-            <Dependencies/>
-        </Projects>
         <Projects Include="MultiDemo\VideoProcessing\VideoProcessing.dproj">
             <Dependencies/>
         </Projects>
@@ -260,24 +254,6 @@
     <Target Name="TwoCameras_C_Thread:Make">
         <MSBuild Projects="MultiDemo\TwoCameras\TwoCameras_C_Thread.dproj" Targets="Make"/>
     </Target>
-    <Target Name="VCLCameraCapture">
-        <MSBuild Projects="MultiDemo\VCLCameraCapture\VCLCameraCapture.dproj"/>
-    </Target>
-    <Target Name="VCLCameraCapture:Clean">
-        <MSBuild Projects="MultiDemo\VCLCameraCapture\VCLCameraCapture.dproj" Targets="Clean"/>
-    </Target>
-    <Target Name="VCLCameraCapture:Make">
-        <MSBuild Projects="MultiDemo\VCLCameraCapture\VCLCameraCapture.dproj" Targets="Make"/>
-    </Target>
-    <Target Name="VCLChessboardCorners">
-        <MSBuild Projects="MultiDemo\VCLChessboardCorners\VCLChessboardCorners.dproj"/>
-    </Target>
-    <Target Name="VCLChessboardCorners:Clean">
-        <MSBuild Projects="MultiDemo\VCLChessboardCorners\VCLChessboardCorners.dproj" Targets="Clean"/>
-    </Target>
-    <Target Name="VCLChessboardCorners:Make">
-        <MSBuild Projects="MultiDemo\VCLChessboardCorners\VCLChessboardCorners.dproj" Targets="Make"/>
-    </Target>
     <Target Name="VideoProcessing">
         <MSBuild Projects="MultiDemo\VideoProcessing\VideoProcessing.dproj"/>
     </Target>
@@ -288,13 +264,13 @@
         <MSBuild Projects="MultiDemo\VideoProcessing\VideoProcessing.dproj" Targets="Make"/>
     </Target>
     <Target Name="Build">
-        <CallTarget Targets="simplAR;CameraCalibrate;CameraCaptureAndFindContours;CameraShift;CarNumDetect;FaceDetect;fback_c;FrameRecon;HandsDetect;HelloWorld;IPCamVideoCapture;LockWorkstation;minarea;mmdt;MotionDetect;Squares;Stereo;TrackColor;TwoCameras_C;TwoCameras_C_Thread;VCLCameraCapture;VCLChessboardCorners;VideoProcessing"/>
+        <CallTarget Targets="simplAR;CameraCalibrate;CameraCaptureAndFindContours;CameraShift;CarNumDetect;FaceDetect;fback_c;FrameRecon;HandsDetect;HelloWorld;IPCamVideoCapture;LockWorkstation;minarea;mmdt;MotionDetect;Squares;Stereo;TrackColor;TwoCameras_C;TwoCameras_C_Thread;VideoProcessing"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="simplAR:Clean;CameraCalibrate:Clean;CameraCaptureAndFindContours:Clean;CameraShift:Clean;CarNumDetect:Clean;FaceDetect:Clean;fback_c:Clean;FrameRecon:Clean;HandsDetect:Clean;HelloWorld:Clean;IPCamVideoCapture:Clean;LockWorkstation:Clean;minarea:Clean;mmdt:Clean;MotionDetect:Clean;Squares:Clean;Stereo:Clean;TrackColor:Clean;TwoCameras_C:Clean;TwoCameras_C_Thread:Clean;VCLCameraCapture:Clean;VCLChessboardCorners:Clean;VideoProcessing:Clean"/>
+        <CallTarget Targets="simplAR:Clean;CameraCalibrate:Clean;CameraCaptureAndFindContours:Clean;CameraShift:Clean;CarNumDetect:Clean;FaceDetect:Clean;fback_c:Clean;FrameRecon:Clean;HandsDetect:Clean;HelloWorld:Clean;IPCamVideoCapture:Clean;LockWorkstation:Clean;minarea:Clean;mmdt:Clean;MotionDetect:Clean;Squares:Clean;Stereo:Clean;TrackColor:Clean;TwoCameras_C:Clean;TwoCameras_C_Thread:Clean;VideoProcessing:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="simplAR:Make;CameraCalibrate:Make;CameraCaptureAndFindContours:Make;CameraShift:Make;CarNumDetect:Make;FaceDetect:Make;fback_c:Make;FrameRecon:Make;HandsDetect:Make;HelloWorld:Make;IPCamVideoCapture:Make;LockWorkstation:Make;minarea:Make;mmdt:Make;MotionDetect:Make;Squares:Make;Stereo:Make;TrackColor:Make;TwoCameras_C:Make;TwoCameras_C_Thread:Make;VCLCameraCapture:Make;VCLChessboardCorners:Make;VideoProcessing:Make"/>
+        <CallTarget Targets="simplAR:Make;CameraCalibrate:Make;CameraCaptureAndFindContours:Make;CameraShift:Make;CarNumDetect:Make;FaceDetect:Make;fback_c:Make;FrameRecon:Make;HandsDetect:Make;HelloWorld:Make;IPCamVideoCapture:Make;LockWorkstation:Make;minarea:Make;mmdt:Make;MotionDetect:Make;Squares:Make;Stereo:Make;TrackColor:Make;TwoCameras_C:Make;TwoCameras_C_Thread:Make;VideoProcessing:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>
