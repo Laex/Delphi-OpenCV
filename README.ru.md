@@ -1,4 +1,4 @@
-###Delphi-OpenCV
+###Delphi-OpenCV (ветка - master)
 * Версия OpenCV - 2.4.6<br>
 * Среда разработки - Delphi XE2-XE4<br>
 
@@ -18,9 +18,7 @@ email: sleuthhound@gmail.com
 <Корневая директория 'C:\OpenCV' или 'C:\', далее обозначена <PROJECT_ROOT>>
 	<Delphi-OpenCV-master>
 		<bin>
-		<component>
 		<include>
-		<opencv_classes>
 		<samples>
 ```
 3.Добавьте пути к файлам библиотеки в Delphi IDE (Tools-Options-Delphi Options-Library-Library path)
@@ -35,15 +33,11 @@ email: sleuthhound@gmail.com
 <PROJECT_ROOT>\Delphi-OpenCV-master\Include\calib3d
 <PROJECT_ROOT>\Delphi-OpenCV-master\Include\contrib
 <PROJECT_ROOT>\Delphi-OpenCV-master\Include\video
-<PROJECT_ROOT>\Delphi-OpenCV-master\component
 ```
 где ```<PROJECT_ROOT>``` каталог куда разархивированы файлы.
 
 4.Откройте в Delphi IDE и откомпилируйте:<br> 
 ```
-<PROJECT_ROOT>\samples\LibTest.groupproj - базовые примеры использования OpenCV
+<PROJECT_ROOT>\samples\LibDemo.groupproj - базовые примеры использования OpenCV
 <PROJECT_ROOT>\samples\MultiDemo.groupproj - примеры комплексного использования функций
-<PROJECT_ROOT>\samples\ClassDemo.groupproj - примеры использования интерфейсов к классам OpenCV
-```
-для использования OCV компонент - инсталируйте ```<PROJECT_ROOT>\component\OpenCV.dpk```
-и затем откройте в Delphi IDE и откомпилируйте ```<PROJECT_ROOT>\samples\ComponentDemo.groupproj```
+<PROJECT_ROOT>\samples\VCLDemo.groupproj - примеры использования в VCL приложениях``

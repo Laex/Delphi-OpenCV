@@ -1,4 +1,4 @@
-###Delphi-OpenCV
+###Delphi-OpenCV (master)
 * OpenCV version - 2.4.6<br>
 * Development environment - Delphi XE2-XE4<br>
 
@@ -18,9 +18,7 @@ email: sleuthhound@gmail.com
 <Directory, such as 'C:\OpenCV' or just 'C:\' - <PROJECT_ROOT>>
 	<Delphi-OpenCV-master>
 		<bin>
-		<component>
 		<include>
-		<opencv_classes>
 		<samples>
 ```
 3.Add the search path for the modules of the project in Delphi IDE (Tools-Options-Delphi Options-Library-Library path)
@@ -35,7 +33,6 @@ email: sleuthhound@gmail.com
 <PROJECT_ROOT>\Delphi-OpenCV-master\Include\calib3d
 <PROJECT_ROOT>\Delphi-OpenCV-master\Include\contrib
 <PROJECT_ROOT>\Delphi-OpenCV-master\Include\video
-<PROJECT_ROOT>\Delphi-OpenCV-master\component
 ```
 where ```<PROJECT_ROOT>``` directory, which was unzipped project.
 
@@ -44,9 +41,7 @@ Then the directory structure of the project is as follows:
 ```
 <Directory, such as 'C:\OpenCV' - <PROJECT_ROOT>>
 	<bin>
-	<component>
 	<include>
-	<opencv_classes>
 	<samples>
 ```
 and path
@@ -61,13 +56,10 @@ and path
 <PROJECT_ROOT>\Include\calib3d
 <PROJECT_ROOT>\Include\contrib
 <PROJECT_ROOT>\Include\video
-<PROJECT_ROOT>\component
 ```
 5.Open in Delphi IDE and compile:<br> 
 ```
-<PROJECT_ROOT>\samples\LibTest.groupproj
+<PROJECT_ROOT>\samples\LibDemo.groupproj
 <PROJECT_ROOT>\samples\MultiDemo.groupproj
-<PROJECT_ROOT>\samples\ClassDemo.groupproj
+<PROJECT_ROOT>\samples\VCLDemo.groupproj
 ```
-for use OCV component - install ```<PROJECT_ROOT>\component\OpenCV.dpk```
-and then open in Delphi IDE and compile ```<PROJECT_ROOT>\samples\ComponentDemo.groupproj```
