@@ -99,7 +99,8 @@ unit core_c;
 interface
 
 uses
-  Windows, core.types_c;
+  Windows,
+  core.types_c;
 
 { ****************************************************************************************
   *          cArray allocation, deallocation, initialization and access to elements      *
@@ -733,13 +734,13 @@ procedure cvCvtPlaneToPix(const src0: pIplImage; const src1: pIplImage; const sr
 
 { dst(idx) = src1(idx) | src2(idx) */
   CVAPI(void) cvOr( const CvArr* src1, const CvArr* src2,
-                 CvArr* dst, const CvArr* mask CV_DEFAULT(NULL));
+  CvArr* dst, const CvArr* mask CV_DEFAULT(NULL));
 }
 procedure cvOr(const src1, src2: pCvArr; dst: pCvArr; const mask: pCvArr = nil); cdecl;
 
 { dst(idx) = src1(idx) ^ src2(idx) */
   CVAPI(void) cvXor( const CvArr* src1, const CvArr* src2,
-                  CvArr* dst, const CvArr* mask CV_DEFAULT(NULL));
+  CvArr* dst, const CvArr* mask CV_DEFAULT(NULL));
 }
 procedure cvXor(const src1, src2: pCvArr; dst: pCvArr; const mask: pCvArr = nil); cdecl;
 
@@ -776,18 +777,18 @@ procedure cvFlip(const src: pCvArr; dst: pCvArr = nil; flip_mode: Integer = 0); 
 
 const
   // * types of array norm */
-  CV_C = 1;
-  CV_L1 = 2;
-  CV_L2 = 4;
+  CV_C         = 1;
+  CV_L1        = 2;
+  CV_L2        = 4;
   CV_NORM_MASK = 7;
-  CV_RELATIVE = 8;
-  CV_DIFF = 16;
-  CV_MINMAX = 32;
+  CV_RELATIVE  = 8;
+  CV_DIFF      = 16;
+  CV_MINMAX    = 32;
 
-  CV_DIFF_C = (CV_DIFF or CV_C);
-  CV_DIFF_L1 = (CV_DIFF or CV_L1);
-  CV_DIFF_L2 = (CV_DIFF or CV_L2);
-  CV_RELATIVE_C = (CV_RELATIVE or CV_C);
+  CV_DIFF_C      = (CV_DIFF or CV_C);
+  CV_DIFF_L1     = (CV_DIFF or CV_L1);
+  CV_DIFF_L2     = (CV_DIFF or CV_L2);
+  CV_RELATIVE_C  = (CV_RELATIVE or CV_C);
   CV_RELATIVE_L1 = (CV_RELATIVE or CV_L1);
   CV_RELATIVE_L2 = (CV_RELATIVE or CV_L2);
 
@@ -802,6 +803,10 @@ function cvNorm(const arr1: pCvArr; const arr2: pCvArr = nil; norm_type: Integer
 // (* ***************************************************************************************\
 // *                                    cArray Statistics                                    *
 // *************************************************************************************** *)
+
+// * Finds sum of array elements */
+// CVAPI(CvScalar)  cvSum( const CvArr* arr );
+function cvSum(const arr: pCvArr): TCvScalar; cdecl;
 
 { Calculates number of non-zero pixels
   CVAPI(Integer)cvCountNonZero(pCvArr * arr);
@@ -1132,21 +1137,22 @@ procedure cvSetNumThreads(threads: Integer = 0); cdecl;
 function cvGetThreadNum: Integer; cdecl;
 
 const
-  CV_CPU_NONE = 0;
-  CV_CPU_MMX = 1;
-  CV_CPU_SSE = 2;
-  CV_CPU_SSE2 = 3;
-  CV_CPU_SSE3 = 4;
-  CV_CPU_SSSE3 = 5;
-  CV_CPU_SSE4_1 = 6;
-  CV_CPU_SSE4_2 = 7;
-  CV_CPU_POPCNT = 8;
-  CV_CPU_AVX = 10;
+  CV_CPU_NONE             = 0;
+  CV_CPU_MMX              = 1;
+  CV_CPU_SSE              = 2;
+  CV_CPU_SSE2             = 3;
+  CV_CPU_SSE3             = 4;
+  CV_CPU_SSSE3            = 5;
+  CV_CPU_SSE4_1           = 6;
+  CV_CPU_SSE4_2           = 7;
+  CV_CPU_POPCNT           = 8;
+  CV_CPU_AVX              = 10;
   CV_HARDWARE_MAX_FEATURE = 255;
 
 implementation
 
-uses ulibname;
+uses
+  ulibname;
 
 function cvCreateImageHeader; external Core_Dll;
 function cvInitImageHeader; external Core_Dll;
@@ -1169,14 +1175,23 @@ procedure cvGetSubArr; external Core_Dll name 'cvGetSubRect';
 
 function cvGetRow(const arr: pCvArr; submat: pCvMat; row: Integer): pCvMat;
 begin
-  Result := cvGetRows(arr, submat, row, row + 1, 1);
+  Result := cvGetRows(
+    arr,
+    submat,
+    row,
+    row + 1,
+    1);
 end;
 
 function cvGetCols; external Core_Dll;
 
 function cvGetCol(const arr: pCvArr; submat: pCvMat; col: Integer): pCvMat;
 begin
-  Result := cvGetCols(arr, submat, col, col + 1);
+  Result := cvGetCols(
+    arr,
+    submat,
+    col,
+    col + 1);
 end;
 
 function cvGetDiag; external Core_Dll;
@@ -1219,13 +1234,13 @@ function cvInitSparseMatIterator; external Core_Dll;
 // }
 function cvGetNextSparseNode(mat_iterator: pCvSparseMatIterator): pCvSparseNode;
 var
-  idx: Integer;
+  idx : Integer;
   node: pCvSparseNode;
 begin
   if Assigned(mat_iterator.node.next) then
   begin
     mat_iterator.node := mat_iterator.node.next;
-    Result := mat_iterator.node;
+    Result            := mat_iterator.node;
   end
   else
   begin
@@ -1236,8 +1251,8 @@ begin
       if Assigned(node) then
       begin
         mat_iterator.curidx := idx;
-        mat_iterator.node := node;
-        Result := mat_iterator.node;
+        mat_iterator.node   := node;
+        Result              := mat_iterator.node;
         exit;
       end;
     end;
@@ -1278,7 +1293,13 @@ function cvReshapeMatND; external Core_Dll;
 function cvReshapeND(const arr: pCvArr; sizeof_header: Integer; header: pCvArr; new_cn, new_dims: Integer;
   new_sizes: pInteger): pCvArr; inline;
 begin
-  Result := cvReshapeMatND(arr, sizeof(sizeof_header), header, new_cn, new_dims, new_sizes);
+  Result := cvReshapeMatND(
+    arr,
+    sizeof(sizeof_header),
+    header,
+    new_cn,
+    new_dims,
+    new_sizes);
 end;
 
 function cvReshape; external Core_Dll;
@@ -1308,14 +1329,16 @@ procedure cvSet(arr: pCvArr; value: TCvScalar; const mask: pCvArr = Nil); extern
 procedure cvSet(mat: pCvMat; i, j: Integer; val: Single); inline;
 var
   type_: Integer;
-  ptr: puchar;
-  pf: PSingle;
+  ptr  : puchar;
+  pf   : PSingle;
 begin
   type_ := CV_MAT_TYPE(mat._type);
   assert((i < mat^.rows) and (j < mat^.cols) and (type_ = CV_32FC1));
   ptr := mat^.data;
-  Inc(ptr, mat.step * i + sizeof(Single) * j);
-  pf := PSingle(ptr);
+  Inc(
+    ptr,
+    mat.step * i + sizeof(Single) * j);
+  pf  := PSingle(ptr);
   pf^ := val;
 end;
 
@@ -1328,7 +1351,11 @@ procedure cvConvertScale; external Core_Dll;
 
 procedure cvConvert(const src: pCvArr; dst: pCvArr); inline;
 begin
-  cvConvertScale(src, dst, 1, 0);
+  cvConvertScale(
+    src,
+    dst,
+    1,
+    0);
 end;
 
 procedure cvScale; external Core_Dll name 'cvConvertScale';
@@ -1342,7 +1369,11 @@ procedure cvSub; external Core_Dll;
 
 procedure cvSubS(const src: pIplImage; value: TCvScalar; dst: pIplImage; const mask: pIplImage);
 begin
-  cvAddS(src, CvScalar(-value.val[0], -value.val[1], -value.val[2], -value.val[3]), dst, mask);
+  cvAddS(
+    src,
+    CvScalar(-value.val[0], -value.val[1], -value.val[2], -value.val[3]),
+    dst,
+    mask);
 end;
 
 procedure cvSubRS; external Core_Dll;
@@ -1353,7 +1384,11 @@ procedure cvScaleAdd; external Core_Dll;
 // define cvAXPY( A, real_scalar, B, C ) cvScaleAdd(A, cvRealScalar(real_scalar), B, C)
 procedure cvAXPY(A: pIplImage; real_scalar: double; B, C: pIplImage); inline;
 begin
-  cvScaleAdd(A, cvRealScalar(real_scalar), B, C);
+  cvScaleAdd(
+    A,
+    cvRealScalar(real_scalar),
+    B,
+    C);
 end;
 
 procedure cvAddWeighted; external Core_Dll;
@@ -1372,7 +1407,11 @@ procedure cvCopyImage; external Core_Dll name 'cvCopy';
 
 function CV_RGB(const r, g, B: double): TCvScalar; inline;
 begin
-  Result := CvScalar(B, g, r, 0);
+  Result := CvScalar(
+    B,
+    g,
+    r,
+    0);
 end;
 
 procedure cvSave(const filename: pCVChar; const struct_ptr: pointer; const name: pCVChar; const comment: pCVChar;
@@ -1381,7 +1420,12 @@ procedure cvSave(const filename: pCVChar; const struct_ptr: pointer; const name:
 procedure cvSave(const filename: pCVChar; const struct_ptr: pointer; const name: pCVChar = Nil;
   const comment: pCVChar = Nil); overload; inline;
 begin
-  cvSave(filename, struct_ptr, name, comment, ZeroCvAttrList);
+  cvSave(
+    filename,
+    struct_ptr,
+    name,
+    comment,
+    ZeroCvAttrList);
 end;
 
 function cvLoad; external Core_Dll;
@@ -1416,14 +1460,18 @@ begin
   // return !node ? default_value :
   // CV_NODE_IS_INT(node->tag) ? node->data.i :
   // CV_NODE_IS_REAL(node->tag) ? cvRound(node->data.f) : 0x7fffffff;
-  Result := iif(not Assigned(node), default_value, iif(CV_NODE_IS_INT(node^.tag), node^.i,
-    iif(CV_NODE_IS_REAL(node^.tag), node^.f, $7FFFFFFF)));
+  Result := iif(
+    not Assigned(node),
+    default_value,
+    iif(CV_NODE_IS_INT(node^.tag), node^.i, iif(CV_NODE_IS_REAL(node^.tag), node^.f, $7FFFFFFF)));
 end;
 
 function cvReadIntByName;
 begin
   // return cvReadInt( cvGetFileNodeByName( fs, map, name ), default_value );
-  Result := cvReadInt(cvGetFileNodeByName(fs, map, name), default_value);
+  Result := cvReadInt(
+    cvGetFileNodeByName(fs, map, name),
+    default_value);
 end;
 
 function cvRead; external Core_Dll;
@@ -1440,9 +1488,19 @@ procedure cvEllipseBox;
 var
   axes: TCvSize;
 begin
-  axes.width := cvRound(box.size.width * 0.5);
+  axes.width  := cvRound(box.size.width * 0.5);
   axes.height := cvRound(box.size.height * 0.5);
-  cvEllipse(img, cvPointFrom32f(box.center), axes, box.angle, 0, 360, color, thickness, line_type, shift);
+  cvEllipse(
+    img,
+    cvPointFrom32f(box.center),
+    axes,
+    box.angle,
+    0,
+    360,
+    color,
+    thickness,
+    line_type,
+    shift);
 end;
 
 procedure cvOr; external Core_Dll;
@@ -1463,14 +1521,16 @@ function cvCountNonZero; external Core_Dll;
 function cvGet(const mat: pCvMat; i, j: Integer): Single; inline;
 var
   type_: Integer;
-  ptr: puchar;
-  pf: PSingle;
+  ptr  : puchar;
+  pf   : PSingle;
 begin
   type_ := CV_MAT_TYPE(mat^._type);
   assert((i < mat^.rows) and (j < mat^.cols) and (type_ = CV_32FC1));
   ptr := mat^.data;
-  Inc(ptr, mat.step * i + sizeof(Single) * j);
-  pf := PSingle(ptr);
+  Inc(
+    ptr,
+    mat.step * i + sizeof(Single) * j);
+  pf     := PSingle(ptr);
   Result := pf^;
 end;
 
@@ -1507,5 +1567,7 @@ procedure cvSeqRemove; external Core_Dll;
 procedure cvClearSeq; external Core_Dll;
 procedure cvWrite; external Core_Dll;
 function cvSeqPartition; external Core_Dll;
+
+function cvSum; external Core_Dll;
 
 end.
