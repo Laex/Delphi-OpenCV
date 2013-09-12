@@ -1,0 +1,36 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{291F0AFF-1DBC-4379-810C-D34F84C875EC}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="Components\cCameraCapture\cCameraCapture.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="cCameraCapture">
+        <MSBuild Projects="Components\cCameraCapture\cCameraCapture.dproj"/>
+    </Target>
+    <Target Name="cCameraCapture:Clean">
+        <MSBuild Projects="Components\cCameraCapture\cCameraCapture.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="cCameraCapture:Make">
+        <MSBuild Projects="Components\cCameraCapture\cCameraCapture.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="cCameraCapture"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="cCameraCapture:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="cCameraCapture:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>
