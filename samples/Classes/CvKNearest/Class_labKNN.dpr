@@ -99,7 +99,7 @@ begin
         // and use a hash function to convert to to a float
         // (N.B. openCV uses a floating point decision tree implementation!)
         begin
-          PSingle(CV_MAT_ELEM(data, CV_32FC1, line, attribute))^ := hash(Sp[attribute]);
+          PSingle(CV_MAT_ELEM(data, CV_32FC1, line, attribute))^ := hash(AnsiString(Sp[attribute]));
         end;
     end;
   finally
@@ -180,7 +180,7 @@ begin
         knn.train(
           training_data,
           training_classifications,
-          0,
+          nil,
           False,
           k);
 
@@ -208,9 +208,9 @@ begin
           resultNode := knn.find_nearest(
             @test_sample,
             k,
-            0,
-            0,
-            0);
+            nil,
+            nil,
+            nil);
 
           WriteLn(Format('Testing Sample %d -> class result %s', [tsample, Classes[Trunc(resultNode)]]));
 

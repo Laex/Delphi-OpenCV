@@ -335,6 +335,12 @@ function cvCreateFileCapture(const filename: pCVChar): pCvCapture; cdecl;
 
 const
   CV_CAP_ANY = 0; // autodetect
+  CV_CAP_CAM_0 = CV_CAP_ANY;
+  CV_CAP_CAM_1 = 1;
+  CV_CAP_CAM_2 = 2;
+  CV_CAP_CAM_3 = 3;
+  CV_CAP_CAM_4 = 4;
+  CV_CAP_CAM_5 = 5;
   CV_CAP_MIL = 100; // MIL proprietary drivers
   CV_CAP_VFW = 200; // platform native
   CV_CAP_V4L = 200;

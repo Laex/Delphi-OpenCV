@@ -764,6 +764,17 @@ procedure cvInRange(const src: pIplImage; const lower: pIplImage; const upper: p
 }
 procedure cvInRangeS(const src: pIplImage; lower: TCvScalar; upper: TCvScalar; dst: pIplImage); cdecl;
 
+const
+  CV_RAND_UNI    = 0;
+  CV_RAND_NORMAL = 1;
+
+  // CVAPI(void)cvRandArr(CvRNG * rng, CvArr * arr, int dist_type, CvScalar param1, CvScalar param2);
+procedure cvRandArr(rng: pCvRNG; arr: pCvArr; dist_type: Integer; param1: TCvScalar; param2: TCvScalar); cdecl;
+
+// CVAPI(void)cvRandShuffle(CvArr * mat, CvRNG * rng, double iter_factor CV_DEFAULT(1. ));
+procedure cvRandShuffle(mat: pCvArr; rng: pCvRNG; iter_factor: double = 1); cdecl;
+
+
 // (* ***************************************************************************************\
 // *                                Math operations                                         *
 // *************************************************************************************** *)
@@ -1569,5 +1580,8 @@ procedure cvWrite; external Core_Dll;
 function cvSeqPartition; external Core_Dll;
 
 function cvSum; external Core_Dll;
+
+procedure cvRandArr; external Core_Dll;
+procedure cvRandShuffle; external Core_Dll;
 
 end.
