@@ -97,7 +97,10 @@ unit legacy;
 
 interface
 
-Uses Windows, Core.types_c, imgproc.types_c;
+Uses
+  Windows,
+  Core.types_c,
+  imgproc.types_c;
 
 // CVAPI(CvSeq*) cvSegmentImage( const CvArr* srcarr, CvArr* dstarr,
 // double canny_threshold,
@@ -115,32 +118,36 @@ Uses Windows, Core.types_c, imgproc.types_c;
 // void* data;
 // }
 // CvInput;
-//
-// #define CV_EIGOBJ_NO_CALLBACK     0
-// #define CV_EIGOBJ_INPUT_CALLBACK  1
-// #define CV_EIGOBJ_OUTPUT_CALLBACK 2
-// #define CV_EIGOBJ_BOTH_CALLBACK   3
-//
-/// * Calculates covariation matrix of a set of arrays */
-// CVAPI(void)  cvCalcCovarMatrixEx( int nObjects, void* input, int ioFlags,
-// int ioBufSize, uchar* buffer, void* userData,
-// IplImage* avg, float* covarMatrix );
-//
-/// * Calculates eigen values and vectors of covariation matrix of a set of
-// arrays */
-// CVAPI(void)  cvCalcEigenObjects( int nObjects, void* input, void* output,
-// int ioFlags, int ioBufSize, void* userData,
-// CvTermCriteria* calcLimit, IplImage* avg,
-// float* eigVals );
-//
+const
+  CV_EIGOBJ_NO_CALLBACK     = 0;
+  CV_EIGOBJ_INPUT_CALLBACK  = 1;
+  CV_EIGOBJ_OUTPUT_CALLBACK = 2;
+  CV_EIGOBJ_BOTH_CALLBACK   = 3;
+
+  /// * Calculates covariation matrix of a set of arrays */
+  // CVAPI(void)  cvCalcCovarMatrixEx( int nObjects, void* input, int ioFlags,
+  // int ioBufSize, uchar* buffer, void* userData,
+  // IplImage* avg, float* covarMatrix );
+  //
+  // Calculates eigen values and vectors of covariation matrix of a set of arrays
+  // CVAPI(void)  cvCalcEigenObjects( int nObjects, void* input, void* output,
+  // int ioFlags, int ioBufSize, void* userData,
+  // CvTermCriteria* calcLimit, IplImage* avg,
+  // float* eigVals );
+
+procedure cvCalcEigenObjects(nObjects: Integer; input: Pointer; output: Pointer; ioFlags: Integer; ioBufSize: Integer;
+  userData: Pointer; calcLimit: pCvTermCriteria; avg: pIplImage; eigVals: pFloat); cdecl;
+
 /// * Calculates dot product (obj - avg) * eigObj (i.e. projects image to eigen vector) */
 // CVAPI(double)  cvCalcDecompCoeff( IplImage* obj, IplImage* eigObj, IplImage* avg );
-//
-/// * Projects image to eigen space (finds all decomposion coefficients */
+
+// Projects image to eigen space (finds all decomposion coefficients
 // CVAPI(void)  cvEigenDecomposite( IplImage* obj, int nEigObjs, void* eigInput,
 // int ioFlags, void* userData, IplImage* avg,
 // float* coeffs );
-//
+procedure cvEigenDecomposite(obj: pIplImage; nEigObjs: Integer; eigInput: Pointer; ioFlags: Integer; userData: Pointer;
+  avg: pIplImage; coeffs: pFloat); cdecl
+
 /// * Projects original objects used to calculate eigen space basis to that space */
 // CVAPI(void)  cvEigenProjection( void* eigInput, int nEigObjs, int ioFlags,
 // void* userData, float* coeffs, IplImage* avg,
@@ -3022,24 +3029,24 @@ Type
 
 const
   { CvSubdiv2DPointLocation enum }
-  CV_PTLOC_ERROR = -2;
+  CV_PTLOC_ERROR        = -2;
   CV_PTLOC_OUTSIDE_RECT = -1;
-  CV_PTLOC_INSIDE = 0;
-  CV_PTLOC_VERTEX = 1;
-  CV_PTLOC_ON_EDGE = 2;
+  CV_PTLOC_INSIDE       = 0;
+  CV_PTLOC_VERTEX       = 1;
+  CV_PTLOC_ON_EDGE      = 2;
 
 Type
   TCvNextEdgeType = Integer;
 
 const
   { CvNextEdgeType enum }
-  CV_NEXT_AROUND_ORG = $00;
-  CV_NEXT_AROUND_DST = $22;
-  CV_PREV_AROUND_ORG = $11;
-  CV_PREV_AROUND_DST = $33;
-  CV_NEXT_AROUND_LEFT = $13;
+  CV_NEXT_AROUND_ORG   = $00;
+  CV_NEXT_AROUND_DST   = $22;
+  CV_PREV_AROUND_ORG   = $11;
+  CV_PREV_AROUND_DST   = $33;
+  CV_NEXT_AROUND_LEFT  = $13;
   CV_NEXT_AROUND_RIGHT = $31;
-  CV_PREV_AROUND_LEFT = $20;
+  CV_PREV_AROUND_LEFT  = $20;
   CV_PREV_AROUND_RIGHT = $02;
 
   /// * get the next edge with the same origin point (counterwise) */
@@ -3310,14 +3317,14 @@ procedure cvFindStereoCorrespondenceGC(const left: pIplImage; const right: pIplI
 // */
 //
 const
-  CV_BG_MODEL_FGD = 0;
-  CV_BG_MODEL_MOG = 1; // * "Mixture of Gaussians".	*/
+  CV_BG_MODEL_FGD        = 0;
+  CV_BG_MODEL_MOG        = 1; // * "Mixture of Gaussians".	*/
   CV_BG_MODEL_FGD_SIMPLE = 2;
 
 Type
 
   ppCvBGStatModel = ^pCvBGStatModel;
-  pCvBGStatModel = ^TCvBGStatModel;
+  pCvBGStatModel  = ^TCvBGStatModel;
 
   // typedef void (CV_CDECL * CvReleaseBGStatModel)( struct CvBGStatModel** bg_model );
   TCvReleaseBGStatModel = procedure(Var bg_model: pCvBGStatModel); cdecl;
@@ -3329,11 +3336,11 @@ Type
     _type: Integer; // *type of BG model
     release: TCvReleaseBGStatModel;
     update: TCvUpdateBGStatModel;
-    background: pIplImage; // *8UC3 reference background image
-    foreground: pIplImage; // *8UC1 foreground image
-    layers: pIplImage; // *8UC3 reference background image, can be null
-    layer_count: Integer; // * can be zero
-    storage: pCvMemStorage; // *storage for foreground_regions
+    background: pIplImage;      // *8UC3 reference background image
+    foreground: pIplImage;      // *8UC1 foreground image
+    layers: pIplImage;          // *8UC3 reference background image, can be null
+    layer_count: Integer;       // * can be zero
+    storage: pCvMemStorage;     // *storage for foreground_regions
     foreground_regions: pCvSeq; // *foreground object contours
   end;
 
@@ -3376,11 +3383,11 @@ function cvUpdateBGStatModel(current_frame: pIplImage; bg_model: pCvBGStatModel;
 
 const
   // Default parameters of foreground detection algorithm:
-  CV_BGFG_FGD_LC = 128;
+  CV_BGFG_FGD_LC  = 128;
   CV_BGFG_FGD_N1C = 15;
   CV_BGFG_FGD_N2C = 25;
 
-  CV_BGFG_FGD_LCC = 64;
+  CV_BGFG_FGD_LCC  = 64;
   CV_BGFG_FGD_N1CC = 25;
   CV_BGFG_FGD_N2CC = 40;
   // Background reference image update parameter: */
@@ -3392,10 +3399,10 @@ const
   CV_BGFG_FGD_ALPHA_2 = 0.005;
 
   // * start value for alpha parameter (to fast initiate statistic model) */
-  CV_BGFG_FGD_ALPHA_3 = 0.1;
-  CV_BGFG_FGD_DELTA = 2;
-  CV_BGFG_FGD_T = 0.9;
-  CV_BGFG_FGD_MINAREA = 15;
+  CV_BGFG_FGD_ALPHA_3         = 0.1;
+  CV_BGFG_FGD_DELTA           = 2;
+  CV_BGFG_FGD_T               = 0.9;
+  CV_BGFG_FGD_MINAREA         = 15;
   CV_BGFG_FGD_BG_UPDATE_TRESH = 0.5;
 
   /// * See the above-referenced Li/Huang/Gu/Tian paper
@@ -3415,7 +3422,7 @@ Type
   pCvFGDStatModelParams = ^TCvFGDStatModelParams;
 
   TCvFGDStatModelParams = packed record
-    Lc: Integer; // Quantized levels per 'color' component. Power of two, typically 32, 64 or 128.
+    Lc: Integer;  // Quantized levels per 'color' component. Power of two, typically 32, 64 or 128.
     N1c: Integer; // Number of color vectors used to model normal background color variation at a given pixel.
     N2c: Integer; // Number of color vectors retained at given pixel.  Must be > N1c, typically ~ 5/3 of N1c.
     // Used to allow the first N1c vectors to adapt over time to changing background.
@@ -3427,12 +3434,12 @@ Type
     // Number of color co-occurrence vectors retained at given pixel.  Must be > N1cc, typically ~ 5/3 of N1cc.
     // Used to allow the first N1cc vectors to adapt over time to changing background.
     is_obj_without_holes: Integer; // If TRUE we ignore holes within foreground blobs. Defaults to TRUE.
-    perform_morphing: Integer; // Number of erode-dilate-erode foreground-blob cleanup iterations.
+    perform_morphing: Integer;     // Number of erode-dilate-erode foreground-blob cleanup iterations.
     // These erase one-pixel junk blobs and merge almost-touching blobs. Default value is 1.
     alpha1: Single; // How quickly we forget old background pixel values seen.  Typically set to 0.1
     alpha2: Single; // "Controls speed of feature learning". Depends on T. Typical value circa 0.005.
     alpha3: Single; // Alternate to alpha2, used (e.g.) for quicker initial convergence. Typical value 0.1.
-    delta: Single; // Affects color and color co-occurrence quantization, typically set to 2.
+    delta: Single;  // Affects color and color co-occurrence quantization, typically set to 2.
     T: Single;
     // "A percentage value which determines when new features can be recognized as new background." (Typically 0.9).
     minArea: Single; // Discard foreground blobs whose bounding box is smaller than this threshold.
@@ -3489,12 +3496,12 @@ const
 
   // * default parameters of gaussian background detection algorithm */
   CV_BGFG_MOG_BACKGROUND_THRESHOLD = 0.7; // * threshold sum of weights for background test */
-  CV_BGFG_MOG_STD_THRESHOLD = 2.5; // * lambda=2.5 is 99% */
-  CV_BGFG_MOG_WINDOW_SIZE = 200; // * Learning rate; alpha = 1/CV_GBG_WINDOW_SIZE */
-  CV_BGFG_MOG_NGAUSSIANS = 5; // * = K = number of Gaussians in mixture */
-  CV_BGFG_MOG_WEIGHT_INIT = 0.05;
-  CV_BGFG_MOG_SIGMA_INIT = 30;
-  CV_BGFG_MOG_MINAREA = 15;
+  CV_BGFG_MOG_STD_THRESHOLD        = 2.5; // * lambda=2.5 is 99% */
+  CV_BGFG_MOG_WINDOW_SIZE          = 200; // * Learning rate; alpha = 1/CV_GBG_WINDOW_SIZE */
+  CV_BGFG_MOG_NGAUSSIANS           = 5;   // * = K = number of Gaussians in mixture */
+  CV_BGFG_MOG_WEIGHT_INIT          = 0.05;
+  CV_BGFG_MOG_SIGMA_INIT           = 30;
+  CV_BGFG_MOG_MINAREA              = 15;
 
   CV_BGFG_MOG_NCOLORS = 3;
 
@@ -3530,11 +3537,11 @@ type
     _type: Integer; // type of BG model
     release: TCvReleaseBGStatModel;
     update: TCvUpdateBGStatModel;
-    background: pIplImage; // 8UC3 reference background image
-    foreground: pIplImage; // 8UC1 foreground image
-    layers: pIplImage; // 8UC3 reference background image, can be null
-    layer_count: Integer; // can be zero
-    storage: pCvMemStorage; // storage for foreground_regions
+    background: pIplImage;      // 8UC3 reference background image
+    foreground: pIplImage;      // 8UC1 foreground image
+    layers: pIplImage;          // 8UC3 reference background image, can be null
+    layer_count: Integer;       // can be zero
+    storage: pCvMemStorage;     // storage for foreground_regions
     foreground_regions: pCvSeq; // foreground object contours
     params: TCvGaussBGStatModelParams;
     g_point: pCvGaussBGPoint;
@@ -3592,7 +3599,8 @@ function cvSegmentFGMask(fgmask: pCvArr; poly1Hull0: Integer { =1 }; perimScale:
 
 implementation
 
-Uses uLibName;
+Uses
+  uLibName;
 
 function cvCreateStereoGCState; external legacy_Dll;
 procedure cvFindStereoCorrespondenceGC; external legacy_Dll;
@@ -3654,5 +3662,7 @@ function cvBGCodeBookDiff; external legacy_Dll;
 procedure cvBGCodeBookClearStale; external legacy_Dll;
 function cvSegmentFGMask; external legacy_Dll;
 procedure cvPyrSegmentation; external legacy_Dll;
+procedure cvCalcEigenObjects; external legacy_Dll;
+procedure cvEigenDecomposite; external legacy_Dll;
 
 end.

@@ -52,6 +52,7 @@ object MainForm: TMainForm
     Top = 8
     Width = 289
     Height = 297
+    VideoSource = ocvmgprtn1
   end
   object ocvcmr1: TocvCamera
     Enabled = True
@@ -60,6 +61,7 @@ object MainForm: TMainForm
     Top = 240
   end
   object ocvmgprtn1: TocvImageOperation
+    VideoSource = ocvcmr1
     ImageOperation = ioCanny
     Left = 348
     Top = 172

@@ -32,6 +32,7 @@ program Class_VideoCapture;
 
 uses
   System.SysUtils,
+  core.types,
   highgui,
   highgui_c,
   Mat;

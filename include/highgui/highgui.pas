@@ -89,6 +89,7 @@ Uses
   WinApi.Windows,
   Mat,
   Core.types_c,
+  Core.types,
   highgui_c;
 
 Type
@@ -218,7 +219,7 @@ procedure imshow(const winname: String; const Mat: IMat);
 Var
   IplImage: TIplImage;
 begin
-  IplImage._IplImage(Pointer(Mat));
+  IplImage.InitFromMat(Mat);
   cvShowImage(
     c_str(winname),
     @IplImage);

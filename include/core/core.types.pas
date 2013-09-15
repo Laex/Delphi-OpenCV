@@ -139,9 +139,14 @@ function CreateSize(width, height: Integer): ISize; overload; safecall;
 
 function CString(const s: pCVChar): Pointer; safecall;
 
+Type
+TIplImageRecordHelper = record helper for TIplImage
+  function InitFromMat(const Mat: IMat): TIplImage;
+end;
+
 implementation
 
-Uses uLibName;
+Uses uLibName, core_c;
 
 function Point: IPoint; external OpenCV_Classes_DLL index 200;
 function Point(x, y: Integer): IPoint; external OpenCV_Classes_DLL index 201;
@@ -152,5 +157,19 @@ function CreateSize: ISize; external OpenCV_Classes_DLL index 205;
 function CreateSize(width, height: Integer): ISize; external OpenCV_Classes_DLL index 206;
 
 function CString; external OpenCV_Classes_DLL index 300;
+
+function TIplImageRecordHelper.InitFromMat(const Mat: IMat): TIplImage;
+begin
+  Assert(Mat.dims <= 2);
+  cvInitImageHeader(
+    @Self,
+    CvSize(Mat.cols, Mat.rows),
+    cvIplDepth(Mat.flags),
+    Mat.channels);
+  cvSetData(
+    @Self,
+    Mat.data,
+    Mat.step1);
+end;
 
 end.

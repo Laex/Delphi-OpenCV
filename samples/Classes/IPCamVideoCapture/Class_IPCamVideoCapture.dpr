@@ -61,7 +61,7 @@ end;
 
 Var
   // See http://www.ispyconnect.com/
-  filename: pCVChar ='rtsp://192.168.0.200:554/mpeg4';
+  filename: pCVChar ='rtsp://192.168.0.202:554/cam/realmonitor?channel=1&subtype=0';
   camera: IVideoCapture;
   cameraFrame: IMat = nil;
 

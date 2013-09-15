@@ -31,7 +31,7 @@ implementation
 
 procedure TMainForm.cbb1Change(Sender: TObject);
 begin
-  ocvImageOperation1.ImageOperation := TcvImageOperations(cbb1.ItemIndex);
+  ocvmgprtn1.ImageOperation := TcvImageOperations(cbb1.ItemIndex);
 end;
 
 procedure TMainForm.chk1Click(Sender: TObject);
@@ -41,7 +41,7 @@ end;
 
 procedure TMainForm.FormCreate(Sender: TObject);
 begin
-  cbb1.ItemIndex := Integer(ocvImageOperation1.ImageOperation);
+  cbb1.ItemIndex := Integer(ocvmgprtn1.ImageOperation);
   chk1.Checked := ocvcmr1.Enabled;
 end;
 
