@@ -41,33 +41,46 @@ Type
 
   IocvDataSource = interface
     ['{80640C0A-6828-42F8-83E7-DA5FD9036DFF}']
-    procedure AddReceiver(const OpenCVVideoReceiver: IocvDataReceiver);
-    procedure RemoveReceiver(const OpenCVVideoReceiver: IocvDataReceiver);
+    procedure SetReceiver(const OpenCVVideoReceiver: IocvDataReceiver);
   end;
 
   TocvReceiverList = TList<IocvDataReceiver>;
 
-  TocvDataSource = class(TComponent, IocvDataSource)
+  TocvDataSource = class({TComponent}TInterfacedPersistent, IocvDataSource)
   private
     ReceiverCS: TCriticalSection;
+    FOwner : TComponent;
   protected
-    FReceiverList: TocvReceiverList;
+    FOpenCVVideoReceiver: IocvDataReceiver;
+    procedure NotifyReceiver(const IplImage: pIplImage); virtual;
+    function GetOwner: TPersistent; override;
   public
-    constructor Create(AOwner: TComponent); override;
+    constructor Create(AOwner: TComponent); //override;
     destructor Destroy; override;
-    procedure AddReceiver(const OpenCVVideoReceiver: IocvDataReceiver); virtual;
-    procedure RemoveReceiver(const OpenCVVideoReceiver: IocvDataReceiver); virtual;
-    procedure DisconnectRecipients; virtual;
-    procedure NotifyRecipients(const IplImage: pIplImage); virtual;
+    procedure SetReceiver(const OpenCVVideoReceiver: IocvDataReceiver); virtual;
+  end;
+
+  TocvDataReceiver = class(TInterfacedPersistent{TComponent}, IocvDataReceiver)
+  private
+    FocvVideoSource: TocvDataSource;
+  protected
+    procedure TakeImage(const IplImage: pIplImage); virtual;
+    procedure SetVideoSource(const Value: TObject); virtual;
+    procedure SetOpenCVVideoSource(const Value: TocvDataSource); virtual;
+  public
+    destructor Destroy; override;
+  published
+    property VideoSource: TocvDataSource Read FocvVideoSource write SetOpenCVVideoSource;
   end;
 
   TocvDataSourceAndReceiver = class(TocvDataSource, IocvDataReceiver)
   private
     FocvVideoSource: TocvDataSource;
-    procedure SetOpenCVVideoSource(const Value: TocvDataSource); virtual;
   protected
     procedure TakeImage(const IplImage: pIplImage); virtual;
     procedure SetVideoSource(const Value: TObject); virtual;
+    procedure SetOpenCVVideoSource(const Value: TocvDataSource); virtual;
+  public
     destructor Destroy; override;
   published
     property VideoSource: TocvDataSource Read FocvVideoSource write SetOpenCVVideoSource;
@@ -77,12 +90,11 @@ implementation
 
 { TOpenCVDataSource }
 
-procedure TocvDataSource.AddReceiver(const OpenCVVideoReceiver: IocvDataReceiver);
+procedure TocvDataSource.SetReceiver(const OpenCVVideoReceiver: IocvDataReceiver);
 begin
   ReceiverCS.Enter;
   try
-    if FReceiverList.IndexOf(OpenCVVideoReceiver) = -1 then
-      FReceiverList.Add(OpenCVVideoReceiver);
+    FOpenCVVideoReceiver := OpenCVVideoReceiver;
   finally
     ReceiverCS.Leave;
   end;
@@ -90,57 +102,34 @@ end;
 
 constructor TocvDataSource.Create(AOwner: TComponent);
 begin
-  inherited;
-  FReceiverList := TocvReceiverList.Create;
+  inherited Create;
+  FOwner:=AOwner;
   ReceiverCS := TCriticalSection.Create;
 end;
 
 destructor TocvDataSource.Destroy;
 begin
-  DisconnectRecipients;
-  FReceiverList.Free;
   ReceiverCS.Free;
   inherited;
 end;
 
-procedure TocvDataSource.DisconnectRecipients;
-Var
-  I: IocvDataReceiver;
+function TocvDataSource.GetOwner: TPersistent;
 begin
-  ReceiverCS.Enter;
-  try
-    for I in FReceiverList do
-      I.SetVideoSource(nil);
-  finally
-    ReceiverCS.Leave;
-  end;
+ Result := FOwner as TPersistent;
 end;
 
-procedure TocvDataSource.NotifyRecipients(const IplImage: pIplImage);
-Var
-  I: Integer;
+procedure TocvDataSource.NotifyReceiver(const IplImage: pIplImage);
 begin
-  for I := 0 to FReceiverList.Count - 1 do
-    FReceiverList[I].TakeImage(IplImage);
-end;
-
-procedure TocvDataSource.RemoveReceiver(const OpenCVVideoReceiver: IocvDataReceiver);
-begin
-  ReceiverCS.Enter;
-  try
-    if FReceiverList.IndexOf(OpenCVVideoReceiver) <> -1 then
-      FReceiverList.Remove(OpenCVVideoReceiver);
-  finally
-    ReceiverCS.Leave;
-  end;
+  if Assigned(FOpenCVVideoReceiver) then
+    FOpenCVVideoReceiver.TakeImage(IplImage);
 end;
 
 { TOpenCVDataSourceAndReceiver }
 
 destructor TocvDataSourceAndReceiver.Destroy;
 begin
-if Assigned(FocvVideoSource) then
-    FocvVideoSource.RemoveReceiver(Self);
+  if Assigned(FocvVideoSource) then
+    FocvVideoSource.SetReceiver(nil);
   inherited;
 end;
 
@@ -149,10 +138,10 @@ begin
   if (FocvVideoSource <> Value) and (Value <> Self) then
   begin
     if Assigned(FocvVideoSource) then
-      FocvVideoSource.RemoveReceiver(Self);
+      FocvVideoSource.SetReceiver(nil);
     FocvVideoSource := Value;
     if Assigned(FocvVideoSource) then
-      FocvVideoSource.AddReceiver(Self);
+      FocvVideoSource.SetReceiver(Self);
   end;
 end;
 
@@ -162,6 +151,37 @@ begin
 end;
 
 procedure TocvDataSourceAndReceiver.TakeImage(const IplImage: pIplImage);
+begin
+
+end;
+
+{ TocvDataReceiver }
+
+destructor TocvDataReceiver.Destroy;
+begin
+  if Assigned(FocvVideoSource) then
+    FocvVideoSource.SetReceiver(nil);
+  inherited;
+end;
+
+procedure TocvDataReceiver.SetOpenCVVideoSource(const Value: TocvDataSource);
+begin
+  if (FocvVideoSource <> Value) then
+  begin
+    if Assigned(FocvVideoSource) then
+      FocvVideoSource.SetReceiver(nil);
+    FocvVideoSource := Value;
+    if Assigned(FocvVideoSource) then
+      FocvVideoSource.SetReceiver(Self);
+  end;
+end;
+
+procedure TocvDataReceiver.SetVideoSource(const Value: TObject);
+begin
+ VideoSource := Value as TocvDataSource;
+end;
+
+procedure TocvDataReceiver.TakeImage(const IplImage: pIplImage);
 begin
 
 end;

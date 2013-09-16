@@ -904,11 +904,27 @@ procedure cvChangeSeqBlock(reader: pCvSeqReader; direction: Integer); cdecl;
 // CVAPI(void)  cvCreateSeqBlock( CvSeqWriter* writer );
 procedure cvCreateSeqBlock(writer: pCvSeqWriter); cdecl;
 
+// * writes an integer */
+// CVAPI(void) cvWriteInt( CvFileStorage* fs, const char* name, int value );
+procedure cvWriteInt(fs: pCvFileStorage; const name: pCvChar; value: Integer); cdecl;
+
+// * writes a floating-point number */
+// CVAPI(void) cvWriteReal( CvFileStorage* fs, const char* name, double value );
+procedure cvWriteReal(fs: pCvFileStorage; const name: pCvChar; value: double); cdecl;
+
+// * writes a string */
+// CVAPI(void) cvWriteString( CvFileStorage* fs, const char* name,const char* str, int quote CV_DEFAULT(0) );
+procedure cvWriteString(fs: pCvFileStorage; const name: pCvChar; const str: pCvChar; quote: Integer = 0); cdecl;
+
+// * writes a comment */
+// CVAPI(void) cvWriteComment( CvFileStorage* fs, const char* comment,int eol_comment );
+procedure cvWriteComment(fs: pCvFileStorage; const comment: pCvChar; eol_comment: Integer); cdecl;
+
 // writes instance of a standard type (matrix, image, sequence, graph etc.)
 // or user-defined type */
 // CVAPI(void) cvWrite( CvFileStorage* fs, const char* name, const void* ptr,
 // CvAttrList attributes CV_DEFAULT(cvAttrList()));
-procedure cvWrite(fs: pCvFileStorage; const name: pCVChar; const ptr: pointer;
+procedure cvWrite(fs: pCvFileStorage; const name: pCvChar; const ptr: pointer;
   attributes: TCvAttrList { = cvAttrList() } ); cdecl;
 
 type
@@ -1019,7 +1035,7 @@ type
   pCvFont = ^TCvFont;
 
   TCvFont = packed record
-    nameFont: pCVChar;
+    nameFont: pCvChar;
     color: TCvScalar;
     font_face: Integer;
     ascii: pInteger;
@@ -1043,7 +1059,7 @@ procedure cvInitFont(font: pCvFont; font_face: Integer; hscale: double; vscale: 
 { CVAPI(void)  cvPutText( pCvArr* img, const char* text, CvPoint org,
   const CvFont* font, CvScalar color );
 }
-procedure cvPutText(img: pCvArr; const text: pCVChar; org: TCvPoint; const font: pCvFont; color: TCvScalar); cdecl;
+procedure cvPutText(img: pCvArr; const text: pCvChar; org: TCvPoint; const font: pCvFont; color: TCvScalar); cdecl;
 
 { Draws contour outlines or filled interiors on the image
   CVAPI(void)  cvDrawContours( pCvArr *img, CvSeq* contour,
@@ -1064,8 +1080,8 @@ procedure cvDrawContours(img: pIplImage; contour: pCvSeq; external_color, hole_c
   CVAPI(CvFileStorage*)  cvOpenFileStorage( const char* filename, CvMemStorage* memstorage,
   int flags, const char* encoding CV_DEFAULT(NULL) );
 }
-function cvOpenFileStorage(const filename: pCVChar; memstorage: pCvMemStorage; flags: Integer;
-  const encoding: pCVChar = nil): pCvFileStorage; cdecl;
+function cvOpenFileStorage(const filename: pCvChar; memstorage: pCvMemStorage; flags: Integer;
+  const encoding: pCvChar = nil): pCvFileStorage; cdecl;
 
 { closes file storage and deallocates buffers
   CVAPI(void) cvReleaseFileStorage( CvFileStorage** fs );
@@ -1076,7 +1092,7 @@ procedure cvReleaseFileStorage(Var fs: pCvFileStorage); cdecl;
   CVAPI(CvFileNode*) cvGetFileNodeByName( const CvFileStorage* fs,
   const CvFileNode* map, const char* name );
 }
-function cvGetFileNodeByName(const fs: pCvFileStorage; const map: pCvFileNode; const name: pCVChar): pCvFileNode; cdecl;
+function cvGetFileNodeByName(const fs: pCvFileStorage; const map: pCvFileNode; const name: pCvChar): pCvFileNode; cdecl;
 
 { CV_INLINE int cvReadInt( const CvFileNode* node, int default_value CV_DEFAULT(0) )
   return !node ? default_value :
@@ -1090,7 +1106,7 @@ function cvReadInt(const node: pCvFileNode; default_value: Integer = 0): Integer
   {
   return cvReadInt( cvGetFileNodeByName( fs, map, name ), default_value );
 }
-function cvReadIntByName(const fs: pCvFileStorage; const map: pCvFileNode; const name: pCVChar;
+function cvReadIntByName(const fs: pCvFileStorage; const map: pCvFileNode; const name: pCvChar;
   default_value: Integer = 0): Integer; inline;
 
 { decodes standard or user-defined object and returns it
@@ -1098,6 +1114,13 @@ function cvReadIntByName(const fs: pCvFileStorage; const map: pCvFileNode; const
   CvAttrList* attributes CV_DEFAULT(NULL));
 }
 function cvRead(fs: pCvFileStorage; node: pCvFileNode; attributes: pCvAttrList = nil): pPointer; cdecl;
+
+// * decodes standard or user-defined object and returns it */
+// CV_INLINE void* cvReadByName( CvFileStorage* fs, const CvFileNode* map, const char* name, CvAttrList* attributes CV_DEFAULT(NULL) )
+// {return cvRead( fs, cvGetFileNodeByName( fs, map, name ), attributes );}
+function cvReadByName(fs: pCvFileStorage; const map: pCvFileNode; const name: pCvChar;
+  attributes: pCvAttrList = nil): pointer;
+
 
 // *********************************** Adding own types ***********************************/
 
@@ -1118,11 +1141,11 @@ procedure cvRelease(var struct_ptr: pCvSeq); cdecl; overload;
   const char** real_name CV_DEFAULT(NULL) );
 }
 
-procedure cvSave(const filename: pCVChar; const struct_ptr: pointer; const name: pCVChar; const comment: pCVChar;
+procedure cvSave(const filename: pCvChar; const struct_ptr: pointer; const name: pCvChar; const comment: pCvChar;
   attributes: TCvAttrList); cdecl; overload;
-procedure cvSave(const filename: pCVChar; const struct_ptr: pointer; const name: pCVChar = Nil;
-  const comment: pCVChar = Nil); overload; inline;
-function cvLoad(const filename: pCVChar; memstorage: pCvMemStorage = Nil; const name: pCVChar = nil;
+procedure cvSave(const filename: pCvChar; const struct_ptr: pointer; const name: pCvChar = Nil;
+  const comment: pCvChar = Nil); overload; inline;
+function cvLoad(const filename: pCvChar; memstorage: pCvMemStorage = Nil; const name: pCvChar = nil;
   const real_name: ppChar = nil): pointer; cdecl;
 
 // *********************************** Measuring Execution Time ***************************/
@@ -1425,11 +1448,11 @@ begin
     0);
 end;
 
-procedure cvSave(const filename: pCVChar; const struct_ptr: pointer; const name: pCVChar; const comment: pCVChar;
+procedure cvSave(const filename: pCvChar; const struct_ptr: pointer; const name: pCvChar; const comment: pCvChar;
   attributes: TCvAttrList); external Core_Dll; overload;
 
-procedure cvSave(const filename: pCVChar; const struct_ptr: pointer; const name: pCVChar = Nil;
-  const comment: pCVChar = Nil); overload; inline;
+procedure cvSave(const filename: pCvChar; const struct_ptr: pointer; const name: pCvChar = Nil;
+  const comment: pCvChar = Nil); overload; inline;
 begin
   cvSave(
     filename,
@@ -1583,5 +1606,19 @@ function cvSum; external Core_Dll;
 
 procedure cvRandArr; external Core_Dll;
 procedure cvRandShuffle; external Core_Dll;
+
+procedure cvWriteInt; external Core_Dll;
+procedure cvWriteReal; external Core_Dll;
+procedure cvWriteString; external Core_Dll;
+procedure cvWriteComment; external Core_Dll;
+
+function cvReadByName(fs: pCvFileStorage; const map: pCvFileNode; const name: pCvChar;
+  attributes: pCvAttrList = nil): pointer;
+begin
+  Result := cvRead(
+    fs,
+    cvGetFileNodeByName(fs, map, name),
+    attributes);
+end;
 
 end.

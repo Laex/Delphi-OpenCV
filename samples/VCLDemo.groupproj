@@ -12,6 +12,9 @@
         <Projects Include="VCLDemo\vclColorTracking\vclColorTracking.dproj">
             <Dependencies/>
         </Projects>
+        <Projects Include="VCLDemo\vclPCArecognition\vclPCArecognition.dproj">
+            <Dependencies/>
+        </Projects>
     </ItemGroup>
     <ProjectExtensions>
         <Borland.Personality>Default.Personality.12</Borland.Personality>
@@ -47,14 +50,23 @@
     <Target Name="vclColorTracking:Make">
         <MSBuild Projects="VCLDemo\vclColorTracking\vclColorTracking.dproj" Targets="Make"/>
     </Target>
+    <Target Name="vclPCArecognition">
+        <MSBuild Projects="VCLDemo\vclPCArecognition\vclPCArecognition.dproj"/>
+    </Target>
+    <Target Name="vclPCArecognition:Clean">
+        <MSBuild Projects="VCLDemo\vclPCArecognition\vclPCArecognition.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="vclPCArecognition:Make">
+        <MSBuild Projects="VCLDemo\vclPCArecognition\vclPCArecognition.dproj" Targets="Make"/>
+    </Target>
     <Target Name="Build">
-        <CallTarget Targets="VCLCameraCapture;VCLChessboardCorners;vclColorTracking"/>
+        <CallTarget Targets="VCLCameraCapture;VCLChessboardCorners;vclColorTracking;vclPCArecognition"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="VCLCameraCapture:Clean;VCLChessboardCorners:Clean;vclColorTracking:Clean"/>
+        <CallTarget Targets="VCLCameraCapture:Clean;VCLChessboardCorners:Clean;vclColorTracking:Clean;vclPCArecognition:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="VCLCameraCapture:Make;VCLChessboardCorners:Make;vclColorTracking:Make"/>
+        <CallTarget Targets="VCLCameraCapture:Make;VCLChessboardCorners:Make;vclColorTracking:Make;vclPCArecognition:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>
