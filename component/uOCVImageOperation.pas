@@ -134,7 +134,7 @@ Type
   protected
     procedure TakeImage(const IplImage: pIplImage); override;
   public
-    constructor Create(AOwner: TComponent); override;
+    constructor Create(AOwner: TComponent); //override;
     destructor Destroy; override;
   published
     property ImageOperation      : TcvImageOperations Read FImageOperation write SetImageOperations;
@@ -215,7 +215,7 @@ begin
       begin
         LockTransform;
         try
-          NotifyRecipients(Destanation);
+          NotifyReceiver(Destanation);
         finally
           UnlockTransform;
         end;

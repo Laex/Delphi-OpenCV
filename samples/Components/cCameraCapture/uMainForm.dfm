@@ -56,7 +56,7 @@ object MainForm: TMainForm
   end
   object ocvcmr1: TocvCamera
     Enabled = True
-    Resolution = r160x120
+    Resolution = r320x240
     Left = 348
     Top = 240
   end
@@ -65,5 +65,10 @@ object MainForm: TMainForm
     ImageOperation = ioCanny
     Left = 348
     Top = 172
+  end
+  object ocvspltr1: TocvSplitter
+    VideoSource = ocvcmr1
+    Left = 404
+    Top = 112
   end
 end

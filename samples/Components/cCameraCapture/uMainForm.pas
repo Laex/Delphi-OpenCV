@@ -5,7 +5,7 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, uOCVTypes, uOCVImageOperation,
-  uOCVCamera, uOCVView, Vcl.StdCtrls;
+  uOCVCamera, uOCVView, Vcl.StdCtrls, uOCVSplitter;
 
 type
   TMainForm = class(TForm)
@@ -15,6 +15,7 @@ type
     ocvw1: TocvView;
     ocvcmr1: TocvCamera;
     ocvmgprtn1: TocvImageOperation;
+    ocvspltr1: TocvSplitter;
     procedure FormCreate(Sender: TObject);
     procedure cbb1Change(Sender: TObject);
     procedure chk1Click(Sender: TObject);

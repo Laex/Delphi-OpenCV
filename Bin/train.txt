@@ -1,0 +1,8 @@
+faces\s1\1.pgm
+faces\s1\2.pgm
+faces\s1\3.pgm
+faces\s1\4.pgm
+faces\s1\5.pgm
+faces\s1\6.pgm
+faces\s1\7.pgm
+faces\s1\8.pgm

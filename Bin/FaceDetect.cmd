@@ -1,1 +1,1 @@
-FaceDetect.exe --cascade=FaceDetectXML\haarcascade_frontalface_alt.xml 0
+FaceDetect.exe --cascade=FaceDetectXML\haarcascade_frontalface_alt_tree.xml 0

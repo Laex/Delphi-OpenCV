@@ -99,7 +99,7 @@ type
     FOpenCVCameraThread: TocvCameraThread;
     procedure OnNotifyData(const IplImage: pIplImage);
   public
-    constructor Create(AOwner: TComponent); override;
+    constructor Create(AOwner: TComponent); //override;
     destructor Destroy; override;
   published
     property Enabled            : Boolean Read FEnabled write SetEnabled default False;
@@ -190,7 +190,7 @@ end;
 constructor TocvCamera.Create(AOwner: TComponent);
 begin
   inherited;
-  if not(csDesigning in ComponentState) then
+//  if not(csDesigning in ComponentState) then
   begin
     FOpenCVCameraThread := TocvCameraThread.Create(True);
     // FOpenCVCameraThread.Priority     := tpHigher;
@@ -230,7 +230,7 @@ end;
 
 procedure TocvCamera.OnNotifyData(const IplImage: pIplImage);
 begin
-  NotifyRecipients(IplImage);
+  NotifyReceiver(IplImage);
 end;
 
 procedure TocvCamera.SetCameraCaptureSource(const Value: TocvCameraCaptureSource);
@@ -251,7 +251,7 @@ procedure TocvCamera.SetEnabled(const Value: Boolean);
 begin
   if FEnabled <> Value then
   begin
-    if not(csDesigning in ComponentState) then
+//    if not(csDesigning in ComponentState) then
     begin
 
       if Assigned(FCapture) and FEnabled then
@@ -278,11 +278,11 @@ end;
 procedure TocvCamera.SetCameraResolution;
 begin
   cvSetCaptureProperty(
-    Fcapture,
+    FCapture,
     CV_CAP_PROP_FRAME_WIDTH,
     CameraResolution[FResolution].cWidth);
   cvSetCaptureProperty(
-    Fcapture,
+    FCapture,
     CV_CAP_PROP_FRAME_HEIGHT,
     CameraResolution[FResolution].cHeight);
 end;
