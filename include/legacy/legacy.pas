@@ -106,7 +106,10 @@ Uses
 // double canny_threshold,
 // double ffill_threshold,
 // CvMemStorage* storage );
-//
+
+function cvSegmentImage(const srcarr: pCvArr; dstarr: pCvArr; canny_threshold: double; ffill_threshold: double;
+  storage: pCvMemStorage): pCvSeq; cdecl;
+
 /// ****************************************************************************************\
 // *                                  Eigen objects                                         *
 // \****************************************************************************************/
@@ -146,7 +149,8 @@ procedure cvCalcEigenObjects(nObjects: Integer; input: Pointer; output: Pointer;
 // int ioFlags, void* userData, IplImage* avg,
 // float* coeffs );
 procedure cvEigenDecomposite(obj: pIplImage; nEigObjs: Integer; eigInput: Pointer; ioFlags: Integer; userData: Pointer;
-  avg: pIplImage; coeffs: pFloat); cdecl
+  avg: pIplImage; coeffs: pFloat);
+cdecl
 
 /// * Projects original objects used to calculate eigen space basis to that space */
 // CVAPI(void)  cvEigenProjection( void* eigInput, int nEigObjs, int ioFlags,
@@ -3664,5 +3668,6 @@ function cvSegmentFGMask; external legacy_Dll;
 procedure cvPyrSegmentation; external legacy_Dll;
 procedure cvCalcEigenObjects; external legacy_Dll;
 procedure cvEigenDecomposite; external legacy_Dll;
+function cvSegmentImage; external legacy_Dll;
 
 end.

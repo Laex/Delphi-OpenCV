@@ -25,9 +25,6 @@
   //  http://blog.vidikon.com/?p=447
   //  *************************************************************** *)
 
-// JCL_DEBUG_EXPERT_GENERATEJDBG OFF
-// JCL_DEBUG_EXPERT_INSERTJDBG OFF
-// JCL_DEBUG_EXPERT_DELETEMAPFILE OFF
 program mmdt;
 
 {$APPTYPE CONSOLE}

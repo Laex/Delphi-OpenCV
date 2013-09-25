@@ -85,7 +85,10 @@ unit core.types;
 
 interface
 
-Uses Windows, core.types_c, Mat;
+Uses
+  Windows,
+  core.types_c,
+  Mat;
 
 Type
   /// ///////////////////////////// Point_ ////////////////////////////////
@@ -112,6 +115,7 @@ Type
   IScalar = interface
     ['{0887A2A4-3A75-4739-A6E8-F9CB502B8864}']
     function isReal(): BOOL; stdcall;
+    procedure all(value: double); stdcall;
     // ---------------------------------
     function getScalar(): Pointer; stdcall;
   end;
@@ -134,27 +138,29 @@ function Point(x, y: Integer): IPoint; overload; safecall;
 function Scalar: IScalar; overload; safecall;
 function Scalar(v0, v1: Integer; v2: Integer = 0; v3: Integer = 0): IScalar; overload; safecall;
 function Scalar(v0: Integer): IScalar; overload; safecall;
-function CreateSize: ISize; overload; safecall;
-function CreateSize(width, height: Integer): ISize; overload; safecall;
+function Size: ISize; overload; overload; safecall;
+function Size(width, height: Integer): ISize; overload; safecall;
 
 function CString(const s: pCVChar): Pointer; safecall;
 
 Type
-TIplImageRecordHelper = record helper for TIplImage
-  function InitFromMat(const Mat: IMat): TIplImage;
-end;
+  TIplImageRecordHelper = record helper for TIplImage
+    function InitFromMat(const Mat: IMat): TIplImage;
+  end;
 
 implementation
 
-Uses uLibName, core_c;
+Uses
+  uLibName,
+  core_c;
 
 function Point: IPoint; external OpenCV_Classes_DLL index 200;
 function Point(x, y: Integer): IPoint; external OpenCV_Classes_DLL index 201;
 function Scalar: IScalar; external OpenCV_Classes_DLL index 202;
 function Scalar(v0, v1: Integer; v2: Integer; v3: Integer): IScalar; external OpenCV_Classes_DLL index 203;
 function Scalar(v0: Integer): IScalar; external OpenCV_Classes_DLL index 204;
-function CreateSize: ISize; external OpenCV_Classes_DLL index 205;
-function CreateSize(width, height: Integer): ISize; external OpenCV_Classes_DLL index 206;
+function Size: ISize; external OpenCV_Classes_DLL index 205;
+function Size(width, height: Integer): ISize; external OpenCV_Classes_DLL index 206;
 
 function CString; external OpenCV_Classes_DLL index 300;
 

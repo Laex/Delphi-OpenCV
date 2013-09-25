@@ -15,6 +15,9 @@
         <Projects Include="VCLDemo\vclPCArecognition\vclPCArecognition.dproj">
             <Dependencies/>
         </Projects>
+        <Projects Include="VCLDemo\vclIPCameraCapture\VCLIPCameraCapture.dproj">
+            <Dependencies/>
+        </Projects>
     </ItemGroup>
     <ProjectExtensions>
         <Borland.Personality>Default.Personality.12</Borland.Personality>
@@ -59,14 +62,23 @@
     <Target Name="vclPCArecognition:Make">
         <MSBuild Projects="VCLDemo\vclPCArecognition\vclPCArecognition.dproj" Targets="Make"/>
     </Target>
+    <Target Name="VCLIPCameraCapture">
+        <MSBuild Projects="VCLDemo\vclIPCameraCapture\VCLIPCameraCapture.dproj"/>
+    </Target>
+    <Target Name="VCLIPCameraCapture:Clean">
+        <MSBuild Projects="VCLDemo\vclIPCameraCapture\VCLIPCameraCapture.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="VCLIPCameraCapture:Make">
+        <MSBuild Projects="VCLDemo\vclIPCameraCapture\VCLIPCameraCapture.dproj" Targets="Make"/>
+    </Target>
     <Target Name="Build">
-        <CallTarget Targets="VCLCameraCapture;VCLChessboardCorners;vclColorTracking;vclPCArecognition"/>
+        <CallTarget Targets="VCLCameraCapture;VCLChessboardCorners;vclColorTracking;vclPCArecognition;VCLIPCameraCapture"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="VCLCameraCapture:Clean;VCLChessboardCorners:Clean;vclColorTracking:Clean;vclPCArecognition:Clean"/>
+        <CallTarget Targets="VCLCameraCapture:Clean;VCLChessboardCorners:Clean;vclColorTracking:Clean;vclPCArecognition:Clean;VCLIPCameraCapture:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="VCLCameraCapture:Make;VCLChessboardCorners:Make;vclColorTracking:Make;vclPCArecognition:Make"/>
+        <CallTarget Targets="VCLCameraCapture:Make;VCLChessboardCorners:Make;vclColorTracking:Make;vclPCArecognition:Make;VCLIPCameraCapture:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>

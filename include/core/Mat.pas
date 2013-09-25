@@ -131,10 +131,12 @@ Type
     function cols: Integer; stdcall;
     // ! pointer to the data
     function data: pByte; stdcall;
+    //! copies the matrix content to "m".
+    // It calls m.create(this->size(), this->type()).
+    procedure copyto(Var _mat:IMat); stdcall;
     // ! pointer to the reference counter;
     // when matrix points to user-allocated data, the pointer is NULL
     function refcount: pInteger; stdcall;
-
     // -----------------------------------
     function getMat(): Pointer; stdcall;
     // procedure setMat(mat:Pointer); stdcall;

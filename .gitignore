@@ -1,5 +1,6 @@
 Win32
 __history
+!*
 *.dcu
 *.local
 *.exe
@@ -29,18 +30,11 @@ __history
 /opencv_classes/ipch
 /opencv_classes/Lib
 /opencv_classes/opencv_classes.sdf
-
 *.exp
-
 *.ilk
-
 *.lib
-
 *.pdb
-
 *.suo
-
 *.vlb
 /bin/carnumdetect.ini
-
 /bin/*.bsc

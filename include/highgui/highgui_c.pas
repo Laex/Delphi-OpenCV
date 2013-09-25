@@ -207,9 +207,11 @@ type
 function cvCreateTrackbar2(const trackbar_name: pCVChar; const window_name: pCVChar; value: PInteger; count: Integer;
   on_change: CvTrackbarCallback2; userdata: Pointer = nil): Integer; cdecl;
 
-(* retrieve or set trackbar position *)
-// CVAPI(Integer)cvGetTrackbarPos(PCVChar trackbar_name, PCVChar window_name);
-// CVAPI(procedure)cvSetTrackbarPos(trackbar_name: PCVChar; window_name: PCVChar; pos: Integer);
+//* retrieve or set trackbar position */
+//CVAPI(int) cvGetTrackbarPos( const char* trackbar_name, const char* window_name );
+function cvGetTrackbarPos( const trackbar_name:pCvChar; const window_name:pCvChar):Integer; cdecl;
+//CVAPI(void) cvSetTrackbarPos( const char* trackbar_name, const char* window_name, int pos );
+procedure cvSetTrackbarPos( const trackbar_name:pCVChar; const window_name:pCVChar; pos:Integer); cdecl;
 
 const
   CV_EVENT_MOUSEMOVE = 0;
@@ -881,5 +883,8 @@ function cvGetWindowProperty; external highgui_Dll;
 function cvInitSystem; external highgui_Dll;
 function cvStartWindowThread; external highgui_Dll;
 function cvCreateTrackbar2; external highgui_Dll;
+
+function cvGetTrackbarPos; external highgui_Dll;
+procedure cvSetTrackbarPos; external highgui_Dll;
 
 end.

@@ -96,7 +96,9 @@ unit calib3d_c;
 
 interface
 
-Uses Core.types_c, compat;
+Uses
+  Core.types_c,
+  compat;
 
 /// ****************************************************************************************\
 // *                      Camera Calibration, Pose Estimation and Stereo                    *
@@ -137,13 +139,13 @@ const
   CV_FM_7POINT = 1;
   CV_FM_8POINT = 2;
 
-  CV_LMEDS = 4;
+  CV_LMEDS  = 4;
   CV_RANSAC = 8;
 
-  CV_FM_LMEDS_ONLY = CV_LMEDS;
+  CV_FM_LMEDS_ONLY  = CV_LMEDS;
   CV_FM_RANSAC_ONLY = CV_RANSAC;
-  CV_FM_LMEDS = CV_LMEDS;
-  CV_FM_RANSAC = CV_RANSAC;
+  CV_FM_LMEDS       = CV_LMEDS;
+  CV_FM_RANSAC      = CV_RANSAC;
 
   CV_ITERATIVE = 0;
   CV_EPNP = 1; // F.Moreno-Noguer, V.Lepetit and P.Fua "EPnP: Efficient Perspective-n-Point Camera Pose Estimation"
@@ -186,17 +188,18 @@ const
   // CvRect* valid_pixel_ROI CV_DEFAULT(0),
   // int center_principal_point CV_DEFAULT(0));
   //
-  /// * Converts rotation vector to rotation matrix or vice versa */
+  // * Converts rotation vector to rotation matrix or vice versa */
   // CVAPI(int) cvRodrigues2( const CvMat* src, CvMat* dst,
   // CvMat* jacobian CV_DEFAULT(0) );
+function cvRodrigues2(const src: pCvMat; dst: pCvMat; jacobian: pCvMat = nil): Integer; cdecl;
 
-  /// * Finds perspective transformation between the object plane and image (view) plane */
-  // CVAPI(int) cvFindHomography( const CvMat* src_points,
-  // const CvMat* dst_points,
-  // CvMat* homography,
-  // int method CV_DEFAULT(0),
-  // double ransacReprojThreshold CV_DEFAULT(3),
-  // CvMat* mask CV_DEFAULT(0));
+/// * Finds perspective transformation between the object plane and image (view) plane */
+// CVAPI(int) cvFindHomography( const CvMat* src_points,
+// const CvMat* dst_points,
+// CvMat* homography,
+// int method CV_DEFAULT(0),
+// double ransacReprojThreshold CV_DEFAULT(3),
+// CvMat* mask CV_DEFAULT(0));
 function cvFindHomography(const src_points: pCvMat; const dst_points: pCvMat; homography: pCvMat; method: Integer = 0;
   ransacReprojThreshold: double = 3; mask: pCvMat = nil): Integer; cdecl;
 
@@ -268,13 +271,13 @@ procedure cvFindExtrinsicCameraParams2(const object_points: pCvMat; const image_
 // #define CV_CALIB_CB_FAST_CHECK       8
 //
 
-{// Performs a fast check if a chessboard is in the input image. This is a workaround to
- // a problem of cvFindChessboardCorners being slow on images with no chessboard
- // - src: input image
- // - size: chessboard size
- // Returns 1 if a chessboard can be in this image and findChessboardCorners should be called,
- // 0 if there is no chessboard, -1 in case of error
- CVAPI(int) cvCheckChessboard(IplImage* src, CvSize size);
+{ // Performs a fast check if a chessboard is in the input image. This is a workaround to
+  // a problem of cvFindChessboardCorners being slow on images with no chessboard
+  // - src: input image
+  // - size: chessboard size
+  // Returns 1 if a chessboard can be in this image and findChessboardCorners should be called,
+  // 0 if there is no chessboard, -1 in case of error
+  CVAPI(int) cvCheckChessboard(IplImage* src, CvSize size);
 }
 function cvCheckChessboard(const image: pCvArr; size: TCvSize): Integer; cdecl;
 
@@ -287,19 +290,19 @@ function cvCheckChessboard(const image: pCvArr; size: TCvSize): Integer; cdecl;
 
 const
   CV_CALIB_USE_INTRINSIC_GUESS = 1;
-  CV_CALIB_FIX_ASPECT_RATIO = 2;
+  CV_CALIB_FIX_ASPECT_RATIO    = 2;
   CV_CALIB_FIX_PRINCIPAL_POINT = 4;
-  CV_CALIB_ZERO_TANGENT_DIST = 8;
-  CV_CALIB_FIX_FOCAL_LENGTH = 16;
-  CV_CALIB_FIX_K1 = 32;
-  CV_CALIB_FIX_K2 = 64;
-  CV_CALIB_FIX_K3 = 128;
-  CV_CALIB_FIX_K4 = 2048;
-  CV_CALIB_FIX_K5 = 4096;
-  CV_CALIB_FIX_K6 = 8192;
-  CV_CALIB_RATIONAL_MODEL = 16384;
-  CV_CALIB_THIN_PRISM_MODEL = 32768;
-  CV_CALIB_FIX_S1_S2_S3_S4 = 65536;
+  CV_CALIB_ZERO_TANGENT_DIST   = 8;
+  CV_CALIB_FIX_FOCAL_LENGTH    = 16;
+  CV_CALIB_FIX_K1              = 32;
+  CV_CALIB_FIX_K2              = 64;
+  CV_CALIB_FIX_K3              = 128;
+  CV_CALIB_FIX_K4              = 2048;
+  CV_CALIB_FIX_K5              = 4096;
+  CV_CALIB_FIX_K6              = 8192;
+  CV_CALIB_RATIONAL_MODEL      = 16384;
+  CV_CALIB_THIN_PRISM_MODEL    = 32768;
+  CV_CALIB_FIX_S1_S2_S3_S4     = 65536;
 
   {
     /* Draws individual chessboard corners or the whole chessboard detected */
@@ -369,22 +372,27 @@ function cvCalibrateCamera2(
 // CvTermCriteria term_crit CV_DEFAULT(cvTermCriteria(
 // CV_TERMCRIT_ITER+CV_TERMCRIT_EPS,30,1e-6)),
 // int flags CV_DEFAULT(CV_CALIB_FIX_INTRINSIC));
-//
-// #define CV_CALIB_ZERO_DISPARITY 1024
-//
-/// * Computes 3D rotations (+ optional shift) for each camera coordinate system to make both
-// views parallel (=> to make all the epipolar lines horizontal or vertical) */
-// CVAPI(void) cvStereoRectify( const CvMat* camera_matrix1, const CvMat* camera_matrix2,
-// const CvMat* dist_coeffs1, const CvMat* dist_coeffs2,
-// CvSize image_size, const CvMat* R, const CvMat* T,
-// CvMat* R1, CvMat* R2, CvMat* P1, CvMat* P2,
-// CvMat* Q CV_DEFAULT(0),
-// int flags CV_DEFAULT(CV_CALIB_ZERO_DISPARITY),
-// double alpha CV_DEFAULT(-1),
-// CvSize new_image_size CV_DEFAULT(cvSize(0,0)),
-// CvRect* valid_pix_ROI1 CV_DEFAULT(0),
-// CvRect* valid_pix_ROI2 CV_DEFAULT(0));
-//
+const
+  CV_CALIB_ZERO_DISPARITY = 1024;
+
+  // Computes 3D rotations (+ optional shift) for each camera coordinate system to make both
+  // views parallel (=> to make all the epipolar lines horizontal or vertical)
+  // CVAPI(void) cvStereoRectify( const CvMat* camera_matrix1, const CvMat* camera_matrix2,
+  // const CvMat* dist_coeffs1, const CvMat* dist_coeffs2,
+  // CvSize image_size, const CvMat* R, const CvMat* T,
+  // CvMat* R1, CvMat* R2, CvMat* P1, CvMat* P2,
+  // CvMat* Q CV_DEFAULT(0),
+  // int flags CV_DEFAULT(CV_CALIB_ZERO_DISPARITY),
+  // double alpha CV_DEFAULT(-1),
+  // CvSize new_image_size CV_DEFAULT(cvSize(0,0)),
+  // CvRect* valid_pix_ROI1 CV_DEFAULT(0),
+  // CvRect* valid_pix_ROI2 CV_DEFAULT(0));
+procedure cvStereoRectify(const camera_matrix1: pCvMat; const camera_matrix2: pCvMat; const dist_coeffs1: pCvMat;
+  const dist_coeffs2: pCvMat; image_size: TCvSize; const R: pCvMat; const T: pCvMat; R1: pCvMat; R2: pCvMat; P1: pCvMat;
+  P2: pCvMat; Q: pCvMat { = nil }; flags: Integer { = CV_CALIB_ZERO_DISPARITY }; alpha: double { = -1 };
+  new_image_size: TCvSize { =CV_DEFAULT(cvSize(0,0)) }; valid_pix_ROI1: pCvRect { =nil };
+  valid_pix_ROI2: pCvRect { =nil } ); cdecl;
+
 /// * Computes rectification transformations for uncalibrated pair of images using a set
 // of point correspondences */
 // CVAPI(int) cvStereoRectifyUncalibrated( const CvMat* points1, const CvMat* points2,
@@ -471,8 +479,8 @@ procedure cvReprojectImageTo3D(
 Const
   CV_CALIB_CB_ADAPTIVE_THRESH = 1;
   CV_CALIB_CB_NORMALIZE_IMAGE = 2;
-  CV_CALIB_CB_FILTER_QUADS = 4;
-  CV_CALIB_CB_FAST_CHECK = 8;
+  CV_CALIB_CB_FILTER_QUADS    = 4;
+  CV_CALIB_CB_FAST_CHECK      = 8;
 
   {
     /* Detects corners on a chessboard calibration pattern */
@@ -489,7 +497,8 @@ function cvFindChessboardCorners(const image: Pointer; pattern_size: TCvSize; co
 
 implementation
 
-Uses uLibName;
+Uses
+  uLibName;
 
 procedure cvReprojectImageTo3D; external calib3d_dll;
 function cvFindChessboardCorners; external calib3d_dll;
@@ -504,5 +513,7 @@ procedure cvReleasePOSITObject; external calib3d_dll;
 function cvRANSACUpdateNumIters; external calib3d_dll;
 procedure cvConvertPointsHomogeneous(const src: pCvMat; dst: pCvMat); external calib3d_dll;
 function cvCheckChessboard; external calib3d_dll;
+function cvRodrigues2; external calib3d_dll;
+procedure cvStereoRectify; external calib3d_dll;
 
 end.

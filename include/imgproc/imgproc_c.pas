@@ -97,7 +97,8 @@ unit imgproc_c;
 interface
 
 uses
-  Core.types_c, imgproc.types_c;
+  Core.types_c,
+  imgproc.types_c;
 
 (* ********************** Background statistics accumulation **************************** *)
 
@@ -252,9 +253,12 @@ procedure cvResize(const src: pIplImage; dst: pIplImage; interpolation: Integer 
 procedure cvWarpAffine(const src: pIplImage; dst: pIplImage; const map_matrix: pCvMat;
   flags: Integer { = CV_INTER_LINEAR+CV_WARP_FILL_OUTLIERS }; fillval: TCvScalar { = cvScalarAll(0) } ); cdecl;
 
-// CVAPI(CvMat)cvGetAffineTransform(CvPoint2D32f * src: );
-// var dst: vPoint2D32f; var map_matrix: CvMat);
-//
+// * Computes affine transform matrix for mapping src[i] to dst[i] (i=0,1,2) */
+// CVAPI(CvMat*) cvGetAffineTransform( const CvPoint2D32f * src,
+// const CvPoint2D32f * dst,
+// CvMat * map_matrix );
+function cvGetAffineTransform(const src: pCvPoint2D32f; const dst: pCvPoint2D32f; map_matrix: pCvMat): pCvMat; cdecl;
+
 {
   (* Computes rotation_matrix matrix *)
   CVAPI(CvMat)cv2DRotationMatrix(CvPoint2D32f center, Double angle, Double scale, CvMat * map_matrix);
@@ -288,7 +292,7 @@ function cvGetPerspectiveTransform(const src: pCvPoint2D32f; const dst: pCvPoint
   int flags CV_DEFAULT(CV_INTER_LINEAR+CV_WARP_FILL_OUTLIERS),
   CvScalar fillval CV_DEFAULT(cvScalarAll(0)) );
 }
-procedure cvRemap(const src: pIplImage; dst: pIplImage; const mapx: pIplImage; const mapy: pIplImage;
+procedure cvRemap(const src: pCvArr; dst: pCvArr; const mapx: pCvArr; const mapy: pCvArr;
   flags: Integer { =CV_INTER_LINEAR+CV_WARP_FILL_OUTLIERS }; fillval: TCvScalar { =cvScalarAll(0) }
   ); cdecl;
 
@@ -307,6 +311,14 @@ procedure cvLogPolar(const src: pCvArr; dst: pCvArr; center: TCvPoint2D32f; M: d
 procedure cvLinearPolar(const src: pCvArr; dst: pCvArr; center: TCvPoint2D32f; maxRadius: double;
   flags: Integer = CV_INTER_LINEAR + CV_WARP_FILL_OUTLIERS); cdecl;
 
+// * Transforms the input image to compensate lens distortion */
+// CVAPI(void) cvUndistort2( const CvArr* src, CvArr* dst,
+// const CvMat* camera_matrix,
+// const CvMat* distortion_coeffs,
+// const CvMat* new_camera_matrix CV_DEFAULT(0) );
+procedure cvUndistort2(const src: pCvArr; dst: pCvArr; const camera_matrix: pCvArr; const distortion_coeffs: pCvArr;
+  const new_camera_matrix: pCvArr = nil); cdecl;
+
 {
   /* Computes transformation map from intrinsic camera parameters
   that can used by cvRemap */
@@ -316,8 +328,8 @@ procedure cvLinearPolar(const src: pCvArr; dst: pCvArr; center: TCvPoint2D32f; m
   CvArr* mapx,
   CvArr* mapy );
 }
-procedure cvInitUndistortMap(const camera_matrix: pCvMat; const distortion_coeffs: pCvMat; mapx: pIplImage;
-  mapy: pIplImage); cdecl;
+procedure cvInitUndistortMap(const camera_matrix: pCvMat; const distortion_coeffs: pCvMat; mapx: pCvArr;
+  mapy: pCvArr); cdecl;
 
 
 // (* Computes undistortion+rectification map for a head of stereo camera *)
@@ -325,49 +337,28 @@ procedure cvInitUndistortMap(const camera_matrix: pCvMat; const distortion_coeff
 // procedure)cvInitUndistortRectifyMap(var camera_matrix: CvMat; var dist_coeffs: vMat;
 // var = new_camera_matrix: onst CvMat; var } CvArr * mapx: {$EXTERNALSYM CvMat;
 // var mapy: CvArr);
-//
+
 // (* Computes the original (undistorted) feature coordinates
 // from the observed (distorted) coordinates *)
-// CVAPI(procedure) cvUndistortPoints(
-// v1: 0);
-// var P CV_DEFAULT(0): vMat);
-//
-// (* creates structuring element used for morphological operations *)
-// CVAPI(IplConvKernel)  cvCreateStructuringElementEx(
-// Integer cols, Integer  rows, Integer  anchor_x, Integer  anchor_y,
-// function shape, Integer values CV_DEFAULT(v1: 0)): Integer;
+// CVAPI(void) cvUndistortPoints( const CvMat* src, CvMat* dst,
+// const CvMat* camera_matrix,
+// const CvMat* dist_coeffs,
+// const CvMat* R CV_DEFAULT(0),
+// const CvMat* P CV_DEFAULT(0));
+procedure cvUndistortPoints(const src: pCvMat; dst: pCvMat; const camera_matrix: pCvMat; const dist_coeffs: pCvMat;
+  const R: pCvMat = nil; const P: pCvMat = nil); cdecl;
 
+// * creates structuring element used for morphological operations */
 // CVAPI(IplConvKernel*)  cvCreateStructuringElementEx(
 // int cols, int  rows, int  anchor_x, int  anchor_y,
 // int shape, int* values CV_DEFAULT(NULL) );
 function cvCreateStructuringElementEx(cols: Integer; rows: Integer; anchor_x: Integer; anchor_y: Integer;
-  shape: Integer; values: pInteger = nil): pIplConvKernel; cdecl;
+  shape: Integer; values: PInteger = nil): pIplConvKernel; cdecl;
 
 // (* releases structuring element *)
 // CVAPI(procedure)  cvReleaseStructuringElement( element: array of IplConvKernel);
 // CVAPI(void)  cvReleaseStructuringElement( IplConvKernel** element );
 procedure cvReleaseStructuringElement(Var element: pIplConvKernel); cdecl;
-
-
-//
-// (* erodes input image (applies minimum filter) one or more times.
-// If element cPointer is 0, 3x3 rectangular element is used *)
-// CVAPI(procedure)  cvErode(
-// v1: 0);
-// var dilates input image (applies maximum filter) one or more times.   If element cPointer is 0: function iterations CV_DEFAULT(v1: 1)): Integer;(;
-// var )
-
-// CVAPI(procedure)  cvDilate(  CvArr* src: 3x3 rectangular element is used;
-// var dst: CvArr;
-// var element CV_DEFAULT(0): IplConvKernel;
-// var Performs complex morphological transformation *)
-
-// CVAPI(procedure)  cvMorphologyEx(  CvArr* src: function iterations CV_DEFAULT(v1: 1)): Integer;(;
-// var dst: CvArr;
-// var temp: CvArr;
-// var element: IplConvKernel;
-// operation: function;
-// var Calculates all spatial and central moments up to the 3rd order *)
 
 { Performs complex morphological transformation }
 // CVAPI(void)  cvMorphologyEx( const CvArr* src, CvArr* dst,
@@ -450,17 +441,17 @@ procedure cvMatchTemplate(const image: pCvArr; const templ: pCvArr; result: pCvA
 const
   // * contour retrieval mode */
   CV_RETR_EXTERNAL = 0;
-  CV_RETR_LIST = 1;
-  CV_RETR_CCOMP = 2;
-  CV_RETR_TREE = 3;
+  CV_RETR_LIST     = 1;
+  CV_RETR_CCOMP    = 2;
+  CV_RETR_TREE     = 3;
 
   // * contour approximation method */
-  CV_CHAIN_CODE = 0;
-  CV_CHAIN_APPROX_NONE = 1;
-  CV_CHAIN_APPROX_SIMPLE = 2;
-  CV_CHAIN_APPROX_TC89_L1 = 3;
+  CV_CHAIN_CODE             = 0;
+  CV_CHAIN_APPROX_NONE      = 1;
+  CV_CHAIN_APPROX_SIMPLE    = 2;
+  CV_CHAIN_APPROX_TC89_L1   = 3;
   CV_CHAIN_APPROX_TC89_KCOS = 4;
-  CV_LINK_RUNS = 5;
+  CV_LINK_RUNS              = 5;
 
   {
     /* Retrieves outer and optionally inner boundaries of white (non-zero) connected
@@ -646,7 +637,7 @@ procedure cvBoxPoints(box: TCvBox2D; pt: TBoxPoints); cdecl;
   float** ranges CV_DEFAULT(NULL),
   int uniform CV_DEFAULT(1));
 }
-function cvCreateHist(dims: Integer; sizes: pInteger; _type: Integer; ranges: pSingleArray2D = nil;
+function cvCreateHist(dims: Integer; sizes: PInteger; _type: Integer; ranges: pSingleArray2D = nil;
   uniform: Integer = 1): pCvHistogram; cdecl;
 
 // (* Assignes histogram bin ranges *)
@@ -674,7 +665,7 @@ procedure cvClearHist(hist: pCvHistogram); cdecl;
   int* max_idx CV_DEFAULT(NULL));
 }
 procedure cvGetMinMaxHistValue(const hist: pCvHistogram; min_value: pSingle; max_value: pSingle;
-  min_idx: pInteger = nil; max_idx: pInteger = nil); cdecl;
+  min_idx: PInteger = nil; max_idx: PInteger = nil); cdecl;
 
 // (* Clear all histogram bins that are below the threshold *)
 // CVAPI(procedure)  cvThreshHist(var hist: CvHistogram; threshold: Double);
@@ -885,7 +876,7 @@ procedure cvFindCornerSubPix(const image: pIplImage; corners: pCvPoint2D32f; cou
   double k CV_DEFAULT(0.04) );
 }
 procedure cvGoodFeaturesToTrack(const image: pIplImage; eig_image: pIplImage; temp_image: pIplImage;
-  corners: pCvPoint2D32f; corner_count: pInteger; quality_level: double; min_distance: double;
+  corners: pCvPoint2D32f; corner_count: PInteger; quality_level: double; min_distance: double;
   const mask: pIplImage = nil; block_size: Integer = 3; use_harris: Integer = 0; k: double = 0.04); cdecl;
 
 
@@ -966,7 +957,8 @@ function cvHoughCircles(
 // {$ENDIF}
 implementation
 
-Uses uLibName;
+Uses
+  uLibName;
 
 // procedure cvCvtColor(const src: pIplImage; dst: pIplImage; code: Integer); external imgproc_Dll;
 procedure cvCvtColor(const src: pIplImage; dst: pIplImage; code: Integer); external imgproc_Dll name 'cvCvtColor';
@@ -1000,7 +992,10 @@ function cvArcLength; external imgproc_Dll;
 
 function cvContourPerimeter(const contour: Pointer): double; inline;
 begin
-  result := cvArcLength(contour, CV_WHOLE_SEQ, 1);
+  result := cvArcLength(
+    contour,
+    CV_WHOLE_SEQ,
+    1);
 end;
 
 function cvMatchShapes; external imgproc_Dll;
@@ -1020,7 +1015,11 @@ function cvCreateHist; external imgproc_Dll;
 
 procedure cvCalcHist;
 begin
-  cvCalcArrHist(image, hist, accumulate, mask);
+  cvCalcArrHist(
+    image,
+    hist,
+    accumulate,
+    mask);
 end;
 
 procedure cvGetMinMaxHistValue; external imgproc_Dll;
@@ -1039,5 +1038,8 @@ procedure cvMoments; external imgproc_Dll;
 function cvGetSpatialMoment; external imgproc_Dll;
 procedure cvMatchTemplate; external imgproc_Dll;
 function cvGetCentralMoment; external imgproc_Dll;
+procedure cvUndistort2; external imgproc_Dll;
+function cvGetAffineTransform; external imgproc_Dll;
+procedure cvUndistortPoints; external imgproc_Dll;
 
 end.

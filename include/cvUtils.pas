@@ -60,10 +60,38 @@ function CreateRGBBitmap(_Grab: PIplImage): HBITMAP;
 
 function c_str(const Text: String): pCVChar;
 
+function ifthen(const Cond: Boolean; const ValueTrue, ValueFalse: pCvArr): pCvArr; overload;
+function ifthen(const Cond: Boolean; const ValueTrue, ValueFalse: string): string; overload;
+function ifthen(const Cond: Boolean; const ValueTrue, ValueFalse: TCvScalar): TCvScalar; overload;
+
 implementation
 
 Uses
   System.SysUtils;
+
+function ifthen(const Cond: Boolean; const ValueTrue, ValueFalse: pCvArr): pCvArr; overload;
+begin
+  if Cond then
+    Result := ValueTrue
+  else
+    Result := ValueFalse;
+end;
+
+function ifthen(const Cond: Boolean; const ValueTrue, ValueFalse: string): string; overload;
+begin
+  if Cond then
+    Result := ValueTrue
+  else
+    Result := ValueFalse;
+end;
+
+function ifthen(const Cond: Boolean; const ValueTrue, ValueFalse: TCvScalar): TCvScalar; overload;
+begin
+  if Cond then
+    Result := ValueTrue
+  else
+    Result := ValueFalse;
+end;
 
 // ---------------------------------------------------------------------------
 // Создание API шного битмапа из интеловского RGB изображения
