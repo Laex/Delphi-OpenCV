@@ -352,8 +352,8 @@ procedure printUsage();
 begin
   WriteLn('Usage: eigenface <command>');
   WriteLn('  Valid commands are');
-  WriteLn('    train train.txt');
-  WriteLn('    test test.txt');
+  WriteLn('    train resource\train.txt');
+  WriteLn('    test resource\test.txt');
 end;
 
 begin

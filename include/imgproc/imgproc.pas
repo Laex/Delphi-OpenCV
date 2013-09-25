@@ -97,21 +97,25 @@ unit imgproc;
 
 interface
 
-Uses Core.types_c, imgproc.types_c, Mat, Core.types;
+Uses
+  Core.types_c,
+  imgproc.types_c,
+  Mat,
+  Core.types;
 
 // {
 //
 /// /! various border interpolation methods
 const
-  BORDER_REPLICATE = IPL_BORDER_REPLICATE;
-  BORDER_CONSTANT = IPL_BORDER_CONSTANT;
-  BORDER_REFLECT = IPL_BORDER_REFLECT;
-  BORDER_WRAP = IPL_BORDER_WRAP;
+  BORDER_REPLICATE   = IPL_BORDER_REPLICATE;
+  BORDER_CONSTANT    = IPL_BORDER_CONSTANT;
+  BORDER_REFLECT     = IPL_BORDER_REFLECT;
+  BORDER_WRAP        = IPL_BORDER_WRAP;
   BORDER_REFLECT_101 = IPL_BORDER_REFLECT_101;
-  BORDER_REFLECT101 = BORDER_REFLECT_101;
+  BORDER_REFLECT101  = BORDER_REFLECT_101;
   BORDER_TRANSPARENT = IPL_BORDER_TRANSPARENT;
-  BORDER_DEFAULT = BORDER_REFLECT_101;
-  BORDER_ISOLATED = 16;
+  BORDER_DEFAULT     = BORDER_REFLECT_101;
+  BORDER_ISOLATED    = 16;
   //
   /// /! 1D interpolation function: returns coordinate of the "donor" pixel for the specified location p.
   // CV_EXPORTS_W int borderInterpolate( int p, int len, int borderType );
@@ -410,21 +414,22 @@ const
   /// /! returns 2D morphological filter
   // CV_EXPORTS Ptr<BaseFilter> getMorphologyFilter(int op, int type, InputArray kernel,
   // Point anchor=Point(-1,-1));
-  //
-  /// /! returns "magic" border value for erosion and dilation. It is automatically transformed to Scalar::all(-DBL_MAX) for dilation.
+
+  // returns "magic" border value for erosion and dilation. It is automatically transformed to Scalar::all(-DBL_MAX) for dilation.
   // static inline Scalar morphologyDefaultBorderValue() { return Scalar::all(DBL_MAX); }
-  //
-  /// /! returns morphological filter engine. Only MORPH_ERODE and MORPH_DILATE are supported.
-  // CV_EXPORTS Ptr<FilterEngine> createMorphologyFilter(int op, int type, InputArray kernel,
-  // Point anchor=Point(-1,-1), int rowBorderType=BORDER_CONSTANT,
-  // int columnBorderType=-1,
-  // const Scalar& borderValue=morphologyDefaultBorderValue());
+function morphologyDefaultBorderValue: IScalar; inline;
+
+/// /! returns morphological filter engine. Only MORPH_ERODE and MORPH_DILATE are supported.
+// CV_EXPORTS Ptr<FilterEngine> createMorphologyFilter(int op, int type, InputArray kernel,
+// Point anchor=Point(-1,-1), int rowBorderType=BORDER_CONSTANT,
+// int columnBorderType=-1,
+// const Scalar& borderValue=morphologyDefaultBorderValue());
 
 const
   /// /! shape of the structuring element
   // enum { MORPH_RECT=0, MORPH_CROSS=1, MORPH_ELLIPSE=2 };
-  MORPH_RECT = 0;
-  MORPH_CROSS = 1;
+  MORPH_RECT    = 0;
+  MORPH_CROSS   = 1;
   MORPH_ELLIPSE = 2;
   /// /! returns structuring element of the specified shape and size
   // CV_EXPORTS_W Mat getStructuringElement(int shape, Size ksize, Point anchor=Point(-1,-1));
@@ -589,7 +594,9 @@ procedure erode(src: IMat; dst: IMat; kernel: IMat; anchor: IPoint { =Point(-1,-
 // Point anchor=Point(-1,-1), int iterations=1,
 // int borderType=BORDER_CONSTANT,
 // const Scalar& borderValue=morphologyDefaultBorderValue() );
-//
+procedure dilate(src: IMat; dst: IMat; kernel: IMat; anchor: IPoint { =Point(-1,-1) }; iterations: Integer { =1 };
+  borderType: Integer { =BORDER_CONSTANT }; const borderValue: IScalar { =morphologyDefaultBorderValue() } );
+
 /// /! applies an advanced morphological operation to the image
 // CV_EXPORTS_W void morphologyEx( InputArray src, OutputArray dst,
 // int op, InputArray kernel,
@@ -695,13 +702,13 @@ procedure erode(src: IMat; dst: IMat; kernel: IMat; anchor: IPoint { =Point(-1,-
 //
 /// /! type of the threshold operation
 const
-  THRESH_BINARY = CV_THRESH_BINARY;
+  THRESH_BINARY     = CV_THRESH_BINARY;
   THRESH_BINARY_INV = CV_THRESH_BINARY_INV;
-  THRESH_TRUNC = CV_THRESH_TRUNC;
-  THRESH_TOZERO = CV_THRESH_TOZERO;
+  THRESH_TRUNC      = CV_THRESH_TRUNC;
+  THRESH_TOZERO     = CV_THRESH_TOZERO;
   THRESH_TOZERO_INV = CV_THRESH_TOZERO_INV;
-  THRESH_MASK = CV_THRESH_MASK;
-  THRESH_OTSU = CV_THRESH_OTSU;
+  THRESH_MASK       = CV_THRESH_MASK;
+  THRESH_OTSU       = CV_THRESH_OTSU;
   //
   /// /! applies fixed threshold to the image
   // CV_EXPORTS_W double threshold( InputArray src, OutputArray dst,
@@ -1150,233 +1157,240 @@ const
 
   // converts image from one color space to another
   // CV_EXPORTS_W void cvtColor( InputArray src, OutputArray dst, int code, int dstCn=0 );
-procedure cvtColor( src:IMat; Var dst:IMat; code:Integer; dstCn:Integer=0);
+procedure cvtColor(src: IMat; Var dst: IMat; code: Integer; dstCn: Integer = 0);
 
-  /// /! raster image moments
-  // class CV_EXPORTS_W_MAP Moments
-  // {
-  // public:
-  // //! the default constructor
-  // Moments();
-  // //! the full constructor
-  // Moments(double m00, double m10, double m01, double m20, double m11,
-  // double m02, double m30, double m21, double m12, double m03 );
-  // //! the conversion from CvMoments
-  // Moments( const CvMoments& moments );
-  // //! the conversion to CvMoments
-  // operator CvMoments() const;
-  //
-  // //! spatial moments
-  // CV_PROP_RW double  m00, m10, m01, m20, m11, m02, m30, m21, m12, m03;
-  // //! central moments
-  // CV_PROP_RW double  mu20, mu11, mu02, mu30, mu21, mu12, mu03;
-  // //! central normalized moments
-  // CV_PROP_RW double  nu20, nu11, nu02, nu30, nu21, nu12, nu03;
-  // };
-  //
-  /// /! computes moments of the rasterized shape or a vector of points
-  // CV_EXPORTS_W Moments moments( InputArray array, bool binaryImage=false );
-  //
-  /// /! computes 7 Hu invariants from the moments
-  // CV_EXPORTS void HuMoments( const Moments& moments, double hu[7] );
-  // CV_EXPORTS_W void HuMoments( const Moments& m, OutputArray hu );
-  //
-  /// /! type of the template matching operation
-  // enum { TM_SQDIFF=0, TM_SQDIFF_NORMED=1, TM_CCORR=2, TM_CCORR_NORMED=3, TM_CCOEFF=4, TM_CCOEFF_NORMED=5 };
-  //
-  /// /! computes the proximity map for the raster template and the image where the template is searched for
-  // CV_EXPORTS_W void matchTemplate( InputArray image, InputArray templ,
-  // OutputArray result, int method );
-  //
-  // enum { CC_STAT_LEFT=0, CC_STAT_TOP=1, CC_STAT_WIDTH=2, CC_STAT_HEIGHT=3, CC_STAT_AREA=4, CC_STAT_MAX = 5};
-  //
-  /// / computes the connected components labeled image of boolean image ``image``
-  /// / with 4 or 8 way connectivity - returns N, the total
-  /// / number of labels [0, N-1] where 0 represents the background label.
-  /// / ltype specifies the output label image type, an important
-  /// / consideration based on the total number of labels or
-  /// / alternatively the total number of pixels in the source image.
-  // CV_EXPORTS_W int connectedComponents(InputArray image, OutputArray labels,
-  // int connectivity = 8, int ltype=CV_32S);
-  // CV_EXPORTS_W int connectedComponentsWithStats(InputArray image, OutputArray labels,
-  // OutputArray stats, OutputArray centroids,
-  // int connectivity = 8, int ltype=CV_32S);
-  //
-  /// /! mode of the contour retrieval algorithm
-  // enum
-  // {
-  // RETR_EXTERNAL=CV_RETR_EXTERNAL, //!< retrieve only the most external (top-level) contours
-  // RETR_LIST=CV_RETR_LIST, //!< retrieve all the contours without any hierarchical information
-  // RETR_CCOMP=CV_RETR_CCOMP, //!< retrieve the connected components (that can possibly be nested)
-  // RETR_TREE=CV_RETR_TREE, //!< retrieve all the contours and the whole hierarchy
-  // RETR_FLOODFILL=CV_RETR_FLOODFILL
-  // };
-  //
-  /// /! the contour approximation algorithm
-  // enum
-  // {
-  // CHAIN_APPROX_NONE=CV_CHAIN_APPROX_NONE,
-  // CHAIN_APPROX_SIMPLE=CV_CHAIN_APPROX_SIMPLE,
-  // CHAIN_APPROX_TC89_L1=CV_CHAIN_APPROX_TC89_L1,
-  // CHAIN_APPROX_TC89_KCOS=CV_CHAIN_APPROX_TC89_KCOS
-  // };
-  //
-  /// /! retrieves contours and the hierarchical information from black-n-white image.
-  // CV_EXPORTS_W void findContours( InputOutputArray image, OutputArrayOfArrays contours,
-  // OutputArray hierarchy, int mode,
-  // int method, Point offset=Point());
-  //
-  /// /! retrieves contours from black-n-white image.
-  // CV_EXPORTS void findContours( InputOutputArray image, OutputArrayOfArrays contours,
-  // int mode, int method, Point offset=Point());
-  //
-  /// /! approximates contour or a curve using Douglas-Peucker algorithm
-  // CV_EXPORTS_W void approxPolyDP( InputArray curve,
-  // OutputArray approxCurve,
-  // double epsilon, bool closed );
-  //
-  /// /! computes the contour perimeter (closed=true) or a curve length
-  // CV_EXPORTS_W double arcLength( InputArray curve, bool closed );
-  /// /! computes the bounding rectangle for a contour
-  // CV_EXPORTS_W Rect boundingRect( InputArray points );
-  /// /! computes the contour area
-  // CV_EXPORTS_W double contourArea( InputArray contour, bool oriented=false );
-  /// /! computes the minimal rotated rectangle for a set of points
-  // CV_EXPORTS_W RotatedRect minAreaRect( InputArray points );
-  /// /! computes the minimal enclosing circle for a set of points
-  // CV_EXPORTS_W void minEnclosingCircle( InputArray points,
-  // CV_OUT Point2f& center, CV_OUT float& radius );
-  /// /! matches two contours using one of the available algorithms
-  // CV_EXPORTS_W double matchShapes( InputArray contour1, InputArray contour2,
-  // int method, double parameter );
-  /// /! computes convex hull for a set of 2D points.
-  // CV_EXPORTS_W void convexHull( InputArray points, OutputArray hull,
-  // bool clockwise=false, bool returnPoints=true );
-  /// /! computes the contour convexity defects
-  // CV_EXPORTS_W void convexityDefects( InputArray contour, InputArray convexhull, OutputArray convexityDefects );
-  //
-  /// /! returns true if the contour is convex. Does not support contours with self-intersection
-  // CV_EXPORTS_W bool isContourConvex( InputArray contour );
-  //
-  /// /! finds intersection of two convex polygons
-  // CV_EXPORTS_W float intersectConvexConvex( InputArray _p1, InputArray _p2,
-  // OutputArray _p12, bool handleNested=true );
-  //
-  /// /! fits ellipse to the set of 2D points
-  // CV_EXPORTS_W RotatedRect fitEllipse( InputArray points );
-  //
-  /// /! fits line to the set of 2D points using M-estimator algorithm
-  // CV_EXPORTS_W void fitLine( InputArray points, OutputArray line, int distType,
-  // double param, double reps, double aeps );
-  /// /! checks if the point is inside the contour. Optionally computes the signed distance from the point to the contour boundary
-  // CV_EXPORTS_W double pointPolygonTest( InputArray contour, Point2f pt, bool measureDist );
-  //
-  //
-  // class CV_EXPORTS_W Subdiv2D
-  // {
-  // public:
-  // enum
-  // {
-  // PTLOC_ERROR = -2,
-  // PTLOC_OUTSIDE_RECT = -1,
-  // PTLOC_INSIDE = 0,
-  // PTLOC_VERTEX = 1,
-  // PTLOC_ON_EDGE = 2
-  // };
-  //
-  // enum
-  // {
-  // NEXT_AROUND_ORG   = 0x00,
-  // NEXT_AROUND_DST   = 0x22,
-  // PREV_AROUND_ORG   = 0x11,
-  // PREV_AROUND_DST   = 0x33,
-  // NEXT_AROUND_LEFT  = 0x13,
-  // NEXT_AROUND_RIGHT = 0x31,
-  // PREV_AROUND_LEFT  = 0x20,
-  // PREV_AROUND_RIGHT = 0x02
-  // };
-  //
-  // CV_WRAP Subdiv2D();
-  // CV_WRAP Subdiv2D(Rect rect);
-  // CV_WRAP void initDelaunay(Rect rect);
-  //
-  // CV_WRAP int insert(Point2f pt);
-  // CV_WRAP void insert(const std::vector<Point2f>& ptvec);
-  // CV_WRAP int locate(Point2f pt, CV_OUT int& edge, CV_OUT int& vertex);
-  //
-  // CV_WRAP int findNearest(Point2f pt, CV_OUT Point2f* nearestPt=0);
-  // CV_WRAP void getEdgeList(CV_OUT std::vector<Vec4f>& edgeList) const;
-  // CV_WRAP void getTriangleList(CV_OUT std::vector<Vec6f>& triangleList) const;
-  // CV_WRAP void getVoronoiFacetList(const std::vector<int>& idx, CV_OUT std::vector<std::vector<Point2f> >& facetList,
-  // CV_OUT std::vector<Point2f>& facetCenters);
-  //
-  // CV_WRAP Point2f getVertex(int vertex, CV_OUT int* firstEdge=0) const;
-  //
-  // CV_WRAP int getEdge( int edge, int nextEdgeType ) const;
-  // CV_WRAP int nextEdge(int edge) const;
-  // CV_WRAP int rotateEdge(int edge, int rotate) const;
-  // CV_WRAP int symEdge(int edge) const;
-  // CV_WRAP int edgeOrg(int edge, CV_OUT Point2f* orgpt=0) const;
-  // CV_WRAP int edgeDst(int edge, CV_OUT Point2f* dstpt=0) const;
-  //
-  // protected:
-  // int newEdge();
-  // void deleteEdge(int edge);
-  // int newPoint(Point2f pt, bool isvirtual, int firstEdge=0);
-  // void deletePoint(int vtx);
-  // void setEdgePoints( int edge, int orgPt, int dstPt );
-  // void splice( int edgeA, int edgeB );
-  // int connectEdges( int edgeA, int edgeB );
-  // void swapEdges( int edge );
-  // int isRightOf(Point2f pt, int edge) const;
-  // void calcVoronoi();
-  // void clearVoronoi();
-  // void checkSubdiv() const;
-  //
-  // struct CV_EXPORTS Vertex
-  // {
-  // Vertex();
-  // Vertex(Point2f pt, bool _isvirtual, int _firstEdge=0);
-  // bool isvirtual() const;
-  // bool isfree() const;
-  // int firstEdge;
-  // int type;
-  // Point2f pt;
-  // };
-  // struct CV_EXPORTS QuadEdge
-  // {
-  // QuadEdge();
-  // QuadEdge(int edgeidx);
-  // bool isfree() const;
-  // int next[4];
-  // int pt[4];
-  // };
-  //
-  // std::vector<Vertex> vtx;
-  // std::vector<QuadEdge> qedges;
-  // int freeQEdge;
-  // int freePoint;
-  // bool validGeometry;
-  //
-  // int recentEdge;
-  // Point2f topLeft;
-  // Point2f bottomRight;
-  // };
-  //
-  /// / main function for all demosaicing procceses
-  // CV_EXPORTS_W void demosaicing(InputArray _src, OutputArray _dst, int code, int dcn = 0);
-  //
-  // }
-  //
-  // #endif /* __cplusplus */
-  //
-  // #endif
-  //
-  /// * End of file. */
+/// /! raster image moments
+// class CV_EXPORTS_W_MAP Moments
+// {
+// public:
+// //! the default constructor
+// Moments();
+// //! the full constructor
+// Moments(double m00, double m10, double m01, double m20, double m11,
+// double m02, double m30, double m21, double m12, double m03 );
+// //! the conversion from CvMoments
+// Moments( const CvMoments& moments );
+// //! the conversion to CvMoments
+// operator CvMoments() const;
+//
+// //! spatial moments
+// CV_PROP_RW double  m00, m10, m01, m20, m11, m02, m30, m21, m12, m03;
+// //! central moments
+// CV_PROP_RW double  mu20, mu11, mu02, mu30, mu21, mu12, mu03;
+// //! central normalized moments
+// CV_PROP_RW double  nu20, nu11, nu02, nu30, nu21, nu12, nu03;
+// };
+//
+/// /! computes moments of the rasterized shape or a vector of points
+// CV_EXPORTS_W Moments moments( InputArray array, bool binaryImage=false );
+//
+/// /! computes 7 Hu invariants from the moments
+// CV_EXPORTS void HuMoments( const Moments& moments, double hu[7] );
+// CV_EXPORTS_W void HuMoments( const Moments& m, OutputArray hu );
+//
+/// /! type of the template matching operation
+// enum { TM_SQDIFF=0, TM_SQDIFF_NORMED=1, TM_CCORR=2, TM_CCORR_NORMED=3, TM_CCOEFF=4, TM_CCOEFF_NORMED=5 };
+//
+/// /! computes the proximity map for the raster template and the image where the template is searched for
+// CV_EXPORTS_W void matchTemplate( InputArray image, InputArray templ,
+// OutputArray result, int method );
+//
+// enum { CC_STAT_LEFT=0, CC_STAT_TOP=1, CC_STAT_WIDTH=2, CC_STAT_HEIGHT=3, CC_STAT_AREA=4, CC_STAT_MAX = 5};
+//
+/// / computes the connected components labeled image of boolean image ``image``
+/// / with 4 or 8 way connectivity - returns N, the total
+/// / number of labels [0, N-1] where 0 represents the background label.
+/// / ltype specifies the output label image type, an important
+/// / consideration based on the total number of labels or
+/// / alternatively the total number of pixels in the source image.
+// CV_EXPORTS_W int connectedComponents(InputArray image, OutputArray labels,
+// int connectivity = 8, int ltype=CV_32S);
+// CV_EXPORTS_W int connectedComponentsWithStats(InputArray image, OutputArray labels,
+// OutputArray stats, OutputArray centroids,
+// int connectivity = 8, int ltype=CV_32S);
+//
+/// /! mode of the contour retrieval algorithm
+// enum
+// {
+// RETR_EXTERNAL=CV_RETR_EXTERNAL, //!< retrieve only the most external (top-level) contours
+// RETR_LIST=CV_RETR_LIST, //!< retrieve all the contours without any hierarchical information
+// RETR_CCOMP=CV_RETR_CCOMP, //!< retrieve the connected components (that can possibly be nested)
+// RETR_TREE=CV_RETR_TREE, //!< retrieve all the contours and the whole hierarchy
+// RETR_FLOODFILL=CV_RETR_FLOODFILL
+// };
+//
+/// /! the contour approximation algorithm
+// enum
+// {
+// CHAIN_APPROX_NONE=CV_CHAIN_APPROX_NONE,
+// CHAIN_APPROX_SIMPLE=CV_CHAIN_APPROX_SIMPLE,
+// CHAIN_APPROX_TC89_L1=CV_CHAIN_APPROX_TC89_L1,
+// CHAIN_APPROX_TC89_KCOS=CV_CHAIN_APPROX_TC89_KCOS
+// };
+//
+/// /! retrieves contours and the hierarchical information from black-n-white image.
+// CV_EXPORTS_W void findContours( InputOutputArray image, OutputArrayOfArrays contours,
+// OutputArray hierarchy, int mode,
+// int method, Point offset=Point());
+//
+/// /! retrieves contours from black-n-white image.
+// CV_EXPORTS void findContours( InputOutputArray image, OutputArrayOfArrays contours,
+// int mode, int method, Point offset=Point());
+//
+/// /! approximates contour or a curve using Douglas-Peucker algorithm
+// CV_EXPORTS_W void approxPolyDP( InputArray curve,
+// OutputArray approxCurve,
+// double epsilon, bool closed );
+//
+/// /! computes the contour perimeter (closed=true) or a curve length
+// CV_EXPORTS_W double arcLength( InputArray curve, bool closed );
+/// /! computes the bounding rectangle for a contour
+// CV_EXPORTS_W Rect boundingRect( InputArray points );
+/// /! computes the contour area
+// CV_EXPORTS_W double contourArea( InputArray contour, bool oriented=false );
+/// /! computes the minimal rotated rectangle for a set of points
+// CV_EXPORTS_W RotatedRect minAreaRect( InputArray points );
+/// /! computes the minimal enclosing circle for a set of points
+// CV_EXPORTS_W void minEnclosingCircle( InputArray points,
+// CV_OUT Point2f& center, CV_OUT float& radius );
+/// /! matches two contours using one of the available algorithms
+// CV_EXPORTS_W double matchShapes( InputArray contour1, InputArray contour2,
+// int method, double parameter );
+/// /! computes convex hull for a set of 2D points.
+// CV_EXPORTS_W void convexHull( InputArray points, OutputArray hull,
+// bool clockwise=false, bool returnPoints=true );
+/// /! computes the contour convexity defects
+// CV_EXPORTS_W void convexityDefects( InputArray contour, InputArray convexhull, OutputArray convexityDefects );
+//
+/// /! returns true if the contour is convex. Does not support contours with self-intersection
+// CV_EXPORTS_W bool isContourConvex( InputArray contour );
+//
+/// /! finds intersection of two convex polygons
+// CV_EXPORTS_W float intersectConvexConvex( InputArray _p1, InputArray _p2,
+// OutputArray _p12, bool handleNested=true );
+//
+/// /! fits ellipse to the set of 2D points
+// CV_EXPORTS_W RotatedRect fitEllipse( InputArray points );
+//
+/// /! fits line to the set of 2D points using M-estimator algorithm
+// CV_EXPORTS_W void fitLine( InputArray points, OutputArray line, int distType,
+// double param, double reps, double aeps );
+/// /! checks if the point is inside the contour. Optionally computes the signed distance from the point to the contour boundary
+// CV_EXPORTS_W double pointPolygonTest( InputArray contour, Point2f pt, bool measureDist );
+//
+//
+// class CV_EXPORTS_W Subdiv2D
+// {
+// public:
+// enum
+// {
+// PTLOC_ERROR = -2,
+// PTLOC_OUTSIDE_RECT = -1,
+// PTLOC_INSIDE = 0,
+// PTLOC_VERTEX = 1,
+// PTLOC_ON_EDGE = 2
+// };
+//
+// enum
+// {
+// NEXT_AROUND_ORG   = 0x00,
+// NEXT_AROUND_DST   = 0x22,
+// PREV_AROUND_ORG   = 0x11,
+// PREV_AROUND_DST   = 0x33,
+// NEXT_AROUND_LEFT  = 0x13,
+// NEXT_AROUND_RIGHT = 0x31,
+// PREV_AROUND_LEFT  = 0x20,
+// PREV_AROUND_RIGHT = 0x02
+// };
+//
+// CV_WRAP Subdiv2D();
+// CV_WRAP Subdiv2D(Rect rect);
+// CV_WRAP void initDelaunay(Rect rect);
+//
+// CV_WRAP int insert(Point2f pt);
+// CV_WRAP void insert(const std::vector<Point2f>& ptvec);
+// CV_WRAP int locate(Point2f pt, CV_OUT int& edge, CV_OUT int& vertex);
+//
+// CV_WRAP int findNearest(Point2f pt, CV_OUT Point2f* nearestPt=0);
+// CV_WRAP void getEdgeList(CV_OUT std::vector<Vec4f>& edgeList) const;
+// CV_WRAP void getTriangleList(CV_OUT std::vector<Vec6f>& triangleList) const;
+// CV_WRAP void getVoronoiFacetList(const std::vector<int>& idx, CV_OUT std::vector<std::vector<Point2f> >& facetList,
+// CV_OUT std::vector<Point2f>& facetCenters);
+//
+// CV_WRAP Point2f getVertex(int vertex, CV_OUT int* firstEdge=0) const;
+//
+// CV_WRAP int getEdge( int edge, int nextEdgeType ) const;
+// CV_WRAP int nextEdge(int edge) const;
+// CV_WRAP int rotateEdge(int edge, int rotate) const;
+// CV_WRAP int symEdge(int edge) const;
+// CV_WRAP int edgeOrg(int edge, CV_OUT Point2f* orgpt=0) const;
+// CV_WRAP int edgeDst(int edge, CV_OUT Point2f* dstpt=0) const;
+//
+// protected:
+// int newEdge();
+// void deleteEdge(int edge);
+// int newPoint(Point2f pt, bool isvirtual, int firstEdge=0);
+// void deletePoint(int vtx);
+// void setEdgePoints( int edge, int orgPt, int dstPt );
+// void splice( int edgeA, int edgeB );
+// int connectEdges( int edgeA, int edgeB );
+// void swapEdges( int edge );
+// int isRightOf(Point2f pt, int edge) const;
+// void calcVoronoi();
+// void clearVoronoi();
+// void checkSubdiv() const;
+//
+// struct CV_EXPORTS Vertex
+// {
+// Vertex();
+// Vertex(Point2f pt, bool _isvirtual, int _firstEdge=0);
+// bool isvirtual() const;
+// bool isfree() const;
+// int firstEdge;
+// int type;
+// Point2f pt;
+// };
+// struct CV_EXPORTS QuadEdge
+// {
+// QuadEdge();
+// QuadEdge(int edgeidx);
+// bool isfree() const;
+// int next[4];
+// int pt[4];
+// };
+//
+// std::vector<Vertex> vtx;
+// std::vector<QuadEdge> qedges;
+// int freeQEdge;
+// int freePoint;
+// bool validGeometry;
+//
+// int recentEdge;
+// Point2f topLeft;
+// Point2f bottomRight;
+// };
+//
+/// / main function for all demosaicing procceses
+// CV_EXPORTS_W void demosaicing(InputArray _src, OutputArray _dst, int code, int dcn = 0);
+//
+// }
+//
+// #endif /* __cplusplus */
+//
+// #endif
+//
+/// * End of file. */
 
 implementation
 
-Uses uLibName;
+Uses
+  uLibName;
+
+function morphologyDefaultBorderValue: IScalar; inline;
+begin
+  Result := Scalar;
+  Result.all(DBL_MAX); //Внести изменения в С++ проект
+end;
 
 // CV_EXPORTS_W void erode( InputArray src, OutputArray dst, InputArray kernel,
 // Point anchor=Point(-1,-1), int iterations=1,
@@ -1397,6 +1411,15 @@ end;
 // Point anchor=Point(-1,-1), int iterations=1,
 // int borderType=BORDER_CONSTANT,
 // const Scalar& borderValue=morphologyDefaultBorderValue() );
+procedure _dilate(src: Pointer; dst: Pointer; kernel: Pointer; anchor: Pointer { =Point(-1,-1) };
+  iterations: Integer { =1 }; borderType: Integer { =BORDER_CONSTANT };
+  const borderValue: Pointer { =morphologyDefaultBorderValue() } ); cdecl; external imgproc_Dll name 'dilate';
+
+procedure dilate(src: IMat; dst: IMat; kernel: IMat; anchor: IPoint { =Point(-1,-1) }; iterations: Integer { =1 };
+  borderType: Integer { =BORDER_CONSTANT }; const borderValue: IScalar { =morphologyDefaultBorderValue() } );
+begin
+
+end;
 
 // ! applies an advanced morphological operation to the image
 // CV_EXPORTS_W void morphologyEx( InputArray src, OutputArray dst,
@@ -1412,11 +1435,13 @@ function _getStructuringElement(shape: Integer; ksize: Pointer; anchor: Pointer)
 function getStructuringElement(shape: Integer; ksize: ISize; anchor: IPoint { =Point(-1,-1) } ): IMat;
 begin
   if not Assigned(anchor) then
-    anchor := Point(-1, -1);
+    anchor := Point(
+      -1,
+      -1);
   Result := CreateMat(_getStructuringElement(shape, ksize.getSize, anchor.getPoint));
 end;
 
-procedure cvtColor( src:IMat; Var dst:IMat; code:Integer; dstCn:Integer);
+procedure cvtColor(src: IMat; Var dst: IMat; code: Integer; dstCn: Integer);
 begin
 
 end;

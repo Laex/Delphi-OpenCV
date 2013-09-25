@@ -105,6 +105,7 @@ const
   DBL_EPSILON = 2.2204460492503131E-016;
   DBL_MAX     = 1.7976931348623157E+308;
   FLT_EPSILON = 1.19209290E-07;
+  FLT_MAX     = 1E+37;
 
 Type
 
@@ -124,7 +125,8 @@ Type
 
 function strdup(const str: pCVChar): pCVChar;
 function cv_stricmp(const str1, str2: pCVChar): Integer;
-procedure strcpy(var str1: pCVChar; const str2: pCVChar);
+procedure strcpy(var str1: pCVChar; const str2: pCVChar); overload;
+procedure strcpync(const str1: pCVChar; const str2: pCVChar); overload;
 procedure strcat(var str1: pCVChar; const str2: pCVChar);
 
 type
@@ -512,11 +514,9 @@ function CV_32SC2: Integer; inline;
 *)
 function CV_32FC2: Integer; inline;
 {$EXTERNALSYM CV_32FC2}
+function CV_32FC3: Integer; inline;
+{$EXTERNALSYM CV_32FC3}
 (*
-  const
-  CV_32FC3 = CV_MAKETYPE(CV_32F, 3);
-  {$EXTERNALSYM CV_32FC3}
-
   const
   CV_32FC4 = CV_MAKETYPE(CV_32F, 4);
   {$EXTERNALSYM CV_32FC4}
@@ -528,15 +528,11 @@ function CV_32FC2: Integer; inline;
 
 function CV_64FC1: Integer; inline;
 {$EXTERNALSYM CV_64FC1}
+function CV_64FC2: Integer; inline;
+{$EXTERNALSYM CV_64FC2}
+function CV_64FC3: Integer; inline;
+{$EXTERNALSYM CV_64FC3}
 (*
-  const
-  CV_64FC2 = CV_MAKETYPE(CV_64F, 2);
-  {$EXTERNALSYM CV_64FC2}
-
-  const
-  CV_64FC3 = CV_MAKETYPE(CV_64F, 3);
-  {$EXTERNALSYM CV_64FC3}
-
   const
   CV_64FC4 = CV_MAKETYPE(CV_64F, 4);
   {$EXTERNALSYM CV_64FC4}
@@ -750,6 +746,9 @@ type
     z: Single;
   end;
 
+function cvPoint3D32f(const x, y, z: Double): TCvPoint3D32f; inline;
+
+Type
   TCvPoint2D64f = packed record
     x: Double;
     y: Double;
@@ -1237,9 +1236,10 @@ const
   // const
   // CV_IS_SEQ_CURVE(seq)(CV_SEQ_KIND(seq) = CV_SEQ_KIND_CURVE)
   /// / >> Following declaration is a macro definition!
-  // const
+
   // CV_IS_SEQ_CLOSED(seq)(((seq)^.flags and CV_SEQ_FLAG_CLOSED) <> 0);
-  //
+function CV_IS_SEQ_CLOSED(const Seq:pCvSeq):Boolean; inline;
+
   /// / >> Following declaration is a macro definition!
   // const
   // CV_IS_SEQ_CONVEX(seq)0;
@@ -1581,22 +1581,24 @@ function CV_NODE_IS_INT(const flags: Integer): Boolean; inline;
 // CV_NODE_IS_REAL(flags)       (CV_NODE_TYPE(flags) == CV_NODE_REAL)
 function CV_NODE_IS_REAL(const flags: Integer): Boolean; inline;
 
-const
-  // CV_NODE_IS_INT(flags)(CV_NODE_TYPE(flags) = CV_NODE_INT)const CV_NODE_IS_REAL(flags)
-  // (CV_NODE_TYPE(flags) = CV_NODE_REAL)const CV_NODE_IS_STRING(flags)
-  // (CV_NODE_TYPE(flags) = CV_NODE_STRING)const CV_NODE_IS_SEQ(flags)
-  // (CV_NODE_TYPE(flags) = CV_NODE_SEQ)const CV_NODE_IS_MAP(flags)
-  // (CV_NODE_TYPE(flags) = CV_NODE_MAP)const CV_NODE_IS_COLLECTION
-  // (flags(CV_NODE_TYPE(flags) >= CV_NODE_SEQ)
-  // // >> Following declaration is a macro definition!
-  // const CV_NODE_IS_FLOW(flags)(((flags) and CV_NODE_FLOW) <> 0);
-  // // >> Following declaration is a macro definition!
-  // const CV_NODE_IS_EMPTY(flags)(((flags) and CV_NODE_EMPTY) <> 0);
-  // // >> Following declaration is a macro definition!
-  // const CV_NODE_IS_USER(flags)(((flags) and CV_NODE_USER) <> 0);
-  // // >> Following declaration is a macro definition!
-  // const CV_NODE_HAS_NAME(flags)(((flags) and CV_NODE_NAMED) <> 0);
+// const CV_NODE_IS_INT(flags)(CV_NODE_TYPE(flags) = CV_NODE_INT)
+// const CV_NODE_IS_REAL(flags) (CV_NODE_TYPE(flags) = CV_NODE_REAL)
+function CV_NODE_IS_STRING(const flags: Integer): Boolean;
+inline
+// (CV_NODE_TYPE(flags) = CV_NODE_STRING)
+// const CV_NODE_IS_SEQ(flags) (CV_NODE_TYPE(flags) = CV_NODE_SEQ)
+// const CV_NODE_IS_MAP(flags) (CV_NODE_TYPE(flags) = CV_NODE_MAP)
+// const CV_NODE_IS_COLLECTION (flags(CV_NODE_TYPE(flags) >= CV_NODE_SEQ)
+// // >> Following declaration is a macro definition!
+// const CV_NODE_IS_FLOW(flags)(((flags) and CV_NODE_FLOW) <> 0);
+// // >> Following declaration is a macro definition!
+// const CV_NODE_IS_EMPTY(flags)(((flags) and CV_NODE_EMPTY) <> 0);
+// // >> Following declaration is a macro definition!
+// const CV_NODE_IS_USER(flags)(((flags) and CV_NODE_USER) <> 0);
+// // >> Following declaration is a macro definition!
+// const CV_NODE_HAS_NAME(flags)(((flags) and CV_NODE_NAMED) <> 0);
 
+const
   CV_NODE_SEQ_SIMPLE = 256;
 {$EXTERNALSYM CV_NODE_SEQ_SIMPLE}
   //
@@ -1885,9 +1887,9 @@ procedure CV_SWAP(var a, b, t: Pointer); inline; overload;
 // const CV_IS_MAT(mat)(CV_IS_MAT_HDR(mat) and ((CvMat(mat))^.data.ptr <> 0);
 //
 // const CV_IS_MASK_ARR(mat)(((mat)^.cType and (CV_MAT_TYPE_MASK and ~ CV_8SC1)) = 0)
-//
-// const CV_ARE_TYPES_EQ(mat1, mat2)((((mat1)^.cType xor (mat2)^.cType) and CV_MAT_TYPE_MASK) = 0)
-//
+
+function CV_ARE_TYPES_EQ(const mat1, mat2: pCvMat): Boolean; inline;
+
 // const CV_ARE_CNS_EQ(mat1, mat2)((((mat1)^.cType xor (mat2)^.cType) and CV_MAT_CN_MASK) = 0)
 //
 // const CV_ARE_DEPTHS_EQ(mat1, mat2)((((mat1)^.cType xor (mat2)^.cType) and CV_MAT_DEPTH_MASK) = 0)
@@ -2212,6 +2214,17 @@ begin
     n);
 end;
 
+procedure strcpync(const str1: pCVChar; const str2: pCVChar);
+Var
+  n: Integer;
+begin
+  n := Length(str2) * SizeOf(CVChar);
+  CopyMemory(
+    str1,
+    str2,
+    n);
+end;
+
 procedure strcat(var str1: pCVChar; const str2: pCVChar);
 Var
   n: Integer;
@@ -2384,6 +2397,12 @@ begin
   Result := CV_NODE_TYPE(flags) = CV_NODE_REAL;
 end;
 
+function CV_NODE_IS_STRING(const flags: Integer): Boolean;
+inline
+begin
+  Result := CV_NODE_TYPE(flags) = CV_NODE_STRING
+end;
+
 procedure CV_READ_SEQ_ELEM(const Elem: Pointer; const Reader: TCvSeqReader; const SizeOfElem: Integer); // inline;
 begin
   // assert( (reader).seq->elem_size == sizeof(elem));
@@ -2449,6 +2468,13 @@ function CvPoint2D32f;
 begin
   Result.x := x;
   Result.y := y;
+end;
+
+function cvPoint3D32f(const x, y, z: Double): TCvPoint3D32f; inline;
+begin
+  Result.x := x;
+  Result.y := y;
+  Result.z := z;
 end;
 
 procedure CV_SWAP(var a, b, t: Pointer);
@@ -2537,11 +2563,32 @@ begin
     2);
 end;
 
+function CV_32FC3: Integer; inline;
+begin
+  Result := CV_MAKETYPE(
+    CV_32F,
+    3);
+end;
+
 function CV_64FC1: Integer;
 begin
   Result := CV_MAKETYPE(
     CV_64F,
     1);
+end;
+
+function CV_64FC2: Integer;
+begin
+  Result := CV_MAKETYPE(
+    CV_64F,
+    2);
+end;
+
+function CV_64FC3: Integer; inline;
+begin
+  Result := CV_MAKETYPE(
+    CV_64F,
+    3);
 end;
 
 function CV_8UC3: Integer;
@@ -2598,6 +2645,16 @@ begin
   Result := CV_ELEM_SIZE1(depth) * 8;
   if (depth = CV_8S) or (depth = CV_16S) or (depth = CV_32S) then
     Result := Result or IPL_DEPTH_SIGN;
+end;
+
+function CV_ARE_TYPES_EQ(const mat1, mat2: pCvMat): Boolean; inline;
+begin
+  Result := ((((mat1)^._type xor (mat2)^._type) and CV_MAT_TYPE_MASK) = 0);
+end;
+
+function CV_IS_SEQ_CLOSED(const Seq:pCvSeq):Boolean; inline;
+begin
+  Result := (seq^.flags and CV_SEQ_FLAG_CLOSED) <> 0;
 end;
 
 end.
