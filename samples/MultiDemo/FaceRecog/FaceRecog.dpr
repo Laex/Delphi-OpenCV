@@ -137,7 +137,7 @@ begin
     pFloat(eigenValMat^.data));
 end;
 
-procedure storeTrainingData();
+procedure StoreTrainingData();
 Var
   fileStorage: pCvFileStorage;
   i          : Integer;
@@ -145,7 +145,7 @@ Var
 begin
   // create a file-storage interface
   fileStorage := cvOpenFileStorage(
-    'result\facedata.xml',
+    'faces\facedata.xml',
     0,
     CV_STORAGE_WRITE);
 
@@ -237,7 +237,7 @@ Var
 begin
   // create a file-storage interface
   fileStorage := cvOpenFileStorage(
-    'result\facedata.xml',
+    'faces\facedata.xml',
     0,
     CV_STORAGE_READ);
   if not Assigned(fileStorage) then
@@ -298,12 +298,10 @@ begin
       iNearest    := iTrain;
     end;
   end;
-
-  WriteLn(leastDistSq:8:2);
   Result := iNearest;
 end;
 
-procedure recognize();
+function Recognize(const TestFace:pIplImage;Var ParsonName:String):Boolean;
 Var
   i, nTestFaces           : Integer; // the number of test images
   trainPersonNumMat       : pCvMat;  // the person numbers during training
@@ -314,25 +312,17 @@ begin
   trainPersonNumMat := nil; // the person numbers during training
   projectedTestFace := nil;
 
-  // load test images and ground truth for person number
-  nTestFaces := loadFaceImgArray(ParamStr(2));
-  WriteLn(
-    nTestFaces,
-    ' test faces loaded');
-
   // load the saved training data
   if not loadTrainingData(trainPersonNumMat) then
-    Exit;
+    Exit(False);
 
   // project the test images onto the PCA subspace
   SetLength(
     projectedTestFace,
     nEigens);
-  for i := 0 to nTestFaces - 1 do
-  begin
     // project the test image onto the PCA subspace
     cvEigenDecomposite(
-      faceImgArr[i],
+      TestFace,
       nEigens,
       @eigenVectArr[0],
       CV_EIGOBJ_NO_CALLBACK,
@@ -341,19 +331,16 @@ begin
       @projectedTestFace[0]);
 
     iNearest := findNearestNeighbor(projectedTestFace);
-    truth    := PInteger(personNumTruthMat^.data)[i];
+    truth    := PInteger(personNumTruthMat^.data)[iNearest];
     nearest  := PInteger(trainPersonNumMat^.data)[iNearest];
-
-    WriteLn(Format('nearest = %d, Truth = %d', [nearest, truth]));
-  end;
 end;
 
 procedure printUsage();
 begin
   WriteLn('Usage: eigenface <command>');
   WriteLn('  Valid commands are');
-  WriteLn('    train resource\train.txt');
-  WriteLn('    test resource\test.txt');
+  WriteLn('    train faces\train.txt');
+  WriteLn('    test faces\test.txt');
 end;
 
 begin

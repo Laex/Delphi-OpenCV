@@ -48,7 +48,7 @@ begin
     image := cvLoadImage(filename, CV_LOAD_IMAGE_UNCHANGED);
     R:=CvRect(50,50,250,250);
     cut_image:=cvCreateImage(CvSize(0,0), image^.depth, image^.nChannels);
-    cut_image := cvGetSubRect(image,cut_Image,R);
+    cut_image := pIplImage(cvGetSubRect(image,cut_Image,R));
     cvNamedWindow(filename, CV_WINDOW_AUTOSIZE);
     cvNamedWindow('Cut image', CV_WINDOW_AUTOSIZE);
     cvRectangle(image,CvPoint(50,50),CvPoint(50+250,50+250),CvScalar(150));

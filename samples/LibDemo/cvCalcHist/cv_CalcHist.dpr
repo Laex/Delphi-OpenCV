@@ -1,4 +1,4 @@
-(* /*****************************************************************
+ //*****************************************************************
   //                       Delphi-OpenCV Demo
   //               Copyright (C) 2013 Project Delphi-OpenCV
   // ****************************************************************
@@ -19,14 +19,11 @@
   // "AS IS" basis, WITHOUT WARRANTY OF ANY KIND, either express or
   // implied. See the License for the specific language governing
   // rights and limitations under the License.
-  *******************************************************************
+  //*****************************************************************
   // Original file:
   // opencv\samples\c\adaptiveskindetector.cpp
-  // *************************************************************** *)
+  // ****************************************************************
 
-// JCL_DEBUG_EXPERT_GENERATEJDBG OFF
-// JCL_DEBUG_EXPERT_INSERTJDBG OFF
-// JCL_DEBUG_EXPERT_DELETEMAPFILE OFF
 program cv_CalcHist;
 
 {$APPTYPE CONSOLE}
@@ -112,5 +109,4 @@ begin
     on E: Exception do
       Writeln(E.ClassName, ': ', E.Message);
   end;
-
 end.

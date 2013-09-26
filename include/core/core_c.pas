@@ -1408,8 +1408,8 @@ function cvSetErrMode(mode: Integer): Integer; cdecl;
   writing message to stderr, terminating application etc.)
   depending on the current error mode *)
 // CVAPI(void) cvError( int status, const char* func_name,const char* err_msg, const char* file_name, int line );
-procedure cvError(status: Integer; const func_name: pCvChar; const err_msg: pCvChar; const file_name: pCvChar;
-  line: Integer); cdecl;
+procedure cvError(status: Integer; const func_name: pCvChar; const err_msg: pCvChar; const file_name: pCvChar = nil;
+  line: Integer = 0); cdecl;
 
 implementation
 
@@ -1433,6 +1433,7 @@ function cvCreateMat; external Core_Dll;
 procedure cvReleaseMat; external Core_Dll;
 function cvCloneMat; external Core_Dll;
 function cvGetSubRect; external Core_Dll;
+
 procedure cvGetSubArr; external Core_Dll name 'cvGetSubRect';
 
 function cvGetRow(const arr: pCvArr; submat: pCvMat; row: Integer): pCvMat;
