@@ -109,8 +109,9 @@ const
 
 Type
 
-  Float  = Single;
-  pFloat = ^Float;
+  Float   = Single;
+  pFloat  = ^Float;
+  ppFloat = ^pFloat;
 
   TSingleArray1D = array [0 .. 1] of Single;
   pSingleArray1D = ^TSingleArray1D;
@@ -323,6 +324,13 @@ const
 {$EXTERNALSYM IPL_BORDER_REFLECT}
   IPL_BORDER_WRAP = 3;
 {$EXTERNALSYM IPL_BORDER_WRAP}
+  // * Sub-pixel interpolation methods */
+
+  CV_INTER_NN       = 0;
+  CV_INTER_LINEAR   = 1;
+  CV_INTER_CUBIC    = 2;
+  CV_INTER_AREA     = 3;
+  CV_INTER_LANCZOS4 = 4;
 
 type
 
@@ -1238,66 +1246,66 @@ const
   /// / >> Following declaration is a macro definition!
 
   // CV_IS_SEQ_CLOSED(seq)(((seq)^.flags and CV_SEQ_FLAG_CLOSED) <> 0);
-function CV_IS_SEQ_CLOSED(const Seq:pCvSeq):Boolean; inline;
+function CV_IS_SEQ_CLOSED(const Seq: pCvSeq): Boolean; inline;
 
-  /// / >> Following declaration is a macro definition!
-  // const
-  // CV_IS_SEQ_CONVEX(seq)0;
-  //
-  /// / >> Following declaration is a macro definition!
-  // const
-  // CV_IS_SEQ_HOLE(seq)(((seq)^.flags and CV_SEQ_FLAG_HOLE) <> 0);
-  //
-  /// / >> Following declaration is a macro definition!
-  // const
-  // CV_IS_SEQ_SIMPLE(seq)1;
-  //
-  // (* type checking macros *)
-  // const
-  // CV_IS_SEQ_POINT_SET(seq)((CV_SEQ_ELTYPE(seq) = CV_32SC2 or CV_SEQ_ELTYPE(seq) = CV_32FC2))
-  //
-  // const
-  // CV_IS_SEQ_POINT_SUBSET(seq)(CV_IS_SEQ_INDEX(seq) or CV_SEQ_ELTYPE(seq) = CV_SEQ_ELTYPE_PPOINT)
-  //
-  // const
-  // CV_IS_SEQ_POLYLINE(seq)(CV_SEQ_KIND(seq) = CV_SEQ_KIND_CURVE and CV_IS_SEQ_POINT_SET(seq))
-  //
-  /// / >> Following declaration is a macro definition!
-  // const
-  // CV_IS_SEQ_POLYGON(seq)(CV_IS_SEQ_POLYLINE(seq) and CV_IS_SEQ_CLOSED(seq));
-  //
-  // const
-  // CV_IS_SEQ_CHAIN(seq)(CV_SEQ_KIND(seq) = CV_SEQ_KIND_CURVE and (seq)^.elem_size = 1)
-  //
-  /// / >> Following declaration is a macro definition!
-  // const
-  // CV_IS_SEQ_CONTOUR(seq)(CV_IS_SEQ_CLOSED(seq) and (CV_IS_SEQ_POLYLINE(seq) or CV_IS_SEQ_CHAIN(seq)));
-  //
-  /// / >> Following declaration is a macro definition!
-  // const
-  // CV_IS_SEQ_CHAIN_CONTOUR(seq)(CV_IS_SEQ_CHAIN(seq) and CV_IS_SEQ_CLOSED(seq));
-  //
-  // const
-  // CV_IS_SEQ_POLYGON_TREE(seq)(CV_SEQ_ELTYPE(seq) = CV_SEQ_ELTYPE_TRIAN_ATR and CV_SEQ_KIND(seq)
-  // = CV_SEQ_KIND_BIN_TREE)
-  //
-  // const
-  // CV_IS_GRAPH(seq)(CV_IS_SET(seq) and CV_SEQ_KIND((CvSet(seq)) = CV_SEQ_KIND_GRAPH)
-  //
-  // // >> Following declaration is a macro definition!
-  // const CV_IS_GRAPH_ORIENTED(seq)(((seq)^.flags and CV_GRAPH_FLAG_ORIENTED) <> 0);
-  //
-  // const CV_IS_SUBDIV2D(seq)(CV_IS_SET(seq) and CV_SEQ_KIND((CvSet(seq)) = CV_SEQ_KIND_SUBDIV2D)
+/// / >> Following declaration is a macro definition!
+// const
+// CV_IS_SEQ_CONVEX(seq)0;
+//
+/// / >> Following declaration is a macro definition!
+// const
+// CV_IS_SEQ_HOLE(seq)(((seq)^.flags and CV_SEQ_FLAG_HOLE) <> 0);
+//
+/// / >> Following declaration is a macro definition!
+// const
+// CV_IS_SEQ_SIMPLE(seq)1;
+//
+// (* type checking macros *)
+// const
+// CV_IS_SEQ_POINT_SET(seq)((CV_SEQ_ELTYPE(seq) = CV_32SC2 or CV_SEQ_ELTYPE(seq) = CV_32FC2))
+//
+// const
+// CV_IS_SEQ_POINT_SUBSET(seq)(CV_IS_SEQ_INDEX(seq) or CV_SEQ_ELTYPE(seq) = CV_SEQ_ELTYPE_PPOINT)
+//
+// const
+// CV_IS_SEQ_POLYLINE(seq)(CV_SEQ_KIND(seq) = CV_SEQ_KIND_CURVE and CV_IS_SEQ_POINT_SET(seq))
+//
+/// / >> Following declaration is a macro definition!
+// const
+// CV_IS_SEQ_POLYGON(seq)(CV_IS_SEQ_POLYLINE(seq) and CV_IS_SEQ_CLOSED(seq));
+//
+// const
+// CV_IS_SEQ_CHAIN(seq)(CV_SEQ_KIND(seq) = CV_SEQ_KIND_CURVE and (seq)^.elem_size = 1)
+//
+/// / >> Following declaration is a macro definition!
+// const
+// CV_IS_SEQ_CONTOUR(seq)(CV_IS_SEQ_CLOSED(seq) and (CV_IS_SEQ_POLYLINE(seq) or CV_IS_SEQ_CHAIN(seq)));
+//
+/// / >> Following declaration is a macro definition!
+// const
+// CV_IS_SEQ_CHAIN_CONTOUR(seq)(CV_IS_SEQ_CHAIN(seq) and CV_IS_SEQ_CLOSED(seq));
+//
+// const
+// CV_IS_SEQ_POLYGON_TREE(seq)(CV_SEQ_ELTYPE(seq) = CV_SEQ_ELTYPE_TRIAN_ATR and CV_SEQ_KIND(seq)
+// = CV_SEQ_KIND_BIN_TREE)
+//
+// const
+// CV_IS_GRAPH(seq)(CV_IS_SET(seq) and CV_SEQ_KIND((CvSet(seq)) = CV_SEQ_KIND_GRAPH)
+//
+// // >> Following declaration is a macro definition!
+// const CV_IS_GRAPH_ORIENTED(seq)(((seq)^.flags and CV_GRAPH_FLAG_ORIENTED) <> 0);
+//
+// const CV_IS_SUBDIV2D(seq)(CV_IS_SET(seq) and CV_SEQ_KIND((CvSet(seq)) = CV_SEQ_KIND_SUBDIV2D)
 
-  // ****************************************************************************************/
-  // *                            Sequence writer & reader                                  */
-  // ****************************************************************************************/
+// ****************************************************************************************/
+// *                            Sequence writer & reader                                  */
+// ****************************************************************************************/
 type
   pCvSeqWriter = ^TCvSeqWriter;
 
   TCvSeqWriter = packed record
     header_size: Integer;
-    seq: pCvSeq;        // * the sequence written */
+    Seq: pCvSeq;        // * the sequence written */
     block: pCvSeqBlock; // * current block */
     ptr: Pointer;       // * pointer to free space */
     block_min: Pointer; // * pointer to the beginning of block*/
@@ -1308,7 +1316,7 @@ type
 
   TCvSeqReader = packed record
     header_size: Integer;
-    seq: pCvSeq;          // * sequence, beign read */
+    Seq: pCvSeq;          // * sequence, beign read */
     block: pCvSeqBlock;   // * current block */
     ptr: Pointer;         // * pointer to element be read next */
     block_min: Pointer;   // * pointer to the beginning of block */
@@ -1330,9 +1338,9 @@ type
     (seq)->first->data + (index) * sizeof(elem_type) :           \
     cvGetSeqElem( (CvSeq*)(seq), (index) )))
   }
-function CV_SEQ_ELEM(seq: pCvSeq; const size_of_elem: Integer; index: Integer): Pointer; inline;
+function CV_SEQ_ELEM(Seq: pCvSeq; const size_of_elem: Integer; index: Integer): Pointer; inline;
 { #define CV_GET_SEQ_ELEM( elem_type, seq, index ) CV_SEQ_ELEM( (seq), elem_type, (index) ) }
-function CV_GET_SEQ_ELEM(const size_of_elem: Integer; seq: pCvSeq; index: Integer): Pointer; inline;
+function CV_GET_SEQ_ELEM(const size_of_elem: Integer; Seq: pCvSeq; index: Integer): Pointer; inline;
 
 // (* Add element to sequence: *)
 // // >> Following declaration is a macro definition!
@@ -1359,7 +1367,8 @@ function CV_CAST_8U(t: Integer): uchar; inline;
   }                                                         \
   }
 *)
-procedure CV_NEXT_SEQ_ELEM(const elem_size: Integer; const Reader: TCvSeqReader); // inline;
+procedure CV_NEXT_SEQ_ELEM(const elem_size: Integer; const Reader: TCvSeqReader);
+// inline;
 
 // (* Move reader position backward: *)
 // // >> Following declaration is a macro definition!
@@ -1450,7 +1459,8 @@ type
   pCvAttrList = ^TCvAttrList;
 
   TCvAttrList = packed record
-    attr: ppCVChar;    (* NULL-terminated array of (attribute_name,attribute_value) pairs. *)
+    attr: ppCVChar;
+    (* NULL-terminated array of (attribute_name,attribute_value) pairs. *)
     next: pCvAttrList; (* Pointer to next chunk of the attributes list. *)
   end;
   (*
@@ -1509,7 +1519,7 @@ Type
       2:
         (str: TCvString); // * text string */
       3:
-        (seq: pCvSeq); // * sequence (ordered collection of file nodes) */
+        (Seq: pCvSeq); // * sequence (ordered collection of file nodes) */
       4:
         (map: pCvFileNodeHash); // * map (collection of named file nodes) */
   end;
@@ -2406,7 +2416,7 @@ end;
 procedure CV_READ_SEQ_ELEM(const Elem: Pointer; const Reader: TCvSeqReader; const SizeOfElem: Integer); // inline;
 begin
   // assert( (reader).seq->elem_size == sizeof(elem));
-  Assert(Reader.seq^.elem_size = SizeOfElem);
+  Assert(Reader.Seq^.elem_size = SizeOfElem);
   // memcpy( &(elem), (reader).ptr, sizeof((elem)));
   CopyMemory(
     Elem,
@@ -2519,7 +2529,7 @@ function CV_GET_SEQ_ELEM;
 begin
   { #define CV_GET_SEQ_ELEM( elem_type, seq, index ) CV_SEQ_ELEM( (seq), elem_type, (index) ) }
   Result := CV_SEQ_ELEM(
-    seq,
+    Seq,
     size_of_elem,
     index);
 end;
@@ -2534,18 +2544,18 @@ begin
     Result := 0;
 end;
 
-function CV_SEQ_ELEM(seq: pCvSeq; const size_of_elem: Integer; index: Integer): Pointer; inline;
+function CV_SEQ_ELEM(Seq: pCvSeq; const size_of_elem: Integer; index: Integer): Pointer; inline;
 begin
   // assert(sizeof((seq)->first[0]) == sizeof(CvSeqBlock) && (seq)->elem_size == sizeof(elem_type))
-  Assert(Assigned(seq^.first) and (SizeOf(seq^.first[0]) = SizeOf(TCvSeqBlock)) and (seq^.elem_size = size_of_elem));
+  Assert(Assigned(Seq^.first) and (SizeOf(Seq^.first[0]) = SizeOf(TCvSeqBlock)) and (Seq^.elem_size = size_of_elem));
   // (elem_type*)((seq)->first && (unsigned)index <(unsigned)((seq)->first->count) ?
-  if Assigned(seq^.first) and (Cardinal(index) < Cardinal(seq^.first^.count)) then
+  if Assigned(Seq^.first) and (Cardinal(index) < Cardinal(Seq^.first^.count)) then
     // (seq)->first->data + (index) * sizeof(elem_type) :
-    Result := Pointer(Integer(seq^.first^.data) + index * size_of_elem)
+    Result := Pointer(Integer(Seq^.first^.data) + index * size_of_elem)
   else
     // cvGetSeqElem( (CvSeq*)(seq), (index) )))
     Result := cvGetSeqElem(
-      seq,
+      Seq,
       index);
 end;
 
@@ -2652,9 +2662,9 @@ begin
   Result := ((((mat1)^._type xor (mat2)^._type) and CV_MAT_TYPE_MASK) = 0);
 end;
 
-function CV_IS_SEQ_CLOSED(const Seq:pCvSeq):Boolean; inline;
+function CV_IS_SEQ_CLOSED(const Seq: pCvSeq): Boolean; inline;
 begin
-  Result := (seq^.flags and CV_SEQ_FLAG_CLOSED) <> 0;
+  Result := (Seq^.flags and CV_SEQ_FLAG_CLOSED) <> 0;
 end;
 
 end.

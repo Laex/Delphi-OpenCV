@@ -1,6 +1,6 @@
 Win32
 __history
-!*
+-*.*
 *.dcu
 *.local
 *.exe
@@ -38,3 +38,4 @@ __history
 *.vlb
 /bin/carnumdetect.ini
 /bin/*.bsc
+/Bin/vclFaceRecogData

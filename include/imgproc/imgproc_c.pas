@@ -637,8 +637,11 @@ procedure cvBoxPoints(box: TCvBox2D; pt: TBoxPoints); cdecl;
   float** ranges CV_DEFAULT(NULL),
   int uniform CV_DEFAULT(1));
 }
-function cvCreateHist(dims: Integer; sizes: PInteger; _type: Integer; ranges: pSingleArray2D = nil;
-  uniform: Integer = 1): pCvHistogram; cdecl;
+function cvCreateHist(dims: Integer; sizes: PInteger; _type: Integer; ranges: pFloat = nil;
+  uniform: Integer = 1): pCvHistogram; cdecl; overload;
+//function cvCreateHist(dims: Integer; sizes: PInteger; _type: Integer; ranges: ppFloat = nil;
+//  uniform: Integer = 1): pCvHistogram; cdecl; overload;
+
 
 // (* Assignes histogram bin ranges *)
 // CVAPI(procedure)  cvSetHistBinRanges(
@@ -1011,7 +1014,12 @@ procedure cvPyrDown; external imgproc_Dll;
 procedure cvPyrUp; external imgproc_Dll;
 function cvCheckContourConvexity; external imgproc_Dll;
 
-function cvCreateHist; external imgproc_Dll;
+//function cvCreateHist(dims: Integer; sizes: PInteger; _type: Integer; ranges: pSingleArray2D = nil;
+//  uniform: Integer = 1): pCvHistogram; external imgproc_Dll;
+//function cvCreateHist(dims: Integer; sizes: PInteger; _type: Integer; ranges: ppFloat = nil;
+//  uniform: Integer = 1): pCvHistogram; external imgproc_Dll;
+function cvCreateHist(dims: Integer; sizes: PInteger; _type: Integer; ranges: pFloat = nil;
+  uniform: Integer = 1): pCvHistogram; external imgproc_Dll;
 
 procedure cvCalcHist;
 begin
