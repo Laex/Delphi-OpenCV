@@ -109,7 +109,6 @@ begin
 end;
 
 Const
-  windowName   = 'CL Adaptive Histogram Equalization'; // window name
   windowName1  = 'Grayscale';                          // window name
   windowNameH1 = 'Adaptive Equalised Histogram';       // window name
   windowNameH2 = 'Original Histogram';                 // window name
@@ -155,9 +154,9 @@ begin
 
     // create window object (use flag=0 to allow resize, 1 to auto fix size)
 
-    cvNamedWindow(
-      windowName,
-      1); // flag set to 1 by Shervin Emami, 17Nov2010.
+//    cvNamedWindow(
+//      windowName,
+//      1); // flag set to 1 by Shervin Emami, 17Nov2010.
     cvNamedWindow(
       windowName1,
       1); // flag set to 1 by Shervin Emami, 17Nov2010.
@@ -172,30 +171,30 @@ begin
       'Simple Histogram Equalization',
       1); // Added by Shervin Emami, 17Nov2010.
 
-    cvCreateTrackbar(
-      'X cells',
-      windowName,
-      @xdivs,
-      16,
-      nil);
-    cvCreateTrackbar(
-      'Y cells',
-      windowName,
-      @ydivs,
-      16,
-      nil);
-    cvCreateTrackbar(
-      'bins',
-      windowName,
-      @bins,
-      256,
-      nil);
-    cvCreateTrackbar(
-      'limit (x 0.1)',
-      windowName,
-      @limit_counter,
-      30,
-      nil);
+//    cvCreateTrackbar(
+//      'X cells',
+//      windowName,
+//      @xdivs,
+//      16,
+//      nil);
+//    cvCreateTrackbar(
+//      'Y cells',
+//      windowName,
+//      @ydivs,
+//      16,
+//      nil);
+//    cvCreateTrackbar(
+//      'bins',
+//      windowName,
+//      @bins,
+//      256,
+//      nil);
+//    cvCreateTrackbar(
+//      'limit (x 0.1)',
+//      windowName,
+//      @limit_counter,
+//      30,
+//      nil);
 
     // define required images for intermediate processing
     // (if using a capture object we need to get a frame first to get the size)
@@ -309,9 +308,9 @@ begin
 
       // display image in window
 
-      cvShowImage(
-        windowName,
-        eqImg);
+//      cvShowImage(
+//        windowName,
+//        eqImg);
       cvShowImage(
         windowName1,
         grayImg);

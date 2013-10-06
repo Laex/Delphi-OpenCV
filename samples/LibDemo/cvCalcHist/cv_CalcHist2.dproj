@@ -1,6 +1,6 @@
 ﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <PropertyGroup>
-        <ProjectGuid>{9892133E-8867-4ABB-8751-07F7A78B96C3}</ProjectGuid>
+        <ProjectGuid>{EF5C3DA9-7A87-4A4E-B2B7-ED8B18619FA3}</ProjectGuid>
         <MainSource>cv_CalcHist2.dpr</MainSource>
         <Base>True</Base>
         <Config Condition="'$(Config)'==''">Debug</Config>

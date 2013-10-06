@@ -1,6 +1,6 @@
 ﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <PropertyGroup>
-        <ProjectGuid>{DD703319-D321-48D2-A8C7-33C4A17C8DE6}</ProjectGuid>
+        <ProjectGuid>{182C3EB2-6F37-4B58-B352-D10DC7C6CB17}</ProjectGuid>
         <MainSource>cv_MatchShapes.dpr</MainSource>
         <Base>True</Base>
         <Config Condition="'$(Config)'==''">Debug</Config>

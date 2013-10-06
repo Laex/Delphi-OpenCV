@@ -1,6 +1,6 @@
 ﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <PropertyGroup>
-        <ProjectGuid>{E6555AEC-7F21-4A66-8EBC-8DD64AE99F97}</ProjectGuid>
+        <ProjectGuid>{4104141B-E8AE-40B0-84F2-01C0147F3C3F}</ProjectGuid>
         <MainSource>cv_DFT.dpr</MainSource>
         <Base>True</Base>
         <Config Condition="'$(Config)'==''">Debug</Config>

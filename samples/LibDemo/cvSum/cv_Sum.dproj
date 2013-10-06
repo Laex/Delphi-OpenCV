@@ -1,6 +1,6 @@
 ﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <PropertyGroup>
-        <ProjectGuid>{1182C644-116C-49CE-9AA6-86129B93A971}</ProjectGuid>
+        <ProjectGuid>{6E82B8F0-7F0C-4B32-BADA-80AA57FAF93A}</ProjectGuid>
         <MainSource>cv_Sum.dpr</MainSource>
         <Base>True</Base>
         <Config Condition="'$(Config)'==''">Debug</Config>

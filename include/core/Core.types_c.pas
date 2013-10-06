@@ -82,9 +82,9 @@
   //  ************************************************************************************************* *)
 
 {$IFDEF DEBUG}
-{$A8,B-,C+,D+,E-,F-,G+,H+,I+,J-,K-,L+,M-,N+,O-,P+,Q+,R+,S-,T-,U-,V+,W+,X+,Y+,Z1}
+{$A8,B-,C+,D+,E-,F-,G+,H+,I+,J+,K-,L+,M-,N+,O-,P+,Q+,R+,S-,T-,U-,V+,W+,X+,Y+,Z1}
 {$ELSE}
-{$A8,B-,C-,D-,E-,F-,G+,H+,I+,J-,K-,L-,M-,N+,O+,P+,Q-,R-,S-,T-,U-,V+,W-,X+,Y-,Z1}
+{$A8,B-,C-,D-,E-,F-,G+,H+,I+,J+,K-,L-,M-,N+,O+,P+,Q-,R-,S-,T-,U-,V+,W-,X+,Y-,Z1}
 {$ENDIF}
 {$WARN SYMBOL_DEPRECATED OFF}
 {$WARN SYMBOL_PLATFORM OFF}
@@ -93,6 +93,7 @@
 {$WARN UNSAFE_CODE OFF}
 {$WARN UNSAFE_CAST OFF}
 {$POINTERMATH ON}
+
 unit Core.types_c;
 
 interface
@@ -358,6 +359,8 @@ type
     height: Integer;
   end;
 
+  TA4CVChar = array [0 .. 3] of CVChar;
+
   TIplImage = packed record
     nSize: Integer;        (* sizeof(IplImage) *)
     id: Integer;           (* version (=0) *)
@@ -365,8 +368,8 @@ type
     alphaChannel: Integer; (* Ignored by OpenCV *)
     depth: Integer; (* Pixel depth in bits: Pixel depth in bits: IPL_DEPTH_8U, IPL_DEPTH_8S, IPL_DEPTH_16S,
       IPL_DEPTH_32S, IPL_DEPTH_32F and IPL_DEPTH_64F are supported. *)
-    colorModel: array [0 .. 3] of CVChar;   (* Ignored by OpenCV *)
-    channelSeq: array [0 .. 3] of CVChar;   (* ditto *)
+    colorModel: TA4CVChar;   (* Ignored by OpenCV *)
+    channelSeq: TA4CVChar;   (* ditto *)
     dataOrder: Integer;                     (* 0 - interleaved color channels, 1 - separate color channels. *)
     origin: Integer;                        (* 0 - top-left origin, *)
     align: Integer;                         (* Alignment of image rows (4 or 8). *)
@@ -869,7 +872,9 @@ type
   end;
 
 type
-  CvMemStoragePos = packed record
+  pCvMemStoragePos = ^TCvMemStoragePos;
+
+  TCvMemStoragePos = packed record
     top: pCvMemBlock;
     free_space: Integer;
   end;
@@ -1148,10 +1153,10 @@ const
 {$EXTERNALSYM CV_SEQ_ELTYPE_BITS}
   CV_SEQ_ELTYPE_MASK = (1 shl CV_SEQ_ELTYPE_BITS) - 1;
 {$EXTERNALSYM CV_SEQ_ELTYPE_MASK}
-  // CV_SEQ_ELTYPE_POINT = CV_32SC2; (* (x,y) *)
-  // {$EXTERNALSYM CV_SEQ_ELTYPE_POINT}
-  // CV_SEQ_ELTYPE_CODE = CV_8UC1; (* freeman code: 0..7 *)
-  // {$EXTERNALSYM CV_SEQ_ELTYPE_CODE}
+  CV_SEQ_ELTYPE_POINT: Integer = 0; // CV_32SC2; (* (x,y) *)
+{$EXTERNALSYM CV_SEQ_ELTYPE_POINT}
+  CV_SEQ_ELTYPE_CODE: Integer = 0; // CV_8UC1; (* freeman code: 0..7 *)
+{$EXTERNALSYM CV_SEQ_ELTYPE_CODE}
   CV_SEQ_ELTYPE_GENERIC = 0;
 {$EXTERNALSYM CV_SEQ_ELTYPE_GENERIC}
   CV_SEQ_ELTYPE_PTR = CV_USRTYPE1;
@@ -1168,8 +1173,8 @@ const
 {$EXTERNALSYM CV_SEQ_ELTYPE_TRIAN_ATR}
   CV_SEQ_ELTYPE_CONNECTED_COMP = 0; (* connected component *)
 {$EXTERNALSYM CV_SEQ_ELTYPE_CONNECTED_COMP}
-  // CV_SEQ_ELTYPE_POINT3D = CV_32FC3; (* (x,y,z) *)
-  // {$EXTERNALSYM CV_SEQ_ELTYPE_POINT3D}
+  CV_SEQ_ELTYPE_POINT3D: Integer = 0; // CV_32FC3; (* (x,y,z) *)
+{$EXTERNALSYM CV_SEQ_ELTYPE_POINT3D}
   CV_SEQ_KIND_BITS = 2;
 {$EXTERNALSYM CV_SEQ_KIND_BITS}
   CV_SEQ_KIND_MASK = ((1 shl CV_SEQ_KIND_BITS) - 1) shl CV_SEQ_ELTYPE_BITS;
@@ -1205,26 +1210,26 @@ const
   CV_ORIENTED_GRAPH = (CV_SEQ_KIND_GRAPH or CV_GRAPH_FLAG_ORIENTED);
 {$EXTERNALSYM CV_ORIENTED_GRAPH}
   (* point sets *)
-  // CV_SEQ_POINT_SET = (CV_SEQ_KIND_GENERIC or CV_SEQ_ELTYPE_POINT);
-  // {$EXTERNALSYM CV_SEQ_POINT_SET}
-  // CV_SEQ_POINT3D_SET = (CV_SEQ_KIND_GENERIC or CV_SEQ_ELTYPE_POINT3D);
-  // {$EXTERNALSYM CV_SEQ_POINT3D_SET}
-  // CV_SEQ_POLYLINE = (CV_SEQ_KIND_CURVE or CV_SEQ_ELTYPE_POINT);
-  // {$EXTERNALSYM CV_SEQ_POLYLINE}
-  // CV_SEQ_POLYGON = (CV_SEQ_FLAG_CLOSED or CV_SEQ_POLYLINE);
-  // {$EXTERNALSYM CV_SEQ_POLYGON}
-  // CV_SEQ_CONTOUR = CV_SEQ_POLYGON;
-  // {$EXTERNALSYM CV_SEQ_CONTOUR}
-  // CV_SEQ_SIMPLE_POLYGON = (CV_SEQ_FLAG_SIMPLE or CV_SEQ_POLYGON);
-  // {$EXTERNALSYM CV_SEQ_SIMPLE_POLYGON}
+  CV_SEQ_POINT_SET: Integer = 0; // (CV_SEQ_KIND_GENERIC or CV_SEQ_ELTYPE_POINT);
+{$EXTERNALSYM CV_SEQ_POINT_SET}
+  CV_SEQ_POINT3D_SET: Integer = 0; // (CV_SEQ_KIND_GENERIC or CV_SEQ_ELTYPE_POINT3D);
+{$EXTERNALSYM CV_SEQ_POINT3D_SET}
+  CV_SEQ_POLYLINE: Integer = 0; // (CV_SEQ_KIND_CURVE or CV_SEQ_ELTYPE_POINT);
+{$EXTERNALSYM CV_SEQ_POLYLINE}
+  CV_SEQ_POLYGON: Integer = 0; // (CV_SEQ_FLAG_CLOSED or CV_SEQ_POLYLINE);
+{$EXTERNALSYM CV_SEQ_POLYGON}
+  CV_SEQ_CONTOUR: Integer = 0; // CV_SEQ_POLYGON;
+{$EXTERNALSYM CV_SEQ_CONTOUR}
+  CV_SEQ_SIMPLE_POLYGON: Integer = 0; // (CV_SEQ_FLAG_SIMPLE or CV_SEQ_POLYGON);
+{$EXTERNALSYM CV_SEQ_SIMPLE_POLYGON}
   (* chain-coded curves *)
-  // CV_SEQ_CHAIN = (CV_SEQ_KIND_CURVE or CV_SEQ_ELTYPE_CODE);
-  // {$EXTERNALSYM CV_SEQ_CHAIN}
-  // CV_SEQ_CHAIN_CONTOUR = (CV_SEQ_FLAG_CLOSED or CV_SEQ_CHAIN);
-  // {$EXTERNALSYM CV_SEQ_CHAIN_CONTOUR}
-  // (* binary tree for the contour *)
-  // CV_SEQ_POLYGON_TREE = (CV_SEQ_KIND_BIN_TREE or CV_SEQ_ELTYPE_TRIAN_ATR);
-  // {$EXTERNALSYM CV_SEQ_POLYGON_TREE}
+  CV_SEQ_CHAIN: Integer = 0; // (CV_SEQ_KIND_CURVE or CV_SEQ_ELTYPE_CODE);
+{$EXTERNALSYM CV_SEQ_CHAIN}
+  CV_SEQ_CHAIN_CONTOUR: Integer = 0; // (CV_SEQ_FLAG_CLOSED or CV_SEQ_CHAIN);
+{$EXTERNALSYM CV_SEQ_CHAIN_CONTOUR}
+  (* binary tree for the contour *)
+  CV_SEQ_POLYGON_TREE = (CV_SEQ_KIND_BIN_TREE or CV_SEQ_ELTYPE_TRIAN_ATR);
+{$EXTERNALSYM CV_SEQ_POLYGON_TREE}
   (* sequence of the connected components *)
   CV_SEQ_CONNECTED_COMP = (CV_SEQ_KIND_GENERIC or CV_SEQ_ELTYPE_CONNECTED_COMP);
 {$EXTERNALSYM CV_SEQ_CONNECTED_COMP}
@@ -1251,11 +1256,11 @@ function CV_IS_SEQ_CLOSED(const Seq: pCvSeq): Boolean; inline;
 /// / >> Following declaration is a macro definition!
 // const
 // CV_IS_SEQ_CONVEX(seq)0;
-//
-/// / >> Following declaration is a macro definition!
-// const
+
+// Following declaration is a macro definition!
 // CV_IS_SEQ_HOLE(seq)(((seq)^.flags and CV_SEQ_FLAG_HOLE) <> 0);
-//
+function CV_IS_SEQ_HOLE(const Seq: pCvSeq): Boolean; inline;
+
 /// / >> Following declaration is a macro definition!
 // const
 // CV_IS_SEQ_SIMPLE(seq)1;
@@ -2666,5 +2671,24 @@ function CV_IS_SEQ_CLOSED(const Seq: pCvSeq): Boolean; inline;
 begin
   Result := (Seq^.flags and CV_SEQ_FLAG_CLOSED) <> 0;
 end;
+
+function CV_IS_SEQ_HOLE(const Seq: pCvSeq): Boolean; inline;
+begin
+  Result := (Seq^.flags and CV_SEQ_FLAG_HOLE) <> 0;
+end;
+
+initialization
+
+CV_SEQ_ELTYPE_POINT   := CV_32SC2;
+CV_SEQ_ELTYPE_CODE    := CV_8UC1;
+CV_SEQ_ELTYPE_POINT3D := CV_32FC3;
+CV_SEQ_POINT_SET      := (CV_SEQ_KIND_GENERIC or CV_SEQ_ELTYPE_POINT);
+CV_SEQ_POINT3D_SET    := (CV_SEQ_KIND_GENERIC or CV_SEQ_ELTYPE_POINT3D);
+CV_SEQ_POLYLINE       := (CV_SEQ_KIND_CURVE or CV_SEQ_ELTYPE_POINT);
+CV_SEQ_POLYGON        := (CV_SEQ_FLAG_CLOSED or CV_SEQ_POLYLINE);
+CV_SEQ_CONTOUR        := CV_SEQ_POLYGON;
+CV_SEQ_SIMPLE_POLYGON := (CV_SEQ_FLAG_SIMPLE or CV_SEQ_POLYGON);
+CV_SEQ_CHAIN          := (CV_SEQ_KIND_CURVE or CV_SEQ_ELTYPE_CODE);
+CV_SEQ_CHAIN_CONTOUR  := (CV_SEQ_FLAG_CLOSED or CV_SEQ_CHAIN);
 
 end.

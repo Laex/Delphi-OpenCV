@@ -18,6 +18,9 @@
         <Projects Include="VCLDemo\vclIPCameraCapture\VCLIPCameraCapture.dproj">
             <Dependencies/>
         </Projects>
+        <Projects Include="VCLDemo\vclOpenCVandOpenGL\vclOCVaOGL.dproj">
+            <Dependencies/>
+        </Projects>
     </ItemGroup>
     <ProjectExtensions>
         <Borland.Personality>Default.Personality.12</Borland.Personality>
@@ -71,14 +74,23 @@
     <Target Name="VCLIPCameraCapture:Make">
         <MSBuild Projects="VCLDemo\vclIPCameraCapture\VCLIPCameraCapture.dproj" Targets="Make"/>
     </Target>
+    <Target Name="vclOCVaOGL">
+        <MSBuild Projects="VCLDemo\vclOpenCVandOpenGL\vclOCVaOGL.dproj"/>
+    </Target>
+    <Target Name="vclOCVaOGL:Clean">
+        <MSBuild Projects="VCLDemo\vclOpenCVandOpenGL\vclOCVaOGL.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="vclOCVaOGL:Make">
+        <MSBuild Projects="VCLDemo\vclOpenCVandOpenGL\vclOCVaOGL.dproj" Targets="Make"/>
+    </Target>
     <Target Name="Build">
-        <CallTarget Targets="VCLCameraCapture;VCLChessboardCorners;vclColorTracking;vclPCArecognition;VCLIPCameraCapture"/>
+        <CallTarget Targets="VCLCameraCapture;VCLChessboardCorners;vclColorTracking;vclPCArecognition;VCLIPCameraCapture;vclOCVaOGL"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="VCLCameraCapture:Clean;VCLChessboardCorners:Clean;vclColorTracking:Clean;vclPCArecognition:Clean;VCLIPCameraCapture:Clean"/>
+        <CallTarget Targets="VCLCameraCapture:Clean;VCLChessboardCorners:Clean;vclColorTracking:Clean;vclPCArecognition:Clean;VCLIPCameraCapture:Clean;vclOCVaOGL:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="VCLCameraCapture:Make;VCLChessboardCorners:Make;vclColorTracking:Make;vclPCArecognition:Make;VCLIPCameraCapture:Make"/>
+        <CallTarget Targets="VCLCameraCapture:Make;VCLChessboardCorners:Make;vclColorTracking:Make;vclPCArecognition:Make;VCLIPCameraCapture:Make;vclOCVaOGL:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>

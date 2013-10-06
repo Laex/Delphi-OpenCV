@@ -453,6 +453,66 @@ const
   CV_CHAIN_APPROX_TC89_KCOS = 4;
   CV_LINK_RUNS              = 5;
 
+type
+
+  pCvContourInfo = ^TCvContourInfo;
+
+  TCvContourInfo = packed record
+    flags: Integer;
+    next: pCvContourInfo;   // next contour with the same mark value */
+    parent: pCvContourInfo; // information about parent contour */
+    contour: pCvSeq;        // corresponding contour (may be 0, if rejected) */
+    rect: TCvRect;          // bounding rectangle */
+    origin: TCvPoint;       // origin point (where the contour was traced from) */
+    is_hole: Integer;       // hole flag */
+  end;
+
+  (*
+    Structure that is used for sequental retrieving contours from the image.
+    It supports both hierarchical and plane variants of Suzuki algorithm.
+  *)
+  pCvContourScanner = ^TCvContourScanner;
+
+  TCvContourScanner = packed record
+    storage1: pCvMemStorage; // contains fetched contours */
+    storage2: pCvMemStorage; // contains approximated contours
+    // (! = storage1 if approx_method2 ! = approx_method1) * / cinfo_storage: pCvMemStorage;
+    // contains _CvContourInfo nodes */
+    cinfo_set: pCvSet;             // set of _CvContourInfo nodes */
+    initial_pos: TCvMemStoragePos; // starting storage pos */
+    backup_pos: TCvMemStoragePos;  // beginning of the latest approx. contour */
+    backup_pos2: TCvMemStoragePos; // ending of the latest approx. contour */
+    img0: pByte;                   // image origin */
+    img: pByte;                    // current image row */
+    img_step: Integer;             // image step */
+    img_size: TCvSize;             // ROI size */
+    offset: TCvPoint;              // ROI offset: coordinates, added to each contour point */
+    pt: TCvPoint;                  // current scanner position */
+    lnbd: TCvPoint;                // position of the last met contour */
+    nbd: Integer;                  // current mark val */
+    l_cinfo: pCvContourInfo;       // information about latest approx. contour */
+    cinfo_temp: TCvContourInfo;    // temporary var which is used in simple modes */
+    frame_info: TCvContourInfo;    // information about frame */
+    frame: TCvSeq;                 // frame itself */
+    approx_method1: Integer;       // approx method when tracing */
+    approx_method2: Integer;       // final approx method */
+    mode: Integer;                 // contour scanning mode:
+    // 0 - external only
+    // 1 - all the contours w/o any hierarchy
+    // 2 - connected components (i.e. two-level structure -
+    // external contours and holes),
+    // 3 - full hierarchy;
+    // 4 - connected components of a multi-level image
+    subst_flag: Integer;
+    seq_type1: Integer;    // type of fetched contours */
+    header_size1: Integer; // hdr size of fetched contours */
+    elem_size1: Integer;   // elem size of fetched contours */
+    seq_type2: Integer;    // */
+    header_size2: Integer; // the same for approx. contours  */
+    elem_size2: Integer;   // */
+    cinfo_table: array [0 .. 127] of pCvContourInfo;
+  end;
+
   {
     /* Retrieves outer and optionally inner boundaries of white (non-zero) connected
     components in the black (zero) background */
@@ -468,36 +528,40 @@ const
 
 function cvFindContours(
   { } image: pIplImage;
-  { } storage: PCvMemStorage;
+  { } storage: pCvMemStorage;
   { } first_contour: pCvSeq;
   { } header_size: Integer { = SizeOf(TCvContour) };
   { } mode: Integer { = CV_RETR_LIST };
   { } method: Integer { = CV_CHAIN_APPROX_SIMPLE };
   { } offset: TCvPoint { =cvPoint(0,0) } ): Integer; cdecl;
 
-//
-// (* Initalizes contour retrieving process.
-// Calls cvStartFindContours.
-// Calls cvFindNextContour until null cPointer is returned
-// or some other condition becomes true.
-// Calls cvEndFindContours at the end. *)
+(* Initalizes contour retrieving process.
+  Calls cvStartFindContours.
+  Calls cvFindNextContour until null pointer is returned
+  or some other condition becomes true.
+  Calls cvEndFindContours at the end. *)
 // CVAPI(CvContourScanner)  cvStartFindContours( CvArr* image, CvMemStorage* storage,
-// function header_size CV_DEFAULT(
-// v1: CvContour));
-// mode CV_DEFAULT(CV_RETR_LIST): Integer;
-// method CV_DEFAULT(CV_CHAIN_APPROX_SIMPLE): Integer;
-// offset CV_DEFAULT(cvPoint(0: CvPoint;
-// v5: ))): Integer;
-//
-// (* Retrieves next contour *)
-// CVAPI(CvSeq)  cvFindNextContour( CvContourScanner scanner ): Pointer;
-//
-//
-// (* Substitutes the last retrieved contour with the new one
-// (if the substitutor is null, the last retrieved contour is removed from the tree) *) then
-// CVAPI(procedure)   cvSubstituteContour(
-// v1: var Releases contour scanner and returns pointer to the first outer contour *)CVAPI(CvSeq)  cvEndFindContours( CvContourScanner* scanner);
-//
+// int header_size CV_DEFAULT(sizeof(CvContour)),
+// int mode CV_DEFAULT(CV_RETR_LIST),
+// int method CV_DEFAULT(CV_CHAIN_APPROX_SIMPLE),
+// CvPoint offset CV_DEFAULT(cvPoint(0,0)));
+function cvStartFindContours(image: pCvArr; storage: pCvMemStorage; header_size: Integer { =sizeof(TCvContour)) };
+  mode: Integer {=  CV_RETR_LIST }; method: Integer { =CV_CHAIN_APPROX_SIMPLE }; offset: TCvPoint { =cvPoint(0,0) } )
+  : pCvContourScanner; cdecl;
+
+// * Retrieves next contour */
+// CVAPI(CvSeq*)  cvFindNextContour( CvContourScanner scanner );
+function cvFindNextContour(scanner: pCvContourScanner): pCvSeq; cdecl;
+
+(* Substitutes the last retrieved contour with the new one
+  (if the substitutor is null, the last retrieved contour is removed from the tree) *)
+// CVAPI(void)   cvSubstituteContour( CvContourScanner scanner, CvSeq* new_contour );
+procedure cvSubstituteContour(scanner: pCvContourScanner; new_contour: pCvSeq); cdecl;
+
+// * Releases contour scanner and returns pointer to the first outer contour */
+// CVAPI(CvSeq*)  cvEndFindContours( CvContourScanner* scanner );
+function cvEndFindContours(Var scanner: pCvContourScanner): pCvSeq; cdecl;
+
 // (* Approximates a single Freeman chain or a tree of chains to polygonal curves *)
 // CVAPI(CvSeq) cvApproxChains( CvSeq* src_seq, CvMemStorage* storage,
 // function method CV_DEFAULT(
@@ -529,7 +593,7 @@ function cvFindContours(
 function cvApproxPoly(
   { } const src_seq: pCvSeq;
   { } header_size: Integer;
-  { } storage: PCvMemStorage;
+  { } storage: pCvMemStorage;
   { } method: Integer;
   { } eps: double;
   { } recursive: Integer = 0): pCvSeq; cdecl;
@@ -565,7 +629,7 @@ function cvContourArea(const contour: pCvArr; slice: TCvSlice { = CV_WHOLE_SEQ }
 
 // (* Finds minimum area rotated rectangle bounding a set of points *)
 // CVAPI(CvBox2D)  cvMinAreaRect2( const CvArr* points, CvMemStorage* storage CV_DEFAULT(NULL));
-function cvMinAreaRect2(points: pCvArr; storage: PCvMemStorage = nil): TCvBox2D; cdecl;
+function cvMinAreaRect2(points: pCvArr; storage: pCvMemStorage = nil): TCvBox2D; cdecl;
 
 // (* Finds minimum enclosing circle for a set of points *)
 // CVAPI(int)  cvMinEnclosingCircle( const CvArr* points,CvPoint2D32f* center, float* radius );
@@ -599,7 +663,7 @@ function cvCheckContourConvexity(const contour: pCvSeq): Integer; cdecl;
   CVAPI(CvSeq)  cvConvexityDefects(  CvArr* contour,  CvArr* convexhull,
   CvMemStorage* storage CV_DEFAULT(0)): Pointer;
 }
-function cvConvexityDefects(contour: pCvSeq; convexhull: pCvSeq; storage: PCvMemStorage = nil): pCvSeq; cdecl;
+function cvConvexityDefects(contour: pCvSeq; convexhull: pCvSeq; storage: pCvMemStorage = nil): pCvSeq; cdecl;
 
 // (* Fits ellipse into a set of 2d points *)
 // CVAPI(CvBox2D) cvFitEllipse2(  CvArr* points );
@@ -637,10 +701,10 @@ procedure cvBoxPoints(box: TCvBox2D; pt: TBoxPoints); cdecl;
   float** ranges CV_DEFAULT(NULL),
   int uniform CV_DEFAULT(1));
 }
-function cvCreateHist(dims: Integer; sizes: PInteger; _type: Integer; ranges: pFloat = nil;
-  uniform: Integer = 1): pCvHistogram; cdecl; overload;
-//function cvCreateHist(dims: Integer; sizes: PInteger; _type: Integer; ranges: ppFloat = nil;
-//  uniform: Integer = 1): pCvHistogram; cdecl; overload;
+function cvCreateHist(dims: Integer; sizes: PInteger; _type: Integer; ranges: Pointer = nil; uniform: Integer = 1)
+  : pCvHistogram; cdecl;
+// function cvCreateHist(dims: Integer; sizes: PInteger; _type: Integer; ranges: ppFloat = nil;
+// uniform: Integer = 1): pCvHistogram; cdecl; overload;
 
 
 // (* Assignes histogram bin ranges *)
@@ -1013,13 +1077,7 @@ function cvConvexityDefects; external imgproc_Dll;
 procedure cvPyrDown; external imgproc_Dll;
 procedure cvPyrUp; external imgproc_Dll;
 function cvCheckContourConvexity; external imgproc_Dll;
-
-//function cvCreateHist(dims: Integer; sizes: PInteger; _type: Integer; ranges: pSingleArray2D = nil;
-//  uniform: Integer = 1): pCvHistogram; external imgproc_Dll;
-//function cvCreateHist(dims: Integer; sizes: PInteger; _type: Integer; ranges: ppFloat = nil;
-//  uniform: Integer = 1): pCvHistogram; external imgproc_Dll;
-function cvCreateHist(dims: Integer; sizes: PInteger; _type: Integer; ranges: pFloat = nil;
-  uniform: Integer = 1): pCvHistogram; external imgproc_Dll;
+function cvCreateHist; external imgproc_Dll;
 
 procedure cvCalcHist;
 begin
@@ -1049,5 +1107,10 @@ function cvGetCentralMoment; external imgproc_Dll;
 procedure cvUndistort2; external imgproc_Dll;
 function cvGetAffineTransform; external imgproc_Dll;
 procedure cvUndistortPoints; external imgproc_Dll;
+
+function cvStartFindContours; external imgproc_Dll;
+function cvFindNextContour; external imgproc_Dll;
+procedure cvSubstituteContour; external imgproc_Dll;
+function cvEndFindContours; external imgproc_Dll;
 
 end.
