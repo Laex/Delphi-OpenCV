@@ -1,6 +1,6 @@
 ﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <PropertyGroup>
-        <ProjectGuid>{C1473E41-922F-4F1D-B7E2-3EE58D9B9F7D}</ProjectGuid>
+        <ProjectGuid>{A7633F76-8F3B-4C33-B954-F5C1987547C1}</ProjectGuid>
         <MainSource>cv_FindContours3.dpr</MainSource>
         <Base>True</Base>
         <Config Condition="'$(Config)'==''">Debug</Config>

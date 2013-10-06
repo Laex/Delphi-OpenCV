@@ -50,7 +50,7 @@ object FormMain: TFormMain
       Width = 75
       Height = 25
       Caption = 'Active'
-      TabOrder = 1
+      TabOrder = 2
       OnClick = ButtonARClick
     end
     object ButtonShow: TButton
@@ -59,7 +59,7 @@ object FormMain: TFormMain
       Width = 75
       Height = 25
       Caption = 'Show cap. >>'
-      TabOrder = 2
+      TabOrder = 1
       OnClick = ButtonShowClick
     end
   end

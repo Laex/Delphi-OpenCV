@@ -973,7 +973,7 @@ function cvCreateMemStorage(block_size: Integer = 0): pCvMemStorage; cdecl;
 { Creates a memory storage that will borrow memory blocks from parent storage
   CVAPI(CvMemStorage*)  cvCreateChildMemStorage( CvMemStorage* parent );
 }
-function cvCreateChildMemStorage(block_size: Integer = 0): pCvMemStorage; cdecl;
+function cvCreateChildMemStorage(parent:pCvMemStorage): pCvMemStorage; cdecl;
 
 { Releases memory storage. All the children of a parent must be released before
   the parent. A child storage returns all the blocks to parent when it is released

@@ -1,28 +1,26 @@
-﻿(* /*****************************************************************
-  //                       Delphi-OpenCV Demo
-  //               Copyright (C) 2013 Project Delphi-OpenCV
-  // ****************************************************************
-  // Contributor:
-  // laentir Valetov
-  // email:laex@bk.ru
-  // ****************************************************************
-  // You may retrieve the latest version of this file at the GitHub,
-  // located at git://github.com/Laex/Delphi-OpenCV.git
-  // ****************************************************************
-  // The contents of this file are used with permission, subject to
-  // the Mozilla Public License Version 1.1 (the "License"); you may
-  // not use this file except in compliance with the License. You may
-  // obtain a copy of the License at
-  // http://www.mozilla.org/MPL/MPL-1_1Final.html
-  //
-  // Software distributed under the License is distributed on an
-  // "AS IS" basis, WITHOUT WARRANTY OF ANY KIND, either express or
-  // implied. See the License for the specific language governing
-  // rights and limitations under the License.
-  ******************************************************************* *)
-// JCL_DEBUG_EXPERT_GENERATEJDBG OFF
-// JCL_DEBUG_EXPERT_INSERTJDBG OFF
-// JCL_DEBUG_EXPERT_DELETEMAPFILE OFF
+﻿// *****************************************************************
+// Delphi-OpenCV Demo
+// Copyright (C) 2013 Project Delphi-OpenCV
+// ****************************************************************
+// Contributor:
+// laentir Valetov
+// email:laex@bk.ru
+// ****************************************************************
+// You may retrieve the latest version of this file at the GitHub,
+// located at git://github.com/Laex/Delphi-OpenCV.git
+// ****************************************************************
+// The contents of this file are used with permission, subject to
+// the Mozilla Public License Version 1.1 (the "License"); you may
+// not use this file except in compliance with the License. You may
+// obtain a copy of the License at
+// http://www.mozilla.org/MPL/MPL-1_1Final.html
+//
+// Software distributed under the License is distributed on an
+// "AS IS" basis, WITHOUT WARRANTY OF ANY KIND, either express or
+// implied. See the License for the specific language governing
+// rights and limitations under the License.
+// ******************************************************************
+
 program IPCamVideoCapture;
 
 uses
@@ -35,7 +33,8 @@ uses
 
 const
   // See http://www.ispyconnect.com
-  VIDEO_FILE_NAME = 'rtsp://192.168.0.200:554/mpeg4';
+  VIDEO_FILE_NAME = 'rtsp://192.168.0.202:554/cam/realmonitor?channel=1&subtype=0&unicast=true&proto=Onvif';
+  //'rtsp://192.168.0.200:554/mpeg4';
   // declare escape char
   ESCAPE_CHAR = 27;
 
@@ -78,7 +77,9 @@ begin
         // is is called...)
         if Assigned(frame) then
           // show frame in window
-          cvShowImage('video', frame);
+          cvShowImage(
+            'video',
+            frame);
         // wait for user key, delay is in msec so 1000msec = 1sec wait period
         key := cvWaitKey(10);
       end;
@@ -89,7 +90,10 @@ begin
     end;
   except
     on E: Exception do
-      Writeln(E.ClassName, ': ', E.Message);
+      Writeln(
+        E.ClassName,
+        ': ',
+        E.Message);
   end;
 
 end.
