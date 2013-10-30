@@ -21,6 +21,9 @@
         <Projects Include="VCLDemo\vclOpenCVandOpenGL\vclOCVaOGL.dproj">
             <Dependencies/>
         </Projects>
+        <Projects Include="VCLDemo\vclColorTracking2\vclColorTracking2.dproj">
+            <Dependencies/>
+        </Projects>
     </ItemGroup>
     <ProjectExtensions>
         <Borland.Personality>Default.Personality.12</Borland.Personality>
@@ -83,14 +86,23 @@
     <Target Name="vclOCVaOGL:Make">
         <MSBuild Projects="VCLDemo\vclOpenCVandOpenGL\vclOCVaOGL.dproj" Targets="Make"/>
     </Target>
+    <Target Name="vclColorTracking2">
+        <MSBuild Projects="VCLDemo\vclColorTracking2\vclColorTracking2.dproj"/>
+    </Target>
+    <Target Name="vclColorTracking2:Clean">
+        <MSBuild Projects="VCLDemo\vclColorTracking2\vclColorTracking2.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="vclColorTracking2:Make">
+        <MSBuild Projects="VCLDemo\vclColorTracking2\vclColorTracking2.dproj" Targets="Make"/>
+    </Target>
     <Target Name="Build">
-        <CallTarget Targets="VCLCameraCapture;VCLChessboardCorners;vclColorTracking;vclPCArecognition;VCLIPCameraCapture;vclOCVaOGL"/>
+        <CallTarget Targets="VCLCameraCapture;VCLChessboardCorners;vclColorTracking;vclPCArecognition;VCLIPCameraCapture;vclOCVaOGL;vclColorTracking2"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="VCLCameraCapture:Clean;VCLChessboardCorners:Clean;vclColorTracking:Clean;vclPCArecognition:Clean;VCLIPCameraCapture:Clean;vclOCVaOGL:Clean"/>
+        <CallTarget Targets="VCLCameraCapture:Clean;VCLChessboardCorners:Clean;vclColorTracking:Clean;vclPCArecognition:Clean;VCLIPCameraCapture:Clean;vclOCVaOGL:Clean;vclColorTracking2:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="VCLCameraCapture:Make;VCLChessboardCorners:Make;vclColorTracking:Make;vclPCArecognition:Make;VCLIPCameraCapture:Make;vclOCVaOGL:Make"/>
+        <CallTarget Targets="VCLCameraCapture:Make;VCLChessboardCorners:Make;vclColorTracking:Make;vclPCArecognition:Make;VCLIPCameraCapture:Make;vclOCVaOGL:Make;vclColorTracking2:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>
