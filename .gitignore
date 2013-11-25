@@ -25,7 +25,6 @@ __history
 *.log
 *.tlog
 *.lastbuildstate
-/include/ml
 /opencv_classes/Debug
 /opencv_classes/ipch
 /opencv_classes/Lib

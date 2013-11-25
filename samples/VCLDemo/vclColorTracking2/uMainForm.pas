@@ -226,8 +226,8 @@ begin
     While Assigned(_contours) do
       if CV_IS_SEQ_CLOSED(_contours) then
       begin
-        cvDrawContours(cameraFeed, _contours, CV_RGB(52, 201, 36), CV_RGB(36, 201, 197), -1, 2, // CV_FILLED,
-          CV_AA, cvPoint(0, 0)); // рисуем контур
+//        cvDrawContours(cameraFeed, _contours, CV_RGB(52, 201, 36), CV_RGB(36, 201, 197), -1, 2, // CV_FILLED,
+//          CV_AA, cvPoint(0, 0)); // рисуем контур
 
         // if number of objects greater than MAX_NUM_OBJECTS we have a noisy filter
         cvZero(dst_th);
