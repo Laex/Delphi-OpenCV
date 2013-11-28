@@ -3,7 +3,7 @@
         <ProjectGuid>{A8A9919B-ED5B-431B-AEEF-F1BCE5E6B42F}</ProjectGuid>
         <MainSource>CarNumDetect.dpr</MainSource>
         <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Release</Config>
+        <Config Condition="'$(Config)'==''">Debug</Config>
         <TargetedPlatforms>1</TargetedPlatforms>
         <AppType>Console</AppType>
         <FrameworkType>None</FrameworkType>
