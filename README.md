@@ -33,6 +33,9 @@ email: sleuthhound@gmail.com
 <PROJECT_ROOT>\Delphi-OpenCV-master\Include\calib3d
 <PROJECT_ROOT>\Delphi-OpenCV-master\Include\contrib
 <PROJECT_ROOT>\Delphi-OpenCV-master\Include\video
+<PROJECT_ROOT>\Delphi-OpenCV-master\Include\ffmpeg
+<PROJECT_ROOT>\Delphi-OpenCV-master\Include\ml
+<PROJECT_ROOT>\Delphi-OpenCV-master\Include\stitching
 ```
 where ```<PROJECT_ROOT>``` directory, which was unzipped project.
 
@@ -62,4 +65,5 @@ and path
 <PROJECT_ROOT>\samples\LibDemo.groupproj
 <PROJECT_ROOT>\samples\MultiDemo.groupproj
 <PROJECT_ROOT>\samples\VCLDemo.groupproj
+<PROJECT_ROOT>\samples\ComponentDemo.groupproj
 ```
