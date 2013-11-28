@@ -25,8 +25,7 @@ program vclOCVaOGL;
 
 uses
   Vcl.Forms,
-  uMainForm in 'uMainForm.pas' {MainForm},
-  dglOpenGL in 'dglOpenGL.pas';
+  uMainForm in 'uMainForm.pas' {MainForm};
 
 {$R *.res}
 
