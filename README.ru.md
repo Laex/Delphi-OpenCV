@@ -33,11 +33,15 @@ email: sleuthhound@gmail.com
 <PROJECT_ROOT>\Delphi-OpenCV-master\Include\calib3d
 <PROJECT_ROOT>\Delphi-OpenCV-master\Include\contrib
 <PROJECT_ROOT>\Delphi-OpenCV-master\Include\video
+<PROJECT_ROOT>\Delphi-OpenCV-master\Include\ffmpeg
+<PROJECT_ROOT>\Delphi-OpenCV-master\Include\ml
+<PROJECT_ROOT>\Delphi-OpenCV-master\Include\stitching
 ```
 где ```<PROJECT_ROOT>``` каталог куда разархивированы файлы.
 
 4.Откройте в Delphi IDE и откомпилируйте:<br> 
 ```
-<PROJECT_ROOT>\samples\LibDemo.groupproj - базовые примеры использования OpenCV
-<PROJECT_ROOT>\samples\MultiDemo.groupproj - примеры комплексного использования функций
-<PROJECT_ROOT>\samples\VCLDemo.groupproj - примеры использования в VCL приложениях``
+<PROJECT_ROOT>\samples\LibDemo.groupproj - базовые примеры использования OpenCV.
+<PROJECT_ROOT>\samples\MultiDemo.groupproj - примеры комплексного использования функций.
+<PROJECT_ROOT>\samples\VCLDemo.groupproj - примеры использования в VCL приложениях.
+<PROJECT_ROOT>\samples\ComponentDemo.groupproj - примеры использования визуальных и невизуальных компонентов для работы с библиотекой OpenCV.``
