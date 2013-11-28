@@ -44,4 +44,5 @@ email: sleuthhound@gmail.com
 <PROJECT_ROOT>\samples\LibDemo.groupproj - базовые примеры использования OpenCV.
 <PROJECT_ROOT>\samples\MultiDemo.groupproj - примеры комплексного использования функций.
 <PROJECT_ROOT>\samples\VCLDemo.groupproj - примеры использования в VCL приложениях.
-<PROJECT_ROOT>\samples\ComponentDemo.groupproj - примеры использования визуальных и невизуальных компонентов для работы с библиотекой OpenCV.``
+<PROJECT_ROOT>\samples\ComponentDemo.groupproj - примеры использования визуальных и невизуальных компонентов для работы с библиотекой OpenCV.
+```
