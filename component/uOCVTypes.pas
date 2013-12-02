@@ -46,44 +46,42 @@ Type
 
   TocvReceiverList = TList<IocvDataReceiver>;
 
-  TocvDataSource = class({TComponent}TInterfacedPersistent, IocvDataSource)
+  TocvDataSource = class(TComponent, IocvDataSource)
   private
     ReceiverCS: TCriticalSection;
-    FOwner : TComponent;
   protected
     FOpenCVVideoReceiver: IocvDataReceiver;
     procedure NotifyReceiver(const IplImage: pIplImage); virtual;
-    function GetOwner: TPersistent; override;
   public
-    constructor Create(AOwner: TComponent); //override;
+    constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
     procedure SetReceiver(const OpenCVVideoReceiver: IocvDataReceiver); virtual;
   end;
 
-  TocvDataReceiver = class(TInterfacedPersistent{TComponent}, IocvDataReceiver)
+  TocvDataReceiver = class(TComponent, IocvDataReceiver)
   private
-    FocvVideoSource: TocvDataSource;
+    FocvVideoSource: IocvDataSource;
   protected
     procedure TakeImage(const IplImage: pIplImage); virtual;
     procedure SetVideoSource(const Value: TObject); virtual;
-    procedure SetOpenCVVideoSource(const Value: TocvDataSource); virtual;
+    procedure SetOpenCVVideoSource(const Value: IocvDataSource); virtual;
   public
     destructor Destroy; override;
   published
-    property VideoSource: TocvDataSource Read FocvVideoSource write SetOpenCVVideoSource;
+    property VideoSource: IocvDataSource Read FocvVideoSource write SetOpenCVVideoSource;
   end;
 
   TocvDataSourceAndReceiver = class(TocvDataSource, IocvDataReceiver)
   private
-    FocvVideoSource: TocvDataSource;
+    FocvVideoSource: IocvDataSource;
   protected
     procedure TakeImage(const IplImage: pIplImage); virtual;
     procedure SetVideoSource(const Value: TObject); virtual;
-    procedure SetOpenCVVideoSource(const Value: TocvDataSource); virtual;
+    procedure SetOpenCVVideoSource(const Value: IocvDataSource); virtual;
   public
     destructor Destroy; override;
   published
-    property VideoSource: TocvDataSource Read FocvVideoSource write SetOpenCVVideoSource;
+    property VideoSource: IocvDataSource Read FocvVideoSource write SetOpenCVVideoSource;
   end;
 
 implementation
@@ -102,8 +100,7 @@ end;
 
 constructor TocvDataSource.Create(AOwner: TComponent);
 begin
-  inherited Create;
-  FOwner:=AOwner;
+  inherited;
   ReceiverCS := TCriticalSection.Create;
 end;
 
@@ -111,11 +108,6 @@ destructor TocvDataSource.Destroy;
 begin
   ReceiverCS.Free;
   inherited;
-end;
-
-function TocvDataSource.GetOwner: TPersistent;
-begin
- Result := FOwner as TPersistent;
 end;
 
 procedure TocvDataSource.NotifyReceiver(const IplImage: pIplImage);
@@ -133,9 +125,9 @@ begin
   inherited;
 end;
 
-procedure TocvDataSourceAndReceiver.SetOpenCVVideoSource(const Value: TocvDataSource);
+procedure TocvDataSourceAndReceiver.SetOpenCVVideoSource(const Value: IocvDataSource);
 begin
-  if (FocvVideoSource <> Value) and (Value <> Self) then
+  if (FocvVideoSource <> Value) then
   begin
     if Assigned(FocvVideoSource) then
       FocvVideoSource.SetReceiver(nil);
@@ -164,7 +156,7 @@ begin
   inherited;
 end;
 
-procedure TocvDataReceiver.SetOpenCVVideoSource(const Value: TocvDataSource);
+procedure TocvDataReceiver.SetOpenCVVideoSource(const Value: IocvDataSource);
 begin
   if (FocvVideoSource <> Value) then
   begin

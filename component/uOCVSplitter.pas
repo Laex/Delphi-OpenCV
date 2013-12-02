@@ -33,9 +33,9 @@ Type
   TocvChannel = class(TCollectionItem, IocvDataSource)
   private
     FOpenCVVideoReceiver: IocvDataReceiver;
-    FVCLComObject       : Pointer;
-    FDataReceiver       : TocvDataReceiver;
-    procedure Set_DataReceiver(const Value: TocvDataReceiver);
+    FVCLComObject: Pointer;
+    FDataReceiver: TocvDataReceiver;
+    FName: String;
   protected
     procedure SetReceiver(const OpenCVVideoReceiver: IocvDataReceiver);
     procedure NotifyReceiver(const IplImage: pIplImage);
@@ -44,22 +44,30 @@ Type
     function _AddRef: Integer; stdcall;
     function _Release: Integer; stdcall;
   published
-    property DataReceiver: TocvDataReceiver read FDataReceiver Write Set_DataReceiver;
+    property Name: String read FName write FName;
+  end;
+
+  TocvChannelCollection = class(TCollection)
+  private
+    function GetOCVItem(Index: Integer): IocvDataSource;
+  public
+    property OCVChannel[Index: Integer]: IocvDataSource read GetOCVItem; default;
   end;
 
   TocvSplitter = class(TocvDataReceiver)
   private
-    FChannels      : TCollection;
+    FChannels: TocvChannelCollection;
     FocvVideoSource: TocvDataSource;
     procedure SetOpenCVVideoSource(const Value: TocvDataSource);
+    procedure SetChannels(const Value: TocvChannelCollection);
   protected
     procedure TakeImage(const IplImage: pIplImage); override;
   public
-    constructor Create(AOwner: TComponent); //override;
+    constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
   published
     property VideoSource: TocvDataSource Read FocvVideoSource write SetOpenCVVideoSource;
-    property Channels   : TCollection read FChannels;
+    property Channels: TocvChannelCollection read FChannels write SetChannels;
   end;
 
 implementation
@@ -68,14 +76,19 @@ implementation
 
 constructor TocvSplitter.Create(AOwner: TComponent);
 begin
-  inherited Create;
-  FChannels := TCollection.Create(TocvChannel);
+  inherited;
+  FChannels := TocvChannelCollection.Create(TocvChannel);
 end;
 
 destructor TocvSplitter.Destroy;
 begin
   FChannels.Free;
   inherited;
+end;
+
+procedure TocvSplitter.SetChannels(const Value: TocvChannelCollection);
+begin
+  FChannels.Assign(Value);
 end;
 
 procedure TocvSplitter.SetOpenCVVideoSource(const Value: TocvDataSource);
@@ -92,10 +105,10 @@ end;
 
 procedure TocvSplitter.TakeImage(const IplImage: pIplImage);
 var
-  ocvChannel: TCollectionItem;
+  OCVChannel: TCollectionItem;
 begin
-  for ocvChannel in FChannels do
-    (ocvChannel as TocvChannel).NotifyReceiver(IplImage);
+  for OCVChannel in FChannels do
+    (OCVChannel as TocvChannel).NotifyReceiver(IplImage);
 end;
 
 { TocvChannel }
@@ -124,14 +137,6 @@ begin
   FOpenCVVideoReceiver := OpenCVVideoReceiver;
 end;
 
-procedure TocvChannel.Set_DataReceiver(const Value: TocvDataReceiver);
-begin
-  if Assigned(FDataReceiver) then
-    FDataReceiver.VideoSource := nil;
-  FDataReceiver               := Value;
-  FDataReceiver.VideoSource   := Self;
-end;
-
 function TocvChannel._AddRef: Integer;
 begin
   if FVCLComObject = nil then
@@ -146,6 +151,13 @@ begin
     Result := -1 // -1 indicates no reference counting is taking place
   else
     Result := IVCLComObject(FVCLComObject)._Release;
+end;
+
+{ TocvChannelCollection }
+
+function TocvChannelCollection.GetOCVItem(Index: Integer): IocvDataSource;
+begin
+  Result := TocvChannel(inherited GetItem(Index));
 end;
 
 end.

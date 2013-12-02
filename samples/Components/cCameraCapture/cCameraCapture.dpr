@@ -28,8 +28,7 @@ program cCameraCapture;
 
 uses
   Vcl.Forms,
-  uMainForm in 'uMainForm.pas' {MainForm},
-  uOCVSplitter in '..\..\..\component\uOCVSplitter.pas';
+  uMainForm in 'uMainForm.pas' {MainForm};
 
 {$R *.res}
 
