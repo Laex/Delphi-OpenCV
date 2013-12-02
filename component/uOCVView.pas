@@ -37,17 +37,17 @@ uses
 type
   TocvView = class(TWinControl, IocvDataReceiver)
   private
-    FocvVideoSource: TocvDataSource;
+    FocvVideoSource: IocvDataSource;
     procedure WMEraseBkgnd(var Message: TWMEraseBkgnd); message WM_ERASEBKGND;
     procedure WMPaint(var Message: TWMPaint); message WM_PAINT;
-    procedure SetOpenCVVideoSource(const Value: TocvDataSource);
+    procedure SetOpenCVVideoSource(const Value: IocvDataSource);
   protected
     procedure TakeImage(const IplImage: pIplImage);
     procedure SetVideoSource(const Value: TObject);
   public
     destructor Destroy; override;
   published
-    property VideoSource: TocvDataSource Read FocvVideoSource write SetOpenCVVideoSource;
+    property VideoSource: IocvDataSource Read FocvVideoSource write SetOpenCVVideoSource;
     property Align;
   end;
 
@@ -65,7 +65,7 @@ begin
   inherited;
 end;
 
-procedure TocvView.SetOpenCVVideoSource(const Value: TocvDataSource);
+procedure TocvView.SetOpenCVVideoSource(const Value: IocvDataSource);
 begin
   if FocvVideoSource <> Value then
   begin

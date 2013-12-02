@@ -40,6 +40,7 @@ contains
   uOCVCamera in 'uOCVCamera.pas',
   uOCVView in 'uOCVView.pas',
   uOCVImageOperation in 'uOCVImageOperation.pas',
-  uOCVRegister in 'uOCVRegister.pas';
+  uOCVRegister in 'uOCVRegister.pas',
+  uOCVSplitter in 'uOCVSplitter.pas';
 
 end.

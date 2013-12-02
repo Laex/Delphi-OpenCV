@@ -99,7 +99,7 @@ type
     FOpenCVCameraThread: TocvCameraThread;
     procedure OnNotifyData(const IplImage: pIplImage);
   public
-    constructor Create(AOwner: TComponent); //override;
+    constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
   published
     property Enabled            : Boolean Read FEnabled write SetEnabled default False;
@@ -190,7 +190,7 @@ end;
 constructor TocvCamera.Create(AOwner: TComponent);
 begin
   inherited;
-//  if not(csDesigning in ComponentState) then
+  if not(csDesigning in ComponentState) then
   begin
     FOpenCVCameraThread := TocvCameraThread.Create(True);
     // FOpenCVCameraThread.Priority     := tpHigher;
@@ -251,7 +251,7 @@ procedure TocvCamera.SetEnabled(const Value: Boolean);
 begin
   if FEnabled <> Value then
   begin
-//    if not(csDesigning in ComponentState) then
+    if not(csDesigning in ComponentState) then
     begin
 
       if Assigned(FCapture) and FEnabled then

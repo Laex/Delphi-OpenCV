@@ -12,9 +12,10 @@ type
     lbl1: TLabel;
     cbb1: TComboBox;
     chk1: TCheckBox;
-    ocvw1: TocvView;
     ocvcmr1: TocvCamera;
+    ocvw1: TocvView;
     ocvmgprtn1: TocvImageOperation;
+    ocvw2: TocvView;
     ocvspltr1: TocvSplitter;
     procedure FormCreate(Sender: TObject);
     procedure cbb1Change(Sender: TObject);
@@ -32,7 +33,7 @@ implementation
 
 procedure TMainForm.cbb1Change(Sender: TObject);
 begin
-  ocvmgprtn1.ImageOperation := TcvImageOperations(cbb1.ItemIndex);
+  ocvmgprtn1.Operation := TcvImageOperations(cbb1.ItemIndex);
 end;
 
 procedure TMainForm.chk1Click(Sender: TObject);
@@ -42,7 +43,12 @@ end;
 
 procedure TMainForm.FormCreate(Sender: TObject);
 begin
-  cbb1.ItemIndex := Integer(ocvmgprtn1.ImageOperation);
+  ocvw1.VideoSource := ocvspltr1.Channels[0];
+
+  ocvmgprtn1.VideoSource := ocvspltr1.Channels[1];
+  ocvw2.VideoSource := ocvmgprtn1;
+
+  cbb1.ItemIndex := Integer(ocvmgprtn1.Operation);
   chk1.Checked := ocvcmr1.Enabled;
 end;
 
