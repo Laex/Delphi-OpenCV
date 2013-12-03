@@ -4,20 +4,26 @@
 *****************************************************************
 
 Visual and non-visual components for working with the library OpenCV.
-Version: OpenCV 2.4.5.
+Version: OpenCV 2.4.7.
 Package: OpenCV.dpk
 
 The demo version.
 
 Components:
 
------ TOpenCVView -------
+----- TocvView -------
 Showcases the work of a visual component to display
 video camera images
 
------ TOpenCVCamera -----
+----- TocvCamera -----
 Showcases the work of non-visual component connection
 to the camera and image transmission receivers TOpenCVCamera
+
+----- TocvImageOperation -----
+Component that handles images
+
+----- TocvSplitter -----
+Transmits the image to multiple receivers
 
 Attention! Components written in a very non-optimal and require
 significant improvement. The use of real-world projects
