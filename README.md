@@ -1,5 +1,5 @@
 ###Delphi-OpenCV (master)
-* OpenCV version - 2.4.7<br>
+* OpenCV version - 2.4.8<br>
 * Development environment - Delphi XE2-XE5<br>
 
 #####Contributors:
@@ -36,7 +36,7 @@ email: sleuthhound@gmail.com
 <PROJECT_ROOT>\Include\video
 <PROJECT_ROOT>\Include\ml
 <PROJECT_ROOT>\Include\stitching
-<PROJECT_ROOT>\Include\component
+<PROJECT_ROOT>\component
 ```
 where ```<PROJECT_ROOT>``` directory, which was unzipped project.
 
