@@ -240,7 +240,7 @@ function sws_getContext(srcW: Integer; srcH: Integer; srcFormat: TAVPixelFormat;
 // uint8_t *const dst[], const int dstStride[]);
 
 Type
-  TCintArray = array [0 .. 0] of cint;
+  TCintArray = array [0 .. 0] of integer;
   PCintArray = ^TCintArray;
   TPCuint8Array = array [0 .. 0] of pByte;
   PPCuint8Array = ^TPCuint8Array;
@@ -249,11 +249,11 @@ function sws_scale( //
   c: pSwsContext; // struct SwsContext *c
   const srcSlice: PPCuint8Array; // const uint8_t *const srcSlice[]
   const srcStride: PCintArray; // const int srcStride[]
-  srcSliceY: cint; // int srcSliceY
-  srcSliceH: cint; // int srcSliceH
+  srcSliceY: integer; // int srcSliceY
+  srcSliceH: integer; // int srcSliceH
   dst: PPCuint8Array; // uint8_t *const dst[]
   const dstStride: PCintArray // const int dstStride[]
-  ): cint; cdecl;
+  ): integer; cdecl;
 
 (*
   * @param dstRange flag indicating the while-black range of the output (1=jpeg / 0=mpeg)

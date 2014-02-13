@@ -72,13 +72,13 @@ Type
 
   pAVFilterPad = ^TAVFilterPad;
 
-  TAVFilterPad = {packed} record
+  TAVFilterPad = record
 
   end;
 
   pAVFilterFormats = ^TAVFilterFormats;
 
-  TAVFilterFormats = {packed} record
+  TAVFilterFormats = record
 
   end;
 
@@ -91,7 +91,7 @@ Type
   *)
   pAVFilterBuffer = ^TAVFilterBuffer;
 
-  TAVFilterBuffer = {packed} record
+  TAVFilterBuffer = record
     data: array [0 .. 7] of pByte;
     /// < buffer data for each plane/channel
 
@@ -139,7 +139,7 @@ Type
   *)
   pAVFilterBufferRefAudioProps = ^TAVFilterBufferRefAudioProps;
 
-  TAVFilterBufferRefAudioProps = {packed} record
+  TAVFilterBufferRefAudioProps = record
     channel_layout: uint64;
     /// < channel layout of audio buffer
     nb_samples: integer;
@@ -157,7 +157,7 @@ Type
   *)
   pAVFilterBufferRefVideoProps = ^TAVFilterBufferRefVideoProps;
 
-  TAVFilterBufferRefVideoProps = {packed} record
+  TAVFilterBufferRefVideoProps = record
     w: integer;
     /// < image width
     h: integer;
@@ -190,7 +190,7 @@ Type
   *)
   pAVFilterBufferRef = ^TAVFilterBufferRef;
 
-  TAVFilterBufferRef = {packed} record
+  TAVFilterBufferRef = record
     buf: pAVFilterBuffer;
     /// < the buffer that this is a reference to
     data: array [0 .. 7] of pByte;
@@ -508,7 +508,7 @@ Type
 
   pavfilter = ^Tavfilter;
 
-  Tavfilter = {packed} record
+  Tavfilter = record
     (*
       * Filter name. Must be non-NULL and unique among filters.
     *)
@@ -680,20 +680,20 @@ Type
 
   pAVFilterInternal = ^TAVFilterInternal;
 
-  TAVFilterInternal = {packed} record
+  TAVFilterInternal = record
 
   end;
 
   pAVFilterCommand = ^TAVFilterCommand;
 
-  TAVFilterCommand = {packed} record
+  TAVFilterCommand = record
 
   end;
 
   pAVFilterGraph = ^TAVFilterGraph;
 
   (* An instance of a filter *)
-  TAVFilterContext = {packed} record
+  TAVFilterContext = record
     av_class: pAVClass;
     /// < needed for av_log() and filters common options
     filter: pavfilter;
@@ -776,17 +776,17 @@ Type
 
   pAVFilterChannelLayouts = ^TAVFilterChannelLayouts;
 
-  TAVFilterChannelLayouts = {packed} record
+  TAVFilterChannelLayouts = record
 
   end;
 
   pAVFilterPool = ^TAVFilterPool;
 
-  TAVFilterPool = {packed} record
+  TAVFilterPool = record
 
   end;
 
-  TAVFilterLink = {packed} record
+  TAVFilterLink = record
     src: pAVFilterContext;
     /// < source filter
     srcpad: pAVFilterPad;
@@ -1214,7 +1214,7 @@ Type
 
   pAVFilterGraphInternal = ^TAVFilterGraphInternal;
 
-  TAVFilterGraphInternal = {packed} record
+  TAVFilterGraphInternal = record
 
   end;
 
@@ -1249,11 +1249,12 @@ Type
   Tavfilter_execute_func = function(ctx: pAVFilterContext; func: Tavfilter_action_func; arg: pointer; var ret: integer; nb_jobs: integer)
     : integer; cdecl;
 
-  TAVFilterGraph = {packed} record
+  TAVFilterGraph = record
     av_class: pAVClass;
 {$IFDEF FF_API_FOO_COUNT}
     // attribute_deprecated
     // unsigned filter_count_unused;
+    filter_count_unused: cardinal;
 {$ENDIF}
     filters: PPMonitor;
 {$IFNDEF FF_API_FOO_COUNT}
@@ -1442,7 +1443,7 @@ type
   *)
   pAVFilterInOut = ^TAVFilterInOut;
 
-  TAVFilterInOut = {packed} record
+  TAVFilterInOut = record
     (* unique name for this input/output in the list *)
     name: pAnsiChar;
 

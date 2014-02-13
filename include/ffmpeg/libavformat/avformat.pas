@@ -279,7 +279,7 @@ uses
   * num is assumed to be 0 <= num < den.
 *)
 Type
-  TAVFrac = {packed} record
+  TAVFrac = { packed } record
     val, num, den: int64_t;
   end;
 
@@ -381,6 +381,8 @@ const
   //
   AVFMTCTX_NOHEADER = $0001; (* < signal that no header is present
     (streams are added dynamically) *)
+  //
+  RAW_PACKET_BUFFER_SIZE = 2500000;
 
 type
   pAVFormatContext = ^TAVFormatContext;
@@ -394,7 +396,7 @@ type
   *)
   pAVProbeData = ^TAVProbeData;
 
-  TAVProbeData = {packed} record
+  TAVProbeData = { packed } record
     filename: pAnsiChar;
     buf: pByte; (* < Buffer must have AVPROBE_PADDING_SIZE of extra allocated bytes filled with zero. *)
     buf_size: Integer; (* < Size of buf except extra allocated bytes *)
@@ -402,7 +404,7 @@ type
 
   pAVOutputFormat = ^TAVOutputFormat;
 
-  TAVOutputFormat = {packed} record
+  TAVOutputFormat = { packed } record
     name: pAnsiChar;
     (*
       * Descriptive name for the format, meant to be more human-readable
@@ -476,7 +478,7 @@ type
 
   pAVInputFormat = ^TAVInputFormat;
 
-  TAVInputFormat = {packed} record
+  TAVInputFormat = { packed } record
     (*
       * A comma separated list of short names for the format. New names
       * may be appended with a minor bump.
@@ -599,7 +601,7 @@ type
     );
   pAVIndexEntry = ^TAVIndexEntry;
 
-  TAVIndexEntry = {packed} record
+  TAVIndexEntry = { packed } record
     pos: int64_t;
     timestamp: int64_t;
     // * Timestamp in AVStream.time_base units, preferably the time from which on correctly decoded frames are available
@@ -655,7 +657,7 @@ type
 
   pInfo = ^TInfo;
 
-  TInfo = {packed} record
+  TInfo = { packed } record
     last_dts: int64_t;
     duration_gcd: int64_t;
     duration_count: Integer;
@@ -678,7 +680,7 @@ type
   pAVStream = ^TAVStream;
   ppAVStream = ^pAVStream;
 
-  TAVStream = {packed} record
+  TAVStream = { packed } record
     index: Integer; // **< stream index in AVFormatContext */
     (*
       * Format-specific stream ID.
@@ -883,7 +885,7 @@ type
   pAVProgram = ^TAVProgram;
   ppAVProgram = ^pAVProgram;
 
-  TAVProgram = {packed} record
+  TAVProgram = { packed } record
     id: Integer;
     flags: Integer;
     discard: TAVDiscard;
@@ -912,7 +914,7 @@ type
   pAVChapter = ^TAVChapter;
   ppAVChapter = ^pAVChapter;
 
-  TAVChapter = {packed} record
+  TAVChapter = { packed } record
     id: Integer;
     /// < unique ID to identify the chapter
     time_base: TAVRational;
@@ -925,11 +927,15 @@ type
     // * The duration of a video can be estimated through various ways, and this enum can be used
     // * to know how the duration was estimated.
   *)
-  // enum AVDurationEstimationMethod {
-  // AVFMT_DURATION_FROM_PTS,    ///< Duration accurately estimated from PTSes
-  // AVFMT_DURATION_FROM_STREAM, ///< Duration estimated from a stream with a known duration
-  // AVFMT_DURATION_FROM_BITRATE ///< Duration estimated from bitrate (less accurate)
-  // };
+
+  TAVDurationEstimationMethod = ( //
+    AVFMT_DURATION_FROM_PTS,
+    /// < Duration accurately estimated from PTSes
+    AVFMT_DURATION_FROM_STREAM,
+    /// < Duration estimated from a stream with a known duration
+    AVFMT_DURATION_FROM_BITRATE
+    /// < Duration estimated from bitrate (less accurate)
+    );
 
   (* *
     * Format I/O context.
@@ -940,7 +946,7 @@ type
     * avformat_alloc_context() to create an AVFormatContext.
   *)
 
-  TAVFormatContext = {packed} record
+  TAVFormatContext = { packed } record
     (*
       * A class for logging and AVOptions. Set by avformat_alloc_context().
       * Exports (de)muxer private options if they exist.
@@ -1101,185 +1107,198 @@ type
     *)
     debug: Integer;
     (*
-      // * Transport stream id.
-      // * This will be moved into demuxer private options. Thus no API/ABI compatibility
+      * Transport stream id.
+      * This will be moved into demuxer private options. Thus no API/ABI compatibility
     *)
     // int ts_id;
-    //
+    ts_id: Integer;
     (*
-      // * Audio preload in microseconds.
-      // * Note, not all formats support this and unpredictable things may happen if it is used when not supported.
-      // * - encoding: Set by user via AVOptions (NO direct access)
-      // * - decoding: unused
+      * Audio preload in microseconds.
+      * Note, not all formats support this and unpredictable things may happen if it is used when not supported.
+      * - encoding: Set by user via AVOptions (NO direct access)
+      * - decoding: unused
     *)
     // int audio_preload;
-    //
+    audio_preload: Integer;
     (*
-      // * Max chunk time in microseconds.
-      // * Note, not all formats support this and unpredictable things may happen if it is used when not supported.
-      // * - encoding: Set by user via AVOptions (NO direct access)
-      // * - decoding: unused
+      * Max chunk time in microseconds.
+      * Note, not all formats support this and unpredictable things may happen if it is used when not supported.
+      * - encoding: Set by user via AVOptions (NO direct access)
+      * - decoding: unused
     *)
     // int max_chunk_duration;
-    //
+    max_chunk_duration: Integer;
     (*
-      // * Max chunk size in bytes
-      // * Note, not all formats support this and unpredictable things may happen if it is used when not supported.
-      // * - encoding: Set by user via AVOptions (NO direct access)
-      // * - decoding: unused
+      * Max chunk size in bytes
+      * Note, not all formats support this and unpredictable things may happen if it is used when not supported.
+      * - encoding: Set by user via AVOptions (NO direct access)
+      * - decoding: unused
     *)
     // int max_chunk_size;
-    //
+    max_chunk_size: Integer;
     (*
-      // * forces the use of wallclock timestamps as pts/dts of packets
-      // * This has undefined results in the presence of B frames.
-      // * - encoding: unused
-      // * - decoding: Set by user via AVOptions (NO direct access)
+      * forces the use of wallclock timestamps as pts/dts of packets
+      * This has undefined results in the presence of B frames.
+      * - encoding: unused
+      * - decoding: Set by user via AVOptions (NO direct access)
     *)
     // int use_wallclock_as_timestamps;
-    //
+    use_wallclock_as_timestamps: Integer;
     (*
-      // * Avoid negative timestamps during muxing.
-      // *  0 -> allow negative timestamps
-      // *  1 -> avoid negative timestamps
-      // * -1 -> choose automatically (default)
-      // * Note, this only works when interleave_packet_per_dts is in use.
-      // * - encoding: Set by user via AVOptions (NO direct access)
-      // * - decoding: unused
+      * Avoid negative timestamps during muxing.
+      *  0 -> allow negative timestamps
+      *  1 -> avoid negative timestamps
+      * -1 -> choose automatically (default)
+      * Note, this only works when interleave_packet_per_dts is in use.
+      * - encoding: Set by user via AVOptions (NO direct access)
+      * - decoding: unused
     *)
     // int avoid_negative_ts;
-    //
+    avoid_negative_ts: Integer;
     (*
-      // * avio flags, used to force AVIO_FLAG_DIRECT.
-      // * - encoding: unused
-      // * - decoding: Set by user via AVOptions (NO direct access)
+      * avio flags, used to force AVIO_FLAG_DIRECT.
+      * - encoding: unused
+      * - decoding: Set by user via AVOptions (NO direct access)
     *)
     // int avio_flags;
-    //
+    avio_flags: Integer;
     (*
-      // * The duration field can be estimated through various ways, and this field can be used
-      // * to know how the duration was estimated.
-      // * - encoding: unused
-      // * - decoding: Read by user via AVOptions (NO direct access)
+      * The duration field can be estimated through various ways, and this field can be used
+      * to know how the duration was estimated.
+      * - encoding: unused
+      * - decoding: Read by user via AVOptions (NO direct access)
     *)
     // enum AVDurationEstimationMethod duration_estimation_method;
-    //
+    duration_estimation_method: TAVDurationEstimationMethod;
     (*
-      // * Skip initial bytes when opening stream
-      // * - encoding: unused
-      // * - decoding: Set by user via AVOptions (NO direct access)
+      * Skip initial bytes when opening stream
+      * - encoding: unused
+      * - decoding: Set by user via AVOptions (NO direct access)
     *)
     // unsigned int skip_initial_bytes;
-    //
+    skip_initial_bytes: Cardinal;
     (*
-      // * Correct single timestamp overflows
-      // * - encoding: unused
-      // * - decoding: Set by user via AVOPtions (NO direct access)
+      * Correct single timestamp overflows
+      * - encoding: unused
+      * - decoding: Set by user via AVOPtions (NO direct access)
     *)
     // unsigned int correct_ts_overflow;
-    //
+    correct_ts_overflow: Cardinal;
     (*
-      // * Force seeking to any (also non key) frames.
-      // * - encoding: unused
-      // * - decoding: Set by user via AVOPtions (NO direct access)
+      * Force seeking to any (also non key) frames.
+      * - encoding: unused
+      * - decoding: Set by user via AVOPtions (NO direct access)
     *)
     // int seek2any;
-    //
+    seek2any: Integer;
     (*
-      // * Flush the I/O context after each packet.
-      // * - encoding: Set by user via AVOptions (NO direct access)
-      // * - decoding: unused
+      * Flush the I/O context after each packet.
+      * - encoding: Set by user via AVOptions (NO direct access)
+      * - decoding: unused
     *)
     // int flush_packets;
-    //
+    flush_packets: Integer;
     (*
-      // * format probing score.
-      // * The maximal score is AVPROBE_SCORE_MAX, its set when the demuxer probes
-      // * the format.
-      // * - encoding: unused
-      // * - decoding: set by avformat, read by user via av_format_get_probe_score() (NO direct access)
+      * format probing score.
+      * The maximal score is AVPROBE_SCORE_MAX, its set when the demuxer probes
+      * the format.
+      * - encoding: unused
+      * - decoding: set by avformat, read by user via av_format_get_probe_score() (NO direct access)
     *)
     // int probe_score;
-    //
+    probe_score: Integer;
     (* ***************************************************************
-      // * All fields below this line are not part of the public API. They
-      // * may not be used outside of libavformat and can be changed and
-      // * removed at will.
-      // * New public fields should be added right above.
-      // *****************************************************************
+      * All fields below this line are not part of the public API. They
+      * may not be used outside of libavformat and can be changed and
+      * removed at will.
+      * New public fields should be added right above.
+      *****************************************************************
     *)
-    //
+
     (*
-      // * This buffer is only needed when packets were already buffered but
-      // * not decoded, for example to get the codec parameters in MPEG
-      // * streams.
+      * This buffer is only needed when packets were already buffered but
+      * not decoded, for example to get the codec parameters in MPEG
+      * streams.
     *)
     // struct AVPacketList *packet_buffer;
+    packet_buffer: pAVPacketList;
     // struct AVPacketList *packet_buffer_end;
-    //
-    // /* av_seek_frame() support */
+    packet_buffer_end: pAVPacketList;
+
+    (* av_seek_frame() support *)
     // int64_t data_offset; /**< offset of the first packet */
-    //
+    data_offset: int64_t;
+
     (*
-      // * Raw packets from the demuxer, prior to parsing and decoding.
-      // * This buffer is used for buffering packets until the codec can
-      // * be identified, as parsing cannot be done without knowing the
-      // * codec.
+      * Raw packets from the demuxer, prior to parsing and decoding.
+      * This buffer is used for buffering packets until the codec can
+      * be identified, as parsing cannot be done without knowing the
+      * codec.
     *)
     // struct AVPacketList *raw_packet_buffer;
+    raw_packet_buffer: pAVPacketList;
     // struct AVPacketList *raw_packet_buffer_end;
+    raw_packet_buffer_end: pAVPacketList;
     (*
-      // * Packets split by the parser get queued here.
+      * Packets split by the parser get queued here.
     *)
     // struct AVPacketList *parse_queue;
+    parse_queue: pAVPacketList;
     // struct AVPacketList *parse_queue_end;
+    parse_queue_end: pAVPacketList;
     (*
-      // * Remaining size available for raw_packet_buffer, in bytes.
+      * Remaining size available for raw_packet_buffer, in bytes.
     *)
     // #define RAW_PACKET_BUFFER_SIZE 2500000
     // int raw_packet_buffer_remaining_size;
-    //
+    raw_packet_buffer_remaining_size: Integer;
+
     (*
-      // * Offset to remap timestamps to be non-negative.
-      // * Expressed in timebase units.
-      // * @see AVStream.mux_ts_offset
+      * Offset to remap timestamps to be non-negative.
+      * Expressed in timebase units.
+      * @see AVStream.mux_ts_offset
     *)
     // int64_t offset;
-    //
+    offset: int64_t;
+
     (*
-      // * Timebase for the timestamp offset.
+      * Timebase for the timestamp offset.
     *)
     // AVRational offset_timebase;
-    //
+    offset_timebase: TAVRational;
+
     (*
-      // * IO repositioned flag.
-      // * This is set by avformat when the underlaying IO context read pointer
-      // * is repositioned, for example when doing byte based seeking.
-      // * Demuxers can use the flag to detect such changes.
+      * IO repositioned flag.
+      * This is set by avformat when the underlaying IO context read pointer
+      * is repositioned, for example when doing byte based seeking.
+      * Demuxers can use the flag to detect such changes.
     *)
     // int io_repositioned;
-    //
+    io_repositioned: Integer;
+
     (*
-      // * Forced video codec.
-      // * This allows forcing a specific decoder, even when there are multiple with
-      // * the same codec_id.
-      // * Demuxing: Set by user via av_format_set_video_codec (NO direct access).
+      * Forced video codec.
+      * This allows forcing a specific decoder, even when there are multiple with
+      * the same codec_id.
+      * Demuxing: Set by user via av_format_set_video_codec (NO direct access).
     *)
     // AVCodec *video_codec;
-    //
+    video_codec: pAVCodec;
+
     (*
-      // * Forced audio codec.
-      // * This allows forcing a specific decoder, even when there are multiple with
-      // * the same codec_id.
-      // * Demuxing: Set by user via av_format_set_audio_codec (NO direct access).
+      * Forced audio codec.
+      * This allows forcing a specific decoder, even when there are multiple with
+      * the same codec_id.
+      * Demuxing: Set by user via av_format_set_audio_codec (NO direct access).
     *)
     // AVCodec *audio_codec;
-    //
+    audio_codec: pAVCodec;
+
     (*
-      // * Forced subtitle codec.
-      // * This allows forcing a specific decoder, even when there are multiple with
-      // * the same codec_id.
-      // * Demuxing: Set by user via av_format_set_subtitle_codec (NO direct access).
+      * Forced subtitle codec.
+      * This allows forcing a specific decoder, even when there are multiple with
+      * the same codec_id.
+      * Demuxing: Set by user via av_format_set_subtitle_codec (NO direct access).
     *)
     subtitle_codec: pAVCodec;
   end;
@@ -1299,7 +1318,7 @@ type
   *)
   // enum AVDurationEstimationMethod av_fmt_ctx_get_duration_estimation_method(const AVFormatContext* ctx);
 
-  TAVPacketList = {packed} record
+  TAVPacketList = { packed } record
     pkt: TAVPacket;
     next: pAVPacketList;
   end;
@@ -1342,13 +1361,13 @@ procedure av_register_all(); cdecl;
   // * protocols at some major version bump.
 *)
 // int avformat_network_init(void);
-function avformat_network_init():integer;cdecl;
+function avformat_network_init(): Integer; cdecl;
 //
 (*
   // * Undo the initialization done by avformat_network_init.
 *)
 // int avformat_network_deinit(void);
-function avformat_network_deinit():integer;cdecl;
+function avformat_network_deinit(): Integer; cdecl;
 //
 (*
   // * If f is NULL, returns the first registered input format,

@@ -5,7 +5,7 @@ unit avutil;
 interface
 
 uses
-  rational;
+  rational, ctypes;
 
 (*
   * copyright (c) 2006 Michael Niedermayer <michaelni@gmx.at>
@@ -218,33 +218,37 @@ Type
   // }
   //
   (*
-    // * Compute the length of an integer list.
-    // *
-    // * @param elsize  size in bytes of each list element (only 1, 2, 4 or 8)
-    // * @param term    list terminator (usually 0 or -1)
-    // * @param list    pointer to the list
-    // * @return  length of the list, in elements, not counting the terminator
+    * Compute the length of an integer list.
+    *
+    * @param elsize  size in bytes of each list element (only 1, 2, 4 or 8)
+    * @param term    list terminator (usually 0 or -1)
+    * @param list    pointer to the list
+    * @return  length of the list, in elements, not counting the terminator
   *)
   // unsigned av_int_list_length_for_size(unsigned elsize,
   // const void *list, uint64_t term) av_pure;
-  //
-  (*
-    // * Compute the length of an integer list.
-    // *
-    // * @param term  list terminator (usually 0 or -1)
-    // * @param list  pointer to the list
-    // * @return  length of the list, in elements, not counting the terminator
-  *)
-  // #define av_int_list_length(list, term) \
-  // av_int_list_length_for_size(sizeof(*(list)), list, term)
-  //
-  (*
-    // * Open a file using a UTF-8 filename.
-    // * The API of this function matches POSIX fopen(), errors are returned through
-    // * errno.
-  *)
-  // FILE *av_fopen_utf8(const char *path, const char *mode);
+function av_int_list_length_for_size(elsize: Cardinal; const list: Pointer; term: uint64_t): Cardinal; cdecl;
+(*
+  // * Compute the length of an integer list.
+  // *
+  // * @param term  list terminator (usually 0 or -1)
+  // * @param list  pointer to the list
+  // * @return  length of the list, in elements, not counting the terminator
+*)
+// #define av_int_list_length(list, term) \
+// av_int_list_length_for_size(sizeof(*(list)), list, term)
+//
+(*
+  // * Open a file using a UTF-8 filename.
+  // * The API of this function matches POSIX fopen(), errors are returned through
+  // * errno.
+*)
+// FILE *av_fopen_utf8(const char *path, const char *mode);
 
 implementation
+
+uses ffmpeglib;
+
+function av_int_list_length_for_size; external avutil_dll;
 
 end.

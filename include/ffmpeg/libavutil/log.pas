@@ -52,7 +52,7 @@ Type
   TGet_category = function(ctx: Pointer): TAVClassCategory; cdecl;
   TQuery_ranges = function(av_ranges: ppAVOptionRanges; obj: Pointer; key: PAnsiChar; flag: Integer): Integer; cdecl;
 
-  TAVClass = {packed} record
+  TAVClass = { packed } record
     (*
       * The name of the class; usually it is the same name as the
       * context structure type to which the AVClass is associated.
@@ -180,6 +180,7 @@ const
   AV_LOG_DEBUG = 48;
   //
   AV_LOG_MAX_OFFSET = (AV_LOG_DEBUG - AV_LOG_QUIET);
+
   //
   /// **
   // * @}
@@ -295,21 +296,23 @@ const
   // #    define av_dlog(pctx, ...) do { if (0) av_log(pctx, AV_LOG_DEBUG, __VA_ARGS__); } while (0)
   // #endif
   //
-  /// **
-  // * Skip repeated messages, this requires the user app to use av_log() instead of
-  // * (f)printf as the 2 would otherwise interfere and lead to
-  // * "Last message repeated x times" messages below (f)printf messages with some
-  // * bad luck.
-  // * Also to receive the last, "last repeated" line if any, the user app must
-  // * call av_log(NULL, AV_LOG_QUIET, "%s", ""); at the end
-  // */
-  // #define AV_LOG_SKIP_REPEATED 1
+  (*
+    * Skip repeated messages, this requires the user app to use av_log() instead of
+    * (f)printf as the 2 would otherwise interfere and lead to
+    * "Last message repeated x times" messages below (f)printf messages with some
+    * bad luck.
+    * Also to receive the last, "last repeated" line if any, the user app must
+    * call av_log(NULL, AV_LOG_QUIET, "%s", ""); at the end
+  *)
+const
+  AV_LOG_SKIP_REPEATED = 1;
   // void av_log_set_flags(int arg);
-  //
-  /// **
-  // * @}
-  // */
+procedure av_log_set_flags(arg: Integer); cdecl;
 
 implementation
+
+uses ffmpeglib;
+
+procedure av_log_set_flags; external avutil_dll;
 
 end.

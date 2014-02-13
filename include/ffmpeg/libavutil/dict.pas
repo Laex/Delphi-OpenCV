@@ -81,7 +81,7 @@ const
 type
   pAVDictionaryEntry = ^TAVDictionaryEntry;
 
-  TAVDictionaryEntry = {packed} record
+  TAVDictionaryEntry = { packed } record
     key: pAnsiChar;
     value: pAnsiChar;
   end;
@@ -89,7 +89,7 @@ type
   pAVDictionary = ^TAVDictionary;
   ppAVDictionary = ^pAVDictionary;
 
-  TAVDictionary = {packed} record
+  TAVDictionary = { packed } record
   end;
 
   (*
@@ -122,7 +122,8 @@ function av_dict_get(m: pAVDictionary; const key: pAnsiChar; const prev: pAVDict
   * @return >= 0 on success otherwise an error code <0
 *)
 // int av_dict_set(AVDictionary **pm, const char *key, const char *value, int flags);
-//
+function av_dict_set(Var pm: pAVDictionary; const key: pAnsiChar; const value: pAnsiChar; flags: Integer): Integer; cdecl;
+
 (*
   * Parse the key/value pairs list and add to a dictionary.
   *
@@ -155,7 +156,7 @@ function av_dict_get(m: pAVDictionary; const key: pAnsiChar; const prev: pAVDict
   * and all keys and values.
 *)
 // void av_dict_free(AVDictionary **m);
-procedure av_dict_free(Var m:pAVDictionary);cdecl;
+procedure av_dict_free(Var m: pAVDictionary); cdecl;
 
 implementation
 
@@ -163,5 +164,6 @@ uses ffmpeglib;
 
 function av_dict_get; external avutil_dll;
 procedure av_dict_free; external avutil_dll;
+function av_dict_set; external avutil_dll;
 
 end.

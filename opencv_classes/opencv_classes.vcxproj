@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -20,14 +20,14 @@
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v110</PlatformToolset>
+    <PlatformToolset>v120</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v110</PlatformToolset>
+    <PlatformToolset>v120</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -43,13 +43,13 @@
     <LinkIncremental>true</LinkIncremental>
     <OutDir>..\bin\</OutDir>
     <IncludePath>C:\OpenCV\build\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\OpenCV\build\x86\vc10\lib;$(LibraryPath)</LibraryPath>
+    <LibraryPath>C:\OpenCV\build\x86\vc12\lib\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>..\bin\</OutDir>
     <IncludePath>C:\OpenCV\build\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\OpenCV\build\x86\vc10\lib;$(LibraryPath)</LibraryPath>
+    <LibraryPath>C:\OpenCV\build\x86\vc12\lib\;$(LibraryPath)</LibraryPath>
     <SourcePath>$(SourcePath)</SourcePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -65,8 +65,8 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ModuleDefinitionFile>opencv_classes.def</ModuleDefinitionFile>
-      <AdditionalLibraryDirectories>C:\opencv\build\x86\vc10\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opencv_calib3d246.lib;opencv_contrib246.lib;opencv_core246.lib;opencv_features2d246.lib;opencv_flann246.lib;opencv_gpu246.lib;opencv_haartraining_engine.lib;opencv_highgui246.lib;opencv_imgproc246.lib;opencv_legacy246.lib;opencv_ml246.lib;opencv_nonfree246.lib;opencv_objdetect246.lib;opencv_ocl246.lib;opencv_photo246.lib;opencv_stitching246.lib;opencv_superres246.lib;opencv_ts246.lib;opencv_video246.lib;opencv_videostab246.lib;opencv_calib3d246d.lib;opencv_contrib246d.lib;opencv_core246d.lib;opencv_features2d246d.lib;opencv_flann246d.lib;opencv_gpu246d.lib;opencv_haartraining_engined.lib;opencv_highgui246d.lib;opencv_imgproc246d.lib;opencv_legacy246d.lib;opencv_ml246d.lib;opencv_nonfree246d.lib;opencv_objdetect246d.lib;opencv_ocl246d.lib;opencv_photo246d.lib;opencv_stitching246d.lib;opencv_superres246d.lib;opencv_ts246d.lib;opencv_video246d.lib;opencv_videostab246d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\OpenCV\build\x86\vc12\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opencv_calib3d248.lib;opencv_calib3d248d.lib;opencv_contrib248.lib;opencv_contrib248d.lib;opencv_core248.lib;opencv_core248d.lib;opencv_features2d248.lib;opencv_features2d248d.lib;opencv_flann248.lib;opencv_flann248d.lib;opencv_gpu248.lib;opencv_gpu248d.lib;opencv_highgui248.lib;opencv_highgui248d.lib;opencv_imgproc248.lib;opencv_imgproc248d.lib;opencv_legacy248.lib;opencv_legacy248d.lib;opencv_ml248.lib;opencv_ml248d.lib;opencv_nonfree248.lib;opencv_nonfree248d.lib;opencv_objdetect248.lib;opencv_objdetect248d.lib;opencv_ocl248.lib;opencv_ocl248d.lib;opencv_photo248.lib;opencv_photo248d.lib;opencv_stitching248.lib;opencv_stitching248d.lib;opencv_superres248.lib;opencv_superres248d.lib;opencv_ts248.lib;opencv_ts248d.lib;opencv_video248.lib;opencv_video248d.lib;opencv_videostab248.lib;opencv_videostab248d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
