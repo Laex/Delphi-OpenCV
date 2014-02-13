@@ -275,7 +275,7 @@ Type
   *)
   pAVOption = ^TAVOption;
 
-  TAVOption = {packed} record
+  TAVOption = { packed } record
     name: pAnsiChar;
     (*
       * short English help text
@@ -322,7 +322,7 @@ end;
 *)
 pAVOptionRange = ^TAVOptionRange;
 ppAVOptionRange = ^pAVOptionRange;
-TAVOptionRange = {packed} record str: pAnsiChar;
+TAVOptionRange = { packed } record str: pAnsiChar;
 value_min, value_max: double;
 /// < For string ranges this represents the min/max length, for dimensions this represents the min/max pixel count
 component_min, component_max: double;
@@ -336,10 +336,11 @@ end;
 *)
 pAVOptionRanges = ^TAVOptionRanges;
 ppAVOptionRanges = ^pAVOptionRanges;
-TAVOptionRanges = {packed} record range: ppAVOptionRange;
+TAVOptionRanges = { packed } record range: ppAVOptionRange;
 nb_ranges:
 Integer;
 end;
+
 //
 // #if FF_API_FIND_OPT
 (*
@@ -558,127 +559,126 @@ end;
 // int av_opt_eval_float (void *obj, const AVOption *o, const char *val, float      *float_out);
 // int av_opt_eval_double(void *obj, const AVOption *o, const char *val, double     *double_out);
 // int av_opt_eval_q     (void *obj, const AVOption *o, const char *val, AVRational *q_out);
-/// **
-// * @}
-// */
-//
-// #define AV_OPT_SEARCH_CHILDREN   0x0001 /**< Search in possible children of the
-// given object first. */
-/// **
-// *  The obj passed to av_opt_find() is fake -- only a double pointer to AVClass
-// *  instead of a required pointer to a struct containing AVClass. This is
-// *  useful for searching for options without needing to allocate the corresponding
-// *  object.
-// */
-// #define AV_OPT_SEARCH_FAKE_OBJ   0x0002
-//
-/// **
-// * Look for an option in an object. Consider only options which
-// * have all the specified flags set.
-// *
-// * @param[in] obj A pointer to a struct whose first element is a
-// *                pointer to an AVClass.
-// *                Alternatively a double pointer to an AVClass, if
-// *                AV_OPT_SEARCH_FAKE_OBJ search flag is set.
-// * @param[in] name The name of the option to look for.
-// * @param[in] unit When searching for named constants, name of the unit
-// *                 it belongs to.
-// * @param opt_flags Find only options with all the specified flags set (AV_OPT_FLAG).
-// * @param search_flags A combination of AV_OPT_SEARCH_*.
-// *
-// * @return A pointer to the option found, or NULL if no option
-// *         was found.
-// *
-// * @note Options found with AV_OPT_SEARCH_CHILDREN flag may not be settable
-// * directly with av_set_string3(). Use special calls which take an options
-// * AVDictionary (e.g. avformat_open_input()) to set options found with this
-// * flag.
-// */
-// const AVOption *av_opt_find(void *obj, const char *name, const char *unit,
-// int opt_flags, int search_flags);
-//
-/// **
-// * Look for an option in an object. Consider only options which
-// * have all the specified flags set.
-// *
-// * @param[in] obj A pointer to a struct whose first element is a
-// *                pointer to an AVClass.
-// *                Alternatively a double pointer to an AVClass, if
-// *                AV_OPT_SEARCH_FAKE_OBJ search flag is set.
-// * @param[in] name The name of the option to look for.
-// * @param[in] unit When searching for named constants, name of the unit
-// *                 it belongs to.
-// * @param opt_flags Find only options with all the specified flags set (AV_OPT_FLAG).
-// * @param search_flags A combination of AV_OPT_SEARCH_*.
-// * @param[out] target_obj if non-NULL, an object to which the option belongs will be
-// * written here. It may be different from obj if AV_OPT_SEARCH_CHILDREN is present
-// * in search_flags. This parameter is ignored if search_flags contain
-// * AV_OPT_SEARCH_FAKE_OBJ.
-// *
-// * @return A pointer to the option found, or NULL if no option
-// *         was found.
-// */
-// const AVOption *av_opt_find2(void *obj, const char *name, const char *unit,
-// int opt_flags, int search_flags, void **target_obj);
-//
-/// **
-// * Iterate over all AVOptions belonging to obj.
-// *
-// * @param obj an AVOptions-enabled struct or a double pointer to an
-// *            AVClass describing it.
-// * @param prev result of the previous call to av_opt_next() on this object
-// *             or NULL
-// * @return next AVOption or NULL
-// */
-// const AVOption *av_opt_next(void *obj, const AVOption *prev);
-//
-/// **
-// * Iterate over AVOptions-enabled children of obj.
-// *
-// * @param prev result of a previous call to this function or NULL
-// * @return next AVOptions-enabled child or NULL
-// */
-// void *av_opt_child_next(void *obj, void *prev);
-//
-/// **
-// * Iterate over potential AVOptions-enabled children of parent.
-// *
-// * @param prev result of a previous call to this function or NULL
-// * @return AVClass corresponding to next potential child or NULL
-// */
-// const AVClass *av_opt_child_class_next(const AVClass *parent, const AVClass *prev);
-//
-/// **
-// * @defgroup opt_set_funcs Option setting functions
-// * @{
-// * Those functions set the field of obj with the given name to value.
-// *
-// * @param[in] obj A struct whose first element is a pointer to an AVClass.
-// * @param[in] name the name of the field to set
-// * @param[in] val The value to set. In case of av_opt_set() if the field is not
-// * of a string type, then the given string is parsed.
-// * SI postfixes and some named scalars are supported.
-// * If the field is of a numeric type, it has to be a numeric or named
-// * scalar. Behavior with more than one scalar and +- infix operators
-// * is undefined.
-// * If the field is of a flags type, it has to be a sequence of numeric
-// * scalars or named flags separated by '+' or '-'. Prefixing a flag
-// * with '+' causes it to be set without affecting the other flags;
-// * similarly, '-' unsets a flag.
-// * @param search_flags flags passed to av_opt_find2. I.e. if AV_OPT_SEARCH_CHILDREN
-// * is passed here, then the option may be set on a child of obj.
-// *
-// * @return 0 if the value has been set, or an AVERROR code in case of
-// * error:
-// * AVERROR_OPTION_NOT_FOUND if no matching option exists
-// * AVERROR(ERANGE) if the value is out of range
-// * AVERROR(EINVAL) if the value is not valid
-// */
-// int av_opt_set       (void *obj, const char *name, const char *val, int search_flags);
-// int av_opt_set_int   (void *obj, const char *name, int64_t     val, int search_flags);
-// int av_opt_set_double(void *obj, const char *name, double      val, int search_flags);
-// int av_opt_set_q     (void *obj, const char *name, AVRational  val, int search_flags);
-// int av_opt_set_bin   (void *obj, const char *name, const uint8_t *val, int size, int search_flags);
+
+const
+  AV_OPT_SEARCH_CHILDREN = $0001; (* *< Search in possible children of the given object first. *)
+
+  (*
+    *  The obj passed to av_opt_find() is fake -- only a double pointer to AVClass
+    *  instead of a required pointer to a struct containing AVClass. This is
+    *  useful for searching for options without needing to allocate the corresponding
+    *  object.
+  *)
+  // #define AV_OPT_SEARCH_FAKE_OBJ   0x0002
+  //
+  /// **
+  // * Look for an option in an object. Consider only options which
+  // * have all the specified flags set.
+  // *
+  // * @param[in] obj A pointer to a struct whose first element is a
+  // *                pointer to an AVClass.
+  // *                Alternatively a double pointer to an AVClass, if
+  // *                AV_OPT_SEARCH_FAKE_OBJ search flag is set.
+  // * @param[in] name The name of the option to look for.
+  // * @param[in] unit When searching for named constants, name of the unit
+  // *                 it belongs to.
+  // * @param opt_flags Find only options with all the specified flags set (AV_OPT_FLAG).
+  // * @param search_flags A combination of AV_OPT_SEARCH_*.
+  // *
+  // * @return A pointer to the option found, or NULL if no option
+  // *         was found.
+  // *
+  // * @note Options found with AV_OPT_SEARCH_CHILDREN flag may not be settable
+  // * directly with av_set_string3(). Use special calls which take an options
+  // * AVDictionary (e.g. avformat_open_input()) to set options found with this
+  // * flag.
+  // */
+  // const AVOption *av_opt_find(void *obj, const char *name, const char *unit,
+  // int opt_flags, int search_flags);
+  //
+  /// **
+  // * Look for an option in an object. Consider only options which
+  // * have all the specified flags set.
+  // *
+  // * @param[in] obj A pointer to a struct whose first element is a
+  // *                pointer to an AVClass.
+  // *                Alternatively a double pointer to an AVClass, if
+  // *                AV_OPT_SEARCH_FAKE_OBJ search flag is set.
+  // * @param[in] name The name of the option to look for.
+  // * @param[in] unit When searching for named constants, name of the unit
+  // *                 it belongs to.
+  // * @param opt_flags Find only options with all the specified flags set (AV_OPT_FLAG).
+  // * @param search_flags A combination of AV_OPT_SEARCH_*.
+  // * @param[out] target_obj if non-NULL, an object to which the option belongs will be
+  // * written here. It may be different from obj if AV_OPT_SEARCH_CHILDREN is present
+  // * in search_flags. This parameter is ignored if search_flags contain
+  // * AV_OPT_SEARCH_FAKE_OBJ.
+  // *
+  // * @return A pointer to the option found, or NULL if no option
+  // *         was found.
+  // */
+  // const AVOption *av_opt_find2(void *obj, const char *name, const char *unit,
+  // int opt_flags, int search_flags, void **target_obj);
+  //
+  /// **
+  // * Iterate over all AVOptions belonging to obj.
+  // *
+  // * @param obj an AVOptions-enabled struct or a double pointer to an
+  // *            AVClass describing it.
+  // * @param prev result of the previous call to av_opt_next() on this object
+  // *             or NULL
+  // * @return next AVOption or NULL
+  // */
+  // const AVOption *av_opt_next(void *obj, const AVOption *prev);
+  //
+  /// **
+  // * Iterate over AVOptions-enabled children of obj.
+  // *
+  // * @param prev result of a previous call to this function or NULL
+  // * @return next AVOptions-enabled child or NULL
+  // */
+  // void *av_opt_child_next(void *obj, void *prev);
+  //
+  /// **
+  // * Iterate over potential AVOptions-enabled children of parent.
+  // *
+  // * @param prev result of a previous call to this function or NULL
+  // * @return AVClass corresponding to next potential child or NULL
+  // */
+  // const AVClass *av_opt_child_class_next(const AVClass *parent, const AVClass *prev);
+  //
+  /// **
+  // * @defgroup opt_set_funcs Option setting functions
+  // * @{
+  // * Those functions set the field of obj with the given name to value.
+  // *
+  // * @param[in] obj A struct whose first element is a pointer to an AVClass.
+  // * @param[in] name the name of the field to set
+  // * @param[in] val The value to set. In case of av_opt_set() if the field is not
+  // * of a string type, then the given string is parsed.
+  // * SI postfixes and some named scalars are supported.
+  // * If the field is of a numeric type, it has to be a numeric or named
+  // * scalar. Behavior with more than one scalar and +- infix operators
+  // * is undefined.
+  // * If the field is of a flags type, it has to be a sequence of numeric
+  // * scalars or named flags separated by '+' or '-'. Prefixing a flag
+  // * with '+' causes it to be set without affecting the other flags;
+  // * similarly, '-' unsets a flag.
+  // * @param search_flags flags passed to av_opt_find2. I.e. if AV_OPT_SEARCH_CHILDREN
+  // * is passed here, then the option may be set on a child of obj.
+  // *
+  // * @return 0 if the value has been set, or an AVERROR code in case of
+  // * error:
+  // * AVERROR_OPTION_NOT_FOUND if no matching option exists
+  // * AVERROR(ERANGE) if the value is out of range
+  // * AVERROR(EINVAL) if the value is not valid
+  // */
+  // int av_opt_set       (void *obj, const char *name, const char *val, int search_flags);
+  // int av_opt_set_int   (void *obj, const char *name, int64_t     val, int search_flags);
+  // int av_opt_set_double(void *obj, const char *name, double      val, int search_flags);
+  // int av_opt_set_q     (void *obj, const char *name, AVRational  val, int search_flags);
+  // int av_opt_set_bin   (void *obj, const char *name, const uint8_t *val, int size, int search_flags);
+function av_opt_set_bin(obj: Pointer; const name: pAnsiChar; const val: PByte; size: Integer; search_flags: Integer):Integer; cdecl;
 // int av_opt_set_image_size(void *obj, const char *name, int w, int h, int search_flags);
 // int av_opt_set_pixel_fmt (void *obj, const char *name, enum AVPixelFormat fmt, int search_flags);
 // int av_opt_set_sample_fmt(void *obj, const char *name, enum AVSampleFormat fmt, int search_flags);
@@ -780,5 +780,9 @@ end;
 // */
 
 implementation
+
+uses ffmpeglib;
+
+function av_opt_set_bin; external avutil_dll;
 
 end.

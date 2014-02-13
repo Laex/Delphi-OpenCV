@@ -50,7 +50,7 @@ object MainForm: TMainForm
     Height = 17
     Caption = 'Variant 1'
     Checked = True
-    TabOrder = 0
+    TabOrder = 2
     TabStop = True
   end
   object rb2: TRadioButton
@@ -59,7 +59,7 @@ object MainForm: TMainForm
     Width = 113
     Height = 17
     Caption = 'Variant 2'
-    TabOrder = 1
+    TabOrder = 3
   end
   object chk1: TCheckBox
     Left = 8
@@ -67,7 +67,7 @@ object MainForm: TMainForm
     Width = 97
     Height = 17
     Caption = 'Draw text'
-    TabOrder = 2
+    TabOrder = 4
   end
   object rg1: TRadioGroup
     Left = 8
@@ -79,7 +79,7 @@ object MainForm: TMainForm
     Items.Strings = (
       'On application idle'
       'On timer')
-    TabOrder = 3
+    TabOrder = 5
     OnClick = rg1Click
   end
   object se1: TSpinEdit
@@ -91,7 +91,7 @@ object MainForm: TMainForm
     Increment = 100
     MaxValue = 10000
     MinValue = 1
-    TabOrder = 4
+    TabOrder = 6
     Value = 100
     OnChange = se1Change
   end
@@ -100,8 +100,10 @@ object MainForm: TMainForm
     Top = 5
     Width = 294
     Height = 21
-    TabOrder = 5
-    Text = 'rtsp://192.168.1.10:554/11'
+    TabOrder = 1
+    Text = 
+      'rtsp://admin:admin@192.168.0.202:554/cam/realmonitor?channel=1&s' +
+      'ubtype=0'
   end
   object ButtonStartCapture: TButton
     Left = 378
@@ -109,7 +111,7 @@ object MainForm: TMainForm
     Width = 75
     Height = 25
     Caption = 'Start'
-    TabOrder = 6
+    TabOrder = 0
     OnClick = ButtonStartCaptureClick
   end
   object tmr1: TTimer

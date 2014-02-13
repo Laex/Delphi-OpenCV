@@ -1,9 +1,9 @@
 ﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <PropertyGroup>
-        <ProjectGuid>{49F2A3CA-C029-463D-A7D7-2D60C31FDDFB}</ProjectGuid>
-        <ProjectVersion>15.1</ProjectVersion>
+        <ProjectGuid>{C2F9EE60-F92D-4AFF-96C2-65E02ABCBAE4}</ProjectGuid>
+        <ProjectVersion>15.2</ProjectVersion>
         <FrameworkType>None</FrameworkType>
-        <MainSource>avcodec_sample2.dpr</MainSource>
+        <MainSource>ffplay.dpr</MainSource>
         <Base>True</Base>
         <Config Condition="'$(Config)'==''">Debug</Config>
         <Platform Condition="'$(Platform)'==''">Win32</Platform>
@@ -60,13 +60,9 @@
         <Base>true</Base>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base)'!=''">
-        <DCC_UnitSearchPath>..\..\;$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
-        <Manifest_File>None</Manifest_File>
-        <VerInfo_Keys>CompanyName=;FileDescription=;FileVersion=1.0.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductName=;ProductVersion=1.0.0.0;Comments=</VerInfo_Keys>
-        <VerInfo_Locale>1049</VerInfo_Locale>
         <DCC_Namespace>System;Xml;Data;Datasnap;Web;Soap;$(DCC_Namespace)</DCC_Namespace>
         <DCC_DcuOutput>.\$(Platform)\$(Config)</DCC_DcuOutput>
-        <DCC_ExeOutput>..\..\..\..\bin</DCC_ExeOutput>
+        <DCC_ExeOutput>.\$(Platform)\$(Config)</DCC_ExeOutput>
         <DCC_E>false</DCC_E>
         <DCC_N>false</DCC_N>
         <DCC_S>false</DCC_S>
@@ -74,12 +70,12 @@
         <DCC_K>false</DCC_K>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Android)'!=''">
-        <Android_LauncherIcon48>$(BDS)\bin\Artwork\Android\FM_LauncherIcon_48x48.png</Android_LauncherIcon48>
-        <Android_LauncherIcon96>$(BDS)\bin\Artwork\Android\FM_LauncherIcon_96x96.png</Android_LauncherIcon96>
         <Android_LauncherIcon36>$(BDS)\bin\Artwork\Android\FM_LauncherIcon_36x36.png</Android_LauncherIcon36>
-        <Android_LauncherIcon144>$(BDS)\bin\Artwork\Android\FM_LauncherIcon_144x144.png</Android_LauncherIcon144>
-        <DCC_UsePackage>DBXInterBaseDriver;DataSnapCommon;DbxCommonDriver;dbxcds;CustomIPTransport;dsnap;IndyCore;CloudService;vc2;FireDACIBDriver;bindcompfmx;dbrtl;FireDACCommon;bindcomp;xmlrtl;ibxpress;FireDACCommonDriver;bindengine;soaprtl;inet;RESTComponents;dbexpress;IndyIPClient;FireDACSqliteDriver;DBXSqliteDriver;fmx;IndySystem;DataSnapClient;DataSnapProviderClient;fmxFireDAC;IndyIPCommon;FireDACDBXDriver;rtl;DbxClientDriver;IndyProtocols;bindcompdbx;FireDAC;FireDACDataSnapDriver;$(DCC_UsePackage)</DCC_UsePackage>
+        <Android_LauncherIcon48>$(BDS)\bin\Artwork\Android\FM_LauncherIcon_48x48.png</Android_LauncherIcon48>
         <Android_LauncherIcon72>$(BDS)\bin\Artwork\Android\FM_LauncherIcon_72x72.png</Android_LauncherIcon72>
+        <DCC_UsePackage>DBXInterBaseDriver;DataSnapCommon;DbxCommonDriver;dbxcds;CustomIPTransport;dsnap;IndyCore;CloudService;vc2;FireDACIBDriver;bindcompfmx;dbrtl;FireDACCommon;bindcomp;xmlrtl;ibxpress;FireDACCommonDriver;bindengine;soaprtl;inet;RESTComponents;dbexpress;IndyIPClient;FireDACSqliteDriver;DBXSqliteDriver;fmx;IndySystem;DataSnapClient;DataSnapProviderClient;fmxFireDAC;IndyIPCommon;FireDACDBXDriver;rtl;DbxClientDriver;IndyProtocols;bindcompdbx;FireDAC;FireDACDataSnapDriver;$(DCC_UsePackage)</DCC_UsePackage>
+        <Android_LauncherIcon144>$(BDS)\bin\Artwork\Android\FM_LauncherIcon_144x144.png</Android_LauncherIcon144>
+        <Android_LauncherIcon96>$(BDS)\bin\Artwork\Android\FM_LauncherIcon_96x96.png</Android_LauncherIcon96>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_iOSDevice)'!=''">
         <DCC_UsePackage>DBXInterBaseDriver;DataSnapCommon;DbxCommonDriver;dbxcds;CustomIPTransport;dsnap;IndyCore;CloudService;FireDACIBDriver;bindcompfmx;dbrtl;FireDACCommon;bindcomp;xmlrtl;ibxpress;FireDACCommonDriver;bindengine;soaprtl;inet;RESTComponents;dbexpress;IndyIPClient;FireDACSqliteDriver;DBXSqliteDriver;fmx;IndySystem;DataSnapClient;DataSnapProviderClient;fmxFireDAC;fmxase;IndyIPCommon;FireDACDBXDriver;rtl;DbxClientDriver;IndyProtocols;bindcompdbx;FireDAC;FireDACDataSnapDriver;$(DCC_UsePackage)</DCC_UsePackage>
@@ -88,19 +84,19 @@
         <DCC_UsePackage>DBXInterBaseDriver;DataSnapCommon;DbxCommonDriver;dbxcds;CustomIPTransport;dsnap;IndyCore;CloudService;FireDACIBDriver;bindcompfmx;dbrtl;FireDACCommon;bindcomp;xmlrtl;ibxpress;FireDACCommonDriver;bindengine;soaprtl;inet;RESTComponents;dbexpress;IndyIPClient;FireDACSqliteDriver;DBXSqliteDriver;fmx;IndySystem;DataSnapClient;DataSnapProviderClient;fmxFireDAC;fmxase;IndyIPCommon;FireDACDBXDriver;rtl;DbxClientDriver;IndyProtocols;bindcompdbx;FireDAC;FireDACDataSnapDriver;$(DCC_UsePackage)</DCC_UsePackage>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_OSX32)'!=''">
-        <DCC_ConsoleTarget>true</DCC_ConsoleTarget>
         <DCC_UsePackage>FireDACPgDriver;DBXInterBaseDriver;DataSnapServer;DataSnapCommon;DbxCommonDriver;dbxcds;CustomIPTransport;dsnap;IndyIPServer;IndyCore;CloudService;FireDACIBDriver;FireDACDb2Driver;bindcompfmx;FireDACODBCDriver;dbrtl;FireDACCommon;bindcomp;inetdb;xmlrtl;ibxpress;FireDACCommonDriver;bindengine;soaprtl;FireDACMSSQLDriver;DBXInformixDriver;DBXFirebirdDriver;inet;FireDACMySQLDriver;DBXSybaseASADriver;RESTComponents;dbexpress;IndyIPClient;FireDACSqliteDriver;DBXSqliteDriver;fmx;IndySystem;DataSnapClient;DataSnapProviderClient;fmxFireDAC;DBXOracleDriver;fmxase;IndyIPCommon;FireDACDBXDriver;inetdbxpress;FireDACASADriver;rtl;DbxClientDriver;IndyProtocols;DBXMySQLDriver;bindcompdbx;FireDACADSDriver;FireDAC;FireDACDataSnapDriver;fmxobj;FireDACOracleDriver;fmxdae;FireDACMSAccDriver;DataSnapIndy10ServerTransport;$(DCC_UsePackage)</DCC_UsePackage>
+        <DCC_ConsoleTarget>true</DCC_ConsoleTarget>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Win32)'!=''">
-        <VerInfo_Locale>1033</VerInfo_Locale>
-        <DCC_ConsoleTarget>true</DCC_ConsoleTarget>
         <DCC_Namespace>Winapi;System.Win;Data.Win;Datasnap.Win;Web.Win;Soap.Win;Xml.Win;Bde;$(DCC_Namespace)</DCC_Namespace>
+        <VerInfo_Locale>1033</VerInfo_Locale>
         <VerInfo_Keys>CompanyName=;FileDescription=;FileVersion=1.0.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductName=;ProductVersion=1.0.0.0;Comments=</VerInfo_Keys>
-        <DCC_UsePackage>JvGlobus;dxBarRS18;dxPSCoreRS18;JvMM;JvManagedThreads;dxPScxPCProdRS18;OverbyteIcsDXE5Run;cxTreeListRS18;dxDockingRS18;FireDACPgDriver;dxThemeRS18;dxPSdxOCLnkRS18;JvCrypt;TP_LockBox3;XiButtonXE4;DBXInterBaseDriver;DataSnapServer;DataSnapCommon;cxTreeListdxBarPopupMenuRS18;JvNet;officeXPrt;TeeUI919;JvDotNetCtrls;FMXTeeDB919;DbxCommonDriver;vclimg;dbxcds;DatasnapConnectorsFreePascal;JvXPCtrls;vcldb;cxExportRS18;FmxTeeUI919;CustomIPTransport;TeeWorld919;dsnap;IndyIPServer;IndyCore;cxVerticalGridRS18;CloudService;TeePro919;dxPSdxDBOCLnkRS18;vc2;FireDACIBDriver;dxADOServerModeRS18;JvDB;JvRuntimeDesign;dxPScxExtCommonRS18;cxEditorsRS18;cxPageControldxBarPopupMenuRS18;cxSchedulerRS18;dxSpellCheckerRS18;dxPScxVGridLnkRS18;JclDeveloperTools;FireDACDb2Driver;dxRibbonRS18;FMXTeePro919;bindcompfmx;dclTP_LockBox3;vcldbx;cxBarEditItemRS18;FireDACODBCDriver;cxPageControlRS18;dbrtl;FireDACCommon;bindcomp;inetdb;JvPluginSystem;DBXOdbcDriver;JvCmp;vclFireDAC;FMXTee919;xmlrtl;JvTimeFramework;ibxpress;dxBarExtItemsRS18;FireDACCommonDriver;bindengine;vclactnband;soaprtl;bindcompvcl;dxPsPrVwAdvRS18;cxSpreadSheetRS18;Jcl;vclie;cxPivotGridRS18;dxmdsRS18;dxBarDBNavRS18;dxTileControlRS18;dxComnRS18;FireDACMSSQLDriver;DBXInformixDriver;dxBarExtDBItemsRS18;Intraweb;dxPScxSchedulerLnkRS18;dxNavBarRS18;dsnapcon;DBXFirebirdDriver;dxPSTeeChartRS18;inet;FMXTeeLanguage919;dxPScxCommonRS18;JvPascalInterpreter;FireDACMySQLDriver;vclx;TeeDB919;DBXSybaseASADriver;dxorgcRS18;RESTComponents;dbexpress;JvBDE;IndyIPClient;dxGDIPlusRS18;FireDACSqliteDriver;dxLayoutControlRS18;ZComponent;DBXSqliteDriver;tmswizdXE4;fmx;JvDlgs;IndySystem;vclib;inetdbbde;DataSnapClient;dxPScxTLLnkRS18;Tee919;cxSchedulerGridRS18;dxtrmdRS18;DataSnapProviderClient;DBXSybaseASEDriver;dxTabbedMDIRS18;TeeGL919;MetropolisUILiveTile;dxPSLnksRS18;vcldsnap;dxPScxPivotGridLnkRS18;fmxFireDAC;DBXDb2Driver;dxPScxSSLnkRS18;DBXOracleDriver;dxServerModeRS18;JvCore;vclribbon;dxdborRS18;fmxase;vcl;IndyIPCommon;DBXMSSQLDriver;CodeSiteExpressPkg;cxPivotGridChartRS18;FireDACDBXDriver;JvAppFrm;inetdbxpress;dxPScxGridLnkRS18;cxLibraryRS18;JvDocking;adortl;JvWizards;FireDACASADriver;dxPSdxDBTVLnkRS18;JvHMI;tmsdXE4;JvBands;ZDbc;rtl;DbxClientDriver;ZPlain;JclContainers;CPortLibDXE;JvSystem;svnui;JvControls;dxDBXServerModeRS18;IndyProtocols;DBXMySQLDriver;dxFlowChartRS18;viTimeLineDPK;bindcompdbx;TeeLanguage919;JvJans;JvPrintPreview;JvPageComps;JvStdCtrls;JvCustom;FireDACADSDriver;vcltouch;ZCore;dxPSPrVwRibbonRS18;tmsexdXE4;dxPSdxFCLnkRS18;VclSmp;FireDAC;VCLRESTComponents;cxGridRS18;DataSnapConnectors;FireDACDataSnapDriver;dxPSDBTeeChartRS18;dxdbtrRS18;tmsxlsdXE4;dxCoreRS18;fmxobj;JclVcl;ZParseSql;svn;dxPSdxLCLnkRS18;FireDACOracleDriver;fmxdae;cxDataRS18;cxPivotGridOLAPRS18;bdertl;TeeImage919;FireDACMSAccDriver;DataSnapIndy10ServerTransport;$(DCC_UsePackage)</DCC_UsePackage>
+        <DCC_ConsoleTarget>true</DCC_ConsoleTarget>
+        <DCC_UsePackage>JvGlobus;dxBarRS18;dxPSCoreRS18;JvMM;JvManagedThreads;dxPScxPCProdRS18;OverbyteIcsDXE5Run;cxTreeListRS18;dxDockingRS18;FireDACPgDriver;dxThemeRS18;dxPSdxOCLnkRS18;JvCrypt;TP_LockBox3;frx19;XiButtonXE4;DBXInterBaseDriver;DataSnapServer;DataSnapCommon;cxTreeListdxBarPopupMenuRS18;JvNet;TeeUI919;JvDotNetCtrls;FMXTeeDB919;DbxCommonDriver;OpenCV;vclimg;dbxcds;DatasnapConnectorsFreePascal;JvXPCtrls;vcldb;cxExportRS18;FmxTeeUI919;CustomIPTransport;TeeWorld919;dsnap;IndyIPServer;IndyCore;cxVerticalGridRS18;CloudService;TeePro919;dxPSdxDBOCLnkRS18;vc2;FireDACIBDriver;dxADOServerModeRS18;JvDB;JvRuntimeDesign;dxPScxExtCommonRS18;cxEditorsRS18;cxPageControldxBarPopupMenuRS18;cxSchedulerRS18;dxSpellCheckerRS18;dxPScxVGridLnkRS18;frxe19;JclDeveloperTools;FireDACDb2Driver;dxRibbonRS18;frxDB19;FMXTeePro919;bindcompfmx;dclTP_LockBox3;vcldbx;cxBarEditItemRS18;FireDACODBCDriver;cxPageControlRS18;dbrtl;FireDACCommon;bindcomp;inetdb;JvPluginSystem;DBXOdbcDriver;JvCmp;vclFireDAC;FMXTee919;xmlrtl;JvTimeFramework;ibxpress;dxBarExtItemsRS18;FireDACCommonDriver;vclactnband;bindengine;soaprtl;bindcompvcl;dxPsPrVwAdvRS18;cxSpreadSheetRS18;Jcl;vclie;cxPivotGridRS18;dxmdsRS18;dxBarDBNavRS18;dxTileControlRS18;dxComnRS18;FireDACMSSQLDriver;DBXInformixDriver;dxBarExtDBItemsRS18;Intraweb;dxPScxSchedulerLnkRS18;dxNavBarRS18;dsnapcon;DBXFirebirdDriver;dxPSTeeChartRS18;inet;FMXTeeLanguage919;dxPScxCommonRS18;JvPascalInterpreter;FireDACMySQLDriver;vclx;TeeDB919;DBXSybaseASADriver;dxorgcRS18;RESTComponents;dbexpress;JvBDE;IndyIPClient;dxGDIPlusRS18;FireDACSqliteDriver;dxLayoutControlRS18;ZComponent;DBXSqliteDriver;tmswizdXE4;fmx;JvDlgs;IndySystem;inetdbbde;vclib;DataSnapClient;dxPScxTLLnkRS18;Tee919;cxSchedulerGridRS18;dxtrmdRS18;DataSnapProviderClient;DBXSybaseASEDriver;dxTabbedMDIRS18;TeeGL919;MetropolisUILiveTile;dxPSLnksRS18;vcldsnap;dxPScxPivotGridLnkRS18;fmxFireDAC;DBXDb2Driver;dxPScxSSLnkRS18;DBXOracleDriver;dxServerModeRS18;JvCore;vclribbon;dxdborRS18;fmxase;vcl;IndyIPCommon;DBXMSSQLDriver;CodeSiteExpressPkg;cxPivotGridChartRS18;FireDACDBXDriver;JvAppFrm;inetdbxpress;webdsnap;dxPScxGridLnkRS18;cxLibraryRS18;JvDocking;adortl;JvWizards;FireDACASADriver;dxPSdxDBTVLnkRS18;JvHMI;tmsdXE4;JvBands;ZDbc;rtl;DbxClientDriver;ZPlain;JclContainers;CPortLibDXE;JvSystem;svnui;JvControls;dxDBXServerModeRS18;IndyProtocols;DBXMySQLDriver;dxFlowChartRS18;viTimeLineDPK;bindcompdbx;TeeLanguage919;JvJans;JvPrintPreview;JvPageComps;JvStdCtrls;JvCustom;FireDACADSDriver;vcltouch;ZCore;dxPSPrVwRibbonRS18;tmsexdXE4;dxPSdxFCLnkRS18;VclSmp;FireDAC;VCLRESTComponents;cxGridRS18;DataSnapConnectors;FireDACDataSnapDriver;dxPSDBTeeChartRS18;dxdbtrRS18;tmsxlsdXE4;dxCoreRS18;fmxobj;JclVcl;ZParseSql;svn;dxPSdxLCLnkRS18;FireDACOracleDriver;fmxdae;cxDataRS18;cxPivotGridOLAPRS18;bdertl;VirtualTreesR;TeeImage919;FireDACMSAccDriver;DataSnapIndy10ServerTransport;$(DCC_UsePackage)</DCC_UsePackage>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Win64)'!=''">
+        <DCC_UsePackage>dxBarRS18;dxPSCoreRS18;OverbyteIcsDXE5Run;cxTreeListRS18;dxDockingRS18;FireDACPgDriver;dxThemeRS18;dxPSdxOCLnkRS18;DBXInterBaseDriver;DataSnapServer;DataSnapCommon;cxTreeListdxBarPopupMenuRS18;DbxCommonDriver;vclimg;dbxcds;DatasnapConnectorsFreePascal;vcldb;cxExportRS18;CustomIPTransport;dsnap;IndyIPServer;IndyCore;cxVerticalGridRS18;CloudService;dxPSdxDBOCLnkRS18;FireDACIBDriver;dxADOServerModeRS18;dxPScxExtCommonRS18;cxEditorsRS18;cxPageControldxBarPopupMenuRS18;cxSchedulerRS18;dxSpellCheckerRS18;dxPScxVGridLnkRS18;FireDACDb2Driver;dxRibbonRS18;bindcompfmx;cxBarEditItemRS18;FireDACODBCDriver;cxPageControlRS18;dbrtl;FireDACCommon;bindcomp;inetdb;DBXOdbcDriver;vclFireDAC;xmlrtl;ibxpress;dxBarExtItemsRS18;FireDACCommonDriver;vclactnband;bindengine;soaprtl;bindcompvcl;dxPsPrVwAdvRS18;cxSpreadSheetRS18;vclie;cxPivotGridRS18;dxmdsRS18;dxBarDBNavRS18;dxTileControlRS18;dxComnRS18;FireDACMSSQLDriver;DBXInformixDriver;dxBarExtDBItemsRS18;Intraweb;dxPScxSchedulerLnkRS18;dxNavBarRS18;dsnapcon;DBXFirebirdDriver;dxPSTeeChartRS18;inet;dxPScxCommonRS18;FireDACMySQLDriver;vclx;DBXSybaseASADriver;dxorgcRS18;RESTComponents;dbexpress;IndyIPClient;dxGDIPlusRS18;FireDACSqliteDriver;dxLayoutControlRS18;ZComponent;DBXSqliteDriver;fmx;IndySystem;vclib;DataSnapClient;dxPScxTLLnkRS18;cxSchedulerGridRS18;dxtrmdRS18;DataSnapProviderClient;DBXSybaseASEDriver;dxTabbedMDIRS18;MetropolisUILiveTile;dxPSLnksRS18;vcldsnap;dxPScxPivotGridLnkRS18;fmxFireDAC;DBXDb2Driver;dxPScxSSLnkRS18;DBXOracleDriver;dxServerModeRS18;vclribbon;dxdborRS18;fmxase;vcl;IndyIPCommon;DBXMSSQLDriver;cxPivotGridChartRS18;FireDACDBXDriver;inetdbxpress;webdsnap;dxPScxGridLnkRS18;cxLibraryRS18;adortl;FireDACASADriver;dxPSdxDBTVLnkRS18;ZDbc;rtl;DbxClientDriver;ZPlain;dxDBXServerModeRS18;IndyProtocols;DBXMySQLDriver;dxFlowChartRS18;bindcompdbx;FireDACADSDriver;vcltouch;ZCore;dxPSPrVwRibbonRS18;dxPSdxFCLnkRS18;VclSmp;FireDAC;VCLRESTComponents;cxGridRS18;DataSnapConnectors;FireDACDataSnapDriver;dxPSDBTeeChartRS18;dxdbtrRS18;dxCoreRS18;fmxobj;ZParseSql;dxPSdxLCLnkRS18;FireDACOracleDriver;fmxdae;cxDataRS18;cxPivotGridOLAPRS18;VirtualTreesR;FireDACMSAccDriver;DataSnapIndy10ServerTransport;$(DCC_UsePackage)</DCC_UsePackage>
         <DCC_ConsoleTarget>true</DCC_ConsoleTarget>
-        <DCC_UsePackage>dxBarRS18;dxPSCoreRS18;OverbyteIcsDXE5Run;cxTreeListRS18;dxDockingRS18;FireDACPgDriver;dxThemeRS18;dxPSdxOCLnkRS18;DBXInterBaseDriver;DataSnapServer;DataSnapCommon;cxTreeListdxBarPopupMenuRS18;officeXPrt;DbxCommonDriver;vclimg;dbxcds;DatasnapConnectorsFreePascal;vcldb;cxExportRS18;CustomIPTransport;dsnap;IndyIPServer;IndyCore;cxVerticalGridRS18;CloudService;dxPSdxDBOCLnkRS18;FireDACIBDriver;dxADOServerModeRS18;dxPScxExtCommonRS18;cxEditorsRS18;cxPageControldxBarPopupMenuRS18;cxSchedulerRS18;dxSpellCheckerRS18;dxPScxVGridLnkRS18;FireDACDb2Driver;dxRibbonRS18;bindcompfmx;cxBarEditItemRS18;FireDACODBCDriver;cxPageControlRS18;dbrtl;FireDACCommon;bindcomp;inetdb;DBXOdbcDriver;vclFireDAC;xmlrtl;ibxpress;dxBarExtItemsRS18;FireDACCommonDriver;bindengine;vclactnband;soaprtl;bindcompvcl;dxPsPrVwAdvRS18;cxSpreadSheetRS18;vclie;cxPivotGridRS18;dxmdsRS18;dxBarDBNavRS18;dxTileControlRS18;dxComnRS18;FireDACMSSQLDriver;DBXInformixDriver;dxBarExtDBItemsRS18;Intraweb;dxPScxSchedulerLnkRS18;dxNavBarRS18;dsnapcon;DBXFirebirdDriver;dxPSTeeChartRS18;inet;dxPScxCommonRS18;FireDACMySQLDriver;vclx;DBXSybaseASADriver;dxorgcRS18;RESTComponents;dbexpress;IndyIPClient;dxGDIPlusRS18;FireDACSqliteDriver;dxLayoutControlRS18;ZComponent;DBXSqliteDriver;fmx;IndySystem;vclib;DataSnapClient;dxPScxTLLnkRS18;cxSchedulerGridRS18;dxtrmdRS18;DataSnapProviderClient;DBXSybaseASEDriver;dxTabbedMDIRS18;MetropolisUILiveTile;dxPSLnksRS18;vcldsnap;dxPScxPivotGridLnkRS18;fmxFireDAC;DBXDb2Driver;dxPScxSSLnkRS18;DBXOracleDriver;dxServerModeRS18;vclribbon;dxdborRS18;fmxase;vcl;IndyIPCommon;DBXMSSQLDriver;cxPivotGridChartRS18;FireDACDBXDriver;inetdbxpress;dxPScxGridLnkRS18;cxLibraryRS18;adortl;FireDACASADriver;dxPSdxDBTVLnkRS18;ZDbc;rtl;DbxClientDriver;ZPlain;dxDBXServerModeRS18;IndyProtocols;DBXMySQLDriver;dxFlowChartRS18;bindcompdbx;FireDACADSDriver;vcltouch;ZCore;dxPSPrVwRibbonRS18;dxPSdxFCLnkRS18;VclSmp;FireDAC;VCLRESTComponents;cxGridRS18;DataSnapConnectors;FireDACDataSnapDriver;dxPSDBTeeChartRS18;dxdbtrRS18;dxCoreRS18;fmxobj;ZParseSql;dxPSdxLCLnkRS18;FireDACOracleDriver;fmxdae;cxDataRS18;cxPivotGridOLAPRS18;FireDACMSAccDriver;DataSnapIndy10ServerTransport;$(DCC_UsePackage)</DCC_UsePackage>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1)'!=''">
         <DCC_Define>DEBUG;$(DCC_Define)</DCC_Define>
@@ -111,8 +107,6 @@
         <DCC_RemoteDebug>true</DCC_RemoteDebug>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1_Win32)'!=''">
-        <VerInfo_Locale>1033</VerInfo_Locale>
-        <Manifest_File>None</Manifest_File>
         <DCC_RemoteDebug>false</DCC_RemoteDebug>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2)'!=''">
@@ -150,6 +144,7 @@
         <DCCReference Include="..\..\libavcodec\libavcodec.avcodec.pas"/>
         <DCCReference Include="..\..\libavfilter\buffersrc.pas"/>
         <DCCReference Include="..\..\libavutil\errno.pas"/>
+        <DCCReference Include="cmdutils.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>
@@ -218,13 +213,8 @@
                     <VersionInfoKeys Name="theme"/>
                 </VersionInfoKeys>
                 <Source>
-                    <Source Name="MainSource">avcodec_sample2.dpr</Source>
+                    <Source Name="MainSource">ffplay.dpr</Source>
                 </Source>
-                <Excluded_Packages>
-                    <Excluded_Packages Name="C:\Users\Public\Documents\RAD Studio\12.0\Bpl\IcsFmxDXE5Design.bpl">Overbyte ICS FMX Design-Time Package for Delphi XE5</Excluded_Packages>
-                    <Excluded_Packages Name="$(BDSBIN)\dcloffice2k190.bpl">Microsoft Office 2000 Sample Automation Server Wrapper Components</Excluded_Packages>
-                    <Excluded_Packages Name="C:\Users\Public\Documents\RAD Studio\12.0\Bpl\IcsVclDXE5Design.bpl">Overbyte ICS VCL Design-Time Package for Delphi XE5</Excluded_Packages>
-                </Excluded_Packages>
             </Delphi.Personality>
             <Deployment/>
             <Platforms>
