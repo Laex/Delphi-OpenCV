@@ -193,7 +193,6 @@ begin
   if not(csDesigning in ComponentState) then
   begin
     FOpenCVCameraThread := TocvCameraThread.Create(True);
-    // FOpenCVCameraThread.Priority     := tpHigher;
     FOpenCVCameraThread.OnNotifyData := OnNotifyData;
     FEnabled                         := False;
     FResolution                      := r160x120;

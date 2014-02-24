@@ -37,11 +37,12 @@ type
   TocvCustomImageOperation = class(TPersistent)
   private
     CS: TCriticalSection;
+    FOwner: TComponent;
   protected
     procedure LockTransform;
     procedure UnlockTransform;
   public
-    constructor Create; virtual;
+    constructor Create(AOwner: TComponent); virtual;
     destructor Destroy; override;
     function Transform(const Source: pIplImage; var Destanation: pIplImage): Boolean; virtual; abstract;
   end;
@@ -70,7 +71,7 @@ type
     procedure SetThreshold2(const Value: double);
   protected
   public
-    constructor Create; override;
+    constructor Create(AOwner: TComponent); override;
     function Transform(const Source: pIplImage; var Destanation: pIplImage): Boolean; override;
   published
     property Threshold1: double Read FThreshold1 write SetThreshold1;
@@ -95,7 +96,7 @@ type
     procedure SetSize2(const Value: Integer);
     procedure SetSmoothOperation(const Value: TocvSmoothOperations);
   public
-    constructor Create; override;
+    constructor Create(AOwner: TComponent); override;
     function Transform(const Source: pIplImage; var Destanation: pIplImage): Boolean; override;
   published
     property sigma1: double read FSigma1 write SetSigma1;
@@ -105,116 +106,135 @@ type
     property SmoothOperation: TocvSmoothOperations read FSmoothOperation write SetSmoothOperation default GAUSSIAN;
   end;
 
-  TcvImageOperations = (ioNone, ioGrayScale, ioCanny, ioSmooth);
+  IocvEditorPropertiesContainer = interface
+    ['{418F88DD-E35D-4425-BF24-E753E83D35D6}']
+    function GetProperties: TocvCustomImageOperation;
+    function GetPropertiesClass: TocvImageOperationClass;
+    procedure SetPropertiesClass(Value: TocvImageOperationClass);
+  end;
 
-Const
-  cvImageOperation: array [TcvImageOperations] of TocvImageOperationClass = (TocvImageOperation_None, TocvImageOperation_GrayScale,
-    TovcImageOperation_Canny, TovcImageOperation_Smooth);
-
-function GetImageOperationByImageOperationClass(const ImageOperationClass: TClass): TcvImageOperations;
-
-Type
-  TocvImageOperation = class(TocvDataSourceAndReceiver)
+  TocvImageOperation = class(TocvDataSourceAndReceiver, IocvEditorPropertiesContainer)
   private
     CS: TCriticalSection;
-    FOperation: TcvImageOperations;
-    FOperationParams: TocvCustomImageOperation;
+    FProperties: TocvCustomImageOperation;
+    FPropertiesClass: TocvImageOperationClass;
     procedure LockTransform;
     procedure UnlockTransform;
-    procedure SetOperationParams(const Value: TocvCustomImageOperation);
-    procedure SetOperations(const Value: TcvImageOperations);
+    procedure CreateProperties;
+    procedure DestroyProperties;
+    procedure RecreateProperties;
+    function GetPropertiesClassName: string;
+    procedure SetProperties(const Value: TocvCustomImageOperation);
+    procedure SetPropertiesClass(Value: TocvImageOperationClass);
+    procedure SetPropertiesClassName(const Value: string);
   protected
     procedure TakeImage(const IplImage: pIplImage); override;
+    function GetProperties: TocvCustomImageOperation;
+    function GetPropertiesClass: TocvImageOperationClass;
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
+    property PropertiesClass: TocvImageOperationClass read GetPropertiesClass write SetPropertiesClass;
   published
-    property Operation: TcvImageOperations Read FOperation write SetOperations;
-    property OperationParams: TocvCustomImageOperation Read FOperationParams write SetOperationParams;
+    property PropertiesClassName: string read GetPropertiesClassName write SetPropertiesClassName;
+    property Properties: TocvCustomImageOperation read GetProperties write SetProperties;
   end;
+
+  TRegisteredImageOperations = class(TStringList)
+  public
+    function FindByClassName(const ClassName: String): TocvImageOperationClass;
+    function GetNameByClass(const IOClass: TClass): String;
+    procedure RegisterIOClass(const IOClass: TClass; const ClassName: String);
+  end;
+
+function GetRegisteredImageOperations: TRegisteredImageOperations;
 
 implementation
 
 Uses
-  VCL.Forms,
   core_c,
   imgproc_c,
   imgproc.types_c;
 
-function GetImageOperationByImageOperationClass(const ImageOperationClass: TClass): TcvImageOperations;
 Var
-  i: TcvImageOperations;
+  _RegisteredImageOperations: TRegisteredImageOperations = nil;
+
+function GetRegisteredImageOperations: TRegisteredImageOperations;
 begin
-  Result := ioNone;
-  for i := Low(cvImageOperation) to High(cvImageOperation) do
-    if cvImageOperation[i] = ImageOperationClass then
-      Exit(i);
+  if not Assigned(_RegisteredImageOperations) then
+    _RegisteredImageOperations := TRegisteredImageOperations.Create;
+  Result := _RegisteredImageOperations;
 end;
 
 { TocvImageOperation }
 
-procedure TocvImageOperation.SetOperationParams(const Value: TocvCustomImageOperation);
-Var
-  io: TcvImageOperations;
+procedure TocvImageOperation.SetProperties(const Value: TocvCustomImageOperation);
 begin
-  if Value <> FOperationParams then
+  if (FProperties <> nil) and (Value <> nil) then
+    FProperties.Assign(Value);
+end;
+
+procedure TocvImageOperation.SetPropertiesClass(Value: TocvImageOperationClass);
+begin
+  if FPropertiesClass <> Value then
   begin
-    LockTransform;
-    try
-      Operation := GetImageOperationByImageOperationClass(Value.ClassType);
-
-      // if csDesigning in ComponentState then
-      // if (Owner is TForm) and (TForm(Owner).Designer <> nil) then
-      // TForm(Owner).Designer.Notification(Self, opRemove);
-
-      FOperationParams.Assign(Value);
-
-      // if csDesigning in ComponentState then
-      // if (Owner is TForm) and (TForm(Owner).Designer <> nil) then
-      // TForm(Owner).Designer.Notification(Self, opInsert);
-
-    finally
-      UnlockTransform;
-    end;
+    FPropertiesClass := Value;
+    RecreateProperties;
   end;
 end;
 
-procedure TocvImageOperation.SetOperations(const Value: TcvImageOperations);
+procedure TocvImageOperation.CreateProperties;
 begin
-  if FOperation <> Value then
-  begin
-    FOperation := Value;
-    if Assigned(FOperationParams) then
-    begin
-      if csDesigning in ComponentState then
-        if (Owner is TForm) and (TForm(Owner).Designer <> nil) then
-          TForm(Owner).Designer.Notification(Self, opRemove);
-      FreeAndNil(FOperationParams);
-    end;
+  if FPropertiesClass <> nil then
+    FProperties := FPropertiesClass.Create(Self);
+end;
 
-    FOperationParams := cvImageOperation[FOperation].Create;
+procedure TocvImageOperation.DestroyProperties;
+begin
+  FreeAndNil(FProperties);
+end;
 
-    if csDesigning in ComponentState then
-      if (Owner is TForm) and (TForm(Owner).Designer <> nil) then
-        TForm(Owner).Designer.Notification(Self, opInsert);
-  end;
+procedure TocvImageOperation.RecreateProperties;
+begin
+  DestroyProperties;
+  CreateProperties;
+end;
+
+procedure TocvImageOperation.SetPropertiesClassName(const Value: string);
+begin
+  PropertiesClass := TocvImageOperationClass(GetRegisteredImageOperations.FindByClassName(Value));
 end;
 
 constructor TocvImageOperation.Create(AOwner: TComponent);
 begin
   inherited;
   CS := TCriticalSection.Create;
-  FOperationParams := TocvImageOperation_None.Create;
-  FOperation := ioNone;
 end;
 
 destructor TocvImageOperation.Destroy;
 begin
   LockTransform;
-  if Assigned(FOperationParams) then
-    FreeAndNil(FOperationParams);
+  if Assigned(FProperties) then
+    FreeAndNil(FProperties);
   CS.Free;
   inherited;
+end;
+
+function TocvImageOperation.GetProperties: TocvCustomImageOperation;
+begin
+  if not Assigned(FProperties) then
+    FProperties := TocvImageOperation_None.Create(Self);
+  Result := FProperties;
+end;
+
+function TocvImageOperation.GetPropertiesClass: TocvImageOperationClass;
+begin
+  Result := TocvImageOperationClass(Properties.ClassType);
+end;
+
+function TocvImageOperation.GetPropertiesClassName: string;
+begin
+  Result := Properties.ClassName;
 end;
 
 procedure TocvImageOperation.LockTransform;
@@ -226,7 +246,7 @@ procedure TocvImageOperation.TakeImage(const IplImage: pIplImage);
 var
   Destanation: pIplImage;
 begin
-  if Assigned(FOperationParams) and FOperationParams.Transform(IplImage, Destanation) then
+  if Assigned(FProperties) and FProperties.Transform(IplImage, Destanation) then
   begin
     LockTransform;
     try
@@ -334,15 +354,11 @@ end;
 
 { TCustomOpenCVImgOperation }
 
-constructor TocvCustomImageOperation.Create { (AOwner: TPersistent) };
+constructor TocvCustomImageOperation.Create(AOwner: TComponent);
 begin
   inherited Create;
-  // FOwner := AOwner;
+  FOwner := AOwner;
   CS := TCriticalSection.Create;
-  // SetLength(
-  // FValues,
-  // 10);
-  // FOwner := AOwner;
 end;
 
 destructor TocvCustomImageOperation.Destroy;
@@ -350,16 +366,6 @@ begin
   CS.Free;
   inherited;
 end;
-
-// function TocvCustomImageOperation.GetOwner: TPersistent;
-// begin
-// Result := FOwner;
-// end;
-
-// function TocvCustomImageOperation.GetOwner: TPersistent;
-// begin
-// Result := FOwner;
-// end;
 
 procedure TocvCustomImageOperation.LockTransform;
 begin
@@ -464,8 +470,48 @@ begin
   end;
 end;
 
+{ TRegisteredImageOperations }
+
+function TRegisteredImageOperations.FindByClassName(const ClassName: String): TocvImageOperationClass;
+Var
+  i: Integer;
+begin
+  i := IndexOf(ClassName);
+  if i <> -1 then
+    Result := TocvImageOperationClass(Objects[i])
+  else
+    Result := Nil;
+end;
+
+function TRegisteredImageOperations.GetNameByClass(const IOClass: TClass): String;
+Var
+  i: Integer;
+begin
+  Result := '';
+  for i := 0 to Count - 1 do
+    if Integer(Objects[i]) = Integer(IOClass) then
+    begin
+      Result := Self[i];
+      Break;
+    end;
+end;
+
+procedure TRegisteredImageOperations.RegisterIOClass(const IOClass: TClass; const ClassName: String);
+begin
+  AddObject(ClassName, TObject(IOClass));
+  RegisterClass(TPersistentClass(IOClass));
+end;
+
 initialization
 
-RegisterClasses([TocvImageOperation_None, TocvImageOperation_GrayScale, TovcImageOperation_Canny, TovcImageOperation_Smooth]);
+GetRegisteredImageOperations.RegisterIOClass(TocvImageOperation_None, 'None');
+GetRegisteredImageOperations.RegisterIOClass(TocvImageOperation_GrayScale, 'GrayScale');
+GetRegisteredImageOperations.RegisterIOClass(TovcImageOperation_Canny, 'Canny');
+GetRegisteredImageOperations.RegisterIOClass(TovcImageOperation_Smooth, 'Smooth');
+
+finalization
+
+if Assigned(_RegisteredImageOperations) then
+  FreeAndNil(_RegisteredImageOperations);
 
 end.

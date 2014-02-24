@@ -1,6 +1,6 @@
 program ffmpeg_sample_player;
 
-{.$APPTYPE CONSOLE}
+{ .$APPTYPE CONSOLE }
 {$R *.res}
 {$include ffmpeg.inc}
 
@@ -65,7 +65,6 @@ begin
     av_register_all();
     avformat_network_init();
 
-
     // Init SDL with video support
     err := SDL_Init(SDL_INIT_VIDEO);
     if (err < 0) then
@@ -113,7 +112,7 @@ begin
       Halt(1);
     end;
 
-    screen := SDL_SetVideoMode(codec_context^.width, codec_context^.height, 0, 0);
+    screen := SDL_SetVideoMode(codec_context^.width, codec_context^.height, 0, 0 { SDL_FULLSCREEN } );
     if (screen = nil) then
     begin
       WriteLn('Couldn''t set video mode');
@@ -122,8 +121,8 @@ begin
 
     bmp := SDL_CreateYUVOverlay(codec_context^.width, codec_context^.height, SDL_YV12_OVERLAY, screen);
 
-    img_convert_context := sws_getCachedContext(nil, codec_context^.width, codec_context^.height, codec_context^.pix_fmt,
-      codec_context^.width, codec_context^.height, AV_PIX_FMT_YUV420P, SWS_BICUBIC, nil, nil, nil);
+    img_convert_context := sws_getCachedContext(nil, codec_context^.width, codec_context^.height, codec_context^.pix_fmt, codec_context^.width, codec_context^.height, AV_PIX_FMT_YUV420P, SWS_BICUBIC,
+      nil, nil, nil);
     if (img_convert_context = nil) then
     begin
       WriteLn('Cannot initialize the conversion context');
