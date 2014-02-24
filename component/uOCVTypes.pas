@@ -1,25 +1,25 @@
-(* /*****************************************************************
-  //                       Delphi-OpenCV Demo
-  //               Copyright (C) 2013 Project Delphi-OpenCV
-  // ****************************************************************
-  // Contributor:
-  // laentir Valetov
-  // email:laex@bk.ru
-  // ****************************************************************
-  // You may retrieve the latest version of this file at the GitHub,
-  // located at git://github.com/Laex/Delphi-OpenCV.git
-  // ****************************************************************
-  // The contents of this file are used with permission, subject to
-  // the Mozilla Public License Version 1.1 (the "License"); you may
-  // not use this file except in compliance with the License. You may
-  // obtain a copy of the License at
-  // http://www.mozilla.org/MPL/MPL-1_1Final.html
-  //
-  // Software distributed under the License is distributed on an
-  // "AS IS" basis, WITHOUT WARRANTY OF ANY KIND, either express or
-  // implied. See the License for the specific language governing
-  // rights and limitations under the License.
-  ******************************************************************* *)
+// *****************************************************************
+// Delphi-OpenCV Demo
+// Copyright (C) 2013 Project Delphi-OpenCV
+// ****************************************************************
+// Contributor:
+// Laentir Valetov
+// email:laex@bk.ru
+// ****************************************************************
+// You may retrieve the latest version of this file at the GitHub,
+// located at git://github.com/Laex/Delphi-OpenCV.git
+// ****************************************************************
+// The contents of this file are used with permission, subject to
+// the Mozilla Public License Version 1.1 (the "License"); you may
+// not use this file except in compliance with the License. You may
+// obtain a copy of the License at
+// http://www.mozilla.org/MPL/MPL-1_1Final.html
+//
+// Software distributed under the License is distributed on an
+// "AS IS" basis, WITHOUT WARRANTY OF ANY KIND, either express or
+// implied. See the License for the specific language governing
+// rights and limitations under the License.
+// *******************************************************************
 
 unit uOCVTypes;
 
@@ -42,6 +42,7 @@ Type
   IocvDataSource = interface
     ['{80640C0A-6828-42F8-83E7-DA5FD9036DFF}']
     procedure SetReceiver(const OpenCVVideoReceiver: IocvDataReceiver);
+    function GetName: string;
   end;
 
   TocvReceiverList = TList<IocvDataReceiver>;
@@ -52,6 +53,7 @@ Type
   protected
     FOpenCVVideoReceiver: IocvDataReceiver;
     procedure NotifyReceiver(const IplImage: pIplImage); virtual;
+    function GetName: string; virtual;
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
@@ -108,6 +110,11 @@ destructor TocvDataSource.Destroy;
 begin
   ReceiverCS.Free;
   inherited;
+end;
+
+function TocvDataSource.GetName: string;
+begin
+  Result := Name;
 end;
 
 procedure TocvDataSource.NotifyReceiver(const IplImage: pIplImage);
@@ -170,7 +177,7 @@ end;
 
 procedure TocvDataReceiver.SetVideoSource(const Value: TObject);
 begin
- VideoSource := Value as TocvDataSource;
+  VideoSource := Value as TocvDataSource;
 end;
 
 procedure TocvDataReceiver.TakeImage(const IplImage: pIplImage);

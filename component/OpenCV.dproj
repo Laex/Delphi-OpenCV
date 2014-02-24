@@ -2,7 +2,7 @@
     <PropertyGroup>
         <ProjectGuid>{67FAAD9E-2FAD-44C3-8F98-56827C3D1CE8}</ProjectGuid>
         <MainSource>OpenCV.dpk</MainSource>
-        <ProjectVersion>15.2</ProjectVersion>
+        <ProjectVersion>15.3</ProjectVersion>
         <FrameworkType>VCL</FrameworkType>
         <Base>True</Base>
         <Config Condition="'$(Config)'==''">Debug</Config>
@@ -97,13 +97,14 @@
         </DelphiCompile>
         <DCCReference Include="rtl.dcp"/>
         <DCCReference Include="vcl.dcp"/>
-        <DCCReference Include="designide.dcp"/>
+        <DCCReference Include="DesignIDE.dcp"/>
         <DCCReference Include="uOCVTypes.pas"/>
         <DCCReference Include="uOCVCamera.pas"/>
         <DCCReference Include="uOCVView.pas"/>
         <DCCReference Include="uOCVImageOperation.pas"/>
         <DCCReference Include="uOCVRegister.pas"/>
         <DCCReference Include="uOCVSplitter.pas"/>
+        <DCCReference Include="uOCVIOProperties.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

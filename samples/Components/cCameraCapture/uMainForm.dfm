@@ -51,7 +51,7 @@ object MainForm: TMainForm
   end
   object ocvw1: TocvView
     Left = 8
-    Top = 8
+    Top = 4
     Width = 294
     Height = 269
   end
@@ -60,14 +60,16 @@ object MainForm: TMainForm
     Top = 296
     Width = 294
     Height = 269
+    VideoSource = ocvmgprtn1
   end
   object ocvcmr1: TocvCamera
-    Resolution = r800x448
+    Enabled = True
+    Resolution = r1280x720
     Left = 368
     Top = 132
   end
   object ocvmgprtn1: TocvImageOperation
-    Operation = ioNone
+    PropertiesClassName = 'TocvImageOperation_None'
     Left = 368
     Top = 228
   end
@@ -75,8 +77,10 @@ object MainForm: TMainForm
     VideoSource = ocvcmr1
     Channels = <
       item
+        Name = 'ocvspltr1[0]'
       end
       item
+        Name = 'ocvspltr1[1]'
       end>
     Left = 368
     Top = 180

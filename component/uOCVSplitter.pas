@@ -43,22 +43,26 @@ Type
     function QueryInterface(const IID: TGUID; out Obj): HResult; virtual; stdcall;
     function _AddRef: Integer; stdcall;
     function _Release: Integer; stdcall;
+    function GetName: string;
   published
-    property Name: String read FName write FName;
+    constructor Create(Collection: TCollection); override;
+    property Name: String read GetName write FName;
   end;
 
   TocvChannelCollection = class(TCollection)
   private
+    FOwner: TComponent;
     function GetOCVItem(Index: Integer): IocvDataSource;
   public
+    constructor Create(const AOwner: TComponent; const ItemClass: TCollectionItemClass);
     property OCVChannel[Index: Integer]: IocvDataSource read GetOCVItem; default;
   end;
 
   TocvSplitter = class(TocvDataReceiver)
   private
     FChannels: TocvChannelCollection;
-    FocvVideoSource: TocvDataSource;
-    procedure SetOpenCVVideoSource(const Value: TocvDataSource);
+    FocvVideoSource: IocvDataSource;
+    procedure SetOpenCVVideoSource(const Value: IocvDataSource);
     procedure SetChannels(const Value: TocvChannelCollection);
   protected
     procedure TakeImage(const IplImage: pIplImage); override;
@@ -66,18 +70,20 @@ Type
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
   published
-    property VideoSource: TocvDataSource Read FocvVideoSource write SetOpenCVVideoSource;
+    property VideoSource: IocvDataSource Read FocvVideoSource write SetOpenCVVideoSource;
     property Channels: TocvChannelCollection read FChannels write SetChannels;
   end;
 
 implementation
+
+Uses System.SysUtils;
 
 { TocvSplitter }
 
 constructor TocvSplitter.Create(AOwner: TComponent);
 begin
   inherited;
-  FChannels := TocvChannelCollection.Create(TocvChannel);
+  FChannels := TocvChannelCollection.Create(Self, TocvChannel);
 end;
 
 destructor TocvSplitter.Destroy;
@@ -91,7 +97,7 @@ begin
   FChannels.Assign(Value);
 end;
 
-procedure TocvSplitter.SetOpenCVVideoSource(const Value: TocvDataSource);
+procedure TocvSplitter.SetOpenCVVideoSource(const Value: IocvDataSource);
 begin
   if FocvVideoSource <> Value then
   begin
@@ -112,6 +118,19 @@ begin
 end;
 
 { TocvChannel }
+
+constructor TocvChannel.Create(Collection: TCollection);
+begin
+  inherited;
+  Name;
+end;
+
+function TocvChannel.GetName: string;
+begin
+  if Length(Trim(FName)) = 0 then
+    FName := (Collection as TocvChannelCollection).FOwner.Name + '[' + ID.ToString + ']';
+  Result := FName;
+end;
 
 procedure TocvChannel.NotifyReceiver(const IplImage: pIplImage);
 begin
@@ -154,6 +173,12 @@ begin
 end;
 
 { TocvChannelCollection }
+
+constructor TocvChannelCollection.Create(const AOwner: TComponent; const ItemClass: TCollectionItemClass);
+begin
+  inherited Create(ItemClass);
+  FOwner := AOwner;
+end;
 
 function TocvChannelCollection.GetOCVItem(Index: Integer): IocvDataSource;
 begin

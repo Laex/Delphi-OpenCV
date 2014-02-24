@@ -21,9 +21,6 @@
   // rights and limitations under the License.
   //  *************************************************************** *)
 
-// JCL_DEBUG_EXPERT_GENERATEJDBG OFF
-// JCL_DEBUG_EXPERT_INSERTJDBG OFF
-// JCL_DEBUG_EXPERT_DELETEMAPFILE OFF
 program cv_ExtractSURF;
 
 {$APPTYPE CONSOLE}
