@@ -42,8 +42,9 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <OutDir>..\bin\</OutDir>
-    <IncludePath>C:\OpenCV\build\include;$(IncludePath)</IncludePath>
+    <IncludePath>C:\OpenCV\build\include;ucl;$(IncludePath)</IncludePath>
     <LibraryPath>C:\OpenCV\build\x86\vc12\lib\;$(LibraryPath)</LibraryPath>
+    <SourcePath>$(SourcePath)</SourcePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
