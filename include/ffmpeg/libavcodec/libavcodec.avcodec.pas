@@ -3501,6 +3501,7 @@ procedure avcodec_get_frame_defaults(frame: pAVFrame); cdecl;
   // *  a custom get_buffer()).
 *)
 // void avcodec_free_frame(AVFrame **frame);
+procedure avcodec_free_frame(Var frame:pAVFrame); cdecl;
 //
 (*
   * Initialize the AVCodecContext to use the given AVCodec. Prior to using this
@@ -5082,6 +5083,7 @@ function avpicture_get_size; external avcodec_dll;
 function avcodec_open2; external avcodec_dll;
 procedure avcodec_register_all; external avcodec_dll;
 procedure avcodec_get_frame_defaults; external avcodec_dll;
+procedure avcodec_free_frame;  external avcodec_dll;
 function avcodec_decode_video2; external avcodec_dll;
 procedure av_free_packet; external avcodec_dll;
 function avcodec_close; external avcodec_dll;
