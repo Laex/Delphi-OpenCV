@@ -82,19 +82,9 @@
 // opencv\modules\ml\include\opencv2\ml.hpp
 // *************************************************************************************************
 
-{$IFDEF DEBUG}
-{$A8,B-,C+,D+,E-,F-,G+,H+,I+,J-,K-,L+,M-,N+,O-,P+,Q+,R+,S-,T-,U-,V+,W+,X+,Y+,Z1}
-{$ELSE}
-{$A8,B-,C-,D-,E-,F-,G+,H+,I+,J-,K-,L-,M-,N+,O+,P+,Q-,R-,S-,T-,U-,V+,W-,X+,Y-,Z1}
-{$ENDIF}
-{$WARN SYMBOL_DEPRECATED OFF}
-{$WARN SYMBOL_PLATFORM OFF}
-{$WARN UNIT_PLATFORM OFF}
-{$WARN UNSAFE_TYPE OFF}
-{$WARN UNSAFE_CODE OFF}
-{$WARN UNSAFE_CAST OFF}
-{$POINTERMATH ON}
 unit ml;
+
+{$POINTERMATH ON}
 
 interface
 
@@ -161,8 +151,8 @@ Uses
 
 const
   /// * Variable type */
-  CV_VAR_NUMERICAL   = 0;
-  CV_VAR_ORDERED     = 0;
+  CV_VAR_NUMERICAL = 0;
+  CV_VAR_ORDERED = 0;
   CV_VAR_CATEGORICAL = 1;
 
   //
@@ -279,12 +269,11 @@ const
   // *                          K-Nearest Neighbour Classifier                                *
   // \****************************************************************************************/
 Type
-  ICvKNearest = interface
-    ['{2F98E12A-AB71-48B5-AACC-025D0D0A3611}']
+  TCvKNearest = class
     function train(const trainData: pCvMat; const responses: pCvMat; const sampleIdx: pCvMat = nil;
-      is_regression: bool = false; maxK: Integer = 32; updateBase: bool = false): bool; stdcall;
+      is_regression: bool = false; maxK: Integer = 32; updateBase: bool = false): bool; virtual; stdcall; abstract;
     function find_nearest(const samples: pCvMat; k: Integer; results: pCvMat = nil; const neighbors: pSingle = nil;
-      neighborResponses: pCvMat = nil; dist: pCvMat = nil): float; stdcall;
+      neighborResponses: pCvMat = nil; dist: pCvMat = nil): float; virtual; stdcall; abstract;
   end;
 
   // k Nearest Neighbors
@@ -725,11 +714,11 @@ Type
   pCvDTreeSplit = ^TCvDTreeSplit;
 
   TCvDTreeSplit = packed record // struct CvDTreeSplit
-    var_idx: Integer;           // int var_idx;
-    condensed_idx: Integer;     // int condensed_idx;
-    inversed: Integer;          // int inversed;
-    quality: float;             // float quality;
-    next: pCvDTreeSplit;        // CvDTreeSplit* next;
+    var_idx: Integer; // int var_idx;
+    condensed_idx: Integer; // int condensed_idx;
+    inversed: Integer; // int inversed;
+    quality: float; // float quality;
+    next: pCvDTreeSplit; // CvDTreeSplit* next;
     case byte of
       // union
       // {
@@ -750,31 +739,31 @@ Type
   pCvDTreeNode = ^TCvDTreeNode;
 
   TCvDTreeNode = packed record // struct CvDTreeNode
-    class_idx: Integer;        // int class_idx;
-    Tn: Integer;               // int Tn;
-    value: Double;             // double value;
+    class_idx: Integer; // int class_idx;
+    Tn: Integer; // int Tn;
+    value: Double; // double value;
     //
     parent: pCvDTreeNode; // CvDTreeNode* parent;
-    left: pCvDTreeNode;   // CvDTreeNode* left;
-    right: pCvDTreeNode;  // CvDTreeNode* right;
+    left: pCvDTreeNode; // CvDTreeNode* left;
+    right: pCvDTreeNode; // CvDTreeNode* right;
     //
     split: pCvDTreeSplit; // CvDTreeSplit* split;
     //
     sample_count: Integer; // int sample_count;
-    depth: Integer;        // int depth;
-    num_valid: pInteger;   // int* num_valid;
-    offset: Integer;       // int offset;
-    buf_idx: Integer;      // int buf_idx;
-    maxlr: Double;         // double maxlr;
+    depth: Integer; // int depth;
+    num_valid: pInteger; // int* num_valid;
+    offset: Integer; // int offset;
+    buf_idx: Integer; // int buf_idx;
+    maxlr: Double; // double maxlr;
     //
     // // global pruning data
-    complexity: Integer;                      // int complexity;
-    alpha: Double;                            // double alpha;
+    complexity: Integer; // int complexity;
+    alpha: Double; // double alpha;
     node_risk, tree_risk, tree_error: Double; // double node_risk, tree_risk, tree_error;
     //
     // // cross-validation pruning data
-    cv_Tn: pInteger;        // int* cv_Tn;
-    cv_node_risk: pDouble;  // double* cv_node_risk;
+    cv_Tn: pInteger; // int* cv_Tn;
+    cv_node_risk: pDouble; // double* cv_node_risk;
     cv_node_error: pDouble; // double* cv_node_error;
     //
     // int get_num_valid(int vi) { return num_valid ? num_valid[vi] : sample_count; }
@@ -783,16 +772,16 @@ Type
     procedure set_num_valid(vi: Integer; n: Integer);
   end;
 
-  TCvDTreeParams = packed record    // struct CV_EXPORTS_W_MAP CvDTreeParams
-    max_categories: Integer;        // CV_PROP_RW int   max_categories                      ;
-    max_depth: Integer;             // CV_PROP_RW int   max_depth                           ;
-    min_sample_count: Integer;      // CV_PROP_RW int   min_sample_count                    ;
-    cv_folds: Integer;              // CV_PROP_RW int   cv_folds                            ;
-    use_surrogates: ByteBool;       // CV_PROP_RW bool  use_surrogates                      ;
-    use_1se_rule: ByteBool;         // CV_PROP_RW bool  use_1se_rule                        ;
+  TCvDTreeParams = packed record // struct CV_EXPORTS_W_MAP CvDTreeParams
+    max_categories: Integer; // CV_PROP_RW int   max_categories                      ;
+    max_depth: Integer; // CV_PROP_RW int   max_depth                           ;
+    min_sample_count: Integer; // CV_PROP_RW int   min_sample_count                    ;
+    cv_folds: Integer; // CV_PROP_RW int   cv_folds                            ;
+    use_surrogates: ByteBool; // CV_PROP_RW bool  use_surrogates                      ;
+    use_1se_rule: ByteBool; // CV_PROP_RW bool  use_1se_rule                        ;
     truncate_pruned_tree: ByteBool; // CV_PROP_RW bool  truncate_pruned_tree                ;
-    regression_accuracy: float;     // CV_PROP_RW float regression_accuracy                 ;
-    priors: pFloat;                 // const float* priors;
+    regression_accuracy: float; // CV_PROP_RW float regression_accuracy                 ;
+    priors: pFloat; // const float* priors;
     //
     // CvDTreeParams();
     {
@@ -2212,18 +2201,20 @@ Type
   // CV_EXPORTS bool initModule_ml(void);
   // }
 
-function CreateCvKNearest: ICvKNearest; overload; safecall;
-function CreateCvKNearest(const trainData: pCvMat; const responses: pCvMat; const sampleIdx: pCvMat = nil;
-  isRegression: bool = false; max_k: Integer = 32): ICvKNearest; overload; safecall;
+function CreateCvKNearest: TCvKNearest; stdcall; overload;
+function CreateCvKNearest(const trainData: pCvMat; const responses: pCvMat; const sampleIdx: pCvMat = nil; isRegression: bool = false; max_k: Integer = 32)
+  : TCvKNearest; stdcall; overload;
+procedure ReleaseCvKNearest(ex: TCvKNearest); stdcall;
 
 implementation
 
 Uses
   uLibName;
 
-function CreateCvKNearest: ICvKNearest; external OpenCV_Classes_DLL name 'CreateCvKNearest';
-function CreateCvKNearest(const trainData: pCvMat; const responses: pCvMat; const sampleIdx: pCvMat = nil;
-  isRegression: bool = false; max_k: Integer = 32): ICvKNearest; external OpenCV_Classes_DLL name 'CreateCvKNearestTR';
+function CreateCvKNearest: TCvKNearest; stdcall; external OpenCV_Classes_DLL name 'CreateCvKNearest';
+function CreateCvKNearest(const trainData: pCvMat; const responses: pCvMat; const sampleIdx: pCvMat = nil; isRegression: bool = false; max_k: Integer = 32)
+  : TCvKNearest; stdcall; external OpenCV_Classes_DLL name 'CreateCvKNearestTR';
+procedure ReleaseCvKNearest; stdcall; external OpenCV_Classes_DLL;
 
 { TCvDTreeNode }
 
