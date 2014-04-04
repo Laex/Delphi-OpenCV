@@ -38,3 +38,6 @@ __history
 /bin/carnumdetect.ini
 /bin/*.bsc
 /Bin/vclFaceRecogData
+Debug
+ipch
+*.sdf

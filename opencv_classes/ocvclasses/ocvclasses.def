@@ -1,0 +1,18 @@
+; ocvclass.def : Declares the module parameters for the DLL.
+
+LIBRARY "ocvclasses.DLL"
+DESCRIPTION  'Wrapper for OpenCV classes'
+
+EXPORTS
+    CreateMat
+	CreateMatRCT
+	ReleaseMat
+
+	CreateVideoCapture
+	CreateVideoCaptureDevice
+	CreateVideoCaptureFileName
+	ReleaseVideoCapture
+
+	CreateCvKNearest
+	CreateCvKNearestTR
+	ReleaseCvKNearest
