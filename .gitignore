@@ -6,7 +6,6 @@ __history
 *.dsk
 *.identcache
 *.~*
-*.h
 *.tvsconfig
 *.skincfg
 *.otares
