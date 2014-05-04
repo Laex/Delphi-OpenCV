@@ -40,3 +40,4 @@ __history
 Debug
 ipch
 *.sdf
+/opencv_classes/ocvclasses/Release

@@ -41,8 +41,9 @@ uses
   core_c,
   Core.types_c,
   imgproc_c,
-  imgproc.types_c,
-  contrib;
+  imgproc.types_c
+//  ,contrib
+  ;
 
 const
   CLOCKS_PER_SEC = 1000;

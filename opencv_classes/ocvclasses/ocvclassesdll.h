@@ -5,10 +5,12 @@
 #include "opencv2\core\mat.hpp"
 #include "opencv2\highgui\highgui.hpp"
 #include "opencv2\ml\ml.hpp"
+#include "opencv2\features2d\features2d.hpp"
 
+//////////////////////////////////////////////////////////////////////
 class AFX_CLASS_EXPORT TMat
 {
-private:
+protected:
 	cv::Mat FMat;
 
 public:
@@ -30,8 +32,18 @@ public:
 	virtual int __stdcall rows()  { return FMat.rows; };
 	virtual int __stdcall cols()  { return FMat.cols; };
 	virtual uchar* __stdcall data()  { return FMat.data; };
-
+	//! copies the matrix content to "m".
+	// It calls m.create(this->size(), this->type()).
+	virtual void __stdcall copyTo(TMat** m) 
+	{ 
+		cv::Mat mm = cv::Mat();
+		FMat.copyTo(mm);
+		*m = new TMat(mm);
+	}
+	virtual cv::Mat* __stdcall Mat()  { return &FMat; };
 };
+
+//////////////////////////////////////////////////////////////////////
 
 class AFX_CLASS_EXPORT TVideoCapture
 {
@@ -69,6 +81,8 @@ public:
 	virtual double __stdcall getvalue(int propId) { return FVideoCapture.get(propId); };
 };
 
+//////////////////////////////////////////////////////////////////////
+
 class AFX_CLASS_EXPORT TCvKNearest
 {
 public:
@@ -94,3 +108,82 @@ public:
 private:
 	CvKNearest FCvKNearest;
 };
+
+//////////////////////////////////////////////////////////////////////
+
+class AFX_CLASS_EXPORT TVec3d
+{
+public:
+	TVec3d() : FVec3d() {}
+	TVec3d(double v0, double v1, double v2) : FVec3d(v0, v1, v2) {} //!< 3-element vector constructor	
+	~TVec3d() { }	
+
+private:
+	cv::Vec3d FVec3d;
+};
+
+//////////////////////////////////////////////////////////////////////
+
+class AFX_CLASS_EXPORT TVec3b
+{
+public:
+	TVec3b() : FVec3b() {}
+	TVec3b(uchar v0, uchar v1, uchar v2) : FVec3b(v0, v1, v2) {} //!< 3-element vector constructor	
+	~TVec3b() { }
+
+private:
+	cv::Vec3b FVec3b;
+};
+
+//////////////////////////////////////////////////////////////////////
+class AFX_CLASS_EXPORT TPoint2i
+{
+public:
+	TPoint2i() : FPoint() {}
+	TPoint2i(int _x, int _y) : FPoint(_x, _y) {}
+	TPoint2i(cv::Point Point) : FPoint(Point) {}
+	~TPoint2i() { }
+	virtual int __stdcall getX() { return FPoint.x; };
+	virtual void __stdcall setX(int x) { FPoint.x=x; };
+	virtual int __stdcall getY() { return FPoint.y; };
+	virtual void __stdcall setY(int y) { FPoint.y = y; };
+private:
+	cv::Point FPoint;
+};
+//////////////////////////////////////////////////////////////////////
+
+//TODO: Create template
+
+class AFX_CLASS_EXPORT TVectorOfPoint2i
+{
+public:
+	TVectorOfPoint2i() : FVectorOfPoint2i() {}
+	TVectorOfPoint2i(int _Count) : FVectorOfPoint2i(_Count) {}
+	TVectorOfPoint2i(std::vector<cv::Point> v) : FVectorOfPoint2i()
+	{
+		for (int i = 0; i < v.size(); i++)
+		{
+			FVectorOfPoint2i.push_back(TPoint2i(v[i]));
+		}
+	}
+	~TVectorOfPoint2i() { }	
+private:
+	std::vector<TPoint2i> FVectorOfPoint2i;	
+};
+//////////////////////////////////////////////////////////////////////
+
+class AFX_CLASS_EXPORT TVectorOfVectorOfPoint2i
+{
+public:
+	TVectorOfVectorOfPoint2i() : FVectorOfVectorOfPoint2i() {}
+	TVectorOfVectorOfPoint2i(int _Count) : FVectorOfVectorOfPoint2i(_Count) {}
+	TVectorOfVectorOfPoint2i(std::vector<TVectorOfPoint2i> v) : FVectorOfVectorOfPoint2i(v) {}
+	~TVectorOfVectorOfPoint2i() { }
+	virtual int __stdcall size() { return FVectorOfVectorOfPoint2i.size(); };
+	virtual void __stdcall push_back(TVectorOfPoint2i _Val) { FVectorOfVectorOfPoint2i.push_back(_Val); };
+private:
+	std::vector<TVectorOfPoint2i> FVectorOfVectorOfPoint2i;
+};
+//////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////

@@ -1,0 +1,300 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{FF7C90DF-A439-4545-8CFD-E139E60D0E9D}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="Augmented reality\simplAR.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="CameraCalibrate\CameraCalibrate.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="CameraCaptureFindContours\CameraCaptureAndFindContours.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="CameraShift\CameraShift.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="CarNumDetect\CarNumDetect.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="FaceDetect\FaceDetect.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="FaceDetect\FaceDetect2.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="FaceDetectAndLockWorkstation\LockWorkstation.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="fback\fback_c.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="FrameRecon\FrameRecon.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="HandsDetect\HandsDetect.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="Hello World\HelloWorld.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="IPCamVideoCapture\IPCamVideoCapture.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="minarea\minarea.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="mmdt\mmdt.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="MotionDetect\MotionDetect.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="ObjectTracking\ObjectTrack.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="Squares\Squares.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="Stereo\Stereo.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="TrackColor\TrackColor.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="TwoCameras\TwoCameras_C.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="TwoCameras\TwoCameras_C_Thread.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="VideoProcessing\VideoProcessing.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="simplAR">
+        <MSBuild Projects="Augmented reality\simplAR.dproj"/>
+    </Target>
+    <Target Name="simplAR:Clean">
+        <MSBuild Projects="Augmented reality\simplAR.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="simplAR:Make">
+        <MSBuild Projects="Augmented reality\simplAR.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="CameraCalibrate">
+        <MSBuild Projects="CameraCalibrate\CameraCalibrate.dproj"/>
+    </Target>
+    <Target Name="CameraCalibrate:Clean">
+        <MSBuild Projects="CameraCalibrate\CameraCalibrate.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="CameraCalibrate:Make">
+        <MSBuild Projects="CameraCalibrate\CameraCalibrate.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="CameraCaptureAndFindContours">
+        <MSBuild Projects="CameraCaptureFindContours\CameraCaptureAndFindContours.dproj"/>
+    </Target>
+    <Target Name="CameraCaptureAndFindContours:Clean">
+        <MSBuild Projects="CameraCaptureFindContours\CameraCaptureAndFindContours.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="CameraCaptureAndFindContours:Make">
+        <MSBuild Projects="CameraCaptureFindContours\CameraCaptureAndFindContours.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="CameraShift">
+        <MSBuild Projects="CameraShift\CameraShift.dproj"/>
+    </Target>
+    <Target Name="CameraShift:Clean">
+        <MSBuild Projects="CameraShift\CameraShift.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="CameraShift:Make">
+        <MSBuild Projects="CameraShift\CameraShift.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="CarNumDetect">
+        <MSBuild Projects="CarNumDetect\CarNumDetect.dproj"/>
+    </Target>
+    <Target Name="CarNumDetect:Clean">
+        <MSBuild Projects="CarNumDetect\CarNumDetect.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="CarNumDetect:Make">
+        <MSBuild Projects="CarNumDetect\CarNumDetect.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="FaceDetect">
+        <MSBuild Projects="FaceDetect\FaceDetect.dproj"/>
+    </Target>
+    <Target Name="FaceDetect:Clean">
+        <MSBuild Projects="FaceDetect\FaceDetect.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="FaceDetect:Make">
+        <MSBuild Projects="FaceDetect\FaceDetect.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="FaceDetect2">
+        <MSBuild Projects="FaceDetect\FaceDetect2.dproj"/>
+    </Target>
+    <Target Name="FaceDetect2:Clean">
+        <MSBuild Projects="FaceDetect\FaceDetect2.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="FaceDetect2:Make">
+        <MSBuild Projects="FaceDetect\FaceDetect2.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="LockWorkstation">
+        <MSBuild Projects="FaceDetectAndLockWorkstation\LockWorkstation.dproj"/>
+    </Target>
+    <Target Name="LockWorkstation:Clean">
+        <MSBuild Projects="FaceDetectAndLockWorkstation\LockWorkstation.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="LockWorkstation:Make">
+        <MSBuild Projects="FaceDetectAndLockWorkstation\LockWorkstation.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="fback_c">
+        <MSBuild Projects="fback\fback_c.dproj"/>
+    </Target>
+    <Target Name="fback_c:Clean">
+        <MSBuild Projects="fback\fback_c.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="fback_c:Make">
+        <MSBuild Projects="fback\fback_c.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="FrameRecon">
+        <MSBuild Projects="FrameRecon\FrameRecon.dproj"/>
+    </Target>
+    <Target Name="FrameRecon:Clean">
+        <MSBuild Projects="FrameRecon\FrameRecon.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="FrameRecon:Make">
+        <MSBuild Projects="FrameRecon\FrameRecon.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="HandsDetect">
+        <MSBuild Projects="HandsDetect\HandsDetect.dproj"/>
+    </Target>
+    <Target Name="HandsDetect:Clean">
+        <MSBuild Projects="HandsDetect\HandsDetect.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="HandsDetect:Make">
+        <MSBuild Projects="HandsDetect\HandsDetect.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="HelloWorld">
+        <MSBuild Projects="Hello World\HelloWorld.dproj"/>
+    </Target>
+    <Target Name="HelloWorld:Clean">
+        <MSBuild Projects="Hello World\HelloWorld.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="HelloWorld:Make">
+        <MSBuild Projects="Hello World\HelloWorld.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="IPCamVideoCapture">
+        <MSBuild Projects="IPCamVideoCapture\IPCamVideoCapture.dproj"/>
+    </Target>
+    <Target Name="IPCamVideoCapture:Clean">
+        <MSBuild Projects="IPCamVideoCapture\IPCamVideoCapture.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="IPCamVideoCapture:Make">
+        <MSBuild Projects="IPCamVideoCapture\IPCamVideoCapture.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="minarea">
+        <MSBuild Projects="minarea\minarea.dproj"/>
+    </Target>
+    <Target Name="minarea:Clean">
+        <MSBuild Projects="minarea\minarea.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="minarea:Make">
+        <MSBuild Projects="minarea\minarea.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="mmdt">
+        <MSBuild Projects="mmdt\mmdt.dproj"/>
+    </Target>
+    <Target Name="mmdt:Clean">
+        <MSBuild Projects="mmdt\mmdt.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="mmdt:Make">
+        <MSBuild Projects="mmdt\mmdt.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="MotionDetect">
+        <MSBuild Projects="MotionDetect\MotionDetect.dproj"/>
+    </Target>
+    <Target Name="MotionDetect:Clean">
+        <MSBuild Projects="MotionDetect\MotionDetect.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="MotionDetect:Make">
+        <MSBuild Projects="MotionDetect\MotionDetect.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="ObjectTrack">
+        <MSBuild Projects="ObjectTracking\ObjectTrack.dproj"/>
+    </Target>
+    <Target Name="ObjectTrack:Clean">
+        <MSBuild Projects="ObjectTracking\ObjectTrack.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="ObjectTrack:Make">
+        <MSBuild Projects="ObjectTracking\ObjectTrack.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Squares">
+        <MSBuild Projects="Squares\Squares.dproj"/>
+    </Target>
+    <Target Name="Squares:Clean">
+        <MSBuild Projects="Squares\Squares.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="Squares:Make">
+        <MSBuild Projects="Squares\Squares.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Stereo">
+        <MSBuild Projects="Stereo\Stereo.dproj"/>
+    </Target>
+    <Target Name="Stereo:Clean">
+        <MSBuild Projects="Stereo\Stereo.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="Stereo:Make">
+        <MSBuild Projects="Stereo\Stereo.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="TrackColor">
+        <MSBuild Projects="TrackColor\TrackColor.dproj"/>
+    </Target>
+    <Target Name="TrackColor:Clean">
+        <MSBuild Projects="TrackColor\TrackColor.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="TrackColor:Make">
+        <MSBuild Projects="TrackColor\TrackColor.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="TwoCameras_C">
+        <MSBuild Projects="TwoCameras\TwoCameras_C.dproj"/>
+    </Target>
+    <Target Name="TwoCameras_C:Clean">
+        <MSBuild Projects="TwoCameras\TwoCameras_C.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="TwoCameras_C:Make">
+        <MSBuild Projects="TwoCameras\TwoCameras_C.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="TwoCameras_C_Thread">
+        <MSBuild Projects="TwoCameras\TwoCameras_C_Thread.dproj"/>
+    </Target>
+    <Target Name="TwoCameras_C_Thread:Clean">
+        <MSBuild Projects="TwoCameras\TwoCameras_C_Thread.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="TwoCameras_C_Thread:Make">
+        <MSBuild Projects="TwoCameras\TwoCameras_C_Thread.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="VideoProcessing">
+        <MSBuild Projects="VideoProcessing\VideoProcessing.dproj"/>
+    </Target>
+    <Target Name="VideoProcessing:Clean">
+        <MSBuild Projects="VideoProcessing\VideoProcessing.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="VideoProcessing:Make">
+        <MSBuild Projects="VideoProcessing\VideoProcessing.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="simplAR;CameraCalibrate;CameraCaptureAndFindContours;CameraShift;CarNumDetect;FaceDetect;FaceDetect2;LockWorkstation;fback_c;FrameRecon;HandsDetect;HelloWorld;IPCamVideoCapture;minarea;mmdt;MotionDetect;ObjectTrack;Squares;Stereo;TrackColor;TwoCameras_C;TwoCameras_C_Thread;VideoProcessing"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="simplAR:Clean;CameraCalibrate:Clean;CameraCaptureAndFindContours:Clean;CameraShift:Clean;CarNumDetect:Clean;FaceDetect:Clean;FaceDetect2:Clean;LockWorkstation:Clean;fback_c:Clean;FrameRecon:Clean;HandsDetect:Clean;HelloWorld:Clean;IPCamVideoCapture:Clean;minarea:Clean;mmdt:Clean;MotionDetect:Clean;ObjectTrack:Clean;Squares:Clean;Stereo:Clean;TrackColor:Clean;TwoCameras_C:Clean;TwoCameras_C_Thread:Clean;VideoProcessing:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="simplAR:Make;CameraCalibrate:Make;CameraCaptureAndFindContours:Make;CameraShift:Make;CarNumDetect:Make;FaceDetect:Make;FaceDetect2:Make;LockWorkstation:Make;fback_c:Make;FrameRecon:Make;HandsDetect:Make;HelloWorld:Make;IPCamVideoCapture:Make;minarea:Make;mmdt:Make;MotionDetect:Make;ObjectTrack:Make;Squares:Make;Stereo:Make;TrackColor:Make;TwoCameras_C:Make;TwoCameras_C_Thread:Make;VideoProcessing:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>

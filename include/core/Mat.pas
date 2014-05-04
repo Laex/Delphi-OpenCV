@@ -31,7 +31,7 @@ Uses
   highgui_c;
 
 Type
-  TOCVMat = class
+  TocvMat = class
   public
     // similar to CV_ELEM_SIZE(cvmat->type)
     function elemSize(): size_t; virtual; stdcall; abstract;
@@ -58,20 +58,21 @@ Type
     function cols: Integer; virtual; stdcall; abstract;
     // ! pointer to the data
     function data: pByte; virtual; stdcall; abstract;
+    procedure copyTo(Var m: TocvMat); virtual; stdcall; abstract;
     // ------------------------------------------------
   end;
 
-function CreateMat: TOCVMat; stdcall; overload;
-function CreateMat(rows, cols, _type: Integer): TOCVMat; stdcall; overload;
-procedure ReleaseMat(ex: TOCVMat); stdcall;
+function CreateMat: TocvMat; stdcall; overload;
+function CreateMat(rows, cols, _type: Integer): TocvMat; stdcall; overload;
+procedure ReleaseMat(ex: TocvMat); stdcall;
 
 implementation
 
 Uses
   uLibName;
 
-function CreateMat: TOCVMat; stdcall; external OpenCV_Classes_DLL name 'CreateMat'; overload;
-function CreateMat(rows, cols, _type: Integer): TOCVMat; stdcall; external OpenCV_Classes_DLL name 'CreateMatRCT'; overload;
+function CreateMat: TocvMat; stdcall; external OpenCV_Classes_DLL name 'CreateMat'; overload;
+function CreateMat(rows, cols, _type: Integer): TocvMat; stdcall; external OpenCV_Classes_DLL name 'CreateMatRCT'; overload;
 procedure ReleaseMat; external OpenCV_Classes_DLL;
 
 end.

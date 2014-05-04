@@ -97,22 +97,22 @@ Type
   // The sequence of function declarations interface must match the
   // sequence of function declarations in the project "opencv_classes" (C++)
 
-  TOCVVideoCapture = class
+  TocvVideoCapture = class
     function open(device: Integer): bool; overload; virtual; stdcall; abstract;
     function openfile(filename: pAnsiChar): bool; overload; virtual; stdcall; abstract;
     function isOpened(): bool; virtual; stdcall; abstract;
     procedure release(); virtual; stdcall; abstract;
     function grab(): bool; virtual; stdcall; abstract;
-    function retrieve(Var image: TOCVMat; flag: Integer): bool; virtual; stdcall; abstract;
-    function read(Var image: TOCVMat): bool; virtual; stdcall; abstract;
+    function retrieve(Var image: TocvMat; flag: Integer): bool; virtual; stdcall; abstract;
+    function read(Var image: TocvMat): bool; virtual; stdcall; abstract;
     function setValue(propId: Integer; value: double): bool; virtual; stdcall; abstract;
     function getValue(propId: Integer): double; virtual; stdcall; abstract;
   end;
 
-function CreateVideoCapture: TOCVVideoCapture; stdcall; overload;
-function CreateVideoCapture(device: Integer): TOCVVideoCapture; stdcall; overload;
-function CreateVideoCapture(filename: pAnsiChar): TOCVVideoCapture; stdcall; overload;
-procedure DestroyVideoCapture(ex: TOCVVideoCapture); stdcall;
+function CreateVideoCapture: TocvVideoCapture; stdcall; overload;
+function CreateVideoCapture(device: Integer): TocvVideoCapture; stdcall; overload;
+function CreateVideoCapture(filename: pAnsiChar): TocvVideoCapture; stdcall; overload;
+procedure DestroyVideoCapture(ex: TocvVideoCapture); stdcall;
 
 // Flags for namedWindow
 Const
@@ -136,7 +136,7 @@ function startWindowThread(): Integer;
 // CV_EXPORTS_W int waitKey(int delay = 0);
 function waitKey(const delay: Integer = 0): Integer;
 // CV_EXPORTS_W void imshow(const String& winname, InputArray mat);
-procedure imshow(const winname: String; const mat: TOCVMat);
+procedure imshow(const winname: String; const mat: TocvMat);
 // CV_EXPORTS_W void resizeWindow(const String& winname, int width, int height);
 procedure resizeWindow(const winname: String; const width, height: Integer);
 // CV_EXPORTS_W void moveWindow(const String& winname, int x, int y);
@@ -153,13 +153,13 @@ function createTrackbar(const trackbarname: String; const winname: String; value
   userdata: Pointer = nil): Integer;
 
 // CV_EXPORTS_W Mat imread( const string& filename, int flags=1 );
-function imread(const filename: string; flag: Integer = 1): TOCVMat;
+function imread(const filename: string; flag: Integer = 1): TocvMat;
 // CV_EXPORTS_W bool imwrite( const string& filename, InputArray img, const vector<int>& params=vector<int>());
-function imwrite(const filename: String; const img: TOCVMat): bool;
+function imwrite(const filename: String; const img: TocvMat): bool;
 
 Type
   TIplImageRecordHelper = record helper for TIplImage
-    function InitFromMat(const mat: TOCVMat): TIplImage;
+    function InitFromMat(const mat: TocvMat): TIplImage;
   end;
 
 implementation
@@ -169,20 +169,20 @@ Uses
   cvUtils,
   core_c;
 
-function CreateVideoCapture: TOCVVideoCapture; stdcall; external OpenCV_Classes_DLL name 'CreateVideoCapture'; overload;
-function CreateVideoCapture(device: Integer): TOCVVideoCapture; stdcall; external OpenCV_Classes_DLL name 'CreateVideoCaptureDevice'; overload;
-function CreateVideoCapture(filename: pAnsiChar): TOCVVideoCapture; stdcall; external OpenCV_Classes_DLL name 'CreateVideoCaptureFileName'; overload;
-procedure DestroyVideoCapture(ex: TOCVVideoCapture); stdcall; external OpenCV_Classes_DLL;
+function CreateVideoCapture: TocvVideoCapture; stdcall; external OpenCV_Classes_DLL name 'CreateVideoCapture'; overload;
+function CreateVideoCapture(device: Integer): TocvVideoCapture; stdcall; external OpenCV_Classes_DLL name 'CreateVideoCaptureDevice'; overload;
+function CreateVideoCapture(filename: pAnsiChar): TocvVideoCapture; stdcall; external OpenCV_Classes_DLL name 'CreateVideoCaptureFileName'; overload;
+procedure DestroyVideoCapture(ex: TocvVideoCapture); stdcall; external OpenCV_Classes_DLL;
 
-function _imread(const filename: pCvChar; flag: Integer): TOCVMat; external OpenCV_Classes_DLL name '_imread';
-function _imwrite(const filename: pCvChar; const img: TOCVMat): bool; external OpenCV_Classes_DLL name '_imwrite';
+function _imread(const filename: pCvChar; flag: Integer): TocvMat; external OpenCV_Classes_DLL name '_imread';
+function _imwrite(const filename: pCvChar; const img: TocvMat): bool; external OpenCV_Classes_DLL name '_imwrite';
 
-function imread(const filename: string; flag: Integer): TOCVMat;
+function imread(const filename: string; flag: Integer): TocvMat;
 begin
   Result := _imread(c_str(filename), flag);
 end;
 
-function imwrite(const filename: String; const img: TOCVMat): bool;
+function imwrite(const filename: String; const img: TocvMat): bool;
 begin
   Result := _imwrite(c_str(filename), img);
 end;
@@ -212,7 +212,7 @@ begin
   Result := cvWaitKey(delay);
 end;
 
-procedure imshow(const winname: String; const mat: TOCVMat);
+procedure imshow(const winname: String; const mat: TocvMat);
 Var
   IplImage: TIplImage;
 begin
@@ -248,7 +248,7 @@ end;
 
 { TIplImageRecordHelper }
 
-function TIplImageRecordHelper.InitFromMat(const mat: TOCVMat): TIplImage;
+function TIplImageRecordHelper.InitFromMat(const mat: TocvMat): TIplImage;
 begin
   Assert(mat.dims <= 2);
   cvInitImageHeader(@Self, CvSize(mat.cols, mat.rows), cvIplDepth(mat.flags), mat.channels);

@@ -38,7 +38,7 @@ uses
   Core.types_c,
   core_c,
   highgui_c,
-  objdetect,
+  objdetect_c,
   imgproc_c,
   imgproc.types_c,
   cvUtils;

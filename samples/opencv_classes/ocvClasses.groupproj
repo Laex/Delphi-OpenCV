@@ -1,0 +1,72 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{6D5C8898-3ADE-4F7C-B313-B5415AE8794D}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="CvKNearest\clsKNN.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="CvKNearest\cls2DPointClassification.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="TOCVMat\clsMat.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="TOCVVideoCapture\clsVideoCapture.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="clsKNN">
+        <MSBuild Projects="CvKNearest\clsKNN.dproj"/>
+    </Target>
+    <Target Name="clsKNN:Clean">
+        <MSBuild Projects="CvKNearest\clsKNN.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="clsKNN:Make">
+        <MSBuild Projects="CvKNearest\clsKNN.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="cls2DPointClassification">
+        <MSBuild Projects="CvKNearest\cls2DPointClassification.dproj"/>
+    </Target>
+    <Target Name="cls2DPointClassification:Clean">
+        <MSBuild Projects="CvKNearest\cls2DPointClassification.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="cls2DPointClassification:Make">
+        <MSBuild Projects="CvKNearest\cls2DPointClassification.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="clsMat">
+        <MSBuild Projects="TOCVMat\clsMat.dproj"/>
+    </Target>
+    <Target Name="clsMat:Clean">
+        <MSBuild Projects="TOCVMat\clsMat.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="clsMat:Make">
+        <MSBuild Projects="TOCVMat\clsMat.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="clsVideoCapture">
+        <MSBuild Projects="TOCVVideoCapture\clsVideoCapture.dproj"/>
+    </Target>
+    <Target Name="clsVideoCapture:Clean">
+        <MSBuild Projects="TOCVVideoCapture\clsVideoCapture.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="clsVideoCapture:Make">
+        <MSBuild Projects="TOCVVideoCapture\clsVideoCapture.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="clsKNN;cls2DPointClassification;clsMat;clsVideoCapture"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="clsKNN:Clean;cls2DPointClassification:Clean;clsMat:Clean;clsVideoCapture:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="clsKNN:Make;cls2DPointClassification:Make;clsMat:Make;clsVideoCapture:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>

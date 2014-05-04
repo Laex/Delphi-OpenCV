@@ -105,6 +105,6 @@ implementation
 
 Uses uLibName;
 
-function initModule_nonfree; external Nonfree_DLL index 1025;
+function initModule_nonfree; external Nonfree_DLL index 894;
 
 end.
