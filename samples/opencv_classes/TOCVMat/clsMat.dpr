@@ -33,7 +33,7 @@ uses
   core_c,
   mat;
 
-procedure Print(const M: TOCVMat);
+procedure Print(const M: TocvMat);
 
 Var
   matdata: PByte;
@@ -63,34 +63,39 @@ begin
 end;
 
 Var
-  mat: TOCVMat;
+  mat,cmat: TocvMat;
 
 begin
   try
     Writeln('--------- Create empty MAT');
     mat := CreateMat;
     Print(mat);
-    DestroyMat(mat);
+    ReleaseMat(mat);
     Readln;
     Writeln('--------- Create MAT 2x2 CV_8UC1 - 1 byte, 1 channel');
     mat := CreateMat(2, 2, CV_8UC1);
     Print(mat);
-    DestroyMat(mat);
+    ReleaseMat(mat);
     Readln;
     Writeln('--------- Create MAT 4x2 CV_32FC2 - single (4-byte floating point), 2 channel');
     mat := CreateMat(4, 2, CV_32FC2);
     Print(mat);
-    DestroyMat(mat);
+    ReleaseMat(mat);
     Readln;
     Writeln('--------- Create 2x2 MAT');
     mat := CreateMat(2, 2, CV_8UC1);
     Print(mat);
-    DestroyMat(mat);
+    ReleaseMat(mat);
     Readln;
     Writeln('--------- Create 3x3 MAT');
     mat := CreateMat(3, 3, CV_8UC1);
     Print(mat);
-    DestroyMat(mat);
+    mat.copyTo(cmat);
+    ReleaseMat(mat);
+    Readln;
+    Writeln('--------- Copy Create 3x3 MAT');
+    Print(cmat);
+    ReleaseMat(cmat);
     Readln;
 
   except

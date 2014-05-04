@@ -22,10 +22,9 @@ program ffplay;
 
 {$APPTYPE CONSOLE}
 {$R *.res}
-{$include ffmpeg.inc}
+{$i ffmpeg.inc}
 
 uses
-  System.SysUtils,
   Winapi.Windows,
   System.SysUtils,
   System.Classes,
@@ -54,8 +53,7 @@ uses
   mathematics in '..\..\libavutil\mathematics.pas',
   libavcodec.avcodec in '..\..\libavcodec\libavcodec.avcodec.pas',
   buffersrc in '..\..\libavfilter\buffersrc.pas',
-  errno in '..\..\libavutil\errno.pas',
-  cmdutils in 'cmdutils.pas';
+  errno in '..\..\libavutil\errno.pas';
 
 const
   dummy_videodriver = 'SDL_VIDEODRIVER=dummy';

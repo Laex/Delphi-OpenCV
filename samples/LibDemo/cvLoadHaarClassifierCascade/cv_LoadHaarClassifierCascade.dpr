@@ -39,7 +39,7 @@ uses
   Core.types_c,
   imgproc_c,
   imgproc.types_c,
-  objdetect;
+  objdetect_c;
 
 procedure help;
 begin

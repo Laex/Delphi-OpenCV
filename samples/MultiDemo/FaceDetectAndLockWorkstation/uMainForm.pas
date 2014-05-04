@@ -5,7 +5,7 @@ unit uMainForm;
 interface
 
 uses
-  core.types_c, core_c, highgui_c, objdetect, cvUtils,
+  core.types_c, core_c, highgui_c, objdetect_c, cvUtils,
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.StdCtrls, Vcl.Samples.Spin,
   Vcl.Menus, Vcl.ImgList;

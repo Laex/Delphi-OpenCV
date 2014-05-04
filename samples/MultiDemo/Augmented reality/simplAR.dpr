@@ -22,7 +22,7 @@
   *******************************************************************
   //Original:
   //http://dsynflo.blogspot.ru/2010/06/simplar-augmented-reality-for-opencv.html
-  //******************************************************************* *)
+  //********************************************************************)
 // JCL_DEBUG_EXPERT_GENERATEJDBG OFF
 // JCL_DEBUG_EXPERT_INSERTJDBG OFF
 // JCL_DEBUG_EXPERT_DELETEMAPFILE OFF
@@ -39,8 +39,7 @@ uses
   Core.types_c,
   calib3d_c,
   imgproc_c,
-  imgproc.types_c,
-  objdetect;
+  imgproc.types_c;
 
 const
   // Print pattern "resource\chessboard 6x5.jpg"
@@ -247,7 +246,7 @@ begin
           cvLine(image, pp[3], pp[0], CV_RGB(255, 255, 0), 2);
 
           // or simply
-           cvDrawChessboardCorners(image, b_size, corners, corner_count, found);
+          cvDrawChessboardCorners(image, b_size, corners, corner_count, found);
 
           cvShowImage('Video', image);
         end;

@@ -1,6 +1,8 @@
 
+#include <vector>
 #include "stdafx.h"
 #include "ocvclassesdll.h"
+#include "opencv2\features2d\features2d.hpp"
 
 ///////////////////////////////////////////////////
 TMat * __stdcall CreateMat()
@@ -54,3 +56,67 @@ void __stdcall ReleaseCvKNearest(TCvKNearest * ex)
 {
 	delete ex;
 };
+
+////////////////////////////////////////////////
+TVec3d * __stdcall CreateVec3d()
+{
+	return new TVec3d();
+};
+
+TVec3d * __stdcall CreateVec3d3(double v0, double v1, double v2)
+{
+	return new TVec3d(v0, v1, v2);
+};
+
+void __stdcall ReleaseVec3d(TVec3d * ex)
+{
+	delete ex;
+};
+
+////////////////////////////////////////////////
+
+TVec3b * __stdcall CreateVec3b()
+{
+	return new TVec3b();
+};
+
+TVec3b * __stdcall CreateVec3b3(uchar v0, uchar v1, uchar v2)
+{
+	return new TVec3b(v0, v1, v2);
+};
+
+void __stdcall ReleaseVec3b(TVec3d * ex)
+{
+	delete ex;
+};
+
+////////////////////////////////////////////////
+
+void __stdcall ReleasePoint2i(TPoint2i * ex)
+{
+	delete ex;
+};
+void __stdcall ReleaseVectorOfPoint2i(TVectorOfPoint2i * ex)
+{
+	delete ex;
+};
+void __stdcall ReleaseVectorOfVectorOfPoint2i(TVectorOfVectorOfPoint2i * ex)
+{
+	delete ex;
+};
+
+////////////////////////////////////////////////
+
+void __stdcall MSER(TMat m, TVectorOfVectorOfPoint2i ** ex)
+{
+	std::vector<std::vector<cv::Point> > contours;
+	cv::Mat* mm;
+	mm = m.Mat();
+	cv::MSER()(*mm, contours);
+	*ex = new TVectorOfVectorOfPoint2i();
+	for (int i = 0; i < contours.size(); i++)
+	{
+		(*ex)->push_back(TVectorOfPoint2i(contours[i]));
+	}
+
+}

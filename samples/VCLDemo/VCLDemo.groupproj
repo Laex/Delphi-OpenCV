@@ -1,0 +1,108 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{CB85ACB3-6386-458D-B2C0-68225234650D}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="vclCameraCapture\VCLCameraCapture.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="vclChessboardCorners\VCLChessboardCorners.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="vclColorTracking\vclColorTracking.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="vclColorTracking2\vclColorTracking2.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="vclIPCameraCapture\VCLIPCameraCapture.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="vclOpenCVandOpenGL\vclOCVaOGL.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="vclPCArecognition\vclPCArecognition.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="VCLCameraCapture">
+        <MSBuild Projects="vclCameraCapture\VCLCameraCapture.dproj"/>
+    </Target>
+    <Target Name="VCLCameraCapture:Clean">
+        <MSBuild Projects="vclCameraCapture\VCLCameraCapture.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="VCLCameraCapture:Make">
+        <MSBuild Projects="vclCameraCapture\VCLCameraCapture.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="VCLChessboardCorners">
+        <MSBuild Projects="vclChessboardCorners\VCLChessboardCorners.dproj"/>
+    </Target>
+    <Target Name="VCLChessboardCorners:Clean">
+        <MSBuild Projects="vclChessboardCorners\VCLChessboardCorners.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="VCLChessboardCorners:Make">
+        <MSBuild Projects="vclChessboardCorners\VCLChessboardCorners.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="vclColorTracking">
+        <MSBuild Projects="vclColorTracking\vclColorTracking.dproj"/>
+    </Target>
+    <Target Name="vclColorTracking:Clean">
+        <MSBuild Projects="vclColorTracking\vclColorTracking.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="vclColorTracking:Make">
+        <MSBuild Projects="vclColorTracking\vclColorTracking.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="vclColorTracking2">
+        <MSBuild Projects="vclColorTracking2\vclColorTracking2.dproj"/>
+    </Target>
+    <Target Name="vclColorTracking2:Clean">
+        <MSBuild Projects="vclColorTracking2\vclColorTracking2.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="vclColorTracking2:Make">
+        <MSBuild Projects="vclColorTracking2\vclColorTracking2.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="VCLIPCameraCapture">
+        <MSBuild Projects="vclIPCameraCapture\VCLIPCameraCapture.dproj"/>
+    </Target>
+    <Target Name="VCLIPCameraCapture:Clean">
+        <MSBuild Projects="vclIPCameraCapture\VCLIPCameraCapture.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="VCLIPCameraCapture:Make">
+        <MSBuild Projects="vclIPCameraCapture\VCLIPCameraCapture.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="vclOCVaOGL">
+        <MSBuild Projects="vclOpenCVandOpenGL\vclOCVaOGL.dproj"/>
+    </Target>
+    <Target Name="vclOCVaOGL:Clean">
+        <MSBuild Projects="vclOpenCVandOpenGL\vclOCVaOGL.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="vclOCVaOGL:Make">
+        <MSBuild Projects="vclOpenCVandOpenGL\vclOCVaOGL.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="vclPCArecognition">
+        <MSBuild Projects="vclPCArecognition\vclPCArecognition.dproj"/>
+    </Target>
+    <Target Name="vclPCArecognition:Clean">
+        <MSBuild Projects="vclPCArecognition\vclPCArecognition.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="vclPCArecognition:Make">
+        <MSBuild Projects="vclPCArecognition\vclPCArecognition.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="VCLCameraCapture;VCLChessboardCorners;vclColorTracking;vclColorTracking2;VCLIPCameraCapture;vclOCVaOGL;vclPCArecognition"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="VCLCameraCapture:Clean;VCLChessboardCorners:Clean;vclColorTracking:Clean;vclColorTracking2:Clean;VCLIPCameraCapture:Clean;vclOCVaOGL:Clean;vclPCArecognition:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="VCLCameraCapture:Make;VCLChessboardCorners:Make;vclColorTracking:Make;vclColorTracking2:Make;VCLIPCameraCapture:Make;vclOCVaOGL:Make;vclPCArecognition:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>

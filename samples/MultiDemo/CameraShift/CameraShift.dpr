@@ -19,7 +19,7 @@
   // "AS IS" basis, WITHOUT WARRANTY OF ANY KIND, either express or
   // implied. See the License for the specific language governing
   // rights and limitations under the License.
-  ******************************************************************* *)
+  ********************************************************************)
 // JCL_DEBUG_EXPERT_GENERATEJDBG OFF
 // JCL_DEBUG_EXPERT_INSERTJDBG OFF
 // JCL_DEBUG_EXPERT_DELETEMAPFILE OFF
@@ -166,8 +166,8 @@ begin
       begin
         val := cvRound(cvGetReal1D(hist^.bins, i) * histimg^.height / 255);
         color := hsv2rgb(i * 180.0 / hdims);
-        cvRectangle(histimg, cvPoint(i * bin_w, histimg^.height), cvPoint((i + 1) * bin_w, histimg^.height - val),
-          color, -1, 8, 0);
+        cvRectangle(histimg, cvPoint(i * bin_w, histimg^.height), cvPoint((i + 1) * bin_w, histimg^.height - val), color,
+          -1, 8, 0);
       end;
     end;
 
@@ -175,19 +175,18 @@ begin
     cvAnd(backproject, mask, backproject, nil);
 
     // Writeln(Format('Track window: x:%d y:%d w:%d h:%d', [track_window.x, track_window.y, track_window.width,track_window.height]));
-    cvCamShift(backproject, track_window, cvTermCriteria((CV_TERMCRIT_EPS or CV_TERMCRIT_ITER), 10, 1), @track_comp,
-      @track_box);
+    cvCamShift(backproject, track_window, cvTermCriteria((CV_TERMCRIT_EPS or CV_TERMCRIT_ITER), 10, 1), @track_comp, @track_box);
     track_window := track_comp.rect;
 
     if (backproject_mode <> 0) then
       cvCvtColor(backproject, image, CV_GRAY2BGR);
     if (image.origin <> IPL_ORIGIN_TL) then
       track_box.angle := -track_box.angle;
-    { draw an ellipse around the tracked object }
+    {draw an ellipse around the tracked object}
     cvEllipseBox(image, track_box, CV_RGB(255, 0, 0), 3, CV_AA, 0);
   end;
 
-  { draw a rectangle on the area selected with mouse }
+  {draw a rectangle on the area selected with mouse}
   if (select_object > 0) and (selection.width > 0) and (selection.height > 0) then
   begin
     cvSetImageROI(image, selection);
@@ -195,7 +194,7 @@ begin
     cvResetImageROI(image);
   end;
 
-  { visualize the camera image in the window }
+  {visualize the camera image in the window}
   cvShowImage('Capture', image);
   cvShowImage('Histogram', histimg);
 end;
@@ -235,39 +234,39 @@ Var
   c: integer;
 
 begin
-   try
-  SingleArray2D[0] := p_SingleArray1D;
-  // окно для отображения
-  cvNamedWindow('Capture', CV_WINDOW_AUTOSIZE);
-  cvNamedWindow('Histogram', CV_WINDOW_AUTOSIZE);
-  cvCreateTrackbar('VMinPos', 'Capture', @tbVminPosition, 256, nil);
-  cvCreateTrackbar('VMaxPos', 'Capture', @tbVmaxPosition, 256, nil);
-  cvCreateTrackbar('SMinPos', 'Capture', @tbSMinPosition, 256, nil);
-  cvSetMouseCallback('Capture', myMouseCallback, image);
-  capture := cvCreateCameraCapture(CV_CAP_ANY);
-  if not assigned(capture) then
-    Halt;
+  try
+    SingleArray2D[0] := p_SingleArray1D;
+    // окно для отображения
+    cvNamedWindow('Capture', CV_WINDOW_AUTOSIZE);
+    cvNamedWindow('Histogram', CV_WINDOW_AUTOSIZE);
+    cvCreateTrackbar('VMinPos', 'Capture', @tbVminPosition, 256, nil);
+    cvCreateTrackbar('VMaxPos', 'Capture', @tbVmaxPosition, 256, nil);
+    cvCreateTrackbar('SMinPos', 'Capture', @tbSMinPosition, 256, nil);
+    cvSetMouseCallback('Capture', myMouseCallback, image);
+    capture := cvCreateCameraCapture(CV_CAP_ANY);
+    if not assigned(capture) then
+      Halt;
 
-  While True do
-  begin
-    main_cycle;
-    c := cvWaitKey(33);
-    if c = 27 then
-      Break
-    else if c = Ord('b') then
-      backproject_mode := backproject_mode xor 1
-    else if c = Ord('c') then
+    While True do
     begin
-      track_object := 0;
-      cvZero(histimg);
+      main_cycle;
+      c := cvWaitKey(33);
+      if c = 27 then
+        Break
+      else if c = Ord('b') then
+        backproject_mode := backproject_mode xor 1
+      else if c = Ord('c') then
+      begin
+        track_object := 0;
+        cvZero(histimg);
+      end;
     end;
-  end;
 
-  cvReleaseCapture(capture);
-  cvDestroyAllWindows;
+    cvReleaseCapture(capture);
+    cvDestroyAllWindows;
   except
-   on E: Exception do
-   Writeln(E.ClassName, ': ', E.Message);
-   end;
+    on E: Exception do
+      Writeln(E.ClassName, ': ', E.Message);
+  end;
 
 end.
