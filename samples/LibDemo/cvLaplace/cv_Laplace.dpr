@@ -55,7 +55,7 @@ begin
 
     // окно для отображения картинки
     cvNamedWindow('original', CV_WINDOW_AUTOSIZE);
-    cvNamedWindow('cvLaplace', CV_WINDOW_AUTOSIZE);
+    cvNamedWindow('cvLaplace8b', CV_WINDOW_AUTOSIZE);
 
     // применяем оператор Лаплccа
     cvLaplace(image, dst, aperture);
@@ -65,7 +65,7 @@ begin
 
     // показываем картинку
     cvShowImage('original', image);
-    cvShowImage('cvLaplace', dst2);
+    cvShowImage('cvLaplace8b', dst2);
 
     cvWaitKey(0);
 

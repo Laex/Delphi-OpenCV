@@ -2,7 +2,7 @@
     <PropertyGroup>
         <ProjectGuid>{67FAAD9E-2FAD-44C3-8F98-56827C3D1CE8}</ProjectGuid>
         <MainSource>OpenCV.dpk</MainSource>
-        <ProjectVersion>15.3</ProjectVersion>
+        <ProjectVersion>15.4</ProjectVersion>
         <FrameworkType>VCL</FrameworkType>
         <Base>True</Base>
         <Config Condition="'$(Config)'==''">Debug</Config>
@@ -50,6 +50,7 @@
         <Base>true</Base>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base)'!=''">
+        <SanitizedProjectName>OpenCV</SanitizedProjectName>
         <GenPackage>true</GenPackage>
         <DCC_CBuilderOutput>All</DCC_CBuilderOutput>
         <GenDll>true</GenDll>
@@ -103,7 +104,6 @@
         <DCCReference Include="uOCVView.pas"/>
         <DCCReference Include="uOCVImageOperation.pas"/>
         <DCCReference Include="uOCVRegister.pas"/>
-        <DCCReference Include="uOCVSplitter.pas"/>
         <DCCReference Include="uOCVIOProperties.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>

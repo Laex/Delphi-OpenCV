@@ -30,13 +30,17 @@ object MainForm: TMainForm
     Width = 145
     Height = 21
     Style = csDropDownList
-    TabOrder = 1
+    TabOrder = 0
     OnChange = cbb1Change
     Items.Strings = (
       'None'
       'Convert to grayscale'
       'Canny'
-      'Smooth')
+      'Smooth'
+      'Erode'
+      'Dilate'
+      'Laplace'
+      'Sobel')
   end
   object chk1: TCheckBox
     Left = 308
@@ -54,6 +58,7 @@ object MainForm: TMainForm
     Top = 4
     Width = 294
     Height = 269
+    VideoSource = ocvcmr1
   end
   object ocvw2: TocvView
     Left = 8
@@ -63,26 +68,24 @@ object MainForm: TMainForm
     VideoSource = ocvmgprtn1
   end
   object ocvcmr1: TocvCamera
-    Enabled = True
-    Resolution = r1280x720
+    Resolution = r640x360
     Left = 368
-    Top = 132
+    Top = 192
   end
   object ocvmgprtn1: TocvImageOperation
-    PropertiesClassName = 'TocvImageOperation_None'
-    Left = 368
-    Top = 228
-  end
-  object ocvspltr1: TocvSplitter
     VideoSource = ocvcmr1
-    Channels = <
+    OperationClassName = 'TocvLaplace'
+    Operations = <
       item
-        Name = 'ocvspltr1[0]'
+        OperationClassName = 'TovcErode'
       end
       item
-        Name = 'ocvspltr1[1]'
+        OperationClassName = 'TovcImageOperation_Canny'
+        Operation.Threshold1 = 10.000000000000000000
+        Operation.Threshold2 = 100.000000000000000000
+        Operation.ApertureSize = 3
       end>
     Left = 368
-    Top = 180
+    Top = 228
   end
 end

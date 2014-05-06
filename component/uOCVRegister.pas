@@ -33,8 +33,7 @@ Uses
   System.Classes,
   uOCVCamera,
   uOCVView,
-  uOCVImageOperation,
-  uOCVSplitter;
+  uOCVImageOperation;
 
 procedure Register;
 begin
@@ -42,9 +41,7 @@ begin
   RegisterComponents('OpenCV', [TocvCamera]);
   RegisterComponents('OpenCV', [TocvCamera]);
   RegisterComponents('OpenCV', [TocvView]);
-  RegisterComponents('OpenCV', [TocvSplitter]);
-  RegisterClasses([TocvImageOperation_None, TocvImageOperation_GrayScale, TovcImageOperation_Canny, TovcImageOperation_Smooth,
-    TocvChannel]);
+  RegisterClasses([TocvImageOperation_None, TocvImageOperation_GrayScale, TovcImageOperation_Canny, TovcImageOperation_Smooth]);
 end;
 
 end.

@@ -28,7 +28,7 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, uOCVTypes, uOCVImageOperation,
-  uOCVCamera, uOCVView, Vcl.StdCtrls, uOCVSplitter;
+  core.types_c, uOCVCamera, uOCVView, Vcl.StdCtrls;
 
 type
   TMainForm = class(TForm)
@@ -39,7 +39,6 @@ type
     ocvw1: TocvView;
     ocvmgprtn1: TocvImageOperation;
     ocvw2: TocvView;
-    ocvspltr1: TocvSplitter;
     procedure FormCreate(Sender: TObject);
     procedure cbb1Change(Sender: TObject);
     procedure chk1Click(Sender: TObject);
@@ -55,13 +54,14 @@ implementation
 {$R *.dfm}
 
 Const
-  IOClass: array [0 .. 3] of TocvImageOperationClass = (
-    { } TocvImageOperation_None, TocvImageOperation_GrayScale,
-    { } TovcImageOperation_Canny, TovcImageOperation_Smooth);
+  IOClass: array [0 .. 7] of TocvImageOperationClass = (
+    {} TocvImageOperation_None, TocvImageOperation_GrayScale,
+    {} TovcImageOperation_Canny, TovcImageOperation_Smooth,
+    {} TovcErode, TovcDilate, TocvLaplace, TovcSobel);
 
 procedure TMainForm.cbb1Change(Sender: TObject);
 begin
-  ocvmgprtn1.PropertiesClass := IOClass[cbb1.ItemIndex];
+  ocvmgprtn1.OperationClass := IOClass[cbb1.ItemIndex];
 end;
 
 procedure TMainForm.chk1Click(Sender: TObject);
@@ -71,12 +71,9 @@ end;
 
 procedure TMainForm.FormCreate(Sender: TObject);
 begin
-  ocvw1.VideoSource := ocvspltr1.Channels[0];
-  ocvmgprtn1.VideoSource := ocvspltr1.Channels[1];
-  ocvw2.VideoSource := ocvmgprtn1;
   cbb1.ItemIndex := 0;
-  chk1.Checked := ocvcmr1.Enabled;
-  ocvmgprtn1.PropertiesClass := IOClass[cbb1.ItemIndex];
+  ocvmgprtn1.OperationClass := IOClass[cbb1.ItemIndex];
+  ocvcmr1.Enabled := True;
 end;
 
 end.

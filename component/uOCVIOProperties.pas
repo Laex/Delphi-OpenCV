@@ -39,32 +39,28 @@ Type
     procedure SetValue(const Value: string); override;
   end;
 
-  TVideoSourceProperty = class(TInterfaceProperty)
-  private
-    FGetValuesStrProc: TGetStrProc;
-  protected
-    procedure ReceiveComponentNames(const S: string);
-  public
-    function GetAttributes: TPropertyAttributes; override;
-    procedure GetValues(Proc: TGetStrProc); override;
-    procedure SetValue(const Value: string); override;
-    function GetValue: string; override;
-  end;
+  // TVideoSourceProperty = class(TInterfaceProperty)
+  // private
+  // FGetValuesStrProc: TGetStrProc;
+  // protected
+  // procedure ReceiveComponentNames(const S: string);
+  // public
+  // function GetAttributes: TPropertyAttributes; override;
+  // procedure GetValues(Proc: TGetStrProc); override;
+  // procedure SetValue(const Value: string); override;
+  // function GetValue: string; override;
+  // end;
 
 implementation
 
 Uses
-
-  VCL.Dialogs,
-
   System.SysUtils,
   System.TypInfo,
   System.RTLConsts,
   uOCVImageOperation,
-  uOCVSplitter,
   uOCVTypes;
 
-{ TImageOperationProperty }
+{TImageOperationProperty}
 
 function TImageOperationProperty.GetAttributes: TPropertyAttributes;
 begin
@@ -79,12 +75,12 @@ end;
 
 procedure TImageOperationProperty.GetValues(Proc: TGetStrProc);
 var
-  i: Integer;
+  I: Integer;
   rIO: TRegisteredImageOperations;
 begin
   rIO := GetRegisteredImageOperations;
-  for i := 0 to rIO.Count - 1 do
-    Proc(rIO[i]);
+  for I := 0 to rIO.Count - 1 do
+    Proc(rIO[I]);
 end;
 
 procedure TImageOperationProperty.SetValue(const Value: string);
@@ -93,102 +89,25 @@ Var
   i: Integer;
   AIntf: IocvEditorPropertiesContainer;
 begin
-  APropertiesClass := GetRegisteredImageOperations.FindByClassName(Value);
+  APropertiesClass := GetRegisteredImageOperations.FindByName(Value);
   if APropertiesClass = nil then
     APropertiesClass := TocvImageOperationClass(GetRegisteredImageOperations.Objects[0]);
+
   for i := 0 to PropCount - 1 do
     if Supports(GetComponent(i), IocvEditorPropertiesContainer, AIntf) then
       AIntf.SetPropertiesClass(APropertiesClass);
+
   Modified;
-end;
-
-{ TVideoSourceProperty }
-
-function TVideoSourceProperty.GetAttributes: TPropertyAttributes;
-begin
-  Result := inherited GetAttributes;
-  Result := Result - [paReadOnly] + [paValueList, paSortList, paRevertable];
-end;
-
-function TVideoSourceProperty.GetValue: string;
-Var
-  AInterface: IInterface;
-  ICR: IocvDataSource;
-begin
-  AInterface := GetIntfValue;
-  if (AInterface <> nil) and Supports(AInterface, IocvDataSource, ICR) then
-    Result := ICR.GetName
-  else
-    Result := '';
-end;
-
-procedure TVideoSourceProperty.GetValues(Proc: TGetStrProc);
-begin
-  FGetValuesStrProc := Proc;
-  try
-    Designer.GetComponentNames(GetTypeData(TypeInfo(TComponent)), ReceiveComponentNames);
-  finally
-    FGetValuesStrProc := nil;
-  end;
-end;
-
-procedure TVideoSourceProperty.ReceiveComponentNames(const S: string);
-var
-  Temp: TComponent;
-  Intf: IInterface;
-  i: Integer;
-begin
-  Temp := Designer.GetComponent(S);
-  if Assigned(FGetValuesStrProc) and Assigned(Temp) then
-  begin
-    if Supports(TObject(Temp), GetTypeData(GetPropType)^.Guid, Intf) then
-      FGetValuesStrProc(S);
-    if not HasInstance(Temp) then
-    if Temp is TocvSplitter then
-      for i := 0 to (Temp as TocvSplitter).Channels.Count - 1 do
-        FGetValuesStrProc(S + '[' + i.ToString + ']');
-  end;
-end;
-
-procedure TVideoSourceProperty.SetValue(const Value: string);
-var
-  Intf: IInterface;
-  Component: TComponent;
-  CompName: string;
-  n1, n2, ChanIndex: Integer;
-  SpComp: TocvSplitter;
-begin
-  if Value = '' then
-    Intf := nil
-  else
-  begin
-    if Pos('[', Value) <> 0 then
-    begin
-      CompName := Copy(Value, 1, Pos('[', Value) - 1);
-      n1 := Pos('[', Value);
-      n2 := Pos(']', Value);
-      ChanIndex := Copy(Value, n1 + 1, n2 - n1 - 1).ToInteger;
-      SpComp := Designer.GetComponent(CompName) as TocvSplitter;
-      if Assigned(SpComp) and (ChanIndex < SpComp.Channels.Count) then
-        Intf := SpComp.Channels[ChanIndex]
-      else
-        raise EDesignPropertyError.CreateRes(@SInvalidPropertyValue);
-    end
-    else
-    begin
-      Component := Designer.GetComponent(Value);
-      if (Component = nil) or (not Supports(TObject(Component), GetTypeData(GetPropType)^.Guid, Intf)) then
-        raise EDesignPropertyError.CreateRes(@SInvalidPropertyValue);
-    end;
-  end;
-  SetIntfValue(Intf);
 end;
 
 initialization
 
-RegisterPropertyEditor(TypeInfo(TocvCustomImageOperation), TocvImageOperation, 'Properties', TImageOperationProperty);
-RegisterPropertyEditor(TypeInfo(string), TocvImageOperation, 'PropertiesClassName', nil);
+//RegisterPropertyEditor(TypeInfo(TocvCustomImageOperation), nil, 'Operation', TImageOperationProperty);
+//UnlistPublishedProperty(nil, 'OperationClassName');
 
-RegisterPropertyEditor(TypeInfo(IocvDataSource), nil, 'VideoSource', TVideoSourceProperty);
+RegisterPropertyEditor(TypeInfo(TocvCustomImageOperation), TocvImageOperation, 'Operation', TImageOperationProperty);
+RegisterPropertyEditor(TypeInfo(TocvCustomImageOperation), TocvImageOperationCollectionItem, 'Operation', TImageOperationProperty);
+UnlistPublishedProperty(TocvImageOperation, 'OperationClassName');
+UnlistPublishedProperty(TocvImageOperationCollectionItem, 'OperationClassName');
 
 end.

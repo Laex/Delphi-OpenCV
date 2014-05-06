@@ -39,7 +39,7 @@ type
     CS: TCriticalSection;
     FOwner: TComponent;
   protected
-    procedure LockTransform;
+    function LockTransform: Boolean;
     procedure UnlockTransform;
   public
     constructor Create(AOwner: TComponent); virtual;
@@ -79,6 +79,70 @@ type
     property ApertureSize: Integer Read FApertureSize write SetApertureSize default 100;
   end;
 
+  TocvErodeDilateMode = (SHAPE_RECT, SHAPE_CROSS, SHAPE_ELLIPSE, SHAPE_CUSTOM);
+
+  TovcCustomErodeDilate = class(TocvCustomImageOperation)
+  protected
+    procedure AssignTo(Dest: TPersistent); override;
+  private
+    FRadius: Integer;
+    FIterations: Integer;
+    FMorphOp: TocvErodeDilateMode;
+    procedure SetRadius(const Value: Integer);
+    procedure SetIterations(const Value: Integer);
+    procedure SetMorphOp(const Value: TocvErodeDilateMode);
+  protected
+  public
+    constructor Create(AOwner: TComponent); override;
+  published
+    property Radius: Integer Read FRadius write SetRadius default 5;
+    property Iterations: Integer Read FIterations write SetIterations default 5;
+    property MorphOp: TocvErodeDilateMode read FMorphOp write SetMorphOp default SHAPE_RECT;
+  end;
+
+  TovcErode = class(TovcCustomErodeDilate)
+  public
+    function Transform(const Source: pIplImage; var Destanation: pIplImage): Boolean; override;
+  end;
+
+  TovcDilate = class(TovcCustomErodeDilate)
+  public
+    function Transform(const Source: pIplImage; var Destanation: pIplImage): Boolean; override;
+  end;
+
+  TocvLaplace = class(TocvCustomImageOperation)
+  protected
+    procedure AssignTo(Dest: TPersistent); override;
+  private
+    FAperture: Integer;
+    procedure SetAperture(const Value: Integer);
+  public
+    constructor Create(AOwner: TComponent); override;
+    function Transform(const Source: pIplImage; var Destanation: pIplImage): Boolean; override;
+  published
+    property Aperture: Integer read FAperture write SetAperture default 3;
+  end;
+
+  TovcSobel = class(TocvCustomImageOperation)
+  protected
+    procedure AssignTo(Dest: TPersistent); override;
+  private
+    FXOrder: Integer;
+    FYOrder: Integer;
+    FAperture: Integer;
+    procedure SetAperture(const Value: Integer);
+    procedure SetXOrder(const Value: Integer);
+    procedure SetYOrder(const Value: Integer);
+  protected
+  public
+    constructor Create(AOwner: TComponent); override;
+    function Transform(const Source: pIplImage; var Destanation: pIplImage): Boolean; override;
+  published
+    property XOrder: Integer read FXOrder write SetXOrder default 1;
+    property YOrder: Integer read FYOrder write SetYOrder default 1;
+    property Aperture: Integer read FAperture write SetAperture default 3;
+  end;
+
   TocvSmoothOperations = (BLUR_NO_SCALE, BLUR, GAUSSIAN, MEDIAN, BILATERAL);
 
   TovcImageOperation_Smooth = class(TocvCustomImageOperation)
@@ -113,12 +177,49 @@ type
     procedure SetPropertiesClass(Value: TocvImageOperationClass);
   end;
 
+  TocvImageOperationCollectionItem = class(TCollectionItem, IocvEditorPropertiesContainer)
+  private
+    CS: TCriticalSection;
+    FOperation: TocvCustomImageOperation;
+    FOperationClass: TocvImageOperationClass;
+    function LockTransform: Boolean;
+    procedure UnlockTransform;
+    procedure CreateProperties;
+    procedure DestroyProperties;
+    procedure RecreateProperties;
+    function GetPropertiesClassName: string;
+    procedure SetProperties(const Value: TocvCustomImageOperation);
+    procedure SetPropertiesClass(Value: TocvImageOperationClass);
+    procedure SetPropertiesClassName(const Value: string);
+  protected
+    function GetProperties: TocvCustomImageOperation;
+    function GetPropertiesClass: TocvImageOperationClass;
+    // function GetOwner: TComponent;
+    function GetDisplayName: string; override;
+    {IInterface}
+    function QueryInterface(const IID: TGUID; out Obj): HResult; stdcall;
+    function _AddRef: Integer; stdcall;
+    function _Release: Integer; stdcall;
+  public
+    constructor Create(Collection: TCollection); override;
+    destructor Destroy; override;
+    function Transform(const Source: pIplImage; var Destanation: pIplImage): Boolean;
+    procedure Assign(Source: TPersistent); override;
+    property OperationClass: TocvImageOperationClass read GetPropertiesClass write SetPropertiesClass;
+  published
+    property OperationClassName: string read GetPropertiesClassName write SetPropertiesClassName;
+    property Operation: TocvCustomImageOperation read GetProperties write SetProperties;
+  end;
+
+  TocvImageOperationCollection = class(TOwnedCollection);
+
   TocvImageOperation = class(TocvDataSourceAndReceiver, IocvEditorPropertiesContainer)
   private
     CS: TCriticalSection;
-    FProperties: TocvCustomImageOperation;
-    FPropertiesClass: TocvImageOperationClass;
-    procedure LockTransform;
+    FOperation: TocvCustomImageOperation;
+    FOperationClass: TocvImageOperationClass;
+    FOperations: TocvImageOperationCollection;
+    function LockTransform: Boolean;
     procedure UnlockTransform;
     procedure CreateProperties;
     procedure DestroyProperties;
@@ -134,15 +235,17 @@ type
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
-    property PropertiesClass: TocvImageOperationClass read GetPropertiesClass write SetPropertiesClass;
+    property OperationClass: TocvImageOperationClass read GetPropertiesClass write SetPropertiesClass;
   published
-    property PropertiesClassName: string read GetPropertiesClassName write SetPropertiesClassName;
-    property Properties: TocvCustomImageOperation read GetProperties write SetProperties;
+    property OperationClassName: string read GetPropertiesClassName write SetPropertiesClassName;
+    property Operation: TocvCustomImageOperation read GetProperties write SetProperties;
+    property Operations: TocvImageOperationCollection Read FOperations write FOperations;
   end;
 
   TRegisteredImageOperations = class(TStringList)
   public
     function FindByClassName(const ClassName: String): TocvImageOperationClass;
+    function FindByName(const Name: String): TocvImageOperationClass;
     function GetNameByClass(const IOClass: TClass): String;
     procedure RegisterIOClass(const IOClass: TClass; const ClassName: String);
   end;
@@ -166,32 +269,32 @@ begin
   Result := _RegisteredImageOperations;
 end;
 
-{ TocvImageOperation }
+{TocvImageOperation}
 
 procedure TocvImageOperation.SetProperties(const Value: TocvCustomImageOperation);
 begin
-  if (FProperties <> nil) and (Value <> nil) then
-    FProperties.Assign(Value);
+  if (FOperation <> nil) and (Value <> nil) then
+    FOperation.Assign(Value);
 end;
 
 procedure TocvImageOperation.SetPropertiesClass(Value: TocvImageOperationClass);
 begin
-  if FPropertiesClass <> Value then
+  if FOperationClass <> Value then
   begin
-    FPropertiesClass := Value;
+    FOperationClass := Value;
     RecreateProperties;
   end;
 end;
 
 procedure TocvImageOperation.CreateProperties;
 begin
-  if FPropertiesClass <> nil then
-    FProperties := FPropertiesClass.Create(Self);
+  if FOperationClass <> nil then
+    FOperation := FOperationClass.Create(Self);
 end;
 
 procedure TocvImageOperation.DestroyProperties;
 begin
-  FreeAndNil(FProperties);
+  FreeAndNil(FOperation);
 end;
 
 procedure TocvImageOperation.RecreateProperties;
@@ -202,59 +305,74 @@ end;
 
 procedure TocvImageOperation.SetPropertiesClassName(const Value: string);
 begin
-  PropertiesClass := TocvImageOperationClass(GetRegisteredImageOperations.FindByClassName(Value));
+  OperationClass := TocvImageOperationClass(GetRegisteredImageOperations.FindByClassName(Value));
 end;
 
 constructor TocvImageOperation.Create(AOwner: TComponent);
 begin
   inherited;
   CS := TCriticalSection.Create;
+  FOperations := TocvImageOperationCollection.Create(Self, TocvImageOperationCollectionItem);
 end;
 
 destructor TocvImageOperation.Destroy;
 begin
-  LockTransform;
-  if Assigned(FProperties) then
-    FreeAndNil(FProperties);
+  if LockTransform then
+    if Assigned(FOperation) then
+      FreeAndNil(FOperation);
+  FOperations.Free;
   CS.Free;
   inherited;
 end;
 
 function TocvImageOperation.GetProperties: TocvCustomImageOperation;
 begin
-  if not Assigned(FProperties) then
-    FProperties := TocvImageOperation_None.Create(Self);
-  Result := FProperties;
+  if not Assigned(FOperation) then
+    FOperation := TocvImageOperation_None.Create(Self);
+  Result := FOperation;
 end;
 
 function TocvImageOperation.GetPropertiesClass: TocvImageOperationClass;
 begin
-  Result := TocvImageOperationClass(Properties.ClassType);
+  Result := TocvImageOperationClass(Operation.ClassType);
 end;
 
 function TocvImageOperation.GetPropertiesClassName: string;
 begin
-  Result := Properties.ClassName;
+  Result := Operation.ClassName;
 end;
 
-procedure TocvImageOperation.LockTransform;
+function TocvImageOperation.LockTransform: Boolean;
 begin
-  CS.Enter;
+  Result := CS.TryEnter;
 end;
 
 procedure TocvImageOperation.TakeImage(const IplImage: pIplImage);
 var
   Destanation: pIplImage;
+  SourceDestanation: pIplImage;
+  i: Integer;
 begin
-  if Assigned(FProperties) and FProperties.Transform(IplImage, Destanation) then
-  begin
-    LockTransform;
+  if LockTransform then
     try
-      NotifyReceiver(Destanation);
+      if FOperations.Count > 0 then
+      begin
+        SourceDestanation := IplImage;
+        for i := 0 to FOperations.Count - 1 do
+        begin
+          if not(FOperations.Items[i] as TocvImageOperationCollectionItem).Transform(SourceDestanation, Destanation) then
+            Exit;
+          if SourceDestanation <> IplImage then
+            cvReleaseImage(SourceDestanation);
+          SourceDestanation := Destanation;
+        end;
+        NotifyReceiver(SourceDestanation);
+      end
+      else if Assigned(FOperation) and FOperation.Transform(IplImage, Destanation) then
+        NotifyReceiver(Destanation);
     finally
       UnlockTransform;
     end;
-  end;
 end;
 
 procedure TocvImageOperation.UnlockTransform;
@@ -262,7 +380,7 @@ begin
   CS.Leave;
 end;
 
-{ TovcImageOperationCanny }
+{TovcImageOperationCanny}
 
 procedure TovcImageOperation_Canny.AssignTo(Dest: TPersistent);
 begin
@@ -276,7 +394,7 @@ begin
     inherited;
 end;
 
-constructor TovcImageOperation_Canny.Create { (AOwner: TPersistent) };
+constructor TovcImageOperation_Canny.Create {(AOwner: TPersistent)};
 begin
   inherited;
   FThreshold1 := 10;
@@ -286,73 +404,86 @@ end;
 
 procedure TovcImageOperation_Canny.SetApertureSize(const Value: Integer);
 begin
-  LockTransform;
-  try
-    FApertureSize := Value;
-  finally
-    UnlockTransform;
-  end;
+  if LockTransform then
+    try
+      FApertureSize := Value;
+    finally
+      UnlockTransform;
+    end;
 end;
 
 procedure TovcImageOperation_Canny.SetThreshold1(const Value: double);
 begin
-  LockTransform;
-  try
-    FThreshold1 := Value;
-  finally
-    UnlockTransform;
-  end;
+  if LockTransform then
+    try
+      FThreshold1 := Value;
+    finally
+      UnlockTransform;
+    end;
 end;
 
 procedure TovcImageOperation_Canny.SetThreshold2(const Value: double);
 begin
-  LockTransform;
-  try
-    FThreshold2 := Value;
-  finally
-    UnlockTransform;
-  end;
+  if LockTransform then
+    try
+      FThreshold2 := Value;
+    finally
+      UnlockTransform;
+    end;
 end;
 
 function TovcImageOperation_Canny.Transform(const Source: pIplImage; var Destanation: pIplImage): Boolean;
 Var
   gray: pIplImage;
 begin
-  LockTransform;
-  try
-    // cоздаём одноканальные картинки
-    gray := cvCreateImage(cvGetSize(Source), IPL_DEPTH_8U, 1);
-    Destanation := cvCreateImage(cvGetSize(Source), IPL_DEPTH_8U, 1);
-    // преобразуем в градации cерого
-    cvCvtColor(Source, gray, CV_RGB2GRAY);
-    // получаем границы
-    cvCanny(gray, Destanation, Threshold1, Threshold2, ApertureSize);
-    cvReleaseImage(gray);
-    Result := true;
-  finally
-    UnlockTransform;
-  end;
+  Result := False;
+  if LockTransform then
+    try
+      // cоздаём одноканальные картинки
+      gray := cvCreateImage(cvGetSize(Source), IPL_DEPTH_8U, 1);
+      Destanation := cvCreateImage(cvGetSize(Source), IPL_DEPTH_8U, 1);
+      // преобразуем в градации cерого
+      cvCvtColor(Source, gray, CV_RGB2GRAY);
+      // получаем границы
+      cvCanny(gray, Destanation, Threshold1, Threshold2, ApertureSize);
+      cvReleaseImage(gray);
+      Result := true;
+    finally
+      UnlockTransform;
+    end;
 end;
 
-{ TocvImageOperationGrayScale }
+{TocvImageOperationGrayScale}
 
 function TocvImageOperation_GrayScale.Transform(const Source: pIplImage; var Destanation: pIplImage): Boolean;
 begin
-  Destanation := cvCreateImage(cvGetSize(Source), IPL_DEPTH_8U, 1);
-  // преобразуем в градации cерого
-  cvCvtColor(Source, Destanation, CV_RGB2GRAY);
-  Result := true;
+  Result := False;
+  if LockTransform then
+    try
+      Destanation := cvCreateImage(cvGetSize(Source), IPL_DEPTH_8U, 1);
+      // преобразуем в градации cерого
+      cvCvtColor(Source, Destanation, CV_RGB2GRAY);
+      Result := true;
+    finally
+      UnlockTransform;
+    end;
 end;
 
-{ TocvImageOperationNone }
+{TocvImageOperationNone}
 
 function TocvImageOperation_None.Transform(const Source: pIplImage; var Destanation: pIplImage): Boolean;
 begin
-  Destanation := cvCloneImage(Source);
-  Result := true;
+  Result := False;
+  if LockTransform then
+    try
+      Destanation := cvCloneImage(Source);
+      Result := true;
+    finally
+      UnlockTransform;
+    end;
 end;
 
-{ TCustomOpenCVImgOperation }
+{TCustomOpenCVImgOperation}
 
 constructor TocvCustomImageOperation.Create(AOwner: TComponent);
 begin
@@ -367,9 +498,9 @@ begin
   inherited;
 end;
 
-procedure TocvCustomImageOperation.LockTransform;
+function TocvCustomImageOperation.LockTransform: Boolean;
 begin
-  CS.Enter;
+  Result := CS.TryEnter;
 end;
 
 procedure TocvCustomImageOperation.UnlockTransform;
@@ -377,9 +508,10 @@ begin
   CS.Leave;
 end;
 
-{ TovcImageOperationSmooth }
+{TovcImageOperationSmooth}
 Const
-  ocvSmoothOperations: array [TocvSmoothOperations] of Integer = (CV_BLUR_NO_SCALE, CV_BLUR, CV_GAUSSIAN, CV_MEDIAN, CV_BILATERAL);
+  ocvSmoothOperations: array [TocvSmoothOperations] of Integer = (CV_BLUR_NO_SCALE, CV_BLUR, CV_GAUSSIAN, CV_MEDIAN,
+    CV_BILATERAL);
 
 procedure TovcImageOperation_Smooth.AssignTo(Dest: TPersistent);
 begin
@@ -395,7 +527,7 @@ begin
     inherited;
 end;
 
-constructor TovcImageOperation_Smooth.Create { (AOwner: TPersistent) };
+constructor TovcImageOperation_Smooth.Create {(AOwner: TPersistent)};
 begin
   inherited;
   FSmoothOperation := GAUSSIAN;
@@ -407,76 +539,86 @@ end;
 
 procedure TovcImageOperation_Smooth.SetSigma1(const Value: double);
 begin
-  LockTransform;
-  try
-    FSigma1 := Value;
-  finally
-    UnlockTransform;
-  end;
+  if LockTransform then
+    try
+      FSigma1 := Value;
+    finally
+      UnlockTransform;
+    end;
 end;
 
 //
 procedure TovcImageOperation_Smooth.Setsigma2(const Value: double);
 begin
-  LockTransform;
-  try
-    FSigma2 := Value;
-  finally
-    UnlockTransform;
-  end;
+  if LockTransform then
+    try
+      FSigma2 := Value;
+    finally
+      UnlockTransform;
+    end;
 end;
 
 //
 procedure TovcImageOperation_Smooth.SetSize1(const Value: Integer);
 begin
-  LockTransform;
-  try
-    FSize1 := Value;
-  finally
-    UnlockTransform;
-  end;
+  if LockTransform then
+    try
+      FSize1 := Value;
+    finally
+      UnlockTransform;
+    end;
 end;
 
 //
 procedure TovcImageOperation_Smooth.SetSize2(const Value: Integer);
 begin
-  LockTransform;
-  try
-    FSize2 := Value;
-  finally
-    UnlockTransform;
-  end;
+  if LockTransform then
+    try
+      FSize2 := Value;
+    finally
+      UnlockTransform;
+    end;
 end;
 
 procedure TovcImageOperation_Smooth.SetSmoothOperation(const Value: TocvSmoothOperations);
 begin
-  LockTransform;
-  try
-    FSmoothOperation := Value;
-  finally
-    UnlockTransform;
-  end;
+  if LockTransform then
+    try
+      FSmoothOperation := Value;
+    finally
+      UnlockTransform;
+    end;
 end;
 
 function TovcImageOperation_Smooth.Transform(const Source: pIplImage; var Destanation: pIplImage): Boolean;
 begin
-  LockTransform;
-  try
-    Destanation := cvCloneImage(Source);
-    cvSmooth(Source, Destanation, ocvSmoothOperations[SmoothOperation], size1, size2, sigma1, sigma2);
-    Result := true;
-  finally
-    UnlockTransform;
-  end;
+  Result := False;
+  if LockTransform then
+    try
+      Destanation := cvCloneImage(Source);
+      cvSmooth(Source, Destanation, ocvSmoothOperations[SmoothOperation], size1, size2, sigma1, sigma2);
+      Result := true;
+    finally
+      UnlockTransform;
+    end;
 end;
 
-{ TRegisteredImageOperations }
+{TRegisteredImageOperations}
 
 function TRegisteredImageOperations.FindByClassName(const ClassName: String): TocvImageOperationClass;
 Var
   i: Integer;
 begin
-  i := IndexOf(ClassName);
+  for i := 0 to Count - 1 do
+    if TocvImageOperationClass(Objects[i]).ClassName = ClassName then
+      Exit(TocvImageOperationClass(Objects[i]));
+end;
+
+function TRegisteredImageOperations.FindByName(const Name: String): TocvImageOperationClass;
+Var
+  i: Integer;
+begin
+  i := IndexOf(Name);
   if i <> -1 then
     Result := TocvImageOperationClass(Objects[i])
   else
@@ -502,12 +644,350 @@ begin
   RegisterClass(TPersistentClass(IOClass));
 end;
 
+{TovcCustomErodeDilate}
+
+procedure TovcCustomErodeDilate.AssignTo(Dest: TPersistent);
+begin
+  if Dest is TovcCustomErodeDilate then
+  begin
+    FRadius := (Dest as TovcCustomErodeDilate).Radius;
+    FIterations := (Dest as TovcCustomErodeDilate).Iterations;
+    FMorphOp := (Dest as TovcCustomErodeDilate).MorphOp;
+  end
+  else
+    inherited;
+end;
+
+constructor TovcCustomErodeDilate.Create(AOwner: TComponent);
+begin
+  inherited;
+  FRadius := 5;
+  FIterations := 5;
+end;
+
+procedure TovcCustomErodeDilate.SetIterations(const Value: Integer);
+begin
+  if LockTransform then
+    try
+      FIterations := Value;
+    finally
+      UnlockTransform;
+    end;
+end;
+
+procedure TovcCustomErodeDilate.SetMorphOp(const Value: TocvErodeDilateMode);
+begin
+  if LockTransform then
+    try
+      FMorphOp := Value;
+    finally
+      UnlockTransform;
+    end;
+end;
+
+procedure TovcCustomErodeDilate.SetRadius(const Value: Integer);
+begin
+  if LockTransform then
+    try
+      FRadius := Value;
+    finally
+      UnlockTransform;
+    end;
+end;
+
+const
+  EDMorpgOp: array [TocvErodeDilateMode] of Integer = (CV_SHAPE_RECT, CV_SHAPE_CROSS, CV_SHAPE_ELLIPSE, CV_SHAPE_CUSTOM);
+
+  {TovcErode}
+
+function TovcErode.Transform(const Source: pIplImage; var Destanation: pIplImage): Boolean;
+Var
+  Kern: pIplConvKernel;
+begin
+  Result := False;
+  if LockTransform then
+    try
+      Destanation := cvCloneImage(Source);
+      Kern := cvCreateStructuringElementEx(Radius * 2 + 1, Radius * 2 + 1, Radius, Radius, EDMorpgOp[FMorphOp]);
+      cvErode(Source, Destanation, Kern, Iterations);
+      cvReleaseStructuringElement(Kern);
+      Result := true;
+    finally
+      UnlockTransform;
+    end;
+end;
+
+{TovcDilate}
+
+function TovcDilate.Transform(const Source: pIplImage; var Destanation: pIplImage): Boolean;
+Var
+  Kern: pIplConvKernel;
+begin
+  Result := False;
+  if LockTransform then
+    try
+      Destanation := cvCloneImage(Source);
+      Kern := cvCreateStructuringElementEx(Radius * 2 + 1, Radius * 2 + 1, Radius, Radius, EDMorpgOp[FMorphOp]);
+      cvDilate(Source, Destanation, Kern, Iterations);
+      cvReleaseStructuringElement(Kern);
+      Result := true;
+    finally
+      UnlockTransform;
+    end;
+end;
+
+{TocvLaplace}
+
+procedure TocvLaplace.AssignTo(Dest: TPersistent);
+begin
+  if Dest is TocvLaplace then
+  begin
+    FAperture := (Dest as TocvLaplace).Aperture;
+  end
+  else
+    inherited;
+end;
+
+constructor TocvLaplace.Create(AOwner: TComponent);
+begin
+  inherited;
+  FAperture := 3;
+end;
+
+procedure TocvLaplace.SetAperture(const Value: Integer);
+begin
+  if LockTransform then
+    try
+      FAperture := Value;
+    finally
+      UnlockTransform;
+    end;
+end;
+
+function TocvLaplace.Transform(const Source: pIplImage; var Destanation: pIplImage): Boolean;
+Var
+  D: pIplImage;
+begin
+  Result := False;
+  if LockTransform then
+    try
+      D := cvCreateImage(cvGetSize(Source), IPL_DEPTH_16S, Source^.nChannels);
+      Destanation := cvCreateImage(cvGetSize(Source), Source^.depth, Source^.nChannels);
+      cvLaplace(Source, D, Aperture);
+      cvConvertScale(D, Destanation);
+      cvReleaseImage(D);
+      Result := true;
+    finally
+      UnlockTransform;
+    end;
+end;
+
+{TovcSobel}
+
+procedure TovcSobel.AssignTo(Dest: TPersistent);
+begin
+  if Dest is TovcSobel then
+  begin
+    FXOrder := (Dest as TovcSobel).XOrder;
+    FYOrder := (Dest as TovcSobel).YOrder;
+    FAperture := (Dest as TovcSobel).Aperture;
+  end
+  else
+    inherited;
+end;
+
+constructor TovcSobel.Create(AOwner: TComponent);
+begin
+  inherited;
+  FXOrder := 1;
+  FYOrder := 1;
+  FAperture := 3;
+end;
+
+procedure TovcSobel.SetAperture(const Value: Integer);
+begin
+  if LockTransform then
+    try
+      FAperture := Value;
+    finally
+      UnlockTransform;
+    end;
+end;
+
+procedure TovcSobel.SetXOrder(const Value: Integer);
+begin
+  if LockTransform then
+    try
+      if (YOrder <> 0) and (Value <> 0) then
+        FXOrder := Value;
+    finally
+      UnlockTransform;
+    end;
+end;
+
+procedure TovcSobel.SetYOrder(const Value: Integer);
+begin
+  if LockTransform then
+    try
+      if (XOrder <> 0) and (Value <> 0) then
+        FYOrder := Value;
+    finally
+      UnlockTransform;
+    end;
+end;
+
+function TovcSobel.Transform(const Source: pIplImage; var Destanation: pIplImage): Boolean;
+Var
+  D: pIplImage;
+begin
+  Result := False;
+  if LockTransform then
+    try
+      D := cvCreateImage(cvGetSize(Source), IPL_DEPTH_16S, Source^.nChannels);
+      Destanation := cvCreateImage(cvGetSize(Source), Source^.depth, Source^.nChannels);
+      cvSobel(Source, D, XOrder, YOrder, Aperture);
+      cvConvertScale(D, Destanation);
+      cvReleaseImage(D);
+      Result := true;
+    finally
+      UnlockTransform;
+    end;
+end;
+
+{TocvImageOperationCollectionItem}
+
+procedure TocvImageOperationCollectionItem.Assign(Source: TPersistent);
+begin
+  if Source is TocvImageOperationCollectionItem then
+    Operation.Assign(TocvImageOperationCollectionItem(Source).Operation)
+  else
+    inherited;
+end;
+
+constructor TocvImageOperationCollectionItem.Create(Collection: TCollection);
+begin
+  inherited;
+  CS := TCriticalSection.Create;
+end;
+
+procedure TocvImageOperationCollectionItem.CreateProperties;
+begin
+  if FOperationClass <> nil then
+    FOperation := FOperationClass.Create(nil);
+end;
+
+destructor TocvImageOperationCollectionItem.Destroy;
+begin
+  CS.Free;
+  inherited;
+end;
+
+procedure TocvImageOperationCollectionItem.DestroyProperties;
+begin
+  FreeAndNil(FOperation);
+end;
+
+function TocvImageOperationCollectionItem.GetDisplayName: string;
+begin
+  Result := GetRegisteredImageOperations.GetNameByClass(FOperation.ClassType);
+end;
+
+// function TocvImageOperationCollectionItem.GetOwner: TComponent;
+// begin
+// Result := (Collection as TOwnedCollection).Owner as TComponent;
+// end;
+
+function TocvImageOperationCollectionItem.GetProperties: TocvCustomImageOperation;
+begin
+  if not Assigned(FOperation) then
+    FOperation := TocvImageOperation_None.Create(nil);
+  Result := FOperation;
+end;
+
+function TocvImageOperationCollectionItem.GetPropertiesClass: TocvImageOperationClass;
+begin
+  Result := TocvImageOperationClass(Operation.ClassType);
+end;
+
+function TocvImageOperationCollectionItem.GetPropertiesClassName: string;
+begin
+  Result := Operation.ClassName;
+end;
+
+function TocvImageOperationCollectionItem.LockTransform: Boolean;
+begin
+  Result := CS.TryEnter;
+end;
+
+function TocvImageOperationCollectionItem.QueryInterface(const IID: TGUID; out Obj): HResult;
+begin
+  if GetInterface(IID, Obj) then
+    Result := 0
+  else
+    Result := E_NOINTERFACE;
+end;
+
+procedure TocvImageOperationCollectionItem.RecreateProperties;
+begin
+  DestroyProperties;
+  CreateProperties;
+end;
+
+procedure TocvImageOperationCollectionItem.SetProperties(const Value: TocvCustomImageOperation);
+begin
+  if (FOperation <> nil) and (Value <> nil) then
+    FOperation.Assign(Value);
+end;
+
+procedure TocvImageOperationCollectionItem.SetPropertiesClass(Value: TocvImageOperationClass);
+begin
+  if FOperationClass <> Value then
+  begin
+    FOperationClass := Value;
+    RecreateProperties;
+  end;
+end;
+
+procedure TocvImageOperationCollectionItem.SetPropertiesClassName(const Value: string);
+begin
+  OperationClass := TocvImageOperationClass(GetRegisteredImageOperations.FindByClassName(Value));
+end;
+
+function TocvImageOperationCollectionItem.Transform(const Source: pIplImage; var Destanation: pIplImage): Boolean;
+begin
+  if LockTransform then
+    try
+      Result := Assigned(FOperation) and FOperation.Transform(Source, Destanation)
+    finally
+      UnlockTransform;
+    end;
+end;
+
+procedure TocvImageOperationCollectionItem.UnlockTransform;
+begin
+  CS.Leave;
+end;
+
+function TocvImageOperationCollectionItem._AddRef: Integer;
+begin
+  Result := -1;
+end;
+
+function TocvImageOperationCollectionItem._Release: Integer;
+begin
+  Result := -1;
+end;
+
 initialization
 
 GetRegisteredImageOperations.RegisterIOClass(TocvImageOperation_None, 'None');
 GetRegisteredImageOperations.RegisterIOClass(TocvImageOperation_GrayScale, 'GrayScale');
 GetRegisteredImageOperations.RegisterIOClass(TovcImageOperation_Canny, 'Canny');
 GetRegisteredImageOperations.RegisterIOClass(TovcImageOperation_Smooth, 'Smooth');
+GetRegisteredImageOperations.RegisterIOClass(TovcErode, 'Erode');
+GetRegisteredImageOperations.RegisterIOClass(TovcDilate, 'Dilate');
+GetRegisteredImageOperations.RegisterIOClass(TocvLaplace, 'Laplace');
+GetRegisteredImageOperations.RegisterIOClass(TovcSobel, 'Sobel');
 
 finalization
 
