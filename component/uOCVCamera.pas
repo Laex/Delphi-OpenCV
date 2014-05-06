@@ -103,8 +103,7 @@ type
     destructor Destroy; override;
   published
     property Enabled            : Boolean Read FEnabled write SetEnabled default False;
-    property CameraCaptureSource: TocvCameraCaptureSource read FCameraCaptureSource write SetCameraCaptureSource
-      default CAP_ANY;
+    property CameraCaptureSource: TocvCameraCaptureSource read FCameraCaptureSource write SetCameraCaptureSource default CAP_ANY;
     property Resolution: TocvResolution read FResolution write setResolution;
   end;
 

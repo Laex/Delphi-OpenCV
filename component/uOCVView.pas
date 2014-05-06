@@ -35,9 +35,14 @@ uses
   core.types_c;
 
 type
+
+  TOnOcvPaint = procedure(Sender: TObject; const IplImage: pIplImage) of object;
+
   TocvView = class(TWinControl, IocvDataReceiver)
   private
     FocvVideoSource: IocvDataSource;
+    FOnAfterPaint: TOnOcvPaint;
+    FOnBeforePaint: TOnOcvPaint;
     procedure WMEraseBkgnd(var Message: TWMEraseBkgnd); message WM_ERASEBKGND;
     procedure WMPaint(var Message: TWMPaint); message WM_PAINT;
     procedure SetOpenCVVideoSource(const Value: IocvDataSource);
@@ -49,6 +54,8 @@ type
   published
     property VideoSource: IocvDataSource Read FocvVideoSource write SetOpenCVVideoSource;
     property Align;
+    property OnAfterPaint: TOnOcvPaint read FOnAfterPaint write FOnAfterPaint;
+    property OnBeforePaint: TOnOcvPaint read FOnBeforePaint write FOnBeforePaint;
   end;
 
 implementation
@@ -56,12 +63,12 @@ implementation
 Uses
   cvUtils;
 
-{ TOpenCVView }
+{TOpenCVView}
 
 destructor TocvView.Destroy;
 begin
   if Assigned(FocvVideoSource) then
-    FocvVideoSource.SetReceiver(nil);
+    FocvVideoSource.RemoveReceiver(Self);
   inherited;
 end;
 
@@ -70,10 +77,10 @@ begin
   if FocvVideoSource <> Value then
   begin
     if Assigned(FocvVideoSource) then
-      FocvVideoSource.SetReceiver(nil);
+      FocvVideoSource.RemoveReceiver(Self);
     FocvVideoSource := Value;
     if Assigned(FocvVideoSource) then
-      FocvVideoSource.SetReceiver(Self);
+      FocvVideoSource.AddReceiver(Self);
   end;
 end;
 
@@ -85,10 +92,13 @@ end;
 procedure TocvView.TakeImage(const IplImage: pIplImage);
 begin
   if not(csDestroying in ComponentState) then
-    ipDraw(
-      GetDC(Handle),
-      IplImage,
-      ClientRect);
+  begin
+    if Assigned(OnBeforePaint) then
+      OnBeforePaint(Self, IplImage);
+    ipDraw(GetDC(Handle), IplImage, ClientRect);
+    if Assigned(OnAfterPaint) then
+      OnAfterPaint(Self, IplImage);
+  end;
 end;
 
 procedure TocvView.WMEraseBkgnd(var Message: TWMEraseBkgnd);

@@ -28,7 +28,7 @@ package OpenCV;
 {$ALIGN 8}
 {$ASSERTIONS ON}
 {$BOOLEVAL OFF}
-{$DEBUGINFO ON}
+{$DEBUGINFO OFF}
 {$EXTENDEDSYNTAX ON}
 {$IMPORTEDDATA ON}
 {$IOCHECKS ON}
@@ -61,7 +61,6 @@ contains
   uOCVView in 'uOCVView.pas',
   uOCVImageOperation in 'uOCVImageOperation.pas',
   uOCVRegister in 'uOCVRegister.pas',
-  uOCVSplitter in 'uOCVSplitter.pas',
   uOCVIOProperties in 'uOCVIOProperties.pas';
 
 end.
