@@ -35,8 +35,8 @@ type
     lbl1: TLabel;
     cbb1: TComboBox;
     chk1: TCheckBox;
-    ocvcmr1: TocvCamera;
     ocvw1: TocvView;
+    ocvcmr1: TocvCamera;
     ocvmgprtn1: TocvImageOperation;
     ocvw2: TocvView;
     procedure FormCreate(Sender: TObject);
@@ -53,15 +53,9 @@ implementation
 
 {$R *.dfm}
 
-Const
-  IOClass: array [0 .. 7] of TocvImageOperationClass = (
-    {} TocvImageOperation_None, TocvImageOperation_GrayScale,
-    {} TovcImageOperation_Canny, TovcImageOperation_Smooth,
-    {} TovcErode, TovcDilate, TocvLaplace, TovcSobel);
-
 procedure TMainForm.cbb1Change(Sender: TObject);
 begin
-  ocvmgprtn1.OperationClass := IOClass[cbb1.ItemIndex];
+  ocvmgprtn1.OperationClass := TocvImageOperationClass(cbb1.Items.Objects[cbb1.ItemIndex]);
 end;
 
 procedure TMainForm.chk1Click(Sender: TObject);
@@ -71,8 +65,9 @@ end;
 
 procedure TMainForm.FormCreate(Sender: TObject);
 begin
-  cbb1.ItemIndex := 0;
-  ocvmgprtn1.OperationClass := IOClass[cbb1.ItemIndex];
+  cbb1.Items.Assign(GetRegisteredImageOperations);
+//  cbb1.ItemIndex := 0;
+//  ocvmgprtn1.OperationClass := TocvImageOperationClass(cbb1.Items.Objects[cbb1.ItemIndex]);
   ocvcmr1.Enabled := True;
 end;
 

@@ -36,8 +36,6 @@ uses
 
 type
 
-  TOnOcvPaint = procedure(Sender: TObject; const IplImage: pIplImage) of object;
-
   TocvView = class(TWinControl, IocvDataReceiver)
   private
     FocvVideoSource: IocvDataSource;

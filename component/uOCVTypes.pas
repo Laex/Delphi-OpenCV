@@ -33,6 +33,10 @@ Uses
   core.types_c;
 
 Type
+
+  TocvOnDataNotify = procedure(const IplImage: pIplImage) of object;
+  TOnOcvPaint = procedure(Sender: TObject; const IplImage: pIplImage) of object;
+
   IocvDataReceiver = interface
     ['{F67DEC9E-CCE0-49D2-AB9B-AD7E1020C5DC}']
     procedure TakeImage(const IplImage: pIplImage);
@@ -44,22 +48,24 @@ Type
     procedure AddReceiver(const OpenCVVideoReceiver: IocvDataReceiver);
     procedure RemoveReceiver(const OpenCVVideoReceiver: IocvDataReceiver);
     function GetName: string;
+    function GetImage: pIplImage;
   end;
 
   TocvReceiverList = TThreadList<IocvDataReceiver>;
 
   TocvDataSource = class(TComponent, IocvDataSource)
-  private
-    // FReceiverCS: TCriticalSection;
   protected
     FOpenCVVideoReceivers: TocvReceiverList;
+    FImage: pIplImage;
     function GetName: string; virtual;
     procedure NotifyReceiver(const IplImage: pIplImage); virtual;
+    function GetImage: pIplImage; virtual;
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
     procedure AddReceiver(const OpenCVVideoReceiver: IocvDataReceiver); virtual;
     procedure RemoveReceiver(const OpenCVVideoReceiver: IocvDataReceiver); virtual;
+    property Image: pIplImage read GetImage;
   end;
 
   TocvDataReceiver = class(TComponent, IocvDataReceiver)
@@ -90,6 +96,9 @@ Type
 
 implementation
 
+uses
+  core_c;
+
 {TOpenCVDataSource}
 
 procedure TocvDataSource.AddReceiver(const OpenCVVideoReceiver: IocvDataReceiver);
@@ -106,7 +115,14 @@ end;
 destructor TocvDataSource.Destroy;
 begin
   FOpenCVVideoReceivers.Free;
+  if Assigned(FImage) then
+    cvReleaseImage(FImage);
   inherited;
+end;
+
+function TocvDataSource.GetImage: pIplImage;
+begin
+  Result := FImage;
 end;
 
 function TocvDataSource.GetName: string;
@@ -121,6 +137,9 @@ Var
 begin
   LockList := FOpenCVVideoReceivers.LockList;
   try
+    if Assigned(FImage) then
+      cvReleaseImage(FImage);
+    FImage := cvCloneImage(IplImage);
     for R in LockList do
       R.TakeImage(IplImage);
   finally

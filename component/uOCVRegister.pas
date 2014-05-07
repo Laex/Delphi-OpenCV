@@ -41,7 +41,7 @@ begin
   RegisterComponents('OpenCV', [TocvCamera]);
   RegisterComponents('OpenCV', [TocvCamera]);
   RegisterComponents('OpenCV', [TocvView]);
-  RegisterClasses([TocvImageOperation_None, TocvImageOperation_GrayScale, TovcImageOperation_Canny, TovcImageOperation_Smooth]);
+  RegisterClasses([TocvNoneOperation, TocvGrayScaleOperation, TovcCannyOperation, TovcSmoothOperation]);
 end;
 
 end.

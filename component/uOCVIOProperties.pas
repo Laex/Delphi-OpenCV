@@ -39,17 +39,13 @@ Type
     procedure SetValue(const Value: string); override;
   end;
 
-  // TVideoSourceProperty = class(TInterfaceProperty)
-  // private
-  // FGetValuesStrProc: TGetStrProc;
-  // protected
-  // procedure ReceiveComponentNames(const S: string);
-  // public
-  // function GetAttributes: TPropertyAttributes; override;
-  // procedure GetValues(Proc: TGetStrProc); override;
-  // procedure SetValue(const Value: string); override;
-  // function GetValue: string; override;
-  // end;
+  TImagePreprocessingProperty = class(TClassProperty)
+  public
+    function GetAttributes: TPropertyAttributes; override;
+    function GetValue: string; override;
+    procedure GetValues(Proc: TGetStrProc); override;
+    procedure SetValue(const Value: string); override;
+  end;
 
 implementation
 
@@ -86,15 +82,52 @@ end;
 procedure TImageOperationProperty.SetValue(const Value: string);
 Var
   APropertiesClass: TocvImageOperationClass;
-  i: Integer;
+  I: Integer;
   AIntf: IocvEditorPropertiesContainer;
 begin
   APropertiesClass := GetRegisteredImageOperations.FindByName(Value);
   if APropertiesClass = nil then
     APropertiesClass := TocvImageOperationClass(GetRegisteredImageOperations.Objects[0]);
 
-  for i := 0 to PropCount - 1 do
-    if Supports(GetComponent(i), IocvEditorPropertiesContainer, AIntf) then
+  for I := 0 to PropCount - 1 do
+    if Supports(GetComponent(I), IocvEditorPropertiesContainer, AIntf) then
+      AIntf.SetPropertiesClass(APropertiesClass);
+
+  Modified;
+end;
+
+{TImagePreprocessingProperty}
+
+function TImagePreprocessingProperty.GetAttributes: TPropertyAttributes;
+begin
+  Result := inherited GetAttributes;
+  Result := Result - [paReadOnly] + [paValueList, paSortList, paRevertable, paVolatileSubProperties];
+end;
+
+function TImagePreprocessingProperty.GetValue: string;
+begin
+  Result := GetRegisteredImageOperations.GetNameByClass(TocvImageOperation(GetOrdValue).ClassType);
+end;
+
+procedure TImagePreprocessingProperty.GetValues(Proc: TGetStrProc);
+begin
+  Proc('None');
+  Proc('Threshold');
+  Proc('AdaptiveThreshold');
+end;
+
+procedure TImagePreprocessingProperty.SetValue(const Value: string);
+Var
+  APropertiesClass: TocvImageOperationClass;
+  I: Integer;
+  AIntf: IocvEditorPropertiesContainer;
+begin
+  APropertiesClass := GetRegisteredImageOperations.FindByName(Value);
+  if APropertiesClass = nil then
+    APropertiesClass := TocvImageOperationClass(GetRegisteredImageOperations.Objects[0]);
+
+  for I := 0 to PropCount - 1 do
+    if Supports(GetComponent(I), IocvEditorPropertiesContainer, AIntf) then
       AIntf.SetPropertiesClass(APropertiesClass);
 
   Modified;
@@ -102,12 +135,13 @@ end;
 
 initialization
 
-//RegisterPropertyEditor(TypeInfo(TocvCustomImageOperation), nil, 'Operation', TImageOperationProperty);
-//UnlistPublishedProperty(nil, 'OperationClassName');
-
 RegisterPropertyEditor(TypeInfo(TocvCustomImageOperation), TocvImageOperation, 'Operation', TImageOperationProperty);
-RegisterPropertyEditor(TypeInfo(TocvCustomImageOperation), TocvImageOperationCollectionItem, 'Operation', TImageOperationProperty);
+RegisterPropertyEditor(TypeInfo(TocvCustomImageOperation), TocvImageOperationCollectionItem, 'Operation',
+  TImageOperationProperty);
+RegisterPropertyEditor(TypeInfo(TocvCustomImageOperation), TocvContoursOperation, 'Preprocessing', TImagePreprocessingProperty);
+
 UnlistPublishedProperty(TocvImageOperation, 'OperationClassName');
 UnlistPublishedProperty(TocvImageOperationCollectionItem, 'OperationClassName');
+UnlistPublishedProperty(TocvContoursOperation, 'OperationClassName');
 
 end.
