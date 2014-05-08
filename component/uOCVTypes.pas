@@ -28,18 +28,43 @@ interface
 Uses
   System.SysUtils,
   System.Classes,
-  // System.SyncObjs,
   System.Generics.Collections,
   core.types_c;
 
 Type
+  IocvImage = interface
+    ['{84567F57-A399-4179-AA0F-6F8A2788F89B}']
+    function GetIplImage: pIplImage;
+    function GetisGray: Boolean;
+    function GrayImage: IocvImage;
+    function Clone: IocvImage;
+    property IpImage: pIplImage Read GetIplImage;
+    property isGray: Boolean read GetisGray;
+  end;
 
-  TocvOnDataNotify = procedure(const IplImage: pIplImage) of object;
-  TOnOcvPaint = procedure(Sender: TObject; const IplImage: pIplImage) of object;
+  TocvImage = class(TInterfacedObject, IocvImage)
+  private
+    FImage: pIplImage;
+  protected
+    function GetIplImage: pIplImage;
+    function GetisGray: Boolean;
+  public
+    constructor Create(const AImage: pIplImage);
+    constructor CreateCopy(const AImage: pIplImage);
+    destructor Destroy; override;
+    function GrayImage: IocvImage;
+    function Clone: IocvImage;
+    property IplImage: pIplImage Read GetIplImage;
+    property isGray: Boolean read GetisGray;
+  end;
+
+  TOnOcvNotify = procedure(Sender: TObject; const IplImage: IocvImage) of object;
+  TOnOcvContour = procedure(Sender: TObject; const IplImage: IocvImage; const ContourCount: Integer; const Contours: pCvSeq)
+    of object;
 
   IocvDataReceiver = interface
     ['{F67DEC9E-CCE0-49D2-AB9B-AD7E1020C5DC}']
-    procedure TakeImage(const IplImage: pIplImage);
+    procedure TakeImage(const IplImage: IocvImage);
     procedure SetVideoSource(const Value: TObject);
   end;
 
@@ -48,7 +73,7 @@ Type
     procedure AddReceiver(const OpenCVVideoReceiver: IocvDataReceiver);
     procedure RemoveReceiver(const OpenCVVideoReceiver: IocvDataReceiver);
     function GetName: string;
-    function GetImage: pIplImage;
+    function GetImage: IocvImage;
   end;
 
   TocvReceiverList = TThreadList<IocvDataReceiver>;
@@ -56,23 +81,23 @@ Type
   TocvDataSource = class(TComponent, IocvDataSource)
   protected
     FOpenCVVideoReceivers: TocvReceiverList;
-    FImage: pIplImage;
+    FImage: IocvImage;
     function GetName: string; virtual;
-    procedure NotifyReceiver(const IplImage: pIplImage); virtual;
-    function GetImage: pIplImage; virtual;
+    procedure NotifyReceiver(const IplImage: IocvImage); virtual;
+    function GetImage: IocvImage;
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
     procedure AddReceiver(const OpenCVVideoReceiver: IocvDataReceiver); virtual;
     procedure RemoveReceiver(const OpenCVVideoReceiver: IocvDataReceiver); virtual;
-    property Image: pIplImage read GetImage;
+    property Image: IocvImage read GetImage;
   end;
 
   TocvDataReceiver = class(TComponent, IocvDataReceiver)
   private
     FocvVideoSource: IocvDataSource;
   protected
-    procedure TakeImage(const IplImage: pIplImage); virtual;
+    procedure TakeImage(const IplImage: IocvImage); virtual;
     procedure SetVideoSource(const Value: TObject); virtual;
     procedure SetOpenCVVideoSource(const Value: IocvDataSource); virtual;
   public
@@ -85,7 +110,7 @@ Type
   private
     FocvVideoSource: IocvDataSource;
   protected
-    procedure TakeImage(const IplImage: pIplImage); virtual;
+    procedure TakeImage(const IplImage: IocvImage); virtual;
     procedure SetVideoSource(const Value: TObject); virtual;
     procedure SetOpenCVVideoSource(const Value: IocvDataSource); virtual;
   public
@@ -97,7 +122,7 @@ Type
 implementation
 
 uses
-  core_c;
+  core_c, imgproc_c, imgproc.types_c;
 
 {TOpenCVDataSource}
 
@@ -115,12 +140,11 @@ end;
 destructor TocvDataSource.Destroy;
 begin
   FOpenCVVideoReceivers.Free;
-  if Assigned(FImage) then
-    cvReleaseImage(FImage);
+  FImage := nil;
   inherited;
 end;
 
-function TocvDataSource.GetImage: pIplImage;
+function TocvDataSource.GetImage: IocvImage;
 begin
   Result := FImage;
 end;
@@ -130,16 +154,14 @@ begin
   Result := Name;
 end;
 
-procedure TocvDataSource.NotifyReceiver(const IplImage: pIplImage);
+procedure TocvDataSource.NotifyReceiver(const IplImage: IocvImage);
 Var
   R: IocvDataReceiver;
   LockList: TList<IocvDataReceiver>;
 begin
   LockList := FOpenCVVideoReceivers.LockList;
   try
-    if Assigned(FImage) then
-      cvReleaseImage(FImage);
-    FImage := cvCloneImage(IplImage);
+    FImage := IplImage;
     for R in LockList do
       R.TakeImage(IplImage);
   finally
@@ -178,7 +200,7 @@ begin
   VideoSource := Value as TocvDataSource;
 end;
 
-procedure TocvDataSourceAndReceiver.TakeImage(const IplImage: pIplImage);
+procedure TocvDataSourceAndReceiver.TakeImage(const IplImage: IocvImage);
 begin
 
 end;
@@ -210,9 +232,56 @@ begin
     VideoSource := Value as TocvDataSource;
 end;
 
-procedure TocvDataReceiver.TakeImage(const IplImage: pIplImage);
+procedure TocvDataReceiver.TakeImage(const IplImage: IocvImage);
 begin
 
+end;
+
+{TocvImage}
+
+function TocvImage.Clone: IocvImage;
+begin
+  Result := TocvImage.CreateCopy(FImage);
+end;
+
+constructor TocvImage.Create(const AImage: pIplImage);
+begin
+  FImage := AImage;
+end;
+
+constructor TocvImage.CreateCopy(const AImage: pIplImage);
+begin
+  FImage := cvCloneImage(AImage);
+end;
+
+destructor TocvImage.Destroy;
+begin
+  cvReleaseImage(FImage);
+  inherited;
+end;
+
+function TocvImage.GetIplImage: pIplImage;
+begin
+  Result := FImage;
+end;
+
+function TocvImage.GetisGray: Boolean;
+begin
+  Result := FImage^.nChannels = 1;
+end;
+
+function TocvImage.GrayImage: IocvImage;
+Var
+  iImage: pIplImage;
+begin
+  if isGray then
+    Result := Self
+  else
+  begin
+    iImage := cvCreateImage(cvGetSize(FImage), IPL_DEPTH_8U, 1);
+    cvCvtColor(FImage, iImage, CV_RGB2GRAY);
+    Result := TocvImage.Create(iImage);
+  end;
 end;
 
 end.
