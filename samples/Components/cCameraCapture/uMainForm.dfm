@@ -69,22 +69,23 @@ object MainForm: TMainForm
     VideoSource = ocvmgprtn1
   end
   object ocvcmr1: TocvCamera
-    Resolution = r640x360
+    Resolution = r320x240
     Left = 328
     Top = 104
   end
   object ocvmgprtn1: TocvImageOperation
     VideoSource = ocvcmr1
     OperationClassName = 'TocvContoursOperation'
-    Operation.OperationClassName = 'TocvAdaptiveThresholdOperation'
+    Operation.OperationClassName = 'TocvThresholdOperation'
     Operation.Preprocessing.MaxValue = 255.000000000000000000
-    Operation.Preprocessing.BlockSize = 21
-    Operation.Preprocessing.Param = 7.000000000000000000
+    Operation.Preprocessing.ThresholdType = THRESH_BINARY_INV
+    Operation.Preprocessing.Threshold = 128.000000000000000000
     Operation.Offset.X = 0
     Operation.Offset.Y = 0
-    Operation.ContourDraw.DrawContours = True
+    Operation.ContourDraw.Thickness = 1
     Operation.ContourDraw.Offset.X = 0
     Operation.ContourDraw.Offset.Y = 0
+    Operation.ApproxPoly.Eps = 3.000000000000000000
     Operations = <>
     Left = 328
     Top = 164

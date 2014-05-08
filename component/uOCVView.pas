@@ -39,21 +39,21 @@ type
   TocvView = class(TWinControl, IocvDataReceiver)
   private
     FocvVideoSource: IocvDataSource;
-    FOnAfterPaint: TOnOcvPaint;
-    FOnBeforePaint: TOnOcvPaint;
+    FOnAfterPaint: TOnOcvNotify;
+    FOnBeforePaint: TOnOcvNotify;
     procedure WMEraseBkgnd(var Message: TWMEraseBkgnd); message WM_ERASEBKGND;
     procedure WMPaint(var Message: TWMPaint); message WM_PAINT;
     procedure SetOpenCVVideoSource(const Value: IocvDataSource);
   protected
-    procedure TakeImage(const IplImage: pIplImage);
+    procedure TakeImage(const IplImage: IocvImage);
     procedure SetVideoSource(const Value: TObject);
   public
     destructor Destroy; override;
   published
     property VideoSource: IocvDataSource Read FocvVideoSource write SetOpenCVVideoSource;
     property Align;
-    property OnAfterPaint: TOnOcvPaint read FOnAfterPaint write FOnAfterPaint;
-    property OnBeforePaint: TOnOcvPaint read FOnBeforePaint write FOnBeforePaint;
+    property OnAfterPaint: TOnOcvNotify read FOnAfterPaint write FOnAfterPaint;
+    property OnBeforePaint: TOnOcvNotify read FOnBeforePaint write FOnBeforePaint;
   end;
 
 implementation
@@ -87,13 +87,13 @@ begin
   VideoSource := Value as TocvDataSource;
 end;
 
-procedure TocvView.TakeImage(const IplImage: pIplImage);
+procedure TocvView.TakeImage(const IplImage: IocvImage);
 begin
   if not(csDestroying in ComponentState) then
   begin
     if Assigned(OnBeforePaint) then
       OnBeforePaint(Self, IplImage);
-    ipDraw(GetDC(Handle), IplImage, ClientRect);
+    ipDraw(GetDC(Handle), IplImage.IpImage, ClientRect);
     if Assigned(OnAfterPaint) then
       OnAfterPaint(Self, IplImage);
   end;

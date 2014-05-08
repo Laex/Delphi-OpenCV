@@ -69,13 +69,15 @@ type
 
 type
   TocvCameraThread = class(TThread)
+  private const
+    ThreadSleepConst = 10;
   private
-    FOnNotifyData: TocvOnDataNotify;
+    FOnNotifyData: TOnOcvNotify;
   protected
     FCapture: pCvCapture;
     procedure Execute; override;
   public
-    property OnNotifyData: TocvOnDataNotify Read FOnNotifyData write FOnNotifyData;
+    property OnNotifyData: TOnOcvNotify Read FOnNotifyData write FOnNotifyData;
   end;
 
   TocvResolution = (r160x120, r320x240, r424x240, r640x360, r800x448, r960x544, r1280x720);
@@ -85,6 +87,7 @@ type
     FEnabled: Boolean;
     FCameraCaptureSource: TocvCameraCaptureSource;
     FResolution: TocvResolution;
+    FOnImage: TOnOcvNotify;
     procedure SetEnabled(const Value: Boolean);
     procedure SetCameraCaptureSource(const Value: TocvCameraCaptureSource);
     procedure setResolution(const Value: TocvResolution);
@@ -94,7 +97,7 @@ type
   protected
     FCapture: pCvCapture;
     FOpenCVCameraThread: TocvCameraThread;
-    procedure OnNotifyData(const IplImage: pIplImage);
+    procedure OnNotifyData(Sender: TObject; const IplImage: IocvImage);
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
@@ -102,6 +105,7 @@ type
     property Enabled: Boolean Read FEnabled write SetEnabled default False;
     property CameraCaptureSource: TocvCameraCaptureSource read FCameraCaptureSource write SetCameraCaptureSource default CAP_ANY;
     property Resolution: TocvResolution read FResolution write setResolution;
+    property OnImage: TOnOcvNotify read FOnImage write FOnImage;
   end;
 
 implementation
@@ -144,8 +148,6 @@ const
     CV_CAP_XIAPI, // XIMEA Camera API
     CV_CAP_AVFOUNDATION);
 
-  ThreadSleepConst = 20;
-
 Type
   TCameraResolution = record
     cWidth, cHeight: Integer;
@@ -172,15 +174,8 @@ begin
           if Assigned(OnNotifyData) then
             Synchronize(
               procedure
-              Var
-                NotifyFrame: pIplImage;
               begin
-                NotifyFrame := cvCloneImage(frame);
-                try
-                  OnNotifyData(frame);
-                finally
-                  cvReleaseImage(NotifyFrame);
-                end;
+                OnNotifyData(Self, TocvImage.CreateCopy(frame));
               end);
           Sleep(ThreadSleepConst);
         end;
@@ -233,8 +228,10 @@ begin
   end;
 end;
 
-procedure TocvCamera.OnNotifyData(const IplImage: pIplImage);
+procedure TocvCamera.OnNotifyData(Sender: TObject; const IplImage: IocvImage);
 begin
+  if Assigned(OnImage) then
+    OnImage(Self, IplImage);
   NotifyReceiver(IplImage);
 end;
 

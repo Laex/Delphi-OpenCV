@@ -28,7 +28,7 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, uOCVTypes, uOCVImageOperation,
-  core.types_c, uOCVCamera, uOCVView, Vcl.StdCtrls;
+  core.types_c, uOCVCamera, uOCVView, Vcl.StdCtrls, Vcl.ExtCtrls;
 
 type
   TMainForm = class(TForm)
@@ -66,7 +66,7 @@ end;
 procedure TMainForm.FormCreate(Sender: TObject);
 begin
   cbb1.Items.Assign(GetRegisteredImageOperations);
-//  cbb1.ItemIndex := 0;
+  cbb1.ItemIndex := cbb1.Items.Count-1;
 //  ocvmgprtn1.OperationClass := TocvImageOperationClass(cbb1.Items.Objects[cbb1.ItemIndex]);
   ocvcmr1.Enabled := True;
 end;
