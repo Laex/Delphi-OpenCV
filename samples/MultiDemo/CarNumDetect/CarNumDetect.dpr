@@ -45,6 +45,8 @@ const
   WindowNameOriginal = 'Original Car in Gray Scale';
   WindowNameThreshold = 'Threshold Car Image';
   WindowNameCarsNumber = 'Cars Number Detect';
+  WindowNamePlateNum = 'Plate Number';
+  Radius = 1;
 
 type
   pCtx = ^TCtx;
@@ -58,6 +60,7 @@ type
     MyInputImage: pIplImage; // Input image
     MyOrigColorImage: pIplImage; // Original Color Image
     MyThresholdImage: pIplImage; // Threshold Image
+    MyPlateNumberImage: pIplImage; // PlateNumber Image
     MyStorage: pCvMemStorage; // Memory storage
     MyCvRect: ArrCvRect;
     MyCvBox2D: ArrCvBox2D;
@@ -73,6 +76,30 @@ var
   WriteVideoFileName: AnsiString;
   MinRatio, MaxRatio, MinFillArea, VideoCamWidth, VideoCamHeight: Double;
   MinArea, MaxArea, MinFullArea, MaxFullArea: Integer;
+  EnableErode, EnableDilate: Integer;
+
+procedure PlateNumber(const Ctx: pCtx; Rect: TCvRect);
+var
+  Sub_Image: pIplImage;
+begin
+  // Создаем временный образ
+  Sub_Image := cvCreateImage(cvGetSize(Ctx.MyOrigColorImage), Ctx.MyOrigColorImage.depth, Ctx.MyOrigColorImage.nChannels);
+  // Копируем оригинальное изображение во временный образ
+  cvCopy(Ctx.MyOrigColorImage, Sub_Image, nil);
+  // Вырезаем рамку из временного образа
+  cvSetImageROI(Sub_Image, Rect);
+  // Конвертируем в градации серого
+  Ctx.MyPlateNumberImage := cvCreateImage(cvGetSize(Sub_Image), IPL_DEPTH_8U, 1);
+  cvConvertImage(Sub_Image, Ctx.MyPlateNumberImage, CV_BGR2BGRA);
+  cvReleaseImage(Sub_Image);
+  cvThreshold(Ctx.MyPlateNumberImage, Ctx.MyPlateNumberImage, Threshold, ThresholdMaxValue, CV_THRESH_BINARY or CV_THRESH_OTSU);
+  // Дилатация
+  //cvDilate(Ctx.MyPlateNumberImage, Ctx.MyPlateNumberImage, nil, 1);
+  // Эрозия
+  //cvErode(Ctx.MyPlateNumberImage, Ctx.MyPlateNumberImage, nil, 1);
+  // Находим границы
+  //cvCanny(Ctx.MyPlateNumberImage, Ctx.MyPlateNumberImage, 100, 50, 3);
+end;
 
 procedure FindBox(const Ctx: pCtx; min_ratio, max_ratio: Double; min_area, max_area, MinFullArea, MaxFullArea: Integer;
   MinFillArea: Double);
@@ -110,23 +137,30 @@ begin
         // Ширина должна быть больше чем высоты
         if box.size.width > box.size.height then
         begin
-          // Фильт по площади
+          // Фильт по площади прямоугольника
           if (area > min_area) and (area < max_area) then
           begin
-            { if box.size.width > box.size.height then
-              begin
-              WriteLn(Format('[d] Rect size: height=%s, width=%s', [FloatToStr(box.size.height), FloatToStr(box.size.width)]));
-              WriteLn(Format('[d] Ratio: %s', [FloatToStr(IfThen(box.size.width < box.size.height, box.size.width/box.size.height, box.size.height/box.size.width))]));
-              WriteLn(Format('[d] Full Contour Area: %s', [FloatToStr(abs(cvContourArea(c, CV_WHOLE_SEQ)))]));
-              WriteLn(Format('[d] Contour Area: %s', [FloatToStr(abs(cvContourArea(c, CV_WHOLE_SEQ))/(area))]));
-              WriteLn('------------------------- ');
-              cvRectangle(Ctx.MyOrigColorImage, cvPoint(Round(box.center.x-box.size.width/2),Round(box.center.y-box.size.height/2)), cvPoint(Round(box.center.x+box.size.width/2),Round(box.center.y+box.size.height/2)), CV_RGB(255,255,0), 2);
-              end; }
             ratio := IfThen(box.size.width < box.size.height, box.size.width / box.size.height,
               box.size.height / box.size.width);
+             {$IFDEF DEBUG}
+             {if box.size.width > box.size.height then
+             begin
+              WriteLn(Format('[d1] Rect size: height=%s, width=%s', [FloatToStr(box.size.height), FloatToStr(box.size.width)]));
+              WriteLn(Format('[d1] Ratio: %s', [FloatToStr(IfThen(box.size.width < box.size.height, box.size.width/box.size.height, box.size.height/box.size.width))]));
+              WriteLn(Format('[d1] Full Contour Area: %s', [FloatToStr(abs(cvContourArea(c, CV_WHOLE_SEQ)))]));
+              WriteLn(Format('[d1] Contour Area: %s', [FloatToStr(abs(cvContourArea(c, CV_WHOLE_SEQ))/(area))]));
+              WriteLn('------------------------- ');
+              }cvRectangle(Ctx.MyOrigColorImage, cvPoint(Round(box.center.x-box.size.width/2),Round(box.center.y-box.size.height/2)), cvPoint(Round(box.center.x+box.size.width/2),Round(box.center.y+box.size.height/2)), CV_RGB(0,255,255), 2);
+             //end;
+             {$ENDIF}
             // Фильт по соотношению сторон
             if (ratio > min_ratio) and (ratio < max_ratio) then
             begin
+              {$IFDEF DEBUG}
+              //WriteLn(Format('[d2] Ratio: %s', [FloatToStr(IfThen(box.size.width < box.size.height, box.size.width/box.size.height, box.size.height/box.size.width))]));
+              //WriteLn('------------------------- ');
+              cvRectangle(Ctx.MyOrigColorImage, cvPoint(Round(box.center.x-box.size.width/2),Round(box.center.y-box.size.height/2)), cvPoint(Round(box.center.x+box.size.width/2),Round(box.center.y+box.size.height/2)), CV_RGB(0,255,255), 2);
+              {$ENDIF}
               { cvContourArea — возвращает площадь контура
                 contour — контур (последовательность или массив вершин)
                 slice — начальная и конечные точки контура (по-умолчанию весь контур)
@@ -135,6 +169,12 @@ begin
               contourarea := cvContourArea(c, CV_WHOLE_SEQ);
               if (abs(contourarea) > MinFullArea) and (abs(contourarea) < MaxFullArea) then
               begin
+                {$IFDEF DEBUG}
+                //WriteLn(Format('[d3] Ratio: %s', [FloatToStr(IfThen(box.size.width < box.size.height, box.size.width/box.size.height, box.size.height/box.size.width))]));
+                //WriteLn(Format('[d3] Full Contour Area: %s', [FloatToStr(abs(contourarea))]));
+                //WriteLn('------------------------- ');
+                cvRectangle(Ctx.MyOrigColorImage, cvPoint(Round(box.center.x-box.size.width/2),Round(box.center.y-box.size.height/2)), cvPoint(Round(box.center.x+box.size.width/2),Round(box.center.y+box.size.height/2)), CV_RGB(255,0,0), 2);
+                {$ENDIF}
                 // Фильт по соотношению площади контура к площади прямоугольника
                 if abs(contourarea) / (area) > MinFillArea then
                 begin
@@ -160,6 +200,7 @@ begin
                     горизонтальны (параллельны сторонам(системе координат) изображения).
                   }
                   rect := cvBoundingRect(c);
+                  PlateNumber(Ctx, rect);
                   // SetLength(Ctx.MyCvRect, Length(Ctx.MyCvRect)+1);
                   // Ctx.MyCvRect[Length(Ctx.MyCvRect)+1] := rect;
                   cvRectangle(Ctx.MyOrigColorImage, cvPoint(rect.x, rect.y),
@@ -291,6 +332,8 @@ begin
 end;
 
 procedure ImageFilterAndThreshold(const Ctx: pCtx);
+var
+  Kern: pIplConvKernel;
 begin
   // Выделение монохромного изображения (бинаризация) с использованием адаптивного подхода.
   // max_value = 255 - Максимальное значение используемое только с CV_THRESH_BINARY и CV_THRESH_BINARY_INV
@@ -304,9 +347,16 @@ begin
   else
     // Выделение монохромного изображения (бинаризация) с использованием порогового метода.
     cvThreshold(Ctx.MyInputImage, Ctx.MyThresholdImage, Threshold, ThresholdMaxValue, CV_THRESH_BINARY_INV);
+  Kern := cvCreateStructuringElementEx(Radius * 2 + 1, Radius * 2 + 1, Radius, Radius, CV_SHAPE_RECT);
+  if EnableErode = 1 then
+    cvErode(Ctx.MyThresholdImage, Ctx.MyThresholdImage, Kern, 1);  // Эрозия
+  if EnableDilate = 1 then
+  cvDilate(Ctx.MyThresholdImage, Ctx.MyThresholdImage, Kern, 1); // Дилатация
 end;
 
 procedure VideoFilterAndThreshold(const Ctx: pCtx);
+var
+  Kern: pIplConvKernel;
 begin
   cvCvtColor(Ctx.MyOrigColorImage, Ctx.MyInputImage, CV_BGR2GRAY);
   // Выделение монохромного изображения (бинаризация) с использованием адаптивного подхода.
@@ -321,6 +371,11 @@ begin
   else
     // Выделение монохромного изображения (бинаризация) с использованием порогового метода.
     cvThreshold(Ctx.MyInputImage, Ctx.MyThresholdImage, Threshold, ThresholdMaxValue, CV_THRESH_BINARY_INV);
+  Kern := cvCreateStructuringElementEx(Radius * 2 + 1, Radius * 2 + 1, Radius, Radius, CV_SHAPE_RECT);
+  if EnableErode = 1 then
+    cvErode(Ctx.MyThresholdImage, Ctx.MyThresholdImage, Kern, 1);  // Эрозия
+  if EnableDilate = 1 then
+  cvDilate(Ctx.MyThresholdImage, Ctx.MyThresholdImage, Kern, 1); // Дилатация
 end;
 
 procedure InitCtx(const Ctx: pCtx);
@@ -341,6 +396,8 @@ begin
   end;
   cvReleaseImage(Ctx.MyInputImage);
   cvReleaseImage(Ctx.MyThresholdImage);
+  if Assigned(Ctx.MyPlateNumberImage) then
+    cvReleaseImage(Ctx.MyPlateNumberImage);
   cvReleaseMemStorage(Ctx.MyStorage);
   cvDestroyAllWindows();
 end;
@@ -351,6 +408,7 @@ begin
     cvNamedWindow(WindowNameOriginal, CV_WINDOW_AUTOSIZE);
   cvNamedWindow(WindowNameThreshold, CV_WINDOW_AUTOSIZE);
   cvNamedWindow(WindowNameCarsNumber, CV_WINDOW_AUTOSIZE);
+  cvNamedWindow(WindowNamePlateNum, CV_WINDOW_AUTOSIZE);
   // Размеcтим окна по рабочему cтолу
   if (Ctx.MyInputImage.width < 1920 / 4) and (Ctx.MyInputImage.height < 1080 / 2) then
   begin
@@ -385,6 +443,8 @@ begin
   cvShowImage(WindowNameThreshold, MyCtx.MyThresholdImage);
   // Показываем что получилоcь
   cvShowImage(WindowNameCarsNumber, MyCtx.MyOrigColorImage);
+  // Показываем сам номер
+  cvShowImage(WindowNamePlateNum, Ctx.MyPlateNumberImage);
 end;
 
 // Загружаем настройки
@@ -432,6 +492,8 @@ begin
       MinFullArea := INI.ReadInteger('Main', 'MinFullArea', 800);
       MaxFullArea := INI.ReadInteger('Main', 'MaxFullArea', 7000);
       MinFillArea := INI.ReadFloat('Main', 'MinFillArea', 0.7);
+      EnableErode := INI.ReadInteger('Main', 'EnableErode', 1);
+      EnableDilate := INI.ReadInteger('Main', 'EnableDilate', 1);
     finally
       INI.Free;
     end;
@@ -460,6 +522,8 @@ begin
       MinFullArea := 800;
       MaxFullArea := 7000;
       MinFillArea := 0.7;
+      EnableErode := 1;
+      EnableDilate := 1;
       // Сохраняем настройки
       INI.WriteInteger('Main', 'SourceCapture', SourceCapture);
       INI.WriteInteger('Main', 'VideoCamNum', VideoCamNum);
@@ -481,6 +545,8 @@ begin
       INI.WriteInteger('Main', 'MinFullArea', MinFullArea);
       INI.WriteInteger('Main', 'MaxFullArea', MaxFullArea);
       INI.WriteFloat('Main', 'MinFillArea', MinFillArea);
+      INI.WriteInteger('Main', 'EnableErode', EnableErode);
+      INI.WriteInteger('Main', 'EnableDilate', EnableDilate);
     finally
       INI.Free;
     end;
