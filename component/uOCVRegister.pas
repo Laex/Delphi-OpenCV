@@ -39,9 +39,8 @@ procedure Register;
 begin
   RegisterComponents('OpenCV', [TocvImageOperation]);
   RegisterComponents('OpenCV', [TocvCamera]);
-  RegisterComponents('OpenCV', [TocvCamera]);
   RegisterComponents('OpenCV', [TocvView]);
-  RegisterClasses([TocvNoneOperation, TocvGrayScaleOperation, TovcCannyOperation, TovcSmoothOperation]);
+  RegisterClasses([TocvNoneOperation, TocvGrayScaleOperation, TovcCannyOperation, TovcSmoothOperation, TovcErodeOperation, TovcDilateOperation, TocvLaplaceOperation, TovcSobelOperation, TocvThresholdOperation, TocvAdaptiveThresholdOperation, TocvContoursOperation, TocvRotateOperation]);
 end;
 
 end.

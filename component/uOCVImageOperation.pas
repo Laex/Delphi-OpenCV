@@ -199,6 +199,33 @@ type
     property Y: Integer read FPoint.Y write FPoint.Y;
   end;
 
+  TocvInterpolationMethod = (INTER_NN, INTER_LINEAR, INTER_CUBIC, INTER_AREA, INTER_LANCZOS4);
+
+  TocvInterpolationWarpingFlag = (WARP_FILL_OUTLIERS, WARP_INVERSE_MAP);
+  TocvInterpolationWarpingFlagSet = set of TocvInterpolationWarpingFlag;
+
+  TocvRotateOperation = class(TocvCustomImageOperation)
+  protected
+    procedure AssignTo(Dest: TPersistent); override;
+    function GetOwner: TPersistent; override;
+  private
+    FCustomCenter: TocvPoint;
+    FMethod: TocvInterpolationMethod;
+    FWarpingFlag: TocvInterpolationWarpingFlagSet;
+    FScale: Double;
+  public
+    constructor Create(AOwner: TPersistent); override;
+    destructor Destroy; override;
+    function DoTransform(const Source: IocvImage; var Destanation: IocvImage): Boolean; override;
+  published
+    property Angle: Integer index 0 Read GetIntParam write SetIntParam;
+    property RotateAroundCenter: Boolean index 0 Read GetBoolParam write SetBoolParam;
+    property CustomCenter: TocvPoint Read FCustomCenter write FCustomCenter;
+    property Method: TocvInterpolationMethod read FMethod write FMethod default INTER_LINEAR;
+    property WarpingFlag: TocvInterpolationWarpingFlagSet read FWarpingFlag write FWarpingFlag default [WARP_FILL_OUTLIERS];
+    property Scale: Double read FScale write FScale;
+  end;
+
   IocvEditorPropertiesContainer = interface
     ['{418F88DD-E35D-4425-BF24-E753E83D35D6}']
     function GetProperties: TocvCustomImageOperation;
@@ -1242,6 +1269,78 @@ begin
   Result := -1;
 end;
 
+{TocvRotateOperation}
+
+procedure TocvRotateOperation.AssignTo(Dest: TPersistent);
+begin
+  if Dest is TocvRotateOperation then
+  begin
+    FCustomCenter := (Dest as TocvRotateOperation).FCustomCenter;
+    FMethod := (Dest as TocvRotateOperation).FMethod;
+    FWarpingFlag := (Dest as TocvRotateOperation).FWarpingFlag;
+    FScale := (Dest as TocvRotateOperation).FScale;
+  end
+  else
+    inherited;
+end;
+
+constructor TocvRotateOperation.Create(AOwner: TPersistent);
+begin
+  inherited;
+  Angle := 90;
+  FCustomCenter := TocvPoint.Create;
+  RotateAroundCenter := True;
+  Method := INTER_LINEAR;
+  WarpingFlag := [WARP_FILL_OUTLIERS];
+  Scale := 1;
+end;
+
+destructor TocvRotateOperation.Destroy;
+begin
+  FCustomCenter.Free;
+  inherited;
+end;
+
+function TocvRotateOperation.DoTransform(const Source: IocvImage; var Destanation: IocvImage): Boolean;
+Var
+  rot_mat: pCvMat;
+  center: TcvPoint2D32f;
+  D: pIplImage;
+  M: Integer;
+begin
+  // Матрица трансформации
+  rot_mat := cvCreateMat(2, 3, CV_32FC1);
+  // Вращение относительно центра изображения
+  if RotateAroundCenter then
+  begin
+    center.X := Source.IpImage^.width div 2;
+    center.Y := Source.IpImage^.height div 2;
+  end
+  else
+  begin
+    center.X := CustomCenter.X;
+    center.Y := CustomCenter.Y;
+  end;
+  cv2DRotationMatrix(center, Angle, Scale, rot_mat);
+  // Создаем изображение
+  D := cvCreateImage(cvGetSize(Source.IpImage), Source.IpImage^.depth, Source.IpImage^.nChannels);
+  // Выполняем вращение
+  M := Integer(Method);
+  if WARP_FILL_OUTLIERS in FWarpingFlag then
+    M := M or CV_WARP_FILL_OUTLIERS;
+  if WARP_INVERSE_MAP in FWarpingFlag then
+    M := M or CV_WARP_INVERSE_MAP;
+  cvWarpAffine(Source.IpImage, D, rot_mat, M, cvScalarAll(0));
+  cvReleaseMat(rot_mat);
+  Destanation := TocvImage.Create(D);
+  Result := True;
+end;
+
+function TocvRotateOperation.GetOwner: TPersistent;
+begin
+
+end;
+
 {TPersistentPoint}
 
 procedure TocvPoint.AssignTo(Dest: TPersistent);
@@ -1337,6 +1436,7 @@ GetRegisteredImageOperations.RegisterIOClass(TovcSobelOperation, 'Sobel');
 GetRegisteredImageOperations.RegisterIOClass(TocvThresholdOperation, 'Threshold');
 GetRegisteredImageOperations.RegisterIOClass(TocvAdaptiveThresholdOperation, 'AdaptiveThreshold');
 GetRegisteredImageOperations.RegisterIOClass(TocvContoursOperation, 'Contours');
+GetRegisteredImageOperations.RegisterIOClass(TocvRotateOperation, 'Rotate');
 
 finalization
 

@@ -90,7 +90,7 @@ type
     FOnImage: TOnOcvNotify;
     procedure SetEnabled(const Value: Boolean);
     procedure SetCameraCaptureSource(const Value: TocvCameraCaptureSource);
-    procedure setResolution(const Value: TocvResolution);
+    procedure SetResolution(const Value: TocvResolution);
     procedure TerminateCameraThread;
     procedure ReleaseCamera;
     procedure SetCameraResolution;
@@ -283,7 +283,7 @@ begin
   cvSetCaptureProperty(FCapture, CV_CAP_PROP_FRAME_HEIGHT, CameraResolution[FResolution].cHeight);
 end;
 
-procedure TocvCamera.setResolution(const Value: TocvResolution);
+procedure TocvCamera.SetResolution(const Value: TocvResolution);
 begin
   if FResolution <> Value then
   begin

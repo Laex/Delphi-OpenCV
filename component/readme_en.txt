@@ -4,7 +4,7 @@
 *****************************************************************
 
 Visual and non-visual components for working with the library OpenCV.
-Version: OpenCV 2.4.7.
+Version: OpenCV 2.4.9
 Package: OpenCV.dpk
 
 The demo version.
