@@ -75,17 +75,13 @@ object MainForm: TMainForm
   end
   object ocvmgprtn1: TocvImageOperation
     VideoSource = ocvcmr1
-    OperationClassName = 'TocvContoursOperation'
-    Operation.OperationClassName = 'TocvThresholdOperation'
-    Operation.Preprocessing.MaxValue = 255.000000000000000000
-    Operation.Preprocessing.ThresholdType = THRESH_BINARY_INV
-    Operation.Preprocessing.Threshold = 128.000000000000000000
-    Operation.Offset.X = 0
-    Operation.Offset.Y = 0
-    Operation.ContourDraw.Thickness = 1
-    Operation.ContourDraw.Offset.X = 0
-    Operation.ContourDraw.Offset.Y = 0
-    Operation.ApproxPoly.Eps = 3.000000000000000000
+    OperationClassName = 'TocvRotateOperation'
+    Operation.Angle = 45
+    Operation.RotateAroundCenter = False
+    Operation.CustomCenter.X = 50
+    Operation.CustomCenter.Y = 50
+    Operation.Method = INTER_LANCZOS4
+    Operation.Scale = 0.500000000000000000
     Operations = <>
     Left = 328
     Top = 164
