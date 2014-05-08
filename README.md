@@ -25,18 +25,19 @@ email: sleuthhound@gmail.com
 3.Add the search path for the modules of the project in Delphi IDE (Tools-Options-Delphi Options-Library-Library path)
 ```
 <PROJECT_ROOT>\include
-<PROJECT_ROOT>\include\calib3d   
-<PROJECT_ROOT>\include\contrib   
-<PROJECT_ROOT>\include\core      
+<PROJECT_ROOT>\include\calib3d
+<PROJECT_ROOT>\include\contrib
+<PROJECT_ROOT>\include\core
 <PROJECT_ROOT>\include\features2d
-<PROJECT_ROOT>\include\ffmpeg    
-<PROJECT_ROOT>\include\highgui   
-<PROJECT_ROOT>\include\imgproc   
-<PROJECT_ROOT>\include\legacy    
-<PROJECT_ROOT>\include\ml        
-<PROJECT_ROOT>\include\nonfree   
-<PROJECT_ROOT>\include\objdetect 
+<PROJECT_ROOT>\include\ffmpeg
+<PROJECT_ROOT>\include\highgui
+<PROJECT_ROOT>\include\imgproc
+<PROJECT_ROOT>\include\legacy
+<PROJECT_ROOT>\include\ml
+<PROJECT_ROOT>\include\nonfree
+<PROJECT_ROOT>\include\objdetect
 <PROJECT_ROOT>\include\stitching
+<PROJECT_ROOT>\include\video
 <PROJECT_ROOT>\component
 ```
 where ```<PROJECT_ROOT>``` directory, which was unzipped project.

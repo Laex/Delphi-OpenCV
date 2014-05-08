@@ -66,8 +66,8 @@ end;
 procedure TMainForm.FormCreate(Sender: TObject);
 begin
   cbb1.Items.Assign(GetRegisteredImageOperations);
-//  cbb1.ItemIndex := 0;
-//  ocvmgprtn1.OperationClass := TocvImageOperationClass(cbb1.Items.Objects[cbb1.ItemIndex]);
+  cbb1.ItemIndex := 0;
+  ocvmgprtn1.OperationClass := TocvImageOperationClass(cbb1.Items.Objects[cbb1.ItemIndex]);
   ocvcmr1.Enabled := True;
 end;
 
