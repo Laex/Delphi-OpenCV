@@ -228,6 +228,19 @@ type
     property Param: Double index 1 Read GetFloatParam write SetFloatParam; // 5;
   end;
 
+  TocvRotateOperation = class(TocvCustomImageOperation)
+  protected
+    procedure AssignTo(Dest: TPersistent); override;
+  private
+    FAngle: Integer;
+    procedure SetAngle(const Value: Integer);
+  public
+    constructor Create(AOwner: TComponent); override;
+    function Transform(const Source: pIplImage; var Destanation: pIplImage): Boolean; override;
+  published
+    property Angle: Integer Read FAngle write SetAngle default 90;
+  end;
+
   TocvPoint = class(TPersistent)
   protected
     procedure AssignTo(Dest: TPersistent); override;
@@ -1459,6 +1472,69 @@ begin
   Result := -1;
 end;
 
+{TocvRotateOperation}
+
+procedure TocvRotateOperation.AssignTo(Dest: TPersistent);
+begin
+  if Dest is TocvRotateOperation then
+  begin
+    FAngle := (Dest as TocvRotateOperation).FAngle;
+  end
+  else
+    inherited;
+end;
+
+constructor TocvRotateOperation.Create(AOwner: TComponent);
+begin
+  inherited;
+  FAngle := 90;
+end;
+
+procedure TocvRotateOperation.SetAngle(const Value: Integer);
+begin
+  if LockTransform then
+    try
+      FAngle := Value;
+    finally
+      UnlockTransform;
+    end;
+end;
+
+function TocvRotateOperation.Transform(const Source: pIplImage; var Destanation: pIplImage): Boolean;
+Var
+  rot_mat: pCvMat;
+  scale: Double;
+  center: TcvPoint2D32f;
+  D: pIplImage;
+begin
+  Result := false;
+  if LockTransform then
+    try
+      NotifyGetParams;
+      // Матрица трансформации
+      rot_mat := cvCreateMat(2, 3, CV_32FC1);
+      // Вращение относительно центра изображения
+      center.x := Source^.width div 2;
+      center.y := Source^.height div 2;
+      scale := 1;
+      cv2DRotationMatrix(center, Angle, scale, rot_mat);
+      // Создаем изображение
+      D := nil;
+      D := cvCreateImage(cvGetSize(Source), Source^.depth, Source^.nChannels);
+      Destanation := cvCreateImage(cvGetSize(Source), Source^.depth, Source^.nChannels);
+      // Выполняем вращение
+      cvWarpAffine(Source, D, rot_mat, CV_INTER_LINEAR or CV_WARP_FILL_OUTLIERS, cvScalarAll(0));
+      // Копируем изображение
+      cvCopy(D, Destanation);
+      // Освобождаем ресурсы
+      cvReleaseImage(D);
+      cvReleaseMat(rot_mat);
+      Result := true;
+    finally
+      UnlockTransform;
+    end;
+end;
+
 {TPersistentPoint}
 
 procedure TocvPoint.AssignTo(Dest: TPersistent);
@@ -1526,6 +1602,7 @@ GetRegisteredImageOperations.RegisterIOClass(TovcSobelOperation, 'Sobel');
 GetRegisteredImageOperations.RegisterIOClass(TocvThresholdOperation, 'Threshold');
 GetRegisteredImageOperations.RegisterIOClass(TocvAdaptiveThresholdOperation, 'AdaptiveThreshold');
 GetRegisteredImageOperations.RegisterIOClass(TocvContoursOperation, 'Contours');
+GetRegisteredImageOperations.RegisterIOClass(TocvRotateOperation, 'Rotate');
 
 finalization
 
