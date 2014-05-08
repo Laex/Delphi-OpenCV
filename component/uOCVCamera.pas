@@ -87,7 +87,7 @@ type
     FResolution: TocvResolution;
     procedure SetEnabled(const Value: Boolean);
     procedure SetCameraCaptureSource(const Value: TocvCameraCaptureSource);
-    procedure setResolution(const Value: TocvResolution);
+    procedure SetResolution(const Value: TocvResolution);
     procedure TerminateCameraThread;
     procedure ReleaseCamera;
     procedure SetCameraResolution;
@@ -101,7 +101,7 @@ type
   published
     property Enabled: Boolean Read FEnabled write SetEnabled default False;
     property CameraCaptureSource: TocvCameraCaptureSource read FCameraCaptureSource write SetCameraCaptureSource default CAP_ANY;
-    property Resolution: TocvResolution read FResolution write setResolution;
+    property Resolution: TocvResolution read FResolution write SetResolution;
   end;
 
 implementation
@@ -286,7 +286,7 @@ begin
   cvSetCaptureProperty(FCapture, CV_CAP_PROP_FRAME_HEIGHT, CameraResolution[FResolution].cHeight);
 end;
 
-procedure TocvCamera.setResolution(const Value: TocvResolution);
+procedure TocvCamera.SetResolution(const Value: TocvResolution);
 begin
   if FResolution <> Value then
   begin
