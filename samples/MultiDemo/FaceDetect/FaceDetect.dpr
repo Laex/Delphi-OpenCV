@@ -48,23 +48,23 @@ Const
   // setup the cameras properly based on OS platform
   CAMERA_INDEX = CV_CAP_ANY;
   // ******************************************************************************/
-  windowName            = 'Haar Cascade Detection';                        // window name
+  windowName = 'Haar Cascade Detection'; // window name
   cascade_name: pCVChar = 'FaceDetectXML\haarcascade_frontalface_alt.xml'; // cascade file
 
 Var
-  img             : pIplImage  = nil; // image object
-  frame           : pIplImage  = nil;
-  capture         : pCvCapture = nil; // capture object
-  detected_objects: pCvSeq     = nil; // list of detected items
-  key             : Integer;          // user input
-  EVENT_LOOP_DELAY: Integer = 40;     // delay for GUI window  40 ms equates to 1000ms/25fps=40ms per frame
-  cascade         : pCvHaarClassifierCascade;
-  storage         : pCvMemStorage;
-  gray            : pIplImage;
-  imgcopy         : pIplImage;
-  i               : Integer;
-  r               : pCvRect;
-  isCapture:Boolean = false;
+  img: pIplImage = nil; // image object
+  frame: pIplImage = nil;
+  capture: pCvCapture = nil; // capture object
+  detected_objects: pCvSeq = nil; // list of detected items
+  key: Integer; // user input
+  EVENT_LOOP_DELAY: Integer = 40; // delay for GUI window  40 ms equates to 1000ms/25fps=40ms per frame
+  cascade: pCvHaarClassifierCascade;
+  storage: pCvMemStorage;
+  gray: pIplImage;
+  imgcopy: pIplImage;
+  i: Integer;
+  r: pCvRect;
+  isCapture: Boolean = false;
 
 begin
   try
@@ -72,45 +72,33 @@ begin
     // otherwise default to capture from attached H/W camera
     if ParamCount = 1 then
     begin
-      img := cvLoadImage(
-        c_str(ParamStr(1)),
-        CV_LOAD_IMAGE_UNCHANGED);
+      img := cvLoadImage(c_str(ParamStr(1)), CV_LOAD_IMAGE_UNCHANGED);
       if not Assigned(img) then
       begin
         capture := cvCreateFileCapture(c_str(ParamStr(1)));
-        isCapture:=True;
+        isCapture := True;
       end;
     end;
 
     if (not Assigned(img)) and (not Assigned(capture)) then
     begin
       capture := cvCreateCameraCapture(CAMERA_INDEX);
-      isCapture:=True;
+      isCapture := True;
     end;
     if not Assigned(capture) then
       Halt(1);
 
     // create window object (use flag:=0 to allow resize, 1 to auto fix size)
-    cvNamedWindow(
-      windowName,
-      0);
+    cvNamedWindow(windowName, 0);
 
     // load the trained haar cascade classifier from file
     // and create storage required for detections
-    cascade := cvLoad(
-      cascade_name,
-      nil,
-      nil,
-      nil);
+    cascade := cvLoad(cascade_name, nil, nil, nil);
     if Assigned(cascade) then
-      Writeln(
-        'LOADED : ',
-        cascade_name)
+      Writeln('LOADED : ', cascade_name)
     else
     begin
-      Writeln(
-        'ERROR: Could not load classifier cascade : ',
-        cascade_name);
+      Writeln('ERROR: Could not load classifier cascade : ', cascade_name);
       Halt(1);
     end;
     try
@@ -134,10 +122,7 @@ begin
       end;
 
       // create a greyscale image upon which to run the classifier
-      gray := cvCreateImage(
-        cvSize(img^.width, img^.height),
-        img^.depth,
-        1);
+      gray := cvCreateImage(cvSize(img^.width, img^.height), img^.depth, 1);
 
       // create a copy of the image upon which to do detection and box drawing
       imgcopy := cvCloneImage(img);
@@ -176,41 +161,25 @@ begin
         // capture object buffer)
         if (img^.origin = IPL_ORIGIN_TL) then
         begin
-          cvCopy(
-            frame,
-            imgcopy);
+          cvCopy(frame, imgcopy);
         end
         else
         begin
-          cvFlip(
-            frame,
-            imgcopy);
+          cvFlip(frame, imgcopy);
           imgcopy^.origin := IPL_ORIGIN_TL;
         end;
         gray^.origin := imgcopy^.origin;
 
         // convert input image to grayscale
-        cvCvtColor(
-          imgcopy,
-          gray,
-          CV_BGR2GRAY);
+        cvCvtColor(imgcopy, gray, CV_BGR2GRAY);
 
         // histogram equalize it also to maximize the region differences
-        cvEqualizeHist(
-          gray,
-          gray);
+        cvEqualizeHist(gray, gray);
 
         // run the haar cascade detection
         // with parameters scale:=1.2, neighbours := 4 and with Canny pruning
         // turned on with minimum detection scale 30x30 pixels
-        detected_objects := cvHaarDetectObjects(
-          gray,
-          cascade,
-          storage,
-          1.2,
-          4,
-          CV_HAAR_DO_CANNY_PRUNING,
-          cvSize(30, 30),
+        detected_objects := cvHaarDetectObjects(gray, cascade, storage, 1.2, 4, CV_HAAR_DO_CANNY_PRUNING, cvSize(30, 30),
           cvSize(0, 0));
 
         // draw a red rectangle around any detected objects
@@ -218,14 +187,8 @@ begin
         While i < ifthen(Assigned(detected_objects), detected_objects^.total, 0) do
         begin
           r := pCvRect(cvGetSeqElem(detected_objects, i));
-          cvRectangle(
-            imgcopy,
-            cvPoint(r^.x, r^.y),
-            cvPoint((r^.x) + (r^.width), (r^.y) + (r^.height)),
-            CV_RGB(255, 0, 0),
-            2,
-            8,
-            0);
+          cvRectangle(imgcopy, cvPoint(r^.x, r^.y), cvPoint((r^.x) + (r^.width), (r^.y) + (r^.height)),
+            CV_RGB(255, 0, 0), 2, 8, 0);
           Inc(i);
         end;
         // if Assigned(detected_objects) then
@@ -233,9 +196,7 @@ begin
         // cvClearMemStorage(storage);
 
         // display image in window
-        cvShowImage(
-          windowName,
-          imgcopy);
+        cvShowImage(windowName, imgcopy);
 
         // start event processing loop (very important,in fact essential for GUI)
         // 40 ms roughly equates to 1000ms/25fps := 4ms per frame
@@ -265,10 +226,7 @@ begin
 
   except
     on E: Exception do
-      Writeln(
-        E.ClassName,
-        ': ',
-        E.Message);
+      Writeln(E.ClassName, ': ', E.Message);
   end;
 
 end.

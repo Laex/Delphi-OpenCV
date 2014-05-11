@@ -37,11 +37,10 @@ Uses
 
 procedure Register;
 begin
-  RegisterComponents('OpenCV', [TocvImageOperation,TocvCameraSource,TocvView,TocvFileSource,TocvIPCamSource]);
-  RegisterClasses([ TocvNoneOperation, TocvGrayScaleOperation, TovcCannyOperation,
-                    TovcSmoothOperation, TovcErodeOperation, TovcDilateOperation,
-                    TocvLaplaceOperation, TovcSobelOperation, TocvThresholdOperation,
-                    TocvAdaptiveThresholdOperation, TocvContoursOperation, TocvRotateOperation]);
+  RegisterComponents('OpenCV', [TocvImageOperation, TocvCameraSource, TocvView, TocvFileSource, TocvIPCamSource]);
+  RegisterClasses([TocvNoneOperation, TocvGrayScaleOperation, TovcCannyOperation, TovcSmoothOperation, TovcErodeOperation,
+    TovcDilateOperation, TocvLaplaceOperation, TovcSobelOperation, TocvThresholdOperation, TocvAdaptiveThresholdOperation,
+    TocvContoursOperation, TocvRotateOperation, TocvAbsDiff, TocvFaceDetect]);
 end;
 
 end.

@@ -84,18 +84,18 @@ object MainForm: TMainForm
   end
   object ocvmgprtn1: TocvImageOperation
     VideoSource = ocvcmrsrc1
-    OperationClassName = 'TocvContoursOperation'
-    Operation.OperationClassName = 'TocvAdaptiveThresholdOperation'
-    Operation.Preprocessing.MaxValue = 250.000000000000000000
-    Operation.Preprocessing.BlockSize = 3
-    Operation.Preprocessing.Param = 5.000000000000000000
-    Operation.Offset.X = 0
-    Operation.Offset.Y = 0
-    Operation.MinArea = 100
-    Operation.ContourDraw.Thickness = 1
-    Operation.ContourDraw.Offset.X = 0
-    Operation.ContourDraw.Offset.Y = 0
-    Operation.ApproxPoly.Eps = 3.000000000000000000
+    OperationClassName = 'TocvFaceDetect'
+    Operation.Equalize = True
+    Operation.Scale = 1.300000000000000000
+    Operation.MinNeighbors = 3
+    Operation.MinSize.X = 30
+    Operation.MinSize.Y = 30
+    Operation.MaxSize.X = 0
+    Operation.MaxSize.Y = 0
+    Operation.DrawFace.Thickness = 1
+    Operation.DrawFace.Offset.X = 0
+    Operation.DrawFace.Offset.Y = 0
+    Operation.CascadeFlags = [HAAR_DO_CANNY_PRUNING]
     Operations = <
       item
         OperationClassName = 'TocvContoursOperation'
@@ -106,9 +106,14 @@ object MainForm: TMainForm
         Operation.Offset.X = 0
         Operation.Offset.Y = 0
         Operation.MinArea = 100
+        Operation.ContourDraw.Enabled = False
+        Operation.ContourDraw.MaxLevel = 0
         Operation.ContourDraw.Thickness = 1
+        Operation.ContourDraw.LineType = LT_FILLED
         Operation.ContourDraw.Offset.X = 0
         Operation.ContourDraw.Offset.Y = 0
+        Operation.ContourDraw.ExternalColor = clBlack
+        Operation.ContourDraw.HoleColor = clBlack
         Operation.ApproxPoly.Eps = 3.000000000000000000
       end
       item
