@@ -71,8 +71,8 @@ procedure TMainForm.FormCreate(Sender: TObject);
 begin
   cbb1.Items.Assign(GetRegisteredImageOperations);
   cbb1.ItemIndex := cbb1.Items.IndexOf(GetRegisteredImageOperations.GetNameByClass(ocvmgprtn1.OperationClass));
-//  ocvcmrsrc1.Enabled := True;
-//  ocvpcmsrc1.Enabled := True;
+  // ocvcmrsrc1.Enabled := True;
+  // ocvpcmsrc1.Enabled := True;
 end;
 
 end.

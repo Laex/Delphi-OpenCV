@@ -29,7 +29,7 @@ Uses
   System.SysUtils,
   System.Classes,
   System.Generics.Collections,
-  core.types_c;
+  core.types_c, System.Types;
 
 Type
   IocvImage = interface
@@ -38,6 +38,7 @@ Type
     function GetisGray: Boolean;
     function GrayImage: IocvImage;
     function Clone: IocvImage;
+    function Same: IocvImage;
     property IpImage: pIplImage Read GetIplImage;
     property isGray: Boolean read GetisGray;
   end;
@@ -54,6 +55,7 @@ Type
     destructor Destroy; override;
     function GrayImage: IocvImage;
     function Clone: IocvImage;
+    function Same: IocvImage;
     property IplImage: pIplImage Read GetIplImage;
     property isGray: Boolean read GetisGray;
   end;
@@ -61,6 +63,11 @@ Type
   TOnOcvNotify = procedure(Sender: TObject; const IplImage: IocvImage) of object;
   TOnOcvContour = procedure(Sender: TObject; const IplImage: IocvImage; const ContourCount: Integer; const Contours: pCvSeq)
     of object;
+
+  TocvFace = TRect;
+  TocvFaces = TArray<TocvFace>;
+
+  TOnOcvFace = procedure(Sender: TObject; const IplImage: IocvImage; const Faces: TocvFaces) of object;
 
   IocvDataReceiver = interface
     ['{F67DEC9E-CCE0-49D2-AB9B-AD7E1020C5DC}']
@@ -282,6 +289,11 @@ begin
     cvCvtColor(FImage, iImage, CV_RGB2GRAY);
     Result := TocvImage.Create(iImage);
   end;
+end;
+
+function TocvImage.Same: IocvImage;
+begin
+  Result := TocvImage.Create(cvCreateImage(cvGetSize(FImage), FImage^.depth, FImage^.nChannels));
 end;
 
 end.

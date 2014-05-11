@@ -32,6 +32,7 @@ uses
   System.SyncObjs,
   System.Types,
   uOCVTypes,
+  objdetect_c,
   core.types_c,
   Vcl.Graphics;
 
@@ -202,6 +203,8 @@ type
     procedure AssignTo(Dest: TPersistent); override;
   private
     FPoint: TPoint;
+  public
+    constructor Create(const AX: Integer = 0; const AY: Integer = 0);
   published
     property X: Integer read FPoint.X write FPoint.X;
     property Y: Integer read FPoint.Y write FPoint.Y;
@@ -215,7 +218,6 @@ type
   TocvRotateOperation = class(TocvCustomImageOperation)
   protected
     procedure AssignTo(Dest: TPersistent); override;
-    function GetOwner: TPersistent; override;
   private
     FCustomCenter: TocvPoint;
     FMethod: TocvInterpolationMethod;
@@ -234,6 +236,83 @@ type
     property Scale: Double read FScale write FScale;
   end;
 
+  TocvAbsDiff = class(TocvCustomImageOperation)
+  protected
+    FPrevFrame: IocvImage;
+  public
+    function DoTransform(const Source: IocvImage; var Destanation: IocvImage): Boolean; override;
+  end;
+
+  TocvLineType = (LT_FILLED, LT_8, LT_AA);
+
+  TocvDraw = class(TPersistent)
+  protected
+    procedure AssignTo(Dest: TPersistent); override;
+    function GetOwner: TPersistent; override;
+  private
+    FOwner: TPersistent;
+    FOffset: TocvPoint;
+    FEnabled: Boolean;
+    FMaxLevel: Integer;
+    FThickness: Integer;
+    FLineType: TocvLineType;
+    FColor: TColor;
+    FShift: Integer;
+  public
+    constructor Create(AOwner: TPersistent);
+    destructor Destroy; override;
+    property Color: TColor read FColor write FColor default clGreen;
+    property Shift: Integer read FShift write FShift default 0;
+  published
+    property Enabled: Boolean read FEnabled write FEnabled default True;
+    property MaxLevel: Integer read FMaxLevel write FMaxLevel default 2;
+    property Thickness: Integer read FThickness write FThickness default 2;
+    property LineType: TocvLineType read FLineType write FLineType default LT_AA;
+    property Offset: TocvPoint read FOffset write FOffset;
+  end;
+
+  TocvFaceDraw = class(TocvDraw)
+  published
+    property Color;
+    property Shift;
+  end;
+
+  TocvHaarFrontalFace = (HCFFA, HCFFA2, HCFFD, HCFFAT);
+
+  TocvHaarCascadeFlag = (HAAR_DO_CANNY_PRUNING, HAAR_SCALE_IMAGE, HAAR_FIND_BIGGEST_OBJECT, HAAR_DO_ROUGH_SEARCH);
+  TocvHaarCascadeFlagSet = set of TocvHaarCascadeFlag;
+
+  TocvFaceDetect = class(TocvCustomImageOperation)
+  private
+    FFrontalFace: TocvHaarFrontalFace;
+    FLockFrontalFaceChange: TCriticalSection;
+    FCascade: pCvHaarClassifierCascade;
+    FMinSize: TocvPoint;
+    FMaxSize: TocvPoint;
+    FDrawFace: TocvFaceDraw;
+    FCascadeFlags: TocvHaarCascadeFlagSet;
+    FOnFace: TOnOcvFace;
+    procedure SetFrontalFace(const Value: TocvHaarFrontalFace);
+    procedure ReleaseCascade;
+    function GetHaarCascadeFlag: Integer;
+  protected
+    FPrevFrame: IocvImage;
+  public
+    constructor Create(AOwner: TPersistent); override;
+    destructor Destroy; override;
+    function DoTransform(const Source: IocvImage; var Destanation: IocvImage): Boolean; override;
+  published
+    property FrontalFace: TocvHaarFrontalFace read FFrontalFace write SetFrontalFace default HCFFA;
+    property Equalize: Boolean index 1 Read GetBoolParam write SetBoolParam;
+    property Scale: Double index 0 Read GetFloatParam write SetFloatParam; // 1.3
+    property MinNeighbors: Integer index 0 Read GetIntParam write SetIntParam; // 3
+    property MinSize: TocvPoint read FMinSize write FMinSize; // CV_DEFAULT(cvSize(0,0))
+    property MaxSize: TocvPoint read FMaxSize write FMaxSize; // {CV_DEFAULT(cvSize(0,0))}
+    property DrawFace: TocvFaceDraw read FDrawFace write FDrawFace;
+    property CascadeFlags: TocvHaarCascadeFlagSet read FCascadeFlags write FCascadeFlags default [];
+    property OnFace: TOnOcvFace read FOnFace write FOnFace;
+  end;
+
   IocvEditorPropertiesContainer = interface
     ['{418F88DD-E35D-4425-BF24-E753E83D35D6}']
     function GetProperties: TocvCustomImageOperation;
@@ -241,38 +320,22 @@ type
     procedure SetPropertiesClass(Value: TocvImageOperationClass);
   end;
 
+  TocvContourDraw = class(TocvDraw)
+  protected
+    procedure AssignTo(Dest: TPersistent); override;
+  private
+    FHoleColor: TColor;
+  public
+    constructor Create(AOwner: TPersistent);
+  published
+    property ExternalColor: TColor read FColor write FColor default clGreen;
+    property HoleColor: TColor read FHoleColor write FHoleColor default clRed;
+  end;
+
   TocvContourRetrievalModes = (RETR_EXTERNAL, RETR_LIST, RETR_CCOMP, RETR_TREE, RETR_FLOODFILL);
 
   TocvContourApproximationMethods = (CHAIN_CODE, CHAIN_APPROX_NONE, CHAIN_APPROX_SIMPLE, CHAIN_APPROX_TC89_L1,
     CHAIN_APPROX_TC89_KCOS, LINK_RUNS);
-
-  TocvLineType = (LT_FILLED, LT_8, LT_AA);
-
-  TocvContourDraw = class(TPersistent)
-  protected
-    procedure AssignTo(Dest: TPersistent); override;
-    function GetOwner: TPersistent; override;
-  private
-    FOwner: TPersistent;
-    FOffset: TocvPoint;
-    FDrawContours: Boolean;
-    FMaxLevel: Integer;
-    FHoleColor: TColor;
-    FThickness: Integer;
-    FLineType: TocvLineType;
-    FExternalColor: TColor;
-  public
-    constructor Create(AOwner: TPersistent);
-    destructor Destroy; override;
-  published
-    property Enabled: Boolean read FDrawContours write FDrawContours default True;
-    property ExternalColor: TColor read FExternalColor write FExternalColor default clGreen;
-    property HoleColor: TColor read FHoleColor write FHoleColor default clRed;
-    property MaxLevel: Integer read FMaxLevel write FMaxLevel default 2;
-    property Thickness: Integer read FThickness write FThickness default 2;
-    property LineType: TocvLineType read FLineType write FLineType default LT_AA;
-    property Offset: TocvPoint read FOffset write FOffset;
-  end;
 
   TocvContourApprox = class(TPersistent)
   protected
@@ -371,7 +434,6 @@ type
     function DoTransform(const Source: IocvImage; var Destanation: IocvImage): Boolean;
     procedure Assign(Source: TPersistent); override;
     property OperationClass: TocvImageOperationClass read GetPropertiesClass write SetPropertiesClass;
-
   published
     property OperationClassName: string read GetPropertiesClassName write SetPropertiesClassName;
     property Operation: TocvCustomImageOperation read GetProperties write SetProperties;
@@ -425,10 +487,12 @@ function GetRegisteredImageOperations: TRegisteredImageOperations;
 
 implementation
 
+{$R opencv.dres}
+
 Uses
   core_c,
   imgproc_c,
-  imgproc.types_c;
+  imgproc.types_c, cvUtils;
 
 type
   TPersistentAccessProtected = class(TPersistent);
@@ -441,6 +505,19 @@ begin
   if not Assigned(_RegisteredImageOperations) then
     _RegisteredImageOperations := TRegisteredImageOperations.Create;
   Result := _RegisteredImageOperations;
+end;
+
+const
+  cLineType: array [TocvLineType] of Integer = (CV_FILLED, 8, CV_AA);
+
+procedure GetRGBValue(const AColor: TColor; var r, g, b: byte);
+Var
+  RGBColor: TColor;
+begin
+  RGBColor := ColorToRGB(AColor);
+  r := GetRValue(RGBColor);
+  g := GetGValue(RGBColor);
+  b := GetBValue(RGBColor);
 end;
 
 {TocvImageOperation}
@@ -752,11 +829,7 @@ procedure TovcSmoothOperation.AssignTo(Dest: TPersistent);
 begin
   inherited;
   if Dest is TovcSmoothOperation then
-  begin
     FSmoothOperation := (Dest as TovcSmoothOperation).FSmoothOperation;
-  end
-  else
-    inherited;
 end;
 
 constructor TovcSmoothOperation.Create {(AOwner: TPersistent)};
@@ -1227,20 +1300,6 @@ begin
 end;
 
 function TocvContoursOperation.DoTransform(const Source: IocvImage; var Destanation: IocvImage): Boolean;
-
-const
-  cLineType: array [TocvLineType] of Integer = (CV_FILLED, 8, CV_AA);
-
-  procedure GetRGBValue(const AColor: TColor; var r, g, b: byte);
-  Var
-    RGBColor: TColor;
-  begin
-    RGBColor := ColorToRGB(AColor);
-    r := GetRValue(RGBColor);
-    g := GetGValue(RGBColor);
-    b := GetBValue(RGBColor);
-  end;
-
 Var
   th_image: IocvImage;
   storage: pCvMemStorage;
@@ -1379,61 +1438,51 @@ begin
   Result := True;
 end;
 
-function TocvRotateOperation.GetOwner: TPersistent;
-begin
-
-end;
-
 {TPersistentPoint}
 
 procedure TocvPoint.AssignTo(Dest: TPersistent);
 begin
+  inherited;
   if Dest is TocvPoint then
-  begin
     FPoint := (Dest as TocvPoint).FPoint;
-  end
-  else
-    inherited;
 end;
 
 {TocvCountourDraw}
 
-procedure TocvContourDraw.AssignTo(Dest: TPersistent);
+procedure TocvDraw.AssignTo(Dest: TPersistent);
 begin
-  if Dest is TocvContourDraw then
+  inherited;
+  if Dest is TocvDraw then
   begin
-    FOffset.FPoint := (Dest as TocvContourDraw).FOffset.FPoint;
-    FDrawContours := (Dest as TocvContourDraw).FDrawContours;
-    FMaxLevel := (Dest as TocvContourDraw).FMaxLevel;
-    FHoleColor := (Dest as TocvContourDraw).FHoleColor;
-    FThickness := (Dest as TocvContourDraw).FThickness;
-    FLineType := (Dest as TocvContourDraw).FLineType;
-    FExternalColor := (Dest as TocvContourDraw).FExternalColor;
-  end
-  else
-    inherited;
+    FOffset.FPoint := (Dest as TocvDraw).FOffset.FPoint;
+    FEnabled := (Dest as TocvDraw).FEnabled;
+    FMaxLevel := (Dest as TocvDraw).FMaxLevel;
+    FThickness := (Dest as TocvDraw).FThickness;
+    FLineType := (Dest as TocvDraw).FLineType;
+    FColor := (Dest as TocvDraw).FColor;
+  end;
 end;
 
-constructor TocvContourDraw.Create(AOwner: TPersistent);
+constructor TocvDraw.Create(AOwner: TPersistent);
 begin
   inherited Create;
   FOwner := AOwner;
   FOffset := TocvPoint.Create;
-  FDrawContours := True;
+  FEnabled := True;
   FMaxLevel := 2;
-  FHoleColor := clRed;
   FThickness := 1;
   FLineType := LT_AA;
-  FExternalColor := clGreen;
+  FColor := clGreen;
+  FShift := 0;
 end;
 
-destructor TocvContourDraw.Destroy;
+destructor TocvDraw.Destroy;
 begin
   FOffset.Free;
   inherited;
 end;
 
-function TocvContourDraw.GetOwner: TPersistent;
+function TocvDraw.GetOwner: TPersistent;
 begin
   Result := FOwner;
 end;
@@ -1466,6 +1515,206 @@ begin
   Result := FOwner;
 end;
 
+{TocvAbsDiff}
+
+function TocvAbsDiff.DoTransform(const Source: IocvImage; var Destanation: IocvImage): Boolean;
+Var
+  GrayImage: IocvImage;
+begin
+  GrayImage := Source.GrayImage;
+  Destanation := GrayImage.Same;
+  if Assigned(FPrevFrame) then
+    cvAbsDiff(FPrevFrame.IpImage, GrayImage.IpImage, Destanation.IpImage);
+  FPrevFrame := GrayImage;
+  Result := True;
+end;
+
+{TocvFaceDetect}
+
+constructor TocvFaceDetect.Create(AOwner: TPersistent);
+begin
+  inherited;
+  FLockFrontalFaceChange := TCriticalSection.Create;
+  FMinSize := TocvPoint.Create(30, 30);
+  FMaxSize := TocvPoint.Create;
+  FrontalFace := HCFFA;
+  FDrawFace := TocvFaceDraw.Create(Self);
+  Scale := 1.3;
+  MinNeighbors := 3;
+  Equalize := True;
+end;
+
+destructor TocvFaceDetect.Destroy;
+begin
+  FLockFrontalFaceChange.Free;
+  FMinSize.Free;
+  FMaxSize.Free;
+  FDrawFace.Free;
+  ReleaseCascade;
+  inherited;
+end;
+
+function TocvFaceDetect.DoTransform(const Source: IocvImage; var Destanation: IocvImage): Boolean;
+Var
+  storage: pCvMemStorage;
+  gray: IocvImage;
+  detected_objects: pCvSeq;
+  i: Integer;
+  cvr: pCvRect;
+  r, g, b: byte;
+  Faces: TocvFaces;
+begin
+  Destanation := Source;
+  if Assigned(FCascade) then
+  begin
+    storage := cvCreateMemStorage(0);
+    try
+      gray := Source.GrayImage;
+      if Equalize then
+        cvEqualizeHist(gray.IpImage, gray.IpImage);
+      detected_objects := cvHaarDetectObjects(gray.IpImage, FCascade, storage, Scale, MinNeighbors, GetHaarCascadeFlag,
+        cvSize(MinSize.X, MinSize.Y), cvSize(MaxSize.X, MaxSize.Y));
+
+      if Assigned(detected_objects) then
+      begin
+        if Assigned(OnFace) then
+        begin
+          SetLength(Faces, detected_objects^.total);
+          i := 0;
+          While i < detected_objects^.total do
+          begin
+            cvr := pCvRect(cvGetSeqElem(detected_objects, i));
+            Faces[i] := Rect(cvr^.X, cvr^.Y, (cvr^.X) + (cvr^.width), (cvr^.Y) + (cvr^.height));
+            Inc(i);
+          end;
+          OnFace(Self, Destanation, Faces);
+        end;
+
+        if DrawFace.Enabled then
+        begin
+          GetRGBValue(DrawFace.Color, r, g, b);
+          i := 0;
+          While i < detected_objects^.total do
+          begin
+            cvr := pCvRect(cvGetSeqElem(detected_objects, i));
+            cvRectangle(Destanation.IpImage, cvPoint(cvr^.X, cvr^.Y), cvPoint((cvr^.X) + (cvr^.width), (cvr^.Y) + (cvr^.height)),
+              CV_RGB(r, g, b), DrawFace.Thickness, cLineType[DrawFace.LineType], DrawFace.Shift);
+            Inc(i);
+          end;
+        end;
+      end;
+      Result := True;
+    finally
+      cvReleaseMemStorage(storage);
+    end;
+  end
+  else
+    Result := False;
+end;
+
+function TocvFaceDetect.GetHaarCascadeFlag: Integer;
+Var
+  i: TocvHaarCascadeFlag;
+  j: Integer;
+begin
+  Result := 0;
+  j := 1;
+  for i := HAAR_DO_CANNY_PRUNING to HAAR_DO_ROUGH_SEARCH do
+  begin
+    if i in FCascadeFlags then
+      Result := Result or j;
+    j := j * 2;
+  end;
+end;
+
+procedure TocvFaceDetect.ReleaseCascade;
+begin
+  if Assigned(FCascade) then
+    cvReleaseHaarClassifierCascade(FCascade);
+  FCascade := nil;
+end;
+
+procedure TocvFaceDetect.SetFrontalFace(const Value: TocvHaarFrontalFace);
+Type
+  TFrontalFaceData = record
+    Name: String;
+    FileName: String;
+  end;
+
+const
+  FrontalFaceXML: array [TocvHaarFrontalFace] of TFrontalFaceData =
+  {} ((Name: 'HCFFA'; FileName: 'haarcascade_frontalface_alt.xml'),
+    {} (Name: 'HCFFA2'; FileName: 'haarcascade_frontalface_alt2.xml'),
+    {} (Name: 'HCFFD'; FileName: 'haarcascade_frontalface_default.xml'),
+    {} (Name: 'HCFFAT'; FileName: 'haarcascade_frontalface_alt_tree.xml'));
+
+  function TempPath: string;
+  var
+    BufSize: Cardinal;
+  begin
+    BufSize := GetTempPath(0, nil);
+    SetLength(Result, BufSize);
+    GetTempPath(BufSize, PChar(Result));
+    Result := Trim(Result);
+  end;
+
+Var
+  FullFileName: String;
+
+begin
+  FLockFrontalFaceChange.Enter;
+  try
+    if FFrontalFace <> Value then
+    begin
+      FFrontalFace := Value;
+      ReleaseCascade;
+    end;
+    if not(csDesigning in ComponentState) then
+    begin
+      if not Assigned(FCascade) then
+        try
+          FullFileName := TempPath + FrontalFaceXML[FFrontalFace].FileName;
+          if not FileExists(FullFileName) then
+          begin
+            with TResourceStream.Create(hInstance, FrontalFaceXML[FFrontalFace].Name, RT_RCDATA) do
+              try
+                SaveToFile(FullFileName);
+              finally
+                Free;
+              end;
+          end;
+          if FileExists(FullFileName) then
+            FCascade := cvLoad(c_str(FullFileName), nil, nil, nil);
+        except
+          ReleaseCascade;
+        end;
+    end;
+  finally
+    FLockFrontalFaceChange.Leave;
+  end;
+end;
+
+constructor TocvPoint.Create(const AX, AY: Integer);
+begin
+  FPoint.X := AX;
+  FPoint.Y := AY;
+end;
+
+{TocvContourDraw}
+
+procedure TocvContourDraw.AssignTo(Dest: TPersistent);
+begin
+  inherited;
+  if Dest is TocvContourDraw then
+    FHoleColor := (Dest as TocvContourDraw).FHoleColor;
+end;
+
+constructor TocvContourDraw.Create(AOwner: TPersistent);
+begin
+  inherited;
+  FHoleColor := clRed;
+end;
+
 initialization
 
 GetRegisteredImageOperations.RegisterIOClass(TocvNoneOperation, 'None');
@@ -1480,6 +1729,8 @@ GetRegisteredImageOperations.RegisterIOClass(TocvThresholdOperation, 'Threshold'
 GetRegisteredImageOperations.RegisterIOClass(TocvAdaptiveThresholdOperation, 'AdaptiveThreshold');
 GetRegisteredImageOperations.RegisterIOClass(TocvContoursOperation, 'Contours');
 GetRegisteredImageOperations.RegisterIOClass(TocvRotateOperation, 'Rotate');
+GetRegisteredImageOperations.RegisterIOClass(TocvAbsDiff, 'AbsDiff');
+GetRegisteredImageOperations.RegisterIOClass(TocvFaceDetect, 'FaceDetect');
 
 finalization
 
