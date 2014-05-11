@@ -1,0 +1,1 @@
+tessdata can load from http://code.google.com/p/tesseract-ocr/
