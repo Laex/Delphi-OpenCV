@@ -50,7 +50,7 @@ Type
     function GetisGray: Boolean;
   public
     constructor Create(const AImage: pIplImage);
-    constructor CreateCopy(const AImage: pIplImage);
+    constructor CreateClone(const AImage: pIplImage);
     destructor Destroy; override;
     function GrayImage: IocvImage;
     function Clone: IocvImage;
@@ -241,7 +241,7 @@ end;
 
 function TocvImage.Clone: IocvImage;
 begin
-  Result := TocvImage.CreateCopy(FImage);
+  Result := TocvImage.CreateClone(FImage);
 end;
 
 constructor TocvImage.Create(const AImage: pIplImage);
@@ -249,7 +249,7 @@ begin
   FImage := AImage;
 end;
 
-constructor TocvImage.CreateCopy(const AImage: pIplImage);
+constructor TocvImage.CreateClone(const AImage: pIplImage);
 begin
   FImage := cvCloneImage(AImage);
 end;
