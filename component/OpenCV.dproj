@@ -100,11 +100,15 @@
         <DCCReference Include="vcl.dcp"/>
         <DCCReference Include="DesignIDE.dcp"/>
         <DCCReference Include="uOCVTypes.pas"/>
-        <DCCReference Include="uOCVCamera.pas"/>
+        <DCCReference Include="uOCVSource.pas"/>
         <DCCReference Include="uOCVView.pas"/>
         <DCCReference Include="uOCVImageOperation.pas"/>
         <DCCReference Include="uOCVRegister.pas"/>
         <DCCReference Include="uOCVIOProperties.pas"/>
+        <None Include="ModelSupport_OpenCV\default.txaPackage"/>
+        <None Include="ModelSupport_OpenCV\default.txvpck"/>
+        <None Include="ModelSupport_OpenCV\uOCVSource\default.txvpck"/>
+        <None Include="ModelSupport_OpenCV\uOCVSource\default.txaPackage"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>
@@ -175,6 +179,7 @@
                 <Platform value="Win32">True</Platform>
                 <Platform value="Win64">False</Platform>
             </Platforms>
+            <ModelSupport>True</ModelSupport>
         </BorlandProject>
         <ProjectFileVersion>12</ProjectFileVersion>
     </ProjectExtensions>

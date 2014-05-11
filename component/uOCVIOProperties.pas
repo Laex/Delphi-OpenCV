@@ -28,10 +28,26 @@ interface
 Uses
   System.Classes,
   DesignEditors,
-  DesignIntf;
+  DesignIntf,
+  uOCVImageOperation;
 
 Type
-  TImageOperationProperty = class(TClassProperty)
+  TImageOperationProperty = class(TComponentProperty)
+  private
+    FInstance: TPersistent;
+  protected
+    function GetInstance: TPersistent; virtual;
+  public
+    function GetAttributes: TPropertyAttributes; override;
+    function GetValue: string; override;
+    procedure GetProperties(Proc: TGetPropProc); override;
+    procedure GetValues(Proc: TGetStrProc); override;
+    procedure SetValue(const Value: string); override;
+    procedure Initialize; override;
+    property Instance: TPersistent read GetInstance;
+  end;
+
+  TImageOperationCollectionItemProperty = class(TClassProperty)
   public
     function GetAttributes: TPropertyAttributes; override;
     function GetValue: string; override;
@@ -39,12 +55,37 @@ Type
     procedure SetValue(const Value: string); override;
   end;
 
-  TImagePreprocessingProperty = class(TClassProperty)
+  TImagePreprocessingProperty = class(TImageOperationCollectionItemProperty)
   public
-    function GetAttributes: TPropertyAttributes; override;
-    function GetValue: string; override;
+//    function GetAttributes: TPropertyAttributes; override;
+//    function GetValue: string; override;
     procedure GetValues(Proc: TGetStrProc); override;
-    procedure SetValue(const Value: string); override;
+//    procedure SetValue(const Value: string); override;
+  end;
+
+  TocvIOPropertyChangeEvent = procedure(Sender: TObject; const PropName: string) of object;
+
+  TocvCustomImageOperationProperty = class(TocvCustomImageOperation)
+  private
+    FUpdateCount: Integer;
+    FOnChanging: TNotifyEvent;
+    FOnChanged: TNotifyEvent;
+    FOnChangingProperty: TocvIOPropertyChangeEvent;
+    FOnChangedProperty: TocvIOPropertyChangeEvent;
+  protected
+    procedure Changed; virtual;
+    procedure Changing; virtual;
+    procedure ChangedProperty(const PropName: string); virtual;
+    procedure ChangingProperty(const PropName: string); virtual;
+    procedure SetUpdateState(Updating: Boolean); virtual;
+    property UpdateCount: Integer read FUpdateCount;
+  public
+    procedure BeginUpdate; virtual;
+    procedure EndUpdate; virtual;
+    property OnChanged: TNotifyEvent read FOnChanged write FOnChanged;
+    property OnChanging: TNotifyEvent read FOnChanging write FOnChanging;
+    property OnChangedProperty: TocvIOPropertyChangeEvent read FOnChangedProperty write FOnChangedProperty;
+    property OnChangingProperty: TocvIOPropertyChangeEvent read FOnChangingProperty write FOnChangingProperty;
   end;
 
 implementation
@@ -53,7 +94,6 @@ Uses
   System.SysUtils,
   System.TypInfo,
   System.RTLConsts,
-  uOCVImageOperation,
   uOCVTypes;
 
 {TImageOperationProperty}
@@ -61,7 +101,7 @@ Uses
 function TImageOperationProperty.GetAttributes: TPropertyAttributes;
 begin
   Result := inherited GetAttributes;
-  Result := Result - [paReadOnly] + [paValueList, paSortList, paRevertable, paVolatileSubProperties];
+  Result := Result - [paReadOnly] + [paValueList, paSortList, paRevertable, paSubProperties, paVolatileSubProperties];
 end;
 
 function TImageOperationProperty.GetValue: string;
@@ -98,16 +138,16 @@ end;
 
 {TImagePreprocessingProperty}
 
-function TImagePreprocessingProperty.GetAttributes: TPropertyAttributes;
-begin
-  Result := inherited GetAttributes;
-  Result := Result - [paReadOnly] + [paValueList, paSortList, paRevertable, paVolatileSubProperties];
-end;
+//function TImagePreprocessingProperty.GetAttributes: TPropertyAttributes;
+//begin
+//  Result := inherited GetAttributes;
+//  Result := Result - [paReadOnly] + [paValueList, paSortList, paRevertable, paSubProperties];
+//end;
 
-function TImagePreprocessingProperty.GetValue: string;
-begin
-  Result := GetRegisteredImageOperations.GetNameByClass(TocvImageOperation(GetOrdValue).ClassType);
-end;
+//function TImagePreprocessingProperty.GetValue: string;
+//begin
+//  Result := GetRegisteredImageOperations.GetNameByClass(TocvImageOperation(GetOrdValue).ClassType);
+//end;
 
 procedure TImagePreprocessingProperty.GetValues(Proc: TGetStrProc);
 begin
@@ -116,7 +156,151 @@ begin
   Proc('AdaptiveThreshold');
 end;
 
-procedure TImagePreprocessingProperty.SetValue(const Value: string);
+//procedure TImagePreprocessingProperty.SetValue(const Value: string);
+//Var
+//  APropertiesClass: TocvImageOperationClass;
+//  I: Integer;
+//  AIntf: IocvEditorPropertiesContainer;
+//begin
+//  APropertiesClass := GetRegisteredImageOperations.FindByName(Value);
+//  if APropertiesClass = nil then
+//    APropertiesClass := TocvImageOperationClass(GetRegisteredImageOperations.Objects[0]);
+//
+//  for I := 0 to PropCount - 1 do
+//    if Supports(GetComponent(I), IocvEditorPropertiesContainer, AIntf) then
+//      AIntf.SetPropertiesClass(APropertiesClass);
+//
+//  Modified;
+//end;
+
+{TocvCustomImageOperationProperty}
+
+procedure TocvCustomImageOperationProperty.BeginUpdate;
+begin
+  if FUpdateCount = 0 then
+    SetUpdateState(True);
+  Inc(FUpdateCount);
+end;
+
+procedure TocvCustomImageOperationProperty.Changed;
+begin
+  if (FUpdateCount = 0) and Assigned(FOnChanged) then
+    FOnChanged(Self);
+end;
+
+procedure TocvCustomImageOperationProperty.ChangedProperty(const PropName: string);
+begin
+  if Assigned(FOnChangedProperty) then
+    FOnChangedProperty(Self, PropName);
+end;
+
+procedure TocvCustomImageOperationProperty.Changing;
+begin
+  if (FUpdateCount = 0) and Assigned(FOnChanging) then
+    FOnChanging(Self);
+end;
+
+procedure TocvCustomImageOperationProperty.ChangingProperty(const PropName: string);
+begin
+  if Assigned(FOnChangingProperty) then
+    FOnChangingProperty(Self, PropName);
+end;
+
+procedure TocvCustomImageOperationProperty.EndUpdate;
+begin
+  Dec(FUpdateCount);
+  if FUpdateCount = 0 then
+    SetUpdateState(False);
+end;
+
+procedure TocvCustomImageOperationProperty.SetUpdateState(Updating: Boolean);
+begin
+  if Updating then
+    Changing
+  else
+    Changed;
+end;
+
+function TImageOperationProperty.GetInstance: TPersistent;
+var
+  LInstance: TPersistent;
+  LPersistentPropertyName: string;
+begin
+  if not Assigned(FInstance) then
+  begin
+    LInstance := GetComponent(0);
+    LPersistentPropertyName := GetName;
+    if IsPublishedProp(LInstance, LPersistentPropertyName) then
+    begin
+      FInstance := TPersistent(GetObjectProp(LInstance, LPersistentPropertyName));
+    end;
+  end;
+  Result := FInstance;
+end;
+
+procedure TImageOperationProperty.GetProperties(Proc: TGetPropProc);
+begin
+  inherited;
+end;
+
+procedure TImageOperationProperty.Initialize;
+var
+  LInstance: TPersistent;
+  LPersistentPropertyName: string;
+begin
+  inherited Initialize;
+  LInstance := Instance;
+  LPersistentPropertyName := GetName;
+  if LInstance is TComponent then
+  begin
+    if (TComponent(LInstance).Name = '') and (TComponent(LInstance).Name <> LPersistentPropertyName) then
+    begin
+      TComponent(LInstance).Name := LPersistentPropertyName;
+    end;
+  end
+  else if LInstance is TocvCustomImageOperation then
+  begin
+    if (TocvCustomImageOperation(LInstance).Name = '') and (TocvCustomImageOperation(LInstance).Name <> LPersistentPropertyName)
+    then
+    begin
+      TocvCustomImageOperation(LInstance).Name := LPersistentPropertyName;
+    end;
+  end
+  // else
+  // if LInstance is TocvImageOperationCollectionItem then
+  // begin
+  // if (TocvImageOperationCollectionItem(LInstance).DisplayName = '') and (TocvImageOperationCollectionItem(LInstance).DisplayName <> LPersistentPropertyName)
+  // then
+  // begin
+  // TocvImageOperationCollectionItem(LInstance).DisplayName := LPersistentPropertyName;
+  // end;
+  // end;
+end;
+
+{TImageOperationCollectionItemProperty}
+
+function TImageOperationCollectionItemProperty.GetAttributes: TPropertyAttributes;
+begin
+  Result := inherited GetAttributes;
+  Result := Result - [paReadOnly] + [paValueList, paSortList, paRevertable, paVolatileSubProperties];
+end;
+
+function TImageOperationCollectionItemProperty.GetValue: string;
+begin
+  Result := GetRegisteredImageOperations.GetNameByClass(TocvImageOperation(GetOrdValue).ClassType);
+end;
+
+procedure TImageOperationCollectionItemProperty.GetValues(Proc: TGetStrProc);
+var
+  I: Integer;
+  rIO: TRegisteredImageOperations;
+begin
+  rIO := GetRegisteredImageOperations;
+  for I := 0 to rIO.Count - 1 do
+    Proc(rIO[I]);
+end;
+
+procedure TImageOperationCollectionItemProperty.SetValue(const Value: string);
 Var
   APropertiesClass: TocvImageOperationClass;
   I: Integer;
@@ -136,10 +320,11 @@ end;
 initialization
 
 RegisterPropertyEditor(TypeInfo(TocvCustomImageOperation), TocvImageOperation, 'Operation', TImageOperationProperty);
-RegisterPropertyEditor(TypeInfo(TocvCustomImageOperation), TocvImageOperationCollectionItem, 'Operation',
-  TImageOperationProperty);
+RegisterPropertyEditor(TypeInfo(TocvCustomImageOperation), TocvImageOperationCollectionItem, 'Operation',TImageOperationCollectionItemProperty);
+//RegisterPropertyEditor(TypeInfo(TocvCustomImageOperation), TocvImageOperationCollectionItem, 'Operation',TImageOperationProperty);
 RegisterPropertyEditor(TypeInfo(TocvCustomImageOperation), TocvContoursOperation, 'Preprocessing', TImagePreprocessingProperty);
 
+UnlistPublishedProperty(TocvCustomImageOperation, 'Name');
 UnlistPublishedProperty(TocvImageOperation, 'OperationClassName');
 UnlistPublishedProperty(TocvImageOperationCollectionItem, 'OperationClassName');
 UnlistPublishedProperty(TocvContoursOperation, 'OperationClassName');

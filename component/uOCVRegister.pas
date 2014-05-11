@@ -31,16 +31,17 @@ implementation
 Uses
   DesignIntf,
   System.Classes,
-  uOCVCamera,
+  uOCVSource,
   uOCVView,
   uOCVImageOperation;
 
 procedure Register;
 begin
-  RegisterComponents('OpenCV', [TocvImageOperation]);
-  RegisterComponents('OpenCV', [TocvCamera]);
-  RegisterComponents('OpenCV', [TocvView]);
-  RegisterClasses([TocvNoneOperation, TocvGrayScaleOperation, TovcCannyOperation, TovcSmoothOperation, TovcErodeOperation, TovcDilateOperation, TocvLaplaceOperation, TovcSobelOperation, TocvThresholdOperation, TocvAdaptiveThresholdOperation, TocvContoursOperation, TocvRotateOperation]);
+  RegisterComponents('OpenCV', [TocvImageOperation,TocvCameraSource,TocvView,TocvFileSource,TocvIPCamSource]);
+  RegisterClasses([ TocvNoneOperation, TocvGrayScaleOperation, TovcCannyOperation,
+                    TovcSmoothOperation, TovcErodeOperation, TovcDilateOperation,
+                    TocvLaplaceOperation, TovcSobelOperation, TocvThresholdOperation,
+                    TocvAdaptiveThresholdOperation, TocvContoursOperation, TocvRotateOperation]);
 end;
 
 end.

@@ -28,7 +28,7 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, uOCVTypes, uOCVImageOperation,
-  core.types_c, uOCVCamera, uOCVView, Vcl.StdCtrls, Vcl.ExtCtrls;
+  core.types_c, uOCVSource, uOCVView, Vcl.StdCtrls, Vcl.ExtCtrls;
 
 type
   TMainForm = class(TForm)
@@ -36,9 +36,13 @@ type
     cbb1: TComboBox;
     chk1: TCheckBox;
     ocvw1: TocvView;
-    ocvcmr1: TocvCamera;
     ocvmgprtn1: TocvImageOperation;
     ocvw2: TocvView;
+    ocvflsrc1: TocvFileSource;
+    ocvw3: TocvView;
+    ocvcmrsrc1: TocvCameraSource;
+    ocvw4: TocvView;
+    ocvpcmsrc1: TocvIPCamSource;
     procedure FormCreate(Sender: TObject);
     procedure cbb1Change(Sender: TObject);
     procedure chk1Click(Sender: TObject);
@@ -60,14 +64,15 @@ end;
 
 procedure TMainForm.chk1Click(Sender: TObject);
 begin
-  ocvcmr1.Enabled := chk1.Checked;
+  ocvcmrsrc1.Enabled := chk1.Checked;
 end;
 
 procedure TMainForm.FormCreate(Sender: TObject);
 begin
   cbb1.Items.Assign(GetRegisteredImageOperations);
   cbb1.ItemIndex := cbb1.Items.IndexOf(GetRegisteredImageOperations.GetNameByClass(ocvmgprtn1.OperationClass));
-  ocvcmr1.Enabled := True;
+//  ocvcmrsrc1.Enabled := True;
+//  ocvpcmsrc1.Enabled := True;
 end;
 
 end.

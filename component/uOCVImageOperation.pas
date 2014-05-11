@@ -37,32 +37,40 @@ uses
 
 type
 
-  TocvCustomImageOperation = class(TPersistent)
+  TocvCustomImageOperation = class(TComponent)
   protected
     procedure AssignTo(Dest: TPersistent); override;
   private
-    CS: TCriticalSection;
-    FOwner: TPersistent; // TComponent;
+    FCriticalSection: TCriticalSection;
+    FOwner: TPersistent;
     FFloatParams: TArray<Double>;
     FIntParams: TArray<Integer>;
     FBoolParams: TArray<Boolean>;
+    FOnAfterPaint: TOnOcvNotify;
+    FOnBeforePaint: TOnOcvNotify;
+  protected
     function GetFloatParam(const index: Integer): Double;
     function GetIntParam(const index: Integer): Integer;
     procedure SetFloatParam(const index: Integer; const Value: Double);
     procedure SetIntParam(const index: Integer; const Value: Integer);
     function GetBoolParam(const index: Integer): Boolean;
     procedure SetBoolParam(const index: Integer; const Value: Boolean);
-  protected
     function LockTransform: Boolean;
     procedure UnlockTransform;
+    function GetOwner: TPersistent; override;
     function DoTransform(const Source: IocvImage; var Destanation: IocvImage): Boolean; virtual;
     property FloatParams[const index: Integer]: Double Read GetFloatParam write SetFloatParam;
     property IntParams[const index: Integer]: Integer Read GetIntParam write SetIntParam;
     property BoolParams[const index: Integer]: Boolean Read GetBoolParam write SetBoolParam;
   public
-    constructor Create(AOwner: TPersistent); virtual;
+    constructor Create(AOwner: TPersistent); reintroduce; virtual;
     destructor Destroy; override;
     function Transform(const Source: IocvImage; var Destanation: IocvImage): Boolean; virtual;
+    function GetNamePath: string; override;
+    property Name;
+  published
+    property OnAfterPaint: TOnOcvNotify read FOnAfterPaint write FOnAfterPaint;
+    property OnBeforePaint: TOnOcvNotify read FOnBeforePaint write FOnBeforePaint;
   end;
 
   TocvImageOperationClass = class of TocvCustomImageOperation;
@@ -293,6 +301,8 @@ type
     FOffset: TocvPoint;
     FContourDraw: TocvContourDraw;
     FApprox: TocvContourApprox;
+    FOnContour: TOnOcvContour;
+    FContours: pCvSeq;
     function LockTransform: Boolean;
     procedure UnlockTransform;
     procedure CreateProperties;
@@ -315,6 +325,7 @@ type
     destructor Destroy; override;
     function DoTransform(const Source: IocvImage; var Destanation: IocvImage): Boolean; override;
     property OperationClass: TocvImageOperationClass read GetPropertiesClass write SetPropertiesClass;
+    property Contours: pCvSeq read FContours;
   published
     property OperationClassName: string read GetPropertiesClassName write SetPropertiesClassName;
     property Preprocessing: TocvCustomImageOperation read GetProperties write SetProperties;
@@ -322,8 +333,10 @@ type
     property ApproximationMethod: TocvContourApproximationMethods read FApproximationMethod write FApproximationMethod
       default CHAIN_APPROX_SIMPLE;
     property Offset: TocvPoint read FOffset write FOffset;
+    property MinArea: Integer index 0 Read GetIntParam write SetIntParam;
     property ContourDraw: TocvContourDraw read FContourDraw write FContourDraw;
     property ApproxPoly: TocvContourApprox read FApprox write FApprox;
+    property OnContour: TOnOcvContour read FOnContour write FOnContour;
   end;
 
   TocvImageOperationCollectionItem = class(TCollectionItem, IocvEditorPropertiesContainer)
@@ -331,6 +344,9 @@ type
     CS: TCriticalSection;
     FOperation: TocvCustomImageOperation;
     FOperationClass: TocvImageOperationClass;
+    FOnAfterPaint: TOnOcvNotify;
+    FOnBeforePaint: TOnOcvNotify;
+    FOwner: TCollection;
     function LockTransform: Boolean;
     procedure UnlockTransform;
     procedure CreateProperties;
@@ -344,6 +360,7 @@ type
     function GetProperties: TocvCustomImageOperation;
     function GetPropertiesClass: TocvImageOperationClass;
     function GetDisplayName: string; override;
+    function GetOwner: TPersistent; override;
     {IInterface}
     function QueryInterface(const IID: TGUID; out Obj): HResult; stdcall;
     function _AddRef: Integer; stdcall;
@@ -354,9 +371,12 @@ type
     function DoTransform(const Source: IocvImage; var Destanation: IocvImage): Boolean;
     procedure Assign(Source: TPersistent); override;
     property OperationClass: TocvImageOperationClass read GetPropertiesClass write SetPropertiesClass;
+
   published
     property OperationClassName: string read GetPropertiesClassName write SetPropertiesClassName;
     property Operation: TocvCustomImageOperation read GetProperties write SetProperties;
+    property OnAfterPaint: TOnOcvNotify read FOnAfterPaint write FOnAfterPaint;
+    property OnBeforePaint: TOnOcvNotify read FOnBeforePaint write FOnBeforePaint;
   end;
 
   TocvImageOperationCollection = class(TOwnedCollection);
@@ -367,9 +387,7 @@ type
     FOperation: TocvCustomImageOperation;
     FOperationClass: TocvImageOperationClass;
     FOperations: TocvImageOperationCollection;
-    FOnBeforeTransorm: TOnOcvNotify;
-    FOnAfterTransorm: TOnOcvNotify;
-    FOnContour: TOnOcvContour;
+    FUseCollection: Boolean;
     function LockTransform: Boolean;
     procedure UnlockTransform;
     procedure CreateProperties;
@@ -379,13 +397,11 @@ type
     procedure SetProperties(const Value: TocvCustomImageOperation);
     procedure SetPropertiesClass(Value: TocvImageOperationClass);
     procedure SetPropertiesClassName(const Value: string);
+    procedure SetUseCollection(const Value: Boolean);
   protected
     procedure TakeImage(const IplImage: IocvImage); override;
     function GetProperties: TocvCustomImageOperation;
     function GetPropertiesClass: TocvImageOperationClass;
-    procedure DoNotifyAfterTransform(Sender: TObject; const IplImage: IocvImage);
-    procedure DoNotifyBeforeTransform(Sender: TObject; const IplImage: IocvImage);
-    procedure DoNotifyContour(Sender: TObject; const IplImage: IocvImage; const ContourCount: Integer; const Contours: pCvSeq);
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
@@ -394,9 +410,7 @@ type
     property OperationClassName: string read GetPropertiesClassName write SetPropertiesClassName;
     property Operation: TocvCustomImageOperation read GetProperties write SetProperties;
     property Operations: TocvImageOperationCollection Read FOperations write FOperations;
-    property OnBeforeTransorm: TOnOcvNotify read FOnBeforeTransorm write FOnBeforeTransorm;
-    property OnAfterTransorm: TOnOcvNotify read FOnAfterTransorm write FOnAfterTransorm;
-    property OnContour: TOnOcvContour read FOnContour write FOnContour;
+    property OperationsEnabled: Boolean read FUseCollection write SetUseCollection default True;
   end;
 
   TRegisteredImageOperations = class(TStringList)
@@ -415,6 +429,9 @@ Uses
   core_c,
   imgproc_c,
   imgproc.types_c;
+
+type
+  TPersistentAccessProtected = class(TPersistent);
 
 Var
   _RegisteredImageOperations: TRegisteredImageOperations = nil;
@@ -465,11 +482,25 @@ begin
   OperationClass := TocvImageOperationClass(GetRegisteredImageOperations.FindByClassName(Value));
 end;
 
+procedure TocvImageOperation.SetUseCollection(const Value: Boolean);
+begin
+  if FUseCollection <> Value then
+  begin
+    CS.Enter;
+    try
+      FUseCollection := Value;
+    finally
+      CS.Leave;
+    end;
+  end;
+end;
+
 constructor TocvImageOperation.Create(AOwner: TComponent);
 begin
   inherited;
   CS := TCriticalSection.Create;
   FOperations := TocvImageOperationCollection.Create(Self, TocvImageOperationCollectionItem);
+  FUseCollection := True;
 end;
 
 destructor TocvImageOperation.Destroy;
@@ -511,53 +542,20 @@ var
 begin
   if LockTransform then
     try
-      if FOperations.Count > 0 then
+      Destanation := IplImage;
+      if OperationsEnabled and (FOperations.Count > 0) then
       begin
-        Destanation := IplImage;
         for i := 0 to FOperations.Count - 1 do
-        begin
-          DoNotifyBeforeTransform(FOperations.Items[i], IplImage);
           if not(FOperations.Items[i] as TocvImageOperationCollectionItem).DoTransform(Destanation, Destanation) then
             Exit;
-          DoNotifyAfterTransform(FOperation, Destanation);
-        end;
-        NotifyReceiver(Destanation);
       end
-      else
-      begin
-        if Assigned(FOperation) then
-        begin
-          DoNotifyBeforeTransform(FOperation, IplImage);
-          if FOperation.DoTransform(IplImage, Destanation) then
-          begin
-            DoNotifyAfterTransform(FOperation, Destanation);
-            NotifyReceiver(Destanation);
-          end;
-        end;
-      end;
+      else if Assigned(FOperation) then
+        FOperation.DoTransform(IplImage, Destanation);
+      NotifyReceiver(Destanation);
     finally
       Destanation := nil;
       UnlockTransform;
     end;
-end;
-
-procedure TocvImageOperation.DoNotifyBeforeTransform(Sender: TObject; const IplImage: IocvImage);
-begin
-  if Assigned(OnBeforeTransorm) then
-    OnBeforeTransorm(Sender, IplImage);
-end;
-
-procedure TocvImageOperation.DoNotifyContour(Sender: TObject; const IplImage: IocvImage; const ContourCount: Integer;
-  const Contours: pCvSeq);
-begin
-  if Assigned(OnContour) then
-    OnContour(Sender, IplImage, ContourCount, Contours);
-end;
-
-procedure TocvImageOperation.DoNotifyAfterTransform(Sender: TObject; const IplImage: IocvImage);
-begin
-  if Assigned(OnAfterTransorm) then
-    OnAfterTransorm(Sender, IplImage);
 end;
 
 procedure TocvImageOperation.UnlockTransform;
@@ -614,20 +612,25 @@ end;
 
 constructor TocvCustomImageOperation.Create(AOwner: TPersistent);
 begin
-  inherited Create;
+  if AOwner is TComponent then
+    inherited Create(AOwner as TComponent)
+  else
+    inherited Create(nil);
+  SetSubComponent(True);
+
   FOwner := AOwner;
-  CS := TCriticalSection.Create;
+  FCriticalSection := TCriticalSection.Create;
 end;
 
 destructor TocvCustomImageOperation.Destroy;
 begin
-  CS.Free;
+  FCriticalSection.Free;
   inherited;
 end;
 
 function TocvCustomImageOperation.DoTransform(const Source: IocvImage; var Destanation: IocvImage): Boolean;
 begin
-
+  Result := False;
 end;
 
 function TocvCustomImageOperation.GetBoolParam(const index: Integer): Boolean;
@@ -635,7 +638,7 @@ begin
   if (index >= 0) and (index < Length(FBoolParams)) then
     Result := FBoolParams[index]
   else
-    Result := false;
+    Result := False;
 end;
 
 function TocvCustomImageOperation.GetFloatParam(const index: Integer): Double;
@@ -654,9 +657,34 @@ begin
     Result := 0;
 end;
 
+function TocvCustomImageOperation.GetNamePath: string;
+var
+  S: string;
+  lOwner: TPersistent;
+begin
+  Result := inherited GetNamePath;
+  lOwner := GetOwner;
+  if
+  {} (lOwner <> nil) and
+  {} (
+    {} (csSubComponent in TComponent(lOwner).ComponentStyle) or
+    {} (TPersistentAccessProtected(lOwner).GetOwner <> nil)
+    {} ) then
+  begin
+    S := lOwner.GetNamePath;
+    if S <> '' then
+      Result := S + '.' + Result;
+  end;
+end;
+
+function TocvCustomImageOperation.GetOwner: TPersistent;
+begin
+  Result := FOwner;
+end;
+
 function TocvCustomImageOperation.LockTransform: Boolean;
 begin
-  Result := CS.TryEnter;
+  Result := FCriticalSection.TryEnter;
 end;
 
 procedure TocvCustomImageOperation.SetBoolParam(const index: Integer; const Value: Boolean);
@@ -700,7 +728,11 @@ begin
   Result := LockTransform;
   if Result then
     try
+      if Assigned(OnBeforePaint) then
+        OnBeforePaint(Self, Source);
       Result := DoTransform(Source, Destanation);
+      if Result and Assigned(OnAfterPaint) then
+        OnAfterPaint(Self, Source);
     finally
       UnlockTransform;
     end;
@@ -708,7 +740,7 @@ end;
 
 procedure TocvCustomImageOperation.UnlockTransform;
 begin
-  CS.Leave;
+  FCriticalSection.Leave;
 end;
 
 {TovcImageOperationSmooth}
@@ -909,13 +941,17 @@ end;
 constructor TocvImageOperationCollectionItem.Create(Collection: TCollection);
 begin
   inherited;
+  FOwner := Collection;
   CS := TCriticalSection.Create;
 end;
 
 procedure TocvImageOperationCollectionItem.CreateProperties;
 begin
   if FOperationClass <> nil then
+  begin
     FOperation := FOperationClass.Create(Self);
+    FOperation.SetParentComponent((GetOwner as TOwnedCollection).Owner as TComponent);
+  end;
 end;
 
 destructor TocvImageOperationCollectionItem.Destroy;
@@ -934,6 +970,11 @@ end;
 function TocvImageOperationCollectionItem.GetDisplayName: string;
 begin
   Result := GetRegisteredImageOperations.GetNameByClass(FOperation.ClassType);
+end;
+
+function TocvImageOperationCollectionItem.GetOwner: TPersistent;
+begin
+  Result := FOwner;
 end;
 
 function TocvImageOperationCollectionItem.GetProperties: TocvCustomImageOperation;
@@ -994,7 +1035,8 @@ end;
 
 function TocvImageOperationCollectionItem.DoTransform(const Source: IocvImage; var Destanation: IocvImage): Boolean;
 begin
-  if LockTransform then
+  Result := LockTransform;
+  if Result then
     try
       Result := Assigned(FOperation) and FOperation.DoTransform(Source, Destanation)
     finally
@@ -1103,6 +1145,7 @@ begin
   end;
   RetrievalMode := RETR_LIST;
   ApproximationMethod := CHAIN_APPROX_SIMPLE;
+  MinArea := 100;
 end;
 
 procedure TocvContoursOperation.CreateProperties;
@@ -1200,15 +1243,15 @@ const
 
 Var
   th_image: IocvImage;
-  Contours: pCvSeq;
   storage: pCvMemStorage;
   contoursCont: Integer;
-  RGBColor: TColor;
   er, eg, eb: byte;
   hr, hg, hb: byte;
+  s_contours: pCvSeq;
+  area: Double;
 begin
-  Result := false;
-  Contours := nil;
+  Result := False;
+  FContours := nil;
   th_image := nil;
   storage := cvCreateMemStorage(0);
   try
@@ -1218,15 +1261,28 @@ begin
       contoursCont := cvFindContours(th_image.IpImage, storage, @Contours, SizeOf(TCvContour), Integer(RetrievalMode),
         Integer(ApproximationMethod), cvPoint(Offset.X, Offset.Y));
       if ApproxPoly.Enabled then
-        Contours := cvApproxPoly(Contours, SizeOf(TCvContour), storage, CV_POLY_APPROX_DP, ApproxPoly.Eps,
+        FContours := cvApproxPoly(Contours, SizeOf(TCvContour), storage, CV_POLY_APPROX_DP, ApproxPoly.Eps,
           Integer(ApproxPoly.Recursive));
       DoNotifyContours(Destanation, contoursCont, Contours);
       if (contoursCont > 0) and ContourDraw.Enabled then
       begin
         GetRGBValue(ContourDraw.ExternalColor, er, eg, eb);
         GetRGBValue(ContourDraw.HoleColor, hr, hg, hb);
-        cvDrawContours(Destanation.IpImage, Contours, CV_RGB(er, eg, eb), CV_RGB(hr, hg, hb), ContourDraw.MaxLevel,
-          ContourDraw.Thickness, cLineType[ContourDraw.LineType], cvPoint(ContourDraw.Offset.X, ContourDraw.Offset.Y));
+        if MinArea > 0 then
+        begin
+          s_contours := Contours;
+          while (s_contours <> nil) do
+          begin
+            area := cvContourArea(s_contours, CV_WHOLE_SEQ);
+            if abs(area) > MinArea then
+              cvDrawContours(Destanation.IpImage, s_contours, CV_RGB(er, eg, eb), CV_RGB(hr, hg, hb), ContourDraw.MaxLevel,
+                ContourDraw.Thickness, cLineType[ContourDraw.LineType], cvPoint(ContourDraw.Offset.X, ContourDraw.Offset.Y));
+            s_contours := s_contours.h_next;
+          end;
+        end
+        else
+          cvDrawContours(Destanation.IpImage, FContours, CV_RGB(er, eg, eb), CV_RGB(hr, hg, hb), ContourDraw.MaxLevel,
+            ContourDraw.Thickness, cLineType[ContourDraw.LineType], cvPoint(ContourDraw.Offset.X, ContourDraw.Offset.Y));
       end;
       Result := True;
     end;
@@ -1236,22 +1292,9 @@ begin
 end;
 
 procedure TocvContoursOperation.DoNotifyContours(const Image: IocvImage; const ContourCount: Integer; const Contours: pCvSeq);
-Var
-  NotifyTarget: TocvImageOperation;
 begin
-  if FOwner is TocvImageOperation then
-    NotifyTarget := FOwner as TocvImageOperation
-  else {}
-    if
-    {} (FOwner is TocvImageOperationCollectionItem) and
-    {} ((FOwner as TocvImageOperationCollectionItem).GetOwner is TocvImageOperationCollection) and
-    {} (((FOwner as TocvImageOperationCollectionItem).GetOwner as TocvImageOperationCollection).Owner is TocvImageOperation) then
-      NotifyTarget := ((FOwner as TocvImageOperationCollectionItem).GetOwner as TocvImageOperationCollection)
-        .Owner as TocvImageOperation
-    else
-      NotifyTarget := nil;
-  if Assigned(NotifyTarget) then
-    NotifyTarget.DoNotifyContour(Self, Image, ContourCount, Contours);
+  if Assigned(OnContour) then
+    OnContour(Self, Image, ContourCount, Contours);
 end;
 
 procedure TocvContoursOperation.UnlockTransform;

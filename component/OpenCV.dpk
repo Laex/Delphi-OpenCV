@@ -24,6 +24,7 @@
 package OpenCV;
 
 {$R *.res}
+{$R *.dcr}
 {$IFDEF IMPLICITBUILDING This IFDEF should not be used by users}
 {$ALIGN 8}
 {$ASSERTIONS ON}
@@ -32,21 +33,21 @@ package OpenCV;
 {$EXTENDEDSYNTAX ON}
 {$IMPORTEDDATA ON}
 {$IOCHECKS ON}
-{$LOCALSYMBOLS ON}
+{$LOCALSYMBOLS OFF}
 {$LONGSTRINGS ON}
 {$OPENSTRINGS ON}
-{$OPTIMIZATION OFF}
+{$OPTIMIZATION ON}
 {$OVERFLOWCHECKS OFF}
 {$RANGECHECKS OFF}
-{$REFERENCEINFO ON}
+{$REFERENCEINFO OFF}
 {$SAFEDIVIDE OFF}
-{$STACKFRAMES ON}
+{$STACKFRAMES OFF}
 {$TYPEDADDRESS OFF}
 {$VARSTRINGCHECKS ON}
 {$WRITEABLECONST OFF}
 {$MINENUMSIZE 1}
 {$IMAGEBASE $400000}
-{$DEFINE DEBUG}
+{$DEFINE RELEASE}
 {$ENDIF IMPLICITBUILDING}
 {$IMPLICITBUILD ON}
 
@@ -57,7 +58,7 @@ requires
 
 contains
   uOCVTypes in 'uOCVTypes.pas',
-  uOCVCamera in 'uOCVCamera.pas',
+  uOCVSource in 'uOCVSource.pas',
   uOCVView in 'uOCVView.pas',
   uOCVImageOperation in 'uOCVImageOperation.pas',
   uOCVRegister in 'uOCVRegister.pas',
