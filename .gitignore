@@ -14,6 +14,7 @@ Debug
 Release
 ipch
 lib
+*.bsc
 *.pgm
 *.~*
 *.dcu
