@@ -100,17 +100,22 @@ type
     procedure OnNotifyData(Sender: TObject; const IplImage: IocvImage);
     procedure SetEnabled(Value: Boolean); virtual;
     procedure Loaded; override;
+    function GetEnabled: Boolean; override;
   private
     FEnabled: Boolean;
     FOnImage: TOnOcvNotify;
     procedure TerminateSourceThread;
     procedure ReleaseSource;
+    function GetHeight: Integer; virtual;
+    function GetWidth: Integer; virtual;
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
   published
-    property Enabled: Boolean Read FEnabled write SetEnabled default False;
+    property Enabled: Boolean Read GetEnabled write SetEnabled default False;
     property OnImage: TOnOcvNotify read FOnImage write FOnImage;
+    property Width: Integer Read GetWidth;
+    property Height: Integer Read GetHeight;
   end;
 
   TocvResolution = (r160x120, r320x240, r424x240, r640x360, r800x448, r960x544, r1280x720);
@@ -124,6 +129,8 @@ type
     procedure SetCameraSource(const Value: TocvCameraCaptureSource);
     procedure SetResolution(const Value: TocvResolution);
     procedure SetCameraResolution;
+    function GetHeight: Integer; override;
+    function GetWidth: Integer; override;
   public
     constructor Create(AOwner: TComponent); override;
   published
@@ -308,6 +315,16 @@ begin
   end;
 end;
 
+function TocvCameraSource.GetHeight: Integer;
+begin
+  Result := CameraResolution[FResolution].cHeight;
+end;
+
+function TocvCameraSource.GetWidth: Integer;
+begin
+  Result := CameraResolution[FResolution].cWidth;
+end;
+
 procedure TocvCameraSource.SetCameraResolution;
 begin
   cvSetCaptureProperty(FCapture, CV_CAP_PROP_FRAME_WIDTH, CameraResolution[FResolution].cWidth);
@@ -350,6 +367,21 @@ begin
   inherited;
 end;
 
+function TocvCustomSource.GetEnabled: Boolean;
+begin
+  Result := FEnabled;
+end;
+
+function TocvCustomSource.GetHeight: Integer;
+begin
+  Result := 0;
+end;
+
+function TocvCustomSource.GetWidth: Integer;
+begin
+  Result := 0;
+end;
+
 procedure TocvCustomSource.Loaded;
 begin
   inherited;
@@ -363,6 +395,7 @@ end;
 
 procedure TocvCustomSource.OnNotifyData(Sender: TObject; const IplImage: IocvImage);
 begin
+  FImage := IplImage.Clone;
   if Assigned(OnImage) then
     OnImage(Self, IplImage);
   NotifyReceiver(IplImage);

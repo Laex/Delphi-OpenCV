@@ -39,3 +39,7 @@ lib
 *.vlb
 *.sdf
 eng.*
+/3rdParty/!leptonica
+/3rdParty/!tesseract
+/3rdParty/!tesseract_classes
+/component/ModelSupport_OpenCV/*.txaPackage

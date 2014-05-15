@@ -64,10 +64,41 @@ function ifthen(const Cond: Boolean; const ValueTrue, ValueFalse: pCvArr): pCvAr
 function ifthen(const Cond: Boolean; const ValueTrue, ValueFalse: string): string; overload;
 function ifthen(const Cond: Boolean; const ValueTrue, ValueFalse: TCvScalar): TCvScalar; overload;
 
+function BitmapToIplImage(const bitmap: Vcl.Graphics.TBitmap): PIplImage;
+function CropIplImage(const src: PIplImage; const roi: TCvRect): PIplImage;
+
 implementation
 
 Uses
-  System.SysUtils;
+  System.SysUtils,
+  core_c;
+
+function BitmapToIplImage(const bitmap: Vcl.Graphics.TBitmap): PIplImage;
+Var
+  bitmapData: PByte;
+begin
+  Assert(bitmap.PixelFormat = pf24bit); // Пока только такой формат
+
+  bitmapData := bitmap.Scanline[0];
+  Result := cvCreateImage(cvSize(bitmap.Width, bitmap.Height), IPL_DEPTH_8U, 3);
+  CopyMemory(Result^.imageData, bitmapData, Result^.imageSize);
+  Result^.imageDataOrigin := nil;
+  Result^.imageId := nil;
+  Result^.maskROI := nil;
+  Result^.roi := nil;
+end;
+
+function CropIplImage(const src: PIplImage; const roi: TCvRect): PIplImage;
+begin
+  // Must have dimensions of output image
+  Result := cvCreateImage(cvSize(roi.Width, roi.Height), src^.depth, src^.nChannels);
+  // Say what the source region is
+  cvSetImageROI(src, roi);
+  // Do the copy
+  cvCopyImage(src, Result);
+  cvResetImageROI(src);
+  Result := Result;
+end;
 
 function ifthen(const Cond: Boolean; const ValueTrue, ValueFalse: pCvArr): pCvArr; overload;
 begin
@@ -105,17 +136,17 @@ function CreateRGBBitmap(_Grab: PIplImage): HBITMAP;
 
 Var
   lpbi: TBitmapInfo;
-  App: pByte;
+  App: PByte;
   pBits: Pointer;
   i, j: Integer;
 begin
   lpbi.bmiHeader.biSize := SizeOf(BITMAPINFOHEADER);
-  lpbi.bmiHeader.biWidth := _Grab^.width;
-  lpbi.bmiHeader.biHeight := _Grab^.height;
+  lpbi.bmiHeader.biWidth := _Grab^.Width;
+  lpbi.bmiHeader.biHeight := _Grab^.Height;
   lpbi.bmiHeader.biPlanes := 1;
   lpbi.bmiHeader.biBitCount := 24;
   lpbi.bmiHeader.biCompression := BI_RGB;
-  lpbi.bmiHeader.biSizeImage := WIDTHBYTES(_Grab^.width * 8) * _Grab^.height;
+  lpbi.bmiHeader.biSizeImage := WIDTHBYTES(_Grab^.Width * 8) * _Grab^.Height;
   lpbi.bmiHeader.biXPelsPerMeter := 0;
   lpbi.bmiHeader.biYPelsPerMeter := 0;
   lpbi.bmiHeader.biClrUsed := 0;
@@ -128,13 +159,13 @@ begin
     if (_Grab^.nChannels = 1) then // Серое или бинарное
     begin
 
-      for i := 0 to _Grab^.height - 1 do
+      for i := 0 to _Grab^.Height - 1 do
       begin
-        for j := 0 to _Grab^.width - 1 do
+        for j := 0 to _Grab^.Width - 1 do
         begin
-          App[_Grab^.width * 3 * (_Grab^.height - i - 1) + j * 3] := _Grab^.imageData[_Grab^.width * (i) + j];
-          App[_Grab^.width * 3 * (_Grab^.height - i - 1) + j * 3 + 1] := _Grab^.imageData[_Grab^.width * (i) + j];
-          App[_Grab^.width * 3 * (_Grab^.height - i - 1) + j * 3 + 2] := _Grab^.imageData[_Grab^.width * (i) + j];
+          App[_Grab^.Width * 3 * (_Grab^.Height - i - 1) + j * 3] := _Grab^.imageData[_Grab^.Width * (i) + j];
+          App[_Grab^.Width * 3 * (_Grab^.Height - i - 1) + j * 3 + 1] := _Grab^.imageData[_Grab^.Width * (i) + j];
+          App[_Grab^.Width * 3 * (_Grab^.Height - i - 1) + j * 3 + 2] := _Grab^.imageData[_Grab^.Width * (i) + j];
         end;
       end;
 
@@ -142,9 +173,9 @@ begin
 
     if (_Grab^.nChannels = 3) then // Цветное
     begin
-      for i := 0 to _Grab^.height - 1 do
+      for i := 0 to _Grab^.Height - 1 do
       begin
-        CopyMemory(App + _Grab^.width * 3 * (_Grab^.height - i - 1), _Grab^.imageData + _Grab^.width * 3 * i, _Grab^.width * 3);
+        CopyMemory(App + _Grab^.Width * 3 * (_Grab^.Height - i - 1), _Grab^.imageData + _Grab^.Width * 3 * i, _Grab^.Width * 3);
         // Копируем память
       end;
 
@@ -165,7 +196,7 @@ begin
   hMemDC := CreateCompatibleDC(dc);
   bitmap := CreateRGBBitmap(_Grab);
   SelectObject(hMemDC, bitmap);
-  BitBlt(dc, x, y, _Grab^.width, _Grab^.height, hMemDC, 0, 0, SRCCOPY);
+  BitBlt(dc, x, y, _Grab^.Width, _Grab^.Height, hMemDC, 0, 0, SRCCOPY);
   DeleteObject(bitmap);
   DeleteDC(hMemDC);
   DeleteDC(dc);
@@ -210,18 +241,18 @@ VAR
   i, j: Integer;
   offset: longint;
   dataByte, RowIn: PByteArray;
-//  channelsCount: Integer;
+  // channelsCount: Integer;
 BEGIN
   TRY
     // assert((iplImg.Depth = 8) and (iplImg.NChannels = 3),
     // 'IplImage2Bitmap: Not a 24 bit color iplImage!');
-    bitmap.height := iplImg.height;
-    bitmap.width := iplImg.width;
-    FOR j := 0 TO bitmap.height - 1 DO
+    bitmap.Height := iplImg.Height;
+    bitmap.Width := iplImg.Width;
+    FOR j := 0 TO bitmap.Height - 1 DO
     BEGIN
       // origin BL = Bottom-Left
       if (iplImg.Origin = IPL_ORIGIN_BL) then
-        RowIn := bitmap.Scanline[bitmap.height - 1 - j]
+        RowIn := bitmap.Scanline[bitmap.Height - 1 - j]
       else
         RowIn := bitmap.Scanline[j];
 
@@ -234,14 +265,14 @@ BEGIN
         CopyMemory(RowIn, dataByte, iplImg.WidthStep);
       End
       else if (iplImg.ChannelSeq = 'GRAY') then
-        FOR i := 0 TO bitmap.width - 1 DO
+        FOR i := 0 TO bitmap.Width - 1 DO
         begin
           RowIn[3 * i] := dataByte[i];
           RowIn[3 * i + 1] := dataByte[i];
           RowIn[3 * i + 2] := dataByte[i];
         End
       else
-        FOR i := 0 TO 3 * bitmap.width - 1 DO
+        FOR i := 0 TO 3 * bitmap.Width - 1 DO
         begin
           RowIn[i] := dataByte[i + 2];
           RowIn[i + 1] := dataByte[i + 1];
@@ -254,7 +285,7 @@ END; {IplImage2Bitmap}
 
 function cvImage2Bitmap(img: PIplImage): Vcl.Graphics.TBitmap;
 var
-//  info: string;
+  // info: string;
   bmp: Vcl.Graphics.TBitmap;
   deep: Integer;
   i, j, K, wStep, Channels: Integer;
@@ -265,8 +296,8 @@ begin
   if (img <> NIL) then
   begin
     bmp := Vcl.Graphics.TBitmap.Create;
-    bmp.width := img^.width;
-    bmp.height := img^.height;
+    bmp.Width := img^.Width;
+    bmp.Height := img^.Height;
     deep := img^.nChannels * img^.depth;
     case deep of
       8:
@@ -281,10 +312,10 @@ begin
     wStep := img^.WidthStep;
     Channels := img^.nChannels;
     data := Pointer(img^.imageData);
-    for i := 0 to img^.height - 1 do
+    for i := 0 to img^.Height - 1 do
     begin
       pb := bmp.Scanline[i];
-      for j := 0 to img^.width - 1 do
+      for j := 0 to img^.Width - 1 do
       begin
         for K := 0 to Channels - 1 do
           pb[3 * j + K] := data[i * wStep + j * Channels + K]
@@ -326,12 +357,12 @@ begin
     for i := 0 to 255 do
       _rgb[i] := rgb(i, i, i);
   dibhdr^.biSize := SizeOf(BITMAPINFOHEADER);
-  dibhdr^.biWidth := img^.width;
+  dibhdr^.biWidth := img^.Width;
   // Check origin for display
   if img^.Origin = 0 then
-    dibhdr^.biHeight := -img^.height
+    dibhdr^.biHeight := -img^.Height
   else
-    dibhdr^.biHeight := img^.height;
+    dibhdr^.biHeight := img^.Height;
 
   dibhdr^.biPlanes := 1;
   dibhdr^.biBitCount := 8 * img^.nChannels;
@@ -346,12 +377,12 @@ begin
   begin
     SetStretchBltMode(dc, COLORONCOLOR);
     // Stretch the image to fit the rectangle
-    Result := StretchDIBits(dc, rect.left, rect.top, rect.width, rect.height, 0, 0, img^.width, img^.height, img^.imageData,
+    Result := StretchDIBits(dc, rect.left, rect.top, rect.Width, rect.Height, 0, 0, img^.Width, img^.Height, img^.imageData,
       _dibhdr, DIB_RGB_COLORS, SRCCOPY) > 0;
   end
   else
     // Draw without scaling
-    Result := SetDIBitsToDevice(dc, rect.left, rect.top, img^.width, img^.height, 0, 0, 0, img^.height, img^.imageData, _dibhdr,
+    Result := SetDIBitsToDevice(dc, rect.left, rect.top, img^.Width, img^.Height, 0, 0, 0, img^.Height, img^.imageData, _dibhdr,
       DIB_RGB_COLORS) > 0;
 end;
 

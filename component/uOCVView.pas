@@ -32,28 +32,47 @@ uses
   System.Classes,
   Vcl.Controls,
   uOCVTypes,
-  core.types_c;
+  core.types_c, Vcl.Graphics;
 
 type
 
   TocvView = class(TWinControl, IocvDataReceiver)
   private
     FocvVideoSource: IocvDataSource;
+    FImage: IocvImage;
     FOnAfterPaint: TOnOcvNotify;
     FOnBeforePaint: TOnOcvNotify;
+    FCanvas: TCanvas;
     procedure WMEraseBkgnd(var Message: TWMEraseBkgnd); message WM_ERASEBKGND;
     procedure WMPaint(var Message: TWMPaint); message WM_PAINT;
     procedure SetOpenCVVideoSource(const Value: IocvDataSource);
+    function isSourceEnabled: Boolean;
   protected
     procedure TakeImage(const IplImage: IocvImage);
     procedure SetVideoSource(const Value: TObject);
   public
+    constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
+    procedure DrawImage(const IplImage: IocvImage);
+    property Canvas: TCanvas read FCanvas;
   published
     property VideoSource: IocvDataSource Read FocvVideoSource write SetOpenCVVideoSource;
     property Align;
     property OnAfterPaint: TOnOcvNotify read FOnAfterPaint write FOnAfterPaint;
     property OnBeforePaint: TOnOcvNotify read FOnBeforePaint write FOnBeforePaint;
+    property OnEnter;
+    property OnExit;
+    property OnKeyDown;
+    property OnKeyPress;
+    property OnKeyUp;
+    property OnMouseDown;
+    property OnMouseUp;
+    property OnMouseMove;
+    property OnMouseEnter;
+    property OnMouseLeave;
+    property OnMouseWheel;
+    property OnMouseWheelUp;
+    property OnMouseWheelDown;
   end;
 
 implementation
@@ -63,10 +82,18 @@ Uses
 
 {TOpenCVView}
 
+constructor TocvView.Create(AOwner: TComponent);
+begin
+  inherited;
+  FCanvas := TControlCanvas.Create;
+  TControlCanvas(FCanvas).Control := Self;
+end;
+
 destructor TocvView.Destroy;
 begin
   if Assigned(FocvVideoSource) then
     FocvVideoSource.RemoveReceiver(Self);
+  FCanvas.Free;
   inherited;
 end;
 
@@ -87,30 +114,70 @@ begin
   VideoSource := Value as TocvDataSource;
 end;
 
+procedure TocvView.DrawImage(const IplImage: IocvImage);
+begin
+  FImage := IplImage;
+  Invalidate;
+end;
+
 procedure TocvView.TakeImage(const IplImage: IocvImage);
 begin
   if not(csDestroying in ComponentState) then
   begin
-    if Assigned(OnBeforePaint) then
-      OnBeforePaint(Self, IplImage);
-    ipDraw(GetDC(Handle), IplImage.IpImage, ClientRect);
-    if Assigned(OnAfterPaint) then
-      OnAfterPaint(Self, IplImage);
+    // if Assigned(OnBeforePaint) then
+    // OnBeforePaint(Self, IplImage);
+    DrawImage(IplImage);
+    // if Assigned(OnAfterPaint) then
+    // OnAfterPaint(Self, IplImage);
   end;
+end;
+
+function TocvView.isSourceEnabled: Boolean;
+begin
+  Result := (Assigned(VideoSource) and (VideoSource.Enabled)) or Assigned(FImage);
 end;
 
 procedure TocvView.WMEraseBkgnd(var Message: TWMEraseBkgnd);
 begin
-  if (csDesigning in ComponentState) then
+  if (csDesigning in ComponentState) or (not isSourceEnabled) then
     inherited;
 end;
 
 procedure TocvView.WMPaint(var Message: TWMPaint);
+Var
+  DC: HDC;
+  lpPaint: TPaintStruct;
 begin
-  if (csDesigning in ComponentState) then
+  if (csDesigning in ComponentState) or (not isSourceEnabled) then
     inherited
   else
-    DefaultHandler(Message);
+  begin
+    if Assigned(FImage) then
+    begin
+      Canvas.Lock;
+      DC := BeginPaint(Handle, lpPaint);
+      try
+        Canvas.Handle := DC;
+        try
+          if Assigned(OnBeforePaint) then
+            OnBeforePaint(Self, FImage);
+
+          ipDraw(DC, FImage.IpImage, ClientRect);
+
+          if Assigned(OnAfterPaint) then
+            OnAfterPaint(Self, FImage);
+
+        finally
+          Canvas.Handle := 0;
+        end;
+      finally
+        EndPaint(Handle, lpPaint);
+        Canvas.Unlock;
+      end;
+    end
+    else
+      DefaultHandler(Message);
+  end;
 end;
 
 end.

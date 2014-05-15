@@ -47,8 +47,8 @@ type
     FFloatParams: TArray<Double>;
     FIntParams: TArray<Integer>;
     FBoolParams: TArray<Boolean>;
-    FOnAfterPaint: TOnOcvNotify;
-    FOnBeforePaint: TOnOcvNotify;
+    FOnAfterPaint: TOnOcvAfterTransform;
+    FOnBeforePaint: TOnOcvBeforeTransform;
   protected
     function GetFloatParam(const index: Integer): Double;
     function GetIntParam(const index: Integer): Integer;
@@ -70,8 +70,8 @@ type
     function GetNamePath: string; override;
     property Name;
   published
-    property OnAfterPaint: TOnOcvNotify read FOnAfterPaint write FOnAfterPaint;
-    property OnBeforePaint: TOnOcvNotify read FOnBeforePaint write FOnBeforePaint;
+    property OnAfterPaint: TOnOcvAfterTransform read FOnAfterPaint write FOnAfterPaint;
+    property OnBeforePaint: TOnOcvBeforeTransform read FOnBeforePaint write FOnBeforePaint;
   end;
 
   TocvImageOperationClass = class of TocvCustomImageOperation;
@@ -253,7 +253,6 @@ type
     FOwner: TPersistent;
     FOffset: TocvPoint;
     FEnabled: Boolean;
-    FMaxLevel: Integer;
     FThickness: Integer;
     FLineType: TocvLineType;
     FColor: TColor;
@@ -265,10 +264,35 @@ type
     property Shift: Integer read FShift write FShift default 0;
   published
     property Enabled: Boolean read FEnabled write FEnabled default True;
-    property MaxLevel: Integer read FMaxLevel write FMaxLevel default 2;
     property Thickness: Integer read FThickness write FThickness default 2;
     property LineType: TocvLineType read FLineType write FLineType default LT_AA;
     property Offset: TocvPoint read FOffset write FOffset;
+  end;
+
+  TocvMatchTemplateMethod = (TM_SQDIFF, TM_SQDIFF_NORMED, TM_CCORR, TM_CCORR_NORMED, TM_CCOEFF, TM_CCOEFF_NORMED);
+
+  TocvMatchTemplate = class(TocvCustomImageOperation)
+  protected
+    procedure AssignTo(Dest: TPersistent); override;
+  private
+    FMethod: TocvMatchTemplateMethod;
+    FIPLTemplate: pIplImage;
+    FTemplate: TPicture;
+    FOnMathTemplateRect: TOnOcvRect;
+    FDrawRect: TocvDraw;
+    procedure SetFIPLTemplate(const Value: pIplImage);
+    function GetIPLTemplate: pIplImage;
+    procedure TemplateOnChange(Sender: TObject);
+  public
+    constructor Create(AOwner: TPersistent); override;
+    destructor Destroy; override;
+    function DoTransform(const Source: IocvImage; var Destanation: IocvImage): Boolean; override;
+    property IPLTemplate: pIplImage read GetIPLTemplate write SetFIPLTemplate;
+  published
+    property Method: TocvMatchTemplateMethod read FMethod write FMethod default TM_CCOEFF_NORMED;
+    property Template: TPicture Read FTemplate write FTemplate;
+    property DrawRect: TocvDraw read FDrawRect write FDrawRect;
+    property OnMathTemplateRect: TOnOcvRect read FOnMathTemplateRect write FOnMathTemplateRect;
   end;
 
   TocvFaceDraw = class(TocvDraw)
@@ -291,7 +315,7 @@ type
     FMaxSize: TocvPoint;
     FDrawFace: TocvFaceDraw;
     FCascadeFlags: TocvHaarCascadeFlagSet;
-    FOnFace: TOnOcvFace;
+    FOnFace: TOnOcvFaces;
     procedure SetFrontalFace(const Value: TocvHaarFrontalFace);
     procedure ReleaseCascade;
     function GetHaarCascadeFlag: Integer;
@@ -310,7 +334,7 @@ type
     property MaxSize: TocvPoint read FMaxSize write FMaxSize; // {CV_DEFAULT(cvSize(0,0))}
     property DrawFace: TocvFaceDraw read FDrawFace write FDrawFace;
     property CascadeFlags: TocvHaarCascadeFlagSet read FCascadeFlags write FCascadeFlags default [];
-    property OnFace: TOnOcvFace read FOnFace write FOnFace;
+    property OnFaces: TOnOcvFaces read FOnFace write FOnFace;
   end;
 
   IocvEditorPropertiesContainer = interface
@@ -325,11 +349,13 @@ type
     procedure AssignTo(Dest: TPersistent); override;
   private
     FHoleColor: TColor;
+    FMaxLevel: Integer;
   public
     constructor Create(AOwner: TPersistent);
   published
     property ExternalColor: TColor read FColor write FColor default clGreen;
     property HoleColor: TColor read FHoleColor write FHoleColor default clRed;
+    property MaxLevel: Integer read FMaxLevel write FMaxLevel default 2;
   end;
 
   TocvContourRetrievalModes = (RETR_EXTERNAL, RETR_LIST, RETR_CCOMP, RETR_TREE, RETR_FLOODFILL);
@@ -407,8 +433,8 @@ type
     CS: TCriticalSection;
     FOperation: TocvCustomImageOperation;
     FOperationClass: TocvImageOperationClass;
-    FOnAfterPaint: TOnOcvNotify;
-    FOnBeforePaint: TOnOcvNotify;
+    FOnAfterPaint: TOnOcvAfterTransform;
+    FOnBeforePaint: TOnOcvBeforeTransform;
     FOwner: TCollection;
     function LockTransform: Boolean;
     procedure UnlockTransform;
@@ -420,6 +446,7 @@ type
     procedure SetPropertiesClass(Value: TocvImageOperationClass);
     procedure SetPropertiesClassName(const Value: string);
   protected
+    function DoTransform(const Source: IocvImage; var Destanation: IocvImage): Boolean; virtual;
     function GetProperties: TocvCustomImageOperation;
     function GetPropertiesClass: TocvImageOperationClass;
     function GetDisplayName: string; override;
@@ -431,14 +458,14 @@ type
   public
     constructor Create(Collection: TCollection); override;
     destructor Destroy; override;
-    function DoTransform(const Source: IocvImage; var Destanation: IocvImage): Boolean;
     procedure Assign(Source: TPersistent); override;
     property OperationClass: TocvImageOperationClass read GetPropertiesClass write SetPropertiesClass;
+    function Transform(const Source: IocvImage; var Destanation: IocvImage): Boolean;
   published
     property OperationClassName: string read GetPropertiesClassName write SetPropertiesClassName;
     property Operation: TocvCustomImageOperation read GetProperties write SetProperties;
-    property OnAfterPaint: TOnOcvNotify read FOnAfterPaint write FOnAfterPaint;
-    property OnBeforePaint: TOnOcvNotify read FOnBeforePaint write FOnBeforePaint;
+    property OnAfterPaint: TOnOcvAfterTransform read FOnAfterPaint write FOnAfterPaint;
+    property OnBeforePaint: TOnOcvBeforeTransform read FOnBeforePaint write FOnBeforePaint;
   end;
 
   TocvImageOperationCollection = class(TOwnedCollection);
@@ -620,14 +647,16 @@ begin
   if LockTransform then
     try
       Destanation := IplImage;
+
       if OperationsEnabled and (FOperations.Count > 0) then
       begin
         for i := 0 to FOperations.Count - 1 do
-          if not(FOperations.Items[i] as TocvImageOperationCollectionItem).DoTransform(Destanation, Destanation) then
+          if not(FOperations.Items[i] as TocvImageOperationCollectionItem).Transform(Destanation, Destanation) then
             Exit;
       end
       else if Assigned(FOperation) then
-        FOperation.DoTransform(IplImage, Destanation);
+        FOperation.Transform(IplImage, Destanation);
+
       NotifyReceiver(Destanation);
     finally
       Destanation := nil;
@@ -801,13 +830,22 @@ begin
 end;
 
 function TocvCustomImageOperation.Transform(const Source: IocvImage; var Destanation: IocvImage): Boolean;
+Var
+  Transform: Boolean;
 begin
   Result := LockTransform;
   if Result then
     try
+      Transform := True;
       if Assigned(OnBeforePaint) then
-        OnBeforePaint(Self, Source);
-      Result := DoTransform(Source, Destanation);
+        OnBeforePaint(Self, Source, Transform);
+      if Transform then
+        Result := DoTransform(Source, Destanation)
+      else
+      begin
+        Destanation := Source;
+        Result := True;
+      end;
       if Result and Assigned(OnAfterPaint) then
         OnAfterPaint(Self, Source);
     finally
@@ -1108,10 +1146,28 @@ end;
 
 function TocvImageOperationCollectionItem.DoTransform(const Source: IocvImage; var Destanation: IocvImage): Boolean;
 begin
+  Result := Assigned(FOperation) and FOperation.DoTransform(Source, Destanation);
+end;
+
+function TocvImageOperationCollectionItem.Transform(const Source: IocvImage; var Destanation: IocvImage): Boolean;
+Var
+  Transform: Boolean;
+begin
   Result := LockTransform;
   if Result then
     try
-      Result := Assigned(FOperation) and FOperation.DoTransform(Source, Destanation)
+      Transform := True;
+      if Assigned(OnBeforePaint) then
+        OnBeforePaint(Self, Source, Transform);
+      if Transform then
+        Result := DoTransform(Source, Destanation)
+      else
+      begin
+        Destanation := Source;
+        Result := True;
+      end;
+      if Result and Assigned(OnAfterPaint) then
+        OnAfterPaint(Self, Source);
     finally
       UnlockTransform;
     end;
@@ -1375,15 +1431,14 @@ end;
 
 procedure TocvRotateOperation.AssignTo(Dest: TPersistent);
 begin
+  inherited;
   if Dest is TocvRotateOperation then
   begin
     FCustomCenter := (Dest as TocvRotateOperation).FCustomCenter;
     FMethod := (Dest as TocvRotateOperation).FMethod;
     FWarpingFlag := (Dest as TocvRotateOperation).FWarpingFlag;
     FScale := (Dest as TocvRotateOperation).FScale;
-  end
-  else
-    inherited;
+  end;
 end;
 
 constructor TocvRotateOperation.Create(AOwner: TPersistent);
@@ -1456,7 +1511,6 @@ begin
   begin
     FOffset.FPoint := (Dest as TocvDraw).FOffset.FPoint;
     FEnabled := (Dest as TocvDraw).FEnabled;
-    FMaxLevel := (Dest as TocvDraw).FMaxLevel;
     FThickness := (Dest as TocvDraw).FThickness;
     FLineType := (Dest as TocvDraw).FLineType;
     FColor := (Dest as TocvDraw).FColor;
@@ -1469,7 +1523,6 @@ begin
   FOwner := AOwner;
   FOffset := TocvPoint.Create;
   FEnabled := True;
-  FMaxLevel := 2;
   FThickness := 1;
   FLineType := LT_AA;
   FColor := clGreen;
@@ -1577,17 +1630,18 @@ begin
 
       if Assigned(detected_objects) then
       begin
-        if Assigned(OnFace) then
+
+        if Assigned(OnFaces) then
         begin
           SetLength(Faces, detected_objects^.total);
           i := 0;
           While i < detected_objects^.total do
           begin
             cvr := pCvRect(cvGetSeqElem(detected_objects, i));
-            Faces[i] := Rect(cvr^.X, cvr^.Y, (cvr^.X) + (cvr^.width), (cvr^.Y) + (cvr^.height));
+            Faces[i] := ocvRect(cvr^.X, cvr^.Y, (cvr^.X) + (cvr^.width), (cvr^.Y) + (cvr^.height));
             Inc(i);
           end;
-          OnFace(Self, Destanation, Faces);
+          OnFaces(Self, Destanation, Faces);
         end;
 
         if DrawFace.Enabled then
@@ -1706,13 +1760,110 @@ procedure TocvContourDraw.AssignTo(Dest: TPersistent);
 begin
   inherited;
   if Dest is TocvContourDraw then
+  begin
     FHoleColor := (Dest as TocvContourDraw).FHoleColor;
+    FMaxLevel := (Dest as TocvContourDraw).FMaxLevel;
+  end;
 end;
 
 constructor TocvContourDraw.Create(AOwner: TPersistent);
 begin
   inherited;
   FHoleColor := clRed;
+  FMaxLevel := 2;
+end;
+
+{TocvMatchTemplate}
+
+procedure TocvMatchTemplate.AssignTo(Dest: TPersistent);
+begin
+  inherited;
+  if Dest is TocvMatchTemplate then
+  begin
+    FMethod := (Dest as TocvMatchTemplate).FMethod;
+  end;
+end;
+
+constructor TocvMatchTemplate.Create(AOwner: TPersistent);
+begin
+  inherited;
+  FTemplate := TPicture.Create;
+  FTemplate.OnChange := TemplateOnChange;
+  FDrawRect := TocvDraw.Create(Self);
+  FMethod := TM_CCOEFF_NORMED;
+end;
+
+destructor TocvMatchTemplate.Destroy;
+begin
+  if Assigned(FIPLTemplate) then
+    cvReleaseImage(FIPLTemplate);
+  FTemplate.Free;
+  FDrawRect.Free;
+  inherited;
+end;
+
+procedure TocvMatchTemplate.TemplateOnChange(Sender: TObject);
+begin
+  IPLTemplate := nil;
+end;
+
+function TocvMatchTemplate.DoTransform(const Source: IocvImage; var Destanation: IocvImage): Boolean;
+Var
+  imgMat: pIplImage;
+  p1, p2: TCvPoint;
+  min: Double;
+  r, g, b: byte;
+begin
+  Destanation := Source;
+  if Assigned(IPLTemplate) then
+  begin
+    imgMat := cvCreateImage(cvSize(Source.IpImage^.width - IPLTemplate^.width + 1, Source.IpImage^.height - IPLTemplate^.height +
+      1), IPL_DEPTH_32F, 1);
+    cvMatchTemplate(Source.IpImage, IPLTemplate, imgMat, Integer(FMethod));
+
+    if Assigned(OnMathTemplateRect) or DrawRect.Enabled then
+    begin
+      cvMinMaxLoc(imgMat, @min, @min, nil, @p1, nil);
+      p2.X := p1.X + IPLTemplate^.width - 1;
+      p2.Y := p1.Y + IPLTemplate^.height - 1;
+
+      if Assigned(OnMathTemplateRect) then
+        OnMathTemplateRect(Self, Source, ocvRect(p1.X, p1.Y, p2.X, p2.Y));
+
+      if DrawRect.Enabled then
+      begin
+        GetRGBValue(DrawRect.Color, r, g, b);
+        cvRectangle(Destanation.IpImage, p1, p2, CV_RGB(r, g, b));
+      end;
+
+    end;
+
+    cvReleaseImage(imgMat);
+
+    Result := True;
+  end
+  else
+    Result := False;
+end;
+
+function TocvMatchTemplate.GetIPLTemplate: pIplImage;
+begin
+  if not Assigned(FIPLTemplate) then
+  begin
+    if not Template.Bitmap.Empty then
+      FIPLTemplate := BitmapToIplImage(Template.Bitmap);
+  end;
+  Result := FIPLTemplate;
+end;
+
+procedure TocvMatchTemplate.SetFIPLTemplate(const Value: pIplImage);
+begin
+  if FIPLTemplate <> Value then
+  begin
+    if Assigned(FIPLTemplate) then
+      cvReleaseImage(FIPLTemplate);
+    FIPLTemplate := Value;
+  end;
 end;
 
 initialization
@@ -1731,6 +1882,7 @@ GetRegisteredImageOperations.RegisterIOClass(TocvContoursOperation, 'Contours');
 GetRegisteredImageOperations.RegisterIOClass(TocvRotateOperation, 'Rotate');
 GetRegisteredImageOperations.RegisterIOClass(TocvAbsDiff, 'AbsDiff');
 GetRegisteredImageOperations.RegisterIOClass(TocvFaceDetect, 'FaceDetect');
+GetRegisteredImageOperations.RegisterIOClass(TocvMatchTemplate, 'MatchTemplate');
 
 finalization
 
