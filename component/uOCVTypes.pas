@@ -61,13 +61,17 @@ Type
   end;
 
   TOnOcvNotify = procedure(Sender: TObject; const IplImage: IocvImage) of object;
+  TOnOcvAfterTransform = TOnOcvNotify;
+  TOnOcvBeforeTransform = procedure(Sender: TObject; const IplImage: IocvImage; Var Transorm: Boolean) of object;
   TOnOcvContour = procedure(Sender: TObject; const IplImage: IocvImage; const ContourCount: Integer; const Contours: pCvSeq)
     of object;
 
-  TocvFace = TRect;
-  TocvFaces = TArray<TocvFace>;
+  TocvRect = Type TRect;
+  TocvFace = TocvRect;
+  TocvFaces = TArray<TocvRect>;
 
-  TOnOcvFace = procedure(Sender: TObject; const IplImage: IocvImage; const Faces: TocvFaces) of object;
+  TOnOcvFaces = procedure(Sender: TObject; const IplImage: IocvImage; const Faces: TocvFaces) of object;
+  TOnOcvRect = procedure(Sender: TObject; const IplImage: IocvImage; const Rect: TocvRect) of object;
 
   IocvDataReceiver = interface
     ['{F67DEC9E-CCE0-49D2-AB9B-AD7E1020C5DC}']
@@ -81,6 +85,8 @@ Type
     procedure RemoveReceiver(const OpenCVVideoReceiver: IocvDataReceiver);
     function GetName: string;
     function GetImage: IocvImage;
+    function GetEnabled: Boolean;
+    property Enabled:Boolean read GetEnabled;
   end;
 
   TocvReceiverList = TThreadList<IocvDataReceiver>;
@@ -92,6 +98,7 @@ Type
     function GetName: string; virtual;
     procedure NotifyReceiver(const IplImage: IocvImage); virtual;
     function GetImage: IocvImage;
+    function GetEnabled: Boolean; virtual;
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
@@ -126,10 +133,20 @@ Type
     property VideoSource: IocvDataSource Read FocvVideoSource write SetOpenCVVideoSource;
   end;
 
+function ocvRect(Left, Top, Right, Bottom: Integer): TocvRect;
+
 implementation
 
 uses
   core_c, imgproc_c, imgproc.types_c;
+
+function ocvRect(Left, Top, Right, Bottom: Integer): TocvRect;
+begin
+  Result.Left := Left;
+  Result.Top := Top;
+  Result.Bottom := Bottom;
+  Result.Right := Right;
+end;
 
 {TOpenCVDataSource}
 
@@ -151,6 +168,11 @@ begin
   inherited;
 end;
 
+function TocvDataSource.GetEnabled: Boolean;
+begin
+  Result := False;
+end;
+
 function TocvDataSource.GetImage: IocvImage;
 begin
   Result := FImage;
@@ -168,7 +190,6 @@ Var
 begin
   LockList := FOpenCVVideoReceivers.LockList;
   try
-    FImage := IplImage;
     for R in LockList do
       R.TakeImage(IplImage);
   finally
