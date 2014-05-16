@@ -1,9 +1,9 @@
 ###Delphi-OpenCV
-----------
 * OpenCV version - 2.4.9<br>
 * Development environment - Delphi XE2-XE6<br>
 
-----------
+Requires installed [Visual C++ redistributable for Visual Studio 2012][2]<br>
+
 #####Contributors:
 ```
  Laentir Valetov (email: laex@bk.ru)
