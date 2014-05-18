@@ -14,6 +14,7 @@ Download the archive [link][1].<br>
 Unzip it to a convenient directory, thus get the following directory structure.<br>
 ```
 <PROJECT_ROOT> - Directory, such as "C:\OpenCV\"
+		<3rdParty>
 		<bin>
 		<component>
 		<include>
@@ -24,34 +25,32 @@ Add the search path for the modules of the project in Delphi IDE (Tools-Options-
 ```
 <PROJECT_ROOT>\include
 <PROJECT_ROOT>\include\calib3d
-<PROJECT_ROOT>\include\contrib
 <PROJECT_ROOT>\include\core
 <PROJECT_ROOT>\include\features2d
-<PROJECT_ROOT>\include\ffmpeg
 <PROJECT_ROOT>\include\highgui
 <PROJECT_ROOT>\include\imgproc
 <PROJECT_ROOT>\include\legacy
 <PROJECT_ROOT>\include\ml
 <PROJECT_ROOT>\include\nonfree
 <PROJECT_ROOT>\include\objdetect
-<PROJECT_ROOT>\include\stitching
 <PROJECT_ROOT>\include\video
 <PROJECT_ROOT>\component
 ```
 where ```<PROJECT_ROOT>``` directory, which was unzipped project.<br>
 Additionally, you can specify the path to the library header files FFMPEG
 ```
-<PROJECT_ROOT>\include\ffmpeg
-<PROJECT_ROOT>\include\ffmpeg\ctypes
-<PROJECT_ROOT>\include\ffmpeg\libavcodec
-<PROJECT_ROOT>\include\ffmpeg\libavfilter
-<PROJECT_ROOT>\include\ffmpeg\libavformat
-<PROJECT_ROOT>\include\ffmpeg\libavutil
-<PROJECT_ROOT>\include\ffmpeg\libswscale
+<PROJECT_ROOT>\3rdParty\ffmpeg
+<PROJECT_ROOT>\3rdParty\ffmpeg\ctypes
+<PROJECT_ROOT>\3rdParty\ffmpeg\libavcodec
+<PROJECT_ROOT>\3rdParty\ffmpeg\libavfilter
+<PROJECT_ROOT>\3rdParty\ffmpeg\libavformat
+<PROJECT_ROOT>\3rdParty\ffmpeg\libavutil
+<PROJECT_ROOT>\3rdParty\ffmpeg\libswresample
+<PROJECT_ROOT>\3rdParty\ffmpeg\libswscale
 ```
 Examples of using FFMPEG library header files are in the
 ```
-<PROJECT_ROOT>\include\ffmpeg\examples
+<PROJECT_ROOT>\samples\FFMpeg
 ```
 Open in Delphi IDE and compile:<br>
 Examples of the use of certain functions and procedures 
@@ -76,6 +75,8 @@ Must also be installed visual C + + redistributable for Visual Studio 2013 is av
 Examples of the use of components - open:
 ```
 <PROJECT_ROOT>\samples\Components\cCameraCapture\cCameraCapture.dproj
+<PROJECT_ROOT>\samples\Components\cMatchTemplate\cMatchTemplate.dproj
+
 ```
 [1]: https://github.com/Laex/Delphi-OpenCV/archive/master.zip
 [2]: http://www.microsoft.com/ru-ru/download/details.aspx?id=40784
