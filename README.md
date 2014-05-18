@@ -2,7 +2,7 @@
 * OpenCV version - 2.4.9<br>
 * Development environment - Delphi XE2-XE6<br>
 
-Requires installed [Visual C++ redistributable for Visual Studio 2012][2]<br>
+Requires installed [Visual C++ redistributable for Visual Studio 2013][2]<br>
 
 #####Contributors:
 ```
@@ -72,10 +72,10 @@ To install the components, open and install
 <PROJECT_ROOT>\include\component\OpenCV.dpk
 ```
 When installing the components in your PATH variable must be available should the library "opencv_*.dll". 
-Must also be installed visual C + + redistributable for Visual Studio 2012 is available on the [link][2]<br>
+Must also be installed visual C + + redistributable for Visual Studio 2013 is available on the [link][2]<br>
 Examples of the use of components - open:
 ```
 <PROJECT_ROOT>\samples\Components\cCameraCapture\cCameraCapture.dproj
 ```
 [1]: https://github.com/Laex/Delphi-OpenCV/archive/master.zip
-[2]: http://www.microsoft.com/en-US/download/details.aspx?id=30679
+[2]: http://www.microsoft.com/ru-US/download/details.aspx?id=40784
