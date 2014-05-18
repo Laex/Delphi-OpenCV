@@ -38,4 +38,4 @@ Installation
 
 Run the sample.
 
-[1]: http://www.microsoft.com/ru-US/download/details.aspx?id=40784
+[1]: http://www.microsoft.com/ru-ru/download/details.aspx?id=40784
