@@ -78,4 +78,4 @@ Examples of the use of components - open:
 <PROJECT_ROOT>\samples\Components\cCameraCapture\cCameraCapture.dproj
 ```
 [1]: https://github.com/Laex/Delphi-OpenCV/archive/master.zip
-[2]: http://www.microsoft.com/ru-US/download/details.aspx?id=40784
+[2]: http://www.microsoft.com/ru-ru/download/details.aspx?id=40784
