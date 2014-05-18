@@ -9,9 +9,6 @@ uses
   System.Character,
   System.ZLib;
 
-Const
-  Path = '.\facedetectxml\';
-
 function CreateResourceName(const FileName: String): string;
 begin
   Result := StringReplace(FileName, 'haarcascade', 'H', [rfIgnoreCase, rfReplaceAll]);
@@ -41,10 +38,10 @@ begin
     S_inc.Add('const');
     S_inc.Add('FrontalFaceXML: array [TocvHaarCascadeType] of TocvHaarCascadeRecord =');
     S_inc.Add('(');
-    if FindFirst(Path + '*.xml', faAnyFile, S) = 0 then
+    if FindFirst('*.xml', faAnyFile, S) = 0 then
       repeat
-        iFileName := Path + S.Name;
-        oFileName := Path + S.Name + '.z';
+        iFileName := S.Name;
+        oFileName := S.Name + '.z';
         Fs := TFileStream.Create(iFileName, fmOpenRead);
         Fd := TFileStream.Create(oFileName, fmCreate);
         ZC := TZCompressionStream.Create(clMax, Fd);
@@ -61,12 +58,12 @@ begin
         end;
       until FindNext(S) <> 0;
     FindClose(S);
-    S_rc.SaveToFile(Path + 'haarcascade.rc');
+    S_rc.SaveToFile('haarcascade.rc');
     rName := S_inc[S_inc.Count - 1];
     Delete(rName, Length(rName), 1);
     S_inc[S_inc.Count - 1] := rName;
     S_inc.Add(');');
-    S_inc.SaveToFile(Path + 'haarcascade.inc');
+    S_inc.SaveToFile('haarcascade.inc');
     S_rc.Free;
     S_inc.Free;
   except
