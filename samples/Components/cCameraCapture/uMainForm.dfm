@@ -117,29 +117,7 @@ object MainForm: TMainForm
     Operation.DrawHaarCascade.Color = clRed
     Operation.CascadeFlags = [HAAR_DO_CANNY_PRUNING, HAAR_SCALE_IMAGE, HAAR_FIND_BIGGEST_OBJECT]
     Operation.NotifyOnlyWhenFound = False
-    Operations = <
-      item
-        OperationClassName = 'TocvContoursOperation'
-        Operation.OperationClassName = 'TocvThresholdOperation'
-        Operation.Preprocessing.MaxValue = 255.000000000000000000
-        Operation.Preprocessing.ThresholdType = THRESH_BINARY_INV
-        Operation.Preprocessing.Threshold = 128.000000000000000000
-        Operation.Offset.X = 0
-        Operation.Offset.Y = 0
-        Operation.MinArea = 100
-        Operation.ContourDraw.Enabled = False
-        Operation.ContourDraw.Thickness = 1
-        Operation.ContourDraw.LineType = LT_FILLED
-        Operation.ContourDraw.Offset.X = 0
-        Operation.ContourDraw.Offset.Y = 0
-        Operation.ContourDraw.ExternalColor = clBlack
-        Operation.ContourDraw.HoleColor = clBlack
-        Operation.ContourDraw.MaxLevel = 0
-        Operation.ApproxPoly.Eps = 3.000000000000000000
-      end
-      item
-        OperationClassName = 'TocvNoneOperation'
-      end>
+    Operations = <>
     OperationsEnabled = False
     Left = 36
     Top = 392

@@ -29,6 +29,7 @@ Uses
   System.SysUtils,
   System.Classes,
   System.Generics.Collections,
+  Vcl.Graphics,
   core.types_c,
   System.Types;
 
@@ -40,6 +41,8 @@ Type
     function GrayImage: IocvImage;
     function Clone: IocvImage;
     function Same: IocvImage;
+    function AsBitmap: TBitmap;
+    function Crop(const roi: TCvRect): IocvImage;
     property IpImage: pIplImage Read GetIplImage;
     property isGray: Boolean read GetisGray;
   end;
@@ -51,12 +54,16 @@ Type
     function GetIplImage: pIplImage;
     function GetisGray: Boolean;
   public
-    constructor Create(const AImage: pIplImage);
+    constructor Create(const AImage: pIplImage); overload;
+    constructor Create(const Bitmap: TBitmap); overload;
     constructor CreateClone(const AImage: pIplImage);
+    constructor LoadFormFile(const FileName: String);
     destructor Destroy; override;
     function GrayImage: IocvImage;
     function Clone: IocvImage;
     function Same: IocvImage;
+    function AsBitmap: TBitmap;
+    function Crop(const roi: TCvRect): IocvImage;
     property IplImage: pIplImage Read GetIplImage;
     property isGray: Boolean read GetisGray;
   end;
@@ -143,7 +150,9 @@ function ocvRect(Left, Top, Right, Bottom: Integer): TocvRect;
 implementation
 
 uses
-  core_c, imgproc_c, imgproc.types_c;
+  core_c,
+  imgproc_c,
+  imgproc.types_c, highgui_c;
 
 function ocvRect(Left, Top, Right, Bottom: Integer): TocvRect;
 begin
@@ -190,8 +199,8 @@ end;
 
 procedure TocvDataSource.NotifyReceiver(const IplImage: IocvImage);
 Var
-  R: Pointer; //IocvDataReceiver;
-  LockList: TList;//<IocvDataReceiver>;
+  R: Pointer; // IocvDataReceiver;
+  LockList: TList; // <IocvDataReceiver>;
 begin
   LockList := FOpenCVVideoReceivers.LockList;
   try
@@ -272,6 +281,47 @@ end;
 
 {TocvImage}
 
+function TocvImage.AsBitmap: TBitmap;
+var
+  deep: Integer;
+  i, j, K, wStep, Channels: Integer;
+  data: PByteArray;
+  pb: PByteArray;
+begin
+  if (FImage <> NIL) then
+  begin
+    Result := TBitmap.Create;
+    Result.Width := FImage^.Width;
+    Result.Height := FImage^.Height;
+    deep := FImage^.nChannels * FImage^.depth;
+    case deep of
+      8:
+        Result.PixelFormat := pf8bit;
+      16:
+        Result.PixelFormat := pf16bit;
+      24:
+        Result.PixelFormat := pf24bit;
+      32:
+        Result.PixelFormat := pf32bit;
+    End;
+    wStep := FImage^.WidthStep;
+    Channels := FImage^.nChannels;
+    data := Pointer(FImage^.imageData);
+    for i := 0 to FImage^.Height - 1 do
+    begin
+      pb := Result.Scanline[i];
+      for j := 0 to FImage^.Width - 1 do
+      begin
+        for K := 0 to Channels - 1 do
+          pb[3 * j + K] := data[i * wStep + j * Channels + K]
+      End;
+    End;
+    Result := Result;
+  End
+  else
+    Result := NIL;
+end;
+
 function TocvImage.Clone: IocvImage;
 begin
   Result := TocvImage.CreateClone(FImage);
@@ -282,9 +332,34 @@ begin
   FImage := AImage;
 end;
 
+constructor TocvImage.Create(const Bitmap: TBitmap);
+Var
+  bitmapData: PByte;
+begin
+  Assert(Bitmap.PixelFormat = pf24bit, 'only 24bit'); // Пока только такой формат - IPL_DEPTH_8U, 3
+  bitmapData := Bitmap.Scanline[0];
+  FImage := cvCreateImage(cvSize(Bitmap.Width, Bitmap.Height), IPL_DEPTH_8U, 3);
+  Move(bitmapData^, FImage^.imageData^, FImage^.imageSize);
+  FImage^.imageDataOrigin := nil;
+  FImage^.imageId := nil;
+  FImage^.maskROI := nil;
+  FImage^.roi := nil;
+end;
+
 constructor TocvImage.CreateClone(const AImage: pIplImage);
 begin
   FImage := cvCloneImage(AImage);
+end;
+
+function TocvImage.Crop(const roi: TCvRect): IocvImage;
+Var
+  CropIplImage: pIplImage;
+begin
+  CropIplImage := cvCreateImage(cvSize(roi.Width, roi.Height), FImage^.depth, FImage^.nChannels);
+  cvSetImageROI(FImage, roi);
+  cvCopyImage(FImage, CropIplImage);
+  cvResetImageROI(FImage);
+  Result := TocvImage.Create(CropIplImage);
 end;
 
 destructor TocvImage.Destroy;
@@ -315,6 +390,11 @@ begin
     cvCvtColor(FImage, iImage, CV_RGB2GRAY);
     Result := TocvImage.Create(iImage);
   end;
+end;
+
+constructor TocvImage.LoadFormFile(const FileName: String);
+begin
+  FImage := cvLoadImage(PAnsiChar(AnsiString(FileName)));
 end;
 
 function TocvImage.Same: IocvImage;

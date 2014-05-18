@@ -51,7 +51,6 @@ Uses
 
 Function hsv2rgb(hue: single): TCvScalar;
 procedure IplImage2Bitmap(iplImg: PIplImage; var bitmap: Vcl.Graphics.TBitmap);
-
 function cvImage2Bitmap(img: PIplImage): Vcl.Graphics.TBitmap;
 
 function ipDraw(dc: HDC; img: PIplImage; const rect: TRect; const Stretch: Boolean = true): Boolean; overload;
@@ -97,7 +96,6 @@ begin
   // Do the copy
   cvCopyImage(src, Result);
   cvResetImageROI(src);
-  Result := Result;
 end;
 
 function ifthen(const Cond: Boolean; const ValueTrue, ValueFalse: pCvArr): pCvArr; overload;
