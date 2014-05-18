@@ -263,7 +263,7 @@ const
     using CV_LOAD_IMAGE_ANYCOLOR alone is equivalent to CV_LOAD_IMAGE_UNCHANGED
     unless CV_LOAD_IMAGE_ANYDEPTH is specified images are converted to 8bit *)
   // CVAPI(IplImage*) cvLoadImage(const char* filename,int iscolor CV_DEFAULT(CV_LOAD_IMAGE_COLOR));
-function cvLoadImage(const filename: pCVChar; iscolor: Integer = CV_LOAD_IMAGE_COLOR): pIplImage; cdecl;
+function cvLoadImage(const filename: pCVChar; iscolor: Integer = CV_LOAD_IMAGE_UNCHANGED): pIplImage; cdecl;
 
 // const (;
 // iscolor CV_DEFAULT(CV_LOAD_IMAGE_COLOR): Integer); CVAPI(CvMat)cvLoadImageM(PCVChar filename,

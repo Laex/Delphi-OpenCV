@@ -353,10 +353,12 @@ type
     FSmoothOperation: TocvSmoothOperations;
     FDrawMotionRect: TocvDrawMotionRect;
     FOnMotion: TOnOcvRects;
+    FContours: pCvSeq;
   public
     constructor Create(AOwner: TPersistent); override;
     destructor Destroy; override;
     function DoTransform(const Source: IocvImage; var Destanation: IocvImage): Boolean; override;
+    property MotionRects: pCvSeq Read FContours;
   published
     property RemoveSmallObject: Boolean index 0 Read GetBoolParam write SetBoolParam;
     property MinObjectSize: Integer index 0 Read GetIntParam write SetIntParam;
@@ -391,9 +393,12 @@ type
     FDrawHaarCascade: TocvHaarCascadeDraw;
     FCascadeFlags: TocvHaarCascadeFlagSet;
     FOnHaarCascade: TOnOcvHaarCascade;
+    FCustomHaarCascade: TFileName;
     procedure SetHaarCascade(const Value: TocvHaarCascadeType);
     procedure ReleaseCascade;
     function GetHaarCascadeFlag: Integer;
+    procedure SetCustomHaarCascade(const Value: TFileName);
+    procedure DoLoadHaarCascade(const FileName: String);
   protected
     FPrevFrame: IocvImage;
   public
@@ -401,6 +406,7 @@ type
     destructor Destroy; override;
     function DoTransform(const Source: IocvImage; var Destanation: IocvImage): Boolean; override;
   published
+    property CustomHaarCascade: TFileName read FCustomHaarCascade write SetCustomHaarCascade;
     property HaarCascade: TocvHaarCascadeType read FHaarCascade write SetHaarCascade default hcFrontalFaceAlt;
     property Equalize: Boolean index 1 Read GetBoolParam write SetBoolParam;
     property Scale: Double index 0 Read GetFloatParam write SetFloatParam; // 1.3
@@ -1684,6 +1690,22 @@ begin
   FCascade := nil;
 end;
 
+procedure TocvHaarCascade.SetCustomHaarCascade(const Value: TFileName);
+begin
+  if FCustomHaarCascade <> Value then
+  begin
+    FCustomHaarCascade := Value;
+    DoLoadHaarCascade(FCustomHaarCascade);
+  end;
+end;
+
+procedure TocvHaarCascade.DoLoadHaarCascade(const FileName: String);
+begin
+  ReleaseCascade;
+  if FileExists(FileName) then
+    FCascade := cvLoad(c_str(FileName), nil, nil, nil);
+end;
+
 procedure TocvHaarCascade.SetHaarCascade(const Value: TocvHaarCascadeType);
 
   function TempPath: string;
@@ -1727,8 +1749,7 @@ begin
               RS.Free;
             end;
           end;
-          if FileExists(FullFileName) then
-            FCascade := cvLoad(c_str(FullFileName), nil, nil, nil);
+          DoLoadHaarCascade(FullFileName);
         except
           ReleaseCascade;
         end;
@@ -1893,7 +1914,6 @@ Var
   CurrentGrayImage: IocvImage;
   DifferenceImage: IocvImage;
   storage: pCvMemStorage;
-  Contours: pCvSeq;
   area: Double;
   ThresholdImage: IocvImage;
   black, white: TCvScalar;
@@ -1918,32 +1938,34 @@ begin
   begin
     // img_out := DifferenceImage.Clone;
     storage := cvCreateMemStorage(0);
-    Contours := AllocMem(SizeOf(TCvSeq));
+    FContours := AllocMem(SizeOf(TCvSeq));
     try
-      cvFindContours(ThresholdImage.IpImage, storage, @Contours, SizeOf(TCvContour), CV_RETR_LIST, CV_CHAIN_APPROX_SIMPLE, cvPoint(0, 0));
+      cvFindContours(ThresholdImage.IpImage, storage, @FContours, SizeOf(TCvContour), CV_RETR_LIST, CV_CHAIN_APPROX_SIMPLE,
+        cvPoint(0, 0));
 
       black := CV_RGB(0, 0, 0);
       white := CV_RGB(255, 255, 255);
 
-      while (Contours <> nil) do
+      while (FContours <> nil) do
       begin
-        area := cvContourArea(Contours, CV_WHOLE_SEQ);
+        area := cvContourArea(FContours, CV_WHOLE_SEQ);
         if (abs(area) <= MinObjectSize) and RemoveSmallObject then // Если площадь меньше порога, то удаляем
-          cvDrawContours(ThresholdImage.IpImage, Contours, black, black, -1, CV_FILLED, 8, cvPoint(0, 0))
+          cvDrawContours(ThresholdImage.IpImage, FContours, black, black, -1, CV_FILLED, 8, cvPoint(0, 0))
         else
-          cvDrawContours(ThresholdImage.IpImage, Contours, white, white, -1, CV_FILLED, 8, cvPoint(0, 0));
+          cvDrawContours(ThresholdImage.IpImage, FContours, white, white, -1, CV_FILLED, 8, cvPoint(0, 0));
 
-        Contours := Contours.h_next; // Переходим к следующему контуру
+        FContours := FContours.h_next; // Переходим к следующему контуру
       end;
 
       cvClearMemStorage(storage);
       SetLength(Rects, 0);
 
-      cvFindContours(ThresholdImage.IpImage, storage, @Contours, SizeOf(TCvContour), CV_RETR_LIST, CV_CHAIN_APPROX_NONE, cvPoint(0, 0));
+      cvFindContours(ThresholdImage.IpImage, storage, @FContours, SizeOf(TCvContour), CV_RETR_LIST, CV_CHAIN_APPROX_NONE,
+        cvPoint(0, 0));
 
-      if Assigned(Contours) then
+      if Assigned(FContours) then
       begin
-        c := Contours;
+        c := FContours;
         i := 0;
         while (c <> nil) do
         begin
