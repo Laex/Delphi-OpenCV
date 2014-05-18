@@ -576,7 +576,9 @@ implementation
 Uses
   core_c,
   imgproc_c,
-  imgproc.types_c, cvUtils, System.ZLib;
+  imgproc.types_c,
+  cvUtils,
+  System.ZLib;
 
 type
   TPersistentAccessProtected = class(TPersistent);
@@ -586,30 +588,11 @@ type
     FileName: String;
   end;
 
-const
-  FrontalFaceXML: array [TocvHaarCascadeType] of TocvHaarCascadeRecord =
-  {} ((Name: 'HCFFA'; FileName: 'haarcascade_frontalface_alt.xml'),
-    {} (Name: 'HCFFA2'; FileName: 'haarcascade_frontalface_alt2.xml'),
-    {} (Name: 'HCFFD'; FileName: 'haarcascade_frontalface_default.xml'),
-    {} (Name: 'HCFFAT'; FileName: 'haarcascade_frontalface_alt_tree.xml'),
-    {} (Name: 'EYE'; FileName: 'haarcascade_eye.xml'),
-    {} (Name: 'ETEG'; FileName: 'haarcascade_eye_tree_eyeglasses.xml'),
-    {} (Name: 'EFB'; FileName: 'haarcascade_fullbody.xml'),
-    {} (Name: 'LE2S'; FileName: 'haarcascade_lefteye_2splits.xml'),
-    {} (Name: 'LB'; FileName: 'haarcascade_lowerbody.xml'),
-    {} (Name: 'MEB'; FileName: 'haarcascade_mcs_eyepair_big.xml'),
-    {} (Name: 'MEP'; FileName: 'haarcascade_mcs_eyepair_small.xml'),
-    {} (Name: 'MLEEAR'; FileName: 'haarcascade_mcs_leftear.xml'),
-    {} (Name: 'MLEEYE'; FileName: 'haarcascade_mcs_lefteye.xml'),
-    {} (Name: 'MM'; FileName: 'haarcascade_mcs_mouth.xml'),
-    {} (Name: 'MN'; FileName: 'haarcascade_mcs_nose.xml'),
-    {} (Name: 'MREAR'; FileName: 'haarcascade_mcs_rightear.xml'),
-    {} (Name: 'MREYE'; FileName: 'haarcascade_mcs_righteye.xml'),
-    {} (Name: 'MUB'; FileName: 'haarcascade_mcs_upperbody.xml'),
-    {} (Name: 'PF'; FileName: 'haarcascade_profileface.xml'),
-    {} (Name: 'RE2S'; FileName: 'haarcascade_righteye_2splits.xml'),
-    {} (Name: 'SM'; FileName: 'haarcascade_smile.xml'),
-    {} (Name: 'UB'; FileName: 'haarcascade_upperbody.xml'));
+  ///
+  // Run utils\CompressHaar\uCompressHaar.dpr
+  // Add to serarch path \Delphi-OpenCV\bin\facedetectxml\
+  ///
+{$I haarcascade.inc}
 
 Var
   _RegisteredImageOperations: TRegisteredImageOperations = nil;
@@ -793,14 +776,13 @@ end;
 
 procedure TocvCustomImageOperation.AssignTo(Dest: TPersistent);
 begin
+  inherited;
   if Dest is TocvCustomImageOperation then
   begin
     FFloatParams := (Dest as TocvCustomImageOperation).FFloatParams;
     FIntParams := (Dest as TocvCustomImageOperation).FIntParams;
     FBoolParams := (Dest as TocvCustomImageOperation).FBoolParams;
-  end
-  else
-    inherited;
+  end;
 end;
 
 constructor TocvCustomImageOperation.Create(AOwner: TPersistent);
