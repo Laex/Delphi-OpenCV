@@ -39,7 +39,6 @@ lib
 *.vlb
 *.sdf
 eng.*
-*.z
 /3rdParty/!leptonica
 /3rdParty/!tesseract
 /3rdParty/!tesseract_classes
