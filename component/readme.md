@@ -37,7 +37,6 @@ Installation
 ```
 <PROJECT_ROOT>\samples\Components\cCameraCapture\cCameraCapture.dproj
 <PROJECT_ROOT>\samples\Components\cMatchTemplate\cMatchTemplate.dproj
-
 ```
 
 Run the sample.
