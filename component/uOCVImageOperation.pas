@@ -76,6 +76,44 @@ type
 
   TocvImageOperationClass = class of TocvCustomImageOperation;
 
+  IocvEditorPropertiesContainer = interface
+    ['{418F88DD-E35D-4425-BF24-E753E83D35D6}']
+    function GetProperties: TocvCustomImageOperation;
+    function GetPropertiesClass: TocvImageOperationClass;
+    procedure SetPropertiesClass(Value: TocvImageOperationClass);
+  end;
+
+  TocvCustomImageOperationWithNestedOperation = class(TocvCustomImageOperation, IocvEditorPropertiesContainer)
+  private
+    FOperation: TocvCustomImageOperation;
+    FOperationClass: TocvImageOperationClass;
+    CS: TCriticalSection;
+  protected
+    function LockTransform: Boolean;
+    procedure UnlockTransform;
+    // ---------------------------------------------
+    procedure CreateProperties;
+    procedure DestroyProperties;
+    procedure RecreateProperties;
+    // ---------------------------------------------
+    function GetPropertiesClassName: string;
+    procedure SetPropertiesClassName(const Value: string);
+
+    function GetProperties: TocvCustomImageOperation;
+    procedure SetProperties(const Value: TocvCustomImageOperation);
+
+    function GetPropertiesClass: TocvImageOperationClass; virtual;
+    procedure SetPropertiesClass(Value: TocvImageOperationClass);
+
+    property Operation: TocvCustomImageOperation read GetProperties write SetProperties;
+  public
+    constructor Create(AOwner: TPersistent); override;
+    destructor Destroy; override;
+    property OperationClass: TocvImageOperationClass read GetPropertiesClass write SetPropertiesClass;
+  published
+    property OperationClassName: string read GetPropertiesClassName write SetPropertiesClassName;
+  end;
+
   TocvNoneOperation = class(TocvCustomImageOperation)
   public
     function DoTransform(const Source: IocvImage; var Destanation: IocvImage): Boolean; override;
@@ -295,28 +333,65 @@ type
     property OnMathTemplateRect: TOnOcvRect read FOnMathTemplateRect write FOnMathTemplateRect;
   end;
 
-  TocvFaceDraw = class(TocvDraw)
+  TocvMotionDetectCalcRectType = (mdBoundingRect, mdMinAreaRect);
+
+  TocvContourApproximationMethods = (CHAIN_CODE, CHAIN_APPROX_NONE, CHAIN_APPROX_SIMPLE, CHAIN_APPROX_TC89_L1,
+    CHAIN_APPROX_TC89_KCOS, LINK_RUNS);
+
+  TocvDrawMotionRect = class(TocvDraw)
+  published
+    property Color;
+  end;
+
+  TocvMotionDetect = class(TocvCustomImageOperationWithNestedOperation)
+  protected
+    procedure AssignTo(Dest: TPersistent); override;
+    function GetPropertiesClass: TocvImageOperationClass; override;
+  private
+    FCalcRectType: TocvMotionDetectCalcRectType;
+    FPrevFrame: IocvImage;
+    FSmoothOperation: TocvSmoothOperations;
+    FDrawMotionRect: TocvDrawMotionRect;
+    FOnMotion: TOnOcvRects;
+  public
+    constructor Create(AOwner: TPersistent); override;
+    destructor Destroy; override;
+    function DoTransform(const Source: IocvImage; var Destanation: IocvImage): Boolean; override;
+  published
+    property RemoveSmallObject: Boolean index 0 Read GetBoolParam write SetBoolParam;
+    property MinObjectSize: Integer index 0 Read GetIntParam write SetIntParam;
+    property CalcRectType: TocvMotionDetectCalcRectType read FCalcRectType write FCalcRectType default mdBoundingRect;
+    property Smooth: TocvSmoothOperations read FSmoothOperation write FSmoothOperation default BLUR;
+    property Threshold: TocvCustomImageOperation read GetProperties write SetProperties;
+    property DrawMotionRect: TocvDrawMotionRect read FDrawMotionRect Write FDrawMotionRect;
+    property OnMotion: TOnOcvRects read FOnMotion write FOnMotion;
+    property NotifyOnlyWhenFound: Boolean index 1 Read GetBoolParam write SetBoolParam;
+  end;
+
+  TocvHaarCascadeDraw = class(TocvDraw)
   published
     property Color;
     property Shift;
   end;
 
-  TocvHaarFrontalFace = (HCFFA, HCFFA2, HCFFD, HCFFAT);
+  TocvHaarCascadeType = (hcFrontalFaceAlt, hcFrontalFaceAlt2, hcFrontalFaceDefaut, hcFrontalFaceAltTree, hcEye,
+    hcEyeTreeEyeGlasses, hcFullBody, hcLeftEye2Splits, hcLowerBody, hcMcsEyePairBig, hcMcsEyePair, hcMcsLeftEar, hcMcsLeftEye,
+    hcMcsMouth, hcMcsNose, hcMcsRightEar, hcMcsRightEye, hcMcsUpperBody, hcProfileFace, hcRightEye2Splits, hcSmile, hcUpperBody);
 
   TocvHaarCascadeFlag = (HAAR_DO_CANNY_PRUNING, HAAR_SCALE_IMAGE, HAAR_FIND_BIGGEST_OBJECT, HAAR_DO_ROUGH_SEARCH);
   TocvHaarCascadeFlagSet = set of TocvHaarCascadeFlag;
 
-  TocvFaceDetect = class(TocvCustomImageOperation)
+  TocvHaarCascade = class(TocvCustomImageOperation)
   private
-    FFrontalFace: TocvHaarFrontalFace;
+    FHaarCascade: TocvHaarCascadeType;
     FLockFrontalFaceChange: TCriticalSection;
     FCascade: pCvHaarClassifierCascade;
     FMinSize: TocvPoint;
     FMaxSize: TocvPoint;
-    FDrawFace: TocvFaceDraw;
+    FDrawHaarCascade: TocvHaarCascadeDraw;
     FCascadeFlags: TocvHaarCascadeFlagSet;
-    FOnFace: TOnOcvFaces;
-    procedure SetFrontalFace(const Value: TocvHaarFrontalFace);
+    FOnHaarCascade: TOnOcvHaarCascade;
+    procedure SetHaarCascade(const Value: TocvHaarCascadeType);
     procedure ReleaseCascade;
     function GetHaarCascadeFlag: Integer;
   protected
@@ -326,22 +401,16 @@ type
     destructor Destroy; override;
     function DoTransform(const Source: IocvImage; var Destanation: IocvImage): Boolean; override;
   published
-    property FrontalFace: TocvHaarFrontalFace read FFrontalFace write SetFrontalFace default HCFFA;
+    property HaarCascade: TocvHaarCascadeType read FHaarCascade write SetHaarCascade default hcFrontalFaceAlt;
     property Equalize: Boolean index 1 Read GetBoolParam write SetBoolParam;
     property Scale: Double index 0 Read GetFloatParam write SetFloatParam; // 1.3
     property MinNeighbors: Integer index 0 Read GetIntParam write SetIntParam; // 3
     property MinSize: TocvPoint read FMinSize write FMinSize; // CV_DEFAULT(cvSize(0,0))
     property MaxSize: TocvPoint read FMaxSize write FMaxSize; // {CV_DEFAULT(cvSize(0,0))}
-    property DrawFace: TocvFaceDraw read FDrawFace write FDrawFace;
+    property DrawHaarCascade: TocvHaarCascadeDraw read FDrawHaarCascade write FDrawHaarCascade;
     property CascadeFlags: TocvHaarCascadeFlagSet read FCascadeFlags write FCascadeFlags default [];
-    property OnFaces: TOnOcvFaces read FOnFace write FOnFace;
-  end;
-
-  IocvEditorPropertiesContainer = interface
-    ['{418F88DD-E35D-4425-BF24-E753E83D35D6}']
-    function GetProperties: TocvCustomImageOperation;
-    function GetPropertiesClass: TocvImageOperationClass;
-    procedure SetPropertiesClass(Value: TocvImageOperationClass);
+    property OnHaarCascade: TOnOcvHaarCascade read FOnHaarCascade write FOnHaarCascade;
+    property NotifyOnlyWhenFound: Boolean index 2 Read GetBoolParam write SetBoolParam;
   end;
 
   TocvContourDraw = class(TocvDraw)
@@ -360,9 +429,6 @@ type
 
   TocvContourRetrievalModes = (RETR_EXTERNAL, RETR_LIST, RETR_CCOMP, RETR_TREE, RETR_FLOODFILL);
 
-  TocvContourApproximationMethods = (CHAIN_CODE, CHAIN_APPROX_NONE, CHAIN_APPROX_SIMPLE, CHAIN_APPROX_TC89_L1,
-    CHAIN_APPROX_TC89_KCOS, LINK_RUNS);
-
   TocvContourApprox = class(TPersistent)
   protected
     procedure AssignTo(Dest: TPersistent); override;
@@ -380,11 +446,8 @@ type
     property Recursive: Boolean read FRecursive write FRecursive default True;
   end;
 
-  TocvContoursOperation = class(TocvCustomImageOperation, IocvEditorPropertiesContainer)
+  TocvContoursOperation = class(TocvCustomImageOperationWithNestedOperation)
   private
-    CS: TCriticalSection;
-    FOperation: TocvCustomImageOperation;
-    FOperationClass: TocvImageOperationClass;
     FRetrievalMode: TocvContourRetrievalModes;
     FApproximationMethod: TocvContourApproximationMethods;
     FOffset: TocvPoint;
@@ -392,31 +455,14 @@ type
     FApprox: TocvContourApprox;
     FOnContour: TOnOcvContour;
     FContours: pCvSeq;
-    function LockTransform: Boolean;
-    procedure UnlockTransform;
-    procedure CreateProperties;
-    procedure DestroyProperties;
-    procedure RecreateProperties;
-    function GetPropertiesClassName: string;
-    procedure SetProperties(const Value: TocvCustomImageOperation);
-    procedure SetPropertiesClass(Value: TocvImageOperationClass);
-    procedure SetPropertiesClassName(const Value: string);
     procedure DoNotifyContours(const Image: IocvImage; const ContourCount: Integer; const Contours: pCvSeq);
   protected
-    function GetProperties: TocvCustomImageOperation;
-    function GetPropertiesClass: TocvImageOperationClass;
-    {IInterface}
-    function QueryInterface(const IID: TGUID; out Obj): HResult; stdcall;
-    function _AddRef: Integer; stdcall;
-    function _Release: Integer; stdcall;
   public
     constructor Create(AOwner: TPersistent); override;
     destructor Destroy; override;
     function DoTransform(const Source: IocvImage; var Destanation: IocvImage): Boolean; override;
-    property OperationClass: TocvImageOperationClass read GetPropertiesClass write SetPropertiesClass;
     property Contours: pCvSeq read FContours;
   published
-    property OperationClassName: string read GetPropertiesClassName write SetPropertiesClassName;
     property Preprocessing: TocvCustomImageOperation read GetProperties write SetProperties;
     property RetrievalMode: TocvContourRetrievalModes read FRetrievalMode write FRetrievalMode default RETR_LIST;
     property ApproximationMethod: TocvContourApproximationMethods read FApproximationMethod write FApproximationMethod
@@ -514,15 +560,50 @@ function GetRegisteredImageOperations: TRegisteredImageOperations;
 
 implementation
 
-{$R opencv.dres}
+///
+// Run utils\CompressHaar\uCompressHaar.dpr
+// Add to serarch path \Delphi-OpenCV\bin\facedetectxml\
+///
+{$R haarcascade.rc haarcascade.res}
+{$R haarcascade.res}
 
 Uses
   core_c,
   imgproc_c,
-  imgproc.types_c, cvUtils;
+  imgproc.types_c, cvUtils, System.ZLib;
 
 type
   TPersistentAccessProtected = class(TPersistent);
+
+  TocvHaarCascadeRecord = record
+    Name: String;
+    FileName: String;
+  end;
+
+const
+  FrontalFaceXML: array [TocvHaarCascadeType] of TocvHaarCascadeRecord =
+  {} ((Name: 'HCFFA'; FileName: 'haarcascade_frontalface_alt.xml'),
+    {} (Name: 'HCFFA2'; FileName: 'haarcascade_frontalface_alt2.xml'),
+    {} (Name: 'HCFFD'; FileName: 'haarcascade_frontalface_default.xml'),
+    {} (Name: 'HCFFAT'; FileName: 'haarcascade_frontalface_alt_tree.xml'),
+    {} (Name: 'EYE'; FileName: 'haarcascade_eye.xml'),
+    {} (Name: 'ETEG'; FileName: 'haarcascade_eye_tree_eyeglasses.xml'),
+    {} (Name: 'EFB'; FileName: 'haarcascade_fullbody.xml'),
+    {} (Name: 'LE2S'; FileName: 'haarcascade_lefteye_2splits.xml'),
+    {} (Name: 'LB'; FileName: 'haarcascade_lowerbody.xml'),
+    {} (Name: 'MEB'; FileName: 'haarcascade_mcs_eyepair_big.xml'),
+    {} (Name: 'MEP'; FileName: 'haarcascade_mcs_eyepair_small.xml'),
+    {} (Name: 'MLEEAR'; FileName: 'haarcascade_mcs_leftear.xml'),
+    {} (Name: 'MLEEYE'; FileName: 'haarcascade_mcs_lefteye.xml'),
+    {} (Name: 'MM'; FileName: 'haarcascade_mcs_mouth.xml'),
+    {} (Name: 'MN'; FileName: 'haarcascade_mcs_nose.xml'),
+    {} (Name: 'MREAR'; FileName: 'haarcascade_mcs_rightear.xml'),
+    {} (Name: 'MREYE'; FileName: 'haarcascade_mcs_righteye.xml'),
+    {} (Name: 'MUB'; FileName: 'haarcascade_mcs_upperbody.xml'),
+    {} (Name: 'PF'; FileName: 'haarcascade_profileface.xml'),
+    {} (Name: 'RE2S'; FileName: 'haarcascade_righteye_2splits.xml'),
+    {} (Name: 'SM'; FileName: 'haarcascade_smile.xml'),
+    {} (Name: 'UB'; FileName: 'haarcascade_upperbody.xml'));
 
 Var
   _RegisteredImageOperations: TRegisteredImageOperations = nil;
@@ -651,11 +732,11 @@ begin
       if OperationsEnabled and (FOperations.Count > 0) then
       begin
         for i := 0 to FOperations.Count - 1 do
-          if not(FOperations.Items[i] as TocvImageOperationCollectionItem).Transform(Destanation, Destanation) then
+          if not(FOperations.Items[i] as TocvImageOperationCollectionItem).Transform(Destanation.Clone, Destanation) then
             Exit;
       end
       else if Assigned(FOperation) then
-        FOperation.Transform(IplImage, Destanation);
+        FOperation.Transform(IplImage.Clone, Destanation);
 
       NotifyReceiver(Destanation);
     finally
@@ -1219,7 +1300,7 @@ end;
 
 function TocvThresholdOperation.DoTransform(const Source: IocvImage; var Destanation: IocvImage): Boolean;
 begin
-  Destanation := TocvImage.Create(cvCreateImage(cvGetSize(Source.IpImage), IPL_DEPTH_8U, 1));
+  Destanation := Source.GrayImage.Same;
   cvThreshold(Source.GrayImage.IpImage, Destanation.IpImage, Threshold, MaxValue, cThreshold[ThresholdType]);
   Result := True;
 end;
@@ -1261,7 +1342,6 @@ end;
 constructor TocvContoursOperation.Create {(AOwner: TComponent)};
 begin
   inherited;
-  CS := TCriticalSection.Create;
   FOffset := TocvPoint.Create;
   FContourDraw := TocvContourDraw.Create(Self);
   FApprox := TocvContourApprox.Create(Self);
@@ -1277,82 +1357,12 @@ begin
   MinArea := 100;
 end;
 
-procedure TocvContoursOperation.CreateProperties;
-begin
-  if FOperationClass <> nil then
-    FOperation := FOperationClass.Create(nil);
-end;
-
 destructor TocvContoursOperation.Destroy;
 begin
-  if Assigned(FOperation) then
-    FOperation.Free;
-  CS.Free;
   FOffset.Free;
   FContourDraw.Free;
   FApprox.Free;
   inherited;
-end;
-
-procedure TocvContoursOperation.DestroyProperties;
-begin
-  FreeAndNil(FOperation);
-end;
-
-function TocvContoursOperation.GetProperties: TocvCustomImageOperation;
-begin
-  if not Assigned(FOperation) then
-    FOperation := TocvNoneOperation.Create(nil);
-  Result := FOperation;
-end;
-
-function TocvContoursOperation.GetPropertiesClass: TocvImageOperationClass;
-begin
-  Result := TocvImageOperationClass(Preprocessing.ClassType);
-end;
-
-function TocvContoursOperation.GetPropertiesClassName: string;
-begin
-  Result := Preprocessing.ClassName;
-end;
-
-function TocvContoursOperation.LockTransform: Boolean;
-begin
-  Result := CS.TryEnter;
-end;
-
-function TocvContoursOperation.QueryInterface(const IID: TGUID; out Obj): HResult;
-begin
-  if GetInterface(IID, Obj) then
-    Result := 0
-  else
-    Result := E_NOINTERFACE;
-end;
-
-procedure TocvContoursOperation.RecreateProperties;
-begin
-  DestroyProperties;
-  CreateProperties;
-end;
-
-procedure TocvContoursOperation.SetProperties(const Value: TocvCustomImageOperation);
-begin
-  if (FOperation <> nil) and (Value <> nil) then
-    FOperation.Assign(Value);
-end;
-
-procedure TocvContoursOperation.SetPropertiesClass(Value: TocvImageOperationClass);
-begin
-  if FOperationClass <> Value then
-  begin
-    FOperationClass := Value;
-    RecreateProperties;
-  end;
-end;
-
-procedure TocvContoursOperation.SetPropertiesClassName(const Value: string);
-begin
-  OperationClass := TocvImageOperationClass(GetRegisteredImageOperations.FindByClassName(Value));
 end;
 
 function TocvContoursOperation.DoTransform(const Source: IocvImage; var Destanation: IocvImage): Boolean;
@@ -1410,21 +1420,6 @@ procedure TocvContoursOperation.DoNotifyContours(const Image: IocvImage; const C
 begin
   if Assigned(OnContour) then
     OnContour(Self, Image, ContourCount, Contours);
-end;
-
-procedure TocvContoursOperation.UnlockTransform;
-begin
-  CS.Leave;
-end;
-
-function TocvContoursOperation._AddRef: Integer;
-begin
-  Result := -1;
-end;
-
-function TocvContoursOperation._Release: Integer;
-begin
-  Result := -1;
 end;
 
 {TocvRotateOperation}
@@ -1584,30 +1579,31 @@ end;
 
 {TocvFaceDetect}
 
-constructor TocvFaceDetect.Create(AOwner: TPersistent);
+constructor TocvHaarCascade.Create(AOwner: TPersistent);
 begin
   inherited;
   FLockFrontalFaceChange := TCriticalSection.Create;
   FMinSize := TocvPoint.Create(30, 30);
   FMaxSize := TocvPoint.Create;
-  FrontalFace := HCFFA;
-  FDrawFace := TocvFaceDraw.Create(Self);
+  HaarCascade := hcFrontalFaceAlt;
+  FDrawHaarCascade := TocvHaarCascadeDraw.Create(Self);
   Scale := 1.3;
   MinNeighbors := 3;
   Equalize := True;
+  NotifyOnlyWhenFound := False;
 end;
 
-destructor TocvFaceDetect.Destroy;
+destructor TocvHaarCascade.Destroy;
 begin
   FLockFrontalFaceChange.Free;
   FMinSize.Free;
   FMaxSize.Free;
-  FDrawFace.Free;
+  FDrawHaarCascade.Free;
   ReleaseCascade;
   inherited;
 end;
 
-function TocvFaceDetect.DoTransform(const Source: IocvImage; var Destanation: IocvImage): Boolean;
+function TocvHaarCascade.DoTransform(const Source: IocvImage; var Destanation: IocvImage): Boolean;
 Var
   storage: pCvMemStorage;
   gray: IocvImage;
@@ -1615,7 +1611,7 @@ Var
   i: Integer;
   cvr: pCvRect;
   r, g, b: byte;
-  Faces: TocvFaces;
+  Faces: TocvRects;
 begin
   Destanation := Source;
   if Assigned(FCascade) then
@@ -1631,7 +1627,7 @@ begin
       if Assigned(detected_objects) then
       begin
 
-        if Assigned(OnFaces) then
+        if Assigned(OnHaarCascade) and ((not NotifyOnlyWhenFound) or (detected_objects^.total > 0)) then
         begin
           SetLength(Faces, detected_objects^.total);
           i := 0;
@@ -1641,18 +1637,18 @@ begin
             Faces[i] := ocvRect(cvr^.X, cvr^.Y, (cvr^.X) + (cvr^.width), (cvr^.Y) + (cvr^.height));
             Inc(i);
           end;
-          OnFaces(Self, Destanation, Faces);
+          OnHaarCascade(Self, Destanation, Faces);
         end;
 
-        if DrawFace.Enabled then
+        if DrawHaarCascade.Enabled then
         begin
-          GetRGBValue(DrawFace.Color, r, g, b);
+          GetRGBValue(DrawHaarCascade.Color, r, g, b);
           i := 0;
           While i < detected_objects^.total do
           begin
             cvr := pCvRect(cvGetSeqElem(detected_objects, i));
             cvRectangle(Destanation.IpImage, cvPoint(cvr^.X, cvr^.Y), cvPoint((cvr^.X) + (cvr^.width), (cvr^.Y) + (cvr^.height)),
-              CV_RGB(r, g, b), DrawFace.Thickness, cLineType[DrawFace.LineType], DrawFace.Shift);
+              CV_RGB(r, g, b), DrawHaarCascade.Thickness, cLineType[DrawHaarCascade.LineType], DrawHaarCascade.Shift);
             Inc(i);
           end;
         end;
@@ -1666,7 +1662,7 @@ begin
     Result := False;
 end;
 
-function TocvFaceDetect.GetHaarCascadeFlag: Integer;
+function TocvHaarCascade.GetHaarCascadeFlag: Integer;
 Var
   i: TocvHaarCascadeFlag;
   j: Integer;
@@ -1681,26 +1677,14 @@ begin
   end;
 end;
 
-procedure TocvFaceDetect.ReleaseCascade;
+procedure TocvHaarCascade.ReleaseCascade;
 begin
   if Assigned(FCascade) then
     cvReleaseHaarClassifierCascade(FCascade);
   FCascade := nil;
 end;
 
-procedure TocvFaceDetect.SetFrontalFace(const Value: TocvHaarFrontalFace);
-Type
-  TFrontalFaceData = record
-    Name: String;
-    FileName: String;
-  end;
-
-const
-  FrontalFaceXML: array [TocvHaarFrontalFace] of TFrontalFaceData =
-  {} ((Name: 'HCFFA'; FileName: 'haarcascade_frontalface_alt.xml'),
-    {} (Name: 'HCFFA2'; FileName: 'haarcascade_frontalface_alt2.xml'),
-    {} (Name: 'HCFFD'; FileName: 'haarcascade_frontalface_default.xml'),
-    {} (Name: 'HCFFAT'; FileName: 'haarcascade_frontalface_alt_tree.xml'));
+procedure TocvHaarCascade.SetHaarCascade(const Value: TocvHaarCascadeType);
 
   function TempPath: string;
   var
@@ -1714,28 +1698,34 @@ const
 
 Var
   FullFileName: String;
-
+  RS: TResourceStream;
+  DC: TZDecompressionStream;
+  FS: TFileStream;
 begin
   FLockFrontalFaceChange.Enter;
   try
-    if FFrontalFace <> Value then
+    if FHaarCascade <> Value then
     begin
-      FFrontalFace := Value;
+      FHaarCascade := Value;
       ReleaseCascade;
     end;
     if not(csDesigning in ComponentState) then
     begin
       if not Assigned(FCascade) then
         try
-          FullFileName := TempPath + FrontalFaceXML[FFrontalFace].FileName;
+          FullFileName := TempPath + FrontalFaceXML[FHaarCascade].FileName;
           if not FileExists(FullFileName) then
           begin
-            with TResourceStream.Create(hInstance, FrontalFaceXML[FFrontalFace].Name, RT_RCDATA) do
-              try
-                SaveToFile(FullFileName);
-              finally
-                Free;
-              end;
+            RS := TResourceStream.Create(hInstance, FrontalFaceXML[FHaarCascade].Name, RT_RCDATA);
+            DC := TZDecompressionStream.Create(RS);
+            FS := TFileStream.Create(FullFileName, fmCreate);
+            try
+              FS.CopyFrom(DC, DC.Size);
+            finally
+              DC.Free;
+              FS.Free;
+              RS.Free;
+            end;
           end;
           if FileExists(FullFileName) then
             FCascade := cvLoad(c_str(FullFileName), nil, nil, nil);
@@ -1866,6 +1856,224 @@ begin
   end;
 end;
 
+{TocvMotionDetect}
+
+procedure TocvMotionDetect.AssignTo(Dest: TPersistent);
+begin
+  inherited;
+  if Dest is TocvMotionDetect then
+  begin
+    FCalcRectType := (Dest as TocvMotionDetect).FCalcRectType;
+  end;
+end;
+
+constructor TocvMotionDetect.Create(AOwner: TPersistent);
+begin
+  inherited;
+  RemoveSmallObject := True;
+  MinObjectSize := 100;
+  FSmoothOperation := BLUR;
+  FDrawMotionRect := TocvDrawMotionRect.Create(Self);
+  OperationClass := TocvThresholdOperation;
+  With (Operation as TocvThresholdOperation) do
+  begin
+    Threshold := 25;
+    MaxValue := 255;
+  end;
+end;
+
+destructor TocvMotionDetect.Destroy;
+begin
+  FDrawMotionRect.Free;
+  inherited;
+end;
+
+function TocvMotionDetect.DoTransform(const Source: IocvImage; var Destanation: IocvImage): Boolean;
+Var
+  CurrentGrayImage: IocvImage;
+  DifferenceImage: IocvImage;
+  storage: pCvMemStorage;
+  Contours: pCvSeq;
+  area: Double;
+  ThresholdImage: IocvImage;
+  black, white: TCvScalar;
+  c: pCvSeq;
+  Rects: TocvRects;
+  Rect: TCvRect;
+  Rect2d: TCvBox2D;
+  i: Integer;
+  r, g, b: byte;
+begin
+  Destanation := Source;
+  CurrentGrayImage := Source.GrayImage;
+
+  if not Assigned(FPrevFrame) then
+    FPrevFrame := CurrentGrayImage;
+
+  DifferenceImage := CurrentGrayImage.Same;
+  cvAbsDiff(FPrevFrame.IpImage, CurrentGrayImage.IpImage, DifferenceImage.IpImage);
+  cvSmooth(DifferenceImage.IpImage, DifferenceImage.IpImage, Integer(Smooth));
+
+  if Threshold.DoTransform(DifferenceImage, ThresholdImage) then
+  begin
+    // img_out := DifferenceImage.Clone;
+    storage := cvCreateMemStorage(0);
+    Contours := AllocMem(SizeOf(TCvSeq));
+    try
+      cvFindContours(ThresholdImage.IpImage, storage, @Contours, SizeOf(TCvContour), CV_RETR_LIST, CV_CHAIN_APPROX_SIMPLE, cvPoint(0, 0));
+
+      black := CV_RGB(0, 0, 0);
+      white := CV_RGB(255, 255, 255);
+
+      while (Contours <> nil) do
+      begin
+        area := cvContourArea(Contours, CV_WHOLE_SEQ);
+        if (abs(area) <= MinObjectSize) and RemoveSmallObject then // Если площадь меньше порога, то удаляем
+          cvDrawContours(ThresholdImage.IpImage, Contours, black, black, -1, CV_FILLED, 8, cvPoint(0, 0))
+        else
+          cvDrawContours(ThresholdImage.IpImage, Contours, white, white, -1, CV_FILLED, 8, cvPoint(0, 0));
+
+        Contours := Contours.h_next; // Переходим к следующему контуру
+      end;
+
+      cvClearMemStorage(storage);
+      SetLength(Rects, 0);
+
+      cvFindContours(ThresholdImage.IpImage, storage, @Contours, SizeOf(TCvContour), CV_RETR_LIST, CV_CHAIN_APPROX_NONE, cvPoint(0, 0));
+
+      if Assigned(Contours) then
+      begin
+        c := Contours;
+        i := 0;
+        while (c <> nil) do
+        begin
+          SetLength(Rects, i + 1);
+          if CalcRectType = mdBoundingRect then
+          begin
+            Rect := cvBoundingRect(c, 0);
+            Rects[i] := ocvRect(Rect.X, Rect.Y, Rect.X + Rect.width, Rect.Y + Rect.height);
+          end
+          else if CalcRectType = mdMinAreaRect then
+          begin
+            Rect2d := cvMinAreaRect2(c);
+            Rects[i] := ocvRect(Round(Rect2d.center.X - Rect2d.Size.width / 2), Round(Rect2d.center.Y - Rect2d.Size.height / 2),
+              Round(Rect2d.center.X + Rect2d.Size.width / 2), Round(Rect2d.center.Y + Rect2d.Size.height / 2));
+          end;
+
+          if DrawMotionRect.Enabled then
+          begin
+            GetRGBValue(DrawMotionRect.Color, r, g, b);
+            cvRectangle(Destanation.IpImage, cvPoint(Rects[i].Left, Rects[i].Top), cvPoint(Rects[i].Right, Rects[i].Bottom),
+              CV_RGB(r, g, b), DrawMotionRect.Thickness, cLineType[DrawMotionRect.LineType], DrawMotionRect.Shift);
+          end;
+          Inc(i);
+          c := c.h_next;
+        end;
+      end;
+
+      if Assigned(OnMotion) and ((not NotifyOnlyWhenFound) or (Length(Rects) > 0)) then
+        OnMotion(Self, Destanation, Rects);
+
+    finally
+      cvReleaseMemStorage(storage);
+    end;
+  end;
+
+  FPrevFrame := CurrentGrayImage;
+
+  Result := True;
+end;
+
+function TocvMotionDetect.GetPropertiesClass: TocvImageOperationClass;
+begin
+  if not Assigned(FOperation) then
+    Result := TocvThresholdOperation
+  else
+    Result := inherited;
+end;
+
+{TocvCustomImageOperationWithNestedOperation}
+
+constructor TocvCustomImageOperationWithNestedOperation.Create(AOwner: TPersistent);
+begin
+  inherited;
+  CS := TCriticalSection.Create;
+end;
+
+procedure TocvCustomImageOperationWithNestedOperation.CreateProperties;
+begin
+  FOperation := FOperationClass.Create(Self);
+end;
+
+function TocvCustomImageOperationWithNestedOperation.GetProperties: TocvCustomImageOperation;
+begin
+  if not Assigned(FOperation) then
+    FOperation := OperationClass.Create(Self);
+  Result := FOperation;
+end;
+
+function TocvCustomImageOperationWithNestedOperation.GetPropertiesClass: TocvImageOperationClass;
+begin
+  if Assigned(FOperation) then
+    Result := TocvImageOperationClass(FOperation.ClassType)
+  else
+    Result := TocvNoneOperation;
+end;
+
+destructor TocvCustomImageOperationWithNestedOperation.Destroy;
+begin
+  CS.Free;
+  DestroyProperties;
+  inherited;
+end;
+
+procedure TocvCustomImageOperationWithNestedOperation.DestroyProperties;
+begin
+  if Assigned(FOperation) then
+    FreeAndNil(FOperation);
+end;
+
+function TocvCustomImageOperationWithNestedOperation.GetPropertiesClassName: string;
+begin
+  Result := Operation.ClassName;
+end;
+
+procedure TocvCustomImageOperationWithNestedOperation.RecreateProperties;
+begin
+  DestroyProperties;
+  CreateProperties;
+end;
+
+procedure TocvCustomImageOperationWithNestedOperation.SetProperties(const Value: TocvCustomImageOperation);
+begin
+  if (FOperation <> nil) and (Value <> nil) then
+    FOperation.Assign(Value);
+end;
+
+procedure TocvCustomImageOperationWithNestedOperation.SetPropertiesClass(Value: TocvImageOperationClass);
+begin
+  if FOperationClass <> Value then
+  begin
+    FOperationClass := Value;
+    RecreateProperties;
+  end;
+end;
+
+procedure TocvCustomImageOperationWithNestedOperation.SetPropertiesClassName(const Value: string);
+begin
+  OperationClass := TocvImageOperationClass(GetRegisteredImageOperations.FindByClassName(Value));
+end;
+
+function TocvCustomImageOperationWithNestedOperation.LockTransform: Boolean;
+begin
+  Result := CS.TryEnter;
+end;
+
+procedure TocvCustomImageOperationWithNestedOperation.UnlockTransform;
+begin
+  CS.Leave;
+end;
+
 initialization
 
 GetRegisteredImageOperations.RegisterIOClass(TocvNoneOperation, 'None');
@@ -1881,8 +2089,9 @@ GetRegisteredImageOperations.RegisterIOClass(TocvAdaptiveThresholdOperation, 'Ad
 GetRegisteredImageOperations.RegisterIOClass(TocvContoursOperation, 'Contours');
 GetRegisteredImageOperations.RegisterIOClass(TocvRotateOperation, 'Rotate');
 GetRegisteredImageOperations.RegisterIOClass(TocvAbsDiff, 'AbsDiff');
-GetRegisteredImageOperations.RegisterIOClass(TocvFaceDetect, 'FaceDetect');
+GetRegisteredImageOperations.RegisterIOClass(TocvHaarCascade, 'HaarCascade');
 GetRegisteredImageOperations.RegisterIOClass(TocvMatchTemplate, 'MatchTemplate');
+GetRegisteredImageOperations.RegisterIOClass(TocvMotionDetect, 'MotionDetect');
 
 finalization
 

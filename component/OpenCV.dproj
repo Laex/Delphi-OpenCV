@@ -109,26 +109,15 @@
         <None Include="ModelSupport_OpenCV\default.txvpck"/>
         <None Include="ModelSupport_OpenCV\uOCVSource\default.txvpck"/>
         <None Include="ModelSupport_OpenCV\uOCVSource\default.txaPackage"/>
-        <RcItem Include="..\bin\facedetectxml\haarcascade_frontalface_alt.xml">
-            <ContainerId>ResourceItem</ContainerId>
-            <ResourceType>RCDATA</ResourceType>
-            <ResourceId>HCFFA</ResourceId>
-        </RcItem>
-        <RcItem Include="..\bin\facedetectxml\haarcascade_frontalface_alt_tree.xml">
-            <ContainerId>ResourceItem</ContainerId>
-            <ResourceType>RCDATA</ResourceType>
-            <ResourceId>HCFFAT</ResourceId>
-        </RcItem>
-        <RcItem Include="..\bin\facedetectxml\haarcascade_frontalface_alt2.xml">
-            <ContainerId>ResourceItem</ContainerId>
-            <ResourceType>RCDATA</ResourceType>
-            <ResourceId>HCFFA2</ResourceId>
-        </RcItem>
-        <RcItem Include="..\bin\facedetectxml\haarcascade_frontalface_default.xml">
-            <ContainerId>ResourceItem</ContainerId>
-            <ResourceType>RCDATA</ResourceType>
-            <ResourceId>HCFFD</ResourceId>
-        </RcItem>
+        <RcCompile Include="..\bin\facedetectxml\haarcascade.rc">
+            <Form>haarcascade.res</Form>
+        </RcCompile>
+        <None Include="ModelSupport_OpenCV\uOCVImageOperation\default.txvpck"/>
+        <None Include="ModelSupport_OpenCV\uOCVTypes\default.txvpck"/>
+        <None Include="ModelSupport_OpenCV\uOCVView\default.txvpck"/>
+        <None Include="ModelSupport_OpenCV\uOCVIOProperties\default.txvpck"/>
+        <None Include="ModelSupport_OpenCV\uOCVRegister\default.txvpck"/>
+        <None Include="ModelSupport_OpenCV\uOCVImageOperation\default.txaPackage"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

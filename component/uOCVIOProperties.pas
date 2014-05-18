@@ -32,6 +32,7 @@ Uses
   uOCVImageOperation;
 
 Type
+  /// Используется в TocvImageOperation
   TImageOperationProperty = class(TComponentProperty)
   private
     FInstance: TPersistent;
@@ -47,6 +48,7 @@ Type
     property Instance: TPersistent read GetInstance;
   end;
 
+  /// Используется в TocvImageOperationCollectionItem
   TImageOperationCollectionItemProperty = class(TClassProperty)
   public
     function GetAttributes: TPropertyAttributes; override;
@@ -55,12 +57,16 @@ Type
     procedure SetValue(const Value: string); override;
   end;
 
-  TImagePreprocessingProperty = class(TImageOperationCollectionItemProperty)
+  /// Используется в TocvContourOperation для Preprocessing
+  TImageContourPrepProperty = class(TImageOperationCollectionItemProperty)
   public
-//    function GetAttributes: TPropertyAttributes; override;
-//    function GetValue: string; override;
     procedure GetValues(Proc: TGetStrProc); override;
-//    procedure SetValue(const Value: string); override;
+  end;
+
+  /// Используется в TocvMotionDetectOperation для Threshold
+  TImageMotionDetectThresholdProperty = class(TImageOperationCollectionItemProperty)
+  public
+    procedure GetValues(Proc: TGetStrProc); override;
   end;
 
   TocvIOPropertyChangeEvent = procedure(Sender: TObject; const PropName: string) of object;
@@ -136,42 +142,14 @@ begin
   Modified;
 end;
 
-{TImagePreprocessingProperty}
+{TImageContourPrepProperty}
 
-//function TImagePreprocessingProperty.GetAttributes: TPropertyAttributes;
-//begin
-//  Result := inherited GetAttributes;
-//  Result := Result - [paReadOnly] + [paValueList, paSortList, paRevertable, paSubProperties];
-//end;
-
-//function TImagePreprocessingProperty.GetValue: string;
-//begin
-//  Result := GetRegisteredImageOperations.GetNameByClass(TocvImageOperation(GetOrdValue).ClassType);
-//end;
-
-procedure TImagePreprocessingProperty.GetValues(Proc: TGetStrProc);
+procedure TImageContourPrepProperty.GetValues(Proc: TGetStrProc);
 begin
   Proc('None');
   Proc('Threshold');
   Proc('AdaptiveThreshold');
 end;
-
-//procedure TImagePreprocessingProperty.SetValue(const Value: string);
-//Var
-//  APropertiesClass: TocvImageOperationClass;
-//  I: Integer;
-//  AIntf: IocvEditorPropertiesContainer;
-//begin
-//  APropertiesClass := GetRegisteredImageOperations.FindByName(Value);
-//  if APropertiesClass = nil then
-//    APropertiesClass := TocvImageOperationClass(GetRegisteredImageOperations.Objects[0]);
-//
-//  for I := 0 to PropCount - 1 do
-//    if Supports(GetComponent(I), IocvEditorPropertiesContainer, AIntf) then
-//      AIntf.SetPropertiesClass(APropertiesClass);
-//
-//  Modified;
-//end;
 
 {TocvCustomImageOperationProperty}
 
@@ -265,16 +243,7 @@ begin
     begin
       TocvCustomImageOperation(LInstance).Name := LPersistentPropertyName;
     end;
-  end
-  // else
-  // if LInstance is TocvImageOperationCollectionItem then
-  // begin
-  // if (TocvImageOperationCollectionItem(LInstance).DisplayName = '') and (TocvImageOperationCollectionItem(LInstance).DisplayName <> LPersistentPropertyName)
-  // then
-  // begin
-  // TocvImageOperationCollectionItem(LInstance).DisplayName := LPersistentPropertyName;
-  // end;
-  // end;
+  end;
 end;
 
 {TImageOperationCollectionItemProperty}
@@ -317,16 +286,25 @@ begin
   Modified;
 end;
 
+{TImageMotionDetectThresholdProperty}
+
+procedure TImageMotionDetectThresholdProperty.GetValues(Proc: TGetStrProc);
+begin
+  Proc('Threshold');
+  Proc('AdaptiveThreshold');
+end;
+
 initialization
 
 RegisterPropertyEditor(TypeInfo(TocvCustomImageOperation), TocvImageOperation, 'Operation', TImageOperationProperty);
-RegisterPropertyEditor(TypeInfo(TocvCustomImageOperation), TocvImageOperationCollectionItem, 'Operation',TImageOperationCollectionItemProperty);
-//RegisterPropertyEditor(TypeInfo(TocvCustomImageOperation), TocvImageOperationCollectionItem, 'Operation',TImageOperationProperty);
-RegisterPropertyEditor(TypeInfo(TocvCustomImageOperation), TocvContoursOperation, 'Preprocessing', TImagePreprocessingProperty);
+RegisterPropertyEditor(TypeInfo(TocvCustomImageOperation), TocvImageOperationCollectionItem, 'Operation', TImageOperationCollectionItemProperty);
+RegisterPropertyEditor(TypeInfo(TocvCustomImageOperation), TocvContoursOperation, 'Preprocessing', TImageContourPrepProperty);
+RegisterPropertyEditor(TypeInfo(TocvCustomImageOperation), TocvMotionDetect, 'Threshold', TImageMotionDetectThresholdProperty);
 
 UnlistPublishedProperty(TocvCustomImageOperation, 'Name');
 UnlistPublishedProperty(TocvImageOperation, 'OperationClassName');
 UnlistPublishedProperty(TocvImageOperationCollectionItem, 'OperationClassName');
 UnlistPublishedProperty(TocvContoursOperation, 'OperationClassName');
+UnlistPublishedProperty(TocvMotionDetect, 'OperationClassName');
 
 end.

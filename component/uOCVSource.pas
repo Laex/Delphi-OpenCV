@@ -114,8 +114,8 @@ type
   published
     property Enabled: Boolean Read GetEnabled write SetEnabled default False;
     property OnImage: TOnOcvNotify read FOnImage write FOnImage;
-    property Width: Integer Read GetWidth;
-    property Height: Integer Read GetHeight;
+    property ImageWidth: Integer Read GetWidth;
+    property ImageHeight: Integer Read GetHeight;
   end;
 
   TocvResolution = (r160x120, r320x240, r424x240, r640x360, r800x448, r960x544, r1280x720);

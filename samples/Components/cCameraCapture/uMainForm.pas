@@ -43,9 +43,13 @@ type
     ocvcmrsrc1: TocvCameraSource;
     ocvw4: TocvView;
     ocvpcmsrc1: TocvIPCamSource;
+    chk2: TCheckBox;
+    chk3: TCheckBox;
     procedure FormCreate(Sender: TObject);
     procedure cbb1Change(Sender: TObject);
     procedure chk1Click(Sender: TObject);
+    procedure chk2Click(Sender: TObject);
+    procedure chk3Click(Sender: TObject);
   private
   public
   end;
@@ -67,12 +71,23 @@ begin
   ocvcmrsrc1.Enabled := chk1.Checked;
 end;
 
+procedure TMainForm.chk2Click(Sender: TObject);
+begin
+  ocvpcmsrc1.Enabled := chk2.Checked;
+end;
+
+procedure TMainForm.chk3Click(Sender: TObject);
+begin
+  ocvflsrc1.Enabled := chk3.Checked;
+end;
+
 procedure TMainForm.FormCreate(Sender: TObject);
 begin
   cbb1.Items.Assign(GetRegisteredImageOperations);
   cbb1.ItemIndex := cbb1.Items.IndexOf(GetRegisteredImageOperations.GetNameByClass(ocvmgprtn1.OperationClass));
-  // ocvcmrsrc1.Enabled := True;
-  // ocvpcmsrc1.Enabled := True;
+  chk3.Checked := ocvflsrc1.Enabled;
+  chk2.Checked := ocvpcmsrc1.Enabled;
+  chk1.Checked := ocvcmrsrc1.Enabled;
 end;
 
 end.

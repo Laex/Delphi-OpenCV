@@ -4,8 +4,8 @@ object MainForm: TMainForm
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
   Caption = 'OpenCV - Component demo'
-  ClientHeight = 550
-  ClientWidth = 616
+  ClientHeight = 669
+  ClientWidth = 624
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -19,14 +19,14 @@ object MainForm: TMainForm
   TextHeight = 13
   object lbl1: TLabel
     Left = 8
-    Top = 8
+    Top = 338
     Width = 79
     Height = 13
     Caption = 'Image operation'
   end
   object cbb1: TComboBox
     Left = 93
-    Top = 5
+    Top = 335
     Width = 145
     Height = 21
     Style = csDropDownList
@@ -45,8 +45,8 @@ object MainForm: TMainForm
   end
   object chk1: TCheckBox
     Left = 8
-    Top = 29
-    Width = 97
+    Top = 5
+    Width = 117
     Height = 17
     Caption = 'Camera enabled'
     Checked = True
@@ -56,35 +56,54 @@ object MainForm: TMainForm
   end
   object ocvw1: TocvView
     Left = 8
-    Top = 52
-    Width = 285
-    Height = 229
+    Top = 28
+    Width = 300
+    Height = 300
     VideoSource = ocvcmrsrc1
   end
   object ocvw2: TocvView
     Left = 8
-    Top = 307
-    Width = 285
-    Height = 229
+    Top = 358
+    Width = 300
+    Height = 300
     VideoSource = ocvmgprtn1
   end
   object ocvw3: TocvView
     Left = 316
-    Top = 307
-    Width = 285
-    Height = 229
+    Top = 358
+    Width = 300
+    Height = 300
     VideoSource = ocvflsrc1
   end
   object ocvw4: TocvView
     Left = 316
-    Top = 52
-    Width = 285
-    Height = 229
+    Top = 28
+    Width = 300
+    Height = 300
     VideoSource = ocvpcmsrc1
+  end
+  object chk2: TCheckBox
+    Left = 314
+    Top = 5
+    Width = 129
+    Height = 17
+    Caption = 'IP Camera enabled'
+    TabOrder = 6
+    OnClick = chk2Click
+  end
+  object chk3: TCheckBox
+    Left = 314
+    Top = 338
+    Width = 187
+    Height = 17
+    Caption = 'File source'
+    TabOrder = 7
+    OnClick = chk3Click
   end
   object ocvmgprtn1: TocvImageOperation
     VideoSource = ocvcmrsrc1
-    OperationClassName = 'TocvFaceDetect'
+    OperationClassName = 'TocvHaarCascade'
+    Operation.HaarCascade = hcLeftEye2Splits
     Operation.Equalize = True
     Operation.Scale = 1.300000000000000000
     Operation.MinNeighbors = 3
@@ -92,10 +111,12 @@ object MainForm: TMainForm
     Operation.MinSize.Y = 30
     Operation.MaxSize.X = 0
     Operation.MaxSize.Y = 0
-    Operation.DrawFace.Thickness = 1
-    Operation.DrawFace.Offset.X = 0
-    Operation.DrawFace.Offset.Y = 0
-    Operation.CascadeFlags = [HAAR_DO_CANNY_PRUNING]
+    Operation.DrawHaarCascade.Thickness = 3
+    Operation.DrawHaarCascade.Offset.X = 0
+    Operation.DrawHaarCascade.Offset.Y = 0
+    Operation.DrawHaarCascade.Color = clRed
+    Operation.CascadeFlags = [HAAR_DO_CANNY_PRUNING, HAAR_SCALE_IMAGE, HAAR_FIND_BIGGEST_OBJECT]
+    Operation.NotifyOnlyWhenFound = False
     Operations = <
       item
         OperationClassName = 'TocvContoursOperation'
@@ -107,42 +128,40 @@ object MainForm: TMainForm
         Operation.Offset.Y = 0
         Operation.MinArea = 100
         Operation.ContourDraw.Enabled = False
-        Operation.ContourDraw.MaxLevel = 0
         Operation.ContourDraw.Thickness = 1
         Operation.ContourDraw.LineType = LT_FILLED
         Operation.ContourDraw.Offset.X = 0
         Operation.ContourDraw.Offset.Y = 0
         Operation.ContourDraw.ExternalColor = clBlack
         Operation.ContourDraw.HoleColor = clBlack
+        Operation.ContourDraw.MaxLevel = 0
         Operation.ApproxPoly.Eps = 3.000000000000000000
       end
       item
         OperationClassName = 'TocvNoneOperation'
       end>
     OperationsEnabled = False
-    Left = 24
-    Top = 316
+    Left = 36
+    Top = 392
   end
   object ocvflsrc1: TocvFileSource
-    Enabled = True
     Delay = 120
     FileName = '.\Resource\768x576.avi'
-    Left = 336
-    Top = 328
+    Left = 372
+    Top = 396
   end
   object ocvcmrsrc1: TocvCameraSource
     Enabled = True
-    Resolution = r160x120
+    Resolution = r960x544
     Left = 32
-    Top = 64
+    Top = 40
   end
   object ocvpcmsrc1: TocvIPCamSource
-    Enabled = True
     UserName = 'admin'
     Password = 'admin'
     IP = '10.1.1.202'
     Postfix = 'cam/realmonitor?channel=1&subtype=0'
     Left = 336
-    Top = 68
+    Top = 44
   end
 end
