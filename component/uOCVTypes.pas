@@ -29,7 +29,8 @@ Uses
   System.SysUtils,
   System.Classes,
   System.Generics.Collections,
-  core.types_c, System.Types;
+  core.types_c,
+  System.Types;
 
 Type
   IocvImage = interface
@@ -67,11 +68,11 @@ Type
     of object;
 
   TocvRect = Type TRect;
-  TocvFace = TocvRect;
-  TocvFaces = TArray<TocvRect>;
+  TocvRects = TArray<TocvRect>;
 
-  TOnOcvFaces = procedure(Sender: TObject; const IplImage: IocvImage; const Faces: TocvFaces) of object;
+  TOnOcvHaarCascade = procedure(Sender: TObject; const IplImage: IocvImage; const HaarRects: TocvRects) of object;
   TOnOcvRect = procedure(Sender: TObject; const IplImage: IocvImage; const Rect: TocvRect) of object;
+  TOnOcvRects = procedure(Sender: TObject; const IplImage: IocvImage; const Rects: TocvRects) of object;
 
   IocvDataReceiver = interface
     ['{F67DEC9E-CCE0-49D2-AB9B-AD7E1020C5DC}']
@@ -86,10 +87,14 @@ Type
     function GetName: string;
     function GetImage: IocvImage;
     function GetEnabled: Boolean;
-    property Enabled:Boolean read GetEnabled;
+    property Enabled: Boolean read GetEnabled;
   end;
 
-  TocvReceiverList = TThreadList<IocvDataReceiver>;
+  TocvReceiverList = class(TThreadList) // <IocvDataReceiver>;
+  public
+    procedure Add(Item: IocvDataReceiver);
+    procedure Remove(Item: IocvDataReceiver); inline;
+  end;
 
   TocvDataSource = class(TComponent, IocvDataSource)
   protected
@@ -185,13 +190,13 @@ end;
 
 procedure TocvDataSource.NotifyReceiver(const IplImage: IocvImage);
 Var
-  R: IocvDataReceiver;
-  LockList: TList<IocvDataReceiver>;
+  R: Pointer; //IocvDataReceiver;
+  LockList: TList;//<IocvDataReceiver>;
 begin
   LockList := FOpenCVVideoReceivers.LockList;
   try
     for R in LockList do
-      R.TakeImage(IplImage);
+      IocvDataReceiver(R).TakeImage(IplImage);
   finally
     FOpenCVVideoReceivers.UnlockList;
   end;
@@ -315,6 +320,18 @@ end;
 function TocvImage.Same: IocvImage;
 begin
   Result := TocvImage.Create(cvCreateImage(cvGetSize(FImage), FImage^.depth, FImage^.nChannels));
+end;
+
+{TocvReceiverList}
+
+procedure TocvReceiverList.Add(Item: IocvDataReceiver);
+begin
+  inherited Add(Pointer(Item));
+end;
+
+procedure TocvReceiverList.Remove(Item: IocvDataReceiver);
+begin
+  inherited Remove(Pointer(Item));
 end;
 
 end.

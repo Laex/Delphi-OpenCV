@@ -15,6 +15,7 @@ type
     ocvmgprtn1: TocvImageOperation;
     btn1: TButton;
     btn2: TButton;
+    lbl1: TLabel;
     procedure btn1Click(Sender: TObject);
     procedure ocvw2MouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
     procedure ocvw2MouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
@@ -49,15 +50,16 @@ begin
   mX1 := 0;
   mY1 := 0;
   ocvw2.DrawImage(SnapImage);
+  lbl1.Visible := True;
 end;
 
 procedure TMainForm.btn2Click(Sender: TObject);
 begin
   (ocvmgprtn1.Operation as TocvMatchTemplate).IPLTemplate := CropIplImage(SnapImage.IpImage, CvRect(
-    {} Trunc(ocvcmrsrc1.Width * mX / ocvw2.Width),
-    {} Trunc(ocvcmrsrc1.Height * mY / ocvw2.Height),
-    {} Trunc(ocvcmrsrc1.Width * (mX1 - mX) / ocvw2.Width),
-    {} Trunc(ocvcmrsrc1.Height * (mY1 - mY) / ocvw2.Height)));
+    {} Trunc(ocvcmrsrc1.ImageWidth * mX / ocvw2.Width),
+    {} Trunc(ocvcmrsrc1.ImageHeight * mY / ocvw2.Height),
+    {} Trunc(ocvcmrsrc1.ImageWidth * (mX1 - mX) / ocvw2.Width),
+    {} Trunc(ocvcmrsrc1.ImageHeight * (mY1 - mY) / ocvw2.Height)));
 end;
 
 procedure TMainForm.ocvw2AfterPaint(Sender: TObject; const IplImage: IocvImage);
@@ -71,7 +73,7 @@ end;
 
 procedure TMainForm.ocvw2MouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
 begin
-  mDown := true;
+  mDown := True;
   mX := X;
   mY := Y;
   mX1 := X;
