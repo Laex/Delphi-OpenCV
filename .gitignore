@@ -45,3 +45,4 @@ eng.*
 /3rdParty/!tesseract_classes
 /component/ModelSupport_OpenCV/*.txaPackage
 /component/ModelSupport_OpenCV
+/samples/!Tesseract-OCR

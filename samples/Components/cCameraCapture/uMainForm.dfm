@@ -102,20 +102,15 @@ object MainForm: TMainForm
   end
   object ocvmgprtn1: TocvImageOperation
     VideoSource = ocvcmrsrc1
-    OperationClassName = 'TocvHaarCascade'
-    Operation.HaarCascade = hcLeftEye2Splits
-    Operation.Equalize = True
-    Operation.Scale = 1.300000000000000000
-    Operation.MinNeighbors = 3
-    Operation.MinSize.X = 30
-    Operation.MinSize.Y = 30
-    Operation.MaxSize.X = 0
-    Operation.MaxSize.Y = 0
-    Operation.DrawHaarCascade.Thickness = 3
-    Operation.DrawHaarCascade.Offset.X = 0
-    Operation.DrawHaarCascade.Offset.Y = 0
-    Operation.DrawHaarCascade.Color = clRed
-    Operation.CascadeFlags = [HAAR_DO_CANNY_PRUNING, HAAR_SCALE_IMAGE, HAAR_FIND_BIGGEST_OBJECT]
+    OperationClassName = 'TocvMotionDetect'
+    Operation.OperationClassName = 'TocvThresholdOperation'
+    Operation.RemoveSmallObject = True
+    Operation.MinObjectSize = 100
+    Operation.Threshold.MaxValue = 255.000000000000000000
+    Operation.Threshold.Threshold = 25.000000000000000000
+    Operation.DrawMotionRect.Thickness = 1
+    Operation.DrawMotionRect.Offset.X = 0
+    Operation.DrawMotionRect.Offset.Y = 0
     Operation.NotifyOnlyWhenFound = False
     Operations = <>
     OperationsEnabled = False
