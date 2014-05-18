@@ -34,8 +34,11 @@ Installation
 3. To install, open <PROJECT_ROOT>\component\OpenCV.dpk. Install package.
 4. In the panel component will be part OpenCV.
 5. Open the sample<br>
-> <PROJECT_ROOT>\samples\Components\cCameraCapture\cCameraCapture.dproj 
-> <PROJECT_ROOT>\samples\Components\cMatchTemplate\cMatchTemplate.dproj 
+```
+<PROJECT_ROOT>\samples\Components\cCameraCapture\cCameraCapture.dproj
+<PROJECT_ROOT>\samples\Components\cMatchTemplate\cMatchTemplate.dproj
+
+```
 
 Run the sample.
 
