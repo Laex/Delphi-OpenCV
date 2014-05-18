@@ -30,9 +30,10 @@ Component that handles images
 Installation
 ------------
 1. Add to system variable PATH path to DLL libraries OpenCV.
-2. To install, open <PROJECT_ROOT>\component\OpenCV.dpk. Install package.
-3. In the panel component will be part OpenCV.
-4. Open the sample<br>
+2. Run <PROJECT_ROOT>\Bin\FaceDetectXML\prepare.cmd
+3. To install, open <PROJECT_ROOT>\component\OpenCV.dpk. Install package.
+4. In the panel component will be part OpenCV.
+5. Open the sample<br>
 > <PROJECT_ROOT>\samples\Components\cCameraCapture\cCameraCapture.dproj 
 > <PROJECT_ROOT>\samples\Components\cMatchTemplate\cMatchTemplate.dproj 
 
