@@ -69,7 +69,7 @@ Examples of the use of video processing algorithms using VCL.Forms
 Examples of use of components.<br>
 To install the components, open and install
 ```
-<PROJECT_ROOT>\include\component\OpenCV.dpk
+<PROJECT_ROOT>\component\Delphi20\RAD Studio XE6.groupproj
 ```
 When installing the components in your PATH variable must be available should the library "opencv_*.dll". 
 Must also be installed visual C++ redistributable for Visual Studio 2013 is available on the [link][2]<br>

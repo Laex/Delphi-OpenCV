@@ -50,27 +50,132 @@ const
 
   CV_VERSION_DLL = CV_VERSION_EPOCH + CV_VERSION_MAJOR + CV_VERSION_MINOR;
 
-{$IFDEF DEBUG}
-  Core_Dll = 'opencv_core' + CV_VERSION_DLL + 'd.dll';
-  highgui_Dll = 'opencv_highgui' + CV_VERSION_DLL + 'd.dll';
-  imgproc_Dll = 'opencv_imgproc' + CV_VERSION_DLL + 'd.dll';
-  objdetect_dll = 'opencv_objdetect' + CV_VERSION_DLL + 'd.dll';
-  legacy_dll = 'opencv_legacy' + CV_VERSION_DLL + 'd.dll';
-  calib3d_dll = 'opencv_calib3d' + CV_VERSION_DLL + 'd.dll';
-  tracking_DLL = 'opencv_video' + CV_VERSION_DLL + 'd.dll';
-  Nonfree_DLL = 'opencv_nonfree' + CV_VERSION_DLL + 'd.dll';
-  OpenCV_Classes_DLL = 'opencv_classes' + CV_VERSION_DLL + 'd.dll';
-{$ELSE}
-  Core_Dll = 'opencv_core' + CV_VERSION_DLL + '.dll';
-  highgui_Dll = 'opencv_highgui' + CV_VERSION_DLL + '.dll';
-  imgproc_Dll = 'opencv_imgproc' + CV_VERSION_DLL + '.dll';
-  objdetect_dll = 'opencv_objdetect' + CV_VERSION_DLL + '.dll';
-  legacy_dll = 'opencv_legacy' + CV_VERSION_DLL + '.dll';
-  calib3d_dll = 'opencv_calib3d' + CV_VERSION_DLL + '.dll';
-  tracking_DLL = 'opencv_video' + CV_VERSION_DLL + '.dll';
-  Nonfree_DLL = 'opencv_nonfree' + CV_VERSION_DLL + '.dll';
-  OpenCV_Classes_DLL = 'opencv_classes' + CV_VERSION_DLL + '.dll';
-{$ENDIF}
+  {$IFDEF MSWINDOWS}
+    {$IFDEF CPUX86}
+    CV_DLL_DIR = 'x86\';
+    {$ELSE}
+    CV_DLL_DIR = 'x64\';
+    {$ENDIF}
+  {$ELSE}
+  {$ENDIF}
+
+  Core_Dll = {$IFDEF MSWINDOWS}
+                CV_DLL_DIR + 'opencv_core' + CV_VERSION_DLL {$IFDEF DEBUG}+'d'{$ENDIF}+'.dll';
+             {$ELSE}
+                {$IFDEF MACOS}
+                   'opencv_core.dylib';
+                {$ELSE}
+                   {$IFDEF ANDROID}
+                     'libopencv_core.so';
+                   {$ELSE}
+                     'libopencv_core.so';
+                   {$ENDIF}
+                {$ENDIF}
+             {$ENDIF}
+  highgui_Dll = {$IFDEF MSWINDOWS}
+                  CV_DLL_DIR + 'opencv_highgui' + CV_VERSION_DLL {$IFDEF DEBUG}+'d'{$ENDIF}+'.dll';
+                {$ELSE}
+                   {$IFDEF MACOS}
+                   'opencv_highgui.dylib';
+                   {$ELSE}
+                      {$IFDEF ANDROID}
+                      'libopencv_highgui.so';
+                      {$ELSE}
+                      'libopencv_highgui.so';
+                      {$ENDIF}
+                   {$ENDIF}
+                {$ENDIF}
+  imgproc_Dll = {$IFDEF MSWINDOWS}
+                  CV_DLL_DIR + 'opencv_imgproc' + CV_VERSION_DLL {$IFDEF DEBUG}+'d'{$ENDIF}+'.dll';
+                {$ELSE}
+                   {$IFDEF MACOS}
+                   'opencv_imgproc.dylib';
+                   {$ELSE}
+                      {$IFDEF ANDROID}
+                      'libopencv_imgproc.so';
+                      {$ELSE}
+                      'libopencv_imgproc.so';
+                      {$ENDIF}
+                   {$ENDIF}
+                {$ENDIF}
+  objdetect_dll = {$IFDEF MSWINDOWS}
+                    CV_DLL_DIR + 'opencv_objdetect' + CV_VERSION_DLL {$IFDEF DEBUG}+'d'{$ENDIF}+'.dll';
+                  {$ELSE}
+                   {$IFDEF MACOS}
+                   'opencv_objdetect.dylib';
+                   {$ELSE}
+                      {$IFDEF ANDROID}
+                      'libopencv_objdetect.so';
+                      {$ELSE}
+                      'libopencv_objdetect.so';
+                      {$ENDIF}
+                   {$ENDIF}
+                  {$ENDIF}
+  legacy_dll = {$IFDEF MSWINDOWS}
+                  CV_DLL_DIR + 'opencv_legacy' + CV_VERSION_DLL {$IFDEF DEBUG}+'d'{$ENDIF}+'.dll';
+               {$ELSE}
+                   {$IFDEF MACOS}
+                   'opencv_legacy.dylib';
+                   {$ELSE}
+                      {$IFDEF ANDROID}
+                      'libopencv_legacy.so';
+                      {$ELSE}
+                      'libopencv_legacy.so';
+                      {$ENDIF}
+                   {$ENDIF}
+               {$ENDIF}
+  calib3d_dll = {$IFDEF MSWINDOWS}
+                  CV_DLL_DIR + 'opencv_calib3d' + CV_VERSION_DLL {$IFDEF DEBUG}+'d'{$ENDIF}+'.dll';
+                {$ELSE}
+                   {$IFDEF MACOS}
+                   'opencv_calib3d.dylib';
+                   {$ELSE}
+                      {$IFDEF ANDROID}
+                      'libopencv_calib3d.so';
+                      {$ELSE}
+                      'libopencv_calib3d.so';
+                      {$ENDIF}
+                   {$ENDIF}
+                {$ENDIF}
+  tracking_DLL = {$IFDEF MSWINDOWS}
+                    CV_DLL_DIR + 'opencv_video' + CV_VERSION_DLL {$IFDEF DEBUG}+'d'{$ENDIF}+'.dll';
+                 {$ELSE}
+                   {$IFDEF MACOS}
+                   'opencv_video.dylib';
+                   {$ELSE}
+                      {$IFDEF ANDROID}
+                      'libopencv_video.so';
+                      {$ELSE}
+                      'libopencv_video.so';
+                      {$ENDIF}
+                   {$ENDIF}
+                 {$ENDIF}
+  Nonfree_DLL = {$IFDEF MSWINDOWS}
+                  CV_DLL_DIR + 'opencv_nonfree' + CV_VERSION_DLL {$IFDEF DEBUG}+'d'{$ENDIF}+'.dll';
+                {$ELSE}
+                   {$IFDEF MACOS}
+                   'opencv_nonfree.dylib';
+                   {$ELSE}
+                      {$IFDEF ANDROID}
+                      'libopencv_nonfree.so';
+                      {$ELSE}
+                      'libopencv_nonfree.so';
+                      {$ENDIF}
+                   {$ENDIF}
+                {$ENDIF}
+  OpenCV_Classes_DLL = {$IFDEF MSWINDOWS}
+                          CV_DLL_DIR + 'opencv_classes' + CV_VERSION_DLL {$IFDEF DEBUG}+'d'{$ENDIF}+'.dll';
+                       {$ELSE}
+                         {$IFDEF MACOS}
+                           'opencv_classes.dylib';
+                         {$ELSE}
+                          {$IFDEF ANDROID}
+                            'libopencv_classes.so';
+                          {$ELSE}
+                            'libopencv_classes.so';
+                          {$ENDIF}
+                         {$ENDIF}
+                       {$ENDIF}
 
 implementation
 

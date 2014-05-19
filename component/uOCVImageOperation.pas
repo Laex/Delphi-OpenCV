@@ -21,20 +21,36 @@
 // rights and limitations under the License.
 // *******************************************************************
 
+{$IFNDEF CLR}
+
+{$I OpenCV.inc}
+
 unit uOCVImageOperation;
+{$ENDIF}
 
 interface
 
 uses
+  {$IFDEF VER6P}
   Winapi.Windows,
+  Vcl.Graphics,
   System.SysUtils,
   System.Classes,
   System.SyncObjs,
   System.Types,
+  System.ZLib,
+  {$ELSE}
+  Windows,
+  Graphics,
+  SysUtils,
+  Classes,
+  SyncObjs,
+  {$IFNDEF VER5}Types,{$ENDIF VER5}
+  ZLib,
+  {$ENDIF VER6P}
   uOCVTypes,
   objdetect_c,
-  core.types_c,
-  Vcl.Graphics;
+  core.types_c;
 
 type
 
@@ -578,8 +594,7 @@ Uses
   core_c,
   imgproc_c,
   imgproc.types_c,
-  cvUtils,
-  System.ZLib;
+  cvUtils;
 
 type
   TPersistentAccessProtected = class(TPersistent);

@@ -21,17 +21,30 @@
 // rights and limitations under the License.
 // *******************************************************************
 
+{$IFNDEF CLR}
+
+{$I OpenCV.inc}
+
 unit uOCVTypes;
+{$ENDIF}
 
 interface
 
 Uses
+  {$IFDEF VER6P}
   System.SysUtils,
   System.Classes,
   System.Generics.Collections,
+  System.Types,
   Vcl.Graphics,
-  core.types_c,
-  System.Types;
+  {$ELSE}
+  SysUtils,
+  Classes,
+  Generics,
+  Graphics,
+  {$IFNDEF VER5}Types,{$ENDIF VER5}
+  {$ENDIF VER6P}
+  core.types_c;
 
 Type
   IocvImage = interface

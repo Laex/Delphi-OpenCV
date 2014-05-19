@@ -1,0 +1,48 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{BD0EE7BD-ED70-4DCA-AA92-522F18635A55}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="OpenCV160.*.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="dclOpenCV160.*.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="OpenCV160">
+        <MSBuild Projects="OpenCV160.dproj"/>
+    </Target>
+    <Target Name="OpenCV160:Clean">
+        <MSBuild Projects="OpenCV160.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="OpenCV160:Make">
+        <MSBuild Projects="OpenCV160.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="dclOpenCV160">
+        <MSBuild Projects="dclOpenCV160.dproj"/>
+    </Target>
+    <Target Name="dclOpenCV160:Clean">
+        <MSBuild Projects="dclOpenCV160.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="dclOpenCV160:Make">
+        <MSBuild Projects="dclOpenCV160.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="OpenCV160;dclOpenCV160"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="OpenCV160:Clean;dclOpenCV160:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="OpenCV160:Make;dclOpenCV160:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>

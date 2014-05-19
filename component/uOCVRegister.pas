@@ -5,6 +5,8 @@
 // Contributor:
 // Laentir Valetov
 // email:laex@bk.ru
+// Mikhail Grigorev
+// email:sleuthound@gmail.com
 // ****************************************************************
 // You may retrieve the latest version of this file at the GitHub,
 // located at git://github.com/Laex/Delphi-OpenCV.git
@@ -20,7 +22,12 @@
 // implied. See the License for the specific language governing
 // rights and limitations under the License.
 // *******************************************************************
+{$IFNDEF CLR}
+
+{$I OpenCV.inc}
+
 unit uOCVRegister;
+{$ENDIF}
 
 interface
 
@@ -29,8 +36,15 @@ procedure Register;
 implementation
 
 Uses
-  DesignIntf,
-  System.Classes,
+{$IFDEF CLR}
+  Borland.Vcl.Design.DesignEditors, Borland.Vcl.Design.DesignIntf,
+{$ELSE}
+  {$IFDEF FPC}
+    PropEdits, ComponentEditors, LResources,
+  {$ELSE}
+    {$IFDEF VER6P}DesignIntf, System.Classes,{$ELSE}DsgnIntf, Classes,{$ENDIF VER6P}
+  {$ENDIF FPC}
+{$ENDIF}
   uOCVSource,
   uOCVView,
   uOCVImageOperation;
@@ -42,5 +56,10 @@ begin
     TovcDilateOperation, TocvLaplaceOperation, TovcSobelOperation, TocvThresholdOperation, TocvAdaptiveThresholdOperation,
     TocvContoursOperation, TocvRotateOperation, TocvAbsDiff, TocvHaarCascade, TocvMatchTemplate,TocvMotionDetect]);
 end;
+
+{$IFDEF FPC}
+initialization
+  {$I OpenCV.lrs}
+{$ENDIF FPC}
 
 end.
