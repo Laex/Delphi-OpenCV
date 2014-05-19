@@ -38,13 +38,15 @@ uses
   System.Classes,
   System.SyncObjs,
   System.Types,
+  System.ZLib,
   {$ELSE}
   Windows,
   Graphics,
   SysUtils,
   Classes,
   SyncObjs,
-  Types,
+  {$IFNDEF VER5}Types,{$ENDIF VER5}
+  ZLib,
   {$ENDIF VER6P}
   uOCVTypes,
   objdetect_c,
@@ -592,8 +594,7 @@ Uses
   core_c,
   imgproc_c,
   imgproc.types_c,
-  cvUtils,
-  System.ZLib;
+  cvUtils;
 
 type
   TPersistentAccessProtected = class(TPersistent);

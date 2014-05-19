@@ -108,7 +108,15 @@ Type
 implementation
 
 Uses
-  {$IFDEF VER6P}System.SysUtils, System.TypInfo, System.RTLConsts,{$ELSE}SysUtils, TypInfo, RTLConsts,{$ENDIF VER6P}
+  {$IFDEF VER6P}
+  System.SysUtils,
+  System.TypInfo,
+  System.RTLConsts,
+  {$ELSE}
+  SysUtils,
+  TypInfo,
+  RTLConsts,
+  {$ENDIF VER6P}
   uOCVTypes;
 
 {TImageOperationProperty}
