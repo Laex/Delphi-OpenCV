@@ -21,20 +21,34 @@
 // rights and limitations under the License.
 // *******************************************************************
 
+{$IFNDEF CLR}
+
+{$I OpenCV.inc}
+
 unit uOCVImageOperation;
+{$ENDIF}
 
 interface
 
 uses
+  {$IFDEF VER6P}
   Winapi.Windows,
+  Vcl.Graphics,
   System.SysUtils,
   System.Classes,
   System.SyncObjs,
   System.Types,
+  {$ELSE}
+  Windows,
+  Graphics,
+  SysUtils,
+  Classes,
+  SyncObjs,
+  Types,
+  {$ENDIF VER6P}
   uOCVTypes,
   objdetect_c,
-  core.types_c,
-  Vcl.Graphics;
+  core.types_c;
 
 type
 
