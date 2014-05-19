@@ -21,14 +21,25 @@
   // rights and limitations under the License.
   ********************************************************************)
 
+{$IFNDEF CLR}
+
+{$I OpenCV.inc}
+
 unit uOCVSource;
+{$ENDIF}
 
 interface
 
 uses
+  {$IFDEF VER6P}
   System.SysUtils,
   System.Classes,
   System.SyncObjs,
+  {$ELSE}
+  SysUtils,
+  Classes,
+  SyncObjs,
+  {$ENDIF VER6P}
   core.types_c,
   highgui_c,
   uOCVTypes;

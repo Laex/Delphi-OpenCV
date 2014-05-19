@@ -1572,6 +1572,7 @@ procedure cvReleaseData; external Core_Dll;
 procedure cvSetData; external Core_Dll;
 procedure cvGetRawData; external Core_Dll;
 
+{$IFDEF CPUX86}
 function cvGetSize(const arr: pCvArr): TCvSize; assembler;
 asm
   // mov eax,arr - в eax уже хранится адрес arr
@@ -1584,6 +1585,12 @@ asm
   mov Result.width,eax
   mov Result.height,ecx
 end;
+{$ELSE}
+function cvGetSize(const arr: pCvArr): TCvSize;
+begin
+  _cvGetSize(arr, Result);
+end;
+{$ENDIF}
 
 procedure _cvGetSize(const arr: pCvArr; var size: TCvSize); external Core_Dll name 'cvGetSize';
 procedure cvCopy; external Core_Dll;
