@@ -21,14 +21,25 @@
 // rights and limitations under the License.
 // *******************************************************************
 
+{$IFNDEF CLR}
+
+{$I OpenCV.inc}
+
 unit uOCVIOProperties;
+{$ENDIF}
 
 interface
 
 Uses
-  System.Classes,
-  DesignEditors,
-  DesignIntf,
+{$IFDEF CLR}
+  Borland.Vcl.Design.DesignEditors, Borland.Vcl.Design.DesignIntf,
+{$ELSE}
+  {$IFDEF FPC}
+    PropEdits, ComponentEditors, LResources,
+  {$ELSE}
+    {$IFDEF VER6P}DesignEditors, DesignIntf, System.Classes,{$ELSE}DsgnIntf, Classes,{$ENDIF VER6P}
+  {$ENDIF FPC}
+{$ENDIF}
   uOCVImageOperation;
 
 Type
@@ -97,9 +108,15 @@ Type
 implementation
 
 Uses
+  {$IFDEF VER6P}
   System.SysUtils,
   System.TypInfo,
   System.RTLConsts,
+  {$ELSE}
+  SysUtils,
+  TypInfo,
+  RTLConsts,
+  {$ENDIF VER6P}
   uOCVTypes;
 
 {TImageOperationProperty}
