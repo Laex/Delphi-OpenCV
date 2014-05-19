@@ -35,6 +35,7 @@
         <Base>true</Base>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base)'!=''">
+        <DCC_DcuOutput>.\$(Platform)\$(Config)</DCC_DcuOutput>
         <SanitizedProjectName>cv_CalcOpticalFlowPyrLK</SanitizedProjectName>
         <DCC_ImageBase>00400000</DCC_ImageBase>
         <DCC_Namespace>System;Xml;Data;Datasnap;Web;Soap;$(DCC_Namespace)</DCC_Namespace>
@@ -44,7 +45,7 @@
         <Manifest_File>None</Manifest_File>
         <DCC_E>false</DCC_E>
         <VerInfo_Keys>CompanyName=;FileDescription=;FileVersion=1.0.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductName=;ProductVersion=1.0.0.0;Comments=;CFBundleName=;CFBundleDisplayName=;CFBundleIdentifier=;CFBundleVersion=;CFBundlePackageType=;CFBundleSignature=;CFBundleAllowMixedLocalizations=;CFBundleExecutable=</VerInfo_Keys>
-        <DCC_ExeOutput>..\..\..\bin\</DCC_ExeOutput>
+        <DCC_ExeOutput>..\..\..\bin\$(Platform)</DCC_ExeOutput>
         <DCC_N>false</DCC_N>
         <VerInfo_Locale>1049</VerInfo_Locale>
     </PropertyGroup>

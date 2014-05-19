@@ -35,10 +35,11 @@
         <Base>true</Base>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base)'!=''">
+        <DCC_DcuOutput>.\$(Platform)\$(Config)</DCC_DcuOutput>
         <SanitizedProjectName>cv_CalcHist</SanitizedProjectName>
         <DCC_ImageBase>00400000</DCC_ImageBase>
         <DCC_Namespace>System;Xml;Data;Datasnap;Web;Soap;Winapi;$(DCC_Namespace)</DCC_Namespace>
-        <DCC_ExeOutput>..\..\..\bin\</DCC_ExeOutput>
+        <DCC_ExeOutput>..\..\..\bin\$(Platform)</DCC_ExeOutput>
         <DCC_K>false</DCC_K>
         <VerInfo_Locale>1049</VerInfo_Locale>
         <DCC_S>false</DCC_S>

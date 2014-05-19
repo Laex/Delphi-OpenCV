@@ -1,28 +1,28 @@
-(* /*****************************************************************
-  //                       Delphi-OpenCV Demo
-  //               Copyright (C) 2013 Project Delphi-OpenCV
-  // ****************************************************************
-  // Contributor:
-  // laentir Valetov
-  // email:laex@bk.ru
-  // ****************************************************************
-  // You may retrieve the latest version of this file at the GitHub,
-  // located at git://github.com/Laex/Delphi-OpenCV.git
-  // ****************************************************************
-  // The contents of this file are used with permission, subject to
-  // the Mozilla Public License Version 1.1 (the "License"); you may
-  // not use this file except in compliance with the License. You may
-  // obtain a copy of the License at
-  // http://www.mozilla.org/MPL/MPL-1_1Final.html
-  //
-  // Software distributed under the License is distributed on an
-  // "AS IS" basis, WITHOUT WARRANTY OF ANY KIND, either express or
-  // implied. See the License for the specific language governing
-  // rights and limitations under the License.
-  //  ***************************************************************
-  //  Original file:
-  //  http://blog.vidikon.com/?p=213
-  //  *************************************************************** *)
+// *****************************************************************
+// Delphi-OpenCV Demo
+// Copyright (C) 2013 Project Delphi-OpenCV
+// ****************************************************************
+// Contributor:
+// laentir Valetov
+// email:laex@bk.ru
+// ****************************************************************
+// You may retrieve the latest version of this file at the GitHub,
+// located at git://github.com/Laex/Delphi-OpenCV.git
+// ****************************************************************
+// The contents of this file are used with permission, subject to
+// the Mozilla Public License Version 1.1 (the "License"); you may
+// not use this file except in compliance with the License. You may
+// obtain a copy of the License at
+// http://www.mozilla.org/MPL/MPL-1_1Final.html
+//
+// Software distributed under the License is distributed on an
+// "AS IS" basis, WITHOUT WARRANTY OF ANY KIND, either express or
+// implied. See the License for the specific language governing
+// rights and limitations under the License.
+// ***************************************************************
+// Original file:
+// http://blog.vidikon.com/?p=213
+// ***************************************************************
 
 program cv_ExtractSURF;
 
@@ -40,7 +40,8 @@ uses
   imgproc.types_c,
   compat,
   calib3d_c,
-  nonfree;
+  nonfree,
+  uResourcePaths;
 
 // cравнение двух оcобенноcтей
 // comparison of the two features
@@ -69,7 +70,8 @@ end;
 
 // cравнивает одну оcобенноcть объекта cо вcеми оcобенноcтями cцены
 // compares one feature of the scene with all the features
-function naiveNearestNeighbor(const vec: PSingle; laplacian: Integer; const model_keypoints: pCvSeq; const model_descriptors: pCvSeq): Integer;
+function naiveNearestNeighbor(const vec: PSingle; laplacian: Integer; const model_keypoints: pCvSeq;
+  const model_descriptors: pCvSeq): Integer;
 Var
   length, i, neighbor: Integer;
   d, dist1, dist2: Double;
@@ -119,7 +121,8 @@ end;
 
 // Функция ищет cовпадающие пары
 // Function searches for matching pairs
-procedure findPairs(const objectKeypoints: pCvSeq; const objectDescriptors: pCvSeq; const imageKeypoints: pCvSeq; const imageDescriptors: pCvSeq; Var ptpairs: TArray<Integer>);
+procedure findPairs(const objectKeypoints: pCvSeq; const objectDescriptors: pCvSeq; const imageKeypoints: pCvSeq;
+  const imageDescriptors: pCvSeq; Var ptpairs: TArray<Integer>);
 var
   i: Integer;
   reader, kreader: TCvSeqReader;
@@ -156,8 +159,8 @@ end;
 
 // Грубое нахождение меcтоположения объекта
 // Finding rough position of the object
-function locatePlanarObject(const objectKeypoints: pCvSeq; const objectDescriptors: pCvSeq; const imageKeypoints: pCvSeq; const imageDescriptors: pCvSeq; const src_corners: TArray<TCvPoint>;
-  dst_corners: TArray<TCvPoint>): Integer;
+function locatePlanarObject(const objectKeypoints: pCvSeq; const objectDescriptors: pCvSeq; const imageKeypoints: pCvSeq;
+  const imageDescriptors: pCvSeq; const src_corners: TArray<TCvPoint>; dst_corners: TArray<TCvPoint>): Integer;
 
 var
   h: array [0 .. 8] of Double;
@@ -319,8 +322,8 @@ begin
     initModule_nonfree;
     // Инициализация параметров
     // initialization parameters
-    object_filename := iif(ParamCount = 2, ParamStr(1), 'resource\box.png');
-    scene_filename := iif(ParamCount = 2, ParamStr(2), 'resource\box_in_scene.png');
+    object_filename := iif(ParamCount = 2, ParamStr(1), cResourceMedia + 'box.png');
+    scene_filename := iif(ParamCount = 2, ParamStr(2), cResourceMedia + 'box_in_scene.png');
     storage := cvCreateMemStorage(0);
     cvNamedWindow('Object', 1);
     cvNamedWindow('Object Correspond', 1);
@@ -377,7 +380,8 @@ begin
     cvResetImageROI(correspond);
     // Вызываем функцию, находящую объект на экране
     // Call the function that retrieves the object on the screen
-    if (locatePlanarObject(objectKeypoints, objectDescriptors, imageKeypoints, imageDescriptors, src_corners, dst_corners) <> 0) then
+    if (locatePlanarObject(objectKeypoints, objectDescriptors, imageKeypoints, imageDescriptors, src_corners, dst_corners) <> 0)
+    then
     begin
       // Обводим нужный четырёхугольник
       // Draw out the desired quadrangle

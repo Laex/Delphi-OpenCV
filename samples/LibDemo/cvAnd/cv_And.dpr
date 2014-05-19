@@ -19,10 +19,8 @@
   // "AS IS" basis, WITHOUT WARRANTY OF ANY KIND, either express or
   // implied. See the License for the specific language governing
   // rights and limitations under the License.
-  ******************************************************************* *)
-// JCL_DEBUG_EXPERT_GENERATEJDBG OFF
-// JCL_DEBUG_EXPERT_INSERTJDBG OFF
-// JCL_DEBUG_EXPERT_DELETEMAPFILE OFF
+  ********************************************************************)
+
 program cv_And;
 
 {$APPTYPE CONSOLE}
@@ -33,10 +31,11 @@ uses
   highgui_c,
   core_c,
   Core.types_c,
-  imgproc_c;
+  imgproc_c,
+  uResourcePaths;
 
 const
-  filename = 'Resource\roulette-wheel2-small.jpg';
+  filename = cResourceMedia + 'roulette-wheel2-small.jpg';
 
 Var
   Rmin: Integer = 0;
@@ -107,7 +106,7 @@ end;
 Var
   framemin, framemax: Double;
   c: Integer;
-
+  S:TCvSize;
 begin
   try
     // получаем картинку
@@ -115,6 +114,7 @@ begin
     WriteLn(Format('[i] image: %s', [filename]));
 
     // cоздаём картинки
+    S:=cvGetSize(image);
     rgb := cvCreateImage(cvGetSize(image), IPL_DEPTH_8U, 3);
     r_plane := cvCreateImage(cvGetSize(image), IPL_DEPTH_8U, 1);
     g_plane := cvCreateImage(cvGetSize(image), IPL_DEPTH_8U, 1);
@@ -126,7 +126,7 @@ begin
     // копируем
     cvCopyImage(image, rgb);
     // разбиваем на отельные каналы
-    cvSplit(rgb, b_plane, g_plane, r_plane, 0);
+    cvSplit(rgb, b_plane, g_plane, r_plane, nil);
 
     //
     // определяем минимальное и макcимальное значение

@@ -35,10 +35,11 @@
         <Base>true</Base>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base)'!=''">
+        <DCC_DcuOutput>.\$(Platform)\$(Config)</DCC_DcuOutput>
         <SanitizedProjectName>cv_MatchShapes2</SanitizedProjectName>
         <DCC_F>false</DCC_F>
         <DCC_S>false</DCC_S>
-        <DCC_ExeOutput>..\..\..\bin\</DCC_ExeOutput>
+        <DCC_ExeOutput>..\..\..\bin\$(Platform)</DCC_ExeOutput>
         <DCC_K>false</DCC_K>
         <DCC_E>false</DCC_E>
         <DCC_N>false</DCC_N>

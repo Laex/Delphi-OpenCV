@@ -35,7 +35,8 @@ uses
   core_c,
   Core.types_c,
   imgproc_c,
-  imgproc.types_c;
+  imgproc.types_c,
+  uResourcePaths;
 
 procedure help;
 begin
@@ -163,8 +164,8 @@ begin
 
     attrs[0] := 'recursive';
     attrs[1] := '1';
-    cvSave('result\contours.xml', contours, nil, nil, cvAttrList(@attrs));
-    contours := pCvSeq(cvLoad('result\contours.xml', storage));
+    cvSave(cResourceResult+'contours.xml', contours, nil, nil, cvAttrList(@attrs));
+    contours := pCvSeq(cvLoad(cResourceResult+'contours.xml', storage));
 
     // comment this out if you do not want approximation
     contours := cvApproxPoly(contours, SizeOf(TCvContour), storage, CV_POLY_APPROX_DP, 3, 1);

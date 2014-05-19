@@ -1,25 +1,25 @@
-(* /*****************************************************************
-  //                       Delphi-OpenCV Demo
-  //               Copyright (C) 2013 Project Delphi-OpenCV
-  // ****************************************************************
-  // Contributor:
-  // laentir Valetov
-  // email:laex@bk.ru
-  // ****************************************************************
-  // You may retrieve the latest version of this file at the GitHub,
-  // located at git://github.com/Laex/Delphi-OpenCV.git
-  // ****************************************************************
-  // The contents of this file are used with permission, subject to
-  // the Mozilla Public License Version 1.1 (the "License"); you may
-  // not use this file except in compliance with the License. You may
-  // obtain a copy of the License at
-  // http://www.mozilla.org/MPL/MPL-1_1Final.html
-  //
-  // Software distributed under the License is distributed on an
-  // "AS IS" basis, WITHOUT WARRANTY OF ANY KIND, either express or
-  // implied. See the License for the specific language governing
-  // rights and limitations under the License.
-  //  *************************************************************** *)
+// *****************************************************************
+// Delphi-OpenCV Demo
+// Copyright (C) 2013 Project Delphi-OpenCV
+// ****************************************************************
+// Contributor:
+// laentir Valetov
+// email:laex@bk.ru
+// ****************************************************************
+// You may retrieve the latest version of this file at the GitHub,
+// located at git://github.com/Laex/Delphi-OpenCV.git
+// ****************************************************************
+// The contents of this file are used with permission, subject to
+// the Mozilla Public License Version 1.1 (the "License"); you may
+// not use this file except in compliance with the License. You may
+// obtain a copy of the License at
+// http://www.mozilla.org/MPL/MPL-1_1Final.html
+//
+// Software distributed under the License is distributed on an
+// "AS IS" basis, WITHOUT WARRANTY OF ANY KIND, either express or
+// implied. See the License for the specific language governing
+// rights and limitations under the License.
+// ***************************************************************
 
 program cv_ExtractSURF;
 
@@ -36,7 +36,8 @@ uses
   imgproc_c,
   imgproc.types_c,
   compat,
-  nonfree;
+  nonfree,
+  uResourcePaths;
 
 function compareSURFDescriptors(const d1: pSingle; const d2: pSingle; best: Double; length: Integer): Double;
 var
@@ -106,8 +107,7 @@ Type
   TIntegerDynArray = Array of Integer;
   pIntegerDynArray = ^TIntegerDynArray;
 
-Procedure findPairs(objectKeypoints, objectDescriptors, imageKeypoints, imageDescriptors: pCvSeq;
-  Var ptpairs: TIntegerDynArray);
+Procedure findPairs(objectKeypoints, objectDescriptors, imageKeypoints, imageDescriptors: pCvSeq; Var ptpairs: TIntegerDynArray);
 Var
   i, nearest_neighbor, n: Integer;
   reader, kreader: TCvSeqReader;
@@ -136,8 +136,8 @@ Begin
 End;
 
 const
-  object_filename = 'resource\box.png';
-  scene_filename = 'resource\box_in_scene.png';
+  object_filename = cResourceMedia + 'box.png';
+  scene_filename = cResourceMedia + 'box_in_scene.png';
 
 Var
   image, ObjImg, objectcolor, correspond: pIplImage;
@@ -181,8 +181,7 @@ begin
     begin
       p1 := pCvSURFPoint(cvGetSeqElem(objectKeypoints, ptpairs[i]));
       p2 := pCvSURFPoint(cvGetSeqElem(imageKeypoints, ptpairs[i]));
-      cvLine(correspond, cvPointFrom32f(p1.pt), cvPoint(cvRound(p2.pt.x), cvRound(p2.pt.y + ObjImg.Height)),
-        cvscalarAll(255));
+      cvLine(correspond, cvPointFrom32f(p1.pt), cvPoint(cvRound(p2.pt.x), cvRound(p2.pt.y + ObjImg.Height)), cvscalarAll(255));
       i := i + 1;
     End;
 
