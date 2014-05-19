@@ -72,7 +72,7 @@ To install the components, open and install
 <PROJECT_ROOT>\include\component\OpenCV.dpk
 ```
 When installing the components in your PATH variable must be available should the library "opencv_*.dll". 
-Must also be installed visual C + + redistributable for Visual Studio 2013 is available on the [link][2]<br>
+Must also be installed visual C++ redistributable for Visual Studio 2013 is available on the [link][2]<br>
 Examples of the use of components - open:
 ```
 <PROJECT_ROOT>\samples\Components\cCameraCapture\cCameraCapture.dproj
