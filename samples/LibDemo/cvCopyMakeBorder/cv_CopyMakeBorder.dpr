@@ -19,7 +19,7 @@
   // "AS IS" basis, WITHOUT WARRANTY OF ANY KIND, either express or
   // implied. See the License for the specific language governing
   // rights and limitations under the License.
-  ******************************************************************* *)
+  ********************************************************************)
 // JCL_DEBUG_EXPERT_GENERATEJDBG OFF
 // JCL_DEBUG_EXPERT_INSERTJDBG OFF
 // JCL_DEBUG_EXPERT_DELETEMAPFILE OFF
@@ -33,10 +33,11 @@ uses
   highgui_c,
   core_c,
   Core.types_c,
-  imgproc_c;
+  imgproc_c,
+  uResourcePaths;
 
 const
-  filename = 'Resource\opencv_logo_with_text.png';
+  filename = cResourceMedia + 'opencv_logo_with_text.png';
 
 var
   image: pIplImage = nil;

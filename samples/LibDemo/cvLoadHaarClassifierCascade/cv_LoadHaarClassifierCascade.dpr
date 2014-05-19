@@ -1,4 +1,4 @@
-(* /*****************************************************************
+//*****************************************************************
   //                       Delphi-OpenCV Demo
   //               Copyright (C) 2013 Project Delphi-OpenCV
   // ****************************************************************
@@ -19,14 +19,11 @@
   // "AS IS" basis, WITHOUT WARRANTY OF ANY KIND, either express or
   // implied. See the License for the specific language governing
   // rights and limitations under the License.
-  *******************************************************************
+  //*******************************************************************
   // Original file:
   // opencv\samples\c\convert_cascade.c
-  // *************************************************************** *)
+  // ***************************************************************
 
-// JCL_DEBUG_EXPERT_GENERATEJDBG OFF
-// JCL_DEBUG_EXPERT_INSERTJDBG OFF
-// JCL_DEBUG_EXPERT_DELETEMAPFILE OFF
 program cv_LoadHaarClassifierCascade;
 
 {$APPTYPE CONSOLE}
@@ -39,7 +36,8 @@ uses
   Core.types_c,
   imgproc_c,
   imgproc.types_c,
-  objdetect_c;
+  objdetect_c,
+  uResourcePaths;
 
 procedure help;
 begin
@@ -58,14 +56,14 @@ Var
 
 begin
   try
-    input_cascade := iif((ParamCount > 0) and FileExists(ParamStr(1)), ParamStr(1), 'FaceDetectXML\haarcascade_eye.xml');
+    input_cascade := iif((ParamCount > 0) and FileExists(ParamStr(1)), ParamStr(1), cResourceFaceDetect+'haarcascade_eye.xml');
     if not FileExists(input_cascade) then
     begin
       help;
       WriteLn('input_cascade not found');
       Halt;
     end;
-    output_cascade := iif(ParamCount > 1, ParamStr(2), 'result\test_cascade.xml');
+    output_cascade := iif(ParamCount > 1, ParamStr(2), cResourceResult+'test_cascade.xml');
 
     size.width := 640;
     size.height := 480;

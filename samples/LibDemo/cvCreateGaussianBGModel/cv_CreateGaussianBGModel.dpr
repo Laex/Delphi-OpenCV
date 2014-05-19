@@ -1,28 +1,25 @@
-﻿(* /*****************************************************************
-  //                       Delphi-OpenCV Demo
-  //               Copyright (C) 2013 Project Delphi-OpenCV
-  // ****************************************************************
-  // Contributor:
-  // laentir Valetov
-  // email:laex@bk.ru
-  // ****************************************************************
-  // You may retrieve the latest version of this file at the GitHub,
-  // located at git://github.com/Laex/Delphi-OpenCV.git
-  // ****************************************************************
-  // The contents of this file are used with permission, subject to
-  // the Mozilla Public License Version 1.1 (the "License"); you may
-  // not use this file except in compliance with the License. You may
-  // obtain a copy of the License at
-  // http://www.mozilla.org/MPL/MPL-1_1Final.html
-  //
-  // Software distributed under the License is distributed on an
-  // "AS IS" basis, WITHOUT WARRANTY OF ANY KIND, either express or
-  // implied. See the License for the specific language governing
-  // rights and limitations under the License.
-  ******************************************************************* *)
-// JCL_DEBUG_EXPERT_GENERATEJDBG OFF
-// JCL_DEBUG_EXPERT_INSERTJDBG OFF
-// JCL_DEBUG_EXPERT_DELETEMAPFILE OFF
+﻿// *****************************************************************
+// Delphi-OpenCV Demo
+// Copyright (C) 2013 Project Delphi-OpenCV
+// ****************************************************************
+// Contributor:
+// laentir Valetov
+// email:laex@bk.ru
+// ****************************************************************
+// You may retrieve the latest version of this file at the GitHub,
+// located at git://github.com/Laex/Delphi-OpenCV.git
+// ****************************************************************
+// The contents of this file are used with permission, subject to
+// the Mozilla Public License Version 1.1 (the "License"); you may
+// not use this file except in compliance with the License. You may
+// obtain a copy of the License at
+// http://www.mozilla.org/MPL/MPL-1_1Final.html
+//
+// Software distributed under the License is distributed on an
+// "AS IS" basis, WITHOUT WARRANTY OF ANY KIND, either express or
+// implied. See the License for the specific language governing
+// rights and limitations under the License.
+// *******************************************************************
 
 program cv_CreateGaussianBGModel;
 
@@ -45,7 +42,7 @@ Var
   update_bg_model: Boolean;
   bg_model: pCvBGStatModel;
   t, learningRate: double;
-  params:TCvGaussBGStatModelParams;
+  params: TCvGaussBGStatModelParams;
 
 begin
   try
@@ -59,13 +56,13 @@ begin
     cvMoveWindow('FG', 335, 0);
     cvMoveWindow('Original', 0, 0);
 
-    params.win_size:=200;
-    params.n_gauss:=5;	// cars:5, trees: 2/10
-    params.bg_threshold:=0.6;	// cars: 0.7, trees: 0.9, car thief: 0.6
-    params.std_threshold:=3.0;	// cars: 3.5, car thief: 3.0
-    params.minArea:=5;	// cars: 25, trees: 1
-    params.weight_init:=0.05;
-    params.variance_init:=50;
+    params.win_size := 200;
+    params.n_gauss := 5; // cars:5, trees: 2/10
+    params.bg_threshold := 0.6; // cars: 0.7, trees: 0.9, car thief: 0.6
+    params.std_threshold := 3.0; // cars: 3.5, car thief: 3.0
+    params.minArea := 5; // cars: 25, trees: 1
+    params.weight_init := 0.05;
+    params.variance_init := 50;
 
     bg_model := NIL;
     fr := 1;
@@ -76,7 +73,7 @@ begin
       if (bg_model = NIL) then
       begin
         // create BG model
-        bg_model := cvCreateGaussianBGModel(tmp_frame,@params);
+        bg_model := cvCreateGaussianBGModel(tmp_frame, @params);
       end
       else
       begin
