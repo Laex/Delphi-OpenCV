@@ -35,6 +35,7 @@ Add the search path for the modules of the project in Delphi IDE (Tools-Options-
 <PROJECT_ROOT>\include\objdetect
 <PROJECT_ROOT>\include\video
 <PROJECT_ROOT>\component
+<PROJECT_ROOT>\Bin\FaceDetectXML
 ```
 where ```<PROJECT_ROOT>``` directory, which was unzipped project.<br>
 Additionally, you can specify the path to the library header files FFMPEG
