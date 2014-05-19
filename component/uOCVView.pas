@@ -37,15 +37,17 @@ uses
   System.SysUtils,
   System.Classes,
   Vcl.Controls,
+  Vcl.Graphics,
   {$ELSE}
   Windows,
   Messages,
   SysUtils,
   Classes,
   Controls,
+  Graphics,
   {$ENDIF VER6P}
   uOCVTypes,
-  core.types_c, Vcl.Graphics;
+  core.types_c;
 
 type
 

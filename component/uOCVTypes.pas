@@ -35,15 +35,16 @@ Uses
   System.SysUtils,
   System.Classes,
   System.Generics.Collections,
+  System.Types,
   Vcl.Graphics,
   {$ELSE}
   SysUtils,
   Classes,
   Generics,
   Graphics,
+  {$IFNDEF VER5}Types,{$ENDIF VER5}
   {$ENDIF VER6P}
-  core.types_c,
-  System.Types;
+  core.types_c;
 
 Type
   IocvImage = interface
