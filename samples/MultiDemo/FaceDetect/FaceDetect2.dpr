@@ -36,7 +36,8 @@ uses
   Core.types_c,
   imgproc_c,
   imgproc.types_c,
-  objdetect_c;
+  objdetect_c,
+  uResourcePaths;
 
 var
   // Create memory for calculations
@@ -44,7 +45,7 @@ var
   // Create a new Haar classifier
   cascade: pCvHaarClassifierCascade = nil;
   // Create a string that contains the cascade name
-  cascade_name: AnsiString = 'FaceDetectXML\haarcascade_frontalface_alt.xml'; // "haarcascade_profileface.xml";
+  cascade_name: AnsiString = cResourceFaceDetect + 'haarcascade_frontalface_alt.xml'; // "haarcascade_profileface.xml";
 
   // Function prototype for detecting and drawing an object from an image
 procedure detect_and_draw(image: pIplImage);
@@ -180,7 +181,7 @@ begin
     else
     // If the capture is not loaded succesfully, then:
     begin // Assume the image to be lena.jpg, or the input_name specified
-      input_name := 'resource\lena.jpg';
+      input_name := cResourceMedia + 'lena.jpg';
 
       // Load the image from that filename
       frame := cvLoadImage(pCVChar(@input_name[1]), 1);

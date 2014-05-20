@@ -33,11 +33,12 @@ uses
   core_c,
   Core.types_c,
   imgproc_c,
-  imgproc.types_c;
+  imgproc.types_c,
+  uResourcePaths;
 
 const
   // declare video filename
-  VIDEO_FILE_NAME = 'Resource\768x576.avi';
+  VIDEO_FILE_NAME = cResourceMedia + '768x576.avi';
   // declare escape char
   ESCAPE_CHAR = 27;
 
