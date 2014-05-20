@@ -38,6 +38,10 @@ lib
 *.suo
 *.vlb
 *.sdf
+*.rsm
+*.dproj.local
+*.groupproj.local
+*.identcache 
 eng.*
 /3rdParty/!leptonica
 /3rdParty/!tesseract
