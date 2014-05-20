@@ -604,10 +604,10 @@ type
     FileName: String;
   end;
 
-  ///
-  // Run utils\CompressHaar\uCompressHaar.dpr
-  // Add to serarch path \Delphi-OpenCV\bin\facedetectxml\
-  ///
+//
+// Run utils\CompressHaar\uCompressHaar.dpr
+// Add to serarch path \Delphi-OpenCV\resource\facedetectxml\
+//
 {$I haarcascade.inc}
 
 Var

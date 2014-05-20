@@ -35,11 +35,12 @@ uses
   Core.types_c,
   imgproc_c,
   imgproc.types_c,
-  legacy;
+  legacy,
+  uResourcePaths;
 
 const
   w = 500;
-  filename = 'resource\cat2.jpg';
+  filename = cResourceMedia + 'cat2.jpg';
 
 var
   imgA, imgB, imgAA: pIplImage;

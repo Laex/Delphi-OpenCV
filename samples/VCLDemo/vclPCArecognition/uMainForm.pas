@@ -127,7 +127,7 @@ begin
   // ****************************************
   for i := 0 to N_Samples - 1 do
   begin
-    facesfilename := 'faces/s' + IntToStr(i + 1) + '/1.pgm';
+    facesfilename := '../../resource/faces/s' + IntToStr(i + 1) + '/1.pgm';
     img_load      := cvLoadImage(c_str(facesfilename));
     size          := cvSize(
       img_load.width,
@@ -176,7 +176,7 @@ begin
   // ****************************************
   i := 3; // Ќомер индивида
   // «агрузим его второе изображение (дл€ тренировки использовалось первое)
-  facesfilename := 'faces/s' + IntToStr(i + 1) + '/2.pgm';
+  facesfilename := '../../resource/faces/s' + IntToStr(i + 1) + '/2.pgm';
   img_load      := cvLoadImage(c_str(facesfilename));
   test_img      := cvCreateImage(
     size,

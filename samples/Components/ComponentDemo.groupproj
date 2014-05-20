@@ -1,0 +1,48 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{82A3C47C-4865-4594-853A-B86F5E30D70D}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="cCameraCapture\cCameraCapture.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="cMatchTemplate\cMatchTemplate.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="cCameraCapture">
+        <MSBuild Projects="cCameraCapture\cCameraCapture.dproj"/>
+    </Target>
+    <Target Name="cCameraCapture:Clean">
+        <MSBuild Projects="cCameraCapture\cCameraCapture.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="cCameraCapture:Make">
+        <MSBuild Projects="cCameraCapture\cCameraCapture.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="cMatchTemplate">
+        <MSBuild Projects="cMatchTemplate\cMatchTemplate.dproj"/>
+    </Target>
+    <Target Name="cMatchTemplate:Clean">
+        <MSBuild Projects="cMatchTemplate\cMatchTemplate.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="cMatchTemplate:Make">
+        <MSBuild Projects="cMatchTemplate\cMatchTemplate.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="cCameraCapture;cMatchTemplate"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="cCameraCapture:Clean;cMatchTemplate:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="cCameraCapture:Make;cMatchTemplate:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>

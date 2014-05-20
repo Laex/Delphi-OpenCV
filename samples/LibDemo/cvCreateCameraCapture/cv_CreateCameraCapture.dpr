@@ -30,7 +30,8 @@ uses
   System.SysUtils,
   highgui_c,
   core_c,
-  Core.types_c;
+  Core.types_c,
+  uResourcePaths;
 
 var
   capture: PCvCapture;
@@ -69,7 +70,7 @@ begin
         13:
           begin
             // cохраняем кадр в файл
-            filename := pCVChar(AnsiString(Format('Image %d.jpg'#0, [counter])));
+            filename := pCVChar(AnsiString(cResourceResult + Format('Image %d.jpg'#0, [counter])));
             WriteLn('[i] capture - ', filename);
             cvSaveImage(filename, frame);
             Inc(counter);

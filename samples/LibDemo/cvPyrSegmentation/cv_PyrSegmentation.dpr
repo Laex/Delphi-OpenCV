@@ -39,7 +39,8 @@ uses
   Core.types_c,
   imgproc_c,
   imgproc.types_c,
-  legacy;
+  legacy,
+  uResourcePaths;
 
 procedure help;
 begin
@@ -82,7 +83,7 @@ Var
 begin
   try
     help;
-    filename := iif(ParamCount = 1, ParamStr(1), 'resource\fruits.jpg');
+    filename := iif(ParamCount = 1, ParamStr(1), cResourceMedia + 'fruits.jpg');
     image[0] := cvLoadImage(pcvChar(@filename[1]), 1);
     if not Assigned(image[0]) then
     begin

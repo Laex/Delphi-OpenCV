@@ -35,10 +35,11 @@ uses
   core_c,
   Core.types_c,
   imgproc_c,
-  imgproc.types_c;
+  imgproc.types_c,
+  uResourcePaths;
 
 const
-  filename = 'resource\opencv_logo_with_text.png';
+  filename = cResourceMedia + 'opencv_logo_with_text.png';
 
 var
   src: pIplImage = nil;

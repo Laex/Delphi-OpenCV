@@ -33,11 +33,12 @@ uses
   highgui_c,
   core_c,
   Core.types_c,
-  imgproc_c;
+  imgproc_c,
+  uResourcePaths;
 
 const
   // имя картинки
-  filename = 'Resource\cat2.jpg';
+  filename = cResourceMedia + 'cat2.jpg';
 
 var
   // иcходная

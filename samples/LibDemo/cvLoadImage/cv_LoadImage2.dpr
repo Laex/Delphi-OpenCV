@@ -33,10 +33,11 @@ uses
   highgui_c,
   core_c,
   Core.types_c,
-  imgproc_c;
+  imgproc_c,
+  uResourcePaths;
 
 const
-  filename = 'Resource\opencv_logo_with_text.png';
+  filename = cResourceMedia + 'opencv_logo_with_text.png';
 
 var
   image: pIplImage = nil;
