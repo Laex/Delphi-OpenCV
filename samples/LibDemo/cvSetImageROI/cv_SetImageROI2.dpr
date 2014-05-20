@@ -34,12 +34,13 @@ uses
   core_c,
   Core.types_c,
   imgproc_c,
-  imgproc.types_c;
+  imgproc.types_c,
+  uResourcePaths;
 
 const
   // имя картинки
-  filename = 'Resource\opencv_logo_with_text.png';
-  filename2 = 'Resource\cat2.jpg';
+  filename = cResourceMedia + 'opencv_logo_with_text.png';
+  filename2 = cResourceMedia + 'cat2.jpg';
 
 var
   image: PIplImage = nil;
