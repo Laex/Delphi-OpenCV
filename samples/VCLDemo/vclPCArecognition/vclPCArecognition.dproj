@@ -5,9 +5,9 @@
         <FrameworkType>VCL</FrameworkType>
         <MainSource>vclPCArecognition.dpr</MainSource>
         <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Debug</Config>
+        <Config Condition="'$(Config)'==''">Release</Config>
         <Platform Condition="'$(Platform)'==''">Win32</Platform>
-        <TargetedPlatforms>1</TargetedPlatforms>
+        <TargetedPlatforms>3</TargetedPlatforms>
         <AppType>Application</AppType>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Config)'=='Base' or '$(Base)'!=''">
@@ -34,9 +34,27 @@
         <Cfg_1>true</Cfg_1>
         <Base>true</Base>
     </PropertyGroup>
+    <PropertyGroup Condition="('$(Platform)'=='Win64' and '$(Cfg_1)'=='true') or '$(Cfg_1_Win64)'!=''">
+        <Cfg_1_Win64>true</Cfg_1_Win64>
+        <CfgParent>Cfg_1</CfgParent>
+        <Cfg_1>true</Cfg_1>
+        <Base>true</Base>
+    </PropertyGroup>
     <PropertyGroup Condition="'$(Config)'=='Release' or '$(Cfg_2)'!=''">
         <Cfg_2>true</Cfg_2>
         <CfgParent>Base</CfgParent>
+        <Base>true</Base>
+    </PropertyGroup>
+    <PropertyGroup Condition="('$(Platform)'=='Win32' and '$(Cfg_2)'=='true') or '$(Cfg_2_Win32)'!=''">
+        <Cfg_2_Win32>true</Cfg_2_Win32>
+        <CfgParent>Cfg_2</CfgParent>
+        <Cfg_2>true</Cfg_2>
+        <Base>true</Base>
+    </PropertyGroup>
+    <PropertyGroup Condition="('$(Platform)'=='Win64' and '$(Cfg_2)'=='true') or '$(Cfg_2_Win64)'!=''">
+        <Cfg_2_Win64>true</Cfg_2_Win64>
+        <CfgParent>Cfg_2</CfgParent>
+        <Cfg_2>true</Cfg_2>
         <Base>true</Base>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base)'!=''">
@@ -63,6 +81,10 @@
         <Manifest_File>$(BDS)\bin\default_app.manifest</Manifest_File>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Win64)'!=''">
+        <DCC_Namespace>Winapi;System.Win;Data.Win;Datasnap.Win;Web.Win;Soap.Win;Xml.Win;$(DCC_Namespace)</DCC_Namespace>
+        <Manifest_File>$(BDS)\bin\default_app.manifest</Manifest_File>
+        <VerInfo_Locale>1033</VerInfo_Locale>
+        <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
         <DCC_UsePackage>dxBarRS18;dxPSCoreRS18;cxTreeListRS18;dxDockingRS18;dxThemeRS18;dxPSdxOCLnkRS18;DBXInterBaseDriver;DataSnapServer;DataSnapCommon;cxTreeListdxBarPopupMenuRS18;officeXPrt;DbxCommonDriver;vclimg;dbxcds;DatasnapConnectorsFreePascal;vcldb;cxExportRS18;CustomIPTransport;dsnap;IndyIPServer;IndyCore;cxVerticalGridRS18;CloudService;dxPSdxDBOCLnkRS18;FmxTeeUI;dxADOServerModeRS18;dxPScxExtCommonRS18;cxEditorsRS18;cxPageControldxBarPopupMenuRS18;cxSchedulerRS18;dxSpellCheckerRS18;dxPScxVGridLnkRS18;dxRibbonRS18;bindcompfmx;cxBarEditItemRS18;cxPageControlRS18;dbrtl;bindcomp;inetdb;DBXOdbcDriver;xmlrtl;ibxpress;dxBarExtItemsRS18;vclactnband;bindengine;soaprtl;FMXTee;bindcompvcl;dxPsPrVwAdvRS18;cxSpreadSheetRS18;vclie;cxPivotGridRS18;dxmdsRS18;dxBarDBNavRS18;dxTileControlRS18;dxComnRS18;dxBarExtDBItemsRS18;DBXInformixDriver;dxPScxSchedulerLnkRS18;Intraweb;dxNavBarRS18;dsnapcon;DBXFirebirdDriver;dxPSTeeChartRS18;inet;dxPScxCommonRS18;vclx;DBXSybaseASADriver;dxorgcRS18;dbexpress;IndyIPClient;dxGDIPlusRS18;dxLayoutControlRS18;ZComponent;DBXSqliteDriver;fmx;IndySystem;TeeDB;vclib;DataSnapClient;dxPScxTLLnkRS18;cxSchedulerGridRS18;dxtrmdRS18;DataSnapProviderClient;DBXSybaseASEDriver;dxTabbedMDIRS18;MetropolisUILiveTile;dxPSLnksRS18;vcldsnap;dxPScxPivotGridLnkRS18;DBXDb2Driver;dxPScxSSLnkRS18;DBXOracleDriver;dxServerModeRS18;vclribbon;dxdborRS18;fmxase;vcl;IndyIPCommon;DBXMSSQLDriver;cxPivotGridChartRS18;inetdbxpress;webdsnap;dxPScxGridLnkRS18;cxLibraryRS18;adortl;dxPSdxDBTVLnkRS18;ZDbc;rtl;DbxClientDriver;ZPlain;Tee;dxDBXServerModeRS18;IndyProtocols;DBXMySQLDriver;dxFlowChartRS18;bindcompdbx;TeeUI;ZCore;vcltouch;dxPSPrVwRibbonRS18;dxPSdxFCLnkRS18;OverbyteIcsDXe4Run;VclSmp;cxGridRS18;DataSnapConnectors;dxPSDBTeeChartRS18;dxdbtrRS18;dxCoreRS18;fmxobj;ZParseSql;dxPSdxLCLnkRS18;cxPivotGridOLAPRS18;fmxdae;cxDataRS18;DataSnapIndy10ServerTransport;$(DCC_UsePackage)</DCC_UsePackage>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1)'!=''">
@@ -74,15 +96,35 @@
         <DCC_RemoteDebug>true</DCC_RemoteDebug>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1_Win32)'!=''">
+        <DCC_ExeOutput>..\..\..\bin\$(Platform)</DCC_ExeOutput>
+        <Manifest_File>$(BDS)\bin\default_app.manifest</Manifest_File>
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
         <VerInfo_Locale>1033</VerInfo_Locale>
         <DCC_RemoteDebug>false</DCC_RemoteDebug>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Cfg_1_Win64)'!=''">
+        <DCC_ExeOutput>..\..\..\bin\$(Platform)</DCC_ExeOutput>
+        <Manifest_File>$(BDS)\bin\default_app.manifest</Manifest_File>
+        <VerInfo_Locale>1033</VerInfo_Locale>
+        <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2)'!=''">
         <DCC_LocalDebugSymbols>false</DCC_LocalDebugSymbols>
         <DCC_Define>RELEASE;$(DCC_Define)</DCC_Define>
         <DCC_SymbolReferenceInfo>0</DCC_SymbolReferenceInfo>
         <DCC_DebugInformation>0</DCC_DebugInformation>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Cfg_2_Win32)'!=''">
+        <DCC_ExeOutput>..\..\..\bin\$(Platform)</DCC_ExeOutput>
+        <Manifest_File>$(BDS)\bin\default_app.manifest</Manifest_File>
+        <VerInfo_Locale>1033</VerInfo_Locale>
+        <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Cfg_2_Win64)'!=''">
+        <DCC_ExeOutput>..\..\..\bin\$(Platform)</DCC_ExeOutput>
+        <Manifest_File>$(BDS)\bin\default_app.manifest</Manifest_File>
+        <VerInfo_Locale>1033</VerInfo_Locale>
+        <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
     </PropertyGroup>
     <ItemGroup>
         <DelphiCompile Include="$(MainSource)">
@@ -153,14 +195,14 @@
                     <VersionInfoKeys Name="CFBundleDevelopmentRegion"/>
                 </VersionInfoKeys>
                 <Excluded_Packages>
-                    <Excluded_Packages Name="C:\Users\Public\Documents\RAD Studio\11.0\Bpl\dclfrx18.bpl">File C:\Users\Public\Documents\RAD Studio\11.0\Bpl\dclfrx18.bpl not found</Excluded_Packages>
-                    <Excluded_Packages Name="$(BDSBIN)\dcloffice2k180.bpl">Microsoft Office 2000 Sample Automation Server Wrapper Components</Excluded_Packages>
+                    <Excluded_Packages Name="$(BDSBIN)\dcloffice2k200.bpl">Microsoft Office 2000 Sample Automation Server Wrapper Components</Excluded_Packages>
+                    <Excluded_Packages Name="$(BDSBIN)\dclofficexp200.bpl">Microsoft Office XP Sample Automation Server Wrapper Components</Excluded_Packages>
                 </Excluded_Packages>
             </Delphi.Personality>
             <Deployment/>
             <Platforms>
                 <Platform value="Win32">True</Platform>
-                <Platform value="Win64">False</Platform>
+                <Platform value="Win64">True</Platform>
             </Platforms>
         </BorlandProject>
         <ProjectFileVersion>12</ProjectFileVersion>
