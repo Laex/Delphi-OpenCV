@@ -34,11 +34,12 @@ uses
   core_c,
   Core.types_c,
   imgproc_c,
-  imgproc.types_c;
+  imgproc.types_c,
+  uResourcePaths;
 
 const
-  const_original = 'resource\matchshapes2.jpg';
-  const_template = 'resource\matchshapes_template.jpg';
+  const_original = cResourceMedia + 'matchshapes2.jpg';
+  const_template = cResourceMedia + 'matchshapes_template.jpg';
 
 var
   original: pIplImage = nil;
