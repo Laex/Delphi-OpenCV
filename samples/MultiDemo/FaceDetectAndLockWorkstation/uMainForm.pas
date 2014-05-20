@@ -8,7 +8,7 @@ uses
   core.types_c, core_c, highgui_c, objdetect_c, cvUtils,
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.StdCtrls, Vcl.Samples.Spin,
-  Vcl.Menus, Vcl.ImgList;
+  Vcl.Menus, Vcl.ImgList, uResourcePaths;
 
 const
   WM_NOFACE = WM_USER+1;
@@ -85,7 +85,7 @@ type
 var
   MainForm: TMainForm;
   HaarCascade: pCvHaarClassifierCascade = nil;
-  Cascade_Name: AnsiString = 'FaceDetectXML\haarcascade_frontalface_alt.xml';
+  Cascade_Name: AnsiString = cResourceFaceDetect + 'haarcascade_frontalface_alt.xml';
 
 // WTSRegisterSessionNotification
 // http://msdn.microsoft.com/en-us/library/aa383828%28VS.85%29.aspx

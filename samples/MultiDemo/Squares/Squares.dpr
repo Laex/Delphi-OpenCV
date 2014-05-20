@@ -34,10 +34,11 @@ uses
   core_c,
   Core.types_c,
   imgproc_c,
-  imgproc.types_c;
+  imgproc.types_c,
+  uResourcePaths;
 
 const
-  filename = 'resource\matchshapes.jpg';
+  filename = cResourceMedia + 'matchshapes.jpg';
   // pic1.bmp...pic6.bmp
   wndname = 'Squares';
 

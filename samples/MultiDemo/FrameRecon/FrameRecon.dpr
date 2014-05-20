@@ -36,7 +36,8 @@ uses
   Core.types_c,
   imgproc_c,
   imgproc.types_c,
-  calib3d_c;
+  calib3d_c,
+  uResourcePaths;
 
 var
   image: pIplImage = nil;
@@ -355,10 +356,10 @@ begin
     cvNamedWindow('Paint window', 1);
     cvNamedWindow('Original', 1);
 
-    intrinsic := cvLoad('Resource\Intrinsics.xml');
+    intrinsic := cvLoad(cResourceMedia + 'Intrinsics.xml');
     // multiply by 2 because the matrix is computed on 320x240 image
     cvConvertScale(intrinsic, intrinsic, 2.0, 0);
-    distortion := cvLoad('Resource\Distortion.xml');
+    distortion := cvLoad(cResourceMedia + 'Distortion.xml');
     obj := cvCreateMat(4, 3, CV_32FC1);
     pro := cvCreateMat(4, 2, CV_32FC1);
     rot := cvCreateMat(1, 3, CV_32FC1);

@@ -38,7 +38,8 @@ uses
   core_c,
   Core.types_c,
   imgproc_c,
-  imgproc.types_c;
+  imgproc.types_c,
+  uResourcePaths;
 
 const
   filename_ini = 'carnumdetect.ini';

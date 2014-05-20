@@ -34,7 +34,8 @@ uses
   core_c,
   Core.types_c,
   imgproc_c,
-  imgproc.types_c;
+  imgproc.types_c,
+  uResourcePaths;
 
 var
   capture: PCvCapture;
@@ -91,7 +92,7 @@ begin
       else if (cc = 13) then
       begin
         // cохраняем кадр в файл
-        filename := pCVChar(AnsiString(Format('Image %d.jpg'#0, [counter])));
+        filename := pCVChar(AnsiString(cResourceResult + Format('Image %d.jpg'#0, [counter])));
         WriteLn('[i] capture - ', filename);
         cvSaveImage(filename, frame);
         Inc(counter);

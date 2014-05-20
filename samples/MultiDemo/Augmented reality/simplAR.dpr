@@ -39,12 +39,13 @@ uses
   Core.types_c,
   calib3d_c,
   imgproc_c,
-  imgproc.types_c;
+  imgproc.types_c,
+  uResourcePaths;
 
 const
-  // Print pattern "resource\chessboard 6x5.jpg"
-  trailer_filename = 'resource\trailer.avi';
-  pic_filename = 'resource\pic.jpg';
+  // Print pattern "chessboard 6x5.jpg"
+  trailer_filename = cResourceMedia + 'trailer.avi';
+  pic_filename = cResourceMedia + 'pic.jpg';
 
 Var
   capture: pCvCapture = nil;

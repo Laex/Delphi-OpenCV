@@ -39,8 +39,8 @@ uses
   calib3d_c;
 
 const
-  Image_Left = 'StereoSample\Aloe\view0.png';
-  Image_Right = 'StereoSample\Aloe\view1.png';
+  Image_Left = '..\..\resource\StereoSample\Aloe\view0.png';
+  Image_Right = '..\..\resource\StereoSample\Aloe\view1.png';
   // Количеcтво различий
   ndisparity = 16;
   // Количеcтво итераций
@@ -87,8 +87,8 @@ begin
     // вывод матрицы в файл
     disparity_left_visual := cvCreateMat(size.height, size.width, CV_8U);
     cvConvertScale(disparity_left, disparity_left_visual, -16);
-    cvSave('result\disparity.png', disparity_left_visual);
-    cvSaveImage('result\disparity.jpg', disparity_left_visual);
+    cvSave('..\..\resource\result\disparity.png', disparity_left_visual);
+    cvSaveImage('..\..\resource\result\disparity.jpg', disparity_left_visual);
 
     Q := cvCreateMat(4, 4, CV_64F);
     pDoubleArray(Q^.data)[0] := 1;
@@ -113,8 +113,8 @@ begin
 
     _3dImage := cvCreateImage(size, IPL_DEPTH_32F, 3);
     cvReprojectImageTo3D(disparity_left_visual, _3dImage, Q);
-    cvSave('result\disparity1.png', _3dImage);
-    cvSaveImage('result\disparity1.jpg', _3dImage);
+    cvSave('..\..\resource\result\disparity1.png', _3dImage);
+    cvSaveImage('..\..\resource\result\disparity1.jpg', _3dImage);
   except
     on E: Exception do
       Writeln(E.ClassName, ': ', E.Message);
