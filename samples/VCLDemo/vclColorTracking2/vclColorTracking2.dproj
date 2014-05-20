@@ -40,6 +40,7 @@
         <Base>true</Base>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base)'!=''">
+        <DCC_DcuOutput>.\$(Platform)\$(Config)</DCC_DcuOutput>
         <SanitizedProjectName>vclColorTracking2</SanitizedProjectName>
         <VerInfo_Locale>1049</VerInfo_Locale>
         <DCC_F>false</DCC_F>
@@ -58,7 +59,7 @@
         <Manifest_File>$(BDS)\bin\default_app.manifest</Manifest_File>
         <VerInfo_Locale>1033</VerInfo_Locale>
         <VerInfo_Keys>CompanyName=;FileDescription=;FileVersion=1.0.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductName=;ProductVersion=1.0.0.0;Comments=</VerInfo_Keys>
-        <DCC_ExeOutput>..\..\..\bin\</DCC_ExeOutput>
+        <DCC_ExeOutput>..\..\..\bin\$(Platform)</DCC_ExeOutput>
         <Icon_MainIcon>vclColorTracking2_Icon.ico</Icon_MainIcon>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Win64)'!=''">

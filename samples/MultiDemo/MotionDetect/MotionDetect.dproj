@@ -41,6 +41,7 @@
         <Base>true</Base>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base)'!=''">
+        <DCC_DcuOutput>.\$(Platform)\$(Config)</DCC_DcuOutput>
         <SanitizedProjectName>MotionDetect</SanitizedProjectName>
         <VerInfo_Locale>1049</VerInfo_Locale>
         <DCC_K>false</DCC_K>

@@ -22,30 +22,28 @@
 // ****************************************************************
 
 {$IFNDEF CLR}
-
 {$I OpenCV.inc}
-
 unit uOCVView;
 {$ENDIF}
 
 interface
 
 uses
-  {$IFDEF VER6P}
+{$IFDEF VER6P}
   WinApi.Windows,
   WinApi.Messages,
   System.SysUtils,
   System.Classes,
   Vcl.Controls,
   Vcl.Graphics,
-  {$ELSE}
+{$ELSE}
   Windows,
   Messages,
   SysUtils,
   Classes,
   Controls,
   Graphics,
-  {$ENDIF VER6P}
+{$ENDIF VER6P}
   uOCVTypes,
   core.types_c;
 
@@ -156,6 +154,7 @@ procedure TocvView.WMPaint(var Message: TWMPaint);
 Var
   DC: HDC;
   lpPaint: TPaintStruct;
+  // CRect: TRect;
 begin
   if (csDesigning in ComponentState) or (not isSourceEnabled) then
     inherited
@@ -165,16 +164,16 @@ begin
     begin
       Canvas.Lock;
       DC := BeginPaint(Handle, lpPaint);
+      // WinApi.Windows.GetClientRect(Handle, CRect);
       try
         Canvas.Handle := DC;
         try
           if Assigned(OnBeforePaint) then
             OnBeforePaint(Self, FImage);
 
-          ipDraw(DC, FImage.IpImage, ClientRect);
-
-          if Assigned(OnAfterPaint) then
-            OnAfterPaint(Self, FImage);
+          if ipDraw(DC, FImage.IpImage, ClientRect) then
+            if Assigned(OnAfterPaint) then
+              OnAfterPaint(Self, FImage);
 
         finally
           Canvas.Handle := 0;

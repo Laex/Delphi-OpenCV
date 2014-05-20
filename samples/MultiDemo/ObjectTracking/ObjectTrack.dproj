@@ -35,6 +35,7 @@
         <Base>true</Base>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base)'!=''">
+        <DCC_DcuOutput>.\$(Platform)\$(Config)</DCC_DcuOutput>
         <SanitizedProjectName>ObjectTrack</SanitizedProjectName>
         <DCC_S>false</DCC_S>
         <DCC_ImageBase>00400000</DCC_ImageBase>
@@ -51,7 +52,7 @@
         <Manifest_File>None</Manifest_File>
         <VerInfo_Locale>1033</VerInfo_Locale>
         <VerInfo_Keys>CompanyName=;FileDescription=;FileVersion=1.0.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductName=;ProductVersion=1.0.0.0;Comments=</VerInfo_Keys>
-        <DCC_ExeOutput>..\..\..\bin</DCC_ExeOutput>
+        <DCC_ExeOutput>..\..\..\bin\$(Platform)</DCC_ExeOutput>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1)'!=''">
         <DCC_Define>RELEASE;$(DCC_Define)</DCC_Define>

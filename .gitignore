@@ -1,19 +1,15 @@
-/!DS!
-/!Work!
-/!Install!
-/bin/carnumdetect.ini
-/bin/*.bsc
-/bin/vclFaceRecogData
-/bin/StereoSample/Aloe/*.png
-/bin/StereoSample/Aloe/dmin.txt
-/bin/Result/*.*
-/opencv_classes/opencv_classes.sdf
+# Directory
 Win32
+Win64
 __history
 Debug
 Release
 ipch
 lib
+# filemask
+/resource/result/*.*
+*.ini
+*.bsc
 *.bsc
 *.pgm
 *.~*
@@ -38,10 +34,4 @@ lib
 *.suo
 *.vlb
 *.sdf
-eng.*
-/3rdParty/!leptonica
-/3rdParty/!tesseract
-/3rdParty/!tesseract_classes
-/component/ModelSupport_OpenCV/*.txaPackage
-/component/ModelSupport_OpenCV
-/samples/!Tesseract-OCR
+*.txaPackage
