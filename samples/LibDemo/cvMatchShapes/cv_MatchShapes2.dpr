@@ -34,7 +34,8 @@ uses
   Core.types_c,
   imgproc_c,
   imgproc.types_c,
-  cvUtils;
+  cvUtils,
+  uResourcePaths;
 
 // сравнение объектов по моментам их контуров
 procedure testMatch(original, templ: pIplImage);
@@ -309,8 +310,8 @@ begin
 end;
 
 const
-  const_original = 'resource\matchshapes2.jpg';
-  const_template = 'resource\matchshapes_template.jpg';
+  const_original = cResourceMedia + 'matchshapes2.jpg';
+  const_template = cResourceMedia + 'matchshapes_template.jpg';
 
 Var
   original           : pIplImage = nil;

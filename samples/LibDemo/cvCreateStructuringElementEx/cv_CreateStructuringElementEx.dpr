@@ -35,7 +35,8 @@ uses
   core_c,
   Core.types_c,
   imgproc_c,
-  imgproc.types_c;
+  imgproc.types_c,
+  uResourcePaths;
 
 var
   src: pIplImage = nil;
@@ -116,7 +117,7 @@ begin
   try
     help();
 
-    filename := iif(ParamCount = 1, ParamStr(1), 'resource\baboon.jpg');
+    filename := iif(ParamCount = 1, ParamStr(1), cResourceMedia + 'baboon.jpg');
     src := cvLoadImage(pCvChar(@filename[1]), 1);
     if not Assigned(src) then
     begin

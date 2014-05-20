@@ -37,7 +37,8 @@ uses
   core_c,
   Core.types_c,
   imgproc_c,
-  imgproc.types_c;
+  imgproc.types_c,
+  uResourcePaths;
 
 Function DrawHist(src_img: pIplImage): pIplImage;
 Var
@@ -96,7 +97,7 @@ Var
 
 begin
   try
-    src := cvLoadImage('resource\baboon.jpg', CV_LOAD_IMAGE_ANYCOLOR OR CV_LOAD_IMAGE_ANYDEPTH);
+    src := cvLoadImage(cResourceMedia+'baboon.jpg', CV_LOAD_IMAGE_ANYCOLOR OR CV_LOAD_IMAGE_ANYDEPTH);
     Hist := DrawHist(src);
     cvShowImage('Image Source', src);
     cvNamedWindow('Histogram', CV_WINDOW_AUTOSIZE);

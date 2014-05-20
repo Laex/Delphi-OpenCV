@@ -119,9 +119,9 @@ object MainForm: TMainForm
   end
   object ocvflsrc1: TocvFileSource
     Delay = 120
-    FileName = '.\Resource\768x576.avi'
-    Left = 372
-    Top = 396
+    FileName = '..\..\resource\media\768x576.avi'
+    Left = 340
+    Top = 380
   end
   object ocvcmrsrc1: TocvCameraSource
     Enabled = True

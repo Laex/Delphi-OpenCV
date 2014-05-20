@@ -35,7 +35,8 @@ uses
   imgproc_c,
   imgproc.types_c,
   calib3d_c,
-  compat;
+  compat,
+  uResourcePaths;
 
 Var
   P: Integer;
@@ -124,7 +125,7 @@ begin
       End;
       ProjectedPoints[P] := cvPoint2D32f(Point2D.x, Point2D.y);
     End;
-    img := cvLoadImage('resource\cv_posit.jpg');
+    img := cvLoadImage(cResourceMedia + 'cv_posit.jpg');
     if not Assigned(img) then
     Begin
       writeln('Image not loaded!');

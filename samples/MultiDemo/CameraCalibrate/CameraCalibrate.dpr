@@ -36,7 +36,8 @@ uses
   Core.types_c,
   imgproc_c,
   imgproc.types_c,
-  calib3d_c;
+  calib3d_c,
+  uResourcePaths;
 
 var
   // Setting the input list //”cтановим входной cпиcок
@@ -278,15 +279,15 @@ begin
 
     // сќ’–јЌя≈ћ ¬Ќ”“–≈ЌЌ»≈ ѕј–јћ≈“–џ » ƒ»с“ќрс»ё
     // Parameters and maintains internal distortion
-    cvSave('result\Intrinsics.xml', intrinsic_matrix);
-    cvSave('result\Distortion.xml', distortion_coeffs);
+    cvSave(cResourceResult + 'Intrinsics.xml', intrinsic_matrix);
+    cvSave(cResourceResult + 'Distortion.xml', distortion_coeffs);
 
     // -------------------------------------------------------------
 
     // ѕ–»ћ≈– «ј√–”« » Ё“»’ ћј“–»÷ Ќј«јƒ ¬ ѕ–ќ√–јћћћ”:
     // Loading examples of these matrices back into the program:
-    intrinsic := cvLoad('result\Intrinsics.xml');
-    Distortion := cvLoad('result\Distortion.xml');
+    intrinsic := cvLoad(cResourceResult + 'Intrinsics.xml');
+    Distortion := cvLoad(cResourceResult + 'Distortion.xml');
 
     // cтроим карту андиcторcии, которую мы будем иcпользовать
     // дл€ вcех поcледующих кадров.

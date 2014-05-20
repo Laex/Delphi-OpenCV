@@ -37,10 +37,11 @@ uses
   core_c,
   Core.types_c,
   imgproc_c,
-  imgproc.types_c;
+  imgproc.types_c,
+  uResourcePaths;
 
 const
-  kernet_filename = 'result\kernel.xml';
+  kernet_filename = cResourceResult + 'kernel.xml';
 
 var
   kernel: array [0 .. 8] of Single;
@@ -111,7 +112,7 @@ begin
     Writeln('Example 3_19 Reading in cfg.xml');
 
     // открываем файл для чтения
-    fs := cvOpenFileStorage('resource\cfg.xml', 0, CV_STORAGE_READ);
+    fs := cvOpenFileStorage(cResourceMedia + 'cfg.xml', 0, CV_STORAGE_READ);
     // cчитываем значения
     frame_count := cvReadIntByName(fs, 0, 'frame_count', 5 { значение по-умолчанию } );
     s := cvGetFileNodeByName(fs, 0, 'frame_size')^.seq;

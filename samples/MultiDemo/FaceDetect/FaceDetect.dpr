@@ -41,7 +41,8 @@ uses
   objdetect_c,
   imgproc_c,
   imgproc.types_c,
-  cvUtils;
+  cvUtils,
+  uResourcePaths;
 
 Const
   // ******************************************************************************/
@@ -49,7 +50,7 @@ Const
   CAMERA_INDEX = CV_CAP_ANY;
   // ******************************************************************************/
   windowName = 'Haar Cascade Detection'; // window name
-  cascade_name: pCVChar = 'FaceDetectXML\haarcascade_frontalface_alt.xml'; // cascade file
+  cascade_name: pCVChar = cResourceFaceDetect + 'haarcascade_frontalface_alt.xml'; // cascade file
 
 Var
   img: pIplImage = nil; // image object

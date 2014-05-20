@@ -33,15 +33,16 @@ uses
   core_c,
   Core.types_c,
   imgproc_c,
-  imgproc.types_c;
+  imgproc.types_c,
+  uResourcePaths;
 
 var
   imgSrc, imgTmp, imgMat: PIplImage;
   min: double;
   p1, p2: TCvPoint;
 begin
-  imgSrc := cvLoadImage('resource\My_Desk.jpg');
-  imgTmp := cvLoadImage('resource\Stapler2.jpg');
+  imgSrc := cvLoadImage(cResourceMedia + 'My_Desk.jpg');
+  imgTmp := cvLoadImage(cResourceMedia + 'Stapler2.jpg');
   imgMat := cvCreateImage(CvSize(imgSrc.Width - imgTmp.Width + 1, imgSrc.Height - imgTmp.Height + 1), IPL_DEPTH_32F, 1);
   try
     cvNamedWindow('Src');

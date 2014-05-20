@@ -35,7 +35,8 @@ uses
   imgproc_c,
   imgproc.types_c,
   objdetect_c,
-  cvUtils;
+  cvUtils,
+  uResourcePaths;
 
 procedure help;
 begin
@@ -49,8 +50,8 @@ end;
 
 var
   tbbNumThreads: Integer = -1;
-  model_filename: AnsiString = 'resource\cat.xml';
-  image_filename: AnsiString = 'resource\cat.jpg';
+  model_filename: AnsiString = cResourceMedia + 'cat.xml';
+  image_filename: AnsiString = cResourceMedia + 'cat.jpg';
 
 procedure detect_and_draw_objects(image: pIplImage; detector: pCvLatentSvmDetector; numThreads: Integer = -1);
 Var

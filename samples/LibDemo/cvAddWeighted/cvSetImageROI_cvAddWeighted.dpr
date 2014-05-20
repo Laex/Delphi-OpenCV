@@ -33,11 +33,12 @@ uses
   highgui_c,
   core_c,
   Core.types_c,
-  imgproc_c;
+  imgproc_c,
+  uResourcePaths;
 
 Const
-  filename_src1 = 'Resource\cat2-mirror.jpg';
-  filename_src2 = 'Resource\cat2.jpg';
+  filename_src1 = cResourceMedia + 'cat2-mirror.jpg';
+  filename_src2 = cResourceMedia + 'cat2.jpg';
 
 Var
   image: pIplImage = nil;

@@ -32,11 +32,12 @@ uses
   System.SysUtils,
   highgui_c,
   core_c,
-  Core.types_c;
+  Core.types_c,
+  uResourcePaths;
 
 const
   // имя картинки
-  filename = 'Resource\opencv_logo_with_text.png';
+  filename = cResourceMedia + 'opencv_logo_with_text.png';
 
 type
   TArrayOfByte = array [0 .. 0] of Byte;
