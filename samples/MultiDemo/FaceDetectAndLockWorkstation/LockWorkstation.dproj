@@ -40,6 +40,7 @@
         <Base>true</Base>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base)'!=''">
+        <DCC_DcuOutput>.\$(Platform)\$(Config)</DCC_DcuOutput>
         <SanitizedProjectName>LockWorkstation</SanitizedProjectName>
         <DCC_N>false</DCC_N>
         <DCC_ImageBase>00400000</DCC_ImageBase>
@@ -81,7 +82,7 @@
         <VerInfo_Locale>1033</VerInfo_Locale>
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
         <Icon_MainIcon>LockWorkstation_Icon.ico</Icon_MainIcon>
-        <DCC_ExeOutput>..\..\..\bin</DCC_ExeOutput>
+        <DCC_ExeOutput>..\..\..\bin\$(Platform)</DCC_ExeOutput>
         <VerInfo_Keys>CompanyName=Mikhail Grigorev;FileDescription=LockWorkstation;FileVersion=1.0.0.1;InternalName=LockWorkstation;LegalCopyright=Mikhail Grigorev;LegalTrademarks=Mikhail Grigorev;OriginalFilename=LockWorkstation;ProductName=LockWorkstation;ProductVersion=1.0.0.0;Comments=www.im-history.ru</VerInfo_Keys>
     </PropertyGroup>
     <ItemGroup>

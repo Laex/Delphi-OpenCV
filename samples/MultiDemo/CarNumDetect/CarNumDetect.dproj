@@ -41,6 +41,7 @@
         <Base>true</Base>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base)'!=''">
+        <DCC_DcuOutput>.\$(Platform)\$(Config)</DCC_DcuOutput>
         <SanitizedProjectName>CarNumDetect</SanitizedProjectName>
         <DCC_F>false</DCC_F>
         <DCC_S>false</DCC_S>

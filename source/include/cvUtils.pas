@@ -338,11 +338,14 @@ Var
   _dibhdr: TBitmapInfo ABSOLUTE buf;
   _rgb: pCOLORREF;
   i: Integer;
+  iResult: Integer;
 begin
   if (not Assigned(img)) or (not Assigned(img^.imageData)) then
     Exit(false);
+
   isrgb := ('R' = upcase(img^.colorModel[0])) and ('G' = upcase(img^.colorModel[1])) and ('B' = upcase(img^.colorModel[2]));
   isgray := 'G' = upcase(img^.colorModel[0]);
+
   if (not isgray) and (not isrgb) then
     Exit(false);
   if (1 = img^.nChannels) and (not isgray) then
@@ -354,6 +357,7 @@ begin
   if (isgray) then
     for i := 0 to 255 do
       _rgb[i] := rgb(i, i, i);
+
   dibhdr^.biSize := SizeOf(BITMAPINFOHEADER);
   dibhdr^.biWidth := img^.Width;
   // Check origin for display
@@ -374,14 +378,19 @@ begin
   if Stretch then
   begin
     SetStretchBltMode(dc, COLORONCOLOR);
+    SetMapMode(dc, MM_TEXT);
     // Stretch the image to fit the rectangle
-    Result := StretchDIBits(dc, rect.left, rect.top, rect.Width, rect.Height, 0, 0, img^.Width, img^.Height, img^.imageData,
-      _dibhdr, DIB_RGB_COLORS, SRCCOPY) > 0;
+    iResult := StretchDIBits(dc, rect.left, rect.top, rect.Width, rect.Height, 0, 0, img^.Width, img^.Height, img^.imageData,
+      _dibhdr, DIB_RGB_COLORS, SRCCOPY);
+    Result := (iResult > 0) and (iResult <> GDI_ERROR);
   end
   else
+  begin
     // Draw without scaling
-    Result := SetDIBitsToDevice(dc, rect.left, rect.top, img^.Width, img^.Height, 0, 0, 0, img^.Height, img^.imageData, _dibhdr,
-      DIB_RGB_COLORS) > 0;
+    iResult := SetDIBitsToDevice(dc, rect.left, rect.top, img^.Width, img^.Height, 0, 0, 0, img^.Height, img^.imageData, _dibhdr,
+      DIB_RGB_COLORS);
+    Result := (iResult > 0) and (iResult <> GDI_ERROR);
+  end;
 end;
 
 end.
