@@ -158,7 +158,7 @@ type
 
   pCvArr = Pointer;
 
-  TCv32suf = packed record
+  TCv32suf = record
     case Byte of
       0:
         (i: Integer);
@@ -168,7 +168,7 @@ type
         (f: Single);
   end;
 
-  TCv64suf = packed record
+  TCv64suf = record
     case Byte of
       0:
         (i: int64);
@@ -340,7 +340,7 @@ type
   pIplROI = ^TIplROI;
   pIplTileInfo = ^TIplTileInfo;
 
-  TIplROI = packed record
+  TIplROI = record
     coi: Integer; (*0 - no COI (all channels are selected), 1 - 0th channel is selected ...*)
     xOffset: Integer;
     yOffset: Integer;
@@ -350,7 +350,7 @@ type
 
   TiplCallBack = procedure(img: pIplImage; xIndex: Integer; yIndex: Integer; mode: Integer);
 
-  TIplTileInfo = packed record
+  TIplTileInfo = record
     callBack: TiplCallBack;
     id: Pointer;
     tileData: pCVChar;
@@ -360,7 +360,7 @@ type
 
   TA4CVChar = array [0 .. 3] of CVChar;
 
-  TIplImage = packed record
+  TIplImage = record
     nSize: Integer; (*sizeof(IplImage)*)
     id: Integer; (*version (=0)*)
     nChannels: Integer; (*Most of OpenCV functions support 1,2,3 or 4 channels*)
@@ -379,7 +379,7 @@ type
     imageId: Pointer; (*"           "*)
     tileInfo: pIplTileInfo; (*"           "*)
     imageSize: Integer; (*Image data size in bytes*)
-    imageData: pByte; (*Pointer to aligned image data.*)
+    imageData: Pointer;//pByte; (*Pointer to aligned image data.*)
     widthStep: Integer; (*Size of aligned image row in bytes.*)
     BorderMode: array [0 .. 3] of Integer; (*Ignored by OpenCV.*)
     BorderConst: array [0 .. 3] of Integer; (*Ditto.*)
@@ -389,7 +389,7 @@ type
   // type       _IplTileInfo IplTileInfo = ;
   pIplConvKernel = ^TIplConvKernel;
 
-  TIplConvKernel = packed record
+  TIplConvKernel = record
     nCols: Integer;
     nRows: Integer;
     anchorX: Integer;
@@ -398,7 +398,7 @@ type
     nShiftR: Integer;
   end;
 
-  IplConvKernelFP = packed record
+  IplConvKernelFP = record
     nCols: Integer;
     nRows: Integer;
     anchorX: Integer;
@@ -594,7 +594,7 @@ type
   pCvMat = ^TCvMat;
   ppCvMat = ^pCvMat;
 
-  TCvMat = packed record
+  TCvMat = record
     _type: Integer;
     step: Integer;
 
@@ -624,12 +624,12 @@ const
 {$EXTERNALSYM CV_MAX_ARR}
 
 type
-  TCvMatNDdim = packed record
+  TCvMatNDdim = record
     size: Integer;
     step: Integer;
   end;
 
-  TCvMatNDdata = packed record
+  TCvMatNDdata = record
     ptr: pByte;
     fl: pSingle;
     db: pDouble;
@@ -639,7 +639,7 @@ type
 
   pCvMatND = ^TCvMatND;
 
-  TCvMatND = packed record
+  TCvMatND = record
     _type: Integer;
     dims: Integer;
     refcount: ^Integer;
@@ -684,7 +684,7 @@ const
 type
   pCvHistogram = ^TCvHistogram;
 
-  TCvHistogram = packed record
+  TCvHistogram = record
     _type: Integer;
     bins: pIplImage;
     thresh: array [0 .. CV_MAX_DIM - 1, 0 .. 1] of Single;
@@ -702,7 +702,7 @@ type
 type
   pCvRect = ^TCvRect;
 
-  TCvRect = packed record
+  TCvRect = record
     x: Integer;
     y: Integer;
     width: Integer;
@@ -722,7 +722,7 @@ const
 type
   pCvTermCriteria = ^TCvTermCriteria;
 
-  TCvTermCriteria = packed record
+  TCvTermCriteria = record
     cType: Integer; (*may be combination of*)
     max_iter: Integer;
     epsilon: Double;
@@ -733,7 +733,7 @@ type
 type
   pCvPoint = ^TCvPoint;
 
-  TCvPoint = packed record
+  TCvPoint = record
     x: Integer;
     y: Integer;
   end;
@@ -743,14 +743,14 @@ type
 
   pCvPoint2D32f = ^TCvPoint2D32f;
 
-  TCvPoint2D32f = packed record
+  TCvPoint2D32f = record
     x: Single;
     y: Single;
   end;
 
   pCvPoint3D32f = ^TCvPoint3D32f;
 
-  TCvPoint3D32f = packed record
+  TCvPoint3D32f = record
     x: Single;
     y: Single;
     z: Single;
@@ -759,12 +759,12 @@ type
 function cvPoint3D32f(const x, y, z: Double): TCvPoint3D32f; inline;
 
 Type
-  TCvPoint2D64f = packed record
+  TCvPoint2D64f = record
     x: Double;
     y: Double;
   end;
 
-  TCvPoint3D64f = packed record
+  TCvPoint3D64f = record
     x: Double;
     y: Double;
     z: Double;
@@ -778,7 +778,7 @@ Const
 type
   pCvSize = ^TCvSize;
 
-  TCvSize = packed record
+  TCvSize = record
     width: Integer;
     height: Integer;
   end;
@@ -789,14 +789,14 @@ const
 Type
   pCvSize2D32f = ^TCvSize2D32f;
 
-  TCvSize2D32f = packed record
+  TCvSize2D32f = record
     width: Single;
     height: Single;
   end;
 
   pCvBox2D = ^TCvBox2D;
 
-  TCvBox2D = packed record
+  TCvBox2D = record
     center: TCvPoint2D32f; (*Center of the box.*)
     size: TCvSize2D32f; (*Box width and length.*)
     angle: Single; (*Angle between the horizontal axis*)
@@ -815,7 +815,7 @@ Type
 
   (*Line iterator state:*)
 type
-  TCvLineIterator = packed record
+  TCvLineIterator = record
     ptr: ^uchar;
     err: Integer;
     plus_delta: Integer;
@@ -827,7 +827,7 @@ type
   (************************************* CvSlice ******************************************)
 
 type
-  TCvSlice = packed record
+  TCvSlice = record
     start_index, end_index: Integer;
   end;
 
@@ -841,7 +841,7 @@ const
 type
   pCvScalar = ^TCvScalar;
 
-  TCvScalar = packed record
+  TCvScalar = record
     val: array [0 .. 3] of Double;
   end;
 
@@ -852,7 +852,7 @@ type
 type
   pCvMemBlock = ^TCvMemBlock;
 
-  TCvMemBlock = packed record
+  TCvMemBlock = record
     prev: pCvMemBlock;
     next: pCvMemBlock;
   end;
@@ -864,7 +864,7 @@ const
 type
   pCvMemStorage = ^TCvMemStorage;
 
-  TCvMemStorage = packed record
+  TCvMemStorage = record
     signature: Integer;
     bottom: pCvMemBlock;
     top: pCvMemBlock; (*First allocated block.*)
@@ -877,7 +877,7 @@ type
 type
   pCvMemStoragePos = ^TCvMemStoragePos;
 
-  TCvMemStoragePos = packed record
+  TCvMemStoragePos = record
     top: pCvMemBlock;
     free_space: Integer;
   end;
@@ -886,7 +886,7 @@ type
 type
   pCvSeqBlock = ^TCvSeqBlock;
 
-  TCvSeqBlock = packed record
+  TCvSeqBlock = record
     prev: pCvSeqBlock; (*Previous sequence block.*)
     next: pCvSeqBlock; (*Next sequence block.*)
     start_index: Integer; (*Index of the first element in the block +*)
@@ -898,7 +898,7 @@ type
   pCvSeqArray = array [0 .. 1] of pCvSeq;
   ppCvSeq = ^pCvSeqArray;
 
-  TCvSeq = packed record
+  TCvSeq = record
     flags: Integer; (*Miscellaneous flags.*)
     header_size: Integer; (*Size of sequence header.*)
     h_prev: pCvSeq; (*Previous sequence.*)
@@ -927,7 +927,7 @@ const
 type
   pCvContour = ^TCvContour;
 
-  TCvContour = packed record
+  TCvContour = record
     flags: Integer; // micsellaneous flags
     header_size: Integer; // size of sequence header
     h_prev: pCvArr; // previous sequence
@@ -957,14 +957,14 @@ type
 type
   pCvSetElem = ^TCvSetElem;
 
-  TCvSetElem = packed record
+  TCvSetElem = record
     flags: Integer;
     next_free: pCvSetElem;
   end;
 
   pCvSet = ^TCvSet;
 
-  TCvSet = packed record
+  TCvSet = record
     flags: Integer; (*Miscellaneous flags.*)
     header_size: Integer; (*Size of sequence header.*)
     h_prev: pCvSeq; (*Previous sequence.*)
@@ -1005,7 +1005,7 @@ const
 type
   pCvSparseMat = ^TCvSparseMat;
 
-  TCvSparseMat = packed record
+  TCvSparseMat = record
     cType: Integer;
     dims: Integer;
     refcount: ^Integer;
@@ -1028,14 +1028,14 @@ type
   // **************** iteration through a sparse array *****************
   pCvSparseNode = ^TCvSparseNode;
 
-  TCvSparseNode = packed record
+  TCvSparseNode = record
     hashval: Cardinal;
     next: pCvSparseNode;
   end;
 
   pCvSparseMatIterator = ^TCvSparseMatIterator;
 
-  TCvSparseMatIterator = packed record
+  TCvSparseMatIterator = record
     Mat: pCvSparseMat;
     node: pCvSparseNode;
     curidx: Integer;
@@ -1081,19 +1081,19 @@ type
   //
   // type
   //
-  // = packed record
+  // = record
   // end;
   // CvGraphEdge;
   //
   // type
   //
-  // = packed record
+  // = record
   // end;
   // CvGraphVtx;
   //
   // type
   //
-  // = packed record ptr: ^CvPoint2D32f;
+  // = record ptr: ^CvPoint2D32f;
   // end;
   // CvGraphVtx2D;
   //
@@ -1107,7 +1107,7 @@ type
   //
   // type
   //
-  // = packed record
+  // = record
   // end;
   // CvGraph;
   //
@@ -1119,7 +1119,7 @@ type
 
 type
 
-  TCvChain = packed record
+  TCvChain = record
     origin: TCvPoint;
   end;
 
@@ -1132,7 +1132,7 @@ type
   //
   // type
   //
-  // = packed record
+  // = record
   // end;
   // CvContour;
   //
@@ -1311,7 +1311,7 @@ function CV_IS_SEQ_HOLE(const Seq: pCvSeq): Boolean; inline;
 type
   pCvSeqWriter = ^TCvSeqWriter;
 
-  TCvSeqWriter = packed record
+  TCvSeqWriter = record
     header_size: Integer;
     Seq: pCvSeq; // * the sequence written */
     block: pCvSeqBlock; // * current block */
@@ -1322,7 +1322,7 @@ type
 
   pCvSeqReader = ^TCvSeqReader;
 
-  TCvSeqReader = packed record
+  TCvSeqReader = record
     header_size: Integer;
     Seq: pCvSeq; // * sequence, beign read */
     block: pCvSeqBlock; // * current block */
@@ -1435,7 +1435,7 @@ procedure CV_READ_SEQ_ELEM(const Elem: Pointer; const Reader: TCvSeqReader; cons
 type
   pCvFileStorage = ^TCvFileStorage;
 
-  TCvFileStorage = packed record
+  TCvFileStorage = record
   end;
 
   (*Storage flags:*)
@@ -1466,7 +1466,7 @@ type
 
   pCvAttrList = ^TCvAttrList;
 
-  TCvAttrList = packed record
+  TCvAttrList = record
     attr: ppCVChar;
     (*NULL-terminated array of (attribute_name,attribute_value) pairs.*)
     next: pCvAttrList; (*Pointer to next chunk of the attributes list.*)
@@ -1506,7 +1506,7 @@ Type
 
   pCvString = ^TCvString;
 
-  TCvString = packed record
+  TCvString = record
     len: Integer;
     ptr: pCVChar;
   end;
@@ -1516,7 +1516,7 @@ Type
 
   pCvFileNodeHash = Pointer;
 
-  TCvFileNode = packed record
+  TCvFileNode = record
     tag: Integer;
     info: pCvTypeInfo;
     case Integer of
@@ -1544,7 +1544,7 @@ Type
   // typedef void* (CV_CDECL *CvCloneFunc)( const void* struct_ptr );
   TCvCloneFunc = function(const struct_ptr: pPointer): Pointer; cdecl;
 
-  TCvTypeInfo = packed record
+  TCvTypeInfo = record
     flags: Integer;
     header_size: Integer;
     prev: pCvTypeInfo;
@@ -1626,7 +1626,7 @@ const
 
 type
 
-  CvString = packed record
+  CvString = record
     len: Integer;
     ptr: pCVChar;
   end;
@@ -1643,7 +1643,7 @@ type
   // CvString str;
   //
   // type
-  // CvStringHashNode * next = packed record
+  // CvStringHashNode * next = record
   // end;
   // end;
   // CvStringHashNode;
@@ -1664,7 +1664,7 @@ type
   // type
   //
   // procedure(CV_CDECL * CvWriteFunc(
-  // CvFileStorage * storage, PCVChar name, Pointer type struct_ptr, CvAttrList attributes) = packed record) =
+  // CvFileStorage * storage, PCVChar name, Pointer type struct_ptr, CvAttrList attributes) = record) =
   // : ptr; end;
   // {$ENDIF}
   // type CvTypeInfo
@@ -1673,27 +1673,27 @@ type
   //
   // begin Integer flags; Integer header_size;
   //
-  // type CvTypeInfo * prev = packed record end;
+  // type CvTypeInfo * prev = record end;
   //
-  // type CvTypeInfo * next = packed record end; PCVChar type_name; CvIsInstanceFunc is_instance;
+  // type CvTypeInfo * next = record end; PCVChar type_name; CvIsInstanceFunc is_instance;
   // CvReleaseFunc release; CvReadFunc read; CvWriteFunc write; CvCloneFunc clone; end; CvTypeInfo;
   //
   // (* *** System data types ***** *)
   //
   // type
   //
-  // = packed record func_addr: ^Pointer; default_func_addr: Pointer; func_names: PCVChar;
+  // = record func_addr: ^Pointer; default_func_addr: Pointer; func_names: PCVChar;
   // search_modules: Integer; loaded_from: Integer; end; CvPluginFuncInfo;
   //
   // type CvModuleInfo
   //
   // begin
   //
-  // type CvModuleInfo * next = packed record end; CvModuleInfo
+  // type CvModuleInfo * next = record end; CvModuleInfo
   //
   // begin
   //
-  // type CvModuleInfo * next = packed record end; PCVChar name; PCVChar version; CvPluginFuncInfo * func_tab;
+  // type CvModuleInfo * next = record end; PCVChar name; PCVChar version; CvPluginFuncInfo * func_tab;
   // end; CvModuleInfo;
   //
   (*__OPENCV_CORE_TYPES_H__*/
@@ -2560,7 +2560,7 @@ end;
 function CV_IMAGE_ELEM(image: pIplImage; size_elemtype, row, col: Integer): Pointer; inline;
 begin
   // (((elemtype*)((image)->imageData + (image)->widthStep*(row)))[(col)])
-  Result := image^.imageData + image^.widthStep * row + col * size_elemtype;
+  Result := pByte(image^.imageData) + image^.widthStep * row + col * size_elemtype;
 end;
 
 function cvRealScalar(val0: Double): TCvScalar; inline;

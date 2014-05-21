@@ -754,7 +754,7 @@ type
 
 
 {$IFDEF FPC}
-  TRect = packed record
+  TRect = record
     Left, Top, Right, Bottom: Longint;
   end;
 {$ENDIF}
@@ -775,7 +775,7 @@ type
   {$IFDEF DGL_WIN}
     PWGLSwap = ^TWGLSwap;
     {$EXTERNALSYM _WGLSWAP}
-      _WGLSWAP = packed record
+      _WGLSWAP = record
         hdc: HDC;
         uiFlags: UINT;
       end;
