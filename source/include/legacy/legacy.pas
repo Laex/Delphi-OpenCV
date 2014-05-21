@@ -3234,7 +3234,7 @@ function cvSubdiv2DEdgeDst(edge: TCvSubdiv2DEdge): pCvSubdiv2DPoint; // inline;
 Type
   pCvStereoGCState = ^TCvStereoGCState;
 
-  TCvStereoGCState = packed record
+  TCvStereoGCState = record
     Ithreshold: Integer;
     interactionRadius: Integer;
     K, lambda, lambda1, lambda2: Single;
@@ -3336,7 +3336,7 @@ Type
   TCvUpdateBGStatModel = function(curr_frame: pIplImage; bg_model: pCvBGStatModel; learningRate: double)
     : Integer; cdecl;
 
-  TCvBGStatModel = packed record
+  TCvBGStatModel = record
     _type: Integer; // *type of BG model
     release: TCvReleaseBGStatModel;
     update: TCvUpdateBGStatModel;
@@ -3425,7 +3425,7 @@ const
 Type
   pCvFGDStatModelParams = ^TCvFGDStatModelParams;
 
-  TCvFGDStatModelParams = packed record
+  TCvFGDStatModelParams = record
     Lc: Integer;  // Quantized levels per 'color' component. Power of two, typically 32, 64 or 128.
     N1c: Integer; // Number of color vectors used to model normal background color variation at a given pixel.
     N2c: Integer; // Number of color vectors retained at given pixel.  Must be > N1c, typically ~ 5/3 of N1c.
@@ -3512,7 +3512,7 @@ const
 type
   pCvGaussBGStatModelParams = ^TCvGaussBGStatModelParams;
 
-  TCvGaussBGStatModelParams = packed record
+  TCvGaussBGStatModelParams = record
     win_size: Integer; // * = 1/alpha
     n_gauss: Integer;
     bg_threshold, std_threshold, minArea: double;
@@ -3521,7 +3521,7 @@ type
 
   pCvGaussBGValues = ^TCvGaussBGValues;
 
-  TCvGaussBGValues = packed record
+  TCvGaussBGValues = record
     match_sum: Integer;
     weight: double;
     variance: array [0 .. CV_BGFG_MOG_NCOLORS - 1] of double;
@@ -3530,13 +3530,13 @@ type
 
   pCvGaussBGPoint = ^TCvGaussBGPoint;
 
-  TCvGaussBGPoint = packed record
+  TCvGaussBGPoint = record
     g_values: pCvGaussBGValues;
   end;
 
   pCvGaussBGModel = ^TCvGaussBGModel;
 
-  TCvGaussBGModel = packed record
+  TCvGaussBGModel = record
     // CV_BG_STAT_MODEL_FIELDS();
     _type: Integer; // type of BG model
     release: TCvReleaseBGStatModel;
@@ -3561,7 +3561,7 @@ function cvCreateGaussianBGModel(first_frame: pIplImage; parameters: pCvGaussBGS
 type
   pCvBGCodeBookElem = ^TCvBGCodeBookElem;
 
-  TCvBGCodeBookElem = packed record
+  TCvBGCodeBookElem = record
     next: pCvBGCodeBookElem;
     tLastUpdate: Integer;
     stale: Integer;
@@ -3573,7 +3573,7 @@ type
 
   pCvBGCodeBookModel = ^TCvBGCodeBookModel;
 
-  TCvBGCodeBookModel = packed record
+  TCvBGCodeBookModel = record
     size: TCvSize;
     T: Integer;
     cbBounds: array [0 .. 2] of byte;

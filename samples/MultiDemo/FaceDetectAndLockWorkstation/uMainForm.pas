@@ -16,7 +16,7 @@ const
 
 type
   pCtx = ^TCtx;
-  TCtx = packed record
+  TCtx = record
     MyCapture: pCvCapture;       // Capture handle
     MyInputImage: pIplImage;     // Input image
     MyStorage: pCvMemStorage;    // Memory storage

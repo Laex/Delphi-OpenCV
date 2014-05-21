@@ -161,9 +161,9 @@ begin
       begin
         for j := 0 to _Grab^.Width - 1 do
         begin
-          App[_Grab^.Width * 3 * (_Grab^.Height - i - 1) + j * 3] := _Grab^.imageData[_Grab^.Width * (i) + j];
-          App[_Grab^.Width * 3 * (_Grab^.Height - i - 1) + j * 3 + 1] := _Grab^.imageData[_Grab^.Width * (i) + j];
-          App[_Grab^.Width * 3 * (_Grab^.Height - i - 1) + j * 3 + 2] := _Grab^.imageData[_Grab^.Width * (i) + j];
+          App[_Grab^.Width * 3 * (_Grab^.Height - i - 1) + j * 3] := pByte(_Grab^.imageData)[_Grab^.Width * (i) + j];
+          App[_Grab^.Width * 3 * (_Grab^.Height - i - 1) + j * 3 + 1] := pByte(_Grab^.imageData)[_Grab^.Width * (i) + j];
+          App[_Grab^.Width * 3 * (_Grab^.Height - i - 1) + j * 3 + 2] := pByte(_Grab^.imageData)[_Grab^.Width * (i) + j];
         end;
       end;
 
@@ -173,7 +173,7 @@ begin
     begin
       for i := 0 to _Grab^.Height - 1 do
       begin
-        CopyMemory(App + _Grab^.Width * 3 * (_Grab^.Height - i - 1), _Grab^.imageData + _Grab^.Width * 3 * i, _Grab^.Width * 3);
+        CopyMemory(App + _Grab^.Width * 3 * (_Grab^.Height - i - 1), pByte(_Grab^.imageData) + _Grab^.Width * 3 * i, _Grab^.Width * 3);
         // Копируем память
       end;
 

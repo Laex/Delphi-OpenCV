@@ -668,7 +668,7 @@ Type
 type
   pCvSURFPoint = ^TCvSURFPoint;
 
-  TCvSURFPoint = packed record
+  TCvSURFPoint = record
     pt: TCvPoint2D32f;
     laplacian: Integer;
     size: Integer;
@@ -694,7 +694,7 @@ type
 type
   pCvSURFParams = ^TCvSURFParams;
 
-  TCvSURFParams = packed record
+  TCvSURFParams = record
     extended: Integer;
     upright: Integer;
     hessianThreshold: double;

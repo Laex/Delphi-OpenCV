@@ -129,7 +129,7 @@ interface
 Type
 //typedef struct SwrContext SwrContext;
 pSwrContext = ^TSwrContext;
-TSwrContext = packed record
+TSwrContext = record
 
 end;
 
