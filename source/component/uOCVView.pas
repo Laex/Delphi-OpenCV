@@ -56,10 +56,14 @@ type
     FOnAfterPaint: TOnOcvNotify;
     FOnBeforePaint: TOnOcvNotify;
     FCanvas: TCanvas;
+    FStretch: Boolean;
+    FProportional: Boolean;
+    FCenter: Boolean;
     procedure WMEraseBkgnd(var Message: TWMEraseBkgnd); message WM_ERASEBKGND;
     procedure WMPaint(var Message: TWMPaint); message WM_PAINT;
     procedure SetOpenCVVideoSource(const Value: IocvDataSource);
     function isSourceEnabled: Boolean;
+    function PaintRect: TRect;
   protected
     procedure TakeImage(const IplImage: IocvImage);
     procedure SetVideoSource(const Value: TObject);
@@ -70,6 +74,9 @@ type
     property Canvas: TCanvas read FCanvas;
   published
     property VideoSource: IocvDataSource Read FocvVideoSource write SetOpenCVVideoSource;
+    property Proportional: Boolean read FProportional write FProportional default False;
+    property Stretch: Boolean read FStretch write FStretch default True;
+    property Center: Boolean read FCenter write FCenter default False;
     property Align;
     property OnAfterPaint: TOnOcvNotify read FOnAfterPaint write FOnAfterPaint;
     property OnBeforePaint: TOnOcvNotify read FOnBeforePaint write FOnBeforePaint;
@@ -100,6 +107,9 @@ begin
   inherited;
   FCanvas := TControlCanvas.Create;
   TControlCanvas(FCanvas).Control := Self;
+  Stretch := True;
+  Proportional := False;
+  Center := False;
 end;
 
 destructor TocvView.Destroy;
@@ -139,6 +149,60 @@ begin
     DrawImage(IplImage);
 end;
 
+function TocvView.PaintRect: TRect;
+var
+  w, h, cw, ch: Integer;
+  xyaspect: Double;
+begin
+  w := FImage.IpImage^.Width;
+  h := FImage.IpImage^.Height;
+  cw := ClientWidth;
+  ch := ClientHeight;
+  if Stretch or (Proportional and ((w > cw) or (h > ch))) then
+  begin
+    if Proportional and (w > 0) and (h > 0) then
+    begin
+      xyaspect := w / h;
+      if w > h then
+      begin
+        w := cw;
+        h := Trunc(cw / xyaspect);
+        if h > ch then  // woops, too big
+        begin
+          h := ch;
+          w := Trunc(ch * xyaspect);
+        end;
+      end
+      else
+      begin
+        h := ch;
+        w := Trunc(ch * xyaspect);
+        if w > cw then  // woops, too big
+        begin
+          w := cw;
+          h := Trunc(cw / xyaspect);
+        end;
+      end;
+    end
+    else
+    begin
+      w := cw;
+      h := ch;
+    end;
+  end;
+
+  with Result do
+  begin
+    Left := 0;
+    Top := 0;
+    Right := w;
+    Bottom := h;
+  end;
+
+  if Center then
+    OffsetRect(Result, (cw - w) div 2, (ch - h) div 2);
+end;
+
 function TocvView.isSourceEnabled: Boolean;
 begin
   Result := (Assigned(VideoSource) and (VideoSource.Enabled)) or Assigned(FImage);
@@ -168,7 +232,7 @@ begin
         try
           if Assigned(OnBeforePaint) then
             OnBeforePaint(Self, FImage);
-          if ipDraw(DC, FImage.IpImage, ClientRect) then
+          if ipDraw(DC, FImage.IpImage, PaintRect) then
             if Assigned(OnAfterPaint) then
               OnAfterPaint(Self, FImage);
         finally

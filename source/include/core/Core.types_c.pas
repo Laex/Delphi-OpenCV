@@ -379,7 +379,7 @@ type
     imageId: Pointer; (*"           "*)
     tileInfo: pIplTileInfo; (*"           "*)
     imageSize: Integer; (*Image data size in bytes*)
-    imageData: Pointer;//pByte; (*Pointer to aligned image data.*)
+    imageData: pByte; (*Pointer to aligned image data.*)
     widthStep: Integer; (*Size of aligned image row in bytes.*)
     BorderMode: array [0 .. 3] of Integer; (*Ignored by OpenCV.*)
     BorderConst: array [0 .. 3] of Integer; (*Ditto.*)

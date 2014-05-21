@@ -63,10 +63,11 @@ object MainForm: TMainForm
   end
   object ocvw2: TocvView
     Left = 8
-    Top = 358
+    Top = 361
     Width = 300
     Height = 300
     VideoSource = ocvmgprtn1
+    Center = True
   end
   object ocvw3: TocvView
     Left = 316
@@ -102,18 +103,33 @@ object MainForm: TMainForm
   end
   object ocvmgprtn1: TocvImageOperation
     VideoSource = ocvcmrsrc1
-    OperationClassName = 'TocvMotionDetect'
-    Operation.OperationClassName = 'TocvThresholdOperation'
-    Operation.RemoveSmallObject = True
-    Operation.MinObjectSize = 100
-    Operation.Threshold.MaxValue = 255.000000000000000000
-    Operation.Threshold.Threshold = 25.000000000000000000
-    Operation.DrawMotionRect.Thickness = 1
-    Operation.DrawMotionRect.Offset.X = 0
-    Operation.DrawMotionRect.Offset.Y = 0
-    Operation.NotifyOnlyWhenFound = False
-    Operations = <>
-    OperationsEnabled = False
+    OperationClassName = 'TocvNoneOperation'
+    Operations = <
+      item
+        OperationClassName = 'TocvHaarCascade'
+        Operation.Equalize = True
+        Operation.Scale = 1.300000000000000000
+        Operation.MinNeighbors = 3
+        Operation.MinSize.X = 30
+        Operation.MinSize.Y = 30
+        Operation.MaxSize.X = 0
+        Operation.MaxSize.Y = 0
+        Operation.DrawHaarCascade.Enabled = False
+        Operation.DrawHaarCascade.Thickness = 1
+        Operation.DrawHaarCascade.Offset.X = 0
+        Operation.DrawHaarCascade.Offset.Y = 0
+        Operation.NotifyOnlyWhenFound = False
+      end
+      item
+        OperationClassName = 'TovcCropOperation'
+        Operation.CropRect.Left = 0
+        Operation.CropRect.Top = 0
+        Operation.CropRect.Bottom = 0
+        Operation.CropRect.Right = 0
+        Operation.CropRect.Width = 0
+        Operation.CropRect.Height = 0
+      end>
+    OnAfterEachOperation = ocvmgprtn1AfterEachOperation
     Left = 36
     Top = 392
   end
@@ -125,7 +141,7 @@ object MainForm: TMainForm
   end
   object ocvcmrsrc1: TocvCameraSource
     Enabled = True
-    Resolution = r960x544
+    Resolution = r320x240
     Left = 32
     Top = 40
   end
