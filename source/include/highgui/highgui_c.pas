@@ -326,7 +326,7 @@ function cvWaitKey(delay: Integer = 0): Integer; cdecl;
 
 type
   (* "black box" capture structure *)
-  TCvCapture = packed record
+  TCvCapture = record
   end;
 
   pCvCapture = ^TCvCapture;

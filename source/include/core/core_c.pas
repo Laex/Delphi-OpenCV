@@ -1157,7 +1157,7 @@ const
 type
   pCvFont = ^TCvFont;
 
-  TCvFont = packed record
+  TCvFont = record
     nameFont: pCvChar;
     color: TCvScalar;
     font_face: Integer;
@@ -1205,7 +1205,7 @@ procedure cvDrawContours(img: pIplImage; contour: pCvSeq; external_color, hole_c
 Type
   pCvTreeNodeIterator = ^TCvTreeNodeIterator;
 
-  TCvTreeNodeIterator = packed record
+  TCvTreeNodeIterator = record
     node: Pointer; // const void* node;
     level: Integer; // int level;
     max_level: Integer; // int max_level;

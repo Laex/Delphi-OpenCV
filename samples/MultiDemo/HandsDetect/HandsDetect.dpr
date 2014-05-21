@@ -44,7 +44,7 @@ const
 type
   pCtx = ^TCtx;
 
-  TCtx = packed record
+  TCtx = record
     capture: pCvCapture; // Capture handle
     image: pIplImage; // Input image
     thr_image: pIplImage; // After filtering and thresholding

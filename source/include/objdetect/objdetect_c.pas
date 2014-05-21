@@ -115,12 +115,12 @@ const
 Type
   pCvHaarFeature = ^TCvHaarFeature;
 
-  TCvHaarFeatureRect = packed record
+  TCvHaarFeatureRect = record
     r: TCvRect;
     weight: Float;
   end;
 
-  TCvHaarFeature = packed record
+  TCvHaarFeature = record
     tilted: Integer; // int tilted;
     // struct
     // {
@@ -132,7 +132,7 @@ Type
 
   pCvHaarClassifier = ^TCvHaarClassifier;
 
-  TCvHaarClassifier = packed record
+  TCvHaarClassifier = record
     count: Integer; // int count;
     haar_feature: pCvHaarFeature; // CvHaarFeature* haar_feature;
     threshold: pFloat; // float* threshold;
@@ -143,7 +143,7 @@ Type
 
   pCvHaarStageClassifier = ^TCvHaarStageClassifier;
 
-  TCvHaarStageClassifier = packed record
+  TCvHaarStageClassifier = record
     count: Integer; // int  count;
     threshold: Float; // float threshold;
     classifier: pCvHaarClassifier; // CvHaarClassifier* classifier;
@@ -153,7 +153,7 @@ Type
   end;
 
   // typedef struct CvHidHaarClassifierCascade CvHidHaarClassifierCascade;
-  TCvHidHaarClassifierCascade = packed record
+  TCvHidHaarClassifierCascade = record
 
   end;
 
@@ -162,7 +162,7 @@ Type
   pCvHaarClassifierCascade = ^TCvHaarClassifierCascade;
 
   // typedef struct CvHaarClassifierCascade
-  TCvHaarClassifierCascade = packed record
+  TCvHaarClassifierCascade = record
     flags: Integer; // int  flags;
     count: Integer; // int  count;
     orig_window_size: TCvSize; // CvSize orig_window_size;
@@ -225,7 +225,7 @@ function cvHaarDetectObjects(const image: pCvArr; cascade: pCvHaarClassifierCasc
 type
   pCvLSVMFilterPosition = ^TCvLSVMFilterPosition;
 
-  TCvLSVMFilterPosition = packed record
+  TCvLSVMFilterPosition = record
     x: Integer;
     y: Integer;
     l: Integer;
@@ -251,7 +251,7 @@ Type
   TpCvLSVMFilterObject = array [0 .. 1] of pCvLSVMFilterObject;
   ppCvLSVMFilterObject = ^TpCvLSVMFilterObject;
 
-  TCvLSVMFilterObject = packed record
+  TCvLSVMFilterObject = record
     V: TCvLSVMFilterPosition;
     fineFunction: array [0 .. 3] of single;
     sizeX: Integer;
@@ -271,7 +271,7 @@ Type
 Type
   pCvLatentSvmDetector = ^TCvLatentSvmDetector;
 
-  TCvLatentSvmDetector = packed record
+  TCvLatentSvmDetector = record
     num_filters: Integer;
     num_components: Integer;
     num_part_filters: pInteger;
@@ -286,7 +286,7 @@ Type
   // score                - confidence level
   pCvObjectDetection = ^TCvObjectDetection;
 
-  TCvObjectDetection = packed record
+  TCvObjectDetection = record
     rect: TCvRect;
     score: single;
   end;
