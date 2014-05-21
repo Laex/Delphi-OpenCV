@@ -454,7 +454,7 @@ type
 
   pCvContourInfo = ^TCvContourInfo;
 
-  TCvContourInfo = packed record
+  TCvContourInfo = record
     flags: Integer;
     next: pCvContourInfo; // next contour with the same mark value */
     parent: pCvContourInfo; // information about parent contour */
@@ -470,7 +470,7 @@ type
   *)
   pCvContourScanner = ^TCvContourScanner;
 
-  TCvContourScanner = packed record
+  TCvContourScanner = record
     storage1: pCvMemStorage; // contains fetched contours */
     storage2: pCvMemStorage; // contains approximated contours
     // (! = storage1 if approx_method2 ! = approx_method1) * / cinfo_storage: pCvMemStorage;

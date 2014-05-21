@@ -109,7 +109,7 @@ Type
   Tsqsumtype = Double;
   psqsumtype = ^Tsqsumtype;
 
-  TCvHidHaarFeatureRect = packed record
+  TCvHidHaarFeatureRect = record
     p0, p1, p2, p3: pSumType;
   end;
 
@@ -117,7 +117,7 @@ Type
 
   pCvHidHaarTreeNode = ^TCvHidHaarTreeNode;
 
-  TCvHidHaarTreeNode = packed record
+  TCvHidHaarTreeNode = record
     feature: TCvHidHaarFeature;
     threshold: Single;
     left: integer;
@@ -126,7 +126,7 @@ Type
 
   pCvHidHaarClassifier = ^TCvHidHaarClassifier;
 
-  TCvHidHaarClassifier = packed record
+  TCvHidHaarClassifier = record
     count: integer;
     // CvHaarFeature* orig_feature;
     node: pCvHidHaarTreeNode;
@@ -135,7 +135,7 @@ Type
 
   pCvHidHaarStageClassifier = ^TCvHidHaarStageClassifier;
 
-  TCvHidHaarStageClassifier = packed record
+  TCvHidHaarStageClassifier = record
     count: integer;
     threshold: Single;
     classifier: pCvHidHaarClassifier;
@@ -146,7 +146,7 @@ Type
     parent: pCvHidHaarStageClassifier;
   end;
 
-  TCvHidHaarClassifierCascade = packed record
+  TCvHidHaarClassifierCascade = record
     count: integer;
     isStumpBased: integer;
     has_tilted_features: integer;

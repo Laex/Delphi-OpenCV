@@ -104,7 +104,7 @@ uses
 type
   pCvConnectedComp = ^TCvConnectedComp;
 
-  TCvConnectedComp = packed record
+  TCvConnectedComp = record
     area: Double;     (* area of the connected component *)
     value: TCvScalar; (* average color of the connected component *)
     rect: TCvRect;    (* ROI of the component *)
@@ -344,7 +344,7 @@ const
 type
   pCvMoments = ^TCvMoments;
 
-  TCvMoments = packed record
+  TCvMoments = record
     m00, m10, m01, m20, m11, m02, m30, m21, m12, m03: Double; (* spatial moments *)
     mu20, mu11, mu02, mu30, mu21, mu12, mu03: Double;         (* central moments *)
     inv_sqrt_m00: Double;                                     (* m00 != 0 ? 1/sqrt(m00) : 0 *)
@@ -352,7 +352,7 @@ type
 
   (* Hu invariants *)
 type
-  CvHuMoments = packed record
+  CvHuMoments = record
     hu1, hu2, hu3, hu4, hu5, hu6, hu7: Double; (* Hu invariants *)
   end;
 
@@ -390,7 +390,7 @@ const
 type
   // CvContourScanner = ^_CvContourScanner;
   (* Freeman chain reader state *)
-  CvChainPtReader = packed record
+  CvChainPtReader = record
     code: char;
     pt: TCvPoint;
     deltas: array [0 .. 7, 0 .. 1] of schar;
@@ -412,7 +412,7 @@ type
 
   pCvSubdiv2DPoint = ^TCvSubdiv2DPoint;
 
-  TCvSubdiv2DPoint = packed record
+  TCvSubdiv2DPoint = record
     flags: Integer;
     first: TCvSubdiv2DEdge;
     pt: TCvPoint2D32f;
@@ -427,7 +427,7 @@ Type
 
   pCvQuadEdge2D = ^TCvQuadEdge2D;
 
-  TCvQuadEdge2D = packed record
+  TCvQuadEdge2D = record
     flags: Integer;
     pt: array [0 .. 3] of pCvSubdiv2DPoint;
     next: array [0 .. 3] of TCvSubdiv2DEdge;
@@ -435,7 +435,7 @@ Type
 
   pCvSubdiv2D = ^TCvSubdiv2D;
 
-  TCvSubdiv2D = packed record
+  TCvSubdiv2D = record
     // CV_SUBDIV2D_FIELDS()
     // -CV_GRAPH_FIELDS()
     // --CV_SET_FIELDS()
@@ -501,7 +501,7 @@ const
 type
   pCvConvexityDefect = ^TCvConvexityDefect;
 
-  TCvConvexityDefect = packed record
+  TCvConvexityDefect = record
     start: PCvPoint;       (* point of the contour where the defect begins *)
     cend: PCvPoint;        (* point of the contour where the defect ends *)
     depth_point: PCvPoint; (* the farthest from the convex hull point within the defect *)
@@ -609,7 +609,7 @@ const
   // end;
   //
   // type
-  // CvLSHOperations = packed record
+  // CvLSHOperations = record
   // end;
 
   // {$IFDEF __cplusplus}

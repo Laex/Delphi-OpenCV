@@ -55,7 +55,7 @@ type
   ArrCvBox2D = Array of TCvBox2D;
   ArrDouble = Array of Double;
 
-  TCtx = packed record
+  TCtx = record
     MyCapture: pCvCapture; // Capture handle
     MyWriter: pCvVideoWriter; // Writer handle
     MyInputImage: pIplImage; // Input image

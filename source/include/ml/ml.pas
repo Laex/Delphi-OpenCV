@@ -706,14 +706,14 @@ Type
   // #define CV_DTREE_CAT_DIR(idx,subset) \
   // (2*((subset[(idx)>>5]&(1 << ((idx) & 31)))==0)-1)
 Type
-  TOrd = packed record
+  TOrd = record
     c: float;
     split_point: Integer;
   end;
 
   pCvDTreeSplit = ^TCvDTreeSplit;
 
-  TCvDTreeSplit = packed record // struct CvDTreeSplit
+  TCvDTreeSplit = record // struct CvDTreeSplit
     var_idx: Integer; // int var_idx;
     condensed_idx: Integer; // int condensed_idx;
     inversed: Integer; // int inversed;
@@ -738,7 +738,7 @@ Type
 
   pCvDTreeNode = ^TCvDTreeNode;
 
-  TCvDTreeNode = packed record // struct CvDTreeNode
+  TCvDTreeNode = record // struct CvDTreeNode
     class_idx: Integer; // int class_idx;
     Tn: Integer; // int Tn;
     value: Double; // double value;
@@ -772,7 +772,7 @@ Type
     procedure set_num_valid(vi: Integer; n: Integer);
   end;
 
-  TCvDTreeParams = packed record // struct CV_EXPORTS_W_MAP CvDTreeParams
+  TCvDTreeParams = record // struct CV_EXPORTS_W_MAP CvDTreeParams
     max_categories: Integer; // CV_PROP_RW int   max_categories                      ;
     max_depth: Integer; // CV_PROP_RW int   max_depth                           ;
     min_sample_count: Integer; // CV_PROP_RW int   min_sample_count                    ;
