@@ -50,6 +50,8 @@ type
     procedure chk1Click(Sender: TObject);
     procedure chk2Click(Sender: TObject);
     procedure chk3Click(Sender: TObject);
+    procedure ocvmgprtn1AfterEachOperation(PrevOperation, Operation, NextOperation: TObject; const IplImage: IocvImage;
+      var ContinueTransform: Boolean);
   private
   public
   end;
@@ -88,6 +90,19 @@ begin
   chk3.Checked := ocvflsrc1.Enabled;
   chk2.Checked := ocvpcmsrc1.Enabled;
   chk1.Checked := ocvcmrsrc1.Enabled;
+end;
+
+procedure TMainForm.ocvmgprtn1AfterEachOperation(PrevOperation, Operation, NextOperation: TObject; const IplImage: IocvImage;
+  var ContinueTransform: Boolean);
+Var
+  H: TocvRects;
+begin
+  if (Operation is TocvHaarCascade) and (NextOperation is TovcCropOperation) then
+  begin
+    H := (Operation as TocvHaarCascade).HaarRects;
+    if Length(H) > 0 then
+      (NextOperation as TovcCropOperation).CropRect.ocvRect := H[0];
+  end;
 end;
 
 end.

@@ -23,9 +23,7 @@
 // rights and limitations under the License.
 // *******************************************************************
 {$IFNDEF CLR}
-
 {$I OpenCV.inc}
-
 unit uOCVRegister;
 {$ENDIF}
 
@@ -39,11 +37,11 @@ Uses
 {$IFDEF CLR}
   Borland.Vcl.Design.DesignEditors, Borland.Vcl.Design.DesignIntf,
 {$ELSE}
-  {$IFDEF FPC}
-    PropEdits, ComponentEditors, LResources,
-  {$ELSE}
-    {$IFDEF VER6P}DesignIntf, System.Classes,{$ELSE}DsgnIntf, Classes,{$ENDIF VER6P}
-  {$ENDIF FPC}
+{$IFDEF FPC}
+  PropEdits, ComponentEditors, LResources,
+{$ELSE}
+{$IFDEF VER6P}DesignIntf, System.Classes, {$ELSE}DsgnIntf, Classes, {$ENDIF VER6P}
+{$ENDIF FPC}
 {$ENDIF}
   uOCVSource,
   uOCVView,
@@ -54,12 +52,15 @@ begin
   RegisterComponents('OpenCV', [TocvImageOperation, TocvCameraSource, TocvView, TocvFileSource, TocvIPCamSource]);
   RegisterClasses([TocvNoneOperation, TocvGrayScaleOperation, TovcCannyOperation, TovcSmoothOperation, TovcErodeOperation,
     TovcDilateOperation, TocvLaplaceOperation, TovcSobelOperation, TocvThresholdOperation, TocvAdaptiveThresholdOperation,
-    TocvContoursOperation, TocvRotateOperation, TocvAbsDiff, TocvHaarCascade, TocvMatchTemplate,TocvMotionDetect]);
+    TocvContoursOperation, TocvRotateOperation, TocvAbsDiff, TocvHaarCascade, TocvMatchTemplate, TocvMotionDetect,
+    TovcCropOperation]);
 end;
 
 {$IFDEF FPC}
+
 initialization
-  {$I OpenCV.lrs}
+
+{$I OpenCV.lrs}
 {$ENDIF FPC}
 
 end.

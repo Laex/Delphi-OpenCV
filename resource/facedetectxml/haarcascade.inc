@@ -23,5 +23,6 @@ FrontalFaceXML: array [TocvHaarCascadeType] of TocvHaarCascadeRecord =
 (Name: 'HPROFILEFACE'; FileName: 'haarcascade_profileface.xml'),
 (Name: 'HREYE2SPLITS'; FileName: 'haarcascade_righteye_2splits.xml'),
 (Name: 'HSMILE'; FileName: 'haarcascade_smile.xml'),
-(Name: 'HUPPERBODY'; FileName: 'haarcascade_upperbody.xml')
+(Name: 'HUPPERBODY'; FileName: 'haarcascade_upperbody.xml'),
+(Name: 'HRUSSIANPLATENUMBER'; FileName: 'haarcascade_russian_plate_number.xml')
 );

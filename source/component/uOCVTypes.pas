@@ -22,28 +22,26 @@
 // *******************************************************************
 
 {$IFNDEF CLR}
-
 {$I OpenCV.inc}
-
 unit uOCVTypes;
 {$ENDIF}
 
 interface
 
 Uses
-  {$IFDEF VER6P}
+{$IFDEF VER6P}
   System.SysUtils,
   System.Classes,
   System.Generics.Collections,
   System.Types,
   Vcl.Graphics,
-  {$ELSE}
+{$ELSE}
   SysUtils,
   Classes,
   Generics,
   Graphics,
-  {$IFNDEF VER5}Types,{$ENDIF VER5}
-  {$ENDIF VER6P}
+{$IFNDEF VER5}Types, {$ENDIF VER5}
+{$ENDIF VER6P}
   core.types_c;
 
 Type
@@ -81,9 +79,12 @@ Type
     property isGray: Boolean read GetisGray;
   end;
 
+  TOnOcvNotifyCollectionItem = procedure(PrevOperation, Operation, NextOperation: TObject; const IplImage: IocvImage;
+    Var ContinueTransform:Boolean) of object;
+
   TOnOcvNotify = procedure(Sender: TObject; const IplImage: IocvImage) of object;
   TOnOcvAfterTransform = TOnOcvNotify;
-  TOnOcvBeforeTransform = procedure(Sender: TObject; const IplImage: IocvImage; Var Transorm: Boolean) of object;
+  TOnOcvBeforeTransform = procedure(Sender: TObject; const IplImage: IocvImage; Var ContinueTransform: Boolean) of object;
   TOnOcvContour = procedure(Sender: TObject; const IplImage: IocvImage; const ContourCount: Integer; const Contours: pCvSeq)
     of object;
 
@@ -159,6 +160,7 @@ Type
   end;
 
 function ocvRect(Left, Top, Right, Bottom: Integer): TocvRect;
+function ocvRectCenter(cX, cY, Width, Height: Integer): TocvRect;
 
 implementation
 
@@ -173,6 +175,14 @@ begin
   Result.Top := Top;
   Result.Bottom := Bottom;
   Result.Right := Right;
+end;
+
+function ocvRectCenter(cX, cY, Width, Height: Integer): TocvRect;
+begin
+  Result.Left := cX - (Width div 2);
+  Result.Right := cX + (Width div 2);
+  Result.Top := cY - (Height div 2);
+  Result.Bottom := cY + (Height div 2);
 end;
 
 {TOpenCVDataSource}
