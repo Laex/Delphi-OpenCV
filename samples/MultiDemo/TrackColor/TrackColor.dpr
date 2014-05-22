@@ -29,11 +29,11 @@ program TrackColor;
 uses
   System.SysUtils,
   System.Math,
-  highgui_c,
-  core_c,
-  Core.types_c,
-  imgproc_c,
-  imgproc.types_c;
+  opencv.highgui_c,
+  opencv.core_c,
+  opencv.core.types_c,
+  opencv.imgproc_c,
+  opencv.imgproc.types_c;
 
 function GetThresholdedImage(img: pIplImage): pIplImage;
 Var

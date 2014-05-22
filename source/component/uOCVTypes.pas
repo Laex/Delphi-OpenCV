@@ -28,7 +28,7 @@ unit uOCVTypes;
 
 interface
 
-Uses
+uses
 {$IFDEF VER6P}
   System.SysUtils,
   System.Classes,
@@ -42,7 +42,7 @@ Uses
   Graphics,
 {$IFNDEF VER5}Types, {$ENDIF VER5}
 {$ENDIF VER6P}
-  core.types_c;
+  opencv.core.types_c;
 
 Type
   IocvImage = interface
@@ -165,9 +165,10 @@ function ocvRectCenter(cX, cY, Width, Height: Integer): TocvRect;
 implementation
 
 uses
-  core_c,
-  imgproc_c,
-  imgproc.types_c, highgui_c;
+  opencv.core_c,
+  opencv.imgproc_c,
+  opencv.imgproc.types_c,
+  opencv.highgui_c;
 
 function ocvRect(Left, Top, Right, Bottom: Integer): TocvRect;
 begin

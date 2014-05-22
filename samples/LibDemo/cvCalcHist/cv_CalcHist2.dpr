@@ -35,12 +35,12 @@ program cv_CalcHist2;
 uses
   WinApi.Windows,
   System.SysUtils,
-  highgui_c,
-  core_c,
-  Core.types_c,
-  imgproc_c,
-  imgproc.types_c,
-  cvUtils;
+  opencv.highgui_c,
+  opencv.core_c,
+  opencv.core.types_c,
+  opencv.imgproc_c,
+  opencv.imgproc.types_c,
+  opencv.cvutils;
 
 Const
   CAMERA_INDEX = CV_CAP_ANY;

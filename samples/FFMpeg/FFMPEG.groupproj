@@ -1,0 +1,72 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{494E9258-6938-4D18-843D-93EBD2FC9965}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="ffmpeg_sample_player\ffmpeg_sample_player.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="filtering_video\filtering_video.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="metadata\metadata.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="scaling_video\scaling_video.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="ffmpeg_sample_player">
+        <MSBuild Projects="ffmpeg_sample_player\ffmpeg_sample_player.dproj"/>
+    </Target>
+    <Target Name="ffmpeg_sample_player:Clean">
+        <MSBuild Projects="ffmpeg_sample_player\ffmpeg_sample_player.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="ffmpeg_sample_player:Make">
+        <MSBuild Projects="ffmpeg_sample_player\ffmpeg_sample_player.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="filtering_video">
+        <MSBuild Projects="filtering_video\filtering_video.dproj"/>
+    </Target>
+    <Target Name="filtering_video:Clean">
+        <MSBuild Projects="filtering_video\filtering_video.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="filtering_video:Make">
+        <MSBuild Projects="filtering_video\filtering_video.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="metadata">
+        <MSBuild Projects="metadata\metadata.dproj"/>
+    </Target>
+    <Target Name="metadata:Clean">
+        <MSBuild Projects="metadata\metadata.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="metadata:Make">
+        <MSBuild Projects="metadata\metadata.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="scaling_video">
+        <MSBuild Projects="scaling_video\scaling_video.dproj"/>
+    </Target>
+    <Target Name="scaling_video:Clean">
+        <MSBuild Projects="scaling_video\scaling_video.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="scaling_video:Make">
+        <MSBuild Projects="scaling_video\scaling_video.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="ffmpeg_sample_player;filtering_video;metadata;scaling_video"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="ffmpeg_sample_player:Clean;filtering_video:Clean;metadata:Clean;scaling_video:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="ffmpeg_sample_player:Make;filtering_video:Make;metadata:Make;scaling_video:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>

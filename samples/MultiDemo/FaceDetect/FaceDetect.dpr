@@ -35,13 +35,13 @@ uses
   System.Character,
   System.SysUtils,
   System.Math,
-  Core.types_c,
-  core_c,
-  highgui_c,
-  objdetect_c,
-  imgproc_c,
-  imgproc.types_c,
-  cvUtils,
+  opencv.core.types_c,
+  opencv.core_c,
+  opencv.highgui_c,
+  opencv.objdetect_c,
+  opencv.imgproc_c,
+  opencv.imgproc.types_c,
+  opencv.cvutils,
   uResourcePaths;
 
 Const

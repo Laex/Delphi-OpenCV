@@ -33,14 +33,14 @@ program cv_ExtractSURF;
 uses
   System.SysUtils,
   Winapi.Windows,
-  highgui_c,
-  core_c,
-  Core.types_c,
-  imgproc_c,
-  imgproc.types_c,
-  compat,
-  calib3d_c,
-  nonfree,
+  opencv.highgui_c,
+  opencv.core_c,
+  opencv.core.types_c,
+  opencv.imgproc_c,
+  opencv.imgproc.types_c,
+  opencv.compat,
+  opencv.calib3d_c,
+  opencv.nonfree,
   uResourcePaths;
 
 // cравнение двух оcобенноcтей

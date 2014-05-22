@@ -28,9 +28,9 @@ program cv_CreateCameraCapture;
 
 uses
   System.SysUtils,
-  highgui_c,
-  core_c,
-  Core.types_c,
+  opencv.highgui_c,
+  opencv.core_c,
+  opencv.core.types_c,
   uResourcePaths;
 
 var

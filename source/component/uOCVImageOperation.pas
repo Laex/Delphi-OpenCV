@@ -49,8 +49,8 @@ uses
   ZLib,
 {$ENDIF VER6P}
   uOCVTypes,
-  objdetect_c,
-  core.types_c;
+  opencv.objdetect_c,
+  opencv.core.types_c;
 
 type
 
@@ -638,11 +638,11 @@ implementation
 {$R haarcascade.rc haarcascade.res}
 {$R haarcascade.res}
 
-Uses
-  core_c,
-  imgproc_c,
-  imgproc.types_c,
-  cvUtils;
+uses
+  opencv.core_c,
+  opencv.imgproc_c,
+  opencv.imgproc.types_c,
+  opencv.cvutils;
 
 type
   TPersistentAccessProtected = class(TPersistent);
@@ -2157,7 +2157,7 @@ end;
 
 function TocvRectPersistent.GetCvRect: TCvRect;
 begin
-  Result := core.types_c.cvRect(Left, Top, Width, Height);
+  Result := opencv.core.types_c.cvRect(Left, Top, Width, Height);
 end;
 
 function TocvRectPersistent.GetHeight: Integer;

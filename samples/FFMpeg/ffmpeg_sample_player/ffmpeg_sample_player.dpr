@@ -9,33 +9,34 @@ uses
   System.SysUtils,
   System.Classes,
   SDL,
-  ffmpeglib in '..\..\ffmpeglib.pas',
-  ctypes in '..\..\..\ctypes\ctypes.pas',
-  avformat in '..\..\libavformat\avformat.pas',
-  avio in '..\..\libavformat\avio.pas',
-  avutil in '..\..\libavutil\avutil.pas',
-  buffer in '..\..\libavutil\buffer.pas',
-  dict in '..\..\libavutil\dict.pas',
-  frame in '..\..\libavutil\frame.pas',
-  log in '..\..\libavutil\log.pas',
-  opt in '..\..\libavutil\opt.pas',
-  pixfmt in '..\..\libavutil\pixfmt.pas',
-  rational in '..\..\libavutil\rational.pas',
-  samplefmt in '..\..\libavutil\samplefmt.pas',
-  parseutils in '..\..\libavutil\parseutils.pas',
-  swscale in '..\..\libswscale\swscale.pas',
-  pixdesc in '..\..\libavutil\pixdesc.pas',
-  imgutils in '..\..\libavutil\imgutils.pas',
-  mem in '..\..\libavutil\mem.pas',
-  error in '..\..\libavutil\error.pas',
-  avfilter in '..\..\libavfilter\avfilter.pas',
-  buffersink in '..\..\libavfilter\buffersink.pas',
-  mathematics in '..\..\libavutil\mathematics.pas',
-  libavcodec.avcodec in '..\..\libavcodec\libavcodec.avcodec.pas',
-  buffersrc in '..\..\libavfilter\buffersrc.pas',
-  errno in '..\..\libavutil\errno.pas';
+  ffmpeglib,
+  ffmpeg.ctypes,
+  ffmpeg.avformat,
+  ffmpeg.avio,
+  ffmpeg.avutil,
+  ffmpeg.buffer,
+  ffmpeg.dict,
+  ffmpeg.frame,
+  ffmpeg.log,
+  ffmpeg.opt,
+  ffmpeg.pixfmt,
+  ffmpeg.rational,
+  ffmpeg.samplefmt,
+  ffmpeg.parseutils,
+  ffmpeg.swscale,
+  ffmpeg.pixdesc,
+  ffmpeg.imgutils,
+  ffmpeg.mem,
+  ffmpeg.error,
+  ffmpeg.avfilter,
+  ffmpeg.buffersink,
+  ffmpeg.mathematics,
+  ffmpeg.libavcodec.avcodec,
+  ffmpeg.buffersrc,
+  ffmpeg.errno,
+  uResourcePaths;
 
-Var
+var
   err: Integer;
   filename: AnsiString;
   format_context: pAVFormatContext = nil;
@@ -52,14 +53,15 @@ Var
   rect: TSDL_Rect;
   event: TSDL_Event;
 
+const
+  std_filename = cResourceMedia + 'trailer.avi';
+
 begin
   try
-
     if (ParamCount < 1) then
-    begin
-      WriteLn(Format('Usage: %s filename', [ExtractFileName(ParamStr(0))]));
-      Halt;
-    end;
+      filename := std_filename
+    else
+      filename := ParamStr(1);
 
     // Register all available file formats and codecs
     av_register_all();
@@ -74,7 +76,6 @@ begin
     end;
 
     // Open video file
-    filename := ParamStr(1);
     err := avformat_open_input(format_context, PAnsiChar(filename), nil, nil);
     if (err < 0) then
     begin

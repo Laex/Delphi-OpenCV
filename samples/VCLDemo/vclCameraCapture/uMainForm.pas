@@ -46,7 +46,7 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
-  highgui_c, Vcl.ExtCtrls, Vcl.StdCtrls, Vcl.Samples.Spin;
+  opencv.highgui_c, Vcl.ExtCtrls, Vcl.StdCtrls, Vcl.Samples.Spin;
 
 type
   TMainForm = class(TForm)
@@ -79,7 +79,7 @@ implementation
 
 {$R *.dfm}
 
-Uses core.types_c, cvUtils;
+uses opencv.core.types_c, opencv.cvutils;
 
 procedure TMainForm.FormDestroy(Sender: TObject);
 begin

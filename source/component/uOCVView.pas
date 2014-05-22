@@ -45,7 +45,7 @@ uses
   Graphics,
 {$ENDIF VER6P}
   uOCVTypes,
-  core.types_c;
+  opencv.core.types_c;
 
 type
 
@@ -97,8 +97,8 @@ type
 
 implementation
 
-Uses
-  cvUtils;
+uses
+  opencv.cvutils;
 
 {TOpenCVView}
 

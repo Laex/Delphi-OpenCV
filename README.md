@@ -25,16 +25,6 @@ Add the search path for the modules of the project in Delphi IDE (Tools-Options-
 ```
 <PROJECT_ROOT>\source
 <PROJECT_ROOT>\source\include
-<PROJECT_ROOT>\source\include\calib3d
-<PROJECT_ROOT>\source\include\core
-<PROJECT_ROOT>\source\include\features2d
-<PROJECT_ROOT>\source\include\highgui
-<PROJECT_ROOT>\source\include\imgproc
-<PROJECT_ROOT>\source\include\legacy
-<PROJECT_ROOT>\source\include\ml
-<PROJECT_ROOT>\source\include\nonfree
-<PROJECT_ROOT>\source\include\objdetect
-<PROJECT_ROOT>\source\include\video
 <PROJECT_ROOT>\source\component
 <PROJECT_ROOT>\resource\facedetectxml
 ```
@@ -42,13 +32,7 @@ where ```<PROJECT_ROOT>``` directory, which was unzipped project.<br>
 Additionally, you can specify the path to the library header files FFMPEG
 ```
 <PROJECT_ROOT>\source\ffmpeg
-<PROJECT_ROOT>\source\ffmpeg\ctypes
-<PROJECT_ROOT>\source\ffmpeg\libavcodec
-<PROJECT_ROOT>\source\ffmpeg\libavfilter
-<PROJECT_ROOT>\source\ffmpeg\libavformat
-<PROJECT_ROOT>\source\ffmpeg\libavutil
-<PROJECT_ROOT>\source\ffmpeg\libswresample
-<PROJECT_ROOT>\source\ffmpeg\libswscale
+<PROJECT_ROOT>\source\sdl
 ```
 Examples of using FFMPEG library header files are in the
 ```

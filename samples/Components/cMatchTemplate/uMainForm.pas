@@ -38,9 +38,9 @@ implementation
 
 {$R *.dfm}
 
-Uses
-  core_c,
-  Core.types_c, cvUtils;
+uses
+  opencv.core_c,
+  opencv.core.types_c, opencv.cvutils;
 
 procedure TMainForm.btn1Click(Sender: TObject);
 begin

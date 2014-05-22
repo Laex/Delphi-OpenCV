@@ -7,26 +7,28 @@ program scaling_video;
 uses
   System.SysUtils,
   System.Classes,
-  ffmpeglib in '..\..\ffmpeglib.pas',
-  libavcodec.avcodec in '..\..\libavcodec\libavcodec.avcodec.pas',
-  ctypes in '..\..\..\ctypes\ctypes.pas',
-  avformat in '..\..\libavformat\avformat.pas',
-  avio in '..\..\libavformat\avio.pas',
-  avutil in '..\..\libavutil\avutil.pas',
-  buffer in '..\..\libavutil\buffer.pas',
-  dict in '..\..\libavutil\dict.pas',
-  frame in '..\..\libavutil\frame.pas',
-  log in '..\..\libavutil\log.pas',
-  opt in '..\..\libavutil\opt.pas',
-  pixfmt in '..\..\libavutil\pixfmt.pas',
-  rational in '..\..\libavutil\rational.pas',
-  samplefmt in '..\..\libavutil\samplefmt.pas',
-  parseutils in '..\..\libavutil\parseutils.pas',
-  swscale in '..\..\libswscale\swscale.pas',
-  pixdesc in '..\..\libavutil\pixdesc.pas',
-  imgutils in '..\..\libavutil\imgutils.pas',
-  mem in '..\..\libavutil\mem.pas',
-  error in '..\..\libavutil\error.pas';
+  Winapi.Windows,
+  ffmpeglib,
+  ffmpeg.libavcodec.avcodec,
+  ffmpeg.ctypes,
+  ffmpeg.avformat,
+  ffmpeg.avio,
+  ffmpeg.avutil,
+  ffmpeg.buffer,
+  ffmpeg.dict,
+  ffmpeg.frame,
+  ffmpeg.log,
+  ffmpeg.opt,
+  ffmpeg.pixfmt,
+  ffmpeg.rational,
+  ffmpeg.samplefmt,
+  ffmpeg.parseutils,
+  ffmpeg.swscale,
+  ffmpeg.pixdesc,
+  ffmpeg.imgutils,
+  ffmpeg.mem,
+  ffmpeg.error,
+  uResourcePaths;
 
 Var
   src_data: TPointers;
@@ -45,6 +47,10 @@ Var
   dst_bufsize: Integer;
   sws_ctx: pSwsContext = nil;
   i, ret: Integer;
+
+const
+  in_filename = cResourceMedia + 'trailer.avi';
+  out_filename = cResourceResult + 'trailer-out.avi';
 
 procedure fill_yuv_image(data: TPointers; linesize: TLinesizes; width: Integer; height: Integer; frame_index: Integer);
 Var
@@ -76,24 +82,30 @@ begin
     begin
       WriteLn(Format('Usage: %s output_file output_size' + #13#10 + 'API example program to show how to scale an image with libswscale.' +
         #13#10 + 'This program generates a series of pictures, rescales them to the given ' +
-        'output_size and saves them to an output file named output_file.' + #13#10 + #13#10, [ExtractFileName(ParamStr(0))]));
-      Halt(1);
+        'output_size and saves them to an output file named output_file.' + #13#10, [ExtractFileName(ParamStr(0))]));
     end;
-    dst_filename := ParamStr(1);
-    dst_size := ParamStr(2);
+    if (ParamCount < 2) then
+    begin
+      if FileExists(in_filename) then
+        if CopyFileEx(PChar(in_filename), PChar(out_filename), nil, nil, nil, COPY_FILE_RESTARTABLE) then
+        begin
+          dst_filename := out_filename;
+          dst_size := '320x240';
+        end
+        else
+          Halt(1);
+    end
+    else
+    begin
+      dst_filename := ParamStr(1);
+      dst_size := ParamStr(2);
+    end;
 
     if av_parse_video_size(dst_w, dst_h, PAnsiChar(dst_size)) < 0 then
     begin
       WriteLn(Format('Invalid size %s, must be in the form WxH or a valid size abbreviation', [dst_size]));
       Halt(1);
     end;
-
-//    Assign(dst_file, dst_filename);
-//    Rewrite(dst_file,1);
-    // if (!dst_file) begin
-    // fprintf(stderr, 'Could not open destination file %s'+#13#10+, dst_filename);
-    // exit(1);
-    // end;
 
     (* create scaling context *)
     sws_ctx := sws_getContext(src_w, src_h, src_pix_fmt, dst_w, dst_h, dst_pix_fmt, SWS_BILINEAR, Nil, Nil, Nil);
@@ -142,7 +154,7 @@ begin
     dst_straem.Free;
 
     WriteLn(Format('Scaling succeeded. Play the output file with the command:' + #13#10 +
-      'ffplay -f rawvideo -pix_fmt %s -video_size %dx%d %s', [av_get_pix_fmt_name(dst_pix_fmt), dst_w, dst_h, dst_filename]));
+      'ffplay -f rawvideo -pixel_format %s -video_size %dx%d %s', [av_get_pix_fmt_name(dst_pix_fmt), dst_w, dst_h, dst_filename]));
 
     av_freep(@src_data[0]);
     av_freep(@dst_data[0]);

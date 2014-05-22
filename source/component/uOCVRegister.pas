@@ -33,7 +33,7 @@ procedure Register;
 
 implementation
 
-Uses
+uses
 {$IFDEF CLR}
   Borland.Vcl.Design.DesignEditors, Borland.Vcl.Design.DesignIntf,
 {$ELSE}

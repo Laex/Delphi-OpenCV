@@ -40,8 +40,8 @@ uses
   Classes,
   SyncObjs,
   {$ENDIF VER6P}
-  core.types_c,
-  highgui_c,
+  opencv.core.types_c,
+  opencv.highgui_c,
   uOCVTypes;
 
 type
@@ -191,7 +191,7 @@ type
 implementation
 
 uses
-  core_c;
+  opencv.core_c;
 
 const
   ocvCameraCaptureSource: array [TocvCameraCaptureSource] of Longint =

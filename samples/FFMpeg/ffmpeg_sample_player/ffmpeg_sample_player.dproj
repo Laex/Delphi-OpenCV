@@ -1,36 +1,16 @@
 ﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <PropertyGroup>
-        <ProjectGuid>{4A70D321-10C0-4AAE-9C24-FAA11F93CC66}</ProjectGuid>
-        <ProjectVersion>15.3</ProjectVersion>
-        <FrameworkType>None</FrameworkType>
+        <ProjectGuid>{036F28BC-83B0-471A-B04B-5E5296551153}</ProjectGuid>
         <MainSource>ffmpeg_sample_player.dpr</MainSource>
         <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Debug</Config>
-        <Platform Condition="'$(Platform)'==''">Win32</Platform>
+        <Config Condition="'$(Config)'==''">Release</Config>
         <TargetedPlatforms>1</TargetedPlatforms>
         <AppType>Console</AppType>
+        <FrameworkType>None</FrameworkType>
+        <ProjectVersion>15.4</ProjectVersion>
+        <Platform Condition="'$(Platform)'==''">Win32</Platform>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Config)'=='Base' or '$(Base)'!=''">
-        <Base>true</Base>
-    </PropertyGroup>
-    <PropertyGroup Condition="('$(Platform)'=='Android' and '$(Base)'=='true') or '$(Base_Android)'!=''">
-        <Base_Android>true</Base_Android>
-        <CfgParent>Base</CfgParent>
-        <Base>true</Base>
-    </PropertyGroup>
-    <PropertyGroup Condition="('$(Platform)'=='iOSDevice' and '$(Base)'=='true') or '$(Base_iOSDevice)'!=''">
-        <Base_iOSDevice>true</Base_iOSDevice>
-        <CfgParent>Base</CfgParent>
-        <Base>true</Base>
-    </PropertyGroup>
-    <PropertyGroup Condition="('$(Platform)'=='iOSSimulator' and '$(Base)'=='true') or '$(Base_iOSSimulator)'!=''">
-        <Base_iOSSimulator>true</Base_iOSSimulator>
-        <CfgParent>Base</CfgParent>
-        <Base>true</Base>
-    </PropertyGroup>
-    <PropertyGroup Condition="('$(Platform)'=='OSX32' and '$(Base)'=='true') or '$(Base_OSX32)'!=''">
-        <Base_OSX32>true</Base_OSX32>
-        <CfgParent>Base</CfgParent>
         <Base>true</Base>
     </PropertyGroup>
     <PropertyGroup Condition="('$(Platform)'=='Win32' and '$(Base)'=='true') or '$(Base_Win32)'!=''">
@@ -38,12 +18,7 @@
         <CfgParent>Base</CfgParent>
         <Base>true</Base>
     </PropertyGroup>
-    <PropertyGroup Condition="('$(Platform)'=='Win64' and '$(Base)'=='true') or '$(Base_Win64)'!=''">
-        <Base_Win64>true</Base_Win64>
-        <CfgParent>Base</CfgParent>
-        <Base>true</Base>
-    </PropertyGroup>
-    <PropertyGroup Condition="'$(Config)'=='Debug' or '$(Cfg_1)'!=''">
+    <PropertyGroup Condition="'$(Config)'=='Release' or '$(Cfg_1)'!=''">
         <Cfg_1>true</Cfg_1>
         <CfgParent>Base</CfgParent>
         <Base>true</Base>
@@ -54,136 +29,58 @@
         <Cfg_1>true</Cfg_1>
         <Base>true</Base>
     </PropertyGroup>
-    <PropertyGroup Condition="'$(Config)'=='Release' or '$(Cfg_2)'!=''">
+    <PropertyGroup Condition="'$(Config)'=='Debug' or '$(Cfg_2)'!=''">
         <Cfg_2>true</Cfg_2>
         <CfgParent>Base</CfgParent>
         <Base>true</Base>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base)'!=''">
-        <DCC_UnitSearchPath>..\..\;$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
-        <VerInfo_Keys>CompanyName=;FileDescription=;FileVersion=1.0.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductName=;ProductVersion=1.0.0.0;Comments=</VerInfo_Keys>
-        <VerInfo_Locale>1049</VerInfo_Locale>
-        <Manifest_File>None</Manifest_File>
-        <DCC_Namespace>System;Xml;Data;Datasnap;Web;Soap;$(DCC_Namespace)</DCC_Namespace>
-        <DCC_DcuOutput>.\$(Platform)\$(Config)</DCC_DcuOutput>
-        <DCC_ExeOutput>..\..\..\..\bin</DCC_ExeOutput>
         <DCC_E>false</DCC_E>
+        <VerInfo_Locale>1049</VerInfo_Locale>
+        <DCC_Namespace>System;Xml;Data;Datasnap;Web;Soap;$(DCC_Namespace)</DCC_Namespace>
         <DCC_N>false</DCC_N>
+        <DCC_ImageBase>00400000</DCC_ImageBase>
+        <DCC_K>false</DCC_K>
         <DCC_S>false</DCC_S>
         <DCC_F>false</DCC_F>
-        <DCC_K>false</DCC_K>
-    </PropertyGroup>
-    <PropertyGroup Condition="'$(Base_Android)'!=''">
-        <Android_LauncherIcon48>$(BDS)\bin\Artwork\Android\FM_LauncherIcon_48x48.png</Android_LauncherIcon48>
-        <Android_LauncherIcon96>$(BDS)\bin\Artwork\Android\FM_LauncherIcon_96x96.png</Android_LauncherIcon96>
-        <Android_LauncherIcon144>$(BDS)\bin\Artwork\Android\FM_LauncherIcon_144x144.png</Android_LauncherIcon144>
-        <Android_LauncherIcon72>$(BDS)\bin\Artwork\Android\FM_LauncherIcon_72x72.png</Android_LauncherIcon72>
-        <Android_LauncherIcon36>$(BDS)\bin\Artwork\Android\FM_LauncherIcon_36x36.png</Android_LauncherIcon36>
-        <DCC_UsePackage>DBXInterBaseDriver;DataSnapCommon;DbxCommonDriver;dbxcds;CustomIPTransport;dsnap;IndyCore;CloudService;vc2;FireDACIBDriver;bindcompfmx;dbrtl;FireDACCommon;bindcomp;xmlrtl;ibxpress;FireDACCommonDriver;bindengine;soaprtl;inet;RESTComponents;dbexpress;IndyIPClient;FireDACSqliteDriver;DBXSqliteDriver;fmx;IndySystem;DataSnapClient;DataSnapProviderClient;fmxFireDAC;IndyIPCommon;FireDACDBXDriver;rtl;DbxClientDriver;IndyProtocols;bindcompdbx;FireDAC;FireDACDataSnapDriver;$(DCC_UsePackage)</DCC_UsePackage>
-    </PropertyGroup>
-    <PropertyGroup Condition="'$(Base_iOSDevice)'!=''">
-        <iPad_SpotLight80>$(BDS)\bin\Artwork\iOS\iPad\FM_SpotlightSearchIcon_80x80.png</iPad_SpotLight80>
-        <iPhone_AppIcon120>$(BDS)\bin\Artwork\iOS\iPhone\FM_ApplicationIcon_120x120.png</iPhone_AppIcon120>
-        <iPhone_Spotlight40>$(BDS)\bin\Artwork\iOS\iPhone\FM_SpotlightSearchIcon_40x40.png</iPhone_Spotlight40>
-        <iPhone_Spotlight80>$(BDS)\bin\Artwork\iOS\iPhone\FM_SpotlightSearchIcon_80x80.png</iPhone_Spotlight80>
-        <iPhone_AppIcon60>$(BDS)\bin\Artwork\iOS\iPhone\FM_ApplicationIcon_60x60.png</iPhone_AppIcon60>
-        <iPad_SpotLight40>$(BDS)\bin\Artwork\iOS\iPad\FM_SpotlightSearchIcon_40x40.png</iPad_SpotLight40>
-        <iPad_Launch768x1024>$(BDS)\bin\Artwork\iOS\iPad\FM_LaunchImagePortrait_768x1024.png</iPad_Launch768x1024>
-        <iPad_AppIcon76>$(BDS)\bin\Artwork\iOS\iPad\FM_ApplicationIcon_76x76.png</iPad_AppIcon76>
-        <iPad_Launch1024x768>$(BDS)\bin\Artwork\iOS\iPad\FM_LaunchImageLandscape_1024x768.png</iPad_Launch1024x768>
-        <iPad_Launch1536x2048>$(BDS)\bin\Artwork\iOS\iPad\FM_LaunchImagePortrait_1536x2048.png</iPad_Launch1536x2048>
-        <iPad_Launch2048x1536>$(BDS)\bin\Artwork\iOS\iPad\FM_LaunchImageLandscape_2048x1536.png</iPad_Launch2048x1536>
-        <iPad_AppIcon152>$(BDS)\bin\Artwork\iOS\iPad\FM_ApplicationIcon_152x152.png</iPad_AppIcon152>
-        <DCC_UsePackage>DBXInterBaseDriver;DataSnapCommon;DbxCommonDriver;dbxcds;CustomIPTransport;dsnap;IndyCore;CloudService;FireDACIBDriver;bindcompfmx;dbrtl;FireDACCommon;bindcomp;xmlrtl;ibxpress;FireDACCommonDriver;bindengine;soaprtl;inet;RESTComponents;dbexpress;IndyIPClient;FireDACSqliteDriver;DBXSqliteDriver;fmx;IndySystem;DataSnapClient;DataSnapProviderClient;fmxFireDAC;fmxase;IndyIPCommon;FireDACDBXDriver;rtl;DbxClientDriver;IndyProtocols;bindcompdbx;FireDAC;FireDACDataSnapDriver;$(DCC_UsePackage)</DCC_UsePackage>
-    </PropertyGroup>
-    <PropertyGroup Condition="'$(Base_iOSSimulator)'!=''">
-        <iPad_SpotLight80>$(BDS)\bin\Artwork\iOS\iPad\FM_SpotlightSearchIcon_80x80.png</iPad_SpotLight80>
-        <iPhone_AppIcon120>$(BDS)\bin\Artwork\iOS\iPhone\FM_ApplicationIcon_120x120.png</iPhone_AppIcon120>
-        <iPhone_Spotlight40>$(BDS)\bin\Artwork\iOS\iPhone\FM_SpotlightSearchIcon_40x40.png</iPhone_Spotlight40>
-        <iPhone_Spotlight80>$(BDS)\bin\Artwork\iOS\iPhone\FM_SpotlightSearchIcon_80x80.png</iPhone_Spotlight80>
-        <iPhone_AppIcon60>$(BDS)\bin\Artwork\iOS\iPhone\FM_ApplicationIcon_60x60.png</iPhone_AppIcon60>
-        <iPad_SpotLight40>$(BDS)\bin\Artwork\iOS\iPad\FM_SpotlightSearchIcon_40x40.png</iPad_SpotLight40>
-        <iPad_Launch768x1024>$(BDS)\bin\Artwork\iOS\iPad\FM_LaunchImagePortrait_768x1024.png</iPad_Launch768x1024>
-        <iPad_AppIcon76>$(BDS)\bin\Artwork\iOS\iPad\FM_ApplicationIcon_76x76.png</iPad_AppIcon76>
-        <iPad_Launch1024x768>$(BDS)\bin\Artwork\iOS\iPad\FM_LaunchImageLandscape_1024x768.png</iPad_Launch1024x768>
-        <iPad_Launch1536x2048>$(BDS)\bin\Artwork\iOS\iPad\FM_LaunchImagePortrait_1536x2048.png</iPad_Launch1536x2048>
-        <iPad_Launch2048x1536>$(BDS)\bin\Artwork\iOS\iPad\FM_LaunchImageLandscape_2048x1536.png</iPad_Launch2048x1536>
-        <iPad_AppIcon152>$(BDS)\bin\Artwork\iOS\iPad\FM_ApplicationIcon_152x152.png</iPad_AppIcon152>
-        <DCC_UsePackage>DBXInterBaseDriver;DataSnapCommon;DbxCommonDriver;dbxcds;CustomIPTransport;dsnap;IndyCore;CloudService;FireDACIBDriver;bindcompfmx;dbrtl;FireDACCommon;bindcomp;xmlrtl;ibxpress;FireDACCommonDriver;bindengine;soaprtl;inet;RESTComponents;dbexpress;IndyIPClient;FireDACSqliteDriver;DBXSqliteDriver;fmx;IndySystem;DataSnapClient;DataSnapProviderClient;fmxFireDAC;fmxase;IndyIPCommon;FireDACDBXDriver;rtl;DbxClientDriver;IndyProtocols;bindcompdbx;FireDAC;FireDACDataSnapDriver;$(DCC_UsePackage)</DCC_UsePackage>
-    </PropertyGroup>
-    <PropertyGroup Condition="'$(Base_OSX32)'!=''">
-        <DCC_ConsoleTarget>true</DCC_ConsoleTarget>
-        <DCC_UsePackage>FireDACPgDriver;DBXInterBaseDriver;DataSnapServer;DataSnapCommon;DbxCommonDriver;dbxcds;CustomIPTransport;dsnap;IndyIPServer;IndyCore;CloudService;FireDACIBDriver;FireDACDb2Driver;bindcompfmx;FireDACODBCDriver;dbrtl;FireDACCommon;bindcomp;inetdb;xmlrtl;ibxpress;FireDACCommonDriver;bindengine;soaprtl;FireDACMSSQLDriver;DBXInformixDriver;DBXFirebirdDriver;inet;FireDACMySQLDriver;DBXSybaseASADriver;RESTComponents;dbexpress;IndyIPClient;FireDACSqliteDriver;DBXSqliteDriver;fmx;IndySystem;DataSnapClient;DataSnapProviderClient;fmxFireDAC;DBXOracleDriver;fmxase;IndyIPCommon;FireDACDBXDriver;inetdbxpress;FireDACASADriver;rtl;DbxClientDriver;IndyProtocols;DBXMySQLDriver;bindcompdbx;FireDACADSDriver;FireDAC;FireDACDataSnapDriver;fmxobj;FireDACOracleDriver;fmxdae;FireDACMSAccDriver;DataSnapIndy10ServerTransport;$(DCC_UsePackage)</DCC_UsePackage>
+        <VerInfo_Keys>CompanyName=;FileDescription=;FileVersion=1.0.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductName=;ProductVersion=1.0.0.0;Comments=;CFBundleName=</VerInfo_Keys>
+        <SanitizedProjectName>ffmpeg_sample_player</SanitizedProjectName>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Win32)'!=''">
-        <DCC_UsePackage>JvGlobus;dxBarRS18;dxPSCoreRS18;JvMM;JvManagedThreads;dxPScxPCProdRS18;OverbyteIcsDXE5Run;cxTreeListRS18;dxDockingRS18;FireDACPgDriver;dxThemeRS18;dxPSdxOCLnkRS18;JvCrypt;TP_LockBox3;XiButtonXE4;DBXInterBaseDriver;DataSnapServer;DataSnapCommon;cxTreeListdxBarPopupMenuRS18;JvNet;officeXPrt;TeeUI919;JvDotNetCtrls;FMXTeeDB919;DbxCommonDriver;vclimg;dbxcds;DatasnapConnectorsFreePascal;JvXPCtrls;vcldb;cxExportRS18;FmxTeeUI919;CustomIPTransport;TeeWorld919;dsnap;IndyIPServer;IndyCore;cxVerticalGridRS18;CloudService;TeePro919;dxPSdxDBOCLnkRS18;vc2;FireDACIBDriver;dxADOServerModeRS18;JvDB;JvRuntimeDesign;dxPScxExtCommonRS18;cxEditorsRS18;cxPageControldxBarPopupMenuRS18;cxSchedulerRS18;dxSpellCheckerRS18;dxPScxVGridLnkRS18;JclDeveloperTools;FireDACDb2Driver;dxRibbonRS18;FMXTeePro919;bindcompfmx;dclTP_LockBox3;vcldbx;cxBarEditItemRS18;FireDACODBCDriver;cxPageControlRS18;dbrtl;FireDACCommon;bindcomp;inetdb;JvPluginSystem;DBXOdbcDriver;JvCmp;vclFireDAC;FMXTee919;xmlrtl;JvTimeFramework;ibxpress;dxBarExtItemsRS18;FireDACCommonDriver;bindengine;vclactnband;soaprtl;bindcompvcl;dxPsPrVwAdvRS18;cxSpreadSheetRS18;Jcl;vclie;cxPivotGridRS18;dxmdsRS18;dxBarDBNavRS18;dxTileControlRS18;dxComnRS18;FireDACMSSQLDriver;DBXInformixDriver;dxBarExtDBItemsRS18;Intraweb;dxPScxSchedulerLnkRS18;dxNavBarRS18;dsnapcon;DBXFirebirdDriver;dxPSTeeChartRS18;inet;FMXTeeLanguage919;dxPScxCommonRS18;JvPascalInterpreter;FireDACMySQLDriver;vclx;TeeDB919;DBXSybaseASADriver;dxorgcRS18;RESTComponents;dbexpress;JvBDE;IndyIPClient;dxGDIPlusRS18;FireDACSqliteDriver;dxLayoutControlRS18;ZComponent;DBXSqliteDriver;tmswizdXE4;fmx;JvDlgs;IndySystem;vclib;inetdbbde;DataSnapClient;dxPScxTLLnkRS18;Tee919;cxSchedulerGridRS18;dxtrmdRS18;DataSnapProviderClient;DBXSybaseASEDriver;dxTabbedMDIRS18;TeeGL919;MetropolisUILiveTile;dxPSLnksRS18;vcldsnap;dxPScxPivotGridLnkRS18;fmxFireDAC;DBXDb2Driver;dxPScxSSLnkRS18;DBXOracleDriver;dxServerModeRS18;JvCore;vclribbon;dxdborRS18;fmxase;vcl;IndyIPCommon;DBXMSSQLDriver;CodeSiteExpressPkg;cxPivotGridChartRS18;FireDACDBXDriver;JvAppFrm;inetdbxpress;dxPScxGridLnkRS18;cxLibraryRS18;JvDocking;adortl;JvWizards;FireDACASADriver;dxPSdxDBTVLnkRS18;JvHMI;tmsdXE4;JvBands;ZDbc;rtl;DbxClientDriver;ZPlain;JclContainers;CPortLibDXE;JvSystem;svnui;JvControls;dxDBXServerModeRS18;IndyProtocols;DBXMySQLDriver;dxFlowChartRS18;viTimeLineDPK;bindcompdbx;TeeLanguage919;JvJans;JvPrintPreview;JvPageComps;JvStdCtrls;JvCustom;FireDACADSDriver;vcltouch;ZCore;dxPSPrVwRibbonRS18;tmsexdXE4;dxPSdxFCLnkRS18;VclSmp;FireDAC;VCLRESTComponents;cxGridRS18;DataSnapConnectors;FireDACDataSnapDriver;dxPSDBTeeChartRS18;dxdbtrRS18;tmsxlsdXE4;dxCoreRS18;fmxobj;JclVcl;ZParseSql;svn;dxPSdxLCLnkRS18;FireDACOracleDriver;fmxdae;cxDataRS18;cxPivotGridOLAPRS18;bdertl;TeeImage919;FireDACMSAccDriver;DataSnapIndy10ServerTransport;$(DCC_UsePackage)</DCC_UsePackage>
-        <DCC_ConsoleTarget>true</DCC_ConsoleTarget>
-        <VerInfo_Locale>1033</VerInfo_Locale>
         <DCC_Namespace>Winapi;System.Win;Data.Win;Datasnap.Win;Web.Win;Soap.Win;Xml.Win;Bde;$(DCC_Namespace)</DCC_Namespace>
-        <Debugger_RunParams>GopherBroke.avi</Debugger_RunParams>
+        <VerInfo_Locale>1033</VerInfo_Locale>
         <VerInfo_Keys>CompanyName=;FileDescription=;FileVersion=1.0.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductName=;ProductVersion=1.0.0.0;Comments=</VerInfo_Keys>
     </PropertyGroup>
-    <PropertyGroup Condition="'$(Base_Win64)'!=''">
-        <DCC_ConsoleTarget>true</DCC_ConsoleTarget>
-        <DCC_UsePackage>dxBarRS18;dxPSCoreRS18;OverbyteIcsDXE5Run;cxTreeListRS18;dxDockingRS18;FireDACPgDriver;dxThemeRS18;dxPSdxOCLnkRS18;DBXInterBaseDriver;DataSnapServer;DataSnapCommon;cxTreeListdxBarPopupMenuRS18;officeXPrt;DbxCommonDriver;vclimg;dbxcds;DatasnapConnectorsFreePascal;vcldb;cxExportRS18;CustomIPTransport;dsnap;IndyIPServer;IndyCore;cxVerticalGridRS18;CloudService;dxPSdxDBOCLnkRS18;FireDACIBDriver;dxADOServerModeRS18;dxPScxExtCommonRS18;cxEditorsRS18;cxPageControldxBarPopupMenuRS18;cxSchedulerRS18;dxSpellCheckerRS18;dxPScxVGridLnkRS18;FireDACDb2Driver;dxRibbonRS18;bindcompfmx;cxBarEditItemRS18;FireDACODBCDriver;cxPageControlRS18;dbrtl;FireDACCommon;bindcomp;inetdb;DBXOdbcDriver;vclFireDAC;xmlrtl;ibxpress;dxBarExtItemsRS18;FireDACCommonDriver;bindengine;vclactnband;soaprtl;bindcompvcl;dxPsPrVwAdvRS18;cxSpreadSheetRS18;vclie;cxPivotGridRS18;dxmdsRS18;dxBarDBNavRS18;dxTileControlRS18;dxComnRS18;FireDACMSSQLDriver;DBXInformixDriver;dxBarExtDBItemsRS18;Intraweb;dxPScxSchedulerLnkRS18;dxNavBarRS18;dsnapcon;DBXFirebirdDriver;dxPSTeeChartRS18;inet;dxPScxCommonRS18;FireDACMySQLDriver;vclx;DBXSybaseASADriver;dxorgcRS18;RESTComponents;dbexpress;IndyIPClient;dxGDIPlusRS18;FireDACSqliteDriver;dxLayoutControlRS18;ZComponent;DBXSqliteDriver;fmx;IndySystem;vclib;DataSnapClient;dxPScxTLLnkRS18;cxSchedulerGridRS18;dxtrmdRS18;DataSnapProviderClient;DBXSybaseASEDriver;dxTabbedMDIRS18;MetropolisUILiveTile;dxPSLnksRS18;vcldsnap;dxPScxPivotGridLnkRS18;fmxFireDAC;DBXDb2Driver;dxPScxSSLnkRS18;DBXOracleDriver;dxServerModeRS18;vclribbon;dxdborRS18;fmxase;vcl;IndyIPCommon;DBXMSSQLDriver;cxPivotGridChartRS18;FireDACDBXDriver;inetdbxpress;dxPScxGridLnkRS18;cxLibraryRS18;adortl;FireDACASADriver;dxPSdxDBTVLnkRS18;ZDbc;rtl;DbxClientDriver;ZPlain;dxDBXServerModeRS18;IndyProtocols;DBXMySQLDriver;dxFlowChartRS18;bindcompdbx;FireDACADSDriver;vcltouch;ZCore;dxPSPrVwRibbonRS18;dxPSdxFCLnkRS18;VclSmp;FireDAC;VCLRESTComponents;cxGridRS18;DataSnapConnectors;FireDACDataSnapDriver;dxPSDBTeeChartRS18;dxdbtrRS18;dxCoreRS18;fmxobj;ZParseSql;dxPSdxLCLnkRS18;FireDACOracleDriver;fmxdae;cxDataRS18;cxPivotGridOLAPRS18;FireDACMSAccDriver;DataSnapIndy10ServerTransport;$(DCC_UsePackage)</DCC_UsePackage>
-    </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1)'!=''">
-        <DCC_Define>DEBUG;$(DCC_Define)</DCC_Define>
-        <DCC_DebugDCUs>true</DCC_DebugDCUs>
-        <DCC_Optimize>false</DCC_Optimize>
-        <DCC_GenerateStackFrames>true</DCC_GenerateStackFrames>
-        <DCC_DebugInfoInExe>true</DCC_DebugInfoInExe>
-        <DCC_RemoteDebug>true</DCC_RemoteDebug>
+        <DCC_Define>RELEASE;$(DCC_Define)</DCC_Define>
+        <DCC_DebugInformation>0</DCC_DebugInformation>
+        <DCC_LocalDebugSymbols>false</DCC_LocalDebugSymbols>
+        <DCC_SymbolReferenceInfo>0</DCC_SymbolReferenceInfo>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1_Win32)'!=''">
-        <Debugger_RunParams>rtsp://10.1.1.201/Streaming/Channels/1?transportmode=unicast</Debugger_RunParams>
-        <VerInfo_Locale>1033</VerInfo_Locale>
+        <DCC_DcuOutput>.\$(Platform)\$(Config)</DCC_DcuOutput>
+        <DCC_ExeOutput>..\..\..\bin\$(Platform)</DCC_ExeOutput>
         <Manifest_File>None</Manifest_File>
-        <DCC_RemoteDebug>false</DCC_RemoteDebug>
+        <VerInfo_Keys>CompanyName=;FileDescription=;FileVersion=1.0.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductName=;ProductVersion=1.0.0.0;Comments=</VerInfo_Keys>
+        <VerInfo_Locale>1033</VerInfo_Locale>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2)'!=''">
-        <DCC_LocalDebugSymbols>false</DCC_LocalDebugSymbols>
-        <DCC_Define>RELEASE;$(DCC_Define)</DCC_Define>
-        <DCC_SymbolReferenceInfo>0</DCC_SymbolReferenceInfo>
-        <DCC_DebugInformation>0</DCC_DebugInformation>
+        <DCC_GenerateStackFrames>true</DCC_GenerateStackFrames>
+        <DCC_Define>DEBUG;$(DCC_Define)</DCC_Define>
+        <DCC_Optimize>false</DCC_Optimize>
     </PropertyGroup>
     <ItemGroup>
         <DelphiCompile Include="$(MainSource)">
             <MainSource>MainSource</MainSource>
         </DelphiCompile>
-        <DCCReference Include="..\..\ffmpeglib.pas"/>
-        <DCCReference Include="..\..\..\ctypes\ctypes.pas"/>
-        <DCCReference Include="..\..\libavformat\avformat.pas"/>
-        <DCCReference Include="..\..\libavformat\avio.pas"/>
-        <DCCReference Include="..\..\libavutil\avutil.pas"/>
-        <DCCReference Include="..\..\libavutil\buffer.pas"/>
-        <DCCReference Include="..\..\libavutil\dict.pas"/>
-        <DCCReference Include="..\..\libavutil\frame.pas"/>
-        <DCCReference Include="..\..\libavutil\log.pas"/>
-        <DCCReference Include="..\..\libavutil\opt.pas"/>
-        <DCCReference Include="..\..\libavutil\pixfmt.pas"/>
-        <DCCReference Include="..\..\libavutil\rational.pas"/>
-        <DCCReference Include="..\..\libavutil\samplefmt.pas"/>
-        <DCCReference Include="..\..\libavutil\parseutils.pas"/>
-        <DCCReference Include="..\..\libswscale\swscale.pas"/>
-        <DCCReference Include="..\..\libavutil\pixdesc.pas"/>
-        <DCCReference Include="..\..\libavutil\imgutils.pas"/>
-        <DCCReference Include="..\..\libavutil\mem.pas"/>
-        <DCCReference Include="..\..\libavutil\error.pas"/>
-        <DCCReference Include="..\..\libavfilter\avfilter.pas"/>
-        <DCCReference Include="..\..\libavfilter\buffersink.pas"/>
-        <DCCReference Include="..\..\libavutil\mathematics.pas"/>
-        <DCCReference Include="..\..\libavcodec\libavcodec.avcodec.pas"/>
-        <DCCReference Include="..\..\libavfilter\buffersrc.pas"/>
-        <DCCReference Include="..\..\libavutil\errno.pas"/>
-        <BuildConfiguration Include="Release">
+        <BuildConfiguration Include="Debug">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>
         </BuildConfiguration>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
-        <BuildConfiguration Include="Debug">
+        <BuildConfiguration Include="Release">
             <Key>Cfg_1</Key>
             <CfgParent>Base</CfgParent>
         </BuildConfiguration>
@@ -193,70 +90,15 @@
         <Borland.ProjectType/>
         <BorlandProject>
             <Delphi.Personality>
-                <VersionInfo>
-                    <VersionInfo Name="IncludeVerInfo">False</VersionInfo>
-                    <VersionInfo Name="AutoIncBuild">False</VersionInfo>
-                    <VersionInfo Name="MajorVer">1</VersionInfo>
-                    <VersionInfo Name="MinorVer">0</VersionInfo>
-                    <VersionInfo Name="Release">0</VersionInfo>
-                    <VersionInfo Name="Build">0</VersionInfo>
-                    <VersionInfo Name="Debug">False</VersionInfo>
-                    <VersionInfo Name="PreRelease">False</VersionInfo>
-                    <VersionInfo Name="Special">False</VersionInfo>
-                    <VersionInfo Name="Private">False</VersionInfo>
-                    <VersionInfo Name="DLL">False</VersionInfo>
-                    <VersionInfo Name="Locale">1049</VersionInfo>
-                    <VersionInfo Name="CodePage">1251</VersionInfo>
-                </VersionInfo>
-                <VersionInfoKeys>
-                    <VersionInfoKeys Name="CompanyName"/>
-                    <VersionInfoKeys Name="FileDescription"/>
-                    <VersionInfoKeys Name="FileVersion">1.0.0.0</VersionInfoKeys>
-                    <VersionInfoKeys Name="InternalName"/>
-                    <VersionInfoKeys Name="LegalCopyright"/>
-                    <VersionInfoKeys Name="LegalTrademarks"/>
-                    <VersionInfoKeys Name="OriginalFilename"/>
-                    <VersionInfoKeys Name="ProductName"/>
-                    <VersionInfoKeys Name="ProductVersion">1.0.0.0</VersionInfoKeys>
-                    <VersionInfoKeys Name="Comments"/>
-                    <VersionInfoKeys Name="CFBundleName"/>
-                    <VersionInfoKeys Name="CFBundleDisplayName"/>
-                    <VersionInfoKeys Name="UIDeviceFamily"/>
-                    <VersionInfoKeys Name="CFBundleIdentifier"/>
-                    <VersionInfoKeys Name="CFBundleVersion"/>
-                    <VersionInfoKeys Name="CFBundlePackageType"/>
-                    <VersionInfoKeys Name="CFBundleSignature"/>
-                    <VersionInfoKeys Name="CFBundleAllowMixedLocalizations"/>
-                    <VersionInfoKeys Name="UISupportedInterfaceOrientations"/>
-                    <VersionInfoKeys Name="CFBundleExecutable"/>
-                    <VersionInfoKeys Name="CFBundleResourceSpecification"/>
-                    <VersionInfoKeys Name="LSRequiresIPhoneOS"/>
-                    <VersionInfoKeys Name="CFBundleInfoDictionaryVersion"/>
-                    <VersionInfoKeys Name="CFBundleDevelopmentRegion"/>
-                    <VersionInfoKeys Name="package"/>
-                    <VersionInfoKeys Name="label"/>
-                    <VersionInfoKeys Name="versionCode"/>
-                    <VersionInfoKeys Name="versionName"/>
-                    <VersionInfoKeys Name="persistent"/>
-                    <VersionInfoKeys Name="restoreAnyVersion"/>
-                    <VersionInfoKeys Name="installLocation"/>
-                    <VersionInfoKeys Name="largeHeap"/>
-                    <VersionInfoKeys Name="theme"/>
-                </VersionInfoKeys>
                 <Source>
                     <Source Name="MainSource">ffmpeg_sample_player.dpr</Source>
                 </Source>
                 <Excluded_Packages>
-                    <Excluded_Packages Name="C:\Users\Public\Documents\RAD Studio\12.0\Bpl\IcsFmxDXE5Design.bpl">Overbyte ICS FMX Design-Time Package for Delphi XE5</Excluded_Packages>
-                    <Excluded_Packages Name="$(BDSBIN)\dcloffice2k190.bpl">Microsoft Office 2000 Sample Automation Server Wrapper Components</Excluded_Packages>
-                    <Excluded_Packages Name="C:\Users\Public\Documents\RAD Studio\12.0\Bpl\IcsVclDXE5Design.bpl">Overbyte ICS VCL Design-Time Package for Delphi XE5</Excluded_Packages>
+                    <Excluded_Packages Name="$(BDSBIN)\dcloffice2k200.bpl">Microsoft Office 2000 Sample Automation Server Wrapper Components</Excluded_Packages>
+                    <Excluded_Packages Name="$(BDSBIN)\dclofficexp200.bpl">Microsoft Office XP Sample Automation Server Wrapper Components</Excluded_Packages>
                 </Excluded_Packages>
             </Delphi.Personality>
-            <Deployment/>
             <Platforms>
-                <Platform value="Android">False</Platform>
-                <Platform value="iOSDevice">False</Platform>
-                <Platform value="iOSSimulator">False</Platform>
                 <Platform value="OSX32">False</Platform>
                 <Platform value="Win32">True</Platform>
                 <Platform value="Win64">False</Platform>
