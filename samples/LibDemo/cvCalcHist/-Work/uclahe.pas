@@ -10,13 +10,11 @@
 // -----------------------------------------------------------------------------
 // Improved by Shervin Emami on 17th Nov 2010, shervin.emami@gmail.com
 // http://www.shervinemami.co.cc/
-// *****************************************************************************
-
-// **************************************************************************************************
+// ************************************************************************************************************************************************ *)*******************************
 // Project Delphi-OpenCV
 // **************************************************************************************************
 // Contributor:
-// Laentir Valetov
+  // Laentir Valetov
 // email:laex@bk.ru
 // **************************************************************************************************
 // You may retrieve the latest version of this file at the GitHub,
@@ -45,10 +43,10 @@
 // **************************************************************************************************
 // The Initial Developer of the Original Code:
 // OpenCV: open source computer vision library
-// Homepage:    http://opencv.org
-// Online docs: http://docs.opencv.org
-// Q&A forum:   http://answers.opencv.org
-// Dev zone:    http://code.opencv.org
+// Homepage:    http://ocv.org
+// Online docs: http://docs.ocv.org
+// Q&A forum:   http://answers.ocv.org
+// Dev zone:    http://code.ocv.org
 // **************************************************************************************************
 // Original: https://github.com/joshdoe/opencv-clahe/blob/master/clahe.cpp
 // **************************************************************************************************

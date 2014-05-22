@@ -1,4 +1,4 @@
-(* /*****************************************************************
+//*****************************************************************
   //                       Delphi-OpenCV Demo
   //               Copyright (C) 2013 Project Delphi-OpenCV
   // ****************************************************************
@@ -19,7 +19,7 @@
   // "AS IS" basis, WITHOUT WARRANTY OF ANY KIND, either express or
   // implied. See the License for the specific language governing
   // rights and limitations under the License.
-  ******************************************************************* *)
+  //*******************************************************************
 
 program Posit;
 {$APPTYPE CONSOLE}
@@ -29,13 +29,13 @@ program Posit;
 uses
   System.SysUtils,
   System.Math,
-  opencv.highgui_c,
-  opencv.core_c,
-  opencv.core.types_c,
-  opencv.imgproc_c,
-  opencv.imgproc.types_c,
-  opencv.calib3d_c,
-  opencv.compat,
+  ocv.highgui_c,
+  ocv.core_c,
+  ocv.core.types_c,
+  ocv.imgproc_c,
+  ocv.imgproc.types_c,
+  ocv.calib3d_c,
+  ocv.compat,
   uResourcePaths;
 
 Var

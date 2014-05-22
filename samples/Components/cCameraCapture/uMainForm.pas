@@ -28,7 +28,7 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, uOCVTypes, uOCVImageOperation,
-  opencv.core.types_c, uOCVSource, uOCVView, Vcl.StdCtrls, Vcl.ExtCtrls;
+  ocv.core.types_c, uOCVSource, uOCVView, Vcl.StdCtrls, Vcl.ExtCtrls;
 
 type
   TMainForm = class(TForm)

@@ -1,4 +1,4 @@
-(* /*****************************************************************
+//*****************************************************************
   //                       Delphi-OpenCV Demo
   //               Copyright (C) 2013 Project Delphi-OpenCV
   // ****************************************************************
@@ -19,10 +19,8 @@
   // "AS IS" basis, WITHOUT WARRANTY OF ANY KIND, either express or
   // implied. See the License for the specific language governing
   // rights and limitations under the License.
-  ******************************************************************* *)
-// JCL_DEBUG_EXPERT_GENERATEJDBG OFF
-// JCL_DEBUG_EXPERT_INSERTJDBG OFF
-// JCL_DEBUG_EXPERT_DELETEMAPFILE OFF
+  //*******************************************************************
+
 program HandsDetect;
 
 {$APPTYPE CONSOLE}
@@ -31,11 +29,11 @@ program HandsDetect;
 
 uses
   System.SysUtils,
-  opencv.highgui_c,
-  opencv.core_c,
-  opencv.core.types_c,
-  opencv.imgproc_c,
-  opencv.imgproc.types_c;
+  ocv.highgui_c,
+  ocv.core_c,
+  ocv.core.types_c,
+  ocv.imgproc_c,
+  ocv.imgproc.types_c;
 
 const
   NUM_FINGERS = 5;

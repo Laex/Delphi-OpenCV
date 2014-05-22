@@ -3,7 +3,7 @@
 // Copyright (C) 2013 Project Delphi-OpenCV
 // ****************************************************************
 // Contributor:
-// Laentir Valetov
+  // Laentir Valetov
 // email:laex@bk.ru
 // ****************************************************************
 // You may retrieve the latest version of this file at the GitHub,
@@ -28,9 +28,9 @@ program cv_CreateCameraCapture;
 
 uses
   System.SysUtils,
-  opencv.highgui_c,
-  opencv.core_c,
-  opencv.core.types_c,
+  ocv.highgui_c,
+  ocv.core_c,
+  ocv.core.types_c,
   uResourcePaths;
 
 var

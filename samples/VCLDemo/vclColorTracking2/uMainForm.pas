@@ -31,10 +31,10 @@
 // **************************************************************************************************
 // The Initial Developer of the Original Code:
 // OpenCV: open source computer vision library
-// Homepage:    http://opencv.org
-// Online docs: http://docs.opencv.org
-// Q&A forum:   http://answers.opencv.org
-// Dev zone:    http://code.opencv.org
+// Homepage:    http://ocv.org
+// Online docs: http://docs.ocv.org
+// Q&A forum:   http://answers.ocv.org
+// Dev zone:    http://code.ocv.org
 // **************************************************************************************************
 
 unit uMainForm;
@@ -51,8 +51,8 @@ uses
   Vcl.Controls,
   Vcl.Forms,
   Vcl.Dialogs,
-  opencv.highgui_c,
-  opencv.core.types_c,
+  ocv.highgui_c,
+  ocv.core.types_c,
   Vcl.StdCtrls,
   Vcl.ExtCtrls, Vcl.ComCtrls;
 
@@ -105,10 +105,10 @@ implementation
 {$R *.dfm}
 
 Uses
-  opencv.core_c,
-  opencv.imgproc_c,
-  opencv.imgproc.types_c,
-  opencv.cvutils;
+  ocv.core_c,
+  ocv.imgproc_c,
+  ocv.imgproc.types_c,
+  ocv.cvutils;
 
 const
   FRAME_WIDTH = 640;
@@ -215,7 +215,8 @@ begin
 
   _contours := nil;
 
-  contoursCont := cvFindContours(dst_th, _hierarchy, @_contours, sizeof(TCvContour), CV_RETR_EXTERNAL, CV_CHAIN_APPROX_SIMPLE, cvPoint(0, 0));
+  contoursCont := cvFindContours(dst_th, _hierarchy, @_contours, sizeof(TCvContour), CV_RETR_EXTERNAL, CV_CHAIN_APPROX_SIMPLE,
+    cvPoint(0, 0));
 
   cvInitFont(@font, CV_FONT_HERSHEY_COMPLEX, 1.0, 1.0, 0, 1, CV_AA);
 
@@ -226,8 +227,8 @@ begin
     While Assigned(_contours) do
       if CV_IS_SEQ_CLOSED(_contours) then
       begin
-//        cvDrawContours(cameraFeed, _contours, CV_RGB(52, 201, 36), CV_RGB(36, 201, 197), -1, 2, // CV_FILLED,
-//          CV_AA, cvPoint(0, 0)); // рисуем контур
+        // cvDrawContours(cameraFeed, _contours, CV_RGB(52, 201, 36), CV_RGB(36, 201, 197), -1, 2, // CV_FILLED,
+        // CV_AA, cvPoint(0, 0)); // рисуем контур
 
         // if number of objects greater than MAX_NUM_OBJECTS we have a noisy filter
         cvZero(dst_th);
@@ -313,8 +314,8 @@ begin
         threshold := cvCreateImage(cvGetSize(frame), 8, 1);
 
       cvInRangeS(HSV,
-        { } cvScalar(trckbr_H_min.Position, trckbr_S_min.Position, trckbr_V_min.Position),
-        { } cvScalar(trckbr_H_max.Position, trckbr_S_max.Position, trckbr_V_max.Position), threshold);
+        {} cvScalar(trckbr_H_min.Position, trckbr_S_min.Position, trckbr_V_min.Position),
+        {} cvScalar(trckbr_H_max.Position, trckbr_S_max.Position, trckbr_V_max.Position), threshold);
       if chk1.Checked then
         morphOps(threshold);
 

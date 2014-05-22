@@ -3,7 +3,7 @@
 // Copyright (C) 2013 Project Delphi-OpenCV
 // ****************************************************************
 // Contributor:
-// Laentir Valetov
+  // Laentir Valetov
 // email:laex@bk.ru
 // ****************************************************************
 // You may retrieve the latest version of this file at the GitHub,
@@ -29,9 +29,9 @@ program clsVideoCapture;
 
 uses
   System.SysUtils,
-  mat,
-  highgui,
-  highgui_c;
+  ocv.mat,
+  ocv.highgui,
+  ocv.highgui_c;
 
 Const
   VK_ESCAPE = 27;

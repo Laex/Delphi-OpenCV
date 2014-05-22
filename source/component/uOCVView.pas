@@ -3,7 +3,7 @@
 // Copyright (C) 2013 Project Delphi-OpenCV
 // ****************************************************************
 // Contributor:
-// Laentir Valetov
+  // Laentir Valetov
 // email:laex@bk.ru
 // ****************************************************************
 // You may retrieve the latest version of this file at the GitHub,
@@ -45,7 +45,7 @@ uses
   Graphics,
 {$ENDIF VER6P}
   uOCVTypes,
-  opencv.core.types_c;
+  ocv.core.types_c;
 
 type
 
@@ -98,7 +98,7 @@ type
 implementation
 
 uses
-  opencv.cvutils;
+  ocv.cvutils;
 
 {TOpenCVView}
 

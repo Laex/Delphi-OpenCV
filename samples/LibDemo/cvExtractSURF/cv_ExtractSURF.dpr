@@ -3,7 +3,7 @@
 // Copyright (C) 2013 Project Delphi-OpenCV
 // ****************************************************************
 // Contributor:
-// laentir Valetov
+  // Laentir Valetov
 // email:laex@bk.ru
 // ****************************************************************
 // You may retrieve the latest version of this file at the GitHub,
@@ -33,14 +33,14 @@ program cv_ExtractSURF;
 uses
   System.SysUtils,
   Winapi.Windows,
-  opencv.highgui_c,
-  opencv.core_c,
-  opencv.core.types_c,
-  opencv.imgproc_c,
-  opencv.imgproc.types_c,
-  opencv.compat,
-  opencv.calib3d_c,
-  opencv.nonfree,
+  ocv.highgui_c,
+  ocv.core_c,
+  ocv.core.types_c,
+  ocv.imgproc_c,
+  ocv.imgproc.types_c,
+  ocv.compat,
+  ocv.calib3d_c,
+  ocv.nonfree,
   uResourcePaths;
 
 // cравнение двух оcобенноcтей

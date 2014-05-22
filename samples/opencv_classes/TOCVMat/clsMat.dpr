@@ -3,7 +3,7 @@
 // Copyright (C) 2013 Project Delphi-OpenCV
 // ****************************************************************
 // Contributor:
-// Laentir Valetov
+  // Laentir Valetov
 // email:laex@bk.ru
 // ****************************************************************
 // You may retrieve the latest version of this file at the GitHub,
@@ -29,9 +29,9 @@ program clsMat;
 
 uses
   System.SysUtils,
-  Core.types_c,
-  core_c,
-  mat;
+  ocv.Core.types_c,
+  ocv.core_c,
+  ocv.mat;
 
 procedure Print(const M: TocvMat);
 

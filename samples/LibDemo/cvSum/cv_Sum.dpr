@@ -3,7 +3,7 @@
 // Copyright (C) 2013 Project Delphi-OpenCV
 // ****************************************************************
 // Contributor:
-// laentir Valetov
+  // Laentir Valetov
 // email:laex@bk.ru
 // ****************************************************************
 // You may retrieve the latest version of this file at the GitHub,
@@ -20,7 +20,7 @@
 // implied. See the License for the specific language governing
 // rights and limitations under the License.
 // *******************************************************************
-// Source: http://answers.opencv.org/question/20484/get-the-color-percentage/
+// Source: http://answers.ocv.org/question/20484/get-the-color-percentage/
 //
 // Get the color percentage of RGB(ex red 50%, green 25% and blue %25) in an image
 //
@@ -32,11 +32,11 @@ program cv_Sum;
 
 uses
   System.SysUtils,
-  opencv.highgui_c,
-  opencv.core_c,
-  opencv.core.types_c,
-  opencv.imgproc_c,
-  opencv.imgproc.types_c,
+  ocv.highgui_c,
+  ocv.core_c,
+  ocv.core.types_c,
+  ocv.imgproc_c,
+  ocv.imgproc.types_c,
   uResourcePaths;
 
 const
