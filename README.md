@@ -35,7 +35,7 @@ Additionally, you can specify the path to the library header files FFMPEG
 ```
 Examples of using FFMPEG library header files are in the
 ```
-<PROJECT_ROOT>\samples\FFMpeg
+<PROJECT_ROOT>\samples\FFMpeg\FFMPEG.groupproj
 ```
 Open in Delphi IDE and compile:<br>
 Examples of the use of certain functions and procedures 
