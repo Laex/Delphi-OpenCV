@@ -3,7 +3,7 @@
 // Copyright (C) 2013 Project Delphi-OpenCV
 // ****************************************************************
 // Contributor:
-  // Laentir Valetov
+// Laentir Valetov
 // email:laex@bk.ru
 // ****************************************************************
 // You may retrieve the latest version of this file at the GitHub,
@@ -80,7 +80,7 @@ Type
   end;
 
   TOnOcvNotifyCollectionItem = procedure(PrevOperation, Operation, NextOperation: TObject; const IplImage: IocvImage;
-    Var ContinueTransform:Boolean) of object;
+    Var ContinueTransform: Boolean) of object;
 
   TOnOcvNotify = procedure(Sender: TObject; const IplImage: IocvImage) of object;
   TOnOcvAfterTransform = TOnOcvNotify;

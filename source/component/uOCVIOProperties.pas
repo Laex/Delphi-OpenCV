@@ -3,7 +3,7 @@
 // Copyright (C) 2013 Project Delphi-OpenCV
 // ****************************************************************
 // Contributor:
-  // Laentir Valetov
+// Laentir Valetov
 // email:laex@bk.ru
 // ****************************************************************
 // You may retrieve the latest version of this file at the GitHub,
@@ -22,9 +22,7 @@
 // *******************************************************************
 
 {$IFNDEF CLR}
-
 {$I OpenCV.inc}
-
 unit uOCVIOProperties;
 {$ENDIF}
 
@@ -34,11 +32,11 @@ uses
 {$IFDEF CLR}
   Borland.Vcl.Design.DesignEditors, Borland.Vcl.Design.DesignIntf,
 {$ELSE}
-  {$IFDEF FPC}
-    PropEdits, ComponentEditors, LResources,
-  {$ELSE}
-    {$IFDEF VER6P}DesignEditors, DesignIntf, System.Classes,{$ELSE}DsgnIntf, Classes,{$ENDIF VER6P}
-  {$ENDIF FPC}
+{$IFDEF FPC}
+  PropEdits, ComponentEditors, LResources,
+{$ELSE}
+{$IFDEF VER6P}DesignEditors, DesignIntf, System.Classes, {$ELSE}DsgnIntf, Classes, {$ENDIF VER6P}
+{$ENDIF FPC}
 {$ENDIF}
   uOCVImageOperation;
 
@@ -108,15 +106,15 @@ type
 implementation
 
 uses
-  {$IFDEF VER6P}
+{$IFDEF VER6P}
   System.SysUtils,
   System.TypInfo,
   System.RTLConsts,
-  {$ELSE}
+{$ELSE}
   SysUtils,
   TypInfo,
   RTLConsts,
-  {$ENDIF VER6P}
+{$ENDIF VER6P}
   uOCVTypes;
 
 {TImageOperationProperty}
@@ -314,7 +312,8 @@ end;
 initialization
 
 RegisterPropertyEditor(TypeInfo(TocvCustomImageOperation), TocvImageOperation, 'Operation', TImageOperationProperty);
-RegisterPropertyEditor(TypeInfo(TocvCustomImageOperation), TocvImageOperationCollectionItem, 'Operation', TImageOperationCollectionItemProperty);
+RegisterPropertyEditor(TypeInfo(TocvCustomImageOperation), TocvImageOperationCollectionItem, 'Operation',
+  TImageOperationCollectionItemProperty);
 RegisterPropertyEditor(TypeInfo(TocvCustomImageOperation), TocvContoursOperation, 'Preprocessing', TImageContourPrepProperty);
 RegisterPropertyEditor(TypeInfo(TocvCustomImageOperation), TocvMotionDetect, 'Threshold', TImageMotionDetectThresholdProperty);
 

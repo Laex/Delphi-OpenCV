@@ -146,10 +146,11 @@ object MainForm: TMainForm
     Top = 40
   end
   object ocvpcmsrc1: TocvIPCamSource
+    Enabled = True
     UserName = 'admin'
     Password = 'admin'
     IP = '10.1.1.202'
-    Postfix = 'cam/realmonitor?channel=1&subtype=0'
+    URI = '/cam/realmonitor?channel=1&subtype=0'
     Left = 336
     Top = 44
   end
