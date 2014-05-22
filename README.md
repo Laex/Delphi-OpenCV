@@ -24,7 +24,6 @@ Unzip it to a convenient directory, thus get the following directory structure.<
 Add the search path for the modules of the project in Delphi IDE (Tools-Options-Delphi Options-Library-Library path)
 ```
 <PROJECT_ROOT>\source
-<PROJECT_ROOT>\source\include
 <PROJECT_ROOT>\source\component
 <PROJECT_ROOT>\resource\facedetectxml
 ```
