@@ -1,9 +1,9 @@
-(* /*****************************************************************
+//*****************************************************************
   //                       Delphi-OpenCV Demo
   //               Copyright (C) 2013 Project Delphi-OpenCV
   // ****************************************************************
   // Contributor:
-  // Laentir Valetov
+    // Laentir Valetov
   // email:laex@bk.ru
   // ****************************************************************
   // You may retrieve the latest version of this file at the GitHub,
@@ -19,7 +19,7 @@
   // "AS IS" basis, WITHOUT WARRANTY OF ANY KIND, either express or
   // implied. See the License for the specific language governing
   // rights and limitations under the License.
-  ********************************************************************)
+  //*******************************************************************
 
 {$IFNDEF CLR}
 
@@ -40,8 +40,8 @@ uses
   Classes,
   SyncObjs,
   {$ENDIF VER6P}
-  opencv.core.types_c,
-  opencv.highgui_c,
+  ocv.core.types_c,
+  ocv.highgui_c,
   uOCVTypes;
 
 type
@@ -191,7 +191,7 @@ type
 implementation
 
 uses
-  opencv.core_c;
+  ocv.core_c;
 
 const
   ocvCameraCaptureSource: array [TocvCameraCaptureSource] of Longint =

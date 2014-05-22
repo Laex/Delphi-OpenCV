@@ -1,9 +1,9 @@
-(* /*****************************************************************
+//*****************************************************************
   //                       Delphi-OpenCV Demo
   //               Copyright (C) 2013 Project Delphi-OpenCV
   // ****************************************************************
   // Contributor:
-  // laentir Valetov
+    // Laentir Valetov
   // email:laex@bk.ru
   // ****************************************************************
   // You may retrieve the latest version of this file at the GitHub,
@@ -19,10 +19,8 @@
   // "AS IS" basis, WITHOUT WARRANTY OF ANY KIND, either express or
   // implied. See the License for the specific language governing
   // rights and limitations under the License.
-  ******************************************************************* *)
-// JCL_DEBUG_EXPERT_GENERATEJDBG OFF
-// JCL_DEBUG_EXPERT_INSERTJDBG OFF
-// JCL_DEBUG_EXPERT_DELETEMAPFILE OFF
+  //*******************************************************************
+
 program CameraCalibrate;
 
 {$APPTYPE CONSOLE}
@@ -31,12 +29,12 @@ program CameraCalibrate;
 
 uses
   System.SysUtils,
-  opencv.highgui_c,
-  opencv.core_c,
-  opencv.core.types_c,
-  opencv.imgproc_c,
-  opencv.imgproc.types_c,
-  opencv.calib3d_c,
+  ocv.highgui_c,
+  ocv.core_c,
+  ocv.core.types_c,
+  ocv.imgproc_c,
+  ocv.imgproc.types_c,
+  ocv.calib3d_c,
   uResourcePaths;
 
 var
@@ -182,7 +180,7 @@ begin
         // cvReleaseImage(mapy); - This has zero//эта еще нулевая
         cvReleaseImage(gray_image);
         // cvReleaseImage(image); - this can not be//этого делать нельзя
-        // cм. http://docs.opencv.org/modules/highgui/doc/reading_and_writing_images_and_video.html?highlight=cvqueryframe#IplImage*%20cvQueryFrame%28CvCapture*%20capture%29
+        // cм. http://docs.ocv.org/modules/highgui/doc/reading_and_writing_images_and_video.html?highlight=cvqueryframe#IplImage*%20cvQueryFrame%28CvCapture*%20capture%29
         // Note
         // OpenCV 1.x functions cvRetrieveFrame and cv.RetrieveFrame return image
         // stored inside the video capturing structure. It is not allowed to modify

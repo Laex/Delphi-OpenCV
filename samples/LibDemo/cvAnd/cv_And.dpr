@@ -1,9 +1,9 @@
-(* /*****************************************************************
+//*****************************************************************
   //                       Delphi-OpenCV Demo
   //               Copyright (C) 2013 Project Delphi-OpenCV
   // ****************************************************************
   // Contributor:
-  // laentir Valetov
+    // Laentir Valetov
   // email:laex@bk.ru
   // ****************************************************************
   // You may retrieve the latest version of this file at the GitHub,
@@ -19,7 +19,7 @@
   // "AS IS" basis, WITHOUT WARRANTY OF ANY KIND, either express or
   // implied. See the License for the specific language governing
   // rights and limitations under the License.
-  ********************************************************************)
+  //*******************************************************************
 
 program cv_And;
 
@@ -28,10 +28,10 @@ program cv_And;
 
 uses
   System.SysUtils,
-  opencv.highgui_c,
-  opencv.core_c,
-  opencv.core.types_c,
-  opencv.imgproc_c,
+  ocv.highgui_c,
+  ocv.core_c,
+  ocv.core.types_c,
+  ocv.imgproc_c,
   uResourcePaths;
 
 const

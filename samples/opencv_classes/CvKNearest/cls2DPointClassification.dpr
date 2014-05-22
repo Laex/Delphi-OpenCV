@@ -3,7 +3,7 @@
 // Copyright (C) 2013 Project Delphi-OpenCV
 // ****************************************************************
 // Contributor:
-// laentir Valetov
+  // Laentir Valetov
 // email:laex@bk.ru
 // ****************************************************************
 // You may retrieve the latest version of this file at the GitHub,
@@ -21,7 +21,7 @@
 // rights and limitations under the License.
 // *******************************************************************
 // Original:
-// http://docs.opencv.org/modules/ml/doc/k_nearest_neighbors.html#cvknearest-is-regression
+// http://docs.ocv.org/modules/ml/doc/k_nearest_neighbors.html#cvknearest-is-regression
 // *******************************************************************
 
 program cls2DPointClassification;
@@ -33,10 +33,10 @@ program cls2DPointClassification;
 uses
   System.SysUtils,
   System.Classes,
-  Core.types_c,
-  core_c,
-  highgui_c,
-  ml;
+  ocv.Core.types_c,
+  ocv.core_c,
+  ocv.highgui_c,
+  ocv.ml;
 
 Const
   K10: Integer = 10;

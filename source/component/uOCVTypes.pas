@@ -3,7 +3,7 @@
 // Copyright (C) 2013 Project Delphi-OpenCV
 // ****************************************************************
 // Contributor:
-// Laentir Valetov
+  // Laentir Valetov
 // email:laex@bk.ru
 // ****************************************************************
 // You may retrieve the latest version of this file at the GitHub,
@@ -42,7 +42,7 @@ uses
   Graphics,
 {$IFNDEF VER5}Types, {$ENDIF VER5}
 {$ENDIF VER6P}
-  opencv.core.types_c;
+  ocv.core.types_c;
 
 Type
   IocvImage = interface
@@ -165,10 +165,10 @@ function ocvRectCenter(cX, cY, Width, Height: Integer): TocvRect;
 implementation
 
 uses
-  opencv.core_c,
-  opencv.imgproc_c,
-  opencv.imgproc.types_c,
-  opencv.highgui_c;
+  ocv.core_c,
+  ocv.imgproc_c,
+  ocv.imgproc.types_c,
+  ocv.highgui_c;
 
 function ocvRect(Left, Top, Right, Bottom: Integer): TocvRect;
 begin

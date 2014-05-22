@@ -1,9 +1,9 @@
-(* /*****************************************************************
+//*****************************************************************
   //                       Delphi-OpenCV Demo
   //               Copyright (C) 2013 Project Delphi-OpenCV
   // ****************************************************************
   // Contributor:
-  // laentir Valetov
+    // Laentir Valetov
   // email:laex@bk.ru
   // ****************************************************************
   // You may retrieve the latest version of this file at the GitHub,
@@ -35,12 +35,12 @@ uses
   Winapi.Windows,
   System.SysUtils,
   System.Generics.Collections,
-  opencv.highgui_c,
-  opencv.core_c,
-  opencv.core.types_c,
-  opencv.imgproc_c,
-  opencv.imgproc.types_c,
-  opencv.tracking_c;
+  ocv.highgui_c,
+  ocv.core_c,
+  ocv.core.types_c,
+  ocv.imgproc_c,
+  ocv.imgproc.types_c,
+  ocv.tracking_c;
 
 const
   MAX_CAMERA = 10;

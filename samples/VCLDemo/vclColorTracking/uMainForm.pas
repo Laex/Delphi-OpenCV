@@ -31,10 +31,10 @@
 // **************************************************************************************************
 // The Initial Developer of the Original Code:
 // OpenCV: open source computer vision library
-// Homepage:    http://opencv.org
-// Online docs: http://docs.opencv.org
-// Q&A forum:   http://answers.opencv.org
-// Dev zone:    http://code.opencv.org
+// Homepage:    http://ocv.org
+// Online docs: http://docs.ocv.org
+// Q&A forum:   http://answers.ocv.org
+// Dev zone:    http://code.ocv.org
 // **************************************************************************************************
 
 unit uMainForm;
@@ -51,8 +51,8 @@ uses
   Vcl.Controls,
   Vcl.Forms,
   Vcl.Dialogs,
-  opencv.highgui_c,
-  opencv.core.types_c,
+  ocv.highgui_c,
+  ocv.core.types_c,
   Vcl.StdCtrls,
   Vcl.ExtCtrls;
 
@@ -65,9 +65,9 @@ type
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
   private
-    capture     : pCvCapture;
+    capture: pCvCapture;
     lastX, lastY: Integer;
-    imgTracking : pIplImage;
+    imgTracking: pIplImage;
     procedure OnIdle(Sender: TObject; var Done: Boolean);
     procedure DetectingRedObjects(img: pIplImage);
     procedure TrackingRedObjects(img: pIplImage);
@@ -83,10 +83,10 @@ implementation
 {$R *.dfm}
 
 Uses
-  opencv.core_c,
-  opencv.imgproc_c,
-  opencv.imgproc.types_c,
-  opencv.cvutils;
+  ocv.core_c,
+  ocv.imgproc_c,
+  ocv.imgproc.types_c,
+  ocv.cvutils;
 
 procedure TMainForm.FormDestroy(Sender: TObject);
 begin
@@ -99,66 +99,37 @@ end;
 // This function threshold the HSV image and create a binary image
 function GetThresholdedImage(imgHSV: pIplImage): pIplImage;
 begin
-  Result := cvCreateImage(
-    cvGetSize(imgHSV),
-    IPL_DEPTH_8U,
-    1);
+  Result := cvCreateImage(cvGetSize(imgHSV), IPL_DEPTH_8U, 1);
 
   // Convet a video into a binary image based on the red color.
   // Red color area of the video is assined to '1' and other area is assigned to '0' in the binary image
-  cvInRangeS(
-    imgHSV,
-    cvScalar(170, 160, 60),
-    cvScalar(180, 256, 256),
-    Result);
+  cvInRangeS(imgHSV, cvScalar(170, 160, 60), cvScalar(180, 256, 256), Result);
 end;
 
 procedure TMainForm.DetectingRedObjects(img: pIplImage);
 Var
-  imgHSV   : pIplImage;
+  imgHSV: pIplImage;
   imgThresh: pIplImage;
-  frame    : pIplImage;
+  frame: pIplImage;
 begin
   frame := cvCloneImage(img);
 
   // smooth the original image using Gaussian kernel
-  cvSmooth(
-    frame,
-    frame,
-    CV_GAUSSIAN,
-    3,
-    3);
+  cvSmooth(frame, frame, CV_GAUSSIAN, 3, 3);
 
-  imgHSV := cvCreateImage(
-    cvGetSize(frame),
-    IPL_DEPTH_8U,
-    3);
+  imgHSV := cvCreateImage(cvGetSize(frame), IPL_DEPTH_8U, 3);
 
   // Change the color format from BGR to HSV
-  cvCvtColor(
-    frame,
-    imgHSV,
-    CV_BGR2HSV);
+  cvCvtColor(frame, imgHSV, CV_BGR2HSV);
 
   imgThresh := GetThresholdedImage(imgHSV);
 
   // smooth the binary image using Gaussian kernel
-  cvSmooth(
-    imgThresh,
-    imgThresh,
-    CV_GAUSSIAN,
-    3,
-    3);
+  cvSmooth(imgThresh, imgThresh, CV_GAUSSIAN, 3, 3);
 
-  ipDraw(
-    pb1.Canvas.Handle,
-    frame,
-    pb1.ClientRect);
+  ipDraw(pb1.Canvas.Handle, frame, pb1.ClientRect);
 
-  ipDraw(
-    pb2.Canvas.Handle,
-    imgThresh,
-    pb1.ClientRect);
+  ipDraw(pb2.Canvas.Handle, imgThresh, pb1.ClientRect);
 
   // Clean up used images
   cvReleaseImage(imgHSV);
@@ -168,28 +139,16 @@ end;
 
 procedure TMainForm.trackObject(imgThresh: pIplImage);
 Var
-  moments                 : pCvMoments;
+  moments: pCvMoments;
   moment10, moment01, area: Double;
-  posX, posY              : Integer;
+  posX, posY: Integer;
 begin
   // Calculate the moments of 'imgThresh'
   moments := allocMem(sizeof(TCvMoments));
-  cvMoments(
-    imgThresh,
-    moments,
-    1);
-  moment10 := cvGetSpatialMoment(
-    moments,
-    1,
-    0);
-  moment01 := cvGetSpatialMoment(
-    moments,
-    0,
-    1);
-  area := cvGetCentralMoment(
-    moments,
-    0,
-    0);
+  cvMoments(imgThresh, moments, 1);
+  moment10 := cvGetSpatialMoment(moments, 1, 0);
+  moment01 := cvGetSpatialMoment(moments, 0, 1);
+  area := cvGetCentralMoment(moments, 0, 0);
 
   // if the area<1000, I consider that the there are no object in the image and it's because of the noise, the area is not zero
   if (area > 1000) then
@@ -200,12 +159,7 @@ begin
 
     if (lastX >= 0) and (lastY >= 0) and (posX >= 0) and (posY >= 0) then
       // Draw a yellow line from the previous point to the current point
-      cvLine(
-        imgTracking,
-        cvPoint(posX, posY),
-        cvPoint(lastX, lastY),
-        cvScalar(0, 0, 255),
-        4);
+      cvLine(imgTracking, cvPoint(posX, posY), cvPoint(lastX, lastY), cvScalar(0, 0, 255), 4);
 
     lastX := posX;
     lastY := posY;
@@ -216,54 +170,29 @@ end;
 
 procedure TMainForm.TrackingRedObjects(img: pIplImage);
 Var
-  imgHSV   : pIplImage;
+  imgHSV: pIplImage;
   imgThresh: pIplImage;
-  frame    : pIplImage;
+  frame: pIplImage;
 begin
   frame := cvCloneImage(img);
 
-  cvSmooth(
-    frame,
-    frame,
-    CV_GAUSSIAN,
-    3,
-    3); // smooth the original image using Gaussian kernel
+  cvSmooth(frame, frame, CV_GAUSSIAN, 3, 3); // smooth the original image using Gaussian kernel
 
-  imgHSV := cvCreateImage(
-    cvGetSize(frame),
-    IPL_DEPTH_8U,
-    3);
-  cvCvtColor(
-    frame,
-    imgHSV,
-    CV_BGR2HSV); // Change the color format from BGR to HSV
+  imgHSV := cvCreateImage(cvGetSize(frame), IPL_DEPTH_8U, 3);
+  cvCvtColor(frame, imgHSV, CV_BGR2HSV); // Change the color format from BGR to HSV
   imgThresh := GetThresholdedImage(imgHSV);
 
-  cvSmooth(
-    imgThresh,
-    imgThresh,
-    CV_GAUSSIAN,
-    3,
-    3); // smooth the binary image using Gaussian kernel
+  cvSmooth(imgThresh, imgThresh, CV_GAUSSIAN, 3, 3); // smooth the binary image using Gaussian kernel
 
   // track the possition of the ball
   trackObject(imgThresh);
 
   // Add the tracking image and the frame
-  cvAdd(
-    frame,
-    imgTracking,
-    frame);
+  cvAdd(frame, imgTracking, frame);
 
-  ipDraw(
-    pb1.Canvas.Handle,
-    frame,
-    pb1.ClientRect);
+  ipDraw(pb1.Canvas.Handle, frame, pb1.ClientRect);
 
-  ipDraw(
-    pb2.Canvas.Handle,
-    imgThresh,
-    pb1.ClientRect);
+  ipDraw(pb2.Canvas.Handle, imgThresh, pb1.ClientRect);
 
   // Clean up used images
   cvReleaseImage(imgHSV);
@@ -287,10 +216,7 @@ begin
         if not Assigned(imgTracking) then
         begin
           // create a blank image and assigned to 'imgTracking' which has the same size of original video
-          imgTracking := cvCreateImage(
-            cvGetSize(frame),
-            IPL_DEPTH_8U,
-            3);
+          imgTracking := cvCreateImage(cvGetSize(frame), IPL_DEPTH_8U, 3);
           cvZero(imgTracking); // covert the image, 'imgTracking' to black
         end;
         TrackingRedObjects(frame);
@@ -302,8 +228,8 @@ end;
 
 procedure TMainForm.FormCreate(Sender: TObject);
 begin
-  lastX   := -1;
-  lastY   := -1;
+  lastX := -1;
+  lastY := -1;
   capture := cvCreateCameraCapture(CV_CAP_ANY);
   if Assigned(capture) then
     Application.OnIdle := OnIdle;

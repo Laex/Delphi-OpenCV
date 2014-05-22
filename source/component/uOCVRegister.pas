@@ -60,7 +60,7 @@ end;
 
 initialization
 
-{$I OpenCV.lrs}
+{$I ocv.lrs}
 {$ENDIF FPC}
 
 end.

@@ -3,7 +3,7 @@
 // Copyright (C) 2013 Project Delphi-OpenCV
 // ****************************************************************
 // Contributor:
-// Laentir Valetov
+  // Laentir Valetov
 // email:laex@bk.ru
 // ****************************************************************
 // You may retrieve the latest version of this file at the GitHub,
@@ -35,13 +35,13 @@ uses
   System.Character,
   System.SysUtils,
   System.Math,
-  opencv.core.types_c,
-  opencv.core_c,
-  opencv.highgui_c,
-  opencv.objdetect_c,
-  opencv.imgproc_c,
-  opencv.imgproc.types_c,
-  opencv.cvutils,
+  ocv.core.types_c,
+  ocv.core_c,
+  ocv.highgui_c,
+  ocv.objdetect_c,
+  ocv.imgproc_c,
+  ocv.imgproc.types_c,
+  ocv.cvutils,
   uResourcePaths;
 
 Const

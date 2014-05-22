@@ -3,7 +3,7 @@
 // Copyright (C) 2013 Project Delphi-OpenCV
 // ****************************************************************
 // Contributor:
-// Laentir Valetov
+  // Laentir Valetov
 // email:laex@bk.ru
 // ****************************************************************
 // You may retrieve the latest version of this file at the GitHub,
@@ -31,12 +31,12 @@ uses
   System.Math,
   System.SysUtils,
   System.Classes,
-  opencv.core_c,
-  opencv.highgui_c,
-  opencv.imgproc_c,
-  opencv.imgproc.types_c,
-  opencv.core.types_c,
-  opencv.cvutils;
+  ocv.core_c,
+  ocv.highgui_c,
+  ocv.imgproc_c,
+  ocv.imgproc.types_c,
+  ocv.core.types_c,
+  ocv.cvutils;
 
 // default capture width and height
 const

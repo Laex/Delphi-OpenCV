@@ -154,7 +154,7 @@
         <DelphiCompile Include="$(MainSource)">
             <MainSource>MainSource</MainSource>
         </DelphiCompile>
-        <DCCReference Include="..\OpenCV.dcr"/>
+        <DCCReference Include="..\ocv.dcr"/>
         <DCCReference Include="OpenCV180.dcp"/>
         <DCCReference Include="rtl.dcp"/>
         <DCCReference Include="vcl.dcp"/>

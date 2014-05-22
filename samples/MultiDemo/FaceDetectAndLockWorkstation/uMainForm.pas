@@ -5,7 +5,7 @@ unit uMainForm;
 interface
 
 uses
-  opencv.core.types_c, opencv.core_c, opencv.highgui_c, opencv.objdetect_c, opencv.cvutils,
+  ocv.core.types_c, ocv.core_c, ocv.highgui_c, ocv.objdetect_c, ocv.cvutils,
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.StdCtrls, Vcl.Samples.Spin,
   Vcl.Menus, Vcl.ImgList, uResourcePaths;

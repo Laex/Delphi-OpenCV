@@ -3,7 +3,7 @@
 // Copyright (C) 2013 Project Delphi-OpenCV
 // ****************************************************************
 // Contributor:
-// Laentir Valetov
+  // Laentir Valetov
 // email:laex@bk.ru
 // ****************************************************************
 // You may retrieve the latest version of this file at the GitHub,
@@ -22,7 +22,7 @@
 // *******************************************************************
 
 {$IFNDEF CLR}
-{$I OpenCV.inc}
+{$I Opencv.inc}
 unit uOCVImageOperation;
 {$ENDIF}
 
@@ -49,8 +49,8 @@ uses
   ZLib,
 {$ENDIF VER6P}
   uOCVTypes,
-  opencv.objdetect_c,
-  opencv.core.types_c;
+  ocv.objdetect_c,
+  ocv.core.types_c;
 
 type
 
@@ -639,10 +639,10 @@ implementation
 {$R haarcascade.res}
 
 uses
-  opencv.core_c,
-  opencv.imgproc_c,
-  opencv.imgproc.types_c,
-  opencv.cvutils;
+  ocv.core_c,
+  ocv.imgproc_c,
+  ocv.imgproc.types_c,
+  ocv.cvutils;
 
 type
   TPersistentAccessProtected = class(TPersistent);
@@ -792,7 +792,7 @@ var
 begin
   if LockTransform then
     try
-      if (OperationsEnabled and Operations.Transform(IplImage, Destanation)) then
+      if (OperationsEnabled and (Operations.Count > 0) and Operations.Transform(IplImage, Destanation)) then
         NotifyReceiver(Destanation)
       else
       begin
@@ -2157,7 +2157,7 @@ end;
 
 function TocvRectPersistent.GetCvRect: TCvRect;
 begin
-  Result := opencv.core.types_c.cvRect(Left, Top, Width, Height);
+  Result := ocv.core.types_c.cvRect(Left, Top, Width, Height);
 end;
 
 function TocvRectPersistent.GetHeight: Integer;

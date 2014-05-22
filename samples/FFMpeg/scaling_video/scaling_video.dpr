@@ -2,32 +2,32 @@ program scaling_video;
 
 {$APPTYPE CONSOLE}
 {$R *.res}
-{$include ffmpeg.inc}
+{$i ffmpeg.inc}
 
 uses
   System.SysUtils,
   System.Classes,
   Winapi.Windows,
-  ffmpeglib,
-  ffmpeg.libavcodec.avcodec,
-  ffmpeg.ctypes,
-  ffmpeg.avformat,
-  ffmpeg.avio,
-  ffmpeg.avutil,
-  ffmpeg.buffer,
-  ffmpeg.dict,
-  ffmpeg.frame,
-  ffmpeg.log,
-  ffmpeg.opt,
-  ffmpeg.pixfmt,
-  ffmpeg.rational,
-  ffmpeg.samplefmt,
-  ffmpeg.parseutils,
-  ffmpeg.swscale,
-  ffmpeg.pixdesc,
-  ffmpeg.imgutils,
-  ffmpeg.mem,
-  ffmpeg.error,
+  ffm.lib,
+  ffm.libavcodec.avcodec,
+  ffm.ctypes,
+  ffm.avformat,
+  ffm.avio,
+  ffm.avutil,
+  ffm.buffer,
+  ffm.dict,
+  ffm.frame,
+  ffm.log,
+  ffm.opt,
+  ffm.pixfmt,
+  ffm.rational,
+  ffm.samplefmt,
+  ffm.parseutils,
+  ffm.swscale,
+  ffm.pixdesc,
+  ffm.imgutils,
+  ffm.mem,
+  ffm.error,
   uResourcePaths;
 
 Var

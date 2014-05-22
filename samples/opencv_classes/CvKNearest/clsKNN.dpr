@@ -3,7 +3,7 @@
 // Copyright (C) 2013 Project Delphi-OpenCV
 // ****************************************************************
 // Contributor:
-// laentir Valetov
+  // Laentir Valetov
 // email:laex@bk.ru
 // ****************************************************************
 // You may retrieve the latest version of this file at the GitHub,
@@ -33,9 +33,9 @@ program clsKNN;
 uses
   System.SysUtils,
   System.Classes,
-  Core.types_c,
-  core_c,
-  ml;
+  ocv.Core.types_c,
+  ocv.core_c,
+  ocv.ml;
 
 { DEFINE Test }
 
