@@ -1,6 +1,8 @@
 ; ocvclass.def : Declares the module parameters for the DLL.
 
-LIBRARY "ocvclasses.DLL"
+
+LIBRARY "opencv_classes249d.dll"
+
 DESCRIPTION  'Wrapper for OpenCV classes'
 
 EXPORTS

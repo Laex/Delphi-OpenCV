@@ -3,7 +3,7 @@
 // Copyright (C) 2013 Project Delphi-OpenCV
 // ****************************************************************
 // Contributor:
-  // Laentir Valetov
+// Laentir Valetov
 // email:laex@bk.ru
 // ****************************************************************
 // You may retrieve the latest version of this file at the GitHub,
@@ -35,17 +35,18 @@ uses
   System.Classes,
   ocv.Core.types_c,
   ocv.core_c,
-  ocv.ml;
+  ocv.ml,
+  uResourcePaths;
 
-{ DEFINE Test }
+{DEFINE Test}
 
 Const
-  CarTrain_FileName = 'resource\car.train';
+  CarTrain_FileName = cResourceMedia + 'car.train';
 {$IFDEF Test}
-  CarTest_FileName = 'resource\car.test';
+  CarTest_FileName = cResourceMedia + 'car.test';
   NUMBER_OF_TESTING_SAMPLES = 345;
 {$ELSE}
-  CarTest_FileName = 'resource\car.data';
+  CarTest_FileName = cResourceMedia + 'car.data';
   NUMBER_OF_TESTING_SAMPLES = 1728;
 {$ENDIF}
   ATTRIBUTES_PER_SAMPLE = 6; // not the last as this is the class
@@ -191,12 +192,14 @@ begin
           end;
         end;
 
-        WriteLn(Format('Results on the testing database: %s'#13#10#9'Correct classification: %d (%4.2f%%)'#13#10#9 + 'Wrong classifications: %d (%4.2f%%)',
-          [CarTest_FileName, correct_class, correct_class * 100 / NUMBER_OF_TESTING_SAMPLES, wrong_class, wrong_class * 100 / NUMBER_OF_TESTING_SAMPLES]));
+        WriteLn(Format('Results on the testing database: %s'#13#10#9'Correct classification: %d (%4.2f%%)'#13#10#9 +
+          'Wrong classifications: %d (%4.2f%%)', [CarTest_FileName, correct_class,
+          correct_class * 100 / NUMBER_OF_TESTING_SAMPLES, wrong_class, wrong_class * 100 / NUMBER_OF_TESTING_SAMPLES]));
 
         for i := 0 to NUMBER_OF_CLASSES - 1 do
         begin
-          WriteLn(Format(#9'Class %s false postives 	%d (%4.2f%%)', [Classes[i], false_positives[i], false_positives[i] * 100 / NUMBER_OF_TESTING_SAMPLES]));
+          WriteLn(Format(#9'Class %s false postives 	%d (%4.2f%%)', [Classes[i], false_positives[i],
+            false_positives[i] * 100 / NUMBER_OF_TESTING_SAMPLES]));
         end;
       end;
     finally

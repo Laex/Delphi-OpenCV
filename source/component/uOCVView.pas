@@ -3,7 +3,7 @@
 // Copyright (C) 2013 Project Delphi-OpenCV
 // ****************************************************************
 // Contributor:
-  // Laentir Valetov
+// Laentir Valetov
 // email:laex@bk.ru
 // ****************************************************************
 // You may retrieve the latest version of this file at the GitHub,
@@ -167,7 +167,7 @@ begin
       begin
         w := cw;
         h := Trunc(cw / xyaspect);
-        if h > ch then  // woops, too big
+        if h > ch then // woops, too big
         begin
           h := ch;
           w := Trunc(ch * xyaspect);
@@ -177,7 +177,7 @@ begin
       begin
         h := ch;
         w := Trunc(ch * xyaspect);
-        if w > cw then  // woops, too big
+        if w > cw then // woops, too big
         begin
           w := cw;
           h := Trunc(cw / xyaspect);
