@@ -30,7 +30,7 @@ unit uOCVIOProperties;
 
 interface
 
-Uses
+uses
 {$IFDEF CLR}
   Borland.Vcl.Design.DesignEditors, Borland.Vcl.Design.DesignIntf,
 {$ELSE}
@@ -42,7 +42,7 @@ Uses
 {$ENDIF}
   uOCVImageOperation;
 
-Type
+type
   /// Используется в TocvImageOperation
   TImageOperationProperty = class(TComponentProperty)
   private
@@ -107,7 +107,7 @@ Type
 
 implementation
 
-Uses
+uses
   {$IFDEF VER6P}
   System.SysUtils,
   System.TypInfo,

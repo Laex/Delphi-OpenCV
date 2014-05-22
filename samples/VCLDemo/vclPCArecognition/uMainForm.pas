@@ -76,12 +76,12 @@ implementation
 
 {$R *.dfm}
 
-Uses
-  core_c,
-  highgui_c,
-  core.types_c,
-  legacy,
-  cvUtils;
+uses
+  opencv.core_c,
+  opencv.highgui_c,
+  opencv.core.types_c,
+  opencv.legacy,
+  opencv.cvutils;
 
 procedure TMainForm.btn1Click(Sender: TObject);
 const

@@ -51,8 +51,8 @@ uses
   Vcl.Controls,
   Vcl.Forms,
   Vcl.Dialogs,
-  highgui_c,
-  core.types_c,
+  opencv.highgui_c,
+  opencv.core.types_c,
   Vcl.StdCtrls,
   Vcl.ExtCtrls;
 
@@ -83,10 +83,10 @@ implementation
 {$R *.dfm}
 
 Uses
-  core_c,
-  imgproc_c,
-  imgproc.types_c,
-  cvUtils;
+  opencv.core_c,
+  opencv.imgproc_c,
+  opencv.imgproc.types_c,
+  opencv.cvutils;
 
 procedure TMainForm.FormDestroy(Sender: TObject);
 begin

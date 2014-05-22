@@ -30,13 +30,13 @@ program cv_ExtractSURF;
 uses
   WinApi.Windows,
   System.SysUtils,
-  highgui_c,
-  core_c,
-  Core.types_c,
-  imgproc_c,
-  imgproc.types_c,
-  compat,
-  nonfree,
+  opencv.highgui_c,
+  opencv.core_c,
+  opencv.core.types_c,
+  opencv.imgproc_c,
+  opencv.imgproc.types_c,
+  opencv.compat,
+  opencv.nonfree,
   uResourcePaths;
 
 function compareSURFDescriptors(const d1: pSingle; const d2: pSingle; best: Double; length: Integer): Double;

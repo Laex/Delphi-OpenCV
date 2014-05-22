@@ -34,8 +34,8 @@ uses
   Vcl.Controls,
   Vcl.Forms,
   Vcl.Dialogs,
-  highgui_c,
-  core.types_c,
+  opencv.highgui_c,
+  opencv.core.types_c,
   Vcl.ExtCtrls,
   Vcl.StdCtrls;
 
@@ -73,11 +73,11 @@ implementation
 {$R *.dfm}
 
 uses
-  core_c,
-  cvUtils,
-  calib3d_c,
-  imgproc_c,
-  imgproc.types_c;
+  opencv.core_c,
+  opencv.cvutils,
+  opencv.calib3d_c,
+  opencv.imgproc_c,
+  opencv.imgproc.types_c;
 
 const
   nWidthGrid  = 9;

@@ -28,10 +28,10 @@ program cv_Laplace;
 
 uses
   System.SysUtils,
-  highgui_c,
-  core_c,
-  Core.types_c,
-  imgproc_c,
+  opencv.highgui_c,
+  opencv.core_c,
+  opencv.core.types_c,
+  opencv.imgproc_c,
   uResourcePaths;
 
 const

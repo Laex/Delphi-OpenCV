@@ -12,10 +12,10 @@ uses
   Vcl.Controls,
   Vcl.Forms,
   Vcl.Dialogs,
-  core_c,
-  core.types_c,
-  imgproc_c,
-  highgui_c,
+  opencv.core_c,
+  opencv.core.types_c,
+  opencv.imgproc_c,
+  opencv.highgui_c,
   dglOpenGL;
 
 type

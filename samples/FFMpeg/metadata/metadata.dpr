@@ -6,26 +6,27 @@ program metadata;
 
 uses
   System.SysUtils,
-  ffmpeglib in '..\..\ffmpeglib.pas',
-  libavcodec.avcodec in '..\..\libavcodec\libavcodec.avcodec.pas',
-  ctypes in '..\..\..\ctypes\ctypes.pas',
-  avformat in '..\..\libavformat\avformat.pas',
-  avio in '..\..\libavformat\avio.pas',
-  avutil in '..\..\libavutil\avutil.pas',
-  buffer in '..\..\libavutil\buffer.pas',
-  dict in '..\..\libavutil\dict.pas',
-  frame in '..\..\libavutil\frame.pas',
-  log in '..\..\libavutil\log.pas',
-  opt in '..\..\libavutil\opt.pas',
-  pixfmt in '..\..\libavutil\pixfmt.pas',
-  rational in '..\..\libavutil\rational.pas',
-  samplefmt in '..\..\libavutil\samplefmt.pas',
-  parseutils in '..\..\libavutil\parseutils.pas',
-  swscale in '..\..\libswscale\swscale.pas',
-  pixdesc in '..\..\libavutil\pixdesc.pas',
-  imgutils in '..\..\libavutil\imgutils.pas',
-  mem in '..\..\libavutil\mem.pas',
-  error in '..\..\libavutil\error.pas';
+  ffmpeglib,
+  ffmpeg.libavcodec.avcodec,
+  ffmpeg.ctypes,
+  ffmpeg.avformat,
+  ffmpeg.avio,
+  ffmpeg.avutil,
+  ffmpeg.buffer,
+  ffmpeg.dict,
+  ffmpeg.frame,
+  ffmpeg.log,
+  ffmpeg.opt,
+  ffmpeg.pixfmt,
+  ffmpeg.rational,
+  ffmpeg.samplefmt,
+  ffmpeg.parseutils,
+  ffmpeg.swscale,
+  ffmpeg.pixdesc,
+  ffmpeg.imgutils,
+  ffmpeg.mem,
+  ffmpeg.error,
+  uResourcePaths;
 
 Var
   fmt_ctx: pAVFormatContext = nil;
@@ -33,16 +34,18 @@ Var
   ret: Integer;
   inp : AnsiString;
 
+const
+  std_filename = cResourceMedia + 'trailer.avi';
+	
 begin
   try
-    if (ParamCount <> 1) then
-    begin
-      Writeln(Format('usage: %s <input_file>'#13#10 + 'example program to demonstrate the use of the libavformat metadata API.'#13#10,
+     Writeln(Format('usage: %s <input_file>'#13#10 + 'example program to demonstrate the use of the libavformat metadata API.'#13#10,
         [ExtractFileName(ParamStr(0))]));
-      Halt(1)
-    end;
+    if (ParamCount < 1) then
+      inp := std_filename
+    else
+      inp := ParamStr(1);
     av_register_all();
-    inp:=ParamStr(1);
     ret := avformat_open_input(fmt_ctx, PAnsiChar(inp), nil, nil);
     if ret < 0 then
       Halt(ret);

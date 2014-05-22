@@ -7,34 +7,36 @@ program filtering_video;
 uses
   Winapi.Windows,
   System.SysUtils,
-  ffmpeglib in '..\..\ffmpeglib.pas',
-  ctypes in '..\..\..\ctypes\ctypes.pas',
-  avformat in '..\..\libavformat\avformat.pas',
-  avio in '..\..\libavformat\avio.pas',
-  avutil in '..\..\libavutil\avutil.pas',
-  buffer in '..\..\libavutil\buffer.pas',
-  dict in '..\..\libavutil\dict.pas',
-  frame in '..\..\libavutil\frame.pas',
-  log in '..\..\libavutil\log.pas',
-  opt in '..\..\libavutil\opt.pas',
-  pixfmt in '..\..\libavutil\pixfmt.pas',
-  rational in '..\..\libavutil\rational.pas',
-  samplefmt in '..\..\libavutil\samplefmt.pas',
-  parseutils in '..\..\libavutil\parseutils.pas',
-  swscale in '..\..\libswscale\swscale.pas',
-  pixdesc in '..\..\libavutil\pixdesc.pas',
-  imgutils in '..\..\libavutil\imgutils.pas',
-  mem in '..\..\libavutil\mem.pas',
-  error in '..\..\libavutil\error.pas',
-  avfilter in '..\..\libavfilter\avfilter.pas',
-  buffersink in '..\..\libavfilter\buffersink.pas',
-  mathematics in '..\..\libavutil\mathematics.pas',
-  libavcodec.avcodec in '..\..\libavcodec\libavcodec.avcodec.pas',
-  buffersrc in '..\..\libavfilter\buffersrc.pas',
-  errno in '..\..\libavutil\errno.pas';
+  ffmpeglib,
+  ffmpeg.ctypes,
+  ffmpeg.avformat,
+  ffmpeg.avio,
+  ffmpeg.avutil,
+  ffmpeg.buffer,
+  ffmpeg.dict,
+  ffmpeg.frame,
+  ffmpeg.log,
+  ffmpeg.opt,
+  ffmpeg.pixfmt,
+  ffmpeg.rational,
+  ffmpeg.samplefmt,
+  ffmpeg.parseutils,
+  ffmpeg.swscale,
+  ffmpeg.pixdesc,
+  ffmpeg.imgutils,
+  ffmpeg.mem,
+  ffmpeg.error,
+  ffmpeg.avfilter,
+  ffmpeg.buffersink,
+  ffmpeg.mathematics,
+  ffmpeg.libavcodec.avcodec,
+  ffmpeg.buffersrc,
+  ffmpeg.errno,
+  uResourcePaths;
 
-Const
+const
   _XOPEN_SOURCE = 600; (* for usleep *)
+  std_filename = cResourceMedia + 'trailer.avi';
 
 Var
   filter_descr: pAnsiChar = 'scale=78:24';
@@ -217,18 +219,16 @@ begin
       Writeln('Could not allocate frame');
       Halt(1);
     end;
-    if (ParamCount <> 1) then
-    begin
-      Writeln('Usage: ', ExtractFileName(ParamStr(0)), ' file');
-      Halt(1);
-    end;
+    if (ParamCount < 1) then
+      filename := std_filename
+    else
+      filename := ParamStr(1);
 
     avcodec_register_all();
     av_register_all();
     avfilter_register_all();
     avformat_network_init;
     try
-      filename := AnsiString(ParamStr(1));
       ret := open_input_file(pAnsiChar(filename));
       if (ret < 0) then
         Halt(1);

@@ -31,12 +31,12 @@ uses
   System.Math,
   System.SysUtils,
   System.Classes,
-  core_c,
-  highgui_c,
-  imgproc_c,
-  imgproc.types_c,
-  core.types_c,
-  cvUtils;
+  opencv.core_c,
+  opencv.highgui_c,
+  opencv.imgproc_c,
+  opencv.imgproc.types_c,
+  opencv.core.types_c,
+  opencv.cvutils;
 
 // default capture width and height
 const

@@ -31,13 +31,13 @@ program CameraShift;
 uses
   System.SysUtils,
   System.Math,
-  highgui_c,
-  core_c,
-  Core.types_c,
-  imgproc_c,
-  imgproc.types_c,
-  tracking_c,
-  cvUtils;
+  opencv.highgui_c,
+  opencv.core_c,
+  opencv.core.types_c,
+  opencv.imgproc_c,
+  opencv.imgproc.types_c,
+  opencv.tracking_c,
+  opencv.cvutils;
 
 var
   image: pIplImage = nil;

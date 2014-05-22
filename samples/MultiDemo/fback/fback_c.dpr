@@ -31,12 +31,12 @@ program fback_c;
 
 uses
   System.SysUtils,
-  highgui_c,
-  core_c,
-  Core.types_c,
-  imgproc_c,
-  imgproc.types_c,
-  tracking_c;
+  opencv.highgui_c,
+  opencv.core_c,
+  opencv.core.types_c,
+  opencv.imgproc_c,
+  opencv.imgproc.types_c,
+  opencv.tracking_c;
 
 procedure drawOptFlowMap(const flow: pCvMat; cflowmap: pCvMat; step: Integer; scale: double; color: TCvScalar);
 var
