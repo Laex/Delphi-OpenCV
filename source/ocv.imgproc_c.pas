@@ -612,7 +612,7 @@ function cvArcLength(const curve: Pointer; slice: TCvSlice { = CV_WHOLE_SEQ }; i
   return cvArcLength( contour, CV_WHOLE_SEQ, 1 );
   }
 *)
-function cvContourPerimeter(const contour: Pointer): double; inline;
+function cvContourPerimeter(const contour: Pointer): double; {$IFDEF VER9P}inline;{$ENDIF}
 
 // * Calculates contour boundning rectangle (update=1) or
 // just retrieves pre-calculated rectangle (update=0) */
@@ -769,7 +769,7 @@ procedure cvCalcArrHist(var arr: pIplImage; hist: pCvHistogram; accumulate: Inte
 // {
 // cvCalcArrHist( (CvArr**)image, hist, accumulate, mask );
 // }
-procedure cvCalcHist(var image: pIplImage; hist: pCvHistogram; accumulate: Integer = 0; const mask: pIplImage = nil); inline;
+procedure cvCalcHist(var image: pIplImage; hist: pCvHistogram; accumulate: Integer = 0; const mask: pIplImage = nil); {$IFDEF VER9P}inline;{$ENDIF}
 
 
 // var mask CV_DEFAULT(0) )begin     cvCalcArrHist( (CvArr*)image: vArr;
@@ -1052,7 +1052,7 @@ procedure cvInitUndistortMap; external imgproc_lib;
 procedure cvRemap; external imgproc_lib;
 function cvArcLength; external imgproc_lib;
 
-function cvContourPerimeter(const contour: Pointer): double; inline;
+function cvContourPerimeter(const contour: Pointer): double; {$IFDEF VER9P}inline;{$ENDIF}
 begin
   result := cvArcLength(contour, CV_WHOLE_SEQ, 1);
 end;
