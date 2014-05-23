@@ -59,7 +59,6 @@ object MainForm: TMainForm
     Top = 28
     Width = 300
     Height = 300
-    VideoSource = ocvcmrsrc1
   end
   object ocvw2: TocvView
     Left = 8
@@ -103,7 +102,10 @@ object MainForm: TMainForm
   end
   object ocvmgprtn1: TocvImageOperation
     VideoSource = ocvcmrsrc1
-    OperationClassName = 'TocvNoneOperation'
+    OperationClassName = 'TovcCannyOperation'
+    Operation.Threshold1 = 10.000000000000000000
+    Operation.Threshold2 = 100.000000000000000000
+    Operation.ApertureSize = 3
     Operations = <
       item
         OperationClassName = 'TocvHaarCascade'
@@ -129,6 +131,7 @@ object MainForm: TMainForm
         Operation.CropRect.Width = 0
         Operation.CropRect.Height = 0
       end>
+    OperationsEnabled = False
     OnAfterEachOperation = ocvmgprtn1AfterEachOperation
     Left = 36
     Top = 392
@@ -146,7 +149,6 @@ object MainForm: TMainForm
     Top = 40
   end
   object ocvpcmsrc1: TocvIPCamSource
-    Enabled = True
     UserName = 'admin'
     Password = 'admin'
     IP = '10.1.1.202'

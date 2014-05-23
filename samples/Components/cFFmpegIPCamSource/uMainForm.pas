@@ -10,6 +10,8 @@ type
   TForm1 = class(TForm)
     ocvfmpgpcmsrc1: TocvFFMpegIPCamSource;
     ocvw1: TocvView;
+    ocvFFMpegIPCamSource1: TocvFFMpegIPCamSource;
+    ocvView1: TocvView;
   private
     { Private declarations }
   public
