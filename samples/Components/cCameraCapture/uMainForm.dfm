@@ -59,6 +59,7 @@ object MainForm: TMainForm
     Top = 28
     Width = 300
     Height = 300
+    VideoSource = ocvcmrsrc1
   end
   object ocvw2: TocvView
     Left = 8
