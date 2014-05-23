@@ -40,6 +40,7 @@ uses
 {$ENDIF VER6P}
   ocv.core.types_c,
   ocv.highgui_c,
+  ffm.libavcodec.avcodec,
   uOCVTypes;
 
 type
@@ -186,6 +187,8 @@ type
     property Port: Word read FPort write FPort default 554;
   end;
 
+  TOnNotifyFFMpegPacket = procedure(Sender: TObject; const packet: TAVPacket; const isKeyFrame: Boolean) of object;
+
   TocvFFMpegIPCamSource = class(TocvCustomSource)
   private
     FPort: Word;
@@ -193,10 +196,12 @@ type
     FIP: string;
     FUserName: String;
     FURI: string;
+    FOnNotifyFFMpegPacket: TOnNotifyFFMpegPacket;
   protected
     function GetIPCamTarget: AnsiString;
     procedure SetEnabled(Value: Boolean); override;
     procedure Loaded; override;
+    procedure DoNotifyPacket(const packet: TAVPacket; const isKeyFrame: Boolean);
   public
     constructor Create(AOwner: TComponent); override;
   published
@@ -205,6 +210,7 @@ type
     property IP: string read FIP write FIP;
     property URI: string read FURI write FURI; {TODO: Need rename}
     property Port: Word read FPort write FPort default 554;
+    property OnFFMpegPacket: TOnNotifyFFMpegPacket read FOnNotifyFFMpegPacket write FOnNotifyFFMpegPacket;
   end;
 
 implementation
@@ -213,9 +219,10 @@ uses
   ocv.core_c,
   ffm.avformat,
   ffm.dict,
-  ffm.libavcodec.avcodec,
   ffm.avutil,
-  ffm.frame, ffm.swscale, ffm.pixfmt;
+  ffm.frame,
+  ffm.swscale,
+  ffm.pixfmt;
 
 Type
   TocvCaptureThread = class(TocvCustomSourceThread)
@@ -234,11 +241,12 @@ Type
     FEnabled: Boolean;
     FIPCamURL: AnsiString;
     FSuspendEvent: TEvent;
+    FOwner: TocvFFMpegIPCamSource;
     procedure TerminatedSet; override;
   protected
     procedure Execute; override;
   public
-    constructor Create(CreateSuspended: Boolean);
+    constructor Create(AOwner: TocvFFMpegIPCamSource);
     destructor Destroy; override;
     procedure SetIPCamUrl(const AIPCam: AnsiString; const AEnabled: Boolean);
   end;
@@ -640,11 +648,17 @@ begin
   FPort := 554;
   if not(csDesigning in ComponentState) then
   begin
-    FSourceThread := TocvFFMpegIPCamSourceThread.Create(False);
+    FSourceThread := TocvFFMpegIPCamSourceThread.Create(Self);
     FSourceThread.OnNotifyData := OnNotifyData;
     FSourceThread.FThreadDelay := FThreadDelay;
     FSourceThread.FreeOnTerminate := True;
   end;
+end;
+
+procedure TocvFFMpegIPCamSource.DoNotifyPacket(const packet: TAVPacket; const isKeyFrame: Boolean);
+begin
+  if Assigned(OnFFMpegPacket) then
+    OnFFMpegPacket(Self, packet, isKeyFrame);
 end;
 
 function TocvFFMpegIPCamSource.GetIPCamTarget: AnsiString;
@@ -694,9 +708,10 @@ end;
 
 {TocvFFMpegIPCamSourceThread}
 
-constructor TocvFFMpegIPCamSourceThread.Create(CreateSuspended: Boolean);
+constructor TocvFFMpegIPCamSourceThread.Create(AOwner: TocvFFMpegIPCamSource);
 begin
   inherited Create(False);
+  FOwner := AOwner;
   FSuspendEvent := TEvent.Create;
   FSuspendEvent.ResetEvent;
 end;
@@ -857,6 +872,11 @@ begin
       begin
         if (packet.stream_index = videoStream) then
         begin
+          Synchronize(
+            procedure
+            begin
+              FOwner.DoNotifyPacket(packet, (packet.flags and AV_PKT_FLAG_KEY) <> 0);
+            end);
           // Video stream packet
           avcodec_decode_video2(pCodecCtx, frame, frame_finished, @packet);
           if (frame_finished <> 0) then

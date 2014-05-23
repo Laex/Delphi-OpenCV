@@ -185,6 +185,34 @@ type
     property Aperture: Integer index 0 Read GetIntParam write SetIntParam;
   end;
 
+  TOnGetImage = procedure(Sender: TObject; Var Source2Image: IocvImage) of object;
+
+  TocvAddWeightedTransform = (awTransformSourse1, awTransformSourse2);
+
+  TovcAddWeightedOperation = class(TocvCustomImageOperation, IocvDataReceiver)
+  protected
+    procedure AssignTo(Dest: TPersistent); override;
+  private
+    FocvVideoSource: IocvDataSource;
+    FSrource2Image: IocvImage;
+    FOnGetImage: TOnGetImage;
+    FTransform: TocvAddWeightedTransform;
+    procedure SetOpenCVVideoSource(const Value: IocvDataSource);
+  public
+    constructor Create(AOwner: TPersistent); override;
+    function DoTransform(const Source: IocvImage; out Destanation: IocvImage): Boolean; override;
+  protected
+    procedure TakeImage(const IplImage: IocvImage);
+    procedure SetVideoSource(const Value: TObject);
+  published
+    property VideoSource: IocvDataSource Read FocvVideoSource write SetOpenCVVideoSource;
+    property Alpha: Double index 0 Read GetFloatParam write SetFloatParam;
+    property Beta: Double index 1 Read GetFloatParam write SetFloatParam;
+    property Gamma: Double index 2 Read GetFloatParam write SetFloatParam;
+    property OnGetImage: TOnGetImage read FOnGetImage write FOnGetImage;
+    property Transform: TocvAddWeightedTransform Read FTransform write FTransform default awTransformSourse2;
+  end;
+
   TovcSobelOperation = class(TocvCustomImageOperation)
   public
     constructor Create(AOwner: TPersistent); override;
@@ -633,7 +661,7 @@ implementation
 
 ///
 // Run utils\CompressHaar\uCompressHaar.dpr
-// Add to serarch path \Delphi-OpenCV\bin\facedetectxml\
+// Add to serarch path \Delphi-OpenCV\resource\facedetectxml\
 ///
 {$R haarcascade.rc haarcascade.res}
 {$R haarcascade.res}
@@ -1001,7 +1029,9 @@ begin
         OnAfterPaint(Self, Source);
     finally
       UnlockTransform;
-    end;
+    end
+  else
+    Destanation := Source;
 end;
 
 procedure TocvCustomImageOperation.UnlockTransform;
@@ -2260,6 +2290,92 @@ begin
   end;
 end;
 
+{TovcAddWeightedOperation}
+
+procedure TovcAddWeightedOperation.AssignTo(Dest: TPersistent);
+begin
+  inherited;
+  if Dest is TovcAddWeightedOperation then
+    FTransform := (Dest as TovcAddWeightedOperation).FTransform;
+end;
+
+constructor TovcAddWeightedOperation.Create(AOwner: TPersistent);
+begin
+  inherited;
+  Alpha := 0.5;
+  Beta := 0.5;
+  Gamma := 0;
+  FTransform := awTransformSourse2;
+end;
+
+function TovcAddWeightedOperation.DoTransform(const Source: IocvImage; out Destanation: IocvImage): Boolean;
+Var
+  s1, s2: IocvImage;
+begin
+  Result := True;
+  if Assigned(FOnGetImage) then
+    FOnGetImage(Self, FSrource2Image);
+  if Assigned(FSrource2Image) then
+  begin
+    try
+      if (Source.IpImage^.Width = FSrource2Image.IpImage^.Width) and (Source.IpImage^.Height = FSrource2Image.IpImage^.Height)
+      then
+      begin
+        s1 := Source;
+        s2 := FSrource2Image;
+        Destanation := Source.Same;
+      end
+      else if Transform = awTransformSourse1 then
+      begin
+        s1 := FSrource2Image.Same;
+        s2 := FSrource2Image;
+        cvResize(Source.IpImage, s1.IpImage, 2);
+        Destanation := FSrource2Image.Same;
+      end
+      else if Transform = awTransformSourse2 then
+      begin
+        s1 := Source;
+        s2 := Source.Same;
+        cvResize(FSrource2Image.IpImage, s2.IpImage, 2);
+        Destanation := Source.Same;
+      end;
+      // Источники должны иметь один размер или ROI
+      cvAddWeighted(s1.IpImage, Alpha, s2.IpImage, Beta, Gamma, Destanation.IpImage);
+    except
+      Result := False;
+    end;
+  end
+  else
+    Destanation := Source;
+end;
+
+procedure TovcAddWeightedOperation.SetOpenCVVideoSource(const Value: IocvDataSource);
+begin
+  if FocvVideoSource <> Value then
+  begin
+    if Assigned(FocvVideoSource) then
+      FocvVideoSource.RemoveReceiver(Self);
+    FocvVideoSource := Value;
+    if Assigned(FocvVideoSource) then
+      FocvVideoSource.AddReceiver(Self);
+  end;
+end;
+
+procedure TovcAddWeightedOperation.SetVideoSource(const Value: TObject);
+begin
+  VideoSource := Value as TocvDataSource;
+end;
+
+procedure TovcAddWeightedOperation.TakeImage(const IplImage: IocvImage);
+begin
+  if LockTransform then
+    try
+      FSrource2Image := IplImage;
+    finally
+      UnlockTransform;
+    end;
+end;
+
 initialization
 
 GetRegisteredImageOperations.RegisterIOClass(TocvNoneOperation, 'None');
@@ -2279,6 +2395,7 @@ GetRegisteredImageOperations.RegisterIOClass(TocvHaarCascade, 'HaarCascade');
 GetRegisteredImageOperations.RegisterIOClass(TocvMatchTemplate, 'MatchTemplate');
 GetRegisteredImageOperations.RegisterIOClass(TocvMotionDetect, 'MotionDetect');
 GetRegisteredImageOperations.RegisterIOClass(TovcCropOperation, 'Crop');
+GetRegisteredImageOperations.RegisterIOClass(TovcAddWeightedOperation, 'AddWeighted');
 
 finalization
 

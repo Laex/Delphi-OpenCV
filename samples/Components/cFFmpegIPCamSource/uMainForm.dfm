@@ -19,6 +19,7 @@ object Form1: TForm1
     Width = 229
     Height = 194
     VideoSource = ocvFFMpegIPCamSource1
+    Frames = <>
     Align = alClient
   end
   object ocvFFMpegIPCamSource1: TocvFFMpegIPCamSource
