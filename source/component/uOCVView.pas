@@ -45,9 +45,64 @@ uses
   Graphics,
 {$ENDIF VER6P}
   uOCVTypes,
-  ocv.core.types_c;
+  ocv.core.types_c, System.SyncObjs;
 
 type
+
+  TocvViewFrames = class(TOwnedCollection)
+
+  end;
+
+  TPersistentRect = class(TPersistent)
+  private
+    FRect: TRect;
+    FOnChange: TNotifyEvent;
+    function GetRect: TRect;
+    procedure SetRect(const Value: TRect);
+    procedure SetRectBottom(const Value: integer);
+    procedure SetRectLeft(const Value: integer);
+    procedure SetRectRight(const Value: integer);
+    procedure SetRectTop(const Value: integer);
+  protected
+    procedure AssignTo(Dest: TPersistent); override;
+  public
+    property AsRect: TRect read GetRect Write SetRect;
+    constructor Create; virtual;
+  published
+    property Left: integer read FRect.Left write SetRectLeft;
+    property Top: integer read FRect.Top write SetRectTop;
+    property Right: integer read FRect.Right write SetRectRight;
+    property Bottom: integer read FRect.Bottom write SetRectBottom;
+    property OnChange: TNotifyEvent read FOnChange write FOnChange;
+  end;
+
+  TocvViewFrame = class(TCollectionItem, IocvDataReceiver)
+  private
+    FocvVideoSource: IocvDataSource;
+    FImage: IocvImage;
+    FLock: TCriticalSection;
+    FDrawRect: TPersistentRect;
+    FEnabled: Boolean;
+    procedure SetOpenCVVideoSource(const Value: IocvDataSource);
+    function GetImage: IocvImage;
+    function Lock: Boolean;
+    procedure Unlock;
+  protected
+    {IInterface}
+    function QueryInterface(const IID: TGUID; out Obj): HResult; stdcall;
+    function _AddRef: integer; stdcall;
+    function _Release: integer; stdcall;
+    procedure TakeImage(const IplImage: IocvImage);
+    procedure SetVideoSource(const Value: TObject);
+  public
+    constructor Create(Collection: TCollection); override;
+    destructor Destroy; override;
+    property Image: IocvImage read GetImage;
+  published
+    property VideoSource: IocvDataSource Read FocvVideoSource write SetOpenCVVideoSource;
+    property DrawRect: TPersistentRect read FDrawRect write FDrawRect;
+    property Enabled: Boolean read FEnabled Write FEnabled default false;
+  end;
 
   TocvView = class(TWinControl, IocvDataReceiver)
   private
@@ -59,6 +114,7 @@ type
     FStretch: Boolean;
     FProportional: Boolean;
     FCenter: Boolean;
+    FFrames: TocvViewFrames;
     procedure WMEraseBkgnd(var Message: TWMEraseBkgnd); message WM_ERASEBKGND;
     procedure WMPaint(var Message: TWMPaint); message WM_PAINT;
     procedure SetOpenCVVideoSource(const Value: IocvDataSource);
@@ -74,9 +130,10 @@ type
     property Canvas: TCanvas read FCanvas;
   published
     property VideoSource: IocvDataSource Read FocvVideoSource write SetOpenCVVideoSource;
-    property Proportional: Boolean read FProportional write FProportional default False;
+    property Proportional: Boolean read FProportional write FProportional default false;
     property Stretch: Boolean read FStretch write FStretch default True;
-    property Center: Boolean read FCenter write FCenter default False;
+    property Center: Boolean read FCenter write FCenter default false;
+    property Frames: TocvViewFrames Read FFrames Write FFrames;
     property Align;
     property OnAfterPaint: TOnOcvNotify read FOnAfterPaint write FOnAfterPaint;
     property OnBeforePaint: TOnOcvNotify read FOnBeforePaint write FOnBeforePaint;
@@ -108,8 +165,9 @@ begin
   FCanvas := TControlCanvas.Create;
   TControlCanvas(FCanvas).Control := Self;
   Stretch := True;
-  Proportional := False;
-  Center := False;
+  Proportional := false;
+  Center := false;
+  FFrames := TocvViewFrames.Create(Self, TocvViewFrame);
 end;
 
 destructor TocvView.Destroy;
@@ -117,6 +175,7 @@ begin
   if Assigned(FocvVideoSource) then
     FocvVideoSource.RemoveReceiver(Self);
   FCanvas.Free;
+  FFrames.Free;
   inherited;
 end;
 
@@ -151,43 +210,43 @@ end;
 
 function TocvView.PaintRect: TRect;
 var
-  w, h, cw, ch: Integer;
-  xyaspect: Double;
+  ViewWidth, ViewHeight, CliWidth, CliHeight: integer;
+  AspectRatio: Double;
 begin
-  w := FImage.IpImage^.Width;
-  h := FImage.IpImage^.Height;
-  cw := ClientWidth;
-  ch := ClientHeight;
-  if Stretch or (Proportional and ((w > cw) or (h > ch))) then
+  ViewWidth := FImage.IpImage^.Width;
+  ViewHeight := FImage.IpImage^.Height;
+  CliWidth := ClientWidth;
+  CliHeight := ClientHeight;
+  if (Proportional and ((ViewWidth > CliWidth) or (ViewHeight > CliHeight))) or Stretch then
   begin
-    if Proportional and (w > 0) and (h > 0) then
+    if Proportional and (ViewWidth > 0) and (ViewHeight > 0) then
     begin
-      xyaspect := w / h;
-      if w > h then
+      AspectRatio := ViewWidth / ViewHeight;
+      if ViewWidth > ViewHeight then
       begin
-        w := cw;
-        h := Trunc(cw / xyaspect);
-        if h > ch then // woops, too big
+        ViewWidth := CliWidth;
+        ViewHeight := Trunc(CliWidth / AspectRatio);
+        if ViewHeight > CliHeight then
         begin
-          h := ch;
-          w := Trunc(ch * xyaspect);
+          ViewHeight := CliHeight;
+          ViewWidth := Trunc(CliHeight * AspectRatio);
         end;
       end
       else
       begin
-        h := ch;
-        w := Trunc(ch * xyaspect);
-        if w > cw then // woops, too big
+        ViewHeight := CliHeight;
+        ViewWidth := Trunc(CliHeight * AspectRatio);
+        if ViewWidth > CliWidth then
         begin
-          w := cw;
-          h := Trunc(cw / xyaspect);
+          ViewWidth := CliWidth;
+          ViewHeight := Trunc(CliWidth / AspectRatio);
         end;
       end;
     end
     else
     begin
-      w := cw;
-      h := ch;
+      ViewWidth := CliWidth;
+      ViewHeight := CliHeight;
     end;
   end;
 
@@ -195,12 +254,12 @@ begin
   begin
     Left := 0;
     Top := 0;
-    Right := w;
-    Bottom := h;
+    Right := ViewWidth;
+    Bottom := ViewHeight;
   end;
 
   if Center then
-    OffsetRect(Result, (cw - w) div 2, (ch - h) div 2);
+    OffsetRect(Result, (CliWidth - ViewWidth) div 2, (CliHeight - ViewHeight) div 2);
 end;
 
 function TocvView.isSourceEnabled: Boolean;
@@ -218,6 +277,7 @@ procedure TocvView.WMPaint(var Message: TWMPaint);
 Var
   DC: HDC;
   lpPaint: TPaintStruct;
+  i: integer;
 begin
   if (csDesigning in ComponentState) or (not isSourceEnabled) then
     inherited
@@ -233,8 +293,15 @@ begin
           if Assigned(OnBeforePaint) then
             OnBeforePaint(Self, FImage);
           if ipDraw(DC, FImage.IpImage, PaintRect) then
+          begin
+            for i := 0 to FFrames.Count - 1 do
+              With (FFrames.Items[i] as TocvViewFrame) do
+                if Enabled and (not DrawRect.AsRect.isEmpty) and Assigned(Image) then
+                  ipDraw(DC, Image.IpImage, DrawRect.AsRect);
+
             if Assigned(OnAfterPaint) then
               OnAfterPaint(Self, FImage);
+          end;
         finally
           Canvas.Handle := 0;
         end;
@@ -246,6 +313,153 @@ begin
     else
       DefaultHandler(Message);
   end;
+end;
+
+{TocvViewFrame}
+
+constructor TocvViewFrame.Create(Collection: TCollection);
+begin
+  inherited;
+  FLock := TCriticalSection.Create;
+  FDrawRect := TPersistentRect.Create;
+  FDrawRect.FRect.Width := 50;
+  FDrawRect.FRect.Height := 50;
+  FEnabled := false;
+end;
+
+destructor TocvViewFrame.Destroy;
+begin
+  FImage := Nil;
+  FLock.Free;
+  FDrawRect.Free;
+  inherited;
+end;
+
+function TocvViewFrame.GetImage: IocvImage;
+begin
+  FLock.Enter;
+  try
+    Result := FImage;
+  finally
+    Unlock;
+  end;
+end;
+
+function TocvViewFrame.Lock: Boolean;
+begin
+  Result := FLock.TryEnter;
+end;
+
+function TocvViewFrame.QueryInterface(const IID: TGUID; out Obj): HResult;
+begin
+  if GetInterface(IID, Obj) then
+    Result := 0
+  else
+    Result := E_NOINTERFACE;
+end;
+
+procedure TocvViewFrame.SetOpenCVVideoSource(const Value: IocvDataSource);
+begin
+  if FocvVideoSource <> Value then
+  begin
+    if Assigned(FocvVideoSource) then
+      FocvVideoSource.RemoveReceiver(Self);
+    FocvVideoSource := Value;
+    if Assigned(FocvVideoSource) then
+      FocvVideoSource.AddReceiver(Self);
+  end;
+end;
+
+procedure TocvViewFrame.SetVideoSource(const Value: TObject);
+begin
+  VideoSource := Value as TocvDataSource;
+end;
+
+procedure TocvViewFrame.TakeImage(const IplImage: IocvImage);
+begin
+  if Lock then
+    try
+      FImage := IplImage;
+    finally
+      Unlock;
+    end;
+end;
+
+procedure TocvViewFrame.Unlock;
+begin
+  FLock.Leave;
+end;
+
+function TocvViewFrame._AddRef: integer;
+begin
+  Result := -1;
+end;
+
+function TocvViewFrame._Release: integer;
+begin
+  Result := -1;
+end;
+
+{TPersistentRect}
+
+procedure TPersistentRect.AssignTo(Dest: TPersistent);
+begin
+  if Dest is TPersistentRect then
+    with TPersistentRect(Dest) do
+    begin
+      AsRect := Self.AsRect;
+    end
+  else
+    inherited AssignTo(Dest);
+end;
+
+constructor TPersistentRect.Create;
+begin
+  inherited;
+  FOnChange := nil;
+end;
+
+function TPersistentRect.GetRect: TRect;
+begin
+  Result := FRect;
+end;
+
+procedure TPersistentRect.SetRect(const Value: TRect);
+begin
+  FRect.Left := Value.Left;
+  FRect.Top := Value.Top;
+  FRect.Right := Value.Right;
+  FRect.Bottom := Value.Bottom;
+  if Assigned(FOnChange) then
+    FOnChange(Self);
+end;
+
+procedure TPersistentRect.SetRectBottom(const Value: integer);
+begin
+  FRect.Bottom := Value;
+  if Assigned(FOnChange) then
+    FOnChange(Self);
+end;
+
+procedure TPersistentRect.SetRectLeft(const Value: integer);
+begin
+  FRect.Left := Value;
+  if Assigned(FOnChange) then
+    FOnChange(Self);
+end;
+
+procedure TPersistentRect.SetRectRight(const Value: integer);
+begin
+  FRect.Right := Value;
+  if Assigned(FOnChange) then
+    FOnChange(Self);
+end;
+
+procedure TPersistentRect.SetRectTop(const Value: integer);
+begin
+  FRect.Top := Value;
+  if Assigned(FOnChange) then
+    FOnChange(Self);
 end;
 
 end.

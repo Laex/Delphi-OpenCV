@@ -59,6 +59,16 @@ object MainForm: TMainForm
     Top = 28
     Width = 300
     Height = 300
+    VideoSource = ocvcmrsrc1
+    Frames = <
+      item
+        VideoSource = ocvflsrc1
+        DrawRect.Left = 0
+        DrawRect.Top = 0
+        DrawRect.Right = 100
+        DrawRect.Bottom = 100
+        Enabled = True
+      end>
   end
   object ocvw2: TocvView
     Left = 8
@@ -67,6 +77,7 @@ object MainForm: TMainForm
     Height = 300
     VideoSource = ocvmgprtn1
     Center = True
+    Frames = <>
   end
   object ocvw3: TocvView
     Left = 316
@@ -74,6 +85,7 @@ object MainForm: TMainForm
     Width = 300
     Height = 300
     VideoSource = ocvflsrc1
+    Frames = <>
   end
   object ocvw4: TocvView
     Left = 316
@@ -81,6 +93,7 @@ object MainForm: TMainForm
     Width = 300
     Height = 300
     VideoSource = ocvpcmsrc1
+    Frames = <>
   end
   object chk2: TCheckBox
     Left = 314
@@ -102,10 +115,10 @@ object MainForm: TMainForm
   end
   object ocvmgprtn1: TocvImageOperation
     VideoSource = ocvcmrsrc1
-    OperationClassName = 'TovcCannyOperation'
-    Operation.Threshold1 = 10.000000000000000000
-    Operation.Threshold2 = 100.000000000000000000
-    Operation.ApertureSize = 3
+    OperationClassName = 'TovcAddWeightedOperation'
+    Operation.VideoSource = ocvflsrc1
+    Operation.Alpha = 0.500000000000000000
+    Operation.Beta = 0.500000000000000000
     Operations = <
       item
         OperationClassName = 'TocvHaarCascade'
@@ -137,6 +150,7 @@ object MainForm: TMainForm
     Top = 392
   end
   object ocvflsrc1: TocvFileSource
+    Enabled = True
     Delay = 120
     FileName = '..\..\resource\media\768x576.avi'
     Left = 340

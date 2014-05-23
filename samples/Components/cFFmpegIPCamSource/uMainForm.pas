@@ -4,18 +4,16 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, uOCVTypes, uOCVSource, uOCVView;
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, uOCVTypes, uOCVSource, uOCVView, ffm.libavcodec.avcodec;
 
 type
   TForm1 = class(TForm)
-    ocvfmpgpcmsrc1: TocvFFMpegIPCamSource;
-    ocvw1: TocvView;
     ocvFFMpegIPCamSource1: TocvFFMpegIPCamSource;
     ocvView1: TocvView;
   private
-    { Private declarations }
+    {Private declarations}
   public
-    { Public declarations }
+    {Public declarations}
   end;
 
 var

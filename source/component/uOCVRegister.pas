@@ -49,11 +49,27 @@ uses
 
 procedure Register;
 begin
-  RegisterComponents('OpenCV', [TocvImageOperation, TocvCameraSource, TocvView, TocvFileSource, TocvIPCamSource,TocvFFMpegIPCamSource]);
-  RegisterClasses([TocvNoneOperation, TocvGrayScaleOperation, TovcCannyOperation, TovcSmoothOperation, TovcErodeOperation,
-    TovcDilateOperation, TocvLaplaceOperation, TovcSobelOperation, TocvThresholdOperation, TocvAdaptiveThresholdOperation,
-    TocvContoursOperation, TocvRotateOperation, TocvAbsDiff, TocvHaarCascade, TocvMatchTemplate, TocvMotionDetect,
-    TovcCropOperation]);
+  RegisterComponents('OpenCV', [TocvImageOperation, TocvCameraSource, TocvView, TocvFileSource, TocvIPCamSource,
+    TocvFFMpegIPCamSource]);
+  RegisterClasses([
+    {} TocvNoneOperation,
+    {} TocvGrayScaleOperation,
+    {} TovcCannyOperation,
+    {} TovcSmoothOperation,
+    {} TovcErodeOperation,
+    {} TovcDilateOperation,
+    {} TocvLaplaceOperation,
+    {} TovcSobelOperation,
+    {} TocvThresholdOperation,
+    {} TocvAdaptiveThresholdOperation,
+    {} TocvContoursOperation,
+    {} TocvRotateOperation,
+    {} TocvAbsDiff,
+    {} TocvHaarCascade,
+    {} TocvMatchTemplate,
+    {} TocvMotionDetect,
+    {} TovcCropOperation,
+    {} TovcAddWeightedOperation]);
 end;
 
 {$IFDEF FPC}
