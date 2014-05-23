@@ -94,7 +94,7 @@ OutputDir=
 UnitOutputDir=.
 PackageDLLOutputDir=
 PackageDCPOutputDir=.
-SearchPath=..\;..\..\;..\..\utils
+SearchPath=..\;..\..\;..\..\utils;..\..\..\resource\facedetectxml
 Packages=
 Conditionals=RELEASE
 DebugSourceDirs=
@@ -140,10 +140,11 @@ Item0=RELEASE
 Count=1
 Item0=WinTypes=Windows;WinProcs=Windows;DbiTypes=BDE;DbiProcs=BDE;DbiErrs=BDE;
 [HistoryLists\hlSearchPath]
-Count=3
-Item0=..\;..\..\;..\..\utils
-Item1=..\;..\..\
-Item2=..\;..\..\;..\..\include;..\..\include\calib3d;..\..\include\core;..\..\include\features2d;..\..\include\highgui;..\..\include\imgproc;..\..\include\legacy;..\..\include\ml;..\..\include\nonfree;..\..\include\objdetect;..\..\include\video
+Count=4
+Item0=..\;..\..\;..\..\utils;..\..\..\resource\facedetectxml
+Item1=..\;..\..\;..\..\utils
+Item2=..\;..\..\
+Item3=..\;..\..\;..\..\include;..\..\include\calib3d;..\..\include\core;..\..\include\features2d;..\..\include\highgui;..\..\include\imgproc;..\..\include\legacy;..\..\include\ml;..\..\include\nonfree;..\..\include\objdetect;..\..\include\video
 [HistoryLists\hlUnitOutputDirectory]
 Count=1
 Item0=.
