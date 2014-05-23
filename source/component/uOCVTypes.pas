@@ -29,7 +29,7 @@ unit uOCVTypes;
 interface
 
 uses
-{$IFDEF VER6P}
+{$IFDEF VER15P}
   System.SysUtils,
   System.Classes,
   System.Generics.Collections,
@@ -38,10 +38,9 @@ uses
 {$ELSE}
   SysUtils,
   Classes,
-  Generics,
   Graphics,
 {$IFNDEF VER5}Types, {$ENDIF VER5}
-{$ENDIF VER6P}
+{$ENDIF VER15P}
   ocv.core.types_c;
 
 Type

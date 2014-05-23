@@ -29,7 +29,7 @@ unit uOCVImageOperation;
 interface
 
 uses
-{$IFDEF VER6P}
+{$IFDEF VER15P}
   Winapi.Windows,
   Vcl.Graphics,
   System.SysUtils,
@@ -47,7 +47,7 @@ uses
   Types,
 {$ENDIF VER5}
   ZLib,
-{$ENDIF VER6P}
+{$ENDIF VER15P}
   uOCVTypes,
   ocv.objdetect_c,
   ocv.core.types_c;
