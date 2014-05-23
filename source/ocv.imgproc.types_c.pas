@@ -409,7 +409,7 @@ type
     *************************************************************************************** *)
 
 type
-  TCvSubdiv2DEdge = size_t;
+  TCvSubdiv2DEdge = NativeUInt;
   { EXTERNALSYM CvSubdiv2DEdge }
 
   pCvSubdiv2DPoint = ^TCvSubdiv2DPoint;

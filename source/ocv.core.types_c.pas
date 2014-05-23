@@ -1369,9 +1369,11 @@ type
     (seq)->first->data + (index) * sizeof(elem_type) :           \
     cvGetSeqElem( (CvSeq*)(seq), (index) )))
   }
+{$IFDEF VER15P}
 function CV_SEQ_ELEM(Seq: pCvSeq; const size_of_elem: Integer; index: Integer): Pointer; {$IFDEF VER9P}inline;{$ENDIF}
 {#define CV_GET_SEQ_ELEM( elem_type, seq, index ) CV_SEQ_ELEM( (seq), elem_type, (index) )}
 function CV_GET_SEQ_ELEM(const size_of_elem: Integer; Seq: pCvSeq; index: Integer): Pointer; {$IFDEF VER9P}inline;{$ENDIF}
+{$ENDIF VER15P}
 
 // (* Add element to sequence: *)
 // // >> Following declaration is a macro definition!
@@ -2512,12 +2514,6 @@ begin
   Result := CV_MAKETYPE(CV_32S, 2);
 end;
 
-function CV_GET_SEQ_ELEM;
-begin
-  {#define CV_GET_SEQ_ELEM( elem_type, seq, index ) CV_SEQ_ELEM( (seq), elem_type, (index) )}
-  Result := CV_SEQ_ELEM(Seq, size_of_elem, index);
-end;
-
 function CV_CAST_8U(t: Integer): uchar;
 begin
   if (not(t and (not 255)) <> 0) then
@@ -2526,6 +2522,13 @@ begin
     Result := 255
   else
     Result := 0;
+end;
+
+{$IFDEF VER15P}
+function CV_GET_SEQ_ELEM;
+begin
+  {#define CV_GET_SEQ_ELEM( elem_type, seq, index ) CV_SEQ_ELEM( (seq), elem_type, (index) )}
+  Result := CV_SEQ_ELEM(Seq, size_of_elem, index);
 end;
 
 function CV_SEQ_ELEM(Seq: pCvSeq; const size_of_elem: Integer; index: Integer): Pointer; {$IFDEF VER9P}inline;{$ENDIF}
@@ -2540,6 +2543,7 @@ begin
     // cvGetSeqElem( (CvSeq*)(seq), (index) )))
     Result := cvGetSeqElem(Seq, index);
 end;
+{$ENDIF VER15P}
 
 function CV_8UC1: Integer; {$IFDEF VER9P}inline;{$ENDIF}
 begin
@@ -2585,7 +2589,7 @@ end;
 function CV_IMAGE_ELEM(image: pIplImage; size_elemtype, row, col: Integer): Pointer; {$IFDEF VER9P}inline;{$ENDIF}
 begin
   // (((elemtype*)((image)->imageData + (image)->widthStep*(row)))[(col)])
-  Result := pByte(image^.imageData) + image^.widthStep * row + col * size_elemtype;
+  Result := {$IFDEF D7}Pointer({$ENDIF D7}{$IFDEF VER9P}pByte{$ELSE}Integer{$ENDIF}(image^.imageData) + image^.widthStep * row + col * size_elemtype{$IFDEF D7}){$ENDIF D7};
 end;
 
 function cvRealScalar(val0: Double): TCvScalar; {$IFDEF VER9P}inline;{$ENDIF}
