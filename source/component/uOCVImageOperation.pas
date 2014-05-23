@@ -29,7 +29,7 @@ unit uOCVImageOperation;
 interface
 
 uses
-{$IFDEF VER6P}
+{$IFDEF VER15P}
   Winapi.Windows,
   Vcl.Graphics,
   System.SysUtils,
@@ -47,12 +47,21 @@ uses
   Types,
 {$ENDIF VER5}
   ZLib,
-{$ENDIF VER6P}
+{$ENDIF VER15P}
   uOCVTypes,
   ocv.objdetect_c,
   ocv.core.types_c;
 
 type
+  {$IFDEF VER17P} //XE3..XE6
+  TArrayDouble = TArray<Double>;
+  TArrayInteger = TArray<Integer>;
+  TArrayBoolean = TArray<Boolean>;
+  {$ELSE} // D7...XE2
+  TArrayDouble = Array of Double;
+  TArrayInteger = Array of Integer;
+  TArrayBoolean = Array of Boolean;
+  {$ENDIF}
 
   TocvCustomImageOperation = class(TComponent)
   protected
@@ -60,9 +69,9 @@ type
   private
     FCriticalSection: TCriticalSection;
     FOwner: TPersistent;
-    FFloatParams: TArray<Double>;
-    FIntParams: TArray<Integer>;
-    FBoolParams: TArray<Boolean>;
+    FFloatParams: TArrayDouble;
+    FIntParams: TArrayInteger;
+    FBoolParams: TArrayBoolean;
     FOnAfterPaint: TOnOcvAfterTransform;
     FOnBeforePaint: TOnOcvBeforeTransform;
   protected

@@ -29,7 +29,7 @@ unit uOCVTypes;
 interface
 
 uses
-{$IFDEF VER6P}
+{$IFDEF VER15P}
   System.SysUtils,
   System.Classes,
   System.Generics.Collections,
@@ -38,10 +38,9 @@ uses
 {$ELSE}
   SysUtils,
   Classes,
-  Generics,
   Graphics,
 {$IFNDEF VER5}Types, {$ENDIF VER5}
-{$ENDIF VER6P}
+{$ENDIF VER15P}
   ocv.core.types_c;
 
 Type
@@ -89,7 +88,11 @@ Type
     of object;
 
   TocvRect = Type TRect;
+  {$IFDEF VER17P}
   TocvRects = TArray<TocvRect>;
+  {$ELSE}
+  TocvRects = Array of TocvRect;
+  {$ENDIF}
 
   TOnOcvHaarCascade = procedure(Sender: TObject; const IplImage: IocvImage; const HaarRects: TocvRects) of object;
   TOnOcvRect = procedure(Sender: TObject; const IplImage: IocvImage; const Rect: TocvRect) of object;
@@ -114,7 +117,7 @@ Type
   TocvReceiverList = class(TThreadList) // <IocvDataReceiver>;
   public
     procedure Add(Item: IocvDataReceiver);
-    procedure Remove(Item: IocvDataReceiver); inline;
+    procedure Remove(Item: IocvDataReceiver); {$IFDEF VER9P}inline;{$ENDIF}
   end;
 
   TocvDataSource = class(TComponent, IocvDataSource)

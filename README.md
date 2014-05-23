@@ -24,6 +24,7 @@ Unzip it to a convenient directory, thus get the following directory structure.<
 Add the search path for the modules of the project in Delphi IDE (Tools-Options-Delphi Options-Library-Library path)
 ```
 <PROJECT_ROOT>\source
+<PROJECT_ROOT>\source\utils
 <PROJECT_ROOT>\source\component
 <PROJECT_ROOT>\resource\facedetectxml
 ```
@@ -32,6 +33,7 @@ Additionally, you can specify the path to the library header files FFMPEG
 ```
 <PROJECT_ROOT>\source\ffmpeg
 <PROJECT_ROOT>\source\sdl
+<PROJECT_ROOT>\source\opengl
 ```
 Examples of using FFMPEG library header files are in the
 ```

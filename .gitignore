@@ -36,3 +36,4 @@ lib
 *.rsm
 *.local
 *.identcache 
+*.cmd

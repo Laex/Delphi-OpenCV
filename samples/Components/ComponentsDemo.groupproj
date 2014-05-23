@@ -9,6 +9,9 @@
         <Projects Include="cMatchTemplate\cMatchTemplate.dproj">
             <Dependencies/>
         </Projects>
+        <Projects Include="cFFmpegIPCamSource\cFFmpegIPCamSource.dproj">
+            <Dependencies/>
+        </Projects>
     </ItemGroup>
     <ProjectExtensions>
         <Borland.Personality>Default.Personality.12</Borland.Personality>
@@ -35,14 +38,23 @@
     <Target Name="cMatchTemplate:Make">
         <MSBuild Projects="cMatchTemplate\cMatchTemplate.dproj" Targets="Make"/>
     </Target>
+    <Target Name="cFFmpegIPCamSource">
+        <MSBuild Projects="cFFmpegIPCamSource\cFFmpegIPCamSource.dproj"/>
+    </Target>
+    <Target Name="cFFmpegIPCamSource:Clean">
+        <MSBuild Projects="cFFmpegIPCamSource\cFFmpegIPCamSource.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="cFFmpegIPCamSource:Make">
+        <MSBuild Projects="cFFmpegIPCamSource\cFFmpegIPCamSource.dproj" Targets="Make"/>
+    </Target>
     <Target Name="Build">
-        <CallTarget Targets="cCameraCapture;cMatchTemplate"/>
+        <CallTarget Targets="cCameraCapture;cMatchTemplate;cFFmpegIPCamSource"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="cCameraCapture:Clean;cMatchTemplate:Clean"/>
+        <CallTarget Targets="cCameraCapture:Clean;cMatchTemplate:Clean;cFFmpegIPCamSource:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="cCameraCapture:Make;cMatchTemplate:Make"/>
+        <CallTarget Targets="cCameraCapture:Make;cMatchTemplate:Make;cFFmpegIPCamSource:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>
