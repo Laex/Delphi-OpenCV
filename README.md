@@ -30,7 +30,11 @@ Add the search path for the modules of the project in Delphi IDE (Tools-Options-
 <PROJECT_ROOT>\resource\facedetectxml
 ```
 where ```<PROJECT_ROOT>``` directory, which was unzipped project.<br>
-
+Add to your PATH variable path to the library "opencv_*.dll" and FFMPEG dll.
+```
+<PROJECT_ROOT>\bin\Win32
+<PROJECT_ROOT>\bin\Win64
+```
 Open in Delphi IDE and compile:<br>
 Examples of the use of certain functions and procedures 
 ```
@@ -48,12 +52,6 @@ Examples of using FFMPEG library header files are in the
 ```
 <PROJECT_ROOT>\samples\FFMpeg\FFMPEG.groupproj
 ```
-When installing the components in your PATH variable must be available should the library "opencv_*.dll"  and FFNPEG dll. 
-```
-<PROJECT_ROOT>\bin\Win32
-<PROJECT_ROOT>\bin\Win64
-```
-Must also be installed visual C++ redistributable for Visual Studio 2013 is available on the [link][2]<br>
 To install the components, open and install
 ```
 <PROJECT_ROOT>\source\component\Delphi20\RAD Studio XE6.groupproj
