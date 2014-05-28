@@ -53,15 +53,15 @@ uses
   ocv.core.types_c;
 
 type
-  {$IFDEF VER17P} //XE3..XE6
+{$IFDEF VER17P} // XE3..XE6
   TArrayDouble = TArray<Double>;
   TArrayInteger = TArray<Integer>;
   TArrayBoolean = TArray<Boolean>;
-  {$ELSE} // D7...XE2
+{$ELSE} // D7...XE2
   TArrayDouble = Array of Double;
   TArrayInteger = Array of Integer;
   TArrayBoolean = Array of Boolean;
-  {$ENDIF}
+{$ENDIF}
 
   TocvCustomImageOperation = class(TComponent)
   protected
@@ -72,8 +72,8 @@ type
     FFloatParams: TArrayDouble;
     FIntParams: TArrayInteger;
     FBoolParams: TArrayBoolean;
-    FOnAfterPaint: TOnOcvAfterTransform;
-    FOnBeforePaint: TOnOcvBeforeTransform;
+    FOnAfterTransform: TOnOcvAfterTransform;
+    FOnBeforeTransform: TOnOcvBeforeTransform;
   protected
     function GetFloatParam(const index: Integer): Double;
     function GetIntParam(const index: Integer): Integer;
@@ -95,8 +95,8 @@ type
     function DoTransform(const Source: IocvImage; out Destanation: IocvImage): Boolean; virtual;
     property Name;
   published
-    property OnAfterPaint: TOnOcvAfterTransform read FOnAfterPaint write FOnAfterPaint;
-    property OnBeforePaint: TOnOcvBeforeTransform read FOnBeforePaint write FOnBeforePaint;
+    property OnAfterTransform: TOnOcvAfterTransform read FOnAfterTransform write FOnAfterTransform;
+    property OnBeforeTransform: TOnOcvBeforeTransform read FOnBeforeTransform write FOnBeforeTransform;
   end;
 
   TocvImageOperationClass = class of TocvCustomImageOperation;
@@ -219,7 +219,7 @@ type
     property Beta: Double index 1 Read GetFloatParam write SetFloatParam;
     property Gamma: Double index 2 Read GetFloatParam write SetFloatParam;
     property OnGetImage: TOnGetImage read FOnGetImage write FOnGetImage;
-    property Transform: TocvAddWeightedTransform Read FTransform write FTransform default awTransformSourse2;
+    property TransformType: TocvAddWeightedTransform Read FTransform write FTransform default awTransformSourse2;
   end;
 
   TovcSobelOperation = class(TocvCustomImageOperation)
@@ -289,7 +289,7 @@ type
     property Param: Double index 1 Read GetFloatParam write SetFloatParam; // 5;
   end;
 
-  TocvPoint = class(TPersistent)
+  TocvPoint2D32i = class(TPersistent)
   protected
     procedure AssignTo(Dest: TPersistent); override;
   private
@@ -301,7 +301,19 @@ type
     property Y: Integer read FPoint.Y write FPoint.Y;
   end;
 
-  TocvRectPersistent = class(TPersistent)
+  TocvPoint2D32f = class(TPersistent)
+  protected
+    procedure AssignTo(Dest: TPersistent); override;
+  private
+    FX, FY: Single;
+  public
+    constructor Create(const AX: Single = 0; const AY: Single = 0);
+  published
+    property X: Single read FX write FX;
+    property Y: Single read FY write FY;
+  end;
+
+  TocvRect32i = class(TPersistent)
   protected
     procedure AssignTo(Dest: TPersistent); override;
   private
@@ -331,13 +343,13 @@ type
 
   TovcCropOperation = class(TocvCustomImageOperation)
   private
-    FCropRect: TocvRectPersistent;
+    FCropRect: TocvRect32i;
   public
     constructor Create(AOwner: TPersistent); override;
     destructor Destroy; override;
     function DoTransform(const Source: IocvImage; out Destanation: IocvImage): Boolean; override;
   published
-    property CropRect: TocvRectPersistent read FCropRect write FCropRect;
+    property CropRect: TocvRect32i read FCropRect write FCropRect;
   end;
 
   TocvInterpolationMethod = (INTER_NN, INTER_LINEAR, INTER_CUBIC, INTER_AREA, INTER_LANCZOS4);
@@ -349,10 +361,10 @@ type
   protected
     procedure AssignTo(Dest: TPersistent); override;
   private
-    FCustomCenter: TocvPoint;
+    FCenter: TocvPoint2D32f;
     FMethod: TocvInterpolationMethod;
     FWarpingFlag: TocvInterpolationWarpingFlagSet;
-    FScale: Double;
+    FFillColor: TColor;
   public
     constructor Create(AOwner: TPersistent); override;
     destructor Destroy; override;
@@ -360,10 +372,59 @@ type
   published
     property Angle: Integer index 0 Read GetIntParam write SetIntParam;
     property RotateAroundCenter: Boolean index 0 Read GetBoolParam write SetBoolParam;
-    property CustomCenter: TocvPoint Read FCustomCenter write FCustomCenter;
+    property CustomCenter: TocvPoint2D32f Read FCenter write FCenter;
     property Method: TocvInterpolationMethod read FMethod write FMethod default INTER_LINEAR;
     property WarpingFlag: TocvInterpolationWarpingFlagSet read FWarpingFlag write FWarpingFlag default [WARP_FILL_OUTLIERS];
-    property Scale: Double read FScale write FScale;
+    property Scale: Double index 0 Read GetFloatParam write SetFloatParam;
+    property FillColor: TColor read FFillColor write FFillColor default clBlack;
+  end;
+
+  TocvQuad = class(TPersistent)
+  protected
+    procedure AssignTo(Dest: TPersistent); override;
+  public type
+    TOcvQuadPoints = array [0 .. 3] of TocvPoint2D32f;
+    TCvPoint2D32fArray = array [0 .. 3] of TCvPoint2D32f;
+  protected
+    FPoints: TOcvQuadPoints;
+    function ShaIsConvexQuadrangle: Boolean;
+  private
+    function GetPoints(const index: Integer): TocvPoint2D32f;
+    procedure SetPoints(const index: Integer; const Value: TocvPoint2D32f);
+    function GetCvQuad: TCvPoint2D32fArray;
+  public
+    constructor Create;
+    destructor Destroy; override;
+    property Points[const Index: Integer]: TocvPoint2D32f read GetPoints write SetPoints;
+    property Quad: TOcvQuadPoints read FPoints;
+    property cvQuad: TCvPoint2D32fArray read GetCvQuad;
+  published
+    property TopLeft: TocvPoint2D32f index 0 read GetPoints write SetPoints;
+    property TopRight: TocvPoint2D32f index 1 read GetPoints write SetPoints;
+    property BottomLeft: TocvPoint2D32f index 2 read GetPoints write SetPoints;
+    property BottomRight: TocvPoint2D32f index 3 read GetPoints write SetPoints;
+  end;
+
+  TocvWarpPerspective = class(TocvCustomImageOperation)
+  protected
+    procedure AssignTo(Dest: TPersistent); override;
+  private
+    FSourceQuad: TocvQuad;
+    FDestQuad: TocvQuad;
+    FMethod: TocvInterpolationMethod;
+    FWarpingFlag: TocvInterpolationWarpingFlagSet;
+    FFillColor: TColor;
+  public
+    constructor Create(AOwner: TPersistent); override;
+    destructor Destroy; override;
+    function DoTransform(const Source: IocvImage; out Destanation: IocvImage): Boolean; override;
+  published
+    property SourceQuad: TocvQuad read FSourceQuad write FSourceQuad;
+    property DestQuad: TocvQuad read FDestQuad write FDestQuad;
+    property Method: TocvInterpolationMethod read FMethod write FMethod default INTER_LINEAR;
+    property WarpingFlag: TocvInterpolationWarpingFlagSet read FWarpingFlag write FWarpingFlag default [WARP_FILL_OUTLIERS];
+    property FullSourceImage: Boolean index 0 Read GetBoolParam write SetBoolParam;
+    property FillColor: TColor Read FFillColor write FFillColor;
   end;
 
   TocvAbsDiff = class(TocvCustomImageOperation)
@@ -377,15 +438,15 @@ type
 
   TocvDraw = class(TPersistent)
   protected
+    FColor: TColor;
     procedure AssignTo(Dest: TPersistent); override;
     function GetOwner: TPersistent; override;
   private
     FOwner: TPersistent;
-    FOffset: TocvPoint;
+    FOffset: TocvPoint2D32i;
     FEnabled: Boolean;
     FThickness: Integer;
     FLineType: TocvLineType;
-    FColor: TColor;
     FShift: Integer;
   public
     constructor Create(AOwner: TPersistent);
@@ -396,7 +457,7 @@ type
     property Enabled: Boolean read FEnabled write FEnabled default True;
     property Thickness: Integer read FThickness write FThickness default 2;
     property LineType: TocvLineType read FLineType write FLineType default LT_AA;
-    property Offset: TocvPoint read FOffset write FOffset;
+    property Offset: TocvPoint2D32i read FOffset write FOffset;
   end;
 
   TocvMatchTemplateMethod = (TM_SQDIFF, TM_SQDIFF_NORMED, TM_CCORR, TM_CCORR_NORMED, TM_CCOEFF, TM_CCOEFF_NORMED);
@@ -481,8 +542,8 @@ type
     FHaarCascade: TocvHaarCascadeType;
     FLockFrontalFaceChange: TCriticalSection;
     FCascade: pCvHaarClassifierCascade;
-    FMinSize: TocvPoint;
-    FMaxSize: TocvPoint;
+    FMinSize: TocvPoint2D32i;
+    FMaxSize: TocvPoint2D32i;
     FDrawHaarCascade: TocvHaarCascadeDraw;
     FCascadeFlags: TocvHaarCascadeFlagSet;
     FOnHaarCascade: TOnOcvHaarCascade;
@@ -506,8 +567,8 @@ type
     property Equalize: Boolean index 1 Read GetBoolParam write SetBoolParam;
     property Scale: Double index 0 Read GetFloatParam write SetFloatParam; // 1.3
     property MinNeighbors: Integer index 0 Read GetIntParam write SetIntParam; // 3
-    property MinSize: TocvPoint read FMinSize write FMinSize; // CV_DEFAULT(cvSize(0,0))
-    property MaxSize: TocvPoint read FMaxSize write FMaxSize; // {CV_DEFAULT(cvSize(0,0))}
+    property MinSize: TocvPoint2D32i read FMinSize write FMinSize; // CV_DEFAULT(cvSize(0,0))
+    property MaxSize: TocvPoint2D32i read FMaxSize write FMaxSize; // {CV_DEFAULT(cvSize(0,0))}
     property DrawHaarCascade: TocvHaarCascadeDraw read FDrawHaarCascade write FDrawHaarCascade;
     property CascadeFlags: TocvHaarCascadeFlagSet read FCascadeFlags write FCascadeFlags default [];
     property OnHaarCascade: TOnOcvHaarCascade read FOnHaarCascade write FOnHaarCascade;
@@ -551,24 +612,23 @@ type
   private
     FRetrievalMode: TocvContourRetrievalModes;
     FApproximationMethod: TocvContourApproximationMethods;
-    FOffset: TocvPoint;
+    FOffset: TocvPoint2D32i;
     FContourDraw: TocvContourDraw;
     FApprox: TocvContourApprox;
     FOnContour: TOnOcvContour;
     FContours: pCvSeq;
     procedure DoNotifyContours(const Image: IocvImage; const ContourCount: Integer; const Contours: pCvSeq);
-  protected
-    function DoTransform(const Source: IocvImage; out Destanation: IocvImage): Boolean; override;
   public
     constructor Create(AOwner: TPersistent); override;
     destructor Destroy; override;
+    function DoTransform(const Source: IocvImage; out Destanation: IocvImage): Boolean; override;
     property Contours: pCvSeq read FContours;
   published
     property Preprocessing: TocvCustomImageOperation read GetProperties write SetProperties;
     property RetrievalMode: TocvContourRetrievalModes read FRetrievalMode write FRetrievalMode default RETR_LIST;
     property ApproximationMethod: TocvContourApproximationMethods read FApproximationMethod write FApproximationMethod
       default CHAIN_APPROX_SIMPLE;
-    property Offset: TocvPoint read FOffset write FOffset;
+    property Offset: TocvPoint2D32i read FOffset write FOffset;
     property MinArea: Integer index 0 Read GetIntParam write SetIntParam;
     property ContourDraw: TocvContourDraw read FContourDraw write FContourDraw;
     property ApproxPoly: TocvContourApprox read FApprox write FApprox;
@@ -581,6 +641,8 @@ type
     FOperation: TocvCustomImageOperation;
     FOperationClass: TocvImageOperationClass;
     FOwner: TCollection;
+    FOnAfterTransform: TOnOcvAfterTransform;
+    FOnBeforeTransform: TOnOcvBeforeTransform;
     function LockTransform: Boolean;
     procedure UnlockTransform;
     procedure CreateProperties;
@@ -602,12 +664,15 @@ type
   public
     constructor Create(Collection: TCollection); override;
     destructor Destroy; override;
+    function GetNamePath: string; override;
     procedure Assign(Source: TPersistent); override;
     function DoTransform(const Source: IocvImage; out Destanation: IocvImage): Boolean; virtual;
     property OperationClass: TocvImageOperationClass read GetPropertiesClass write SetPropertiesClass;
   published
     property OperationClassName: string read GetPropertiesClassName write SetPropertiesClassName;
     property Operation: TocvCustomImageOperation read GetProperties write SetProperties;
+    property OnAfterTransform: TOnOcvAfterTransform read FOnAfterTransform write FOnAfterTransform;
+    property OnBeforeTransform: TOnOcvBeforeTransform read FOnBeforeTransform write FOnBeforeTransform;
   end;
 
   TocvImageOperationCollection = class(TOwnedCollection)
@@ -640,12 +705,12 @@ type
     procedure SetOnAfterEachOperation(const Value: TOnOcvNotifyCollectionItem);
     procedure SetOnBeforeEachOperation(const Value: TOnOcvNotifyCollectionItem);
   protected
-    procedure TakeImage(const IplImage: IocvImage); override;
     function GetProperties: TocvCustomImageOperation;
     function GetPropertiesClass: TocvImageOperationClass;
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
+    procedure TakeImage(const IplImage: IocvImage); override;
     property OperationClass: TocvImageOperationClass read GetPropertiesClass write SetPropertiesClass;
   published
     property OperationClassName: string read GetPropertiesClassName write SetPropertiesClassName;
@@ -679,7 +744,7 @@ uses
   ocv.core_c,
   ocv.imgproc_c,
   ocv.imgproc.types_c,
-  ocv.cvutils;
+  ocv.cvutils, System.Math;
 
 type
   TPersistentAccessProtected = class(TPersistent);
@@ -716,6 +781,14 @@ begin
   r := GetRValue(RGBColor);
   g := GetGValue(RGBColor);
   b := GetBValue(RGBColor);
+end;
+
+function ColorToCvRGB(const Color: TColor): TCvScalar;
+var
+  r, g, b: byte;
+begin
+  GetRGBValue(Color, r, g, b);
+  Result := CV_RGB(r, g, b);
 end;
 
 {TocvImageOperation}
@@ -1025,8 +1098,8 @@ begin
   if Result then
     try
       ContinueTransform := True;
-      if Assigned(OnBeforePaint) then
-        OnBeforePaint(Self, Source, ContinueTransform);
+      if Assigned(OnBeforeTransform) then
+        OnBeforeTransform(Self, Source, ContinueTransform);
       if ContinueTransform then
         Result := DoTransform(Source.Clone, Destanation)
       else
@@ -1034,8 +1107,8 @@ begin
         Destanation := Source;
         Result := True;
       end;
-      if Result and Assigned(OnAfterPaint) then
-        OnAfterPaint(Self, Source);
+      if Result and Assigned(OnAfterTransform) then
+        OnAfterTransform(Self, Destanation);
     finally
       UnlockTransform;
     end
@@ -1096,6 +1169,7 @@ function TRegisteredImageOperations.FindByClassName(const ClassName: String): To
 Var
   i: Integer;
 begin
+  Result := nil;
   for i := 0 to Count - 1 do
     if TocvImageOperationClass(Objects[i]).ClassName = ClassName then
       Exit(TocvImageOperationClass(Objects[i]));
@@ -1273,6 +1347,11 @@ begin
   Result := GetRegisteredImageOperations.GetNameByClass(FOperation.ClassType);
 end;
 
+function TocvImageOperationCollectionItem.GetNamePath: string;
+begin
+  Result := inherited GetNamePath + Format('Operations%d', [Index]);
+end;
+
 function TocvImageOperationCollectionItem.GetOwner: TPersistent;
 begin
   Result := FOwner;
@@ -1336,12 +1415,17 @@ end;
 
 function TocvImageOperationCollectionItem.DoTransform(const Source: IocvImage; out Destanation: IocvImage): Boolean;
 Var
-  Transform: Boolean;
+  ContinueTransform: Boolean;
 begin
   Result := LockTransform;
   if Result then
     try
-      Result := Operation.DoTransform(Source, Destanation)
+      ContinueTransform := True;
+      if Assigned(OnBeforeTransform) then
+        OnBeforeTransform(Self, Source, ContinueTransform);
+      Result := ContinueTransform and Operation.DoTransform(Source, Destanation);
+      if Result and Assigned(OnAfterTransform) then
+        OnAfterTransform(Self, Destanation);
     finally
       UnlockTransform;
     end;
@@ -1435,7 +1519,7 @@ end;
 constructor TocvContoursOperation.Create {(AOwner: TComponent)};
 begin
   inherited;
-  FOffset := TocvPoint.Create;
+  FOffset := TocvPoint2D32i.Create;
   FContourDraw := TocvContourDraw.Create(Self);
   FApprox := TocvContourApprox.Create(Self);
   OperationClass := TocvThresholdOperation;
@@ -1522,10 +1606,10 @@ begin
   inherited;
   if Dest is TocvRotateOperation then
   begin
-    FCustomCenter := (Dest as TocvRotateOperation).FCustomCenter;
+    FCenter := (Dest as TocvRotateOperation).FCenter;
     FMethod := (Dest as TocvRotateOperation).FMethod;
     FWarpingFlag := (Dest as TocvRotateOperation).FWarpingFlag;
-    FScale := (Dest as TocvRotateOperation).FScale;
+    FFillColor := (Dest as TocvRotateOperation).FFillColor
   end;
 end;
 
@@ -1533,23 +1617,24 @@ constructor TocvRotateOperation.Create(AOwner: TPersistent);
 begin
   inherited;
   Angle := 90;
-  FCustomCenter := TocvPoint.Create;
+  FCenter := TocvPoint2D32f.Create;
   RotateAroundCenter := True;
   Method := INTER_LINEAR;
   WarpingFlag := [WARP_FILL_OUTLIERS];
   Scale := 1;
+  FFillColor := clBlack;
 end;
 
 destructor TocvRotateOperation.Destroy;
 begin
-  FCustomCenter.Free;
+  FCenter.Free;
   inherited;
 end;
 
 function TocvRotateOperation.DoTransform(const Source: IocvImage; out Destanation: IocvImage): Boolean;
 Var
   rot_mat: pCvMat;
-  center: TcvPoint2D32f;
+  cvCenter: TCvPoint2D32f;
   D: pIplImage;
   M: Integer;
 begin
@@ -1558,15 +1643,15 @@ begin
   // Вращение относительно центра изображения
   if RotateAroundCenter then
   begin
-    center.X := Source.IpImage^.Width div 2;
-    center.Y := Source.IpImage^.Height div 2;
+    cvCenter.X := Source.IpImage^.Width div 2;
+    cvCenter.Y := Source.IpImage^.Height div 2;
   end
   else
   begin
-    center.X := CustomCenter.X;
-    center.Y := CustomCenter.Y;
+    cvCenter.X := CustomCenter.X;
+    cvCenter.Y := CustomCenter.Y;
   end;
-  cv2DRotationMatrix(center, Angle, Scale, rot_mat);
+  cv2DRotationMatrix(cvCenter, Angle, Scale, rot_mat);
   // Создаем изображение
   D := cvCreateImage(cvGetSize(Source.IpImage), Source.IpImage^.depth, Source.IpImage^.nChannels);
   // Выполняем вращение
@@ -1575,7 +1660,7 @@ begin
     M := M or CV_WARP_FILL_OUTLIERS;
   if WARP_INVERSE_MAP in FWarpingFlag then
     M := M or CV_WARP_INVERSE_MAP;
-  cvWarpAffine(Source.IpImage, D, rot_mat, M, cvScalarAll(0));
+  cvWarpAffine(Source.IpImage, D, rot_mat, M, ColorToCvRGB(FillColor));
   cvReleaseMat(rot_mat);
   Destanation := TocvImage.Create(D);
   Result := True;
@@ -1583,11 +1668,11 @@ end;
 
 {TPersistentPoint}
 
-procedure TocvPoint.AssignTo(Dest: TPersistent);
+procedure TocvPoint2D32i.AssignTo(Dest: TPersistent);
 begin
   inherited;
-  if Dest is TocvPoint then
-    FPoint := (Dest as TocvPoint).FPoint;
+  if Dest is TocvPoint2D32f then
+    FPoint := (Dest as TocvPoint2D32i).FPoint;
 end;
 
 {TocvCountourDraw}
@@ -1609,7 +1694,7 @@ constructor TocvDraw.Create(AOwner: TPersistent);
 begin
   inherited Create;
   FOwner := AOwner;
-  FOffset := TocvPoint.Create;
+  FOffset := TocvPoint2D32i.Create;
   FEnabled := True;
   FThickness := 1;
   FLineType := LT_AA;
@@ -1676,8 +1761,8 @@ constructor TocvHaarCascade.Create(AOwner: TPersistent);
 begin
   inherited;
   FLockFrontalFaceChange := TCriticalSection.Create;
-  FMinSize := TocvPoint.Create(30, 30);
-  FMaxSize := TocvPoint.Create;
+  FMinSize := TocvPoint2D32i.Create(30, 30);
+  FMaxSize := TocvPoint2D32i.Create;
   HaarCascade := hcFrontalFaceAlt;
   FDrawHaarCascade := TocvHaarCascadeDraw.Create(Self);
   Scale := 1.3;
@@ -1843,7 +1928,7 @@ begin
   end;
 end;
 
-constructor TocvPoint.Create(const AX, AY: Integer);
+constructor TocvPoint2D32i.Create(const AX, AY: Integer);
 begin
   FPoint.X := AX;
   FPoint.Y := AY;
@@ -1905,7 +1990,7 @@ end;
 function TocvMatchTemplate.DoTransform(const Source: IocvImage; out Destanation: IocvImage): Boolean;
 Var
   imgMat: pIplImage;
-  p1, p2: TCvPoint;
+  P1, P2: TCvPoint;
   min: Double;
   r, g, b: byte;
 begin
@@ -1918,17 +2003,17 @@ begin
 
     if Assigned(OnMathTemplateRect) or DrawRect.Enabled then
     begin
-      cvMinMaxLoc(imgMat, @min, @min, nil, @p1, nil);
-      p2.X := p1.X + IPLTemplate^.Width - 1;
-      p2.Y := p1.Y + IPLTemplate^.Height - 1;
+      cvMinMaxLoc(imgMat, @min, @min, nil, @P1, nil);
+      P2.X := P1.X + IPLTemplate^.Width - 1;
+      P2.Y := P1.Y + IPLTemplate^.Height - 1;
 
       if Assigned(OnMathTemplateRect) then
-        OnMathTemplateRect(Self, Source, ocvRect(p1.X, p1.Y, p2.X, p2.Y));
+        OnMathTemplateRect(Self, Source, ocvRect(P1.X, P1.Y, P2.X, P2.Y));
 
       if DrawRect.Enabled then
       begin
         GetRGBValue(DrawRect.Color, r, g, b);
-        cvRectangle(Destanation.IpImage, p1, p2, CV_RGB(r, g, b));
+        cvRectangle(Destanation.IpImage, P1, P2, CV_RGB(r, g, b));
       end;
 
     end;
@@ -2062,8 +2147,8 @@ begin
           else if CalcRectType = mdMinAreaRect then
           begin
             Rect2d := cvMinAreaRect2(c);
-            Rects[i] := ocvRect(Round(Rect2d.center.X - Rect2d.Size.Width / 2), Round(Rect2d.center.Y - Rect2d.Size.Height / 2),
-              Round(Rect2d.center.X + Rect2d.Size.Width / 2), Round(Rect2d.center.Y + Rect2d.Size.Height / 2));
+            Rects[i] := ocvRect(Round(Rect2d.Center.X - Rect2d.Size.Width / 2), Round(Rect2d.Center.Y - Rect2d.Size.Height / 2),
+              Round(Rect2d.Center.X + Rect2d.Size.Width / 2), Round(Rect2d.Center.Y + Rect2d.Size.Height / 2));
           end;
 
           if DrawMotionRect.Enabled then
@@ -2182,39 +2267,39 @@ end;
 
 {TocvRectPersistent}
 
-procedure TocvRectPersistent.AssignTo(Dest: TPersistent);
+procedure TocvRect32i.AssignTo(Dest: TPersistent);
 begin
   inherited;
-  if Dest is TocvRectPersistent then
+  if Dest is TocvRect32i then
   begin
-    FRight := (Dest as TocvRectPersistent).FRight;
-    FBottom := (Dest as TocvRectPersistent).FBottom;
-    FTop := (Dest as TocvRectPersistent).FTop;
-    FLeft := (Dest as TocvRectPersistent).FLeft;
+    FRight := (Dest as TocvRect32i).FRight;
+    FBottom := (Dest as TocvRect32i).FBottom;
+    FTop := (Dest as TocvRect32i).FTop;
+    FLeft := (Dest as TocvRect32i).FLeft;
   end;
 end;
 
-function TocvRectPersistent.GetCvRect: TCvRect;
+function TocvRect32i.GetCvRect: TCvRect;
 begin
   Result := ocv.core.types_c.cvRect(Left, Top, Width, Height);
 end;
 
-function TocvRectPersistent.GetHeight: Integer;
+function TocvRect32i.GetHeight: Integer;
 begin
   Result := Bottom - Top;
 end;
 
-function TocvRectPersistent.GetOcvRect: TocvRect;
+function TocvRect32i.GetOcvRect: TocvRect;
 begin
   Result := uOCVTypes.ocvRect(Left, Top, Right, Bottom);
 end;
 
-function TocvRectPersistent.GetWidth: Integer;
+function TocvRect32i.GetWidth: Integer;
 begin
   Result := Right - Left;
 end;
 
-procedure TocvRectPersistent.SetCvRect(const Value: TCvRect);
+procedure TocvRect32i.SetCvRect(const Value: TCvRect);
 begin
   Left := Value.X;
   Top := Value.Y;
@@ -2222,12 +2307,12 @@ begin
   Height := Value.Height;
 end;
 
-procedure TocvRectPersistent.SetHeight(const Value: Integer);
+procedure TocvRect32i.SetHeight(const Value: Integer);
 begin
   Bottom := Top + Value;
 end;
 
-procedure TocvRectPersistent.SetOcvRect(const Value: TocvRect);
+procedure TocvRect32i.SetOcvRect(const Value: TocvRect);
 begin
   FLeft := Value.Left;
   FTop := Value.Top;
@@ -2235,7 +2320,7 @@ begin
   FBottom := Value.Bottom;
 end;
 
-procedure TocvRectPersistent.SetWidth(const Value: Integer);
+procedure TocvRect32i.SetWidth(const Value: Integer);
 begin
   FRight := FLeft + Value;
 end;
@@ -2245,7 +2330,7 @@ end;
 constructor TovcCropOperation.Create(AOwner: TPersistent);
 begin
   inherited;
-  FCropRect := TocvRectPersistent.Create;
+  FCropRect := TocvRect32i.Create;
 end;
 
 destructor TovcCropOperation.Destroy;
@@ -2281,6 +2366,7 @@ Var
 begin
   Destanation := Source;
   ContinueTransform := True;
+  Result := True;
   for i := 0 to Count - 1 do
   begin
     if Assigned(FOnBeforeEachOperation) then
@@ -2334,14 +2420,14 @@ begin
         s2 := FSrource2Image;
         Destanation := Source.Same;
       end
-      else if Transform = awTransformSourse1 then
+      else if TransformType = awTransformSourse1 then
       begin
         s1 := FSrource2Image.Same;
         s2 := FSrource2Image;
         cvResize(Source.IpImage, s1.IpImage, 2);
         Destanation := FSrource2Image.Same;
       end
-      else if Transform = awTransformSourse2 then
+      else if TransformType = awTransformSourse2 then
       begin
         s1 := Source;
         s2 := Source.Same;
@@ -2385,6 +2471,207 @@ begin
     end;
 end;
 
+{TocvWarpAffine}
+
+procedure TocvWarpPerspective.AssignTo(Dest: TPersistent);
+begin
+  inherited;
+  if Dest is TocvWarpPerspective then
+  begin
+    FMethod := (Dest as TocvWarpPerspective).FMethod;
+    FWarpingFlag := (Dest as TocvWarpPerspective).FWarpingFlag;
+    FFillColor := (Dest as TocvWarpPerspective).FFillColor;
+    FSourceQuad.AssignTo((Dest as TocvWarpPerspective).FSourceQuad);
+    FDestQuad.AssignTo((Dest as TocvWarpPerspective).FDestQuad);
+  end;
+end;
+
+constructor TocvWarpPerspective.Create(AOwner: TPersistent);
+begin
+  inherited;
+  FSourceQuad := TocvQuad.Create;
+  FDestQuad := TocvQuad.Create;
+  Method := INTER_LINEAR;
+  WarpingFlag := [WARP_FILL_OUTLIERS];
+  FullSourceImage := True;
+  FFillColor := clBlack;
+end;
+
+destructor TocvWarpPerspective.Destroy;
+begin
+  FSourceQuad.Free;
+  FDestQuad.Free;
+  inherited;
+end;
+
+function TocvWarpPerspective.DoTransform(const Source: IocvImage; out Destanation: IocvImage): Boolean;
+Var
+  dst: pIplImage;
+  srcQuad, dstQuad: TocvQuad.TCvPoint2D32fArray;
+  warp_matrix: pCvMat;
+begin
+  if DestQuad.ShaIsConvexQuadrangle then
+  begin
+    if FullSourceImage or (not SourceQuad.ShaIsConvexQuadrangle) then
+    begin
+      srcQuad[0].X := 0; // src Top left
+      srcQuad[0].Y := 0;
+      srcQuad[1].X := Source.Width - 1; // src Top right
+      srcQuad[1].Y := 0;
+      srcQuad[2].X := 0; // src Bottom left
+      srcQuad[2].Y := Source.Height - 1;
+      srcQuad[3].X := Source.Width - 1; // src Bot right
+      srcQuad[3].Y := Source.Height - 1;
+    end
+    else
+      srcQuad := SourceQuad.cvQuad;
+
+    dstQuad := DestQuad.cvQuad;
+    warp_matrix := cvCreateMat(3, 3, CV_32FC1);
+    dst := cvCloneImage(Source.IpImage);
+    cvGetPerspectiveTransform(@srcQuad, @dstQuad, warp_matrix);
+    cvWarpPerspective(Source.IpImage, dst, warp_matrix, CV_INTER_LINEAR or CV_WARP_FILL_OUTLIERS, ColorToCvRGB(FillColor));
+    Destanation := TocvImage.Create(dst);
+  end
+  else
+    Destanation := Source;
+  Result := True;
+end;
+
+{TocvQuad}
+
+procedure TocvQuad.AssignTo(Dest: TPersistent);
+Var
+  i: Integer;
+begin
+  inherited;
+  if Dest is TocvQuad then
+    for i := 0 to 3 do
+      FPoints[i].AssignTo((Dest as TocvQuad).FPoints[i]);
+end;
+
+constructor TocvQuad.Create;
+Var
+  i: Integer;
+begin
+  inherited;
+  for i := 0 to 3 do
+    FPoints[i] := TocvPoint2D32f.Create;
+end;
+
+destructor TocvQuad.Destroy;
+Var
+  i: Integer;
+begin
+  for i := 0 to 3 do
+    FPoints[i].Free;
+  inherited;
+end;
+
+function TocvQuad.GetCvQuad: TCvPoint2D32fArray;
+Var
+  i: Integer;
+begin
+  for i := 0 to 3 do
+  begin
+    Result[i].X := FPoints[i].X;
+    Result[i].Y := FPoints[i].Y;
+  end;
+end;
+
+function TocvQuad.GetPoints(const index: Integer): TocvPoint2D32f;
+begin
+  if (index >= 0) and (index < 4) then
+    Result := FPoints[index]
+  else
+    Result := nil;
+end;
+
+function TocvQuad.ShaIsConvexQuadrangle: Boolean;
+begin
+  Result := True;
+  // ---------------------------------
+  // Procedure GetVector(const i: byte; var P: TCvPoint2D32f);
+  // begin
+  // P.X := FPoints[(i + 1) and 3].X - FPoints[i and 3].X;
+  // P.Y := FPoints[(i + 1) and 3].Y - FPoints[i and 3].Y;
+  // end;
+  //
+  // Var
+  // Q: Boolean;
+  // v1, v2: TCvPoint2D32f;
+  // T, Z, P: Double;
+  // i: Integer;
+  // begin
+  // GetVector(3, v1);
+  // GetVector(0, v2);
+  // T := v1.X * v2.Y - v2.X * v1.Y;
+  // Z := Sign(T);
+  // P := 1.0;
+  // i := 0;
+  // Q := True;
+  // while (Q and (i < 4)) do
+  // begin
+  // GetVector(i, v1);
+  // GetVector(i + 1, v2);
+  // T := v1.X * v2.Y - v2.X * v1.Y;
+  // P := P * Z * Sign(T);
+  // if (P < 0) then
+  // Q := False;
+  // Inc(i);
+  // end;
+  // Result := Q;
+  // ---------------------------------
+  // ---------------------------------
+  // function ShaIsSameDirection(const t0, t1, t2: TocvPoint2D32f; var dir: Integer): Boolean;
+  // const
+  // MinInt = -1 xor MaxInt;
+  // var
+  // S: Integer;
+  // begin;
+  // S := Trunc((t1.X - t0.X) * (t2.Y - t0.Y) - (t2.X - t0.X) * (t1.Y - t0.Y));
+  // if S = 0 then
+  // Result := True
+  // else
+  // begin;
+  // S := S or MaxInt;
+  // Result := (S xor dir) <> MinInt;
+  // dir := S;
+  // end;
+  // end;
+  // var
+  // dir: Integer;
+  // begin;
+  // dir := 0;
+  // Result := ShaIsSameDirection(P0, P1, P2, dir) and ShaIsSameDirection(P1, P2, P3, dir) and ShaIsSameDirection(P2, P3, P0, dir)
+  // and ShaIsSameDirection(P3, P0, P1, dir) and (dir <> 0);
+  // ---------------------------------
+end;
+
+procedure TocvQuad.SetPoints(const index: Integer; const Value: TocvPoint2D32f);
+begin
+  if (index >= 0) and (index < 4) then
+    FPoints[index] := Value;
+end;
+
+{TocvPoint2D32f}
+
+procedure TocvPoint2D32f.AssignTo(Dest: TPersistent);
+begin
+  inherited;
+  if Dest is TocvPoint2D32f then
+  begin
+    FX := (Dest as TocvPoint2D32f).FX;
+    FY := (Dest as TocvPoint2D32f).FY;
+  end;
+end;
+
+constructor TocvPoint2D32f.Create(const AX, AY: Single);
+begin
+  FX := AX;
+  FY := AY;
+end;
+
 initialization
 
 GetRegisteredImageOperations.RegisterIOClass(TocvNoneOperation, 'None');
@@ -2405,6 +2692,7 @@ GetRegisteredImageOperations.RegisterIOClass(TocvMatchTemplate, 'MatchTemplate')
 GetRegisteredImageOperations.RegisterIOClass(TocvMotionDetect, 'MotionDetect');
 GetRegisteredImageOperations.RegisterIOClass(TovcCropOperation, 'Crop');
 GetRegisteredImageOperations.RegisterIOClass(TovcAddWeightedOperation, 'AddWeighted');
+GetRegisteredImageOperations.RegisterIOClass(TocvWarpPerspective, 'WarpPerspective');
 
 finalization
 

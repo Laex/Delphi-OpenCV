@@ -115,10 +115,10 @@ object MainForm: TMainForm
   end
   object ocvmgprtn1: TocvImageOperation
     VideoSource = ocvcmrsrc1
-    OperationClassName = 'TovcAddWeightedOperation'
-    Operation.VideoSource = ocvflsrc1
-    Operation.Alpha = 0.500000000000000000
-    Operation.Beta = 0.500000000000000000
+    OperationClassName = 'TocvRotateOperation'
+    Operation.Angle = 90
+    Operation.RotateAroundCenter = True
+    Operation.Scale = 1.000000000000000000
     Operations = <
       item
         OperationClassName = 'TocvHaarCascade'

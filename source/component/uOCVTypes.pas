@@ -53,8 +53,12 @@ Type
     function Same: IocvImage;
     function AsBitmap: TBitmap;
     function Crop(const roi: TCvRect): IocvImage;
+    function GetWidth: Integer;
+    function GetHeight: Integer;
     property IpImage: pIplImage Read GetIplImage;
     property isGray: Boolean read GetisGray;
+    property Width: Integer read GetWidth;
+    property Height: Integer read GetHeight;
   end;
 
   TocvImage = class(TInterfacedObject, IocvImage)
@@ -63,6 +67,8 @@ Type
   protected
     function GetIplImage: pIplImage;
     function GetisGray: Boolean;
+    function GetWidth: Integer;
+    function GetHeight: Integer;
   public
     constructor Create(const AImage: pIplImage); overload;
     constructor Create(const Bitmap: TBitmap); overload;
@@ -88,12 +94,11 @@ Type
     of object;
 
   TocvRect = Type TRect;
-  {$IFDEF VER17P}
+{$IFDEF VER17P}
   TocvRects = TArray<TocvRect>;
-  {$ELSE}
+{$ELSE}
   TocvRects = Array of TocvRect;
-  {$ENDIF}
-
+{$ENDIF}
   TOnOcvHaarCascade = procedure(Sender: TObject; const IplImage: IocvImage; const HaarRects: TocvRects) of object;
   TOnOcvRect = procedure(Sender: TObject; const IplImage: IocvImage; const Rect: TocvRect) of object;
   TOnOcvRects = procedure(Sender: TObject; const IplImage: IocvImage; const Rects: TocvRects) of object;
@@ -117,7 +122,7 @@ Type
   TocvReceiverList = class(TThreadList) // <IocvDataReceiver>;
   public
     procedure Add(Item: IocvDataReceiver);
-    procedure Remove(Item: IocvDataReceiver); {$IFDEF VER9P}inline;{$ENDIF}
+    procedure Remove(Item: IocvDataReceiver); {$IFDEF VER9P}inline; {$ENDIF}
   end;
 
   TocvDataSource = class(TComponent, IocvDataSource)
@@ -153,10 +158,10 @@ Type
   private
     FocvVideoSource: IocvDataSource;
   protected
-    procedure TakeImage(const IplImage: IocvImage); virtual;
     procedure SetVideoSource(const Value: TObject); virtual;
     procedure SetOpenCVVideoSource(const Value: IocvDataSource); virtual;
   public
+    procedure TakeImage(const IplImage: IocvImage); virtual;
     destructor Destroy; override;
   published
     property VideoSource: IocvDataSource Read FocvVideoSource write SetOpenCVVideoSource;
@@ -395,6 +400,14 @@ begin
   inherited;
 end;
 
+function TocvImage.GetHeight: Integer;
+begin
+  if Assigned(FImage) then
+    Result := FImage^.Height
+  else
+    Result := 0;
+end;
+
 function TocvImage.GetIplImage: pIplImage;
 begin
   Result := FImage;
@@ -403,6 +416,14 @@ end;
 function TocvImage.GetisGray: Boolean;
 begin
   Result := FImage^.nChannels = 1;
+end;
+
+function TocvImage.GetWidth: Integer;
+begin
+  if Assigned(FImage) then
+    Result := FImage^.Width
+  else
+    Result := 0;
 end;
 
 function TocvImage.GrayImage: IocvImage;

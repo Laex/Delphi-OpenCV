@@ -228,7 +228,7 @@ const
 Begin
   hue := hue * 0.033333333333333333333333333333333;
   sector := cvFloor(hue);
-  p := cvRound(255 * (hue - sector));
+//  p := cvRound(255 * (hue - sector));
   if (sector and 1) = 1 then
     p := 255
   else
@@ -396,14 +396,14 @@ begin
     // Stretch the image to fit the rectangle
     iResult := StretchDIBits(dc, rect.left, rect.top, rect.Width, rect.Height, 0, 0, img^.Width, img^.Height, img^.imageData,
       _dibhdr, DIB_RGB_COLORS, SRCCOPY);
-    Result := (iResult > 0) and (iResult <> GDI_ERROR);
+    Result := (iResult > 0);// and (iResult <> GDI_ERROR);
   end
   else
   begin
     // Draw without scaling
     iResult := SetDIBitsToDevice(dc, rect.left, rect.top, img^.Width, img^.Height, 0, 0, 0, img^.Height, img^.imageData, _dibhdr,
       DIB_RGB_COLORS);
-    Result := (iResult > 0) and (iResult <> GDI_ERROR);
+    Result := (iResult > 0);// and (iResult <> GDI_ERROR);
   end;
 end;
 
