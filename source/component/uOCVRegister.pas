@@ -69,7 +69,8 @@ begin
     {} TocvMatchTemplate,
     {} TocvMotionDetect,
     {} TovcCropOperation,
-    {} TovcAddWeightedOperation]);
+    {} TovcAddWeightedOperation,
+    {} TocvWarpPerspective]);
 end;
 
 {$IFDEF FPC}

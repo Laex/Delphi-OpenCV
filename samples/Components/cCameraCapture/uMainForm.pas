@@ -52,6 +52,7 @@ type
     procedure chk3Click(Sender: TObject);
     procedure ocvmgprtn1AfterEachOperation(PrevOperation, Operation, NextOperation: TObject; const IplImage: IocvImage;
       var ContinueTransform: Boolean);
+    procedure ocvmgprtn1OperationBeforeTransform(Sender: TObject; const IplImage: IocvImage; var ContinueTransform: Boolean);
   private
   public
   end;
@@ -102,6 +103,22 @@ begin
     H := (Operation as TocvHaarCascade).HaarRects;
     if Length(H) > 0 then
       (NextOperation as TovcCropOperation).CropRect.ocvRect := H[0];
+  end;
+end;
+
+procedure TMainForm.ocvmgprtn1OperationBeforeTransform(Sender: TObject; const IplImage: IocvImage;
+  var ContinueTransform: Boolean);
+begin
+  With Sender as TocvWarpPerspective do
+  begin
+    DestQuad.Points[0].x := IplImage.width * 0.05; // dst Top left
+    DestQuad.Points[0].y := IplImage.height * 0.33;
+    DestQuad.Points[1].x := IplImage.width * 0.9; // dst Top right
+    DestQuad.Points[1].y := IplImage.height * 0.25;
+    DestQuad.Points[2].x := IplImage.width * 0.2; // dst Bottom left
+    DestQuad.Points[2].y := IplImage.height * 0.7;
+    DestQuad.Points[3].x := IplImage.width * 0.8; // dst Bot right
+    DestQuad.Points[3].y := IplImage.height * 0.9;
   end;
 end;
 
