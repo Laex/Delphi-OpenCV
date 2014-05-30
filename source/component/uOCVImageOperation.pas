@@ -248,7 +248,7 @@ type
     property sigma2: Double index 1 Read GetFloatParam write SetFloatParam;
     property size1: Integer index 0 Read GetIntParam write SetIntParam;
     property size2: Integer index 1 Read GetIntParam write SetIntParam;
-    property SmoothOperation: TocvSmoothOperations read FSmoothOperation write SetSmoothOperation default GAUSSIAN;
+    property SmoothType: TocvSmoothOperations read FSmoothOperation write SetSmoothOperation default GAUSSIAN;
   end;
 
   TocvThresholdType = (THRESH_BINARY, THRESH_BINARY_INV, THRESH_TRUNC, THRESH_TOZERO, THRESH_TOZERO_INV, THRESH_MASK,
@@ -434,8 +434,6 @@ type
     function DoTransform(const Source: IocvImage; out Destanation: IocvImage): Boolean; override;
   end;
 
-  TocvLineType = (LT_FILLED, LT_8, LT_AA);
-
   TocvDraw = class(TPersistent)
   protected
     FColor: TColor;
@@ -448,16 +446,25 @@ type
     FThickness: Integer;
     FLineType: TocvLineType;
     FShift: Integer;
+    function GetCvLineType: Integer;
+    function GetCvColor: TCvScalar;
   public
     constructor Create(AOwner: TPersistent);
     destructor Destroy; override;
     property Color: TColor read FColor write FColor default clGreen;
     property Shift: Integer read FShift write FShift default 0;
+    property cvLineType: Integer read GetCvLineType;
+    property cvColor: TCvScalar read GetCvColor;
   published
     property Enabled: Boolean read FEnabled write FEnabled default True;
     property Thickness: Integer read FThickness write FThickness default 2;
     property LineType: TocvLineType read FLineType write FLineType default LT_AA;
     property Offset: TocvPoint2D32i read FOffset write FOffset;
+  end;
+
+  TocvDrawColor = class(TocvDraw)
+  published
+    property Color;
   end;
 
   TocvMatchTemplateMethod = (TM_SQDIFF, TM_SQDIFF_NORMED, TM_CCORR, TM_CCORR_NORMED, TM_CCOEFF, TM_CCOEFF_NORMED);
@@ -491,10 +498,7 @@ type
   TocvContourApproximationMethods = (CHAIN_CODE, CHAIN_APPROX_NONE, CHAIN_APPROX_SIMPLE, CHAIN_APPROX_TC89_L1,
     CHAIN_APPROX_TC89_KCOS, LINK_RUNS);
 
-  TocvDrawMotionRect = class(TocvDraw)
-  published
-    property Color;
-  end;
+  TocvDrawMotionRect = TocvDrawColor;
 
   TocvMotionDetect = class(TocvCustomImageOperationWithNestedOperation)
   protected
@@ -521,6 +525,99 @@ type
     property DrawMotionRect: TocvDrawMotionRect read FDrawMotionRect Write FDrawMotionRect;
     property OnMotion: TOnOcvRects read FOnMotion write FOnMotion;
     property NotifyOnlyWhenFound: Boolean index 1 Read GetBoolParam write SetBoolParam;
+  end;
+
+  TocvHoughTransform = (HOUGH_STANDARD, HOUGH_PROBABILISTIC, HOUGH_MULTI_SCALE, HOUGH_GRADIENT);
+
+  TocvDrawHoughCircles = TocvDrawColor;
+
+  TovcHoughCirclesSmooth = class(TPersistent)
+  protected
+    procedure AssignTo(Dest: TPersistent); override;
+  private
+    FSmoothOperation: TocvSmoothOperations;
+    Fsigma1: Double;
+    Fsigma2: Double;
+    Fsize1: Integer;
+    Fsize2: Integer;
+    FEnabled: Boolean;
+  public
+    constructor Create;
+  published
+    property sigma1: Double Read Fsigma1 write Fsigma1;
+    property sigma2: Double Read Fsigma2 write Fsigma2;
+    property size1: Integer Read Fsize1 write Fsize1 default 0;
+    property size2: Integer Read Fsize2 write Fsize2 default 0;
+    property SmoothType: TocvSmoothOperations read FSmoothOperation write FSmoothOperation default GAUSSIAN;
+    property Enabled: Boolean read FEnabled write FEnabled default True;
+  end;
+
+  TocvHoughCircles = class(TocvCustomImageOperation)
+  protected
+    procedure AssignTo(Dest: TPersistent); override;
+  private
+    FHoughTransform: TocvHoughTransform;
+    FDrawCircle: TocvDrawHoughCircles;
+    FOnCircles: TOnOcvCircles;
+    FSmooth: TovcHoughCirclesSmooth;
+  public
+    constructor Create(AOwner: TPersistent); override;
+    destructor Destroy; override;
+    function DoTransform(const Source: IocvImage; out Destanation: IocvImage): Boolean; override;
+  published
+    property Method: TocvHoughTransform read FHoughTransform write FHoughTransform default HOUGH_GRADIENT;
+    property InverseRatio: Double index 0 Read GetFloatParam write SetFloatParam;
+    property MinDist: Double index 1 Read GetFloatParam write SetFloatParam;
+    property Param1: Double index 2 Read GetFloatParam write SetFloatParam;
+    property Param2: Double index 3 Read GetFloatParam write SetFloatParam;
+    property MinRadius: Integer index 0 Read GetIntParam write SetIntParam;
+    property MaxRadius: Integer index 1 Read GetIntParam write SetIntParam;
+    property DrawCircle: TocvDrawHoughCircles read FDrawCircle write FDrawCircle;
+    property OnCircles: TOnOcvCircles read FOnCircles write FOnCircles;
+    property NotifyOnlyWhenFound: Boolean index 0 Read GetBoolParam write SetBoolParam;
+    property Smooth: TovcHoughCirclesSmooth read FSmooth write FSmooth;
+  end;
+
+  TocvHoughLinesCanny = class(TPersistent)
+  protected
+    procedure AssignTo(Dest: TPersistent); override;
+  private
+    FThreshold1: Double;
+    FThreshold2: Double;
+    FApertureSize: Integer;
+  public
+    constructor Create;
+  published
+    property Threshold1: Double read FThreshold1 write FThreshold1;
+    property Threshold2: Double read FThreshold2 write FThreshold2;
+    property ApertureSize: Integer read FApertureSize write FApertureSize default 3;
+  end;
+
+  TocvDrawHoughLines = TocvDrawColor;
+
+  TocvHoughLines = class(TocvCustomImageOperation)
+  protected
+    procedure AssignTo(Dest: TPersistent); override;
+  private
+    FHoughTransform: TocvHoughTransform;
+    FCanny: TocvHoughLinesCanny;
+    FOnLines: TOnOcvLines;
+    FDrawLines: TocvDrawHoughLines;
+  public
+    constructor Create(AOwner: TPersistent); override;
+    destructor Destroy; override;
+    function DoTransform(const Source: IocvImage; out Destanation: IocvImage): Boolean; override;
+  published
+    property Method: TocvHoughTransform read FHoughTransform write FHoughTransform default HOUGH_PROBABILISTIC;
+    property Rho: Double index 0 Read GetFloatParam write SetFloatParam;
+    property Theta: Double index 1 Read GetFloatParam write SetFloatParam;
+    property Param1: Double index 2 Read GetFloatParam write SetFloatParam;
+    property Param2: Double index 3 Read GetFloatParam write SetFloatParam;
+    property Threshold: Integer index 0 Read GetIntParam write SetIntParam;
+    property Canny: TocvHoughLinesCanny Read FCanny write FCanny;
+    property OnLines: TOnOcvLines read FOnLines write FOnLines;
+    property DrawLines: TocvDrawHoughLines read FDrawLines write FDrawLines;
+    property NotifyOnlyWhenFound: Boolean index 0 Read GetBoolParam write SetBoolParam;
   end;
 
   TocvHaarCascadeDraw = class(TocvDraw)
@@ -744,7 +841,8 @@ uses
   ocv.core_c,
   ocv.imgproc_c,
   ocv.imgproc.types_c,
-  ocv.cvutils, System.Math;
+  ocv.cvutils,
+  System.Math;
 
 type
   TPersistentAccessProtected = class(TPersistent);
@@ -768,27 +866,6 @@ begin
   if not Assigned(_RegisteredImageOperations) then
     _RegisteredImageOperations := TRegisteredImageOperations.Create;
   Result := _RegisteredImageOperations;
-end;
-
-const
-  cLineType: array [TocvLineType] of Integer = (CV_FILLED, 8, CV_AA);
-
-procedure GetRGBValue(const AColor: TColor; var r, g, b: byte);
-Var
-  RGBColor: TColor;
-begin
-  RGBColor := ColorToRGB(AColor);
-  r := GetRValue(RGBColor);
-  g := GetGValue(RGBColor);
-  b := GetBValue(RGBColor);
-end;
-
-function ColorToCvRGB(const Color: TColor): TCvScalar;
-var
-  r, g, b: byte;
-begin
-  GetRGBValue(Color, r, g, b);
-  Result := CV_RGB(r, g, b);
 end;
 
 {TocvImageOperation}
@@ -1158,7 +1235,7 @@ Var
   Image: pIplImage;
 begin
   Image := cvCloneImage(Source.IpImage);
-  cvSmooth(Source.IpImage, Image, ocvSmoothOperations[SmoothOperation], size1, size2, sigma1, sigma2);
+  cvSmooth(Source.IpImage, Image, ocvSmoothOperations[SmoothType], size1, size2, sigma1, sigma2);
   Destanation := TocvImage.Create(Image);
   Result := True;
 end;
@@ -1708,6 +1785,16 @@ begin
   inherited;
 end;
 
+function TocvDraw.GetCvColor: TCvScalar;
+begin
+  Result := ColorToCvRGB(Color);
+end;
+
+function TocvDraw.GetCvLineType: Integer;
+begin
+  Result := cLineType[LineType];
+end;
+
 function TocvDraw.GetOwner: TPersistent;
 begin
   Result := FOwner;
@@ -2070,6 +2157,7 @@ begin
     Threshold := 25;
     MaxValue := 255;
   end;
+  NotifyOnlyWhenFound := False;
 end;
 
 destructor TocvMotionDetect.Destroy;
@@ -2672,6 +2760,221 @@ begin
   FY := AY;
 end;
 
+{TocvHoughCircles}
+
+procedure TocvHoughCircles.AssignTo(Dest: TPersistent);
+begin
+  inherited;
+  if Dest is TocvHoughCircles then
+  begin
+    FHoughTransform := (Dest as TocvHoughCircles).FHoughTransform;
+  end;
+end;
+
+constructor TocvHoughCircles.Create(AOwner: TPersistent);
+begin
+  inherited;
+  FHoughTransform := HOUGH_GRADIENT;
+  InverseRatio := 1;
+  MinDist := 100;
+  Param1 := 100;
+  Param2 := 100;
+  MinRadius := 0;
+  MaxRadius := 0;
+  FDrawCircle := TocvDrawHoughCircles.Create(Self);
+  NotifyOnlyWhenFound := False;
+  FSmooth := TovcHoughCirclesSmooth.Create;
+  FSmooth.SmoothType := GAUSSIAN;
+  FSmooth.size1 := 5;
+  FSmooth.size2 := 5;
+  FSmooth.sigma1 := 0;
+  FSmooth.sigma2 := 0;
+end;
+
+destructor TocvHoughCircles.Destroy;
+begin
+  FDrawCircle.Free;
+  FSmooth.Free;
+  inherited;
+end;
+
+function TocvHoughCircles.DoTransform(const Source: IocvImage; out Destanation: IocvImage): Boolean;
+type
+  TFloatArray = array [0 .. 10] of Single;
+  pFloatArray = ^TFloatArray;
+
+Var
+  results: pCvSeq;
+  storage: pCvMemStorage;
+  Circles: TocvCircles;
+  i: Integer;
+  p: pFloatArray;
+  D: IocvImage;
+begin
+  SetLength(Circles, 0);
+  Destanation := Source;
+  try
+    storage := cvCreateMemStorage(0);
+    results := nil;
+    try
+
+      if Smooth.Enabled then
+      begin
+        D := Source.Same;
+        cvSmooth(Source.IpImage, D.IpImage, ocvSmoothOperations[Smooth.SmoothType], Smooth.size1, Smooth.size2, Smooth.sigma1,
+          Smooth.sigma2);
+      end
+      else
+        D := Source;
+
+      results := cvHoughCircles(D.GrayImage.IpImage, storage, Integer(Method), InverseRatio, MinDist, Param1, Param2, MinRadius,
+        MaxRadius);
+      if Assigned(results) then
+      begin
+        SetLength(Circles, results^.total);
+        for i := 0 to results^.total - 1 do
+        begin
+          p := pFloatArray(cvGetSeqElem(results, i));
+          Circles[i].cX := cvRound(p^[0]);
+          Circles[i].cY := cvRound(p^[1]);
+          Circles[i].Radius := cvRound(p^[2]);
+          if DrawCircle.Enabled then
+            cvCircle(Destanation.IpImage, cvPoint(Circles[i].cX, Circles[i].cY), Circles[i].Radius, DrawCircle.cvColor,
+              DrawCircle.Thickness, DrawCircle.cvLineType, DrawCircle.Shift);
+        end;
+      end;
+    finally
+      cvReleaseMemStorage(storage);
+    end;
+  except
+  end;
+  if Assigned(OnCircles) and ((Length(Circles) > 0) or (not NotifyOnlyWhenFound)) then
+    OnCircles(Self, Destanation, Circles);
+end;
+
+{TocvHoughLines}
+
+procedure TocvHoughLines.AssignTo(Dest: TPersistent);
+begin
+  inherited;
+  if Dest is TocvHoughLines then
+  begin
+    FHoughTransform := (Dest as TocvHoughLines).FHoughTransform
+  end;
+end;
+
+constructor TocvHoughLines.Create(AOwner: TPersistent);
+begin
+  inherited;
+  FHoughTransform := HOUGH_PROBABILISTIC;
+  Rho := 1;
+  Theta := CV_PI / 180;
+  Param1 := 50;
+  Param2 := 10;
+  Threshold := 50;
+  FCanny := TocvHoughLinesCanny.Create;
+  FDrawLines := TocvDrawHoughLines.Create(Self);
+  NotifyOnlyWhenFound := True;
+end;
+
+destructor TocvHoughLines.Destroy;
+begin
+  FCanny.Free;
+  FDrawLines.Free;
+  inherited;
+end;
+
+function TocvHoughLines.DoTransform(const Source: IocvImage; out Destanation: IocvImage): Boolean;
+Var
+  lines: pCvSeq;
+  line: pCvPointArray;
+  storage: pCvMemStorage;
+  SG, D: IocvImage;
+  i: Integer;
+  ocvlines: TocvLines;
+begin
+  lines := nil;
+  SetLength(ocvlines, 0);
+  Destanation := Source;
+  try
+    storage := cvCreateMemStorage(0);
+    try
+      SG := Source.GrayImage;
+      D := SG.Same;
+      cvCanny(SG.IpImage, D.IpImage, Canny.Threshold1, Canny.Threshold2, Canny.ApertureSize);
+      lines := cvHoughLines2(D.IpImage, storage, Integer(Method), Rho, Theta, Threshold, Param1, Param2);
+      if Assigned(lines) then
+      begin
+        SetLength(ocvlines, lines^.total);
+        for i := 0 to lines^.total - 1 do
+        begin
+          line := pCvPointArray(cvGetSeqElem(lines, i));
+          ocvlines[i].S := line^[0];
+          ocvlines[i].E := line^[1];
+          if DrawLines.Enabled then
+            cvLine(Destanation.IpImage, line^[0], line^[1], DrawLines.cvColor, DrawLines.Thickness, DrawLines.cvLineType,
+              DrawLines.Shift);
+        end;
+      end;
+
+      if Assigned(OnLines) and ((Length(ocvlines) > 0) or (not NotifyOnlyWhenFound)) then
+        OnLines(Self, Destanation, ocvlines);
+    finally
+      cvReleaseMemStorage(storage);
+    end;
+  except
+
+  end;
+end;
+
+{TovcHoughCirclesSmooth}
+
+procedure TovcHoughCirclesSmooth.AssignTo(Dest: TPersistent);
+begin
+  inherited;
+  if Dest is TovcHoughCirclesSmooth then
+  begin
+    FSmoothOperation := (Dest as TovcHoughCirclesSmooth).FSmoothOperation;
+    Fsigma1 := (Dest as TovcHoughCirclesSmooth).Fsigma1;
+    Fsigma2 := (Dest as TovcHoughCirclesSmooth).Fsigma2;
+    Fsize1 := (Dest as TovcHoughCirclesSmooth).Fsize1;
+    Fsize2 := (Dest as TovcHoughCirclesSmooth).Fsize2;
+    FEnabled := (Dest as TovcHoughCirclesSmooth).FEnabled;
+  end;
+end;
+
+constructor TovcHoughCirclesSmooth.Create;
+begin
+  inherited;
+  FSmoothOperation := GAUSSIAN;
+  Fsigma1 := 0;
+  Fsigma2 := 0;
+  Fsize1 := 5;
+  Fsize2 := 5;
+  FEnabled := True;
+end;
+
+{TocvHoughLinesCanny}
+
+procedure TocvHoughLinesCanny.AssignTo(Dest: TPersistent);
+begin
+  inherited;
+  if Dest is TocvHoughLinesCanny then
+  begin
+    FThreshold1 := (Dest as TocvHoughLinesCanny).FThreshold1;
+    FThreshold2 := (Dest as TocvHoughLinesCanny).FThreshold2;
+    FApertureSize := (Dest as TocvHoughLinesCanny).FApertureSize;
+  end;
+end;
+
+constructor TocvHoughLinesCanny.Create;
+begin
+  inherited;
+  FThreshold1 := 50;
+  FThreshold2 := 200;
+  FApertureSize := 3;
+end;
+
 initialization
 
 GetRegisteredImageOperations.RegisterIOClass(TocvNoneOperation, 'None');
@@ -2693,6 +2996,8 @@ GetRegisteredImageOperations.RegisterIOClass(TocvMotionDetect, 'MotionDetect');
 GetRegisteredImageOperations.RegisterIOClass(TovcCropOperation, 'Crop');
 GetRegisteredImageOperations.RegisterIOClass(TovcAddWeightedOperation, 'AddWeighted');
 GetRegisteredImageOperations.RegisterIOClass(TocvWarpPerspective, 'WarpPerspective');
+GetRegisteredImageOperations.RegisterIOClass(TocvHoughCircles, 'HoughCircles');
+GetRegisteredImageOperations.RegisterIOClass(TocvHoughLines, 'HoughLines');
 
 finalization
 

@@ -84,7 +84,6 @@
 // *************************************************************************************************
 
 {$I OpenCV.inc}
-
 {$IFDEF DEBUG}
 {$A8,B-,C+,D+,E-,F-,G+,H+,I+,J+,K-,L+,M-,N+,O-,P+,Q+,R+,S-,T-,U-,V+,W+,X+,Y+,Z1}
 {$ELSE}
@@ -99,7 +98,6 @@
 {$IFDEF VER12P}
 {$POINTERMATH ON}
 {$ENDIF}
-
 unit ocv.core.types_c;
 
 interface
@@ -131,24 +129,23 @@ type
   CVChar = AnsiChar;
 {$IFNDEF VER16P}
 {$IFDEF CLR}
-  {$IFDEF VER11P}
+{$IFDEF VER11P}
   NativeInt = size_t;
   NativeUInt = size_t;
-  {$ELSE}
+{$ELSE}
   NativeInt = Integer;
   NativeUInt = Cardinal;
-  {$ENDIF}
+{$ENDIF}
 {$ELSE}
-  {$IFDEF FPC}
+{$IFDEF FPC}
   NativeInt = SizeInt;
   NativeUInt = SizeUInt;
-  {$ELSE}
+{$ELSE}
   NativeInt = Integer;
   NativeUInt = Cardinal;
-  {$ENDIF}
 {$ENDIF}
 {$ENDIF}
-
+{$ENDIF}
 function strdup(const str: pCVChar): pCVChar;
 function cv_stricmp(const str1, str2: pCVChar): Integer;
 procedure strcpy(var str1: pCVChar; const str2: pCVChar); overload;
@@ -287,8 +284,7 @@ const
   // CvRNG rng = seed ? (uint64)seed : (uint64)(int64)-1;
   // return rng;
   // }
-function cvRNG(seed: int64 = -1): TCvRNG; {$IFDEF VER9P}inline;{$ENDIF}
-
+function cvRNG(seed: int64 = -1): TCvRNG; {$IFDEF VER9P}inline; {$ENDIF}
 (****************************************************************************************\
   *                                  Image cType (IplImage)                                 *
   ****************************************************************************************)
@@ -477,14 +473,13 @@ const
 {$EXTERNALSYM CV_USRTYPE1}
   CV_MAT_DEPTH_MASK = (CV_DEPTH_MAX - 1);
 {$EXTERNALSYM CV_MAT_DEPTH_MASK}
-function CV_8UC1: Integer; {$IFDEF VER9P}inline;{$ENDIF}
-
+function CV_8UC1: Integer; {$IFDEF VER9P}inline; {$ENDIF}
 {$EXTERNALSYM CV_8UC1}
 (*
   CV_8UC2 = CV_MAKETYPE(CV_8U, 2);
   {$EXTERNALSYM CV_8UC2}
 *)
-function CV_8UC3: Integer; {$IFDEF VER9P}inline;{$ENDIF}
+function CV_8UC3: Integer; {$IFDEF VER9P}inline; {$ENDIF}
 {$EXTERNALSYM CV_8UC3}
 (*
   CV_8UC4 = CV_MAKETYPE(CV_8U, 4);
@@ -527,8 +522,7 @@ function CV_8UC3: Integer; {$IFDEF VER9P}inline;{$ENDIF}
 // const
 // CV_32SC2 = CV_MAKETYPE(CV_32S, 2);
 {$EXTERNALSYM CV_32SC2}
-function CV_32SC2: Integer; {$IFDEF VER9P}inline;{$ENDIF}
-
+function CV_32SC2: Integer; {$IFDEF VER9P}inline; {$ENDIF}
 (*
   const
   CV_32SC3 = CV_MAKETYPE(CV_32S, 3);
@@ -546,9 +540,9 @@ function CV_32SC2: Integer; {$IFDEF VER9P}inline;{$ENDIF}
   CV_32FC1 = CV_MAKETYPE(CV_32F, 1);
   {$EXTERNALSYM CV_32FC1}
 *)
-function CV_32FC2: Integer; {$IFDEF VER9P}inline;{$ENDIF}
+function CV_32FC2: Integer; {$IFDEF VER9P}inline; {$ENDIF}
 {$EXTERNALSYM CV_32FC2}
-function CV_32FC3: Integer; {$IFDEF VER9P}inline;{$ENDIF}
+function CV_32FC3: Integer; {$IFDEF VER9P}inline; {$ENDIF}
 {$EXTERNALSYM CV_32FC3}
 (*
   const
@@ -560,11 +554,11 @@ function CV_32FC3: Integer; {$IFDEF VER9P}inline;{$ENDIF}
   CV_32FC(n)CV_MAKETYPE(CV_32F, (n));
 *)
 
-function CV_64FC1: Integer; {$IFDEF VER9P}inline;{$ENDIF}
+function CV_64FC1: Integer; {$IFDEF VER9P}inline; {$ENDIF}
 {$EXTERNALSYM CV_64FC1}
-function CV_64FC2: Integer; {$IFDEF VER9P}inline;{$ENDIF}
+function CV_64FC2: Integer; {$IFDEF VER9P}inline; {$ENDIF}
 {$EXTERNALSYM CV_64FC2}
-function CV_64FC3: Integer; {$IFDEF VER9P}inline;{$ENDIF}
+function CV_64FC3: Integer; {$IFDEF VER9P}inline; {$ENDIF}
 {$EXTERNALSYM CV_64FC3}
 (*
   const
@@ -578,7 +572,7 @@ function CV_64FC3: Integer; {$IFDEF VER9P}inline;{$ENDIF}
 
 // * get reference to pixel at (col,row),
 // for multi-channel images (col) should be multiplied by number of channels */
-function CV_IMAGE_ELEM(image: pIplImage; size_elemtype, row, col: Integer): Pointer; {$IFDEF VER9P}inline;{$ENDIF}
+function CV_IMAGE_ELEM(image: pIplImage; size_elemtype, row, col: Integer): Pointer; {$IFDEF VER9P}inline; {$ENDIF}
 // (((elemtype*)((image)->imageData + (image)->widthStep*(row)))[(col)])
 
 const
@@ -780,7 +774,7 @@ type
     z: Single;
   end;
 
-function cvPoint3D32f(const x, y, z: Double): TCvPoint3D32f; {$IFDEF VER9P}inline;{$ENDIF}
+function cvPoint3D32f(const x, y, z: Single): TCvPoint3D32f; {$IFDEF VER9P}inline; {$ENDIF}
 
 Type
   TCvPoint2D64f = record
@@ -1277,16 +1271,14 @@ const
   /// / >> Following declaration is a macro definition!
 
   // CV_IS_SEQ_CLOSED(seq)(((seq)^.flags and CV_SEQ_FLAG_CLOSED) <> 0);
-function CV_IS_SEQ_CLOSED(const Seq: pCvSeq): Boolean; {$IFDEF VER9P}inline;{$ENDIF}
-
+function CV_IS_SEQ_CLOSED(const Seq: pCvSeq): Boolean; {$IFDEF VER9P}inline; {$ENDIF}
 /// / >> Following declaration is a macro definition!
 // const
 // CV_IS_SEQ_CONVEX(seq)0;
 
 // Following declaration is a macro definition!
 // CV_IS_SEQ_HOLE(seq)(((seq)^.flags and CV_SEQ_FLAG_HOLE) <> 0);
-function CV_IS_SEQ_HOLE(const Seq: pCvSeq): Boolean; {$IFDEF VER9P}inline;{$ENDIF}
-
+function CV_IS_SEQ_HOLE(const Seq: pCvSeq): Boolean; {$IFDEF VER9P}inline; {$ENDIF}
 /// / >> Following declaration is a macro definition!
 // const
 // CV_IS_SEQ_SIMPLE(seq)1;
@@ -1370,11 +1362,11 @@ type
     cvGetSeqElem( (CvSeq*)(seq), (index) )))
   }
 {$IFDEF VER15P}
-function CV_SEQ_ELEM(Seq: pCvSeq; const size_of_elem: Integer; index: Integer): Pointer; {$IFDEF VER9P}inline;{$ENDIF}
-{#define CV_GET_SEQ_ELEM( elem_type, seq, index ) CV_SEQ_ELEM( (seq), elem_type, (index) )}
-function CV_GET_SEQ_ELEM(const size_of_elem: Integer; Seq: pCvSeq; index: Integer): Pointer; {$IFDEF VER9P}inline;{$ENDIF}
-{$ENDIF VER15P}
 
+function CV_SEQ_ELEM(Seq: pCvSeq; const size_of_elem: Integer; index: Integer): Pointer; {$IFDEF VER9P}inline; {$ENDIF}
+{#define CV_GET_SEQ_ELEM( elem_type, seq, index ) CV_SEQ_ELEM( (seq), elem_type, (index) )}
+function CV_GET_SEQ_ELEM(const size_of_elem: Integer; Seq: pCvSeq; index: Integer): Pointer; {$IFDEF VER9P}inline; {$ENDIF}
+{$ENDIF VER15P}
 // (* Add element to sequence: *)
 // // >> Following declaration is a macro definition!
 // const CV_WRITE_SEQ_ELEM_VAR(elem_ptr, writer);
@@ -1388,8 +1380,7 @@ function CV_GET_SEQ_ELEM(const size_of_elem: Integer; Seq: pCvSeq; index: Intege
 // Assert((writer).ptr <= (writer).block_max - SizeOf(elem));
 // memcpy((writer).ptr, and (elem), SizeOf(elem)); (writer).ptr := mod +SizeOf(elem) then; end;
 
-function CV_CAST_8U(t: Integer): uchar; {$IFDEF VER9P}inline;{$ENDIF}
-
+function CV_CAST_8U(t: Integer): uchar; {$IFDEF VER9P}inline; {$ENDIF}
 (*
   /* Move reader position forward: */
   #define CV_NEXT_SEQ_ELEM( elem_size, reader )                 \
@@ -1418,7 +1409,8 @@ procedure CV_NEXT_SEQ_ELEM(const elem_size: Integer; const Reader: TCvSeqReader)
   CV_NEXT_SEQ_ELEM( sizeof(elem), reader )                   \
   }
 *)
-procedure CV_READ_SEQ_ELEM(const Elem: Pointer; const Reader: TCvSeqReader; const SizeOfElem: Integer); // {$IFDEF VER9P}inline;{$ENDIF}
+procedure CV_READ_SEQ_ELEM(const Elem: Pointer; const Reader: TCvSeqReader; const SizeOfElem: Integer);
+// {$IFDEF VER9P}inline;{$ENDIF}
 
 
 // (* Read element and move read position backward: *)
@@ -1607,7 +1599,7 @@ const
 {$EXTERNALSYM CV_NODE_TYPE_MASK}
   // >> Following declaration is a macro definition!
   // CV_NODE_TYPE(flags)((flags) and CV_NODE_TYPE_MASK);
-function CV_NODE_TYPE(const flags: Integer): Integer; {$IFDEF VER9P}inline;{$ENDIF}
+function CV_NODE_TYPE(const flags: Integer): Integer; {$IFDEF VER9P}inline; {$ENDIF}
 
 const
   (*file node flags*)
@@ -1620,13 +1612,12 @@ const
   CV_NODE_NAMED = 64;
 {$EXTERNALSYM CV_NODE_NAMED}
   // CV_NODE_IS_INT(flags)        (CV_NODE_TYPE(flags) == CV_NODE_INT)
-function CV_NODE_IS_INT(const flags: Integer): Boolean; {$IFDEF VER9P}inline;{$ENDIF}
+function CV_NODE_IS_INT(const flags: Integer): Boolean; {$IFDEF VER9P}inline; {$ENDIF}
 // CV_NODE_IS_REAL(flags)       (CV_NODE_TYPE(flags) == CV_NODE_REAL)
-function CV_NODE_IS_REAL(const flags: Integer): Boolean; {$IFDEF VER9P}inline;{$ENDIF}
-
+function CV_NODE_IS_REAL(const flags: Integer): Boolean; {$IFDEF VER9P}inline; {$ENDIF}
 // const CV_NODE_IS_INT(flags)(CV_NODE_TYPE(flags) = CV_NODE_INT)
 // const CV_NODE_IS_REAL(flags) (CV_NODE_TYPE(flags) = CV_NODE_REAL)
-function CV_NODE_IS_STRING(const flags: Integer): Boolean; {$IFDEF VER9P}inline;{$ENDIF}
+function CV_NODE_IS_STRING(const flags: Integer): Boolean; {$IFDEF VER9P}inline; {$ENDIF}
 // (CV_NODE_TYPE(flags) = CV_NODE_STRING)
 // const CV_NODE_IS_SEQ(flags) (CV_NODE_TYPE(flags) = CV_NODE_SEQ)
 // const CV_NODE_IS_MAP(flags) (CV_NODE_TYPE(flags) = CV_NODE_MAP)
@@ -1725,10 +1716,10 @@ type
     (* End of file.*)
 
   // #define CV_SWAP(a,b,t) ((t) = (a), (a) = (b), (b) = (t))
-procedure CV_SWAP(var a, b, t: pIplImage); {$IFDEF VER9P}inline;{$ENDIF} overload;
-procedure CV_SWAP(var a, b, t: pCvPoint2D32f); {$IFDEF VER9P}inline;{$ENDIF} overload;
-procedure CV_SWAP(var a, b, t: pCvMat); {$IFDEF VER9P}inline;{$ENDIF} overload;
-procedure CV_SWAP(var a, b, t: Pointer); {$IFDEF VER9P}inline;{$ENDIF} overload;
+procedure CV_SWAP(var a, b, t: pIplImage); {$IFDEF VER9P}inline; {$ENDIF} overload;
+procedure CV_SWAP(var a, b, t: pCvPoint2D32f); {$IFDEF VER9P}inline; {$ENDIF} overload;
+procedure CV_SWAP(var a, b, t: pCvMat); {$IFDEF VER9P}inline; {$ENDIF} overload;
+procedure CV_SWAP(var a, b, t: Pointer); {$IFDEF VER9P}inline; {$ENDIF} overload;
 
 // {$IFNDEF MIN}
 // {$HPPEMIT '#  define MIN(a,b)  ((a) > (b) ? (b) : (a))'}
@@ -1930,8 +1921,7 @@ procedure CV_SWAP(var a, b, t: Pointer); {$IFDEF VER9P}inline;{$ENDIF} overload;
 //
 // const CV_IS_MASK_ARR(mat)(((mat)^.cType and (CV_MAT_TYPE_MASK and ~ CV_8SC1)) = 0)
 
-function CV_ARE_TYPES_EQ(const mat1, mat2: pCvMat): Boolean; {$IFDEF VER9P}inline;{$ENDIF}
-
+function CV_ARE_TYPES_EQ(const mat1, mat2: pCvMat): Boolean; {$IFDEF VER9P}inline; {$ENDIF}
 // const CV_ARE_CNS_EQ(mat1, mat2)((((mat1)^.cType xor (mat2)^.cType) and CV_MAT_CN_MASK) = 0)
 //
 // const CV_ARE_DEPTHS_EQ(mat1, mat2)((((mat1)^.cType xor (mat2)^.cType) and CV_MAT_DEPTH_MASK) = 0)
@@ -2034,12 +2024,9 @@ function cvIplDepth(_type: Integer): Integer; // {$IFDEF VER9P}inline;{$ENDIF}
 
 // (* ****************************** CvPoint and variants ********************************** *)
 
-function CvPoint2D32f(x, y: Double): TCvPoint2D32f; {$IFDEF VER9P}inline;{$ENDIF}
-
-function cvPointTo32f(point: TCvPoint): TCvPoint2D32f; {$IFDEF VER9P}inline;{$ENDIF}
-
-function cvPointFrom32f(point: TCvPoint2D32f): TCvPoint; {$IFDEF VER9P}inline;{$ENDIF}
-
+function CvPoint2D32f(x, y: Single): TCvPoint2D32f; {$IFDEF VER9P}inline; {$ENDIF}
+function cvPointTo32f(point: TCvPoint): TCvPoint2D32f; {$IFDEF VER9P}inline; {$ENDIF}
+function cvPointFrom32f(point: TCvPoint2D32f): TCvPoint; {$IFDEF VER9P}inline; {$ENDIF}
 // CV_INLINE CvPoint3D32f CvPoint3D32f(Double x, Double y, Double z)
 //
 // begin
@@ -2116,8 +2103,7 @@ function cvPointFrom32f(point: TCvPoint2D32f): TCvPoint; {$IFDEF VER9P}inline;{$
 // return scalar;
 // }
 
-function cvRealScalar(val0: Double): TCvScalar; {$IFDEF VER9P}inline;{$ENDIF}
-
+function cvRealScalar(val0: Double): TCvScalar; {$IFDEF VER9P}inline; {$ENDIF}
 // (*************************************************************************************** *)
 // (* Dynamic Data structures *)
 // (*************************************************************************************** *)
@@ -2138,8 +2124,7 @@ function cvRealScalar(val0: Double): TCvScalar; {$IFDEF VER9P}inline;{$ENDIF}
 
 // (* ********************************** CvTermCriteria ************************************ *)
 // (* CV_INLINE CvTermCriteria CvTermCriteria(Integer cType, Integer max_iter, Double epsilon)
-function CvTermCriteria(_type: Integer; max_iter: Integer; epsilon: Double): TCvTermCriteria; {$IFDEF VER9P}inline;{$ENDIF}
-
+function CvTermCriteria(_type: Integer; max_iter: Integer; epsilon: Double): TCvTermCriteria; {$IFDEF VER9P}inline; {$ENDIF}
 (*
   CV_INLINE  int  cvFloor( double value )
   {
@@ -2164,13 +2149,14 @@ function CvTermCriteria(_type: Integer; max_iter: Integer; epsilon: Double): TCv
   #endif
   }
 *)
-function cvFloor(value: Double): Integer; {$IFDEF VER9P}inline;{$ENDIF}
-function cvScalarAll(val0123: Double): TCvScalar; {$IFDEF VER9P}inline;{$ENDIF}
-function CvPoint(const x, y: Integer): TCvPoint; {$IFDEF VER9P}inline;{$ENDIF}
-function CvSize(const width, height: Integer): TCvSize; {$IFDEF VER9P}inline;{$ENDIF}
-function CvScalar(const val0: Double; const val1: Double = 0; const val2: Double = 0; const val3: Double = 0): TCvScalar; {$IFDEF VER9P}inline;{$ENDIF}
-function cvRandInt(Var rng: TCvRNG): Cardinal; {$IFDEF VER9P}inline;{$ENDIF}
-function CvRect(Const x, y, width, height: Integer): TCvRect; {$IFDEF VER9P}inline;{$ENDIF}
+function cvFloor(value: Double): Integer; {$IFDEF VER9P}inline; {$ENDIF}
+function cvScalarAll(val0123: Double): TCvScalar; {$IFDEF VER9P}inline; {$ENDIF}
+function CvPoint(const x, y: Integer): TCvPoint; {$IFDEF VER9P}inline; {$ENDIF}
+function CvSize(const width, height: Integer): TCvSize; {$IFDEF VER9P}inline; {$ENDIF}
+function CvScalar(const val0: Double; const val1: Double = 0; const val2: Double = 0; const val3: Double = 0): TCvScalar;
+{$IFDEF VER9P}inline; {$ENDIF}
+function cvRandInt(Var rng: TCvRNG): Cardinal; {$IFDEF VER9P}inline; {$ENDIF}
+function CvRect(Const x, y, width, height: Integer): TCvRect; {$IFDEF VER9P}inline; {$ENDIF}
 function cvRound(value: Double): Integer;
 
 const
@@ -2206,30 +2192,32 @@ function CV_MAT_TYPE(const flags: Integer): Integer;
 function CV_ELEM_SIZE1(const _type: Integer): Integer;
 function CV_ELEM_SIZE(const _type: Integer): Integer;
 function CV_MAT_CN(const flags: Integer): Integer;
-function CV_32FC1: Integer; {$IFDEF VER9P}inline;{$ENDIF}
-function CV_32SC1: Integer; {$IFDEF VER9P}inline;{$ENDIF}
-function CV_MAKETYPE(depth, cn: Integer): Integer; {$IFDEF VER9P}inline;{$ENDIF}
+function CV_32FC1: Integer; {$IFDEF VER9P}inline; {$ENDIF}
+function CV_32SC1: Integer; {$IFDEF VER9P}inline; {$ENDIF}
+function CV_MAKETYPE(depth, cn: Integer): Integer; {$IFDEF VER9P}inline; {$ENDIF}
 // #define CV_MAT_ELEM( mat, elemtype, row, col )
 // (*(elemtype*)CV_MAT_ELEM_PTR_FAST( mat, row, col, sizeof(elemtype)))
-function CV_MAT_ELEM(const mat: TCvMat; const elemsize: Integer; const row, col: Integer): Pointer; {$IFDEF VER9P}inline;{$ENDIF}
+function CV_MAT_ELEM(const mat: TCvMat; const elemsize: Integer; const row, col: Integer): Pointer; {$IFDEF VER9P}inline; {$ENDIF}
 // #define CV_MAT_ELEM_PTR_FAST( mat, row, col, pix_size )
 // (assert( (unsigned)(row) < (unsigned)(mat).rows &&
 // (unsigned)(col) < (unsigned)(mat).cols ),
 // (mat).data.ptr + (size_t)(mat).step*(row) + (pix_size)*(col))
-function CV_MAT_ELEM_PTR_FAST(const mat: TCvMat; const row, col, pix_size: Integer): Pointer; {$IFDEF VER9P}inline;{$ENDIF}
+function CV_MAT_ELEM_PTR_FAST(const mat: TCvMat; const row, col, pix_size: Integer): Pointer; {$IFDEF VER9P}inline; {$ENDIF}
+function iif(const Conditional: Boolean; const ifTrue, ifFalse: Variant): Variant; {$IFDEF VER9P}inline; {$ENDIF} overload;
+function iif(const Conditional: Boolean; const ifTrue, ifFalse: Pointer): Pointer; {$IFDEF VER9P}inline; {$ENDIF} overload;
 
-function iif(const Conditional: Boolean; const ifTrue, ifFalse: Variant): Variant; {$IFDEF VER9P}inline;{$ENDIF} overload;
-function iif(const Conditional: Boolean; const ifTrue, ifFalse: Pointer): Pointer; {$IFDEF VER9P}inline;{$ENDIF} overload;
+function CvBox2D(const cX, cY, width, height, angle: Single): TCvBox2D;
+function CvSize2D32f(const width, height: Single): TCvSize2D32f;
 
 implementation
 
 uses
   ocv.core_c,
-  {$IFDEF VER15P}
+{$IFDEF VER15P}
   System.SysUtils;
-  {$ELSE}
-  SysUtils;
-  {$ENDIF VER15P}
+{$ELSE}
+SysUtils;
+{$ENDIF VER15P}
 
 function strdup(const str: pCVChar): pCVChar;
 begin
@@ -2383,7 +2371,7 @@ begin
   Result := Round(value);
 end;
 
-function iif(const Conditional: Boolean; const ifTrue, ifFalse: Variant): Variant; {$IFDEF VER9P}inline;{$ENDIF} overload;
+function iif(const Conditional: Boolean; const ifTrue, ifFalse: Variant): Variant; {$IFDEF VER9P}inline; {$ENDIF} overload;
 begin
   if Conditional then
     Result := ifTrue
@@ -2391,7 +2379,7 @@ begin
     Result := ifFalse;
 end;
 
-function iif(const Conditional: Boolean; const ifTrue, ifFalse: Pointer): Pointer; {$IFDEF VER9P}inline;{$ENDIF} overload;
+function iif(const Conditional: Boolean; const ifTrue, ifFalse: Pointer): Pointer; {$IFDEF VER9P}inline; {$ENDIF} overload;
 begin
   if Conditional then
     Result := ifTrue
@@ -2417,12 +2405,13 @@ begin
   Result := CV_NODE_TYPE(flags) = CV_NODE_REAL;
 end;
 
-function CV_NODE_IS_STRING(const flags: Integer): Boolean; {$IFDEF VER9P}inline;{$ENDIF}
+function CV_NODE_IS_STRING(const flags: Integer): Boolean; {$IFDEF VER9P}inline; {$ENDIF}
 begin
   Result := CV_NODE_TYPE(flags) = CV_NODE_STRING
 end;
 
-procedure CV_READ_SEQ_ELEM(const Elem: Pointer; const Reader: TCvSeqReader; const SizeOfElem: Integer); // {$IFDEF VER9P}inline;{$ENDIF}
+procedure CV_READ_SEQ_ELEM(const Elem: Pointer; const Reader: TCvSeqReader; const SizeOfElem: Integer);
+// {$IFDEF VER9P}inline;{$ENDIF}
 begin
   // assert( (reader).seq->elem_size == sizeof(elem));
   Assert(Reader.Seq^.elem_size = SizeOfElem);
@@ -2480,7 +2469,7 @@ begin
   Result.y := y;
 end;
 
-function cvPoint3D32f(const x, y, z: Double): TCvPoint3D32f; {$IFDEF VER9P}inline;{$ENDIF}
+function cvPoint3D32f(const x, y, z: Single): TCvPoint3D32f; {$IFDEF VER9P}inline; {$ENDIF}
 begin
   Result.x := x;
   Result.y := y;
@@ -2525,13 +2514,14 @@ begin
 end;
 
 {$IFDEF VER15P}
+
 function CV_GET_SEQ_ELEM;
 begin
   {#define CV_GET_SEQ_ELEM( elem_type, seq, index ) CV_SEQ_ELEM( (seq), elem_type, (index) )}
   Result := CV_SEQ_ELEM(Seq, size_of_elem, index);
 end;
 
-function CV_SEQ_ELEM(Seq: pCvSeq; const size_of_elem: Integer; index: Integer): Pointer; {$IFDEF VER9P}inline;{$ENDIF}
+function CV_SEQ_ELEM(Seq: pCvSeq; const size_of_elem: Integer; index: Integer): Pointer; {$IFDEF VER9P}inline; {$ENDIF}
 begin
   // assert(sizeof((seq)->first[0]) == sizeof(CvSeqBlock) && (seq)->elem_size == sizeof(elem_type))
   Assert(Assigned(Seq^.first) and (SizeOf(Seq^.first[0]) = SizeOf(TCvSeqBlock)) and (Seq^.elem_size = size_of_elem));
@@ -2545,7 +2535,7 @@ begin
 end;
 {$ENDIF VER15P}
 
-function CV_8UC1: Integer; {$IFDEF VER9P}inline;{$ENDIF}
+function CV_8UC1: Integer; {$IFDEF VER9P}inline; {$ENDIF}
 begin
   Result := CV_MAKETYPE(CV_8U, 1);
 end;
@@ -2555,7 +2545,7 @@ begin
   Result := CV_MAKETYPE(CV_32F, 2);
 end;
 
-function CV_32FC3: Integer; {$IFDEF VER9P}inline;{$ENDIF}
+function CV_32FC3: Integer; {$IFDEF VER9P}inline; {$ENDIF}
 begin
   Result := CV_MAKETYPE(CV_32F, 3);
 end;
@@ -2570,7 +2560,7 @@ begin
   Result := CV_MAKETYPE(CV_64F, 2);
 end;
 
-function CV_64FC3: Integer; {$IFDEF VER9P}inline;{$ENDIF}
+function CV_64FC3: Integer; {$IFDEF VER9P}inline; {$ENDIF}
 begin
   Result := CV_MAKETYPE(CV_64F, 3);
 end;
@@ -2586,13 +2576,14 @@ begin
   Result := Assigned(ptr) and (pCvSetElem(ptr)^.flags >= 0);
 end;
 
-function CV_IMAGE_ELEM(image: pIplImage; size_elemtype, row, col: Integer): Pointer; {$IFDEF VER9P}inline;{$ENDIF}
+function CV_IMAGE_ELEM(image: pIplImage; size_elemtype, row, col: Integer): Pointer; {$IFDEF VER9P}inline; {$ENDIF}
 begin
   // (((elemtype*)((image)->imageData + (image)->widthStep*(row)))[(col)])
-  Result := {$IFDEF D7}Pointer({$ENDIF D7}{$IFDEF VER9P}pByte{$ELSE}Integer{$ENDIF}(image^.imageData) + image^.widthStep * row + col * size_elemtype{$IFDEF D7}){$ENDIF D7};
+  Result := {$IFDEF D7}Pointer({$ENDIF D7}{$IFDEF VER9P}pByte{$ELSE}Integer{$ENDIF}(image^.imageData) + image^.widthStep * row +
+    col * size_elemtype{$IFDEF D7}){$ENDIF D7};
 end;
 
-function cvRealScalar(val0: Double): TCvScalar; {$IFDEF VER9P}inline;{$ENDIF}
+function cvRealScalar(val0: Double): TCvScalar; {$IFDEF VER9P}inline; {$ENDIF}
 begin
   Result.val[0] := val0;
   Result.val[1] := 0;
@@ -2600,7 +2591,7 @@ begin
   Result.val[3] := 0;
 end;
 
-function cvRNG(seed: int64 = -1): TCvRNG; {$IFDEF VER9P}inline;{$ENDIF}
+function cvRNG(seed: int64 = -1): TCvRNG; {$IFDEF VER9P}inline; {$ENDIF}
 begin
   // CvRNG rng = seed ? (uint64)seed : (uint64)(int64)-1;
   Result := iif(seed > 0, seed, uint64(int64(-1)));
@@ -2623,22 +2614,35 @@ begin
   depth := CV_MAT_DEPTH(_type);
   Result := CV_ELEM_SIZE1(depth) * 8;
   if (depth = CV_8S) or (depth = CV_16S) or (depth = CV_32S) then
-    Result := Result or IPL_DEPTH_SIGN;
+    Result := Result or Integer(IPL_DEPTH_SIGN);
 end;
 
-function CV_ARE_TYPES_EQ(const mat1, mat2: pCvMat): Boolean; {$IFDEF VER9P}inline;{$ENDIF}
+function CV_ARE_TYPES_EQ(const mat1, mat2: pCvMat): Boolean; {$IFDEF VER9P}inline; {$ENDIF}
 begin
   Result := ((((mat1)^._type xor (mat2)^._type) and CV_MAT_TYPE_MASK) = 0);
 end;
 
-function CV_IS_SEQ_CLOSED(const Seq: pCvSeq): Boolean; {$IFDEF VER9P}inline;{$ENDIF}
+function CV_IS_SEQ_CLOSED(const Seq: pCvSeq): Boolean; {$IFDEF VER9P}inline; {$ENDIF}
 begin
   Result := (Seq^.flags and CV_SEQ_FLAG_CLOSED) <> 0;
 end;
 
-function CV_IS_SEQ_HOLE(const Seq: pCvSeq): Boolean; {$IFDEF VER9P}inline;{$ENDIF}
+function CV_IS_SEQ_HOLE(const Seq: pCvSeq): Boolean; {$IFDEF VER9P}inline; {$ENDIF}
 begin
   Result := (Seq^.flags and CV_SEQ_FLAG_HOLE) <> 0;
+end;
+
+function CvBox2D(const cX, cY, width, height, angle: Single): TCvBox2D;
+begin
+  Result.center := CvPoint2D32f(cX, cY);
+  Result.size := CvSize2D32f(width, height);
+  Result.angle := angle;
+end;
+
+function CvSize2D32f(const width, height: Single): TCvSize2D32f;
+begin
+  Result.width := width;
+  Result.height := height;
 end;
 
 initialization
