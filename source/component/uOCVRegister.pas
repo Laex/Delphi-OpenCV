@@ -70,7 +70,9 @@ begin
     {} TocvMotionDetect,
     {} TovcCropOperation,
     {} TovcAddWeightedOperation,
-    {} TocvWarpPerspective]);
+    {} TocvWarpPerspective,
+    {} TocvHoughCircles,
+    {} TocvHoughLines]);
 end;
 
 {$IFDEF FPC}

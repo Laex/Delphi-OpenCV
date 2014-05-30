@@ -3,7 +3,7 @@
 // Copyright (C) 2013 Project Delphi-OpenCV
 // ****************************************************************
 // Contributor:
-  // Laentir Valetov
+// Laentir Valetov
 // email:laex@bk.ru
 // ****************************************************************
 // You may retrieve the latest version of this file at the GitHub,
@@ -33,14 +33,13 @@ program cv_AdaptiveSkinDetector;
 uses
   System.SysUtils,
   WinApi.Windows,
-  lib,
-  highgui_c,
-  core_c,
-  Core.types_c,
-  imgproc_c,
-  imgproc.types_c
-  // ,contrib
-    ;
+  ocv.lib,
+  ocv.highgui_c,
+  ocv.core_c,
+  ocv.Core.types_c,
+  ocv.imgproc_c,
+  ocv.imgproc.types_c,
+  ocv.contrib;
 
 const
   CLOCKS_PER_SEC = 1000;

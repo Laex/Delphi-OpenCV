@@ -30,20 +30,89 @@ interface
 
 uses
 {$IFDEF VER15P}
+  WinApi.Windows,
   System.SysUtils,
   System.Classes,
   System.Generics.Collections,
   System.Types,
   Vcl.Graphics,
 {$ELSE}
+  Windows,
   SysUtils,
   Classes,
   Graphics,
 {$IFNDEF VER5}Types, {$ENDIF VER5}
 {$ENDIF VER15P}
+  ocv.core_c,
   ocv.core.types_c;
 
 Type
+
+  TocvRect = Type TRect;
+  TocvLine = record
+    S, E: TCvPoint;
+  end;
+
+  TocvCircle = record
+    cX, cY: Integer;
+    Radius: Integer;
+  end;
+
+{$IFDEF VER17P}
+
+  TocvRects = TArray<TocvRect>;
+  TocvCircles = TArray<TocvCircle>;
+  TocvLines = TArray<TocvLine>;
+{$ELSE}
+  TocvRects = Array of TocvRect;
+  TocvCircles = Array of TocvCircle;
+  TocvLines = array of TocvLine;
+{$ENDIF}
+  TocvLineType = (LT_FILLED, LT_8, LT_AA);
+
+  IocvFont = interface
+    ['{3EAFF1CE-7C65-4138-829F-329C81DDED8F}']
+    function GetFontName: string;
+    procedure SetFontName(const Value: string);
+    function GetFontColor: TColor;
+    procedure SetFontColor(const Value: TColor);
+    function GetFontThickness: Integer;
+    procedure SetFontThickness(const Value: Integer);
+    function GetFontLineType: TocvLineType;
+    procedure SetFontLineType(const Value: TocvLineType);
+    function GetFontHScale: Single;
+    procedure SetFontHScale(const Value: Single);
+    function GetFontVScale: Single;
+    procedure SetFontVScale(const Value: Single);
+    function GetCvFont: TCvFont;
+    property Name: string read GetFontName write SetFontName;
+    property Color: TColor read GetFontColor write SetFontColor;
+    property Thickness: Integer read GetFontThickness write SetFontThickness;
+    property LineType: TocvLineType read GetFontLineType write SetFontLineType;
+    property HScale: Single read GetFontHScale write SetFontHScale;
+    property VScale: Single read GetFontVScale write SetFontVScale;
+    property cvFont: TCvFont Read GetCvFont;
+  end;
+
+  IocvCanvas = interface
+    ['{D5BCBC44-8139-42A7-A97A-0A5AD33C6526}']
+    function GetOcvFont: IocvFont;
+    property ocvFont: IocvFont read GetOcvFont;
+
+    procedure Rectangle(const x1, y1, x2, y2: Integer; const Color: TColor = clRed; const Thickness: Integer = 1;
+      const LineType: TocvLineType = LT_8; const Shift: Integer = 0);
+    procedure Circle(const x, y, r: Integer; const Color: TColor = clRed; const Thickness: Integer = 1;
+      const LineType: TocvLineType = LT_8; const Shift: Integer = 0);
+    procedure Ellipse(const CenterX, CenterY: Integer; const Axes: TocvRect; const Angle: double; const start_angle: double;
+      const nd_angle: double; const Color: TColor = clRed; const Thickness: Integer = 1; const LineType: TocvLineType = LT_8;
+      const Shift: Integer = 0);
+    procedure EllipseBox(const Box: TocvRect; const Angle: Single; const Color: TColor = clRed; const Thickness: Integer = 1;
+      Const LineType: TocvLineType = LT_8; const Shift: Integer = 0); overload;
+    procedure EllipseBox(const Box: TCvBox2D; const Color: TColor = clRed; const Thickness: Integer = 1;
+      Const LineType: TocvLineType = LT_8; const Shift: Integer = 0); overload;
+    procedure TextOut(const x, y: Integer; const Text: String; const Shadow: Boolean = False);
+  end;
+
   IocvImage = interface
     ['{84567F57-A399-4179-AA0F-6F8A2788F89B}']
     function GetIplImage: pIplImage;
@@ -55,21 +124,84 @@ Type
     function Crop(const roi: TCvRect): IocvImage;
     function GetWidth: Integer;
     function GetHeight: Integer;
+    function GetCanvas: IocvCanvas;
+    // -------------------------------------------
     property IpImage: pIplImage Read GetIplImage;
-    property isGray: Boolean read GetisGray;
-    property Width: Integer read GetWidth;
-    property Height: Integer read GetHeight;
+    property isGray: Boolean Read GetisGray;
+    property Width: Integer Read GetWidth;
+    property Height: Integer Read GetHeight;
+    property Canvas: IocvCanvas Read GetCanvas;
+  end;
+
+  TocvFont = class(TInterfacedObject, IocvFont)
+  private
+    FCvFont: TCvFont;
+    FFontColor: TColor;
+    FFontLineType: TocvLineType;
+    procedure CreateOcvFont;
+  protected
+    function GetFontName: string;
+    procedure SetFontName(const Value: string);
+    function GetFontColor: TColor;
+    procedure SetFontColor(const Value: TColor);
+    function GetFontThickness: Integer;
+    procedure SetFontThickness(const Value: Integer);
+    function GetFontLineType: TocvLineType;
+    procedure SetFontLineType(const Value: TocvLineType);
+    function GetFontHScale: Single;
+    procedure SetFontHScale(const Value: Single);
+    function GetFontVScale: Single;
+    procedure SetFontVScale(const Value: Single);
+    function GetCvFont: TCvFont;
+  public
+    constructor Create;
+    property Name: string read GetFontName write SetFontName;
+    property Color: TColor read GetFontColor write SetFontColor;
+    property Thickness: Integer read GetFontThickness write SetFontThickness;
+    property LineType: TocvLineType read GetFontLineType write SetFontLineType;
+    property HScale: Single read GetFontHScale write SetFontHScale;
+    property VScale: Single read GetFontVScale write SetFontVScale;
+    property cvFont: TCvFont Read GetCvFont;
+  end;
+
+  TocvImage = class;
+
+  TocvCanvas = class(TInterfacedObject, IocvCanvas)
+  private
+    FOwner: TocvImage;
+    FocvFont: IocvFont;
+  protected
+    function GetOcvFont: IocvFont;
+  public
+    constructor Create(AOwner: TocvImage);
+    destructor Destroy; override;
+    procedure Rectangle(const x1, y1, x2, y2: Integer; const Color: TColor = clRed; const Thickness: Integer = 1;
+      const LineType: TocvLineType = LT_AA; const Shift: Integer = 0);
+    procedure Circle(const CenterX, CenterY, Radius: Integer; const Color: TColor = clRed; const Thickness: Integer = 1;
+      const LineType: TocvLineType = LT_8; const Shift: Integer = 0);
+    procedure Ellipse(const CenterX, CenterY: Integer; const Axes: TocvRect; const Angle: double; const start_angle: double;
+      const nd_angle: double; const Color: TColor = clRed; const Thickness: Integer = 1; const LineType: TocvLineType = LT_8;
+      const Shift: Integer = 0);
+    procedure EllipseBox(const Box: TocvRect; const Angle: Single; const Color: TColor = clRed; const Thickness: Integer = 1;
+      Const LineType: TocvLineType = LT_8; const Shift: Integer = 0); overload;
+    procedure EllipseBox(const Box: TCvBox2D; const Color: TColor = clRed; const Thickness: Integer = 1;
+      Const LineType: TocvLineType = LT_8; const Shift: Integer = 0); overload;
+    procedure TextOut(const x, y: Integer; const Text: String; const Shadow: Boolean = False);
+    property ocvFont: IocvFont read GetOcvFont;
   end;
 
   TocvImage = class(TInterfacedObject, IocvImage)
   private
     FImage: pIplImage;
+    FocvCanvas: IocvCanvas;
   protected
     function GetIplImage: pIplImage;
     function GetisGray: Boolean;
     function GetWidth: Integer;
     function GetHeight: Integer;
+    function GetCanvas: IocvCanvas;
   public
+    constructor Create; overload;
     constructor Create(const AImage: pIplImage); overload;
     constructor Create(const Bitmap: TBitmap); overload;
     constructor CreateClone(const AImage: pIplImage);
@@ -81,7 +213,7 @@ Type
     function AsBitmap: TBitmap;
     function Crop(const roi: TCvRect): IocvImage;
     property IplImage: pIplImage Read GetIplImage;
-    property isGray: Boolean read GetisGray;
+    property isGray: Boolean Read GetisGray;
   end;
 
   TOnOcvNotifyCollectionItem = procedure(PrevOperation, Operation, NextOperation: TObject; const IplImage: IocvImage;
@@ -92,16 +224,11 @@ Type
   TOnOcvBeforeTransform = procedure(Sender: TObject; const IplImage: IocvImage; Var ContinueTransform: Boolean) of object;
   TOnOcvContour = procedure(Sender: TObject; const IplImage: IocvImage; const ContourCount: Integer; const Contours: pCvSeq)
     of object;
-
-  TocvRect = Type TRect;
-{$IFDEF VER17P}
-  TocvRects = TArray<TocvRect>;
-{$ELSE}
-  TocvRects = Array of TocvRect;
-{$ENDIF}
   TOnOcvHaarCascade = procedure(Sender: TObject; const IplImage: IocvImage; const HaarRects: TocvRects) of object;
   TOnOcvRect = procedure(Sender: TObject; const IplImage: IocvImage; const Rect: TocvRect) of object;
   TOnOcvRects = procedure(Sender: TObject; const IplImage: IocvImage; const Rects: TocvRects) of object;
+  TOnOcvCircles = procedure(Sender: TObject; const IplImage: IocvImage; const Circles: TocvCircles) of object;
+  TOnOcvLines = procedure(Sender: TObject; const IplImage: IocvImage; const Lines: TocvLines) of object;
 
   IocvDataReceiver = interface
     ['{F67DEC9E-CCE0-49D2-AB9B-AD7E1020C5DC}']
@@ -116,7 +243,7 @@ Type
     function GetName: string;
     function GetImage: IocvImage;
     function GetEnabled: Boolean;
-    property Enabled: Boolean read GetEnabled;
+    property Enabled: Boolean Read GetEnabled;
   end;
 
   TocvReceiverList = class(TThreadList) // <IocvDataReceiver>;
@@ -138,17 +265,17 @@ Type
     destructor Destroy; override;
     procedure AddReceiver(const OpenCVVideoReceiver: IocvDataReceiver); virtual;
     procedure RemoveReceiver(const OpenCVVideoReceiver: IocvDataReceiver); virtual;
-    property Image: IocvImage read GetImage;
+    property Image: IocvImage Read GetImage;
   end;
 
   TocvDataReceiver = class(TComponent, IocvDataReceiver)
   private
     FocvVideoSource: IocvDataSource;
   protected
-    procedure TakeImage(const IplImage: IocvImage); virtual;
     procedure SetVideoSource(const Value: TObject); virtual;
     procedure SetOpenCVVideoSource(const Value: IocvDataSource); virtual;
   public
+    procedure TakeImage(const IplImage: IocvImage); virtual;
     destructor Destroy; override;
   published
     property VideoSource: IocvDataSource Read FocvVideoSource write SetOpenCVVideoSource;
@@ -170,13 +297,15 @@ Type
 function ocvRect(Left, Top, Right, Bottom: Integer): TocvRect;
 function ocvRectCenter(cX, cY, Width, Height: Integer): TocvRect;
 
+procedure GetRGBValue(const AColor: TColor; var r, g, b: byte);
+function ColorToCvRGB(const Color: TColor): TCvScalar;
+
+const
+  cLineType: array [TocvLineType] of Integer = (CV_FILLED, 8, CV_AA);
+
 implementation
 
-uses
-  ocv.core_c,
-  ocv.imgproc_c,
-  ocv.imgproc.types_c,
-  ocv.highgui_c;
+uses ocv.imgproc_c, ocv.imgproc.types_c, ocv.highgui_c;
 
 function ocvRect(Left, Top, Right, Bottom: Integer): TocvRect;
 begin
@@ -231,13 +360,13 @@ end;
 
 procedure TocvDataSource.NotifyReceiver(const IplImage: IocvImage);
 Var
-  R: Pointer; // IocvDataReceiver;
+  r: Pointer; // IocvDataReceiver;
   LockList: TList; // <IocvDataReceiver>;
 begin
   LockList := FOpenCVVideoReceivers.LockList;
   try
-    for R in LockList do
-      IocvDataReceiver(R).TakeImage(IplImage);
+    for r in LockList do
+      IocvDataReceiver(r).TakeImage(IplImage);
   finally
     FOpenCVVideoReceivers.UnlockList;
   end;
@@ -361,6 +490,7 @@ end;
 
 constructor TocvImage.Create(const AImage: pIplImage);
 begin
+  Create;
   FImage := AImage;
 end;
 
@@ -368,6 +498,7 @@ constructor TocvImage.Create(const Bitmap: TBitmap);
 Var
   bitmapData: PByte;
 begin
+  Create;
   Assert(Bitmap.PixelFormat = pf24bit, 'only 24bit'); // Пока только такой формат - IPL_DEPTH_8U, 3
   bitmapData := Bitmap.Scanline[0];
   FImage := cvCreateImage(cvSize(Bitmap.Width, Bitmap.Height), IPL_DEPTH_8U, 3);
@@ -378,8 +509,14 @@ begin
   FImage^.roi := nil;
 end;
 
+constructor TocvImage.Create;
+begin
+  FocvCanvas := TocvCanvas.Create(Self);
+end;
+
 constructor TocvImage.CreateClone(const AImage: pIplImage);
 begin
+  Create;
   FImage := cvCloneImage(AImage);
 end;
 
@@ -396,8 +533,14 @@ end;
 
 destructor TocvImage.Destroy;
 begin
+  // FocvCanvas.Free;
   cvReleaseImage(FImage);
   inherited;
+end;
+
+function TocvImage.GetCanvas: IocvCanvas;
+begin
+  Result := FocvCanvas as IocvCanvas;
 end;
 
 function TocvImage.GetHeight: Integer;
@@ -460,6 +603,184 @@ end;
 procedure TocvReceiverList.Remove(Item: IocvDataReceiver);
 begin
   inherited Remove(Pointer(Item));
+end;
+
+procedure GetRGBValue(const AColor: TColor; var r, g, b: byte);
+Var
+  RGBColor: TColor;
+begin
+  RGBColor := ColorToRGB(AColor);
+  r := GetRValue(RGBColor);
+  g := GetGValue(RGBColor);
+  b := GetBValue(RGBColor);
+end;
+
+function ColorToCvRGB(const Color: TColor): TCvScalar;
+var
+  r, g, b: byte;
+begin
+  GetRGBValue(Color, r, g, b);
+  Result := CV_RGB(r, g, b);
+end;
+
+{TocvCanvas}
+
+procedure TocvCanvas.Circle(const CenterX, CenterY, Radius: Integer; const Color: TColor; const Thickness: Integer;
+  const LineType: TocvLineType; const Shift: Integer);
+begin
+  if Assigned(FOwner) and Assigned(FOwner.FImage) then
+    cvCircle(FOwner.FImage, cvPoint(CenterX, CenterY), Radius, ColorToCvRGB(Color), Thickness, cLineType[LineType], Shift);
+end;
+
+constructor TocvCanvas.Create(AOwner: TocvImage);
+begin
+  FOwner := AOwner;
+  FocvFont := TocvFont.Create;
+end;
+
+destructor TocvCanvas.Destroy;
+begin
+  // FocvFont.Free;
+  inherited;
+end;
+
+procedure TocvCanvas.Ellipse(const CenterX, CenterY: Integer; const Axes: TocvRect; const Angle, start_angle, nd_angle: double;
+  const Color: TColor; const Thickness: Integer; const LineType: TocvLineType; const Shift: Integer);
+begin
+  if Assigned(FOwner) and Assigned(FOwner.FImage) then
+    cvEllipse(FOwner.FImage, cvPoint(CenterX, CenterY), cvSize(Axes.Width, Axes.Height), Angle, start_angle, nd_angle,
+      ColorToCvRGB(Color), Thickness, cLineType[LineType], Shift);
+end;
+
+procedure TocvCanvas.EllipseBox(const Box: TCvBox2D; const Color: TColor; const Thickness: Integer; const LineType: TocvLineType;
+  const Shift: Integer);
+begin
+  if Assigned(FOwner) and Assigned(FOwner.FImage) then
+    cvEllipseBox(FOwner.FImage, Box, ColorToCvRGB(Color), Thickness, cLineType[LineType], Shift);
+end;
+
+function TocvCanvas.GetOcvFont: IocvFont;
+begin
+  Result := FocvFont as IocvFont;
+end;
+
+procedure TocvCanvas.EllipseBox(const Box: TocvRect; const Angle: Single; const Color: TColor; const Thickness: Integer;
+  const LineType: TocvLineType; const Shift: Integer);
+begin
+  EllipseBox(CvBox2D(Box.Left, Box.Top, Box.Width, Box.Height, Angle), Color, Thickness, LineType, Shift);
+end;
+
+procedure TocvCanvas.Rectangle(const x1, y1, x2, y2: Integer; const Color: TColor; const Thickness: Integer;
+  const LineType: TocvLineType; const Shift: Integer);
+begin
+  if Assigned(FOwner) and Assigned(FOwner.FImage) then
+    cvRectangle(FOwner.FImage, cvPoint(x1, y1), cvPoint(x2, y2), ColorToCvRGB(Color), Thickness, cLineType[LineType], Shift);
+end;
+
+procedure TocvCanvas.TextOut(const x, y: Integer; const Text: String; const Shadow: Boolean);
+Var
+  str: pCVChar;
+  Font: TCvFont;
+begin
+  if Assigned(FOwner) and Assigned(FOwner.FImage) then
+  begin
+    str := @(AnsiString(Text)[1]);
+    Font := ocvFont.cvFont;
+    if Shadow then
+      cvPutText(FOwner.FImage, str, cvPoint(x - 1, y - 1), @Font, CV_RGB(0, 0, 0));
+    cvPutText(FOwner.FImage, str, cvPoint(x, y), @Font, ColorToCvRGB(ocvFont.Color));
+  end;
+end;
+
+{TocvFont}
+
+constructor TocvFont.Create;
+begin
+  inherited;
+  FillChar(FCvFont, SizeOf(FCvFont), 0);
+  FCvFont.HScale := 0.5;
+  FCvFont.VScale := 0.5;
+  FCvFont.Thickness := 1;
+  FFontLineType := LT_8;
+  FFontColor := clRed;
+  CreateOcvFont;
+end;
+
+procedure TocvFont.CreateOcvFont;
+begin
+  cvInitFont(@FCvFont, CV_FONT_VECTOR0, HScale, VScale, 0, Thickness, cLineType[LineType]);
+end;
+
+function TocvFont.GetCvFont: TCvFont;
+begin
+  Result := FCvFont;
+end;
+
+function TocvFont.GetFontColor: TColor;
+begin
+  Result := FFontColor;
+end;
+
+function TocvFont.GetFontHScale: Single;
+begin
+  Result := FCvFont.HScale;
+end;
+
+function TocvFont.GetFontLineType: TocvLineType;
+begin
+  Result := FFontLineType;
+end;
+
+function TocvFont.GetFontName: string;
+begin
+  Result := FCvFont.nameFont;
+end;
+
+function TocvFont.GetFontThickness: Integer;
+begin
+  Result := FCvFont.Thickness;
+end;
+
+function TocvFont.GetFontVScale: Single;
+begin
+  Result := FCvFont.VScale;
+end;
+
+procedure TocvFont.SetFontColor(const Value: TColor);
+begin
+  FFontColor := Value;
+  FCvFont.Color := ColorToCvRGB(Value);
+  CreateOcvFont;
+end;
+
+procedure TocvFont.SetFontHScale(const Value: Single);
+begin
+  FCvFont.HScale := Value;
+  CreateOcvFont;
+end;
+
+procedure TocvFont.SetFontLineType(const Value: TocvLineType);
+begin
+  FFontLineType := Value;
+  CreateOcvFont;
+end;
+
+procedure TocvFont.SetFontName(const Value: string);
+begin
+  FCvFont.nameFont := pCVChar(AnsiString(Value));
+  CreateOcvFont;
+end;
+
+procedure TocvFont.SetFontThickness(const Value: Integer);
+begin
+  FCvFont.Thickness := Value;
+  CreateOcvFont;
+end;
+
+procedure TocvFont.SetFontVScale(const Value: Single);
+begin
+  FCvFont.VScale := Value;
+  CreateOcvFont;
 end;
 
 end.
