@@ -49,6 +49,7 @@ uses
 Type
 
   TocvRect = Type TRect;
+
   TocvLine = record
     S, E: TCvPoint;
   end;
@@ -240,10 +241,20 @@ Type
     ['{80640C0A-6828-42F8-83E7-DA5FD9036DFF}']
     procedure AddReceiver(const OpenCVVideoReceiver: IocvDataReceiver);
     procedure RemoveReceiver(const OpenCVVideoReceiver: IocvDataReceiver);
+
     function GetName: string;
     function GetImage: IocvImage;
     function GetEnabled: Boolean;
+    function GetHeight: Integer;
+    function GetWidth: Integer;
+    function GetFPS: double;
+
     property Enabled: Boolean Read GetEnabled;
+    property Image: IocvImage read GetImage;
+    property Name: String read GetName;
+    property Width: Integer Read GetWidth;
+    property Height: Integer Read GetHeight;
+    property FPS: double read GetFPS;
   end;
 
   TocvReceiverList = class(TThreadList) // <IocvDataReceiver>;
@@ -256,10 +267,15 @@ Type
   protected
     FOpenCVVideoReceivers: TocvReceiverList;
     FImage: IocvImage;
+    FWidth, FHeight: Integer;
+    FFPS: double;
     function GetName: string; virtual;
     procedure NotifyReceiver(const IplImage: IocvImage); virtual;
     function GetImage: IocvImage;
     function GetEnabled: Boolean; virtual;
+    function GetHeight: Integer; virtual;
+    function GetWidth: Integer; virtual;
+    function GetFPS: double; virtual;
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
@@ -277,6 +293,7 @@ Type
   public
     procedure TakeImage(const IplImage: IocvImage); virtual;
     destructor Destroy; override;
+    function isSourceEnabled: Boolean; virtual;
   published
     property VideoSource: IocvDataSource Read FocvVideoSource write SetOpenCVVideoSource;
   end;
@@ -348,6 +365,16 @@ begin
   Result := False;
 end;
 
+function TocvDataSource.GetFPS: double;
+begin
+  Result := FFPS;
+end;
+
+function TocvDataSource.GetHeight: Integer;
+begin
+  Result := FHeight;
+end;
+
 function TocvDataSource.GetImage: IocvImage;
 begin
   Result := FImage;
@@ -356,6 +383,11 @@ end;
 function TocvDataSource.GetName: string;
 begin
   Result := Name;
+end;
+
+function TocvDataSource.GetWidth: Integer;
+begin
+  Result := FWidth;
 end;
 
 procedure TocvDataSource.NotifyReceiver(const IplImage: IocvImage);
@@ -415,6 +447,11 @@ begin
   if Assigned(FocvVideoSource) then
     FocvVideoSource.RemoveReceiver(Self);
   inherited;
+end;
+
+function TocvDataReceiver.isSourceEnabled: Boolean;
+begin
+  Result := Assigned(VideoSource) and VideoSource.Enabled;
 end;
 
 procedure TocvDataReceiver.SetOpenCVVideoSource(const Value: IocvDataSource);

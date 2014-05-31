@@ -230,7 +230,7 @@
         <DCC_UnitSearchPath>..;$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
         <VerInfo_Locale>1033</VerInfo_Locale>
-        <VerInfo_Keys>CompanyName=;FileDescription=OpenCV Component;FileVersion=1.0.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductName=OpenCV Component;ProductVersion=1.0.0.0;Comments=;LastCompiledTime=30.05.2014 19:19:54</VerInfo_Keys>
+        <VerInfo_Keys>CompanyName=;FileDescription=OpenCV Component;FileVersion=1.0.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductName=OpenCV Component;ProductVersion=1.0.0.0;Comments=;LastCompiledTime=31.05.2014 12:40:52</VerInfo_Keys>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2_Win64)'!=''">
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
@@ -244,6 +244,7 @@
         <DCCReference Include="rtl.dcp"/>
         <DCCReference Include="vcl.dcp"/>
         <DCCReference Include="..\uOCVImageOperation.pas"/>
+        <DCCReference Include="..\uOCVVideoWriter.pas"/>
         <DCCReference Include="..\uOCVTypes.pas"/>
         <DCCReference Include="..\uOCVSource.pas"/>
         <DCCReference Include="..\uOCVView.pas"/>

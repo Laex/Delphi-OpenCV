@@ -45,12 +45,12 @@ uses
 {$ENDIF}
   uOCVSource,
   uOCVView,
-  uOCVImageOperation;
+  uOCVImageOperation, uOCVVideoWriter;
 
 procedure Register;
 begin
   RegisterComponents('OpenCV', [TocvImageOperation, TocvCameraSource, TocvView, TocvFileSource, TocvIPCamSource,
-    TocvFFMpegIPCamSource]);
+    TocvFFMpegIPCamSource, TocvVideoWriter]);
   RegisterClasses([
     {} TocvNoneOperation,
     {} TocvGrayScaleOperation,
