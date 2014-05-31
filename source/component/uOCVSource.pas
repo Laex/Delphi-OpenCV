@@ -97,7 +97,7 @@ type
   protected
     FSourceThread: TocvCustomSourceThread;
     FThreadDelay: Integer;
-    procedure OnNotifyData(Sender: TObject; const IplImage: IocvImage);
+    procedure OnNotifyData(Sender: TObject; const IplImage: IocvImage); virtual;
     procedure SetEnabled(Value: Boolean); virtual;
     function GetEnabled: Boolean; override;
   private
@@ -105,8 +105,6 @@ type
     FOnImage: TOnOcvNotify;
     procedure TerminateSourceThread;
     procedure ReleaseSource; virtual;
-    function GetHeight: Integer; virtual;
-    function GetWidth: Integer; virtual;
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
@@ -115,6 +113,7 @@ type
     property OnImage: TOnOcvNotify read FOnImage write FOnImage;
     property ImageWidth: Integer Read GetWidth;
     property ImageHeight: Integer Read GetHeight;
+    property FPS: Double read GetFPS;
   end;
 
   TocvCaptureSource = class(TocvCustomSource)
@@ -138,8 +137,6 @@ type
     procedure SetCameraSource(const Value: TocvCameraCaptureSource);
     procedure SetResolution(const Value: TocvResolution);
     procedure SetCameraResolution;
-    function GetHeight: Integer; override;
-    function GetWidth: Integer; override;
   public
     constructor Create(AOwner: TComponent); override;
   published
@@ -375,6 +372,7 @@ begin
         if Assigned(FCapture) then
         begin
           SetCameraResolution;
+          FFPS := cvGetCaptureProperty(FCapture, CV_CAP_PROP_FPS);
           (FSourceThread as TocvCaptureThread).Capture := FCapture;
           FSourceThread.Resume;
         end;
@@ -382,16 +380,6 @@ begin
     end;
     FEnabled := Value;
   end;
-end;
-
-function TocvCameraSource.GetHeight: Integer;
-begin
-  Result := CameraResolution[FResolution].cHeight;
-end;
-
-function TocvCameraSource.GetWidth: Integer;
-begin
-  Result := CameraResolution[FResolution].cWidth;
 end;
 
 procedure TocvCameraSource.SetCameraResolution;
@@ -404,6 +392,8 @@ procedure TocvCameraSource.SetResolution(const Value: TocvResolution);
 begin
   if FResolution <> Value then
   begin
+    FWidth := CameraResolution[Value].cWidth;
+    FHeight := CameraResolution[Value].cHeight;
     FResolution := Value;
     if Enabled then
     begin
@@ -434,18 +424,10 @@ begin
   Result := FEnabled;
 end;
 
-function TocvCustomSource.GetHeight: Integer;
-begin
-  Result := 0;
-end;
-
-function TocvCustomSource.GetWidth: Integer;
-begin
-  Result := 0;
-end;
-
 procedure TocvCustomSource.OnNotifyData(Sender: TObject; const IplImage: IocvImage);
 begin
+  FWidth := IplImage.Width;
+  FHeight := IplImage.Height;
   FImage := IplImage.Clone;
   if Assigned(OnImage) then
     OnImage(Self, IplImage);
@@ -853,8 +835,8 @@ begin
       Continue;
     end;
 
-    img_convert_context := sws_getCachedContext(nil, pCodecCtx^.width, pCodecCtx^.height, pCodecCtx^.pix_fmt, pCodecCtx^.width,
-      pCodecCtx^.height, AV_PIX_FMT_BGR24, SWS_BILINEAR, nil, nil, nil);
+    img_convert_context := sws_getCachedContext(nil, pCodecCtx^.Width, pCodecCtx^.Height, pCodecCtx^.pix_fmt, pCodecCtx^.Width,
+      pCodecCtx^.Height, AV_PIX_FMT_BGR24, SWS_BILINEAR, nil, nil, nil);
     if (img_convert_context = nil) then
     begin
       isReconnect := True;
@@ -862,12 +844,11 @@ begin
     end;
 
     frame := av_frame_alloc();
-    iplframe := cvCreateImage(CvSize(pCodecCtx^.width, pCodecCtx^.height), IPL_DEPTH_8U, 3); // iplframe
+    iplframe := cvCreateImage(CvSize(pCodecCtx^.Width, pCodecCtx^.Height), IPL_DEPTH_8U, 3); // iplframe
     FillChar(linesize, SizeOf(linesize), 0);
     linesize[0] := iplframe^.widthStep;
 
     while (not Terminated) and (FSuspendEvent.WaitFor(0) = wrSignaled) do
-    begin
       if av_read_frame(pFormatCtx, packet) >= 0 then
       begin
         if (packet.stream_index = videoStream) then
@@ -881,7 +862,7 @@ begin
           avcodec_decode_video2(pCodecCtx, frame, frame_finished, @packet);
           if (frame_finished <> 0) then
           begin
-            sws_scale(img_convert_context, @frame^.data, @frame^.linesize, 0, pCodecCtx^.height, @iplframe^.imageData, @linesize);
+            sws_scale(img_convert_context, @frame^.data, @frame^.linesize, 0, pCodecCtx^.Height, @iplframe^.imageData, @linesize);
             if Assigned(OnNotifyData) then
               Synchronize(
                 procedure
@@ -895,8 +876,8 @@ begin
           isReconnect := True;
           Break;
         end;
+        av_free_packet(packet);
       end;
-    end;
   end;
   ReleaseAllocatedData;
   avformat_network_deinit;

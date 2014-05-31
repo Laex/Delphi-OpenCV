@@ -35,6 +35,7 @@ requires
 
 contains
   uOCVImageOperation in '..\uOCVImageOperation.pas',
+uOCVVideoWriter in '..\uOCVVideoWriter.pas',
   uOCVTypes in '..\uOCVTypes.pas',
   uOCVSource in '..\uOCVSource.pas',
   uOCVView in '..\uOCVView.pas';

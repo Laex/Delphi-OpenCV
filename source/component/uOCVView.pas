@@ -121,8 +121,8 @@ type
     function isSourceEnabled: Boolean;
     function PaintRect: TRect;
   protected
-    procedure TakeImage(const IplImage: IocvImage);
     procedure SetVideoSource(const Value: TObject);
+    procedure TakeImage(const IplImage: IocvImage);
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;

@@ -141,7 +141,7 @@
         <DCC_DcuOutput>.</DCC_DcuOutput>
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
         <VerInfo_Locale>1033</VerInfo_Locale>
-        <VerInfo_Keys>CompanyName=;FileDescription=OpenCV Component;FileVersion=1.0.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductName=OpenCV Component;ProductVersion=1.0.0.0;Comments=;LastCompiledTime=30.05.2014 19:19:57</VerInfo_Keys>
+        <VerInfo_Keys>CompanyName=;FileDescription=OpenCV Component;FileVersion=1.0.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductName=OpenCV Component;ProductVersion=1.0.0.0;Comments=;LastCompiledTime=31.05.2014 12:40:55</VerInfo_Keys>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2_Win64)'!=''">
         <DCC_DcuOutput>.\$(Platform)\$(Config)</DCC_DcuOutput>
