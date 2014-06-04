@@ -1,25 +1,25 @@
-//*****************************************************************
-  //                       Delphi-OpenCV Demo
-  //               Copyright (C) 2013 Project Delphi-OpenCV
-  // ****************************************************************
-  // Contributor:
-    // Laentir Valetov
-  // email:laex@bk.ru
-  // ****************************************************************
-  // You may retrieve the latest version of this file at the GitHub,
-  // located at git://github.com/Laex/Delphi-OpenCV.git
-  // ****************************************************************
-  // The contents of this file are used with permission, subject to
-  // the Mozilla Public License Version 1.1 (the "License"); you may
-  // not use this file except in compliance with the License. You may
-  // obtain a copy of the License at
-  // http://www.mozilla.org/MPL/MPL-1_1Final.html
-  //
-  // Software distributed under the License is distributed on an
-  // "AS IS" basis, WITHOUT WARRANTY OF ANY KIND, either express or
-  // implied. See the License for the specific language governing
-  // rights and limitations under the License.
-  //*******************************************************************
+// *****************************************************************
+// Delphi-OpenCV Demo
+// Copyright (C) 2013 Project Delphi-OpenCV
+// ****************************************************************
+// Contributor:
+// Laentir Valetov
+// email:laex@bk.ru
+// ****************************************************************
+// You may retrieve the latest version of this file at the GitHub,
+// located at git://github.com/Laex/Delphi-OpenCV.git
+// ****************************************************************
+// The contents of this file are used with permission, subject to
+// the Mozilla Public License Version 1.1 (the "License"); you may
+// not use this file except in compliance with the License. You may
+// obtain a copy of the License at
+// http://www.mozilla.org/MPL/MPL-1_1Final.html
+//
+// Software distributed under the License is distributed on an
+// "AS IS" basis, WITHOUT WARRANTY OF ANY KIND, either express or
+// implied. See the License for the specific language governing
+// rights and limitations under the License.
+// *******************************************************************
 
 program CameraCalibrate;
 
@@ -79,6 +79,7 @@ var
 
   t: pIplImage;
   s: Single;
+  RMS: double;
 
 begin
   try
@@ -122,7 +123,7 @@ begin
     begin
       // Ïğîïócêàåì board_dt ôğåéìîâ, ïğåäîcòàâëåííûå ïîëüçîâàòåëåì, äâèãàşùèì äîcêó
       // Skip the "board_dt" frames supplied by the user to move the board
-      if ((frame mod board_dt) = 0) then  //At this point - the error is found and corrected CLubfitter73
+      if ((frame mod board_dt) = 0) then // At this point - the error is found and corrected CLubfitter73
       begin
         Writeln('Successes: ', successes);
         // Íàõîäèì óãëû øàõìàòíîé äîcêè
@@ -148,12 +149,20 @@ begin
           step := successes * board_n;
           i := step;
           j := 0;
-          while j < board_n do //At this point - the error is found and corrected CLubfitter73
+          while j < board_n do // At this point - the error is found and corrected CLubfitter73
           begin
             pSingle(CV_MAT_ELEM(image_points^, SizeOf(Single), i, 0))^ := corners[j].x;
             pSingle(CV_MAT_ELEM(image_points^, SizeOf(Single), i, 1))^ := corners[j].y;
-            pSingle(CV_MAT_ELEM(object_points^, SizeOf(Single), i, 0))^ := j / board_w;
+
+            // By default, the division operation returns Double
+            // When implicitly cast the Double to Single - the result is zero
+            // Integer to Double and Single given correctly
+            //
+            // Frans
+            //
+            pSingle(CV_MAT_ELEM(object_points^, SizeOf(Single), i, 0))^ := j mod board_w;
             pSingle(CV_MAT_ELEM(object_points^, SizeOf(Single), i, 1))^ := j div board_w;
+
             pSingle(CV_MAT_ELEM(object_points^, SizeOf(Single), i, 2))^ := 0;
             Inc(i);
             Inc(j);
@@ -197,7 +206,7 @@ begin
         Halt;
       end;
       image := cvQueryFrame(capture); // We get the following picture//Ïîëó÷àåì cëåäóşùåå èçîáğàæåíèå
-      Inc(frame); //At this point - the error is found and corrected CLubfitter73
+      Inc(frame); // At this point - the error is found and corrected CLubfitter73
     end;
 
     // ÂÛÄÅËßÅÌ ÌÀÒĞÈÖÛ Ê ÒÀÊÎÌÓ ÊÎËÈ×ÅcÒÂÓ ØÀÕÌÀÒÍÛÕ ÄÎcÊ, cÊÎËÜÊÎ ÁÛËÎ ÍÀÉÄÅÍÎ
@@ -212,16 +221,11 @@ begin
     i := 0;
     While i < successes * board_n do
     begin
-      pSingle(CV_MAT_ELEM(image_points2^, SizeOf(Single), i, 0))^ :=
-        pSingle(CV_MAT_ELEM(image_points^, SizeOf(Single), i, 0))^;
-      pSingle(CV_MAT_ELEM(image_points2^, SizeOf(Single), i, 1))^ :=
-        pSingle(CV_MAT_ELEM(image_points^, SizeOf(Single), i, 1))^;
-      pSingle(CV_MAT_ELEM(object_points2^, SizeOf(Single), i, 0))^ :=
-        pSingle(CV_MAT_ELEM(object_points^, SizeOf(Single), i, 0))^;
-      pSingle(CV_MAT_ELEM(object_points2^, SizeOf(Single), i, 1))^ :=
-        pSingle(CV_MAT_ELEM(object_points^, SizeOf(Single), i, 1))^;
-      pSingle(CV_MAT_ELEM(object_points2^, SizeOf(Single), i, 2))^ :=
-        pSingle(CV_MAT_ELEM(object_points^, SizeOf(Single), i, 2))^;
+      pSingle(CV_MAT_ELEM(image_points2^, SizeOf(Single), i, 0))^ := pSingle(CV_MAT_ELEM(image_points^, SizeOf(Single), i, 0))^;
+      pSingle(CV_MAT_ELEM(image_points2^, SizeOf(Single), i, 1))^ := pSingle(CV_MAT_ELEM(image_points^, SizeOf(Single), i, 1))^;
+      pSingle(CV_MAT_ELEM(object_points2^, SizeOf(Single), i, 0))^ := pSingle(CV_MAT_ELEM(object_points^, SizeOf(Single), i, 0))^;
+      pSingle(CV_MAT_ELEM(object_points2^, SizeOf(Single), i, 1))^ := pSingle(CV_MAT_ELEM(object_points^, SizeOf(Single), i, 1))^;
+      pSingle(CV_MAT_ELEM(object_points2^, SizeOf(Single), i, 2))^ := pSingle(CV_MAT_ELEM(object_points^, SizeOf(Single), i, 2))^;
       Inc(i);
     end;
     i := 0;
@@ -254,7 +258,7 @@ begin
     // pSingle(CV_MAT_ELEM(intrinsic_matrix^, SizeOf(Single), 0, 2))^ := 70.0;
     // pSingle(CV_MAT_ELEM(intrinsic_matrix^, SizeOf(Single), 1, 2))^ := 70.0;
 
-    //At this point - the error is found and corrected CLubfitter73
+    // At this point - the error is found and corrected CLubfitter73
     pSingle(CV_MAT_ELEM(intrinsic_matrix^, SizeOf(Single), 0, 0))^ := 1;
     pSingle(CV_MAT_ELEM(intrinsic_matrix^, SizeOf(Single), 1, 1))^ := 1;
 
@@ -268,12 +272,12 @@ begin
 
     // ÊÀËÈÁĞÓÅÌ ÊÀÌÅĞÓ!
     // Calibrating the camera!
-    cvCalibrateCamera2(object_points2, image_points2, point_counts2, cvGetSize(image), intrinsic_matrix,
+    RMS := cvCalibrateCamera2(object_points2, image_points2, point_counts2, cvGetSize(image), intrinsic_matrix,
       distortion_coeffs, nil, nil,
       // {}0,
-      { } CV_CALIB_FIX_ASPECT_RATIO,
+      {} CV_CALIB_FIX_ASPECT_RATIO,
       // {}CV_CALIB_USE_INTRINSIC_GUESS,
-      { } cvTermCriteria(CV_TERMCRIT_ITER + CV_TERMCRIT_EPS, 30, DBL_EPSILON));
+      {} cvTermCriteria(CV_TERMCRIT_ITER + CV_TERMCRIT_EPS, 30, DBL_EPSILON));
 
     // ñÎÕĞÀÍßÅÌ ÂÍÓÒĞÅÍÍÈÅ ÏÀĞÀÌÅÒĞÛ È ÄÈñÒÎğñÈŞ
     // Parameters and maintains internal distortion

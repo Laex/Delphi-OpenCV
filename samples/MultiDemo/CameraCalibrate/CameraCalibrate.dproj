@@ -3,7 +3,7 @@
         <ProjectGuid>{7579E0D0-8D54-460C-8920-D633B273A12A}</ProjectGuid>
         <MainSource>CameraCalibrate.dpr</MainSource>
         <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Release</Config>
+        <Config Condition="'$(Config)'==''">Debug</Config>
         <TargetedPlatforms>3</TargetedPlatforms>
         <AppType>Console</AppType>
         <FrameworkType>None</FrameworkType>
