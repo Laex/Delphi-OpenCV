@@ -647,19 +647,22 @@ function cvCheckTermCriteria(criteria: TCvTermCriteria; default_eps: double; def
 // *                   Arithmetic, logic and comparison operations                       *
 // ***************************************************************************************
 
-{dst(mask) = src1(mask) + src2(mask)
+{
+  dst(mask) = src1(mask) + src2(mask)
   CVAPI(void)  cvAdd( const pCvArr* src1, const pCvArr* src2, pCvArr* dst,
   const pCvArr* mask CV_DEFAULT(NULL));
 }
 procedure cvAdd(const src1, src2: pIplImage; dst: pIplImage; const mask: pIplImage = nil); cdecl;
 
-{dst(mask) = src(mask) + value
+{
+  dst(mask) = src(mask) + value
   CVAPI(void)  cvAddS( const pCvArr* src, CvScalar value, pCvArr* dst,
   const pCvArr* mask CV_DEFAULT(NULL));
 }
 procedure cvAddS(const src: pIplImage; value: TCvScalar; dst: pIplImage; const mask: pIplImage = nil); cdecl;
 
-{dst(mask) = src1(mask) - src2(mask)
+{
+  dst(mask) = src1(mask) - src2(mask)
   CVAPI(void)  cvSub( const pCvArr* src1, const pCvArr* src2, pCvArr* dst,
   const pCvArr* mask CV_DEFAULT(NULL));
 }

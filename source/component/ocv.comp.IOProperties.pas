@@ -23,7 +23,7 @@
 
 {$IFNDEF CLR}
 {$I OpenCV.inc}
-unit uOCVIOProperties;
+unit ocv.comp.IOProperties;
 {$ENDIF}
 
 interface
@@ -38,7 +38,7 @@ uses
 {$IFDEF VER6P}DesignEditors, DesignIntf, System.Classes, {$ELSE}DsgnIntf, Classes, {$ENDIF VER6P}
 {$ENDIF FPC}
 {$ENDIF}
-  uOCVImageOperation;
+  ocv.comp.ImageOperation;
 
 type
   /// Используется в TocvImageOperation
@@ -115,7 +115,7 @@ uses
   TypInfo,
   RTLConsts,
 {$ENDIF VER6P}
-  uOCVTypes;
+  ocv.comp.Types;
 
 {TImageOperationProperty}
 

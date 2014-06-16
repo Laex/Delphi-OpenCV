@@ -4,7 +4,8 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, uOCVTypes, uOCVSource, uOCVView, ffm.libavcodec.avcodec;
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, ffm.libavcodec.avcodec,
+  ocv.comp.Types, ocv.comp.Source, ocv.comp.View;
 
 type
   TForm1 = class(TForm)

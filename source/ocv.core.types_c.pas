@@ -103,7 +103,7 @@ unit ocv.core.types_c;
 interface
 
 uses
-  Windows;
+  WinApi.Windows;
 
 const
   // Ќаименьшее число дл€ которого выполн€етс€ условие 1.0+DBL_EPSILON <> 1.0

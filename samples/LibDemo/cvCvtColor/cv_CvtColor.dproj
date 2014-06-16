@@ -3,7 +3,7 @@
         <ProjectGuid>{5F07BEF4-77BC-45EB-B419-49B9B605AD96}</ProjectGuid>
         <MainSource>cv_CvtColor.dpr</MainSource>
         <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Release</Config>
+        <Config Condition="'$(Config)'==''">Debug</Config>
         <TargetedPlatforms>3</TargetedPlatforms>
         <AppType>Console</AppType>
         <FrameworkType>None</FrameworkType>

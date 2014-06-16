@@ -23,7 +23,7 @@
 
 {$IFNDEF CLR}
 {$I OpenCV.inc}
-unit uOCVTypes;
+unit ocv.comp.Types;
 {$ENDIF}
 
 interface
@@ -220,7 +220,8 @@ Type
   TOnOcvNotifyCollectionItem = procedure(PrevOperation, Operation, NextOperation: TObject; const IplImage: IocvImage;
     Var ContinueTransform: Boolean) of object;
 
-  TOnOcvNotify = procedure(Sender: TObject; const IplImage: IocvImage) of object;
+  TOnOcvNotify = procedure(Sender: TObject; Var IplImage: IocvImage) of object;
+  TOnOcvAfterViewPaint = procedure(Sender: TObject; const IplImage: IocvImage) of object;
   TOnOcvAfterTransform = TOnOcvNotify;
   TOnOcvBeforeTransform = procedure(Sender: TObject; const IplImage: IocvImage; Var ContinueTransform: Boolean) of object;
   TOnOcvContour = procedure(Sender: TObject; const IplImage: IocvImage; const ContourCount: Integer; const Contours: pCvSeq)
@@ -311,8 +312,19 @@ Type
     property VideoSource: IocvDataSource Read FocvVideoSource write SetOpenCVVideoSource;
   end;
 
+  // Haar cascade types
+  TocvHaarCascadeType = (hcEye, hcEyeTreeEyeGlasses, hcFrontalFaceAlt, hcFrontalFaceAlt2, hcFrontalFaceAltTree,
+    hcFrontalFaceDefaut, hcFullBody, hcLeftEye2Splits, hcLowerBody, hcMcsEyePairBig, hcMcsEyePairSmall, hcMcsLeftEar,
+    hcMcsLeftEye, hcMcsMouth, hcMcsNose, hcMcsRightEar, hcMcsRightEye, hcMcsUpperBody, hcProfileFace, hcRightEye2Splits, hcSmile,
+    hcUpperBody, hcPlateNumberRus);
+  TocvHaarCascadeFlag = (HAAR_DO_CANNY_PRUNING, HAAR_SCALE_IMAGE, HAAR_FIND_BIGGEST_OBJECT, HAAR_DO_ROUGH_SEARCH);
+  TocvHaarCascadeFlagSet = set of TocvHaarCascadeFlag;
+
+function HaarSetToFlag(const CascadeFlags: TocvHaarCascadeFlagSet): Integer;
+
 function ocvRect(Left, Top, Right, Bottom: Integer): TocvRect;
 function ocvRectCenter(cX, cY, Width, Height: Integer): TocvRect;
+function cvRect(const oRect: TocvRect): TCvRect;
 
 procedure GetRGBValue(const AColor: TColor; var r, g, b: byte);
 function ColorToCvRGB(const Color: TColor): TCvScalar;
@@ -322,7 +334,30 @@ const
 
 implementation
 
-uses ocv.imgproc_c, ocv.imgproc.types_c, ocv.highgui_c;
+uses
+  ocv.imgproc_c,
+  ocv.imgproc.types_c,
+  ocv.highgui_c;
+
+function cvRect(const oRect: TocvRect): TCvRect;
+begin
+  Result := ocv.core.types_c.cvRect(oRect.Left, oRect.Top, oRect.Width, oRect.Height);
+end;
+
+function HaarSetToFlag(const CascadeFlags: TocvHaarCascadeFlagSet): Integer;
+Var
+  i: TocvHaarCascadeFlag;
+  j: Integer;
+begin
+  Result := 0;
+  j := 1;
+  for i := HAAR_DO_CANNY_PRUNING to HAAR_DO_ROUGH_SEARCH do
+  begin
+    if i in CascadeFlags then
+      Result := Result or j;
+    j := j * 2;
+  end;
+end;
 
 function ocvRect(Left, Top, Right, Bottom: Integer): TocvRect;
 begin

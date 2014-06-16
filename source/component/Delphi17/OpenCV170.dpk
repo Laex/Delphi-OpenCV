@@ -34,9 +34,10 @@ requires
   vcl;
 
 contains
-  uOCVImageOperation in '..\uOCVImageOperation.pas',
-  uOCVTypes in '..\uOCVTypes.pas',
-  uOCVSource in '..\uOCVSource.pas',
-  uOCVView in '..\uOCVView.pas';
-
+  ocv.comp.ImageOperation in '..\ocv.comp.ImageOperation.pas',
+  ocv.comp.VideoWriter in '..\ocv.comp.VideoWriter.pas',
+  ocv.comp.Types in '..\ocv.comp.Types.pas',
+  ocv.comp.Source in '..\ocv.comp.Source.pas',
+  ocv.comp.View in '..\ocv.comp.View.pas',
+  ocv.comp.Proc in '..\ocv.comp.Proc.pas';
 end.

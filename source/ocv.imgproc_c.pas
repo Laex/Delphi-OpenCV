@@ -1,87 +1,87 @@
 // --------------------------------- OpenCV license.txt ---------------------------
-//    IMPORTANT: READ BEFORE DOWNLOADING, COPYING, INSTALLING OR USING.
-  //
-  //    By downloading, copying, installing or using the software you agree to this license.
-  //    If you do not agree to this license, do not download, install,
-  //    copy or use the software.
-  //
-  //
-  //                             License Agreement
-  //                  For Open Source Computer Vision Library
-  //
-  //   Copyright (C) 2000-2008, Intel Corporation, all rights reserved.
-  //   Copyright (C) 2009, Willow Garage Inc., all rights reserved.
-  //   Third party copyrights are property of their respective owners.
-  //
-  //   Redistribution and use in source and binary forms, with or without modification,
-  //   are permitted provided that the following conditions are met:
-  //
-  //     * Redistribution's of source code must retain the above copyright notice,
-  //       this list of conditions and the following disclaimer.
-  //
-  //     * Redistribution's in binary form must reproduce the above copyright notice,
-  //       this list of conditions and the following disclaimer in the documentation
-  //       and/or other materials provided with the distribution.
-  //
-  //     * The name of the copyright holders may not be used to endorse or promote products
-  //       derived from this software without specific prior written permission.
-  //
-  //   This software is provided by the copyright holders and contributors "as is" and
-  //   any express or implied warranties, including, but not limited to, the implied
-  //   warranties of merchantability and fitness for a particular purpose are disclaimed.
-  //   In no event shall the Intel Corporation or contributors be liable for any direct,
-  //   indirect, incidental, special, exemplary, or consequential damages
-  //   (including, but not limited to, procurement of substitute goods or services;
-  //   loss of use, data, or profits; or business interruption) however caused
-  //   and on any theory of liability, whether in contract, strict liability,
-  //   or tort (including negligence or otherwise) arising in any way out of
-    //   the use of this software, even if advised of the possibility of such damage.
+// IMPORTANT: READ BEFORE DOWNLOADING, COPYING, INSTALLING OR USING.
+//
+// By downloading, copying, installing or using the software you agree to this license.
+// If you do not agree to this license, do not download, install,
+// copy or use the software.
+//
+//
+// License Agreement
+// For Open Source Computer Vision Library
+//
+// Copyright (C) 2000-2008, Intel Corporation, all rights reserved.
+// Copyright (C) 2009, Willow Garage Inc., all rights reserved.
+// Third party copyrights are property of their respective owners.
+//
+// Redistribution and use in source and binary forms, with or without modification,
+// are permitted provided that the following conditions are met:
+//
+// * Redistribution's of source code must retain the above copyright notice,
+// this list of conditions and the following disclaimer.
+//
+// * Redistribution's in binary form must reproduce the above copyright notice,
+// this list of conditions and the following disclaimer in the documentation
+// and/or other materials provided with the distribution.
+//
+// * The name of the copyright holders may not be used to endorse or promote products
+// derived from this software without specific prior written permission.
+//
+// This software is provided by the copyright holders and contributors "as is" and
+// any express or implied warranties, including, but not limited to, the implied
+// warranties of merchantability and fitness for a particular purpose are disclaimed.
+// In no event shall the Intel Corporation or contributors be liable for any direct,
+// indirect, incidental, special, exemplary, or consequential damages
+// (including, but not limited to, procurement of substitute goods or services;
+// loss of use, data, or profits; or business interruption) however caused
+// and on any theory of liability, whether in contract, strict liability,
+// or tort (including negligence or otherwise) arising in any way out of
+// the use of this software, even if advised of the possibility of such damage.
 
-//**************************************************************************************************
-  //                                 Project Delphi-OpenCV
-  //  **************************************************************************************************
-  //  Contributor:
-    // Laentir Valetov
-  //  email:laex@bk.ru
-  //  Mikhail Grigorev
-  //  email:sleuthound@gmail.com
-  //  **************************************************************************************************
-  //  You may retrieve the latest version of this file at the GitHub,
-  //  located at git://github.com/Laex/Delphi-OpenCV.git
-  //  **************************************************************************************************
-  //  License:
-  //  The contents of this file are subject to the Mozilla Public License Version 1.1 (the "License");
-  //  you may not use this file except in compliance with the License. You may obtain a copy of the
-  //  License at http://www.mozilla.org/MPL/
-  //
-  //  Software distributed under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
-  //  ANY KIND, either express or implied. See the License for the specific language governing rights
-  //  and limitations under the License.
-  //
-  //  Alternatively, the contents of this file may be used under the terms of the
-  //  GNU Lesser General Public License (the  "LGPL License"), in which case the
-  //  provisions of the LGPL License are applicable instead of those above.
-  //  If you wish to allow use of your version of this file only under the terms
-  //  of the LGPL License and not to allow others to use your version of this file
-  //  under the MPL, indicate your decision by deleting  the provisions above and
-  //  replace  them with the notice and other provisions required by the LGPL
-  //  License.  If you do not delete the provisions above, a recipient may use
-  //  your version of this file under either the MPL or the LGPL License.
-  //
-  //  For more information about the LGPL: http://www.gnu.org/copyleft/lesser.html
-  //  **************************************************************************************************
-  //  Warning: Using Delphi XE3 syntax!
-  //  **************************************************************************************************
-  //  The Initial Developer of the Original Code:
-  //  OpenCV: open source computer vision library
-  //  Homepage:    http://ocv.org
-  //  Online docs: http://docs.ocv.org
-  //  Q&A forum:   http://answers.ocv.org
-  //  Dev zone:    http://code.ocv.org
-  //  **************************************************************************************************
-  //  Original file:
-  //  opencv\modules\imgproc\include\opencv2\imgproc\imgproc_c.h
-  // *************************************************************************************************
+// **************************************************************************************************
+// Project Delphi-OpenCV
+// **************************************************************************************************
+// Contributor:
+// Laentir Valetov
+// email:laex@bk.ru
+// Mikhail Grigorev
+// email:sleuthound@gmail.com
+// **************************************************************************************************
+// You may retrieve the latest version of this file at the GitHub,
+// located at git://github.com/Laex/Delphi-OpenCV.git
+// **************************************************************************************************
+// License:
+// The contents of this file are subject to the Mozilla Public License Version 1.1 (the "License");
+// you may not use this file except in compliance with the License. You may obtain a copy of the
+// License at http://www.mozilla.org/MPL/
+//
+// Software distributed under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
+// ANY KIND, either express or implied. See the License for the specific language governing rights
+// and limitations under the License.
+//
+// Alternatively, the contents of this file may be used under the terms of the
+// GNU Lesser General Public License (the  "LGPL License"), in which case the
+// provisions of the LGPL License are applicable instead of those above.
+// If you wish to allow use of your version of this file only under the terms
+// of the LGPL License and not to allow others to use your version of this file
+// under the MPL, indicate your decision by deleting  the provisions above and
+// replace  them with the notice and other provisions required by the LGPL
+// License.  If you do not delete the provisions above, a recipient may use
+// your version of this file under either the MPL or the LGPL License.
+//
+// For more information about the LGPL: http://www.gnu.org/copyleft/lesser.html
+// **************************************************************************************************
+// Warning: Using Delphi XE3 syntax!
+// **************************************************************************************************
+// The Initial Developer of the Original Code:
+// OpenCV: open source computer vision library
+// Homepage:    http://ocv.org
+// Online docs: http://docs.ocv.org
+// Q&A forum:   http://answers.ocv.org
+// Dev zone:    http://code.ocv.org
+// **************************************************************************************************
+// Original file:
+// opencv\modules\imgproc\include\opencv2\imgproc\imgproc_c.h
+// *************************************************************************************************
 
 {$IFDEF DEBUG}
 {$A8,B-,C+,D+,E-,F-,G+,H+,I+,J-,K-,L+,M-,N+,O-,P+,Q+,R+,S-,T-,U-,V+,W+,X+,Y+,Z1}
@@ -102,9 +102,9 @@ uses
   ocv.core.types_c,
   ocv.imgproc.types_c;
 
-(* ********************** Background statistics accumulation **************************** *)
+(*********************** Background statistics accumulation *****************************)
 
-(* Adds image to accumulator *)
+(*Adds image to accumulator*)
 // CVAPI(procedure)cvAcc(var Adds squared image to accumulator * )
 // CVAPI(procedure)cvSquareAcc(CvArr * image: v1: 0)): CvArr; (var sqsum: CvArr; var Adds a product of two images to accumulator * )
 // CVAPI(procedure)cvMultiplyAcc(CvArr * image1: unction mask CV_DEFAULT(v1: 0)): CvArr; (;
@@ -125,11 +125,11 @@ uses
   CvScalar value CV_DEFAULT(cvScalarAll(0)));
 }
 procedure cvCopyMakeBorder(
-  { } const src: pIplImage;
-  { } dst: pIplImage;
-  { } offset: TCvPoint;
-  { } bordertype: Integer;
-  { } value: TCvScalar { * cvScalarAll(0) * } ); cdecl;
+  {} const src: pIplImage;
+  {} dst: pIplImage;
+  {} offset: TCvPoint;
+  {} bordertype: Integer;
+  {} value: TCvScalar {* cvScalarAll(0) *} ); cdecl;
 
 {
   // Smoothes array (removes noise)
@@ -143,13 +143,13 @@ procedure cvCopyMakeBorder(
   double sigma2 CV_DEFAULT(0));
 }
 procedure cvSmooth(
-  { } const src: pIplImage;
-  { } dst: pIplImage;
-  { } smoothtype: Integer = CV_GAUSSIAN;
-  { } size1: Integer = 3;
-  { } size2: Integer = 0;
-  { } sigma1: double = 0;
-  { } sigma2: double = 0); cdecl;
+  {} const src: pIplImage;
+  {} dst: pIplImage;
+  {} smoothtype: Integer = CV_GAUSSIAN;
+  {} size1: Integer = 3;
+  {} size2: Integer = 0;
+  {} sigma1: double = 0;
+  {} sigma2: double = 0); cdecl;
 
 // (* Convolves the image with the kernel *)
 // CVAPI(
@@ -166,10 +166,10 @@ procedure cvSmooth(
   CvArr* tilted_sum CV_DEFAULT(NULL));
 }
 procedure cvIntegral(
-  { } const image: pIplImage;
-  { } sum: pIplImage;
-  { } sqsum: pIplImage = NIL;
-  { } tilted_sum: pIplImage = NIL); cdecl;
+  {} const image: pIplImage;
+  {} sum: pIplImage;
+  {} sqsum: pIplImage = NIL;
+  {} tilted_sum: pIplImage = NIL); cdecl;
 
 (*
   Smoothes the input image with gaussian kernel and then down-samples it.
@@ -231,7 +231,7 @@ procedure cvSobel(const src: pIplImage; dst: pIplImage; xorder: Integer; yorder:
 }
 procedure cvLaplace(const src: pIplImage; dst: pIplImage; aperture_size: Integer = 3); cdecl;
 
-(* Converts input array pixels from one color space to another *)
+(*Converts input array pixels from one color space to another*)
 // CVAPI(void)  cvCvtColor( const CvArr* src, CvArr* dst, int code );
 procedure cvCvtColor(const src: pIplImage; dst: pIplImage; code: Integer); cdecl; overload;
 procedure cvCvtColor(const src: pCvMat; dst: pCvMat; code: Integer); cdecl; overload;
@@ -252,7 +252,7 @@ procedure cvResize(const src: pIplImage; dst: pIplImage; interpolation: Integer 
   CvScalar fillval CV_DEFAULT(cvScalarAll(0)) );
 }
 procedure cvWarpAffine(const src: pIplImage; dst: pIplImage; const map_matrix: pCvMat;
-  flags: Integer { = CV_INTER_LINEAR+CV_WARP_FILL_OUTLIERS }; fillval: TCvScalar { = cvScalarAll(0) } ); cdecl;
+  flags: Integer {= CV_INTER_LINEAR+CV_WARP_FILL_OUTLIERS}; fillval: TCvScalar {= cvScalarAll(0)} ); cdecl;
 
 // * Computes affine transform matrix for mapping src[i] to dst[i] (i=0,1,2) */
 // CVAPI(CvMat*) cvGetAffineTransform( const CvPoint2D32f * src,
@@ -273,7 +273,7 @@ function cv2DRotationMatrix(center: TCvPoint2D32f; angle: double; scale: double;
   CvScalar fillval CV_DEFAULT(cvScalarAll(0)) );
 }
 procedure cvWarpPerspective(const src: pIplImage; dst: pIplImage; const map_matrix: pCvMat;
-  flags: Integer { =CV_INTER_LINEAR+CV_WARP_FILL_OUTLIERS }; fillval: TCvScalar { =cvScalarAll(0) } ); cdecl;
+  flags: Integer {=CV_INTER_LINEAR+CV_WARP_FILL_OUTLIERS}; fillval: TCvScalar {=cvScalarAll(0)} ); cdecl;
 {
   /* Computes perspective transform matrix for mapping src[i] to dst[i] (i=0,1,2,3) */
   CVAPI(CvMat*) cvGetPerspectiveTransform( const CvPoint2D32f* src,
@@ -293,7 +293,7 @@ function cvGetPerspectiveTransform(const src: pCvPoint2D32f; const dst: pCvPoint
   CvScalar fillval CV_DEFAULT(cvScalarAll(0)) );
 }
 procedure cvRemap(const src: pCvArr; dst: pCvArr; const mapx: pCvArr; const mapy: pCvArr;
-  flags: Integer { =CV_INTER_LINEAR+CV_WARP_FILL_OUTLIERS }; fillval: TCvScalar { =cvScalarAll(0) }
+  flags: Integer {=CV_INTER_LINEAR+CV_WARP_FILL_OUTLIERS}; fillval: TCvScalar {=cvScalarAll(0)}
   ); cdecl;
 
 /// * Performs forward or inverse log-polar image transform */
@@ -359,7 +359,7 @@ function cvCreateStructuringElementEx(cols: Integer; rows: Integer; anchor_x: In
 // CVAPI(void)  cvReleaseStructuringElement( IplConvKernel** element );
 procedure cvReleaseStructuringElement(Var element: pIplConvKernel); cdecl;
 
-{ Performs complex morphological transformation }
+{Performs complex morphological transformation}
 // CVAPI(void)  cvMorphologyEx( const CvArr* src, CvArr* dst,
 // CvArr* temp, IplConvKernel* element,
 // int operation, int iterations CV_DEFAULT(1) );
@@ -370,15 +370,15 @@ procedure cvMorphologyEx(const src: pIplImage; dst: pIplImage; temp: pIplImage; 
 // CVAPI(void) cvMoments( const CvArr* arr, CvMoments* moments, int binary CV_DEFAULT(0));
 procedure cvMoments(const arr: pCvArr; moments: pCvMoments; binary: Integer = 0); cdecl;
 
-{ erodes input image (applies minimum filter) one or more times.
-  If element pointer is NULL, 3x3 rectangular element is used }
+{erodes input image (applies minimum filter) one or more times.
+  If element pointer is NULL, 3x3 rectangular element is used}
 // CVAPI(void)  cvErode( const CvArr* src, CvArr* dst,
 // IplConvKernel* element CV_DEFAULT(NULL),
 // int iterations CV_DEFAULT(1) );
 procedure cvErode(const src: pIplImage; dst: pIplImage; element: pIplConvKernel = nil; iterations: Integer = 1); cdecl;
 
-{ dilates input image (applies maximum filter) one or more times.
-  If element pointer is NULL, 3x3 rectangular element is used }
+{dilates input image (applies maximum filter) one or more times.
+  If element pointer is NULL, 3x3 rectangular element is used}
 // CVAPI(void)  cvDilate( const CvArr* src, CvArr* dst,
 // IplConvKernel* element CV_DEFAULT(NULL),
 // int iterations CV_DEFAULT(1) );
@@ -440,17 +440,17 @@ procedure cvMatchTemplate(const image: pCvArr; const templ: pCvArr; result: pCvA
 const
   // * contour retrieval mode */
   CV_RETR_EXTERNAL = 0;
-  CV_RETR_LIST     = 1;
-  CV_RETR_CCOMP    = 2;
-  CV_RETR_TREE     = 3;
+  CV_RETR_LIST = 1;
+  CV_RETR_CCOMP = 2;
+  CV_RETR_TREE = 3;
 
   // * contour approximation method */
-  CV_CHAIN_CODE             = 0;
-  CV_CHAIN_APPROX_NONE      = 1;
-  CV_CHAIN_APPROX_SIMPLE    = 2;
-  CV_CHAIN_APPROX_TC89_L1   = 3;
+  CV_CHAIN_CODE = 0;
+  CV_CHAIN_APPROX_NONE = 1;
+  CV_CHAIN_APPROX_SIMPLE = 2;
+  CV_CHAIN_APPROX_TC89_L1 = 3;
   CV_CHAIN_APPROX_TC89_KCOS = 4;
-  CV_LINK_RUNS              = 5;
+  CV_LINK_RUNS = 5;
 
 type
 
@@ -526,34 +526,34 @@ type
   }
 
 function cvFindContours(
-  { } image: pIplImage;
-  { } storage: pCvMemStorage;
-  { } first_contour: pCvSeq;
-  { } header_size: Integer { = SizeOf(TCvContour) };
-  { } mode: Integer { = CV_RETR_LIST };
-  { } method: Integer { = CV_CHAIN_APPROX_SIMPLE };
-  { } offset: TCvPoint { =cvPoint(0,0) } ): Integer; cdecl;
+  {} image: pIplImage;
+  {} storage: pCvMemStorage;
+  {} first_contour: pCvSeq;
+  {} header_size: Integer {= SizeOf(TCvContour)};
+  {} mode: Integer {= CV_RETR_LIST};
+  {} method: Integer {= CV_CHAIN_APPROX_SIMPLE};
+  {} offset: TCvPoint {=cvPoint(0,0)} ): Integer; cdecl;
 
-(* Initalizes contour retrieving process.
+(*Initalizes contour retrieving process.
   Calls cvStartFindContours.
   Calls cvFindNextContour until null pointer is returned
   or some other condition becomes true.
-  Calls cvEndFindContours at the end. *)
+  Calls cvEndFindContours at the end.*)
 // CVAPI(CvContourScanner)  cvStartFindContours( CvArr* image, CvMemStorage* storage,
 // int header_size CV_DEFAULT(sizeof(CvContour)),
 // int mode CV_DEFAULT(CV_RETR_LIST),
 // int method CV_DEFAULT(CV_CHAIN_APPROX_SIMPLE),
 // CvPoint offset CV_DEFAULT(cvPoint(0,0)));
-function cvStartFindContours(image: pCvArr; storage: pCvMemStorage; header_size: Integer { =sizeof(TCvContour)) };
-  mode: Integer { =  CV_RETR_LIST }; method: Integer { =CV_CHAIN_APPROX_SIMPLE }; offset: TCvPoint { =cvPoint(0,0) } )
+function cvStartFindContours(image: pCvArr; storage: pCvMemStorage; header_size: Integer {=sizeof(TCvContour))};
+  mode: Integer {=  CV_RETR_LIST}; method: Integer {=CV_CHAIN_APPROX_SIMPLE}; offset: TCvPoint {=cvPoint(0,0)} )
   : pCvContourScanner; cdecl;
 
 // * Retrieves next contour */
 // CVAPI(CvSeq*)  cvFindNextContour( CvContourScanner scanner );
 function cvFindNextContour(scanner: pCvContourScanner): pCvSeq; cdecl;
 
-(* Substitutes the last retrieved contour with the new one
-  (if the substitutor is null, the last retrieved contour is removed from the tree) *)
+(*Substitutes the last retrieved contour with the new one
+  (if the substitutor is null, the last retrieved contour is removed from the tree)*)
 // CVAPI(void)   cvSubstituteContour( CvContourScanner scanner, CvSeq* new_contour );
 procedure cvSubstituteContour(scanner: pCvContourScanner; new_contour: pCvSeq); cdecl;
 
@@ -590,12 +590,12 @@ function cvEndFindContours(Var scanner: pCvContourScanner): pCvSeq; cdecl;
   int recursive CV_DEFAULT(0));
 }
 function cvApproxPoly(
-  { } const src_seq: pCvSeq;
-  { } header_size: Integer;
-  { } storage: pCvMemStorage;
-  { } method: Integer;
-  { } eps: double;
-  { } recursive: Integer = 0): pCvSeq; cdecl;
+  {} const src_seq: pCvSeq;
+  {} header_size: Integer;
+  {} storage: pCvMemStorage;
+  {} method: Integer;
+  {} eps: double;
+  {} recursive: Integer = 0): pCvSeq; cdecl;
 
 (*
   /* Calculates perimeter of a contour or length of a part of contour */
@@ -604,7 +604,7 @@ function cvApproxPoly(
   int is_closed CV_DEFAULT(-1));
 *)
 
-function cvArcLength(const curve: Pointer; slice: TCvSlice { = CV_WHOLE_SEQ }; is_closed: Integer { = 1 } ): double; cdecl;
+function cvArcLength(const curve: Pointer; slice: TCvSlice {= CV_WHOLE_SEQ}; is_closed: Integer {= 1} ): double; cdecl;
 
 (*
   CV_INLINE double cvContourPerimeter( const void* contour )
@@ -612,8 +612,7 @@ function cvArcLength(const curve: Pointer; slice: TCvSlice { = CV_WHOLE_SEQ }; i
   return cvArcLength( contour, CV_WHOLE_SEQ, 1 );
   }
 *)
-function cvContourPerimeter(const contour: Pointer): double; {$IFDEF VER9P}inline;{$ENDIF}
-
+function cvContourPerimeter(const contour: Pointer): double; {$IFDEF VER9P}inline; {$ENDIF}
 // * Calculates contour boundning rectangle (update=1) or
 // just retrieves pre-calculated rectangle (update=0) */
 // CVAPI(CvRect)  cvBoundingRect( CvArr* points, int update CV_DEFAULT(0) );
@@ -623,7 +622,7 @@ function cvBoundingRect(points: pCvArr; update: Integer = 0): TCvRect; cdecl;
 // CVAPI(double)  cvContourArea( const CvArr* contour,
 // CvSlice slice CV_DEFAULT(CV_WHOLE_SEQ),
 // int oriented CV_DEFAULT(0));
-function cvContourArea(const contour: pCvArr; slice: TCvSlice { = CV_WHOLE_SEQ }; oriented: Integer = 0): double; cdecl;
+function cvContourArea(const contour: pCvArr; slice: TCvSlice {= CV_WHOLE_SEQ}; oriented: Integer = 0): double; cdecl;
 
 // (* Finds minimum area rotated rectangle bounding a set of points *)
 // CVAPI(CvBox2D)  cvMinAreaRect2( const CvArr* points, CvMemStorage* storage CV_DEFAULT(NULL));
@@ -735,7 +734,7 @@ procedure cvGetMinMaxHistValue(const hist: pCvHistogram; min_value: pSingle; max
 // CVAPI(procedure)  cvThreshHist(var hist: CvHistogram; threshold: Double);
 //
 //
-(* Compares two histogram *)
+(*Compares two histogram*)
 // CVAPI(Double)  cvCompareHist(  CvHistogram* hist1,
 // CvHistogram* hist2,
 // Integer method);
@@ -769,9 +768,8 @@ procedure cvCalcArrHist(var arr: pIplImage; hist: pCvHistogram; accumulate: Inte
 // {
 // cvCalcArrHist( (CvArr**)image, hist, accumulate, mask );
 // }
-procedure cvCalcHist(var image: pIplImage; hist: pCvHistogram; accumulate: Integer = 0; const mask: pIplImage = nil); {$IFDEF VER9P}inline;{$ENDIF}
-
-
+procedure cvCalcHist(var image: pIplImage; hist: pCvHistogram; accumulate: Integer = 0; const mask: pIplImage = nil);
+{$IFDEF VER9P}inline; {$ENDIF}
 // var mask CV_DEFAULT(0) )begin     cvCalcArrHist( (CvArr*)image: vArr;
 // v5: hist;
 // v6: accumulate;
@@ -804,7 +802,7 @@ procedure cvCalcBackProject(var image: pIplImage; dst: pIplImage; const hist: pC
 // (* calculates probabilistic density (divides one histogram by another) *)
 // CVAPI(procedure)  cvCalcProbDensity(
 
-{ /* equalizes histogram of 8-bit single-channel image */
+{/* equalizes histogram of 8-bit single-channel image */
   CVAPI(void)  cvEqualizeHist( const CvArr* src, CvArr* dst );
 }
 
@@ -840,13 +838,13 @@ function cvThreshold(const src, dst: pIplImage; threshold, max_value: double; th
   double param1 CV_DEFAULT(5));
 }
 procedure cvAdaptiveThreshold(
-  { } const src: pIplImage;
-  { } dst: pIplImage;
-  { } max_value: double;
-  { } adaptive_method: Integer = CV_ADAPTIVE_THRESH_MEAN_C;
-  { } threshold_type: Integer = CV_THRESH_BINARY;
-  { } block_size: Integer = 3;
-  { } param1: double = 5); cdecl;
+  {} const src: pIplImage;
+  {} dst: pIplImage;
+  {} max_value: double;
+  {} adaptive_method: Integer = CV_ADAPTIVE_THRESH_MEAN_C;
+  {} threshold_type: Integer = CV_THRESH_BINARY;
+  {} block_size: Integer = 3;
+  {} param1: double = 5); cdecl;
 
 {
   /* Fills the connected component until the color difference gets large enough */
@@ -861,14 +859,14 @@ procedure cvAdaptiveThreshold(
   CvArr* mask CV_DEFAULT(NULL));
 }
 procedure cvFloodFill(
-  { } image: pIplImage;
-  { } seed_point: TCvPoint;
-  { } new_val: TCvScalar;
-  { } lo_diff: TCvScalar { * cvScalarAll(0) * };
-  { } up_diff: TCvScalar { * cvScalarAll(0) * };
-  { } comp: pCvConnectedComp = NIL;
-  { } flags: Integer = 4;
-  { } mask: pCvArr = NIL); cdecl;
+  {} image: pIplImage;
+  {} seed_point: TCvPoint;
+  {} new_val: TCvScalar;
+  {} lo_diff: TCvScalar {* cvScalarAll(0) *};
+  {} up_diff: TCvScalar {* cvScalarAll(0) *};
+  {} comp: pCvConnectedComp = NIL;
+  {} flags: Integer = 4;
+  {} mask: pCvArr = NIL); cdecl;
 
 // ****************************************************************************************
 // *                                  Feature detection                                   *
@@ -975,14 +973,14 @@ procedure cvGoodFeaturesToTrack(const image: pIplImage; eig_image: pIplImage; te
 }
 
 function cvHoughLines2(
-  { } image: pIplImage;
-  { } line_storage: Pointer;
-  { } method: Integer;
-  { } rho: double;
-  { } theta: double;
-  { } threshold: Integer;
-  { } param1: double = 0;
-  { } param2: double = 0): pCvSeq; cdecl;
+  {} image: pIplImage;
+  {} line_storage: Pointer;
+  {} method: Integer;
+  {} rho: double;
+  {} theta: double;
+  {} threshold: Integer;
+  {} param1: double = 0;
+  {} param2: double = 0): pCvSeq; cdecl;
 
 {
   /* Finds circles in the image */
@@ -999,15 +997,15 @@ function cvHoughLines2(
 }
 
 function cvHoughCircles(
-  { } image: pIplImage;
-  { } circle_storage: Pointer;
-  { } method: Integer;
-  { } dp: double;
-  { } min_dist: double;
-  { } param1: double = 100;
-  { } param2: double = 100;
-  { } min_radius: Integer = 0;
-  { } max_radius: Integer = 0): pCvSeq; cdecl;
+  {} image: pIplImage;
+  {} circle_storage: Pointer;
+  {} method: Integer;
+  {} dp: double;
+  {} min_dist: double;
+  {} param1: double = 100;
+  {} param2: double = 100;
+  {} min_radius: Integer = 0;
+  {} max_radius: Integer = 0): pCvSeq; cdecl;
 
 // (* Fits a line into set of 2d or 3d points in a robust way (M-estimator technique) *)
 // CVAPI(
@@ -1052,7 +1050,7 @@ procedure cvInitUndistortMap; external imgproc_lib;
 procedure cvRemap; external imgproc_lib;
 function cvArcLength; external imgproc_lib;
 
-function cvContourPerimeter(const contour: Pointer): double; {$IFDEF VER9P}inline;{$ENDIF}
+function cvContourPerimeter(const contour: Pointer): double; {$IFDEF VER9P}inline; {$ENDIF}
 begin
   result := cvArcLength(contour, CV_WHOLE_SEQ, 1);
 end;

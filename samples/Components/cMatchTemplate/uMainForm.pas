@@ -27,8 +27,8 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, uOCVTypes,
-  uOCVImageOperation, uOCVSource, uOCVView;
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, ocv.comp.Types,
+  ocv.comp.ImageOperation, ocv.comp.Source, ocv.comp.View;
 
 type
   TMainForm = class(TForm)
@@ -42,9 +42,9 @@ type
     procedure btn1Click(Sender: TObject);
     procedure ocvw2MouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
     procedure ocvw2MouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
-    procedure ocvw2AfterPaint(Sender: TObject; const IplImage: IocvImage);
     procedure ocvw2MouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
     procedure btn2Click(Sender: TObject);
+    procedure ocvw2AfterPaint(Sender: TObject; var IplImage: IocvImage);
   private
     SnapImage: IocvImage;
     mX, mY: Integer;
@@ -85,7 +85,7 @@ begin
     {} Trunc(ocvcmrsrc1.ImageHeight * (mY1 - mY) / ocvw2.Height)));
 end;
 
-procedure TMainForm.ocvw2AfterPaint(Sender: TObject; const IplImage: IocvImage);
+procedure TMainForm.ocvw2AfterPaint(Sender: TObject; var IplImage: IocvImage);
 begin
   // if mDown then
   ocvw2.Canvas.Brush.Style := bsClear;

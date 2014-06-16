@@ -23,7 +23,7 @@
 
 {$IFNDEF CLR}
 {$I Opencv.inc}
-unit uOCVImageOperation;
+unit ocv.comp.ImageOperation;
 {$ENDIF}
 
 interface
@@ -48,9 +48,11 @@ uses
 {$ENDIF VER5}
   ZLib,
 {$ENDIF VER15P}
-  uOCVTypes,
+  ocv.comp.Types,
+  ocv.comp.proc,
   ocv.objdetect_c,
-  ocv.core.types_c;
+  ocv.core.types_c,
+  ocv.imgproc.types_c;
 
 type
 {$IFDEF VER17P} // XE3..XE6
@@ -75,11 +77,11 @@ type
     FOnAfterTransform: TOnOcvAfterTransform;
     FOnBeforeTransform: TOnOcvBeforeTransform;
   protected
-    function GetFloatParam(const index: Integer): Double;
-    function GetIntParam(const index: Integer): Integer;
+    function GetFloatParam(const index: Integer): Double; virtual;
+    function GetIntParam(const index: Integer): Integer; virtual;
+    function GetBoolParam(const index: Integer): Boolean; virtual;
     procedure SetFloatParam(const index: Integer; const Value: Double);
     procedure SetIntParam(const index: Integer; const Value: Integer);
-    function GetBoolParam(const index: Integer): Boolean;
     procedure SetBoolParam(const index: Integer; const Value: Boolean);
     function LockTransform: Boolean;
     procedure UnlockTransform;
@@ -144,12 +146,109 @@ type
     function DoTransform(const Source: IocvImage; out Destanation: IocvImage): Boolean; override;
   end;
 
-  TocvGrayScaleOperation = class(TocvCustomImageOperation)
+  TocvInterpolationMethod = (INTER_NN, INTER_LINEAR, INTER_CUBIC, INTER_AREA, INTER_LANCZOS4);
+
+  TocvResizeOperation = class(TocvCustomImageOperation)
+  private
+    FInterpolation: TocvInterpolationMethod;
+  protected
+    procedure AssignTo(Dest: TPersistent); override;
   public
+    constructor Create(AOwner: TPersistent); override;
     function DoTransform(const Source: IocvImage; out Destanation: IocvImage): Boolean; override;
+  published
+    property DestWidth: Integer index 0 Read GetIntParam write SetIntParam;
+    property DestHeight: Integer index 1 Read GetIntParam write SetIntParam;
+    property Interpolation: TocvInterpolationMethod read FInterpolation write FInterpolation default INTER_LINEAR;
   end;
 
-  TovcCannyOperation = class(TocvCustomImageOperation)
+  TocvColorConversion = (BGR2BGRA, RGB2RGBA, BGRA2BGR, RGBA2RGB, BGR2RGBA, RGB2BGRA, RGBA2BGR, BGRA2RGB, BGR2RGB, RGB2BGR,
+    BGRA2RGBA, RGBA2BGRA, BGR2GRAY, RGB2GRAY, GRAY2BGR, GRAY2RGB, GRAY2BGRA, GRAY2RGBA, BGRA2GRAY, RGBA2GRAY, BGR2BGR565,
+    RGB2BGR565, BGR5652BGR, BGR5652RGB, BGRA2BGR565, RGBA2BGR565, BGR5652BGRA, BGR5652RGBA, GRAY2BGR565, BGR5652GRAY, BGR2BGR555,
+    RGB2BGR555, BGR5552BGR, BGR5552RGB, BGRA2BGR555, RGBA2BGR555, BGR5552BGRA, BGR5552RGBA, GRAY2BGR555, BGR5552GRAY, BGR2XYZ,
+    RGB2XYZ, XYZ2BGR, XYZ2RGB, BGR2YCrCb, RGB2YCrCb, YCrCb2BGR, YCrCb2RGB, BGR2HSV, RGB2HSV, BGR2Lab, RGB2Lab, BayerBG2BGR,
+    BayerGB2BGR, BayerRG2BGR, BayerGR2BGR, BayerBG2RGB, BayerGB2RGB, BayerRG2RGB, BayerGR2RGB, BGR2Luv, RGB2Luv, BGR2HLS, RGB2HLS,
+    HSV2BGR, HSV2RGB, Lab2BGR, Lab2RGB, Luv2BGR, Luv2RGB, HLS2BGR, HLS2RGB, BayerBG2BGR_VNG, BayerGB2BGR_VNG, BayerRG2BGR_VNG,
+    BayerGR2BGR_VNG, BayerBG2RGB_VNG, BayerGB2RGB_VNG, BayerRG2RGB_VNG, BayerGR2RGB_VNG, BGR2HSV_FULL, RGB2HSV_FULL, BGR2HLS_FULL,
+    RGB2HLS_FULL, HSV2BGR_FULL, HSV2RGB_FULL, HLS2BGR_FULL, HLS2RGB_FULL, LBGR2Lab, LRGB2Lab, LBGR2Luv, LRGB2Luv, Lab2LBGR,
+    Lab2LRGB, Luv2LBGR, Luv2LRGB, BGR2YUV, RGB2YUV, YUV2BGR, YUV2RGB, BayerBG2GRAY, BayerGB2GRAY, BayerRG2GRAY, BayerGR2GRAY,
+    // YUV 4:2:0 formats family;
+    YUV2RGB_NV12, YUV2BGR_NV12, YUV2RGB_NV21, YUV2BGR_NV21, YUV420sp2RGB, YUV420sp2BGR, YUV2RGBA_NV12, YUV2BGRA_NV12,
+    YUV2RGBA_NV21, YUV2BGRA_NV21, YUV420sp2RGBA, YUV420sp2BGRA, YUV2RGB_YV12, YUV2BGR_YV12, YUV2RGB_IYUV, YUV2BGR_IYUV,
+    YUV2RGB_I420, YUV2BGR_I420, YUV420p2RGB, YUV420p2BGR, YUV2RGBA_YV12, YUV2BGRA_YV12, YUV2RGBA_IYUV, YUV2BGRA_IYUV,
+    YUV2RGBA_I420, YUV2BGRA_I420, YUV420p2RGBA, YUV420p2BGRA, YUV2GRAY_420, YUV2GRAY_NV21, YUV2GRAY_NV12, YUV2GRAY_YV12,
+    YUV2GRAY_IYUV, YUV2GRAY_I420, YUV420sp2GRAY, YUV420p2GRAY,
+    // YUV 4:2:2 formats family;
+    YUV2RGB_UYVY, YUV2BGR_UYVY, YUV2RGB_Y422, YUV2BGR_Y422, YUV2RGB_UYNV, YUV2BGR_UYNV, YUV2RGBA_UYVY, YUV2BGRA_UYVY,
+    YUV2RGBA_Y422, YUV2BGRA_Y422, YUV2RGBA_UYNV, YUV2BGRA_UYNV, YUV2RGB_YUY2, YUV2BGR_YUY2, YUV2RGB_YVYU, YUV2BGR_YVYU,
+    YUV2RGB_YUYV, YUV2BGR_YUYV, YUV2RGB_YUNV, YUV2BGR_YUNV, YUV2RGBA_YUY2, YUV2BGRA_YUY2, YUV2RGBA_YVYU, YUV2BGRA_YVYU,
+    YUV2RGBA_YUYV, YUV2BGRA_YUYV, YUV2RGBA_YUNV, YUV2BGRA_YUNV, YUV2GRAY_UYVY, YUV2GRAY_YUY2, YUV2GRAY_Y422, YUV2GRAY_UYNV,
+    YUV2GRAY_YVYU, YUV2GRAY_YUYV, YUV2GRAY_YUNV,
+    // alpha premultiplication;
+    RGBA2mRGBA, mRGBA2RGBA, COLORCVT_MAX);
+
+  TocvIPLDepth = (DEPTH_1U, DEPTH_8U, DEPTH_16U, DEPTH_32F, DEPTH_64F, DEPTH_8S, DEPTH_16S, DEPTH_32S);
+
+  TocvCvtColorOperation = class(TocvCustomImageOperation)
+  private const
+    cIPLDepth: array [TocvIPLDepth] of Integer = (IPL_DEPTH_1U, IPL_DEPTH_8U, IPL_DEPTH_16U, IPL_DEPTH_32F, IPL_DEPTH_64F,
+      (IPL_DEPTH_SIGN or 8), IPL_DEPTH_16S, IPL_DEPTH_32S);
+
+    cColorConversion: array [TocvColorConversion] of Integer = (CV_BGR2BGRA, CV_RGB2RGBA, CV_BGRA2BGR, CV_RGBA2RGB, CV_BGR2RGBA,
+      CV_RGB2BGRA, CV_RGBA2BGR, CV_BGRA2RGB, CV_BGR2RGB, CV_RGB2BGR, CV_BGRA2RGBA, CV_RGBA2BGRA, CV_BGR2GRAY, CV_RGB2GRAY,
+      CV_GRAY2BGR, CV_GRAY2RGB, CV_GRAY2BGRA, CV_GRAY2RGBA, CV_BGRA2GRAY, CV_RGBA2GRAY, CV_BGR2BGR565, CV_RGB2BGR565,
+      CV_BGR5652BGR, CV_BGR5652RGB, CV_BGRA2BGR565, CV_RGBA2BGR565, CV_BGR5652BGRA, CV_BGR5652RGBA, CV_GRAY2BGR565,
+      CV_BGR5652GRAY, CV_BGR2BGR555, CV_RGB2BGR555, CV_BGR5552BGR, CV_BGR5552RGB, CV_BGRA2BGR555, CV_RGBA2BGR555, CV_BGR5552BGRA,
+      CV_BGR5552RGBA, CV_GRAY2BGR555, CV_BGR5552GRAY, CV_BGR2XYZ, CV_RGB2XYZ, CV_XYZ2BGR, CV_XYZ2RGB, CV_BGR2YCrCb, CV_RGB2YCrCb,
+      CV_YCrCb2BGR, CV_YCrCb2RGB, CV_BGR2HSV, CV_RGB2HSV, CV_BGR2Lab, CV_RGB2Lab, CV_BayerBG2BGR, CV_BayerGB2BGR, CV_BayerRG2BGR,
+      CV_BayerGR2BGR, CV_BayerBG2RGB, CV_BayerGB2RGB, CV_BayerRG2RGB, CV_BayerGR2RGB, CV_BGR2Luv, CV_RGB2Luv, CV_BGR2HLS,
+      CV_RGB2HLS, CV_HSV2BGR, CV_HSV2RGB, CV_Lab2BGR, CV_Lab2RGB, CV_Luv2BGR, CV_Luv2RGB, CV_HLS2BGR, CV_HLS2RGB,
+      CV_BayerBG2BGR_VNG, CV_BayerGB2BGR_VNG, CV_BayerRG2BGR_VNG, CV_BayerGR2BGR_VNG, CV_BayerBG2RGB_VNG, CV_BayerGB2RGB_VNG,
+      CV_BayerRG2RGB_VNG, CV_BayerGR2RGB_VNG, CV_BGR2HSV_FULL, CV_RGB2HSV_FULL, CV_BGR2HLS_FULL, CV_RGB2HLS_FULL, CV_HSV2BGR_FULL,
+      CV_HSV2RGB_FULL, CV_HLS2BGR_FULL, CV_HLS2RGB_FULL, CV_LBGR2Lab, CV_LRGB2Lab, CV_LBGR2Luv, CV_LRGB2Luv, CV_Lab2LBGR,
+      CV_Lab2LRGB, CV_Luv2LBGR, CV_Luv2LRGB, CV_BGR2YUV, CV_RGB2YUV, CV_YUV2BGR, CV_YUV2RGB, CV_BayerBG2GRAY, CV_BayerGB2GRAY,
+      CV_BayerRG2GRAY, CV_BayerGR2GRAY,
+      // YUV 4:2:0 formats family;
+      CV_YUV2RGB_NV12, CV_YUV2BGR_NV12, CV_YUV2RGB_NV21, CV_YUV2BGR_NV21, CV_YUV420sp2RGB, CV_YUV420sp2BGR, CV_YUV2RGBA_NV12,
+      CV_YUV2BGRA_NV12, CV_YUV2RGBA_NV21, CV_YUV2BGRA_NV21, CV_YUV420sp2RGBA, CV_YUV420sp2BGRA, CV_YUV2RGB_YV12, CV_YUV2BGR_YV12,
+      CV_YUV2RGB_IYUV, CV_YUV2BGR_IYUV, CV_YUV2RGB_I420, CV_YUV2BGR_I420, CV_YUV420p2RGB, CV_YUV420p2BGR, CV_YUV2RGBA_YV12,
+      CV_YUV2BGRA_YV12, CV_YUV2RGBA_IYUV, CV_YUV2BGRA_IYUV, CV_YUV2RGBA_I420, CV_YUV2BGRA_I420, CV_YUV420p2RGBA, CV_YUV420p2BGRA,
+      CV_YUV2GRAY_420, CV_YUV2GRAY_NV21, CV_YUV2GRAY_NV12, CV_YUV2GRAY_YV12, CV_YUV2GRAY_IYUV, CV_YUV2GRAY_I420, CV_YUV420sp2GRAY,
+      CV_YUV420p2GRAY,
+      // YUV 4:2:2 formats family;
+      CV_YUV2RGB_UYVY, CV_YUV2BGR_UYVY, CV_YUV2RGB_Y422, CV_YUV2BGR_Y422, CV_YUV2RGB_UYNV, CV_YUV2BGR_UYNV, CV_YUV2RGBA_UYVY,
+      CV_YUV2BGRA_UYVY, CV_YUV2RGBA_Y422, CV_YUV2BGRA_Y422, CV_YUV2RGBA_UYNV, CV_YUV2BGRA_UYNV, CV_YUV2RGB_YUY2, CV_YUV2BGR_YUY2,
+      CV_YUV2RGB_YVYU, CV_YUV2BGR_YVYU, CV_YUV2RGB_YUYV, CV_YUV2BGR_YUYV, CV_YUV2RGB_YUNV, CV_YUV2BGR_YUNV, CV_YUV2RGBA_YUY2,
+      CV_YUV2BGRA_YUY2, CV_YUV2RGBA_YVYU, CV_YUV2BGRA_YVYU, CV_YUV2RGBA_YUYV, CV_YUV2BGRA_YUYV, CV_YUV2RGBA_YUNV,
+      CV_YUV2BGRA_YUNV, CV_YUV2GRAY_UYVY, CV_YUV2GRAY_YUY2, CV_YUV2GRAY_Y422, CV_YUV2GRAY_UYNV, CV_YUV2GRAY_YVYU,
+      CV_YUV2GRAY_YUYV, CV_YUV2GRAY_YUNV,
+      // alpha premultiplication;
+      CV_RGBA2mRGBA, CV_mRGBA2RGBA, CV_COLORCVT_MAX);
+  private
+    FColorConversion: TocvColorConversion;
+    // FAutoCalcParams: Boolean;
+    FChannels: Integer;
+    FDepth: TocvIPLDepth;
+  public
+    constructor Create(AOwner: TPersistent); override;
+    // procedure CalculateImageParams(const Source: IocvImage);
+    function DoTransform(const Source: IocvImage; out Destanation: IocvImage): Boolean; override;
+  published
+    // property AutoCalcParams: Boolean read FAutoCalcParams write FAutoCalcParams default True;
+    property ColorConversion: TocvColorConversion read FColorConversion write FColorConversion default RGB2GRAY;
+    property Depth: TocvIPLDepth Read FDepth write FDepth;
+    property Channels: Integer read FChannels write FChannels;
+  end;
+
+  TocvGrayScaleOperation = class(TocvCvtColorOperation)
+  public
+    function DoTransform(const Source: IocvImage; out Destanation: IocvImage): Boolean; override;
+    property ColorConversion;
+    property Depth;
+    property Channels;
+  end;
+
+  TocvCannyOperation = class(TocvCustomImageOperation)
   public
     constructor Create(AOwner: TPersistent); override;
     function DoTransform(const Source: IocvImage; out Destanation: IocvImage): Boolean; override;
@@ -161,7 +260,7 @@ type
 
   TocvErodeDilateMode = (SHAPE_RECT, SHAPE_CROSS, SHAPE_ELLIPSE, SHAPE_CUSTOM);
 
-  TovcCustomErodeDilateOperation = class(TocvCustomImageOperation)
+  TocvCustomErodeDilateOperation = class(TocvCustomImageOperation)
   protected
     procedure AssignTo(Dest: TPersistent); override;
   private
@@ -176,12 +275,12 @@ type
     property MorphOp: TocvErodeDilateMode read FMorphOp write SetMorphOp default SHAPE_RECT;
   end;
 
-  TovcErodeOperation = class(TovcCustomErodeDilateOperation)
+  TocvErodeOperation = class(TocvCustomErodeDilateOperation)
   public
     function DoTransform(const Source: IocvImage; out Destanation: IocvImage): Boolean; override;
   end;
 
-  TovcDilateOperation = class(TovcCustomErodeDilateOperation)
+  TocvDilateOperation = class(TocvCustomErodeDilateOperation)
   public
     function DoTransform(const Source: IocvImage; out Destanation: IocvImage): Boolean; override;
   end;
@@ -194,35 +293,104 @@ type
     property Aperture: Integer index 0 Read GetIntParam write SetIntParam;
   end;
 
-  TOnGetImage = procedure(Sender: TObject; Var Source2Image: IocvImage) of object;
-
-  TocvAddWeightedTransform = (awTransformSourse1, awTransformSourse2);
-
-  TovcAddWeightedOperation = class(TocvCustomImageOperation, IocvDataReceiver)
+  TocvScalar = class(TPersistent)
   protected
     procedure AssignTo(Dest: TPersistent); override;
+  private
+    FCvScalar: TCvScalar;
+    function GetScalar(const index: Integer): Double;
+    procedure SetScalar(const index: Integer; const Value: Double);
+  public
+    property CvScalar: TCvScalar read FCvScalar write FCvScalar;
+    property Scalar[const Index: Integer]: Double read GetScalar write SetScalar;
+  published
+    property Val0: Double index 0 read GetScalar write SetScalar;
+    property Val1: Double index 1 read GetScalar write SetScalar;
+    property Val2: Double index 2 read GetScalar write SetScalar;
+    property Val3: Double index 3 read GetScalar write SetScalar;
+  end;
+
+  TOnGetImage = procedure(Sender: TObject; Var Source2Image: IocvImage) of object;
+
+  TocvCommonMathOperation = class(TocvCustomImageOperation, IocvDataReceiver)
   private
     FocvVideoSource: IocvDataSource;
     FSrource2Image: IocvImage;
     FOnGetImage: TOnGetImage;
-    FTransform: TocvAddWeightedTransform;
-    procedure SetOpenCVVideoSource(const Value: IocvDataSource);
+    FOnGetMaskImage: TOnGetImage;
+    FTransformInterpolation: TocvInterpolationMethod;
+    procedure SetVideoSource_Source2(const Value: IocvDataSource);
+    procedure DoGetSourceImage(Var Image: IocvImage);
+    procedure DoGetMaskImage(Var Image: IocvImage);
+    procedure GetImagesForTransorm(out Source1: IocvImage; out Source2, Mask: IocvImage);
+    // --------------------------------------
+    property VideoSource: IocvDataSource Read FocvVideoSource write SetVideoSource_Source2;
+    property OnGetSourceImage: TOnGetImage read FOnGetImage write FOnGetImage;
+    property OnGetMaskImage: TOnGetImage read FOnGetMaskImage write FOnGetMaskImage;
+    property TransformInterpolation: TocvInterpolationMethod read FTransformInterpolation write FTransformInterpolation
+      default INTER_CUBIC;
   public
     constructor Create(AOwner: TPersistent); override;
-    function DoTransform(const Source: IocvImage; out Destanation: IocvImage): Boolean; override;
   protected
     procedure TakeImage(const IplImage: IocvImage);
     procedure SetVideoSource(const Value: TObject);
   published
-    property VideoSource: IocvDataSource Read FocvVideoSource write SetOpenCVVideoSource;
+  end;
+
+  TocvAddWeightedOperation = class(TocvCommonMathOperation)
+  public
+    constructor Create(AOwner: TPersistent); override;
+    function DoTransform(const Source: IocvImage; out Destanation: IocvImage): Boolean; override;
+  published
+    property VideoSource;
+    property OnGetSourceImage;
+    property TransformInterpolation;
+
     property Alpha: Double index 0 Read GetFloatParam write SetFloatParam;
     property Beta: Double index 1 Read GetFloatParam write SetFloatParam;
     property Gamma: Double index 2 Read GetFloatParam write SetFloatParam;
-    property OnGetImage: TOnGetImage read FOnGetImage write FOnGetImage;
-    property TransformType: TocvAddWeightedTransform Read FTransform write FTransform default awTransformSourse2;
   end;
 
-  TovcSobelOperation = class(TocvCustomImageOperation)
+  TocvLogicType = (ioAdd, ioSub, ioAnd, ioOr, ioXor);
+
+  TocvLogicOperation = class(TocvCommonMathOperation)
+  protected
+    procedure AssignTo(Dest: TPersistent); override;
+  private
+    FOperation: TocvLogicType;
+  public
+    constructor Create(AOwner: TPersistent); override;
+    function DoTransform(const Source: IocvImage; out Destanation: IocvImage): Boolean; override;
+  published
+    property VideoSource;
+    property OnGetSourceImage;
+    property OnGetMaskImage;
+    property TransformInterpolation;
+
+    property Operation: TocvLogicType read FOperation write FOperation default ioAdd;
+  end;
+
+  TocvLogicSType = (ioAddS, ioSubS, ioSubRS, ioXorS);
+
+  TocvLogicSOperation = class(TocvCommonMathOperation)
+  protected
+    procedure AssignTo(Dest: TPersistent); override;
+  private
+    FOperation: TocvLogicSType;
+    FValue: TocvScalar;
+  public
+    constructor Create(AOwner: TPersistent); override;
+    destructor Destroy; override;
+    function DoTransform(const Source: IocvImage; out Destanation: IocvImage): Boolean; override;
+  published
+    property OnGetMaskImage;
+    property TransformInterpolation;
+
+    property Operation: TocvLogicSType read FOperation write FOperation default ioAddS;
+    property Value: TocvScalar read FValue write FValue;
+  end;
+
+  TocvSobelOperation = class(TocvCustomImageOperation)
   public
     constructor Create(AOwner: TPersistent); override;
     function DoTransform(const Source: IocvImage; out Destanation: IocvImage): Boolean; override;
@@ -234,7 +402,7 @@ type
 
   TocvSmoothOperations = (BLUR_NO_SCALE, BLUR, GAUSSIAN, MEDIAN, BILATERAL);
 
-  TovcSmoothOperation = class(TocvCustomImageOperation)
+  TocvSmoothOperation = class(TocvCustomImageOperation)
   protected
     procedure AssignTo(Dest: TPersistent); override;
   private
@@ -293,12 +461,13 @@ type
   protected
     procedure AssignTo(Dest: TPersistent); override;
   private
-    FPoint: TPoint;
+    FSize: TcvSize;
   public
     constructor Create(const AX: Integer = 0; const AY: Integer = 0);
+    property Size: TcvSize read FSize write FSize;
   published
-    property X: Integer read FPoint.X write FPoint.X;
-    property Y: Integer read FPoint.Y write FPoint.Y;
+    property X: Integer read FSize.Width write FSize.Width;
+    property Y: Integer read FSize.height write FSize.height;
   end;
 
   TocvPoint2D32f = class(TPersistent)
@@ -336,12 +505,12 @@ type
     property Bottom: Integer read FBottom write FBottom;
     property Right: Integer read FRight write FRight;
     property Width: Integer read GetWidth write SetWidth;
-    property Height: Integer read GetHeight write SetHeight;
+    property height: Integer read GetHeight write SetHeight;
     property ocvRect: TocvRect read GetOcvRect write SetOcvRect;
     property cvRect: TCvRect read GetCvRect write SetCvRect;
   end;
 
-  TovcCropOperation = class(TocvCustomImageOperation)
+  TocvCropOperation = class(TocvCustomImageOperation)
   private
     FCropRect: TocvRect32i;
   public
@@ -352,7 +521,41 @@ type
     property CropRect: TocvRect32i read FCropRect write FCropRect;
   end;
 
-  TocvInterpolationMethod = (INTER_NN, INTER_LINEAR, INTER_CUBIC, INTER_AREA, INTER_LANCZOS4);
+  TocvInRangeSOperation = class(TocvCustomImageOperation)
+  protected
+    procedure AssignTo(Dest: TPersistent); override;
+  private
+    FLower: TocvScalar;
+    FUpper: TocvScalar;
+  public
+    constructor Create(AOwner: TPersistent); override;
+    destructor Destroy; override;
+    function DoTransform(const Source: IocvImage; out Destanation: IocvImage): Boolean; override;
+  published
+    property Lower: TocvScalar read FLower write FLower;
+    property Upper: TocvScalar read FUpper write FUpper;
+  end;
+
+  // TocvLogicType =
+  // (
+  // ioAdd,
+  // ioAddS,
+  // ioSub,
+  // ioSubS,
+  // ioSubRS,
+  // ioMul,
+  // ioDiv,
+  // ioScaleAdd,
+  // ioAXPY
+  // );
+  //
+  // TocvMathLogicOperation = class(TocvCustomImageOperation)
+  // public
+  // constructor Create(AOwner: TPersistent); override;
+  // destructor Destroy; override;
+  // function DoTransform(const Source: IocvImage; out Destanation: IocvImage): Boolean; override;
+  // published
+  // end;
 
   TocvInterpolationWarpingFlag = (WARP_FILL_OUTLIERS, WARP_INVERSE_MAP);
   TocvInterpolationWarpingFlagSet = set of TocvInterpolationWarpingFlag;
@@ -531,7 +734,7 @@ type
 
   TocvDrawHoughCircles = TocvDrawColor;
 
-  TovcHoughCirclesSmooth = class(TPersistent)
+  TocvHoughCirclesSmooth = class(TPersistent)
   protected
     procedure AssignTo(Dest: TPersistent); override;
   private
@@ -559,7 +762,7 @@ type
     FHoughTransform: TocvHoughTransform;
     FDrawCircle: TocvDrawHoughCircles;
     FOnCircles: TOnOcvCircles;
-    FSmooth: TovcHoughCirclesSmooth;
+    FSmooth: TocvHoughCirclesSmooth;
   public
     constructor Create(AOwner: TPersistent); override;
     destructor Destroy; override;
@@ -575,7 +778,7 @@ type
     property DrawCircle: TocvDrawHoughCircles read FDrawCircle write FDrawCircle;
     property OnCircles: TOnOcvCircles read FOnCircles write FOnCircles;
     property NotifyOnlyWhenFound: Boolean index 0 Read GetBoolParam write SetBoolParam;
-    property Smooth: TovcHoughCirclesSmooth read FSmooth write FSmooth;
+    property Smooth: TocvHoughCirclesSmooth read FSmooth write FSmooth;
   end;
 
   TocvHoughLinesCanny = class(TPersistent)
@@ -626,14 +829,6 @@ type
     property Shift;
   end;
 
-  TocvHaarCascadeType = (hcEye, hcEyeTreeEyeGlasses, hcFrontalFaceAlt, hcFrontalFaceAlt2, hcFrontalFaceAltTree,
-    hcFrontalFaceDefaut, hcFullBody, hcLeftEye2Splits, hcLowerBody, hcMcsEyePairBig, hcMcsEyePairSmall, hcMcsLeftEar,
-    hcMcsLeftEye, hcMcsMouth, hcMcsNose, hcMcsRightEar, hcMcsRightEye, hcMcsUpperBody, hcProfileFace, hcRightEye2Splits, hcSmile,
-    hcUpperBody, hcPlateNumberRus);
-
-  TocvHaarCascadeFlag = (HAAR_DO_CANNY_PRUNING, HAAR_SCALE_IMAGE, HAAR_FIND_BIGGEST_OBJECT, HAAR_DO_ROUGH_SEARCH);
-  TocvHaarCascadeFlagSet = set of TocvHaarCascadeFlag;
-
   TocvHaarCascade = class(TocvCustomImageOperation)
   private
     FHaarCascade: TocvHaarCascadeType;
@@ -648,7 +843,6 @@ type
     FHaarRects: TocvRects;
     procedure SetHaarCascade(const Value: TocvHaarCascadeType);
     procedure ReleaseCascade;
-    function GetHaarCascadeFlag: Integer;
     procedure SetCustomHaarCascade(const Value: TFileName);
     procedure DoLoadHaarCascade(const FileName: String);
   protected
@@ -661,7 +855,7 @@ type
   published
     property CustomHaarCascade: TFileName read FCustomHaarCascade write SetCustomHaarCascade;
     property HaarCascade: TocvHaarCascadeType read FHaarCascade write SetHaarCascade default hcFrontalFaceAlt;
-    property Equalize: Boolean index 1 Read GetBoolParam write SetBoolParam;
+    property Equalize: Boolean index 0 Read GetBoolParam write SetBoolParam;
     property Scale: Double index 0 Read GetFloatParam write SetFloatParam; // 1.3
     property MinNeighbors: Integer index 0 Read GetIntParam write SetIntParam; // 3
     property MinSize: TocvPoint2D32i read FMinSize write FMinSize; // CV_DEFAULT(cvSize(0,0))
@@ -669,7 +863,7 @@ type
     property DrawHaarCascade: TocvHaarCascadeDraw read FDrawHaarCascade write FDrawHaarCascade;
     property CascadeFlags: TocvHaarCascadeFlagSet read FCascadeFlags write FCascadeFlags default [];
     property OnHaarCascade: TOnOcvHaarCascade read FOnHaarCascade write FOnHaarCascade;
-    property NotifyOnlyWhenFound: Boolean index 2 Read GetBoolParam write SetBoolParam;
+    property NotifyOnlyWhenFound: Boolean index 1 Read GetBoolParam write SetBoolParam;
   end;
 
   TocvContourDraw = class(TocvDraw)
@@ -840,23 +1034,11 @@ implementation
 uses
   ocv.core_c,
   ocv.imgproc_c,
-  ocv.imgproc.types_c,
   ocv.cvutils,
   System.Math;
 
 type
   TPersistentAccessProtected = class(TPersistent);
-
-  TocvHaarCascadeRecord = record
-    Name: String;
-    FileName: String;
-  end;
-
-  //
-  // Run utils\CompressHaar\uCompressHaar.dpr
-  // Add to serarch path \Delphi-OpenCV\resource\facedetectxml\
-  //
-{$I haarcascade.inc}
 
 Var
   _RegisteredImageOperations: TRegisteredImageOperations = nil;
@@ -1008,9 +1190,9 @@ begin
   CS.Leave;
 end;
 
-{TovcImageOperationCanny}
+{TocvImageOperationCanny}
 
-constructor TovcCannyOperation.Create {(AOwner: TPersistent)};
+constructor TocvCannyOperation.Create {(AOwner: TPersistent)};
 begin
   inherited;
   Threshold1 := 10;
@@ -1018,7 +1200,7 @@ begin
   ApertureSize := 3;
 end;
 
-function TovcCannyOperation.DoTransform(const Source: IocvImage; out Destanation: IocvImage): Boolean;
+function TocvCannyOperation.DoTransform(const Source: IocvImage; out Destanation: IocvImage): Boolean;
 begin
   Destanation := TocvImage.Create(cvCreateImage(cvGetSize(Source.IpImage), IPL_DEPTH_8U, 1));
   cvCanny(Source.GrayImage.IpImage, Destanation.IpImage, Threshold1, Threshold2, ApertureSize);
@@ -1198,19 +1380,19 @@ begin
   FCriticalSection.Leave;
 end;
 
-{TovcImageOperationSmooth}
+{TocvImageOperationSmooth}
 Const
   ocvSmoothOperations: array [TocvSmoothOperations] of Integer = (CV_BLUR_NO_SCALE, CV_BLUR, CV_GAUSSIAN, CV_MEDIAN,
     CV_BILATERAL);
 
-procedure TovcSmoothOperation.AssignTo(Dest: TPersistent);
+procedure TocvSmoothOperation.AssignTo(Dest: TPersistent);
 begin
   inherited;
-  if Dest is TovcSmoothOperation then
-    FSmoothOperation := (Dest as TovcSmoothOperation).FSmoothOperation;
+  if Dest is TocvSmoothOperation then
+    FSmoothOperation := (Dest as TocvSmoothOperation).FSmoothOperation;
 end;
 
-constructor TovcSmoothOperation.Create {(AOwner: TPersistent)};
+constructor TocvSmoothOperation.Create {(AOwner: TPersistent)};
 begin
   inherited;
   FSmoothOperation := GAUSSIAN;
@@ -1220,7 +1402,7 @@ begin
   sigma2 := 0;
 end;
 
-procedure TovcSmoothOperation.SetSmoothOperation(const Value: TocvSmoothOperations);
+procedure TocvSmoothOperation.SetSmoothOperation(const Value: TocvSmoothOperations);
 begin
   if LockTransform then
     try
@@ -1230,7 +1412,7 @@ begin
     end;
 end;
 
-function TovcSmoothOperation.DoTransform(const Source: IocvImage; out Destanation: IocvImage): Boolean;
+function TocvSmoothOperation.DoTransform(const Source: IocvImage; out Destanation: IocvImage): Boolean;
 Var
   Image: pIplImage;
 begin
@@ -1282,16 +1464,16 @@ begin
   RegisterClass(TPersistentClass(IOClass));
 end;
 
-{TovcCustomErodeDilate}
+{TocvCustomErodeDilate}
 
-procedure TovcCustomErodeDilateOperation.AssignTo(Dest: TPersistent);
+procedure TocvCustomErodeDilateOperation.AssignTo(Dest: TPersistent);
 begin
   inherited;
-  if Dest is TovcCustomErodeDilateOperation then
-    FMorphOp := (Dest as TovcCustomErodeDilateOperation).MorphOp;
+  if Dest is TocvCustomErodeDilateOperation then
+    FMorphOp := (Dest as TocvCustomErodeDilateOperation).MorphOp;
 end;
 
-constructor TovcCustomErodeDilateOperation.Create {(AOwner: TComponent)};
+constructor TocvCustomErodeDilateOperation.Create {(AOwner: TComponent)};
 begin
   inherited;
   Radius := 5;
@@ -1299,7 +1481,7 @@ begin
   FMorphOp := SHAPE_RECT;
 end;
 
-procedure TovcCustomErodeDilateOperation.SetMorphOp(const Value: TocvErodeDilateMode);
+procedure TocvCustomErodeDilateOperation.SetMorphOp(const Value: TocvErodeDilateMode);
 begin
   if LockTransform then
     try
@@ -1312,9 +1494,9 @@ end;
 const
   EDMorpgOp: array [TocvErodeDilateMode] of Integer = (CV_SHAPE_RECT, CV_SHAPE_CROSS, CV_SHAPE_ELLIPSE, CV_SHAPE_CUSTOM);
 
-  {TovcErode}
+  {TocvErode}
 
-function TovcErodeOperation.DoTransform(const Source: IocvImage; out Destanation: IocvImage): Boolean;
+function TocvErodeOperation.DoTransform(const Source: IocvImage; out Destanation: IocvImage): Boolean;
 Var
   Kern: pIplConvKernel;
 begin
@@ -1325,9 +1507,9 @@ begin
   Result := True;
 end;
 
-{TovcDilate}
+{TocvDilate}
 
-function TovcDilateOperation.DoTransform(const Source: IocvImage; out Destanation: IocvImage): Boolean;
+function TocvDilateOperation.DoTransform(const Source: IocvImage; out Destanation: IocvImage): Boolean;
 Var
   Kern: pIplConvKernel;
 begin
@@ -1351,16 +1533,16 @@ Var
   TempImg: pIplImage;
 begin
   TempImg := cvCreateImage(cvGetSize(Source.IpImage), IPL_DEPTH_16S, Source.IpImage^.nChannels);
-  Destanation := TocvImage.Create(cvCreateImage(cvGetSize(Source.IpImage), Source.IpImage^.depth, Source.IpImage^.nChannels));
+  Destanation := TocvImage.Create(cvCreateImage(cvGetSize(Source.IpImage), Source.IpImage^.Depth, Source.IpImage^.nChannels));
   cvLaplace(Source.IpImage, TempImg, Aperture);
   cvConvertScale(TempImg, Destanation.IpImage);
   cvReleaseImage(TempImg);
   Result := True;
 end;
 
-{TovcSobel}
+{TocvSobel}
 
-constructor TovcSobelOperation.Create {(AOwner: TComponent)};
+constructor TocvSobelOperation.Create {(AOwner: TComponent)};
 begin
   inherited;
   XOrder := 1;
@@ -1368,12 +1550,12 @@ begin
   Aperture := 3;
 end;
 
-function TovcSobelOperation.DoTransform(const Source: IocvImage; out Destanation: IocvImage): Boolean;
+function TocvSobelOperation.DoTransform(const Source: IocvImage; out Destanation: IocvImage): Boolean;
 Var
   TmpImg: pIplImage;
 begin
   TmpImg := cvCreateImage(cvGetSize(Source.IpImage), IPL_DEPTH_16S, Source.IpImage^.nChannels);
-  Destanation := TocvImage.Create(cvCreateImage(cvGetSize(Source.IpImage), Source.IpImage^.depth, Source.IpImage^.nChannels));
+  Destanation := TocvImage.Create(cvCreateImage(cvGetSize(Source.IpImage), Source.IpImage^.Depth, Source.IpImage^.nChannels));
   cvSobel(Source.IpImage, TmpImg, XOrder, YOrder, Aperture);
   cvConvertScale(TmpImg, Destanation.IpImage);
   cvReleaseImage(TmpImg);
@@ -1721,7 +1903,7 @@ begin
   if RotateAroundCenter then
   begin
     cvCenter.X := Source.IpImage^.Width div 2;
-    cvCenter.Y := Source.IpImage^.Height div 2;
+    cvCenter.Y := Source.IpImage^.height div 2;
   end
   else
   begin
@@ -1730,7 +1912,7 @@ begin
   end;
   cv2DRotationMatrix(cvCenter, Angle, Scale, rot_mat);
   // Создаем изображение
-  D := cvCreateImage(cvGetSize(Source.IpImage), Source.IpImage^.depth, Source.IpImage^.nChannels);
+  D := cvCreateImage(cvGetSize(Source.IpImage), Source.IpImage^.Depth, Source.IpImage^.nChannels);
   // Выполняем вращение
   M := Integer(Method);
   if WARP_FILL_OUTLIERS in FWarpingFlag then
@@ -1749,7 +1931,7 @@ procedure TocvPoint2D32i.AssignTo(Dest: TPersistent);
 begin
   inherited;
   if Dest is TocvPoint2D32f then
-    FPoint := (Dest as TocvPoint2D32i).FPoint;
+    FSize := (Dest as TocvPoint2D32i).FSize;
 end;
 
 {TocvCountourDraw}
@@ -1759,7 +1941,7 @@ begin
   inherited;
   if Dest is TocvDraw then
   begin
-    FOffset.FPoint := (Dest as TocvDraw).FOffset.FPoint;
+    FOffset.FSize := (Dest as TocvDraw).FOffset.FSize;
     FEnabled := (Dest as TocvDraw).FEnabled;
     FThickness := (Dest as TocvDraw).FThickness;
     FLineType := (Dest as TocvDraw).FLineType;
@@ -1875,68 +2057,72 @@ Var
   detected_objects: pCvSeq;
   i: Integer;
   cvr: pCvRect;
-  r, g, b: byte;
 begin
   Destanation := Source;
-  if Assigned(FCascade) then
+  Result := ocvHaarCascadeTransform(
+    {} Source,
+    {} FCascade,
+    {} FHaarRects,
+    {} MinSize.Size,
+    {} MaxSize.Size,
+    {} Equalize,
+    {} Scale,
+    {} MinNeighbors,
+    {} CascadeFlags);
+
+  if Result then
   begin
-    storage := cvCreateMemStorage(0);
-    try
-      gray := Source.GrayImage;
-      if Equalize then
-        cvEqualizeHist(gray.IpImage, gray.IpImage);
-      detected_objects := cvHaarDetectObjects(gray.IpImage, FCascade, storage, Scale, MinNeighbors, GetHaarCascadeFlag,
-        cvSize(MinSize.X, MinSize.Y), cvSize(MaxSize.X, MaxSize.Y));
-
-      if Assigned(detected_objects) then
-      begin
-        SetLength(FHaarRects, detected_objects^.total);
-        i := 0;
-        While i < detected_objects^.total do
-        begin
-          cvr := pCvRect(cvGetSeqElem(detected_objects, i));
-          FHaarRects[i] := ocvRect(cvr^.X, cvr^.Y, (cvr^.X) + (cvr^.Width), (cvr^.Y) + (cvr^.Height));
-          Inc(i);
-        end;
-
-        if Assigned(OnHaarCascade) and ((not NotifyOnlyWhenFound) or (detected_objects^.total > 0)) then
-          OnHaarCascade(Self, Destanation, FHaarRects);
-
-        if DrawHaarCascade.Enabled then
-        begin
-          GetRGBValue(DrawHaarCascade.Color, r, g, b);
-          i := 0;
-          While i < detected_objects^.total do
-          begin
-            cvr := pCvRect(cvGetSeqElem(detected_objects, i));
-            cvRectangle(Destanation.IpImage, cvPoint(cvr^.X, cvr^.Y), cvPoint((cvr^.X) + (cvr^.Width), (cvr^.Y) + (cvr^.Height)),
-              CV_RGB(r, g, b), DrawHaarCascade.Thickness, cLineType[DrawHaarCascade.LineType], DrawHaarCascade.Shift);
-            Inc(i);
-          end;
-        end;
-      end;
-      Result := True;
-    finally
-      cvReleaseMemStorage(storage);
-    end;
-  end
-  else
-    Result := False;
-end;
-
-function TocvHaarCascade.GetHaarCascadeFlag: Integer;
-Var
-  i: TocvHaarCascadeFlag;
-  j: Integer;
-begin
-  Result := 0;
-  j := 1;
-  for i := HAAR_DO_CANNY_PRUNING to HAAR_DO_ROUGH_SEARCH do
-  begin
-    if i in FCascadeFlags then
-      Result := Result or j;
-    j := j * 2;
+    if Assigned(OnHaarCascade) and ((not NotifyOnlyWhenFound) or (Length(FHaarRects) > 0)) then
+      OnHaarCascade(Self, Destanation, FHaarRects);
+    if DrawHaarCascade.Enabled then
+      for i := 0 to High(FHaarRects) do
+        Destanation.Canvas.Rectangle(FHaarRects[i].Left, FHaarRects[i].Top, FHaarRects[i].Right, FHaarRects[i].Bottom,
+          DrawHaarCascade.Color, DrawHaarCascade.Thickness, DrawHaarCascade.LineType, DrawHaarCascade.Shift);
   end;
+  // if Assigned(FCascade) then
+  // begin
+  // storage := cvCreateMemStorage(0);
+  // try
+  // gray := Source.GrayImage;
+  // if Equalize then
+  // cvEqualizeHist(gray.IpImage, gray.IpImage);
+  // detected_objects := cvHaarDetectObjects(gray.IpImage, FCascade, storage, Scale, MinNeighbors, GetHaarCascadeFlag,
+  // cvSize(MinSize.X, MinSize.Y), cvSize(MaxSize.X, MaxSize.Y));
+  //
+  // if Assigned(detected_objects) then
+  // begin
+  // SetLength(FHaarRects, detected_objects^.total);
+  // i := 0;
+  // While i < detected_objects^.total do
+  // begin
+  // cvr := pCvRect(cvGetSeqElem(detected_objects, i));
+  // FHaarRects[i] := ocvRect(cvr^.X, cvr^.Y, (cvr^.X) + (cvr^.Width), (cvr^.Y) + (cvr^.height));
+  // Inc(i);
+  // end;
+  //
+  // if Assigned(OnHaarCascade) and ((not NotifyOnlyWhenFound) or (detected_objects^.total > 0)) then
+  // OnHaarCascade(Self, Destanation, FHaarRects);
+  //
+  // if DrawHaarCascade.Enabled then
+  // begin
+  // GetRGBValue(DrawHaarCascade.Color, r, g, b);
+  // i := 0;
+  // While i < detected_objects^.total do
+  // begin
+  // cvr := pCvRect(cvGetSeqElem(detected_objects, i));
+  // cvRectangle(Destanation.IpImage, cvPoint(cvr^.X, cvr^.Y), cvPoint((cvr^.X) + (cvr^.Width), (cvr^.Y) + (cvr^.height)),
+  // CV_RGB(r, g, b), DrawHaarCascade.Thickness, cLineType[DrawHaarCascade.LineType], DrawHaarCascade.Shift);
+  // Inc(i);
+  // end;
+  // end;
+  // end;
+  // Result := True;
+  // finally
+  // cvReleaseMemStorage(storage);
+  // end;
+  // end
+  // else
+  // Result := False;
 end;
 
 procedure TocvHaarCascade.ReleaseCascade;
@@ -1989,26 +2175,8 @@ begin
     end;
     if not(csDesigning in ComponentState) then
     begin
-      if not Assigned(FCascade) then
-        try
-          FullFileName := TempPath + FrontalFaceXML[FHaarCascade].FileName;
-          if not FileExists(FullFileName) then
-          begin
-            RS := TResourceStream.Create(hInstance, FrontalFaceXML[FHaarCascade].Name, RT_RCDATA);
-            DC := TZDecompressionStream.Create(RS);
-            FS := TFileStream.Create(FullFileName, fmCreate);
-            try
-              FS.CopyFrom(DC, DC.Size);
-            finally
-              DC.Free;
-              FS.Free;
-              RS.Free;
-            end;
-          end;
-          DoLoadHaarCascade(FullFileName);
-        except
-          ReleaseCascade;
-        end;
+      ReleaseCascade;
+      FCascade := ocvLoadHaarCascade(FHaarCascade);
     end;
   finally
     FLockFrontalFaceChange.Leave;
@@ -2017,8 +2185,8 @@ end;
 
 constructor TocvPoint2D32i.Create(const AX, AY: Integer);
 begin
-  FPoint.X := AX;
-  FPoint.Y := AY;
+  X := AX;
+  Y := AY;
 end;
 
 {TocvContourDraw}
@@ -2084,7 +2252,7 @@ begin
   Destanation := Source;
   if Assigned(IPLTemplate) then
   begin
-    imgMat := cvCreateImage(cvSize(Source.IpImage^.Width - IPLTemplate^.Width + 1, Source.IpImage^.Height - IPLTemplate^.Height +
+    imgMat := cvCreateImage(cvSize(Source.IpImage^.Width - IPLTemplate^.Width + 1, Source.IpImage^.height - IPLTemplate^.height +
       1), IPL_DEPTH_32F, 1);
     cvMatchTemplate(Source.IpImage, IPLTemplate, imgMat, Integer(FMethod));
 
@@ -2092,7 +2260,7 @@ begin
     begin
       cvMinMaxLoc(imgMat, @min, @min, nil, @P1, nil);
       P2.X := P1.X + IPLTemplate^.Width - 1;
-      P2.Y := P1.Y + IPLTemplate^.Height - 1;
+      P2.Y := P1.Y + IPLTemplate^.height - 1;
 
       if Assigned(OnMathTemplateRect) then
         OnMathTemplateRect(Self, Source, ocvRect(P1.X, P1.Y, P2.X, P2.Y));
@@ -2230,13 +2398,13 @@ begin
           if CalcRectType = mdBoundingRect then
           begin
             Rect := cvBoundingRect(c, 0);
-            Rects[i] := ocvRect(Rect.X, Rect.Y, Rect.X + Rect.Width, Rect.Y + Rect.Height);
+            Rects[i] := ocvRect(Rect.X, Rect.Y, Rect.X + Rect.Width, Rect.Y + Rect.height);
           end
           else if CalcRectType = mdMinAreaRect then
           begin
             Rect2d := cvMinAreaRect2(c);
-            Rects[i] := ocvRect(Round(Rect2d.Center.X - Rect2d.Size.Width / 2), Round(Rect2d.Center.Y - Rect2d.Size.Height / 2),
-              Round(Rect2d.Center.X + Rect2d.Size.Width / 2), Round(Rect2d.Center.Y + Rect2d.Size.Height / 2));
+            Rects[i] := ocvRect(Round(Rect2d.Center.X - Rect2d.Size.Width / 2), Round(Rect2d.Center.Y - Rect2d.Size.height / 2),
+              Round(Rect2d.Center.X + Rect2d.Size.Width / 2), Round(Rect2d.Center.Y + Rect2d.Size.height / 2));
           end;
 
           if DrawMotionRect.Enabled then
@@ -2369,7 +2537,7 @@ end;
 
 function TocvRect32i.GetCvRect: TCvRect;
 begin
-  Result := ocv.core.types_c.cvRect(Left, Top, Width, Height);
+  Result := ocv.core.types_c.cvRect(Left, Top, Width, height);
 end;
 
 function TocvRect32i.GetHeight: Integer;
@@ -2379,7 +2547,7 @@ end;
 
 function TocvRect32i.GetOcvRect: TocvRect;
 begin
-  Result := uOCVTypes.ocvRect(Left, Top, Right, Bottom);
+  Result := ocv.comp.Types.ocvRect(Left, Top, Right, Bottom);
 end;
 
 function TocvRect32i.GetWidth: Integer;
@@ -2392,7 +2560,7 @@ begin
   Left := Value.X;
   Top := Value.Y;
   Width := Value.Width;
-  Height := Value.Height;
+  height := Value.height;
 end;
 
 procedure TocvRect32i.SetHeight(const Value: Integer);
@@ -2413,21 +2581,21 @@ begin
   FRight := FLeft + Value;
 end;
 
-{TovcCropOperation}
+{TocvCropOperation}
 
-constructor TovcCropOperation.Create(AOwner: TPersistent);
+constructor TocvCropOperation.Create(AOwner: TPersistent);
 begin
   inherited;
   FCropRect := TocvRect32i.Create;
 end;
 
-destructor TovcCropOperation.Destroy;
+destructor TocvCropOperation.Destroy;
 begin
   FCropRect.Free;
   inherited;
 end;
 
-function TovcCropOperation.DoTransform(const Source: IocvImage; out Destanation: IocvImage): Boolean;
+function TocvCropOperation.DoTransform(const Source: IocvImage; out Destanation: IocvImage): Boolean;
 begin
   if FCropRect.ocvRect.IsEmpty then
     Destanation := Source
@@ -2473,66 +2641,58 @@ begin
   end;
 end;
 
-{TovcAddWeightedOperation}
+{TocvAddWeightedOperation}
 
-procedure TovcAddWeightedOperation.AssignTo(Dest: TPersistent);
+constructor TocvCommonMathOperation.Create(AOwner: TPersistent);
 begin
   inherited;
-  if Dest is TovcAddWeightedOperation then
-    FTransform := (Dest as TovcAddWeightedOperation).FTransform;
+  FTransformInterpolation := INTER_CUBIC;
 end;
 
-constructor TovcAddWeightedOperation.Create(AOwner: TPersistent);
+procedure TocvCommonMathOperation.DoGetMaskImage(var Image: IocvImage);
 begin
-  inherited;
-  Alpha := 0.5;
-  Beta := 0.5;
-  Gamma := 0;
-  FTransform := awTransformSourse2;
+  Image := nil;
+  if Assigned(FOnGetMaskImage) then
+    FOnGetMaskImage(Self, Image);
 end;
 
-function TovcAddWeightedOperation.DoTransform(const Source: IocvImage; out Destanation: IocvImage): Boolean;
-Var
-  s1, s2: IocvImage;
+procedure TocvCommonMathOperation.DoGetSourceImage(var Image: IocvImage);
 begin
-  Result := True;
+  FCriticalSection.Enter;
+  try
+    Image := FSrource2Image;
+  finally
+    UnlockTransform;
+  end;
   if Assigned(FOnGetImage) then
-    FOnGetImage(Self, FSrource2Image);
-  if Assigned(FSrource2Image) then
+    FOnGetImage(Self, Image);
+end;
+
+procedure TocvCommonMathOperation.GetImagesForTransorm(out Source1: IocvImage; out Source2, Mask: IocvImage);
+Var
+  s1, s2, M: IocvImage;
+begin
+  Source1 := VideoSource.Image;
+  DoGetSourceImage(s2);
+  DoGetMaskImage(M);
+  if Assigned(s2) and ((s1.Width <> s2.Width) or (s1.height <> s2.height)) then
   begin
-    try
-      if (Source.IpImage^.Width = FSrource2Image.IpImage^.Width) and (Source.IpImage^.Height = FSrource2Image.IpImage^.Height)
-      then
-      begin
-        s1 := Source;
-        s2 := FSrource2Image;
-        Destanation := Source.Same;
-      end
-      else if TransformType = awTransformSourse1 then
-      begin
-        s1 := FSrource2Image.Same;
-        s2 := FSrource2Image;
-        cvResize(Source.IpImage, s1.IpImage, 2);
-        Destanation := FSrource2Image.Same;
-      end
-      else if TransformType = awTransformSourse2 then
-      begin
-        s1 := Source;
-        s2 := Source.Same;
-        cvResize(FSrource2Image.IpImage, s2.IpImage, 2);
-        Destanation := Source.Same;
-      end;
-      // Источники должны иметь один размер или ROI
-      cvAddWeighted(s1.IpImage, Alpha, s2.IpImage, Beta, Gamma, Destanation.IpImage);
-    except
-      Result := False;
-    end;
+    Source2 := s1.Same;
+    cvResize(s2.IpImage, Source2.IpImage, Integer(TransformInterpolation));
   end
   else
-    Destanation := Source;
+    Source2 := s2;
+
+  if Assigned(M) and ((s1.Width <> M.Width) or (s1.height <> M.height)) then
+  begin
+    Mask := s1.Same;
+    cvResize(M.IpImage, Mask.IpImage, Integer(TransformInterpolation));
+  end
+  else
+    Mask := M;
 end;
 
-procedure TovcAddWeightedOperation.SetOpenCVVideoSource(const Value: IocvDataSource);
+procedure TocvCommonMathOperation.SetVideoSource_Source2(const Value: IocvDataSource);
 begin
   if FocvVideoSource <> Value then
   begin
@@ -2544,12 +2704,12 @@ begin
   end;
 end;
 
-procedure TovcAddWeightedOperation.SetVideoSource(const Value: TObject);
+procedure TocvCommonMathOperation.SetVideoSource(const Value: TObject);
 begin
   VideoSource := Value as TocvDataSource;
 end;
 
-procedure TovcAddWeightedOperation.TakeImage(const IplImage: IocvImage);
+procedure TocvCommonMathOperation.TakeImage(const IplImage: IocvImage);
 begin
   if LockTransform then
     try
@@ -2607,9 +2767,9 @@ begin
       srcQuad[1].X := Source.Width - 1; // src Top right
       srcQuad[1].Y := 0;
       srcQuad[2].X := 0; // src Bottom left
-      srcQuad[2].Y := Source.Height - 1;
+      srcQuad[2].Y := Source.height - 1;
       srcQuad[3].X := Source.Width - 1; // src Bot right
-      srcQuad[3].Y := Source.Height - 1;
+      srcQuad[3].Y := Source.height - 1;
     end
     else
       srcQuad := SourceQuad.cvQuad;
@@ -2624,6 +2784,32 @@ begin
   else
     Destanation := Source;
   Result := True;
+end;
+
+{TocvAddWeightedOperation}
+
+constructor TocvAddWeightedOperation.Create(AOwner: TPersistent);
+begin
+  inherited;
+  Alpha := 0.5;
+  Beta := 0.5;
+  Gamma := 0;
+end;
+
+function TocvAddWeightedOperation.DoTransform(const Source: IocvImage; out Destanation: IocvImage): Boolean;
+Var
+  s1, s2, M: IocvImage;
+begin
+  GetImagesForTransorm(s1, s2, M);
+  try
+    Destanation := s1.Same;
+    // Источники должны иметь один размер или ROI
+    cvAddWeighted(s1.IpImage, Alpha, s2.IpImage, Beta, Gamma, Destanation.IpImage);
+    Result := True;
+  except
+    Destanation := Source;
+    Result := False;
+  end;
 end;
 
 {TocvQuad}
@@ -2783,7 +2969,7 @@ begin
   MaxRadius := 0;
   FDrawCircle := TocvDrawHoughCircles.Create(Self);
   NotifyOnlyWhenFound := False;
-  FSmooth := TovcHoughCirclesSmooth.Create;
+  FSmooth := TocvHoughCirclesSmooth.Create;
   FSmooth.SmoothType := GAUSSIAN;
   FSmooth.size1 := 5;
   FSmooth.size2 := 5;
@@ -2927,23 +3113,23 @@ begin
   end;
 end;
 
-{TovcHoughCirclesSmooth}
+{TocvHoughCirclesSmooth}
 
-procedure TovcHoughCirclesSmooth.AssignTo(Dest: TPersistent);
+procedure TocvHoughCirclesSmooth.AssignTo(Dest: TPersistent);
 begin
   inherited;
-  if Dest is TovcHoughCirclesSmooth then
+  if Dest is TocvHoughCirclesSmooth then
   begin
-    FSmoothOperation := (Dest as TovcHoughCirclesSmooth).FSmoothOperation;
-    Fsigma1 := (Dest as TovcHoughCirclesSmooth).Fsigma1;
-    Fsigma2 := (Dest as TovcHoughCirclesSmooth).Fsigma2;
-    Fsize1 := (Dest as TovcHoughCirclesSmooth).Fsize1;
-    Fsize2 := (Dest as TovcHoughCirclesSmooth).Fsize2;
-    FEnabled := (Dest as TovcHoughCirclesSmooth).FEnabled;
+    FSmoothOperation := (Dest as TocvHoughCirclesSmooth).FSmoothOperation;
+    Fsigma1 := (Dest as TocvHoughCirclesSmooth).Fsigma1;
+    Fsigma2 := (Dest as TocvHoughCirclesSmooth).Fsigma2;
+    Fsize1 := (Dest as TocvHoughCirclesSmooth).Fsize1;
+    Fsize2 := (Dest as TocvHoughCirclesSmooth).Fsize2;
+    FEnabled := (Dest as TocvHoughCirclesSmooth).FEnabled;
   end;
 end;
 
-constructor TovcHoughCirclesSmooth.Create;
+constructor TocvHoughCirclesSmooth.Create;
 begin
   inherited;
   FSmoothOperation := GAUSSIAN;
@@ -2975,16 +3161,276 @@ begin
   FApertureSize := 3;
 end;
 
+{TocvInRangeOperation}
+
+procedure TocvInRangeSOperation.AssignTo(Dest: TPersistent);
+begin
+  inherited;
+  if Dest is TocvInRangeSOperation then
+  begin
+    FLower := (Dest as TocvInRangeSOperation).FLower;
+    FUpper := (Dest as TocvInRangeSOperation).FUpper;
+  end;
+end;
+
+constructor TocvInRangeSOperation.Create(AOwner: TPersistent);
+begin
+  inherited;
+  FLower := TocvScalar.Create;
+  FUpper := TocvScalar.Create;
+end;
+
+destructor TocvInRangeSOperation.Destroy;
+begin
+  FLower.Free;
+  FUpper.Free;
+  inherited;
+end;
+
+function TocvInRangeSOperation.DoTransform(const Source: IocvImage; out Destanation: IocvImage): Boolean;
+begin
+  Destanation := Source.Clone;
+  try
+    cvInRangeS(Source.IpImage, FLower.CvScalar, FUpper.CvScalar, Destanation.IpImage);
+    Result := True;
+  except
+    Result := False;
+  end;
+end;
+
+{TocvScalar}
+
+procedure TocvScalar.AssignTo(Dest: TPersistent);
+begin
+  inherited;
+  if Dest is TocvScalar then
+    FCvScalar := (Dest as TocvScalar).FCvScalar;
+end;
+
+function TocvScalar.GetScalar(const index: Integer): Double;
+begin
+  if (index >= 0) and (index < 4) then
+    Result := FCvScalar.val[index]
+  else
+    Result := 0;
+end;
+
+procedure TocvScalar.SetScalar(const index: Integer; const Value: Double);
+begin
+  if (index >= 0) and (index < 4) then
+    FCvScalar.val[index] := Value;
+end;
+
+{TocvCvtColorOperation}
+
+constructor TocvCvtColorOperation.Create(AOwner: TPersistent);
+begin
+  inherited;
+  FColorConversion := RGB2GRAY;
+  FDepth := DEPTH_8U;
+  FChannels := 1;
+  // FAutoCalcParams := True;
+end;
+
+function TocvCvtColorOperation.DoTransform(const Source: IocvImage; out Destanation: IocvImage): Boolean;
+Var
+  iImage: pIplImage;
+begin
+  // if FAutoCalcParams then
+  // CalculateImageParams(Source);
+  iImage := cvCreateImage(cvGetSize(Source.IpImage), cIPLDepth[Depth], Channels);
+  try
+    cvCvtColor(Source.IpImage, iImage, cColorConversion[ColorConversion]);
+    Destanation := TocvImage.Create(iImage);
+    Result := True;
+  except
+    Destanation := Source;
+    Result := False;
+  end;
+end;
+
+// procedure TocvCvtColorOperation.CalculateImageParams(const Source: IocvImage);
+// Var
+// scn, Depth: Integer;
+// code: Integer;
+// dcn: Integer;
+// begin
+// scn := Source.IpImage^.nChannels;
+// dcn := scn;
+// Depth := Source.IpImage^.Depth;
+// code := CVColorConversion[ColorConversion];
+// case code of
+// CV_BGR2BGRA, CV_RGB2BGRA, CV_BGRA2BGR, CV_RGBA2BGR, CV_RGB2BGR, CV_BGRA2RGBA:
+// begin
+// if (code = CV_BGR2BGRA) or (code = CV_RGB2BGRA) or (code = CV_BGRA2RGBA) then
+// dcn := 4
+// else
+// dcn := 3;
+// end;
+// CV_BGR2BGR565, CV_BGR2BGR555, CV_RGB2BGR565, CV_RGB2BGR555, CV_BGRA2BGR565, CV_BGRA2BGR555, CV_RGBA2BGR565, CV_RGBA2BGR555:
+// begin
+// Assert((scn = 3) or (scn = 4) and (Depth = IPL_DEPTH_8U));
+// end;
+// CV_BGR5652BGR, CV_BGR5552BGR, CV_BGR5652RGB, CV_BGR5552RGB, CV_BGR5652BGRA, CV_BGR5552BGRA, CV_BGR5652RGBA, CV_BGR5552RGBA:
+// begin
+// if (dcn <= 0) then
+// if (code = CV_BGR5652BGRA) or (code = CV_BGR5552BGRA) or (code = CV_BGR5652RGBA) or (code = CV_BGR5552RGBA) then
+// dcn := 4
+// else
+// dcn := 3;
+// Assert((scn = 2) and (Depth = IPL_DEPTH_8U));
+// end;
+// CV_BGR2GRAY, CV_BGRA2GRAY, CV_RGB2GRAY, CV_RGBA2GRAY:
+// begin
+// Assert(scn = 3) or (scn = 4);
+// dcn := 1;
+// end;
+// CV_BGR5652GRAY, CV_BGR5552GRAY:
+// begin
+// Assert((scn = 2) and (Depth = IPL_DEPTH_8U));
+// dcn := 1;
+// end;
+// end;
+// end;
+
+{TocvResizeOperation}
+
+procedure TocvResizeOperation.AssignTo(Dest: TPersistent);
+begin
+  inherited;
+  if Dest is TocvResizeOperation then
+    FInterpolation := (Dest as TocvResizeOperation).FInterpolation;
+end;
+
+constructor TocvResizeOperation.Create(AOwner: TPersistent);
+begin
+  inherited;
+  FInterpolation := INTER_LINEAR;
+end;
+
+function TocvResizeOperation.DoTransform(const Source: IocvImage; out Destanation: IocvImage): Boolean;
+Var
+  D: pIplImage;
+begin
+  Destanation := Source;
+  if (DestWidth <> 0) and (DestHeight <> 0) then
+    try
+      D := cvCreateImage(cvSize(DestWidth, DestHeight), Source.IpImage^.Depth, Source.IpImage^.nChannels);
+      cvResize(Source.IpImage, D, Integer(Interpolation));
+      Destanation := TocvImage.Create(D);
+      Result := True;
+    except
+      Result := False;
+    end;
+end;
+
+{TocvMathLogicOperation}
+
+procedure TocvLogicOperation.AssignTo(Dest: TPersistent);
+begin
+  inherited;
+  if Dest is TocvLogicOperation then
+    FOperation := (Dest as TocvLogicOperation).FOperation;
+end;
+
+constructor TocvLogicOperation.Create(AOwner: TPersistent);
+begin
+  inherited;
+  FOperation := ioAdd;
+end;
+
+function TocvLogicOperation.DoTransform(const Source: IocvImage; out Destanation: IocvImage): Boolean;
+Var
+  s1, s2, M: IocvImage;
+  _m: pIplImage;
+begin
+  GetImagesForTransorm(s1, s2, M);
+  try
+    Destanation := s1.Same;
+    if Assigned(M) then
+      _m := M.IpImage
+    else
+      _m := nil;
+    case Operation of
+      ioAdd:
+        cvAdd(s1.IpImage, s2.IpImage, Destanation.IpImage, _m);
+      ioSub:
+        cvSub(s1.IpImage, s2.IpImage, Destanation.IpImage, _m);
+      ioAnd:
+        cvAnd(s1.IpImage, s2.IpImage, Destanation.IpImage, _m);
+      ioOr:
+        cvOr(s1.IpImage, s2.IpImage, Destanation.IpImage, _m);
+      ioXor:
+        cvXor(s1.IpImage, s2.IpImage, Destanation.IpImage, _m);
+    end;
+    Result := True;
+  except
+    Destanation := Source;
+    Result := False;
+  end;
+end;
+
+{TocvLogicSOperation}
+
+procedure TocvLogicSOperation.AssignTo(Dest: TPersistent);
+begin
+  inherited;
+  if Dest is TocvLogicSOperation then
+    FOperation := (Dest as TocvLogicSOperation).FOperation;
+end;
+
+constructor TocvLogicSOperation.Create(AOwner: TPersistent);
+begin
+  inherited;
+  FValue := TocvScalar.Create;
+  FOperation := ioAddS;
+end;
+
+destructor TocvLogicSOperation.Destroy;
+begin
+  FValue.Free;
+  inherited;
+end;
+
+function TocvLogicSOperation.DoTransform(const Source: IocvImage; out Destanation: IocvImage): Boolean;
+Var
+  s1, s2, M: IocvImage;
+  _m: pIplImage;
+begin
+  GetImagesForTransorm(s1, s2, M);
+  try
+    Destanation := s1.Same;
+    if Assigned(M) then
+      _m := M.IpImage
+    else
+      _m := nil;
+    case Operation of
+      ioAddS:
+        cvAddS(s1.IpImage, Value.CvScalar, Destanation.IpImage, _m);
+      ioSubS:
+        cvSubS(s1.IpImage, Value.CvScalar, Destanation.IpImage, _m);
+      ioSubRS:
+        cvSubRS(s1.IpImage, Value.CvScalar, Destanation.IpImage, _m);
+      ioXorS:
+        cvXorS(s1.IpImage, Value.CvScalar, Destanation.IpImage, _m);
+    end;
+    Result := True;
+  except
+    Destanation := Source;
+    Result := False;
+  end;
+end;
+
 initialization
 
 GetRegisteredImageOperations.RegisterIOClass(TocvNoneOperation, 'None');
 GetRegisteredImageOperations.RegisterIOClass(TocvGrayScaleOperation, 'GrayScale');
-GetRegisteredImageOperations.RegisterIOClass(TovcCannyOperation, 'Canny');
-GetRegisteredImageOperations.RegisterIOClass(TovcSmoothOperation, 'Smooth');
-GetRegisteredImageOperations.RegisterIOClass(TovcErodeOperation, 'Erode');
-GetRegisteredImageOperations.RegisterIOClass(TovcDilateOperation, 'Dilate');
+GetRegisteredImageOperations.RegisterIOClass(TocvCannyOperation, 'Canny');
+GetRegisteredImageOperations.RegisterIOClass(TocvSmoothOperation, 'Smooth');
+GetRegisteredImageOperations.RegisterIOClass(TocvErodeOperation, 'Erode');
+GetRegisteredImageOperations.RegisterIOClass(TocvDilateOperation, 'Dilate');
 GetRegisteredImageOperations.RegisterIOClass(TocvLaplaceOperation, 'Laplace');
-GetRegisteredImageOperations.RegisterIOClass(TovcSobelOperation, 'Sobel');
+GetRegisteredImageOperations.RegisterIOClass(TocvSobelOperation, 'Sobel');
 GetRegisteredImageOperations.RegisterIOClass(TocvThresholdOperation, 'Threshold');
 GetRegisteredImageOperations.RegisterIOClass(TocvAdaptiveThresholdOperation, 'AdaptiveThreshold');
 GetRegisteredImageOperations.RegisterIOClass(TocvContoursOperation, 'Contours');
@@ -2993,11 +3439,16 @@ GetRegisteredImageOperations.RegisterIOClass(TocvAbsDiff, 'AbsDiff');
 GetRegisteredImageOperations.RegisterIOClass(TocvHaarCascade, 'HaarCascade');
 GetRegisteredImageOperations.RegisterIOClass(TocvMatchTemplate, 'MatchTemplate');
 GetRegisteredImageOperations.RegisterIOClass(TocvMotionDetect, 'MotionDetect');
-GetRegisteredImageOperations.RegisterIOClass(TovcCropOperation, 'Crop');
-GetRegisteredImageOperations.RegisterIOClass(TovcAddWeightedOperation, 'AddWeighted');
+GetRegisteredImageOperations.RegisterIOClass(TocvCropOperation, 'Crop');
+GetRegisteredImageOperations.RegisterIOClass(TocvAddWeightedOperation, 'AddWeighted');
 GetRegisteredImageOperations.RegisterIOClass(TocvWarpPerspective, 'WarpPerspective');
 GetRegisteredImageOperations.RegisterIOClass(TocvHoughCircles, 'HoughCircles');
 GetRegisteredImageOperations.RegisterIOClass(TocvHoughLines, 'HoughLines');
+GetRegisteredImageOperations.RegisterIOClass(TocvInRangeSOperation, 'InRangeS');
+GetRegisteredImageOperations.RegisterIOClass(TocvCvtColorOperation, 'ColorOperation');
+GetRegisteredImageOperations.RegisterIOClass(TocvResizeOperation, 'Resize');
+GetRegisteredImageOperations.RegisterIOClass(TocvLogicOperation, 'Logic');
+GetRegisteredImageOperations.RegisterIOClass(TocvLogicSOperation, 'LogicS');
 
 finalization
 
