@@ -24,7 +24,7 @@
 // *******************************************************************
 {$IFNDEF CLR}
 {$I OpenCV.inc}
-unit uOCVRegister;
+unit ocv.comp.Register;
 {$ENDIF}
 
 interface
@@ -43,9 +43,10 @@ uses
 {$IFDEF VER6P}DesignIntf, System.Classes, {$ELSE}DsgnIntf, Classes, {$ENDIF VER6P}
 {$ENDIF FPC}
 {$ENDIF}
-  uOCVSource,
-  uOCVView,
-  uOCVImageOperation, uOCVVideoWriter;
+  ocv.comp.Source,
+  ocv.comp.View,
+  ocv.comp.ImageOperation,
+  ocv.comp.VideoWriter;
 
 procedure Register;
 begin
@@ -54,12 +55,12 @@ begin
   RegisterClasses([
     {} TocvNoneOperation,
     {} TocvGrayScaleOperation,
-    {} TovcCannyOperation,
-    {} TovcSmoothOperation,
-    {} TovcErodeOperation,
-    {} TovcDilateOperation,
+    {} TocvCannyOperation,
+    {} TocvSmoothOperation,
+    {} TocvErodeOperation,
+    {} TocvDilateOperation,
     {} TocvLaplaceOperation,
-    {} TovcSobelOperation,
+    {} TocvSobelOperation,
     {} TocvThresholdOperation,
     {} TocvAdaptiveThresholdOperation,
     {} TocvContoursOperation,
@@ -68,11 +69,16 @@ begin
     {} TocvHaarCascade,
     {} TocvMatchTemplate,
     {} TocvMotionDetect,
-    {} TovcCropOperation,
-    {} TovcAddWeightedOperation,
+    {} TocvCropOperation,
+    {} TocvAddWeightedOperation,
     {} TocvWarpPerspective,
     {} TocvHoughCircles,
-    {} TocvHoughLines]);
+    {} TocvHoughLines,
+    {} TocvInRangeSOperation,
+    {} TocvCvtColorOperation,
+    {} TocvResizeOperation,
+    {} TocvLogicOperation,
+    {} TocvLogicSOperation]);
 end;
 
 {$IFDEF FPC}

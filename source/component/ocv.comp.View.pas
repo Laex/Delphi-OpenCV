@@ -23,7 +23,7 @@
 
 {$IFNDEF CLR}
 {$I OpenCV.inc}
-unit uOCVView;
+unit ocv.comp.View;
 {$ENDIF}
 
 interface
@@ -44,7 +44,7 @@ uses
   Controls,
   Graphics,
 {$ENDIF VER6P}
-  uOCVTypes,
+  ocv.comp.Types,
   ocv.core.types_c, System.SyncObjs;
 
 type
@@ -53,7 +53,7 @@ type
 
   end;
 
-  TPersistentRect = class(TPersistent)
+  TocvPersistentRect = class(TPersistent)
   private
     FRect: TRect;
     FOnChange: TNotifyEvent;
@@ -81,7 +81,7 @@ type
     FocvVideoSource: IocvDataSource;
     FImage: IocvImage;
     FLock: TCriticalSection;
-    FDrawRect: TPersistentRect;
+    FDrawRect: TocvPersistentRect;
     FEnabled: Boolean;
     procedure SetOpenCVVideoSource(const Value: IocvDataSource);
     function GetImage: IocvImage;
@@ -100,7 +100,7 @@ type
     property Image: IocvImage read GetImage;
   published
     property VideoSource: IocvDataSource Read FocvVideoSource write SetOpenCVVideoSource;
-    property DrawRect: TPersistentRect read FDrawRect write FDrawRect;
+    property DrawRect: TocvPersistentRect read FDrawRect write FDrawRect;
     property Enabled: Boolean read FEnabled Write FEnabled default false;
   end;
 
@@ -108,7 +108,7 @@ type
   private
     FocvVideoSource: IocvDataSource;
     FImage: IocvImage;
-    FOnAfterPaint: TOnOcvNotify;
+    FOnAfterPaint: TOnOcvAfterViewPaint;
     FOnBeforePaint: TOnOcvNotify;
     FCanvas: TCanvas;
     FStretch: Boolean;
@@ -135,7 +135,7 @@ type
     property Center: Boolean read FCenter write FCenter default false;
     property Frames: TocvViewFrames Read FFrames Write FFrames;
     property Align;
-    property OnAfterPaint: TOnOcvNotify read FOnAfterPaint write FOnAfterPaint;
+    property OnAfterPaint: TOnOcvAfterViewPaint read FOnAfterPaint write FOnAfterPaint;
     property OnBeforePaint: TOnOcvNotify read FOnBeforePaint write FOnBeforePaint;
     property OnEnter;
     property OnExit;
@@ -321,7 +321,7 @@ constructor TocvViewFrame.Create(Collection: TCollection);
 begin
   inherited;
   FLock := TCriticalSection.Create;
-  FDrawRect := TPersistentRect.Create;
+  FDrawRect := TocvPersistentRect.Create;
   FDrawRect.FRect.Width := 50;
   FDrawRect.FRect.Height := 50;
   FEnabled := false;
@@ -402,10 +402,10 @@ end;
 
 {TPersistentRect}
 
-procedure TPersistentRect.AssignTo(Dest: TPersistent);
+procedure TocvPersistentRect.AssignTo(Dest: TPersistent);
 begin
-  if Dest is TPersistentRect then
-    with TPersistentRect(Dest) do
+  if Dest is TocvPersistentRect then
+    with TocvPersistentRect(Dest) do
     begin
       AsRect := Self.AsRect;
     end
@@ -413,18 +413,18 @@ begin
     inherited AssignTo(Dest);
 end;
 
-constructor TPersistentRect.Create;
+constructor TocvPersistentRect.Create;
 begin
   inherited;
   FOnChange := nil;
 end;
 
-function TPersistentRect.GetRect: TRect;
+function TocvPersistentRect.GetRect: TRect;
 begin
   Result := FRect;
 end;
 
-procedure TPersistentRect.SetRect(const Value: TRect);
+procedure TocvPersistentRect.SetRect(const Value: TRect);
 begin
   FRect.Left := Value.Left;
   FRect.Top := Value.Top;
@@ -434,28 +434,28 @@ begin
     FOnChange(Self);
 end;
 
-procedure TPersistentRect.SetRectBottom(const Value: integer);
+procedure TocvPersistentRect.SetRectBottom(const Value: integer);
 begin
   FRect.Bottom := Value;
   if Assigned(FOnChange) then
     FOnChange(Self);
 end;
 
-procedure TPersistentRect.SetRectLeft(const Value: integer);
+procedure TocvPersistentRect.SetRectLeft(const Value: integer);
 begin
   FRect.Left := Value;
   if Assigned(FOnChange) then
     FOnChange(Self);
 end;
 
-procedure TPersistentRect.SetRectRight(const Value: integer);
+procedure TocvPersistentRect.SetRectRight(const Value: integer);
 begin
   FRect.Right := Value;
   if Assigned(FOnChange) then
     FOnChange(Self);
 end;
 
-procedure TPersistentRect.SetRectTop(const Value: integer);
+procedure TocvPersistentRect.SetRectTop(const Value: integer);
 begin
   FRect.Top := Value;
   if Assigned(FOnChange) then

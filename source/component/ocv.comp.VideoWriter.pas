@@ -1,4 +1,4 @@
-unit uOCVVideoWriter;
+unit ocv.comp.VideoWriter;
 
 interface
 
@@ -9,7 +9,7 @@ Uses
   ocv.core_c,
   ocv.core.types_c,
   ocv.imgproc_c,
-  uOCVTypes;
+  ocv.comp.Types;
 
 Type
 

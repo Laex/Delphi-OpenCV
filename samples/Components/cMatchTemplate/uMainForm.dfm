@@ -33,12 +33,14 @@ object MainForm: TMainForm
     Width = 320
     Height = 320
     VideoSource = ocvmgprtn1
+    Frames = <>
   end
   object ocvw2: TocvView
     Left = 451
     Top = 22
     Width = 320
     Height = 320
+    Frames = <>
     OnAfterPaint = ocvw2AfterPaint
     OnMouseDown = ocvw2MouseDown
     OnMouseUp = ocvw2MouseUp

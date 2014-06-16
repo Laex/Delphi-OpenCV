@@ -23,7 +23,7 @@
 
 {$IFNDEF CLR}
 {$I OpenCV.inc}
-unit uOCVSource;
+unit ocv.comp.Source;
 {$ENDIF}
 
 interface
@@ -41,7 +41,7 @@ uses
   ocv.core.types_c,
   ocv.highgui_c,
   ffm.libavcodec.avcodec,
-  uOCVTypes;
+  ocv.comp.Types;
 
 type
   TocvCameraCaptureSource =
@@ -97,7 +97,7 @@ type
   protected
     FSourceThread: TocvCustomSourceThread;
     FThreadDelay: Integer;
-    procedure OnNotifyData(Sender: TObject; const IplImage: IocvImage); virtual;
+    procedure OnNotifyData(Sender: TObject; Var IplImage: IocvImage); virtual;
     procedure SetEnabled(Value: Boolean); virtual;
     function GetEnabled: Boolean; override;
   private
@@ -141,7 +141,7 @@ type
     constructor Create(AOwner: TComponent); override;
   published
     property Camera: TocvCameraCaptureSource read FCaptureSource write SetCameraSource default CAP_ANY;
-    property Resolution: TocvResolution read FResolution write SetResolution;
+    property Resolution: TocvResolution read FResolution write SetResolution default r160x120;
   end;
 
   TocvFileSource = class(TocvCaptureSource)
@@ -316,8 +316,12 @@ begin
             if Assigned(OnNotifyData) then
               Synchronize(
                 procedure
+                Var
+                  Image: IocvImage;
                 begin
-                  OnNotifyData(Self, TocvImage.CreateClone(frame));
+                  Image := TocvImage.CreateClone(frame);
+                  OnNotifyData(Self, Image);
+                  Image := nil;
                 end);
             Sleep(FThreadDelay);
           end
@@ -337,7 +341,7 @@ constructor TocvCameraSource.Create(AOwner: TComponent);
 begin
   inherited;
   FEnabled := False;
-  FResolution := r160x120;
+  Resolution := r160x120;
 end;
 
 procedure TocvCameraSource.SetCameraSource(const Value: TocvCameraCaptureSource);
@@ -390,10 +394,10 @@ end;
 
 procedure TocvCameraSource.SetResolution(const Value: TocvResolution);
 begin
+  FWidth := CameraResolution[Value].cWidth;
+  FHeight := CameraResolution[Value].cHeight;
   if FResolution <> Value then
   begin
-    FWidth := CameraResolution[Value].cWidth;
-    FHeight := CameraResolution[Value].cHeight;
     FResolution := Value;
     if Enabled then
     begin
@@ -424,7 +428,7 @@ begin
   Result := FEnabled;
 end;
 
-procedure TocvCustomSource.OnNotifyData(Sender: TObject; const IplImage: IocvImage);
+procedure TocvCustomSource.OnNotifyData(Sender: TObject; Var IplImage: IocvImage);
 begin
   FWidth := IplImage.Width;
   FHeight := IplImage.Height;
@@ -866,8 +870,12 @@ begin
             if Assigned(OnNotifyData) then
               Synchronize(
                 procedure
+                Var
+                  Image: IocvImage;
                 begin
-                  OnNotifyData(Self, TocvImage.CreateClone(iplframe));
+                  Image := TocvImage.CreateClone(iplframe);
+                  OnNotifyData(Self, Image);
+                  Image := nil;
                 end);
           end;
         end

@@ -35,7 +35,7 @@ requires
   designide;
 
 contains
-  uOCVIOProperties in '..\uOCVIOProperties.pas',
-  uOCVRegister in '..\uOCVRegister.pas';
+  ocv.comp.IOProperties in '..\ocv.comp.IOProperties.pas',
+  ocv.comp.Register in '..\ocv.comp.Register.pas';
 
 end.
