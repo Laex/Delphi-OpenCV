@@ -3,7 +3,7 @@
         <ProjectGuid>{B97156ED-0FAF-46F9-A23B-624365F042E1}</ProjectGuid>
         <MainSource>HandsDetect.dpr</MainSource>
         <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Release</Config>
+        <Config Condition="'$(Config)'==''">Debug</Config>
         <TargetedPlatforms>3</TargetedPlatforms>
         <AppType>Console</AppType>
         <FrameworkType>None</FrameworkType>

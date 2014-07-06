@@ -3,7 +3,7 @@
         <ProjectGuid>{E588D78C-C6B0-48AD-BB2E-823914DFC7E4}</ProjectGuid>
         <MainSource>cv_FloodFill.dpr</MainSource>
         <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Release</Config>
+        <Config Condition="'$(Config)'==''">Debug</Config>
         <TargetedPlatforms>3</TargetedPlatforms>
         <AppType>Console</AppType>
         <FrameworkType>None</FrameworkType>

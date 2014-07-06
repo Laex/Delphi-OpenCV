@@ -3,7 +3,7 @@
         <ProjectGuid>{A54CF89B-7F6F-47F5-BBBA-77052931B47D}</ProjectGuid>
         <MainSource>cv_Integral.dpr</MainSource>
         <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Release</Config>
+        <Config Condition="'$(Config)'==''">Debug</Config>
         <TargetedPlatforms>3</TargetedPlatforms>
         <AppType>Console</AppType>
         <FrameworkType>None</FrameworkType>

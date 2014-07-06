@@ -3,7 +3,7 @@
         <ProjectGuid>{EF5C3DA9-7A87-4A4E-B2B7-ED8B18619FA3}</ProjectGuid>
         <MainSource>cv_CalcHist2.dpr</MainSource>
         <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Release</Config>
+        <Config Condition="'$(Config)'==''">Debug</Config>
         <TargetedPlatforms>3</TargetedPlatforms>
         <AppType>Console</AppType>
         <FrameworkType>None</FrameworkType>

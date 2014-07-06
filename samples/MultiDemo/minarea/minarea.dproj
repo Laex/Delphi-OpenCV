@@ -3,7 +3,7 @@
         <ProjectGuid>{C8408868-8907-48A6-95E3-6E11A3C694BB}</ProjectGuid>
         <MainSource>minarea.dpr</MainSource>
         <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Release</Config>
+        <Config Condition="'$(Config)'==''">Debug</Config>
         <TargetedPlatforms>3</TargetedPlatforms>
         <AppType>Console</AppType>
         <FrameworkType>None</FrameworkType>

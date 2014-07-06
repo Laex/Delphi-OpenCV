@@ -3,7 +3,7 @@
         <ProjectGuid>{7B36576A-8C0B-49D3-B17A-9B5128DA8B4F}</ProjectGuid>
         <MainSource>Stereo.dpr</MainSource>
         <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Release</Config>
+        <Config Condition="'$(Config)'==''">Debug</Config>
         <TargetedPlatforms>3</TargetedPlatforms>
         <AppType>Console</AppType>
         <FrameworkType>None</FrameworkType>

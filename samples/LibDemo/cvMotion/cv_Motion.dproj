@@ -3,7 +3,7 @@
         <ProjectGuid>{5F847642-0B24-4A22-BA5A-40586B5493D2}</ProjectGuid>
         <MainSource>cv_Motion.dpr</MainSource>
         <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Release</Config>
+        <Config Condition="'$(Config)'==''">Debug</Config>
         <TargetedPlatforms>3</TargetedPlatforms>
         <AppType>Console</AppType>
         <FrameworkType>None</FrameworkType>

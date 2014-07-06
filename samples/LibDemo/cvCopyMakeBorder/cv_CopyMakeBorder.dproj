@@ -3,7 +3,7 @@
         <ProjectGuid>{2B674281-1581-48B6-9C0C-542326E06DDA}</ProjectGuid>
         <MainSource>cv_CopyMakeBorder.dpr</MainSource>
         <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Release</Config>
+        <Config Condition="'$(Config)'==''">Debug</Config>
         <TargetedPlatforms>3</TargetedPlatforms>
         <AppType>Console</AppType>
         <FrameworkType>None</FrameworkType>

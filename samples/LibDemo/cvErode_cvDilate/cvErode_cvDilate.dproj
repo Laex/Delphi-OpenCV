@@ -3,7 +3,7 @@
         <ProjectGuid>{A67691CB-5F9C-4FDA-AAD9-9CECB5BF2DE2}</ProjectGuid>
         <MainSource>cvErode_cvDilate.dpr</MainSource>
         <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Release</Config>
+        <Config Condition="'$(Config)'==''">Debug</Config>
         <TargetedPlatforms>3</TargetedPlatforms>
         <AppType>Console</AppType>
         <FrameworkType>None</FrameworkType>

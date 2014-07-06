@@ -3,7 +3,7 @@
         <ProjectGuid>{2EBC1447-340E-4014-BF60-29DD6A0152A2}</ProjectGuid>
         <MainSource>cv_SetImageROI.dpr</MainSource>
         <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Release</Config>
+        <Config Condition="'$(Config)'==''">Debug</Config>
         <TargetedPlatforms>3</TargetedPlatforms>
         <AppType>Console</AppType>
         <FrameworkType>None</FrameworkType>

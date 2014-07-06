@@ -3,7 +3,7 @@
         <ProjectGuid>{80AFD0AA-BC0D-4D1D-869A-AF8111F8BBDB}</ProjectGuid>
         <MainSource>fback_c.dpr</MainSource>
         <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Release</Config>
+        <Config Condition="'$(Config)'==''">Debug</Config>
         <TargetedPlatforms>3</TargetedPlatforms>
         <AppType>Console</AppType>
         <FrameworkType>None</FrameworkType>

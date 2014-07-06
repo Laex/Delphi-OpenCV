@@ -3,7 +3,7 @@
         <ProjectGuid>{2A7D6208-4A7B-47C0-A5E9-02443BE8B744}</ProjectGuid>
         <MainSource>cv_ExtractSURF.dpr</MainSource>
         <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Release</Config>
+        <Config Condition="'$(Config)'==''">Debug</Config>
         <TargetedPlatforms>3</TargetedPlatforms>
         <AppType>Console</AppType>
         <FrameworkType>None</FrameworkType>

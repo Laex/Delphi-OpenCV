@@ -3,7 +3,7 @@
         <ProjectGuid>{92B0F595-37C8-4BBF-8AE5-BB81B6FB91B2}</ProjectGuid>
         <MainSource>cv_Sobel.dpr</MainSource>
         <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Release</Config>
+        <Config Condition="'$(Config)'==''">Debug</Config>
         <TargetedPlatforms>3</TargetedPlatforms>
         <AppType>Console</AppType>
         <FrameworkType>None</FrameworkType>

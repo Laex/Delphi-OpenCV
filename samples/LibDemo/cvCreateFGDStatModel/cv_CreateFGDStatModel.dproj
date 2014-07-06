@@ -3,7 +3,7 @@
         <ProjectGuid>{89733BC5-2146-4F31-97F6-F5BA7C4DB1A7}</ProjectGuid>
         <MainSource>cv_CreateFGDStatModel.dpr</MainSource>
         <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Release</Config>
+        <Config Condition="'$(Config)'==''">Debug</Config>
         <TargetedPlatforms>3</TargetedPlatforms>
         <AppType>Console</AppType>
         <FrameworkType>None</FrameworkType>

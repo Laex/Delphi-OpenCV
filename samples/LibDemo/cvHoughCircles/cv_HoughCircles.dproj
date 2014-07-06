@@ -3,7 +3,7 @@
         <ProjectGuid>{F5652391-C1CD-46A1-BA90-DCF88920E291}</ProjectGuid>
         <MainSource>cv_HoughCircles.dpr</MainSource>
         <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Release</Config>
+        <Config Condition="'$(Config)'==''">Debug</Config>
         <TargetedPlatforms>3</TargetedPlatforms>
         <AppType>Console</AppType>
         <FrameworkType>None</FrameworkType>

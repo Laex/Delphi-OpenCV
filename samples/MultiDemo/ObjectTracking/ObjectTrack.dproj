@@ -3,7 +3,7 @@
         <ProjectGuid>{F5AA37CD-E0F6-415C-A828-A5E3123CDC60}</ProjectGuid>
         <MainSource>ObjectTrack.dpr</MainSource>
         <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Release</Config>
+        <Config Condition="'$(Config)'==''">Debug</Config>
         <TargetedPlatforms>3</TargetedPlatforms>
         <AppType>Console</AppType>
         <FrameworkType>None</FrameworkType>

@@ -3,7 +3,7 @@
         <ProjectGuid>{DB5FF8A8-8FFF-4CD9-BBFF-B2AAE1F87798}</ProjectGuid>
         <MainSource>cv_CodeBook.dpr</MainSource>
         <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Release</Config>
+        <Config Condition="'$(Config)'==''">Debug</Config>
         <TargetedPlatforms>3</TargetedPlatforms>
         <AppType>Console</AppType>
         <FrameworkType>None</FrameworkType>

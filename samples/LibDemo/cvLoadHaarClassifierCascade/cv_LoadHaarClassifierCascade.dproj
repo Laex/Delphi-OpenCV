@@ -3,7 +3,7 @@
         <ProjectGuid>{0AF7D07F-9011-4006-98FC-6E0CE8E534BF}</ProjectGuid>
         <MainSource>cv_LoadHaarClassifierCascade.dpr</MainSource>
         <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Release</Config>
+        <Config Condition="'$(Config)'==''">Debug</Config>
         <TargetedPlatforms>3</TargetedPlatforms>
         <AppType>Console</AppType>
         <FrameworkType>None</FrameworkType>

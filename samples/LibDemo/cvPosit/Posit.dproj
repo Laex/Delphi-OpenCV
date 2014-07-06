@@ -3,7 +3,7 @@
         <ProjectGuid>{CF4DBFCE-6F08-4646-B1E1-FF5E8A623767}</ProjectGuid>
         <MainSource>Posit.dpr</MainSource>
         <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Release</Config>
+        <Config Condition="'$(Config)'==''">Debug</Config>
         <TargetedPlatforms>3</TargetedPlatforms>
         <AppType>Console</AppType>
         <FrameworkType>None</FrameworkType>

@@ -3,7 +3,7 @@
         <ProjectGuid>{C5EC75FC-9DB4-4626-BC4F-B1593E7939CA}</ProjectGuid>
         <MainSource>latentsvmdetect.dpr</MainSource>
         <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Release</Config>
+        <Config Condition="'$(Config)'==''">Debug</Config>
         <TargetedPlatforms>3</TargetedPlatforms>
         <AppType>Console</AppType>
         <FrameworkType>None</FrameworkType>

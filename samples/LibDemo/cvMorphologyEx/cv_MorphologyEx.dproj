@@ -3,7 +3,7 @@
         <ProjectGuid>{8B9C7F2C-646D-46E0-B5EE-2A047CD4F950}</ProjectGuid>
         <MainSource>cv_MorphologyEx.dpr</MainSource>
         <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Release</Config>
+        <Config Condition="'$(Config)'==''">Debug</Config>
         <TargetedPlatforms>3</TargetedPlatforms>
         <AppType>Console</AppType>
         <FrameworkType>None</FrameworkType>

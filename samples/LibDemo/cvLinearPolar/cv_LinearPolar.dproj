@@ -3,7 +3,7 @@
         <ProjectGuid>{A90B268B-A4E4-472E-86FE-1B11BCD50A10}</ProjectGuid>
         <MainSource>cv_LinearPolar.dpr</MainSource>
         <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Release</Config>
+        <Config Condition="'$(Config)'==''">Debug</Config>
         <TargetedPlatforms>3</TargetedPlatforms>
         <AppType>Console</AppType>
         <FrameworkType>None</FrameworkType>

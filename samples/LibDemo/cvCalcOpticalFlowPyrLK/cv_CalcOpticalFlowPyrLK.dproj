@@ -3,7 +3,7 @@
         <ProjectGuid>{6074EFD5-BEB3-4FCD-B642-6CBE745C6234}</ProjectGuid>
         <MainSource>cv_CalcOpticalFlowPyrLK.dpr</MainSource>
         <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Release</Config>
+        <Config Condition="'$(Config)'==''">Debug</Config>
         <TargetedPlatforms>3</TargetedPlatforms>
         <AppType>Console</AppType>
         <FrameworkType>None</FrameworkType>

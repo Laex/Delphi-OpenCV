@@ -3,7 +3,7 @@
         <ProjectGuid>{A6FFA890-66CF-4608-8FD5-7CB2F66589C3}</ProjectGuid>
         <MainSource>cvSetImageROI_cvAddWeighted.dpr</MainSource>
         <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Release</Config>
+        <Config Condition="'$(Config)'==''">Debug</Config>
         <TargetedPlatforms>3</TargetedPlatforms>
         <AppType>Console</AppType>
         <FrameworkType>VCL</FrameworkType>

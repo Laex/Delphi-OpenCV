@@ -3,7 +3,7 @@
         <ProjectGuid>{0A8053AF-E6CE-4921-B37D-1680427734B6}</ProjectGuid>
         <MainSource>cv_PyrSegmentation.dpr</MainSource>
         <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Release</Config>
+        <Config Condition="'$(Config)'==''">Debug</Config>
         <TargetedPlatforms>3</TargetedPlatforms>
         <AppType>Console</AppType>
         <FrameworkType>None</FrameworkType>
