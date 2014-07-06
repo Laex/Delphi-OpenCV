@@ -1,6 +1,6 @@
 ﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <PropertyGroup>
-        <ProjectGuid>{B97156ED-0FAF-46F9-A23B-624365F042E1}</ProjectGuid>
+        <ProjectGuid>{1FBF481D-B5DA-468C-A056-055D4EDBEC7B}</ProjectGuid>
         <MainSource>HandsDetect2.dpr</MainSource>
         <Base>True</Base>
         <Config Condition="'$(Config)'==''">Debug</Config>

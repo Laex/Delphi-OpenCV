@@ -66,7 +66,7 @@ interface
   * @see av_mallocz()
 *)
 // void *av_malloc(size_t size) av_malloc_attrib av_alloc_size(1);
-function av_malloc(size:Cardinal):Pointer;cdecl;
+function av_malloc(size: Cardinal): Pointer; cdecl;
 
 (*
   * Allocate a block of size * nmemb bytes with av_malloc().
@@ -179,7 +179,7 @@ function av_malloc(size:Cardinal):Pointer;cdecl;
   * @see av_freep()
 *)
 // void av_free(void *ptr);
-procedure av_free(ptr:pointer);cdecl;
+procedure av_free(ptr: Pointer); cdecl;
 
 (*
   * Allocate a block of size bytes with alignment suitable for all
@@ -190,6 +190,7 @@ procedure av_free(ptr:pointer);cdecl;
   * @see av_malloc()
 *)
 // void *av_mallocz(size_t size) av_malloc_attrib av_alloc_size(1);
+function av_mallocz(size: Cardinal): Pointer; cdecl;
 
 (*
   * Allocate a block of nmemb * size bytes with alignment suitable for all
@@ -226,7 +227,7 @@ procedure av_free(ptr:pointer);cdecl;
   * copy of s or NULL if the string cannot be allocated.
 *)
 // char *av_strdup(const char *s) av_malloc_attrib;
-function av_strdup(const s:pAnsiChar):pAnsiChar;cdecl;
+function av_strdup(const s: pAnsiChar): pAnsiChar; cdecl;
 
 (*
   * Duplicate the buffer p.
@@ -244,7 +245,7 @@ function av_strdup(const s:pAnsiChar):pAnsiChar;cdecl;
   * @see av_free()
 *)
 // void av_freep(void *ptr);
-procedure av_freep(ptr:pointer);cdecl;
+procedure av_freep(ptr: Pointer); cdecl;
 
 (*
   * Add an element to a dynamic array.
@@ -349,9 +350,10 @@ implementation
 
 uses ffm.lib;
 
-procedure av_free;external avutil_dll;
-procedure av_freep;external avutil_dll;
-function av_strdup;external avutil_dll;
-function av_malloc;external avutil_dll;
+procedure av_free; external avutil_dll;
+procedure av_freep; external avutil_dll;
+function av_strdup; external avutil_dll;
+function av_malloc; external avutil_dll;
+function av_mallocz; external avutil_dll;
 
 end.

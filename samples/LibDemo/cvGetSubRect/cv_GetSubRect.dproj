@@ -3,7 +3,7 @@
         <ProjectGuid>{BB3256DB-ED2B-4817-9BC5-2106F6C93322}</ProjectGuid>
         <MainSource>cv_GetSubRect.dpr</MainSource>
         <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Release</Config>
+        <Config Condition="'$(Config)'==''">Debug</Config>
         <TargetedPlatforms>3</TargetedPlatforms>
         <AppType>Console</AppType>
         <FrameworkType>None</FrameworkType>

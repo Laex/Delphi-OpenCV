@@ -3,7 +3,7 @@
         <ProjectGuid>{9633D545-EF17-4E79-8C91-8DCAC56D6E4F}</ProjectGuid>
         <MainSource>CameraCaptureAndFindContours.dpr</MainSource>
         <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Release</Config>
+        <Config Condition="'$(Config)'==''">Debug</Config>
         <TargetedPlatforms>3</TargetedPlatforms>
         <AppType>Console</AppType>
         <FrameworkType>None</FrameworkType>

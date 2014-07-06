@@ -121,28 +121,10 @@ object MainForm: TMainForm
     Operation.Scale = 1.000000000000000000
     Operations = <
       item
-        OperationClassName = 'TocvHaarCascade'
-        Operation.Equalize = True
-        Operation.Scale = 1.300000000000000000
-        Operation.MinNeighbors = 3
-        Operation.MinSize.X = 30
-        Operation.MinSize.Y = 30
-        Operation.MaxSize.X = 0
-        Operation.MaxSize.Y = 0
-        Operation.DrawHaarCascade.Enabled = False
-        Operation.DrawHaarCascade.Thickness = 1
-        Operation.DrawHaarCascade.Offset.X = 0
-        Operation.DrawHaarCascade.Offset.Y = 0
-        Operation.NotifyOnlyWhenFound = False
+        OperationClassName = 'TocvNoneOperation'
       end
       item
-        OperationClassName = 'TovcCropOperation'
-        Operation.CropRect.Left = 0
-        Operation.CropRect.Top = 0
-        Operation.CropRect.Bottom = 0
-        Operation.CropRect.Right = 0
-        Operation.CropRect.Width = 0
-        Operation.CropRect.Height = 0
+        OperationClassName = 'TocvNoneOperation'
       end>
     OperationsEnabled = False
     OnAfterEachOperation = ocvmgprtn1AfterEachOperation

@@ -3,7 +3,7 @@
         <ProjectGuid>{73324524-4106-44AC-A262-3F5CCED9F2AF}</ProjectGuid>
         <MainSource>FaceDetect.dpr</MainSource>
         <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Release</Config>
+        <Config Condition="'$(Config)'==''">Debug</Config>
         <TargetedPlatforms>3</TargetedPlatforms>
         <AppType>Console</AppType>
         <FrameworkType>None</FrameworkType>

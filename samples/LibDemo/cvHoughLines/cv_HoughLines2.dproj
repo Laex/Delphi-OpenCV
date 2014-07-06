@@ -3,7 +3,7 @@
         <ProjectGuid>{F36556EC-7063-4EC7-AC15-EFB326CD96FA}</ProjectGuid>
         <MainSource>cv_HoughLines2.dpr</MainSource>
         <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Release</Config>
+        <Config Condition="'$(Config)'==''">Debug</Config>
         <TargetedPlatforms>3</TargetedPlatforms>
         <AppType>Console</AppType>
         <FrameworkType>None</FrameworkType>

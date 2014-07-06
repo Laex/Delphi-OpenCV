@@ -3,7 +3,7 @@
         <ProjectGuid>{3241E823-E129-4F66-8AF6-C74D02E83B15}</ProjectGuid>
         <MainSource>CameraShift.dpr</MainSource>
         <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Release</Config>
+        <Config Condition="'$(Config)'==''">Debug</Config>
         <TargetedPlatforms>3</TargetedPlatforms>
         <AppType>Console</AppType>
         <FrameworkType>None</FrameworkType>

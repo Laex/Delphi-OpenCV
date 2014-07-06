@@ -3,7 +3,7 @@
         <ProjectGuid>{A783D6BB-265E-4762-8A2E-4BC72C16C9D5}</ProjectGuid>
         <MainSource>cv_GoodFeaturesToTrack.dpr</MainSource>
         <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Release</Config>
+        <Config Condition="'$(Config)'==''">Debug</Config>
         <TargetedPlatforms>3</TargetedPlatforms>
         <AppType>Console</AppType>
         <FrameworkType>None</FrameworkType>

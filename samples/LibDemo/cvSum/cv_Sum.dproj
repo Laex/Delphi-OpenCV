@@ -3,7 +3,7 @@
         <ProjectGuid>{6E82B8F0-7F0C-4B32-BADA-80AA57FAF93A}</ProjectGuid>
         <MainSource>cv_Sum.dpr</MainSource>
         <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Release</Config>
+        <Config Condition="'$(Config)'==''">Debug</Config>
         <TargetedPlatforms>3</TargetedPlatforms>
         <AppType>Console</AppType>
         <FrameworkType>None</FrameworkType>

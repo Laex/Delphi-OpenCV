@@ -3,7 +3,7 @@
         <ProjectGuid>{BD542315-B8B0-4B54-9375-B25973D9474E}</ProjectGuid>
         <MainSource>HelloWorld.dpr</MainSource>
         <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Release</Config>
+        <Config Condition="'$(Config)'==''">Debug</Config>
         <TargetedPlatforms>3</TargetedPlatforms>
         <AppType>Console</AppType>
         <FrameworkType>None</FrameworkType>

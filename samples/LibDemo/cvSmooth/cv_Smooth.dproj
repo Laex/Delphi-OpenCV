@@ -3,7 +3,7 @@
         <ProjectGuid>{1182C644-116C-49CE-9AA6-86129B93A971}</ProjectGuid>
         <MainSource>cv_Smooth.dpr</MainSource>
         <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Release</Config>
+        <Config Condition="'$(Config)'==''">Debug</Config>
         <TargetedPlatforms>3</TargetedPlatforms>
         <AppType>Console</AppType>
         <FrameworkType>None</FrameworkType>

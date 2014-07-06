@@ -3,7 +3,7 @@
         <ProjectGuid>{499BAB2F-FFA9-40F1-A670-F9A15C99A88C}</ProjectGuid>
         <MainSource>LockWorkstation.dpr</MainSource>
         <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Release</Config>
+        <Config Condition="'$(Config)'==''">Debug</Config>
         <TargetedPlatforms>3</TargetedPlatforms>
         <AppType>Application</AppType>
         <FrameworkType>VCL</FrameworkType>

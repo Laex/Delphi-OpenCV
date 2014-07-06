@@ -3,7 +3,7 @@
         <ProjectGuid>{DB80687B-B1AD-41AC-957D-21DA87C6971C}</ProjectGuid>
         <MainSource>cv_CreateStructuringElementEx.dpr</MainSource>
         <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Release</Config>
+        <Config Condition="'$(Config)'==''">Debug</Config>
         <TargetedPlatforms>3</TargetedPlatforms>
         <AppType>Console</AppType>
         <FrameworkType>None</FrameworkType>

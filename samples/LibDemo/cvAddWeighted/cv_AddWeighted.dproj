@@ -3,7 +3,7 @@
         <ProjectGuid>{2633EEFA-FD62-4BD2-9CDE-EAA36F67DA2B}</ProjectGuid>
         <MainSource>cv_AddWeighted.dpr</MainSource>
         <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Release</Config>
+        <Config Condition="'$(Config)'==''">Debug</Config>
         <TargetedPlatforms>3</TargetedPlatforms>
         <AppType>Console</AppType>
         <FrameworkType>VCL</FrameworkType>

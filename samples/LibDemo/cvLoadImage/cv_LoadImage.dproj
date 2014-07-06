@@ -3,7 +3,7 @@
         <ProjectGuid>{7DE3ACA5-D226-4AED-BDAC-3D815A3DDBD8}</ProjectGuid>
         <MainSource>cv_LoadImage.dpr</MainSource>
         <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Release</Config>
+        <Config Condition="'$(Config)'==''">Debug</Config>
         <TargetedPlatforms>3</TargetedPlatforms>
         <AppType>Console</AppType>
         <FrameworkType>None</FrameworkType>

@@ -3,7 +3,7 @@
         <ProjectGuid>{F3D470FD-11B6-4494-ADE1-BDFAC276A0A3}</ProjectGuid>
         <MainSource>cv_WarpAffine.dpr</MainSource>
         <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Release</Config>
+        <Config Condition="'$(Config)'==''">Debug</Config>
         <TargetedPlatforms>3</TargetedPlatforms>
         <AppType>Console</AppType>
         <FrameworkType>None</FrameworkType>

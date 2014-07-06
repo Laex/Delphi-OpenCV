@@ -3,7 +3,7 @@
         <ProjectGuid>{182C3EB2-6F37-4B58-B352-D10DC7C6CB17}</ProjectGuid>
         <MainSource>cv_MatchShapes.dpr</MainSource>
         <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Release</Config>
+        <Config Condition="'$(Config)'==''">Debug</Config>
         <TargetedPlatforms>3</TargetedPlatforms>
         <AppType>Console</AppType>
         <FrameworkType>None</FrameworkType>

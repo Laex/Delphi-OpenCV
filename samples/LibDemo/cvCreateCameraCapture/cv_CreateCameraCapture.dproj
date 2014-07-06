@@ -3,7 +3,7 @@
         <ProjectGuid>{5E67F385-27F1-49EA-BBBC-458BEF9B82AD}</ProjectGuid>
         <MainSource>cv_CreateCameraCapture.dpr</MainSource>
         <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Release</Config>
+        <Config Condition="'$(Config)'==''">Debug</Config>
         <TargetedPlatforms>3</TargetedPlatforms>
         <AppType>Console</AppType>
         <FrameworkType>None</FrameworkType>

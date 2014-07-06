@@ -27,8 +27,8 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, uOCVTypes, uOCVImageOperation,
-  ocv.core.types_c, uOCVSource, uOCVView, Vcl.StdCtrls, Vcl.ExtCtrls;
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, ocv.comp.Types, ocv.comp.ImageOperation,
+  ocv.core.types_c, ocv.comp.Source, ocv.comp.View, Vcl.StdCtrls, Vcl.ExtCtrls;
 
 type
   TMainForm = class(TForm)
@@ -98,11 +98,11 @@ procedure TMainForm.ocvmgprtn1AfterEachOperation(PrevOperation, Operation, NextO
 Var
   H: TocvRects;
 begin
-  if (Operation is TocvHaarCascade) and (NextOperation is TovcCropOperation) then
+  if (Operation is TocvHaarCascade) and (NextOperation is TocvCropOperation) then
   begin
     H := (Operation as TocvHaarCascade).HaarRects;
     if Length(H) > 0 then
-      (NextOperation as TovcCropOperation).CropRect.ocvRect := H[0];
+      (NextOperation as TocvCropOperation).CropRect.ocvRect := H[0];
   end;
 end;
 

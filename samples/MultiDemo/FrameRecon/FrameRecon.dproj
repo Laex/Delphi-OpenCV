@@ -3,7 +3,7 @@
         <ProjectGuid>{F0EF9F64-A50A-4420-B381-F2496EFB5E25}</ProjectGuid>
         <MainSource>FrameRecon.dpr</MainSource>
         <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Release</Config>
+        <Config Condition="'$(Config)'==''">Debug</Config>
         <TargetedPlatforms>3</TargetedPlatforms>
         <AppType>Console</AppType>
         <FrameworkType>None</FrameworkType>

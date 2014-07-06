@@ -3,7 +3,7 @@
         <ProjectGuid>{4104141B-E8AE-40B0-84F2-01C0147F3C3F}</ProjectGuid>
         <MainSource>cv_DFT.dpr</MainSource>
         <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Release</Config>
+        <Config Condition="'$(Config)'==''">Debug</Config>
         <TargetedPlatforms>3</TargetedPlatforms>
         <AppType>Console</AppType>
         <FrameworkType>None</FrameworkType>

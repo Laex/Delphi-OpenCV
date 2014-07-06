@@ -3,7 +3,7 @@
         <ProjectGuid>{6E3F5BEB-C274-4DCC-9D59-480C9A8DB9F3}</ProjectGuid>
         <MainSource>Squares.dpr</MainSource>
         <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Release</Config>
+        <Config Condition="'$(Config)'==''">Debug</Config>
         <TargetedPlatforms>3</TargetedPlatforms>
         <AppType>Console</AppType>
         <FrameworkType>None</FrameworkType>

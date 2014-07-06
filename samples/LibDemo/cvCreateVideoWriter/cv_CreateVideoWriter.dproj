@@ -3,7 +3,7 @@
         <ProjectGuid>{751AE2FB-A8CC-4AB2-90FE-5E0D12EA5E36}</ProjectGuid>
         <MainSource>cv_CreateVideoWriter.dpr</MainSource>
         <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Release</Config>
+        <Config Condition="'$(Config)'==''">Debug</Config>
         <TargetedPlatforms>3</TargetedPlatforms>
         <AppType>Console</AppType>
         <FrameworkType>None</FrameworkType>

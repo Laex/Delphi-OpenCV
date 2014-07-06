@@ -3,7 +3,7 @@
         <ProjectGuid>{FB41453B-2438-4060-A453-393842878BE7}</ProjectGuid>
         <MainSource>cv_Resize.dpr</MainSource>
         <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Release</Config>
+        <Config Condition="'$(Config)'==''">Debug</Config>
         <TargetedPlatforms>3</TargetedPlatforms>
         <AppType>Console</AppType>
         <FrameworkType>None</FrameworkType>

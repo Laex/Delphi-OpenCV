@@ -3,7 +3,7 @@
         <ProjectGuid>{F3BED90E-B7C3-42F9-9976-8B80F9549855}</ProjectGuid>
         <MainSource>cvSplit_cvMerge.dpr</MainSource>
         <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Release</Config>
+        <Config Condition="'$(Config)'==''">Debug</Config>
         <TargetedPlatforms>3</TargetedPlatforms>
         <AppType>Console</AppType>
         <FrameworkType>None</FrameworkType>

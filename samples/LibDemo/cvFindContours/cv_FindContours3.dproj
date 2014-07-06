@@ -3,7 +3,7 @@
         <ProjectGuid>{A7633F76-8F3B-4C33-B954-F5C1987547C1}</ProjectGuid>
         <MainSource>cv_FindContours3.dpr</MainSource>
         <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Release</Config>
+        <Config Condition="'$(Config)'==''">Debug</Config>
         <TargetedPlatforms>3</TargetedPlatforms>
         <AppType>Console</AppType>
         <FrameworkType>None</FrameworkType>

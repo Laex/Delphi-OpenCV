@@ -3,7 +3,7 @@
         <ProjectGuid>{55AED6D3-14EA-433F-BFC5-4F19BCD3CDEA}</ProjectGuid>
         <MainSource>IPCamVideoCapture.dpr</MainSource>
         <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Release</Config>
+        <Config Condition="'$(Config)'==''">Debug</Config>
         <TargetedPlatforms>3</TargetedPlatforms>
         <AppType>Console</AppType>
         <FrameworkType>None</FrameworkType>

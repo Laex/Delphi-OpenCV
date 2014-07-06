@@ -3,7 +3,7 @@
         <ProjectGuid>{968D4451-ED96-46DF-9AD0-631B8B1AFE16}</ProjectGuid>
         <MainSource>cv_SnakeImage.dpr</MainSource>
         <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Release</Config>
+        <Config Condition="'$(Config)'==''">Debug</Config>
         <TargetedPlatforms>3</TargetedPlatforms>
         <AppType>Console</AppType>
         <FrameworkType>VCL</FrameworkType>

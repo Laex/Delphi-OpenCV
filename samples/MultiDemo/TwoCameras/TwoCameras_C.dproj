@@ -3,7 +3,7 @@
         <ProjectGuid>{F7B4226B-38DA-49AA-9542-8DDB99C852D4}</ProjectGuid>
         <MainSource>TwoCameras_C.dpr</MainSource>
         <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Release</Config>
+        <Config Condition="'$(Config)'==''">Debug</Config>
         <TargetedPlatforms>3</TargetedPlatforms>
         <AppType>Console</AppType>
         <FrameworkType>None</FrameworkType>

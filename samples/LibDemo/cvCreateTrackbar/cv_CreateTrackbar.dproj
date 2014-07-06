@@ -3,7 +3,7 @@
         <ProjectGuid>{6A6A2114-760A-429A-B2AA-187C5DF4BA55}</ProjectGuid>
         <MainSource>cv_CreateTrackbar.dpr</MainSource>
         <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Release</Config>
+        <Config Condition="'$(Config)'==''">Debug</Config>
         <TargetedPlatforms>3</TargetedPlatforms>
         <AppType>Console</AppType>
         <FrameworkType>None</FrameworkType>
