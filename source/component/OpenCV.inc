@@ -3,135 +3,11 @@
 // Check IDE version
 
 {$IFDEF FPC}
-  {$DEFINE VER5P}
-  {$DEFINE VER6P}
-{$ENDIF}
-
-{$IFDEF VER130} { Delphi 5, C++ Builder 5 }
-  {$DEFINE VER5}
-  {$DEFINE VER5P}
-{$IFDEF BCB}
-  {$DEFINE CB5}
-  {$ObjExportAll On}
+  {$MODE DELPHI}
 {$ELSE}
-  {$DEFINE D5}
-{$ENDIF}
-{$ENDIF}
-
-{$IFDEF VER140} { Delphi 6, C++ Builder 6 }
-  {$DEFINE VER6}
-  {$DEFINE VER5P}
-  {$DEFINE VER6P}
-{$IFDEF BCB}
-  {$DEFINE CB6}
-  {$ObjExportAll On}
-{$ELSE}
-  {$DEFINE D6}
-{$ENDIF}
-{$ENDIF}
-
-{$IFDEF VER150} { Delphi 7 }
-{$IFNDEF BCB}
-  {$DEFINE D7}
-  {$DEFINE VER7}
-  {$DEFINE VER5P}
-  {$DEFINE VER6P}
-  {$DEFINE VER7P}
-{$ENDIF}
-{$ENDIF}
-
-{$IFDEF VER160} { Delphi 8 }
-  {$DEFINE D8}
-  {$DEFINE VER8}
-
-  {$DEFINE VER5P}
-  {$DEFINE VER6P}
-  {$DEFINE VER7P}
-  {$DEFINE VER8P}
-{$ENDIF}
-
-{$IFDEF VER170} { Delphi 2005 }
-  {$DEFINE D9}
-  {$DEFINE VER9}
-
-  {$DEFINE VER5P}
-  {$DEFINE VER6P}
-  {$DEFINE VER7P}
-  {$DEFINE VER8P}
-  {$DEFINE VER9P}
-{$ENDIF}
-
-{$IFDEF VER180} { Delphi 2006 }
-{$IFNDEF VER185} { not Delphi 2007 Spacely}
-  {$DEFINE D10}
-  {$DEFINE VER10}
-  {$DEFINE VER5P}
-  {$DEFINE VER6P}
-  {$DEFINE VER7P}
-  {$DEFINE VER8P}
-  {$DEFINE VER9P}
-  {$DEFINE VER10P}
-{$ENDIF}
-{$ENDIF}
-
-{$IFDEF VER185} { Delphi 2007 Spacely}
-  {$DEFINE D11}
-{$ENDIF}
-{$IFDEF VER190} { Delphi 2007 Highlander}
-  {$DEFINE D11}
-{$ENDIF}
-
-{$IFDEF D11}
-  {$DEFINE VER11}
-  {$DEFINE VER5P}
-  {$DEFINE VER6P}
-  {$DEFINE VER7P}
-  {$DEFINE VER8P}
-  {$DEFINE VER9P}
-  {$DEFINE VER10P}
-  {$DEFINE VER11P}
-{$ENDIF}
-
-{$IFDEF VER200} { Delphi 2009 }
-  {$DEFINE D12}
-  {$DEFINE VER12}
-  {$DEFINE VER5P}
-  {$DEFINE VER6P}
-  {$DEFINE VER7P}
-  {$DEFINE VER8P}
-  {$DEFINE VER9P}
-  {$DEFINE VER10P}
-  {$DEFINE VER11P}
-  {$DEFINE VER12P}
-{$ENDIF}
-
-{$IFDEF VER210} { Delphi 2010 }
-  {$DEFINE D14}
-  {$DEFINE VER14}
-  {$DEFINE VER5P}
-  {$DEFINE VER6P}
-  {$DEFINE VER7P}
-  {$DEFINE VER8P}
-  {$DEFINE VER9P}
-  {$DEFINE VER10P}
-  {$DEFINE VER11P}
-  {$DEFINE VER12P}
-  {$DEFINE VER14P}
-{$ENDIF}
-
-{$IFDEF VER220} { Delphi XE }
-  {$DEFINE D15}
-  {$DEFINE VER15}
-  {$DEFINE VER5P}
-  {$DEFINE VER6P}
-  {$DEFINE VER7P}
-  {$DEFINE VER8P}
-  {$DEFINE VER9P}
-  {$DEFINE VER10P}
-  {$DEFINE VER11P}
-  {$DEFINE VER12P}
-  {$DEFINE VER14P}
-  {$DEFINE VER15P}
+ {$IFDEF CompillerVersion<23}
+  Use RAD Studio XE2 and above.
+ {$ENDIF}
 {$ENDIF}
 
 {$IFDEF VER230} { Delphi XE2 }
@@ -229,6 +105,7 @@
 {$IFDEF CPU64}
   {$DEFINE CPUX64} { assembler for x64 - Lazarus compatibility }
 {$ENDIF}
+
 {$IFDEF CPU86}
   {$DEFINE CPUX86} { assembler for x86 - Lazarus compatibility }
 {$ENDIF}
