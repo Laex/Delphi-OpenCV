@@ -261,7 +261,7 @@ Type
   TocvReceiverList = class(TThreadList) // <IocvDataReceiver>;
   public
     procedure Add(Item: IocvDataReceiver);
-    procedure Remove(Item: IocvDataReceiver); {$IFDEF VER9P}inline; {$ENDIF}
+    procedure Remove(Item: IocvDataReceiver); {$IFDEF USE_INLINE}inline;{$ENDIF}
   end;
 
   TocvDataSource = class(TComponent, IocvDataSource)
