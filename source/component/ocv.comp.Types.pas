@@ -104,11 +104,11 @@ Type
       const LineType: TocvLineType = LT_8; const Shift: Integer = 0);
     procedure Circle(const x, y, r: Integer; const Color: TColor = clRed; const Thickness: Integer = 1;
       const LineType: TocvLineType = LT_8; const Shift: Integer = 0);
-    procedure Ellipse(const CenterX, CenterY: Integer; const Axes: TocvRect; const Angle: double; const start_angle: double;
-      const nd_angle: double; const Color: TColor = clRed; const Thickness: Integer = 1; const LineType: TocvLineType = LT_8;
-      const Shift: Integer = 0);
-    procedure EllipseBox(const Box: TocvRect; const Angle: Single; const Color: TColor = clRed; const Thickness: Integer = 1;
-      Const LineType: TocvLineType = LT_8; const Shift: Integer = 0); overload;
+    procedure Ellipse(const CenterX, CenterY: Integer; const Axes: TocvRect; const Angle: double;
+      const start_angle: double; const nd_angle: double; const Color: TColor = clRed; const Thickness: Integer = 1;
+      const LineType: TocvLineType = LT_8; const Shift: Integer = 0);
+    procedure EllipseBox(const Box: TocvRect; const Angle: Single; const Color: TColor = clRed;
+      const Thickness: Integer = 1; Const LineType: TocvLineType = LT_8; const Shift: Integer = 0); overload;
     procedure EllipseBox(const Box: TCvBox2D; const Color: TColor = clRed; const Thickness: Integer = 1;
       Const LineType: TocvLineType = LT_8; const Shift: Integer = 0); overload;
     procedure TextOut(const x, y: Integer; const Text: String; const Shadow: Boolean = False);
@@ -180,11 +180,11 @@ Type
       const LineType: TocvLineType = LT_AA; const Shift: Integer = 0);
     procedure Circle(const CenterX, CenterY, Radius: Integer; const Color: TColor = clRed; const Thickness: Integer = 1;
       const LineType: TocvLineType = LT_8; const Shift: Integer = 0);
-    procedure Ellipse(const CenterX, CenterY: Integer; const Axes: TocvRect; const Angle: double; const start_angle: double;
-      const nd_angle: double; const Color: TColor = clRed; const Thickness: Integer = 1; const LineType: TocvLineType = LT_8;
-      const Shift: Integer = 0);
-    procedure EllipseBox(const Box: TocvRect; const Angle: Single; const Color: TColor = clRed; const Thickness: Integer = 1;
-      Const LineType: TocvLineType = LT_8; const Shift: Integer = 0); overload;
+    procedure Ellipse(const CenterX, CenterY: Integer; const Axes: TocvRect; const Angle: double;
+      const start_angle: double; const nd_angle: double; const Color: TColor = clRed; const Thickness: Integer = 1;
+      const LineType: TocvLineType = LT_8; const Shift: Integer = 0);
+    procedure EllipseBox(const Box: TocvRect; const Angle: Single; const Color: TColor = clRed;
+      const Thickness: Integer = 1; Const LineType: TocvLineType = LT_8; const Shift: Integer = 0); overload;
     procedure EllipseBox(const Box: TCvBox2D; const Color: TColor = clRed; const Thickness: Integer = 1;
       Const LineType: TocvLineType = LT_8; const Shift: Integer = 0); overload;
     procedure TextOut(const x, y: Integer; const Text: String; const Shadow: Boolean = False);
@@ -223,9 +223,10 @@ Type
   TOnOcvNotify = procedure(Sender: TObject; Var IplImage: IocvImage) of object;
   TOnOcvAfterViewPaint = procedure(Sender: TObject; const IplImage: IocvImage) of object;
   TOnOcvAfterTransform = TOnOcvNotify;
-  TOnOcvBeforeTransform = procedure(Sender: TObject; const IplImage: IocvImage; Var ContinueTransform: Boolean) of object;
-  TOnOcvContour = procedure(Sender: TObject; const IplImage: IocvImage; const ContourCount: Integer; const Contours: pCvSeq)
+  TOnOcvBeforeTransform = procedure(Sender: TObject; const IplImage: IocvImage; Var ContinueTransform: Boolean)
     of object;
+  TOnOcvContour = procedure(Sender: TObject; const IplImage: IocvImage; const ContourCount: Integer;
+    const Contours: pCvSeq) of object;
   TOnOcvHaarCascade = procedure(Sender: TObject; const IplImage: IocvImage; const HaarRects: TocvRects) of object;
   TOnOcvRect = procedure(Sender: TObject; const IplImage: IocvImage; const Rect: TocvRect) of object;
   TOnOcvRects = procedure(Sender: TObject; const IplImage: IocvImage; const Rects: TocvRects) of object;
@@ -261,7 +262,7 @@ Type
   TocvReceiverList = class(TThreadList) // <IocvDataReceiver>;
   public
     procedure Add(Item: IocvDataReceiver);
-    procedure Remove(Item: IocvDataReceiver); {$IFDEF USE_INLINE}inline;{$ENDIF}
+    procedure Remove(Item: IocvDataReceiver); {$IFDEF USE_INLINE}inline; {$ENDIF}
   end;
 
   TocvDataSource = class(TComponent, IocvDataSource)
@@ -315,8 +316,8 @@ Type
   // Haar cascade types
   TocvHaarCascadeType = (hcEye, hcEyeTreeEyeGlasses, hcFrontalFaceAlt, hcFrontalFaceAlt2, hcFrontalFaceAltTree,
     hcFrontalFaceDefaut, hcFullBody, hcLeftEye2Splits, hcLowerBody, hcMcsEyePairBig, hcMcsEyePairSmall, hcMcsLeftEar,
-    hcMcsLeftEye, hcMcsMouth, hcMcsNose, hcMcsRightEar, hcMcsRightEye, hcMcsUpperBody, hcProfileFace, hcRightEye2Splits, hcSmile,
-    hcUpperBody, hcPlateNumberRus);
+    hcMcsLeftEye, hcMcsMouth, hcMcsNose, hcMcsRightEar, hcMcsRightEye, hcMcsUpperBody, hcProfileFace, hcRightEye2Splits,
+    hcSmile, hcUpperBody, hcPlateNumberRus);
   TocvHaarCascadeFlag = (HAAR_DO_CANNY_PRUNING, HAAR_SCALE_IMAGE, HAAR_FIND_BIGGEST_OBJECT, HAAR_DO_ROUGH_SEARCH);
   TocvHaarCascadeFlagSet = set of TocvHaarCascadeFlag;
 
@@ -337,7 +338,7 @@ implementation
 uses
   ocv.imgproc_c,
   ocv.imgproc.types_c,
-  ocv.highgui_c;
+  ocv.highgui_c, ocv.cvutils;
 
 function cvRect(const oRect: TocvRect): TCvRect;
 begin
@@ -375,7 +376,7 @@ begin
   Result.Bottom := cY + (Height div 2);
 end;
 
-{TOpenCVDataSource}
+{ TOpenCVDataSource }
 
 procedure TocvDataSource.AddReceiver(const OpenCVVideoReceiver: IocvDataReceiver);
 begin
@@ -444,7 +445,7 @@ begin
   FOpenCVVideoReceivers.Remove(OpenCVVideoReceiver);
 end;
 
-{TOpenCVDataSourceAndReceiver}
+{ TOpenCVDataSourceAndReceiver }
 
 destructor TocvDataSourceAndReceiver.Destroy;
 begin
@@ -475,7 +476,7 @@ begin
 
 end;
 
-{TocvDataReceiver}
+{ TocvDataReceiver }
 
 destructor TocvDataReceiver.Destroy;
 begin
@@ -512,7 +513,7 @@ begin
 
 end;
 
-{TocvImage}
+{ TocvImage }
 
 function TocvImage.AsBitmap: TBitmap;
 var
@@ -537,19 +538,19 @@ begin
       32:
         Result.PixelFormat := pf32bit;
     End;
-    wStep := FImage^.WidthStep;
-    Channels := FImage^.nChannels;
-    data := Pointer(FImage^.imageData);
-    for i := 0 to FImage^.Height - 1 do
-    begin
+    if not ipDraw(Result.Canvas.Handle, FImage, Rect(0, 0, FImage^.Width - 1, FImage^.Height - 1), False) then
+      FreeAndNil(Result);
+    {
+      wStep := FImage^.WidthStep;
+      Channels := FImage^.nChannels;
+      data := Pointer(FImage^.imageData);
+      for i := 0 to FImage^.Height - 1 do
+      begin
       pb := Result.Scanline[i];
       for j := 0 to FImage^.Width - 1 do
-      begin
-        for K := 0 to Channels - 1 do
-          pb[3 * j + K] := data[i * wStep + j * Channels + K]
-      End;
-    End;
-    Result := Result;
+      for K := 0 to Channels - 1 do
+      pb[Channels * j + K] := data[i * wStep + j * Channels + K]
+      End; }
   End
   else
     Result := NIL;
@@ -571,6 +572,7 @@ Var
   bitmapData: PByte;
 begin
   Create;
+  Assert(Assigned(Bitmap) and (Bitmap.Width > 0) and (Bitmap.Height > 0));
   Assert(Bitmap.PixelFormat = pf24bit, 'only 24bit'); // Пока только такой формат - IPL_DEPTH_8U, 3
   bitmapData := Bitmap.Scanline[0];
   FImage := cvCreateImage(cvSize(Bitmap.Width, Bitmap.Height), IPL_DEPTH_8U, 3);
@@ -665,7 +667,7 @@ begin
   Result := TocvImage.Create(cvCreateImage(cvGetSize(FImage), FImage^.depth, FImage^.nChannels));
 end;
 
-{TocvReceiverList}
+{ TocvReceiverList }
 
 procedure TocvReceiverList.Add(Item: IocvDataReceiver);
 begin
@@ -695,13 +697,14 @@ begin
   Result := CV_RGB(r, g, b);
 end;
 
-{TocvCanvas}
+{ TocvCanvas }
 
 procedure TocvCanvas.Circle(const CenterX, CenterY, Radius: Integer; const Color: TColor; const Thickness: Integer;
   const LineType: TocvLineType; const Shift: Integer);
 begin
   if Assigned(FOwner) and Assigned(FOwner.FImage) then
-    cvCircle(FOwner.FImage, cvPoint(CenterX, CenterY), Radius, ColorToCvRGB(Color), Thickness, cLineType[LineType], Shift);
+    cvCircle(FOwner.FImage, cvPoint(CenterX, CenterY), Radius, ColorToCvRGB(Color), Thickness,
+      cLineType[LineType], Shift);
 end;
 
 constructor TocvCanvas.Create(AOwner: TocvImage);
@@ -716,16 +719,17 @@ begin
   inherited;
 end;
 
-procedure TocvCanvas.Ellipse(const CenterX, CenterY: Integer; const Axes: TocvRect; const Angle, start_angle, nd_angle: double;
-  const Color: TColor; const Thickness: Integer; const LineType: TocvLineType; const Shift: Integer);
+procedure TocvCanvas.Ellipse(const CenterX, CenterY: Integer; const Axes: TocvRect;
+  const Angle, start_angle, nd_angle: double; const Color: TColor; const Thickness: Integer;
+  const LineType: TocvLineType; const Shift: Integer);
 begin
   if Assigned(FOwner) and Assigned(FOwner.FImage) then
     cvEllipse(FOwner.FImage, cvPoint(CenterX, CenterY), cvSize(Axes.Width, Axes.Height), Angle, start_angle, nd_angle,
       ColorToCvRGB(Color), Thickness, cLineType[LineType], Shift);
 end;
 
-procedure TocvCanvas.EllipseBox(const Box: TCvBox2D; const Color: TColor; const Thickness: Integer; const LineType: TocvLineType;
-  const Shift: Integer);
+procedure TocvCanvas.EllipseBox(const Box: TCvBox2D; const Color: TColor; const Thickness: Integer;
+  const LineType: TocvLineType; const Shift: Integer);
 begin
   if Assigned(FOwner) and Assigned(FOwner.FImage) then
     cvEllipseBox(FOwner.FImage, Box, ColorToCvRGB(Color), Thickness, cLineType[LineType], Shift);
@@ -746,7 +750,8 @@ procedure TocvCanvas.Rectangle(const x1, y1, x2, y2: Integer; const Color: TColo
   const LineType: TocvLineType; const Shift: Integer);
 begin
   if Assigned(FOwner) and Assigned(FOwner.FImage) then
-    cvRectangle(FOwner.FImage, cvPoint(x1, y1), cvPoint(x2, y2), ColorToCvRGB(Color), Thickness, cLineType[LineType], Shift);
+    cvRectangle(FOwner.FImage, cvPoint(x1, y1), cvPoint(x2, y2), ColorToCvRGB(Color), Thickness,
+      cLineType[LineType], Shift);
 end;
 
 procedure TocvCanvas.TextOut(const x, y: Integer; const Text: String; const Shadow: Boolean);
@@ -764,7 +769,7 @@ begin
   end;
 end;
 
-{TocvFont}
+{ TocvFont }
 
 constructor TocvFont.Create;
 begin
