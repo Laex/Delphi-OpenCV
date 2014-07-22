@@ -45,7 +45,8 @@ uses
   Graphics,
 {$ENDIF VER6P}
   ocv.comp.Types,
-  ocv.core.types_c, System.SyncObjs;
+  ocv.core.types_c,
+  System.SyncObjs;
 
 type
 

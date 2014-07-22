@@ -46,6 +46,9 @@ Type
     nAudioBufferSizeCurrent: Integer;
     W_VIDEO: Integer;
     H_VIDEO: Integer;
+    fbit_rate: Integer;
+    ftime_base_den: Integer;
+    function flush_encoder: Integer;
   protected
     // Add video stream
     function AddVideoStream(const pContext: pAVFormatContext; const codec_id: TAVCodecID): pAVStream;
@@ -75,6 +78,8 @@ Type
     // init output file
     function InitFile(const inputFile: AnsiString; const container: AnsiString; const AW_VIDEO: Integer = 320;
       const AH_VIDEO: Integer = 200): boolean;
+    // Set video params
+    procedure SetVideoParams(const atime_base_den: Integer = 25; const abit_rate: Integer = 2000000);
     // Add video and audio data
     function AddFrame(const frame: pAVFrame; const soundBuffer: pByte; const soundBufferSize: Integer;
       const framepixfmt: TAVPixelFormat = AV_PIX_FMT_RGB24): boolean;
@@ -90,7 +95,7 @@ Uses
   System.Math,
   ffm.mem, ffm.avutil, ffm.samplefmt, ffm.mathematics;
 
-{TNVRVideoEncoder}
+{ TNVRVideoEncoder }
 
 function TFFMVideoEncoder.AddAudioSample(const pFormatContext: pAVFormatContext; const pStream: pAVStream;
   const soundBuffer: pByte; const soundBufferSize: Integer): boolean;
@@ -312,6 +317,7 @@ begin
 
       // Write packet with frame.
       Result := av_interleaved_write_frame(pFormatContext, @pkt) = 0;
+      // Result := av_write_frame(pFormatContext, @pkt) = 0;
     end
     else
       Result := false;
@@ -322,7 +328,6 @@ function TFFMVideoEncoder.AddVideoStream(const pContext: pAVFormatContext; const
 Var
   pCodecCxt: pAVCodecContext;
 begin
-
   pCodecCxt := nil;
   Result := nil;
 
@@ -338,15 +343,15 @@ begin
   pCodecCxt^.codec_type := AVMEDIA_TYPE_VIDEO;
   pCodecCxt^.frame_number := 0;
   // Put sample parameters.
-  pCodecCxt^.bit_rate := 2000000;
+  pCodecCxt^.bit_rate := fbit_rate; // 2000000;
   // Resolution must be a multiple of two.
   pCodecCxt^.width := W_VIDEO;
   pCodecCxt^.height := H_VIDEO;
-  (*time base: this is the fundamental unit of time (in seconds) in terms
+  (* time base: this is the fundamental unit of time (in seconds) in terms
     of which frame timestamps are represented. for fixed-fps content,
     timebase should be 1/framerate and timestamp increments should be
-    identically 1.*)
-  pCodecCxt^.time_base.den := 25;
+    identically 1. *)
+  pCodecCxt^.time_base.den := ftime_base_den; // 25;
   pCodecCxt^.time_base.num := 1;
   pCodecCxt^.gop_size := 12; // emit one intra frame every twelve frames at most
 
@@ -358,9 +363,9 @@ begin
   end;
   if (pCodecCxt^.codec_id = AV_CODEC_ID_MPEG1VIDEO) then
   begin
-    (*Needed to avoid using macroblocks
+    (* Needed to avoid using macroblocks
       in which some coeffs overflow.This does not happen with normal video, it just happens here as the motion of
-      the chroma plane does not match the luma plane.*)
+      the chroma plane does not match the luma plane. *)
     pCodecCxt^.mb_decision := 2;
   end;
 
@@ -418,6 +423,7 @@ begin
   nAudioBufferSize := 1024 * 1024 * 4;
   audioBuffer := AllocMem(nAudioBufferSize);
   nAudioBufferSizeCurrent := 0;
+  SetVideoParams;
 end;
 
 function TFFMVideoEncoder.CreateFFmpegPicture(const pix_fmt: TAVPixelFormat; const nWidth, nHeight: Integer): pAVFrame;
@@ -458,6 +464,7 @@ begin
   // Todo: Maybe you need write audio samples from audioBuffer to file before cloasing.
   if Assigned(pFormatContext) then
   begin
+//    flush_encoder;
     av_write_trailer(pFormatContext);
     Free;
   end;
@@ -466,6 +473,32 @@ begin
   begin
     FreeMem(audioBuffer);
     audioBuffer := nil;
+  end;
+end;
+
+function TFFMVideoEncoder.flush_encoder: Integer;
+Var
+  ret, got_output: Integer;
+  pkt: TAVPacket;
+begin
+  (* get the delayed frames *)
+  av_init_packet(@pkt);
+  got_output := 1;
+  While got_output <> 0 do
+  begin
+    ret := avcodec_encode_video2(pVideoStream^.codec, @pkt, nil, got_output);
+    if (ret < 0) then
+    begin
+      // WriteLn('Error encoding frame');
+      Exit(ret);
+    end;
+    if (got_output <> 0) then
+    begin
+      // WriteLn(format('Write frame %3d (size=%5d)', [i, pkt.size]));
+      // BlockWrite(f, pkt.data^, pkt.size);
+      av_free_packet(pkt);
+    end;
+    // Inc(i);
   end;
 end;
 
@@ -542,8 +575,8 @@ begin
       if Assigned(pAudioStream) then
         Result := OpenAudio(pFormatContext, pAudioStream);
 
-      if Result and ((pOutFormat^.flags and AVFMT_NOFILE) = 0) and (avio_open(pFormatContext^.pb, filename, AVIO_FLAG_WRITE) < 0)
-      then
+      if Result and ((pOutFormat^.flags and AVFMT_NOFILE) = 0) and
+        (avio_open(pFormatContext^.pb, filename, AVIO_FLAG_WRITE) < 0) then
       begin
         Result := false;
         // printf(" Cannot open file\ n ");
@@ -637,6 +670,12 @@ begin
     pVideoEncodeBuffer := av_malloc(nSizeVideoEncodeBuffer);
   end;
   Result := true;
+end;
+
+procedure TFFMVideoEncoder.SetVideoParams(const atime_base_den, abit_rate: Integer);
+begin
+  fbit_rate := abit_rate;
+  ftime_base_den := atime_base_den;
 end;
 
 end.

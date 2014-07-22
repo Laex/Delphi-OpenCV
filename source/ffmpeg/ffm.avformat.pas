@@ -279,11 +279,11 @@ uses
   * num is assumed to be 0 <= num < den.
 *)
 Type
-  TAVFrac = {packed} record
+  TAVFrac = { packed } record
     val, num, den: int64_t;
   end;
 
-  (************************************************/
+  (* ***********************************************/
     * input/output formats
   *)
 
@@ -380,8 +380,8 @@ const
   AV_PROGRAM_RUNNING = 1;
 
   //
-  AVFMTCTX_NOHEADER = $0001; (*< signal that no header is present
-    (streams are added dynamically)*)
+  AVFMTCTX_NOHEADER = $0001; (* < signal that no header is present
+    (streams are added dynamically) *)
   //
   RAW_PACKET_BUFFER_SIZE = 2500000;
 
@@ -397,15 +397,15 @@ type
   *)
   pAVProbeData = ^TAVProbeData;
 
-  TAVProbeData = {packed} record
+  TAVProbeData = { packed } record
     filename: pAnsiChar;
-    buf: pByte; (*< Buffer must have AVPROBE_PADDING_SIZE of extra allocated bytes filled with zero.*)
-    buf_size: Integer; (*< Size of buf except extra allocated bytes*)
+    buf: pByte; (* < Buffer must have AVPROBE_PADDING_SIZE of extra allocated bytes filled with zero. *)
+    buf_size: Integer; (* < Size of buf except extra allocated bytes *)
   end;
 
   pAVOutputFormat = ^TAVOutputFormat;
 
-  TAVOutputFormat = {packed} record
+  TAVOutputFormat = { packed } record
     name: pAnsiChar;
     (*
       * Descriptive name for the format, meant to be more human-readable
@@ -433,7 +433,7 @@ type
     codec_tag: ppAVCodecTag;
     priv_class: pAVClass; // < AVClass for the private context
 
-    (****************************************************************
+    (* ***************************************************************
       * No fields below this line are part of the public API. They
       * may not be used outside of libavformat and can be changed and
       * removed at will.
@@ -479,7 +479,7 @@ type
 
   pAVInputFormat = ^TAVInputFormat;
 
-  TAVInputFormat = {packed} record
+  TAVInputFormat = { packed } record
     (*
       * A comma separated list of short names for the format. New names
       * may be appended with a minor bump.
@@ -569,7 +569,8 @@ type
       * @return the timestamp or AV_NOPTS_VALUE if an error occurred
     *)
     // int64_t (*read_timestamp)(struct AVFormatContext *s, int stream_index, int64_t *pos, int64_t pos_limit);
-    read_timestamp: function(s: pAVFormatContext; stream_index: Integer; pos: pint64_t; pos_limit: int64_t): int64_t; cdecl;
+    read_timestamp: function(s: pAVFormatContext; stream_index: Integer; pos: pint64_t; pos_limit: int64_t)
+      : int64_t; cdecl;
     (*
       * Start/resume playing - only meaningful if using a network-based format
       * (RTSP).
@@ -594,16 +595,18 @@ type
   TAVStreamParseType = ( //
     AVSTREAM_PARSE_NONE, AVSTREAM_PARSE_FULL, // **< full parsing and repack */
     AVSTREAM_PARSE_HEADERS, // **< Only parse headers, do not repack. */
-    AVSTREAM_PARSE_TIMESTAMPS, // **< full parsing and interpolation of timestamps for frames not starting on a packet boundary */
-    AVSTREAM_PARSE_FULL_ONCE, // **< full parsing and repack of the first frame only, only implemented for H.264 currently */
+    AVSTREAM_PARSE_TIMESTAMPS,
+    // **< full parsing and interpolation of timestamps for frames not starting on a packet boundary */
+    AVSTREAM_PARSE_FULL_ONCE,
+    // **< full parsing and repack of the first frame only, only implemented for H.264 currently */
     AVSTREAM_PARSE_FULL_RAW = $57415230 // MKTAG(0,'R','A','W')
-    (*< full parsing and repack with timestamp and position generation by parser for raw
+    (* < full parsing and repack with timestamp and position generation by parser for raw
       this assumes that each packet in the file contains no demuxer level headers and
-      just codec level data, otherwise position generation would fail*)
+      just codec level data, otherwise position generation would fail *)
     );
   pAVIndexEntry = ^TAVIndexEntry;
 
-  TAVIndexEntry = {packed} record
+  TAVIndexEntry = { packed } record
     pos: int64_t;
     timestamp: int64_t;
     // * Timestamp in AVStream.time_base units, preferably the time from which on correctly decoded frames are available
@@ -613,7 +616,8 @@ type
     // int flags:2;
     // int size:30; //Yeah, trying to keep the size of this small to reduce memory requirements (it is 24 vs. 32 bytes due to possible 8-byte alignment).
     flag_size: int32;
-    min_distance: Integer; (*< Minimum distance between this and the previous keyframe, used to avoid unneeded searching.*)
+    min_distance: Integer;
+    (* < Minimum distance between this and the previous keyframe, used to avoid unneeded searching. *)
   end;
   (*
     * Track should be used during playback by default.
@@ -659,7 +663,7 @@ type
 
   pInfo = ^TInfo;
 
-  TInfo = {packed} record
+  TInfo = { packed } record
     last_dts: int64_t;
     duration_gcd: int64_t;
     duration_count: Integer;
@@ -682,7 +686,7 @@ type
   pAVStream = ^TAVStream;
   ppAVStream = ^pAVStream;
 
-  TAVStream = {packed} record
+  TAVStream = { packed } record
     index: Integer; // **< stream index in AVFormatContext */
     (*
       * Format-specific stream ID.
@@ -755,7 +759,7 @@ type
       * encoding: unused
     *)
     attached_pic: TAVPacket;
-    (****************************************************************
+    (* ***************************************************************
       * All fields below this line are not part of the public API. They
       * may not be used outside of libavformat and can be changed and
       * removed at will.
@@ -805,8 +809,8 @@ type
     probe_data: TAVProbeData;
     // #define MAX_REORDER_DELAY 16
     pts_buffer: array [0 .. MAX_REORDER_DELAY] of int64_t;
-    index_entries: pAVIndexEntry; (*< Only used if the format does not
-      support seeking natively.*)
+    index_entries: pAVIndexEntry; (* < Only used if the format does not
+      support seeking natively. *)
     nb_index_entries: Integer;
     index_entries_allocated_size: Cardinal;
     (*
@@ -887,7 +891,7 @@ type
   pAVProgram = ^TAVProgram;
   ppAVProgram = ^pAVProgram;
 
-  TAVProgram = {packed} record
+  TAVProgram = { packed } record
     id: Integer;
     flags: Integer;
     discard: TAVDiscard;
@@ -898,7 +902,7 @@ type
     program_num: Integer;
     pmt_pid: Integer;
     pcr_pid: Integer;
-    (****************************************************************
+    (* ***************************************************************
       * All fields below this line are not part of the public API. They
       * may not be used outside of libavformat and can be changed and
       * removed at will.
@@ -916,7 +920,7 @@ type
   pAVChapter = ^TAVChapter;
   ppAVChapter = ^pAVChapter;
 
-  TAVChapter = {packed} record
+  TAVChapter = { packed } record
     id: Integer;
     /// < unique ID to identify the chapter
     time_base: TAVRational;
@@ -939,7 +943,7 @@ type
     /// < Duration estimated from bitrate (less accurate)
     );
 
-  (**
+  (* *
     * Format I/O context.
     * New fields can be added to the end with minor version bumps.
     * Removal, reordering and changes to existing fields require a major
@@ -948,7 +952,7 @@ type
     * avformat_alloc_context() to create an AVFormatContext.
   *)
 
-  TAVFormatContext = {packed} record
+  TAVFormatContext = { packed } record
     (*
       * A class for logging and AVOptions. Set by avformat_alloc_context().
       * Exports (de)muxer private options if they exist.
@@ -980,7 +984,7 @@ type
     *)
     pb: pAVIOContext;
 
-    (*stream info*)
+    (* stream info *)
     ctx_flags: Integer; // **< Format-specific flags, see AVFMTCTX_xx */
 
     (*
@@ -1209,7 +1213,7 @@ type
     *)
     // int probe_score;
     probe_score: Integer;
-    (****************************************************************
+    (* ***************************************************************
       * All fields below this line are not part of the public API. They
       * may not be used outside of libavformat and can be changed and
       * removed at will.
@@ -1227,7 +1231,7 @@ type
     // struct AVPacketList *packet_buffer_end;
     packet_buffer_end: pAVPacketList;
 
-    (*av_seek_frame() support*)
+    (* av_seek_frame() support *)
     // int64_t data_offset; /**< offset of the first packet */
     data_offset: int64_t;
 
@@ -1320,7 +1324,7 @@ type
   *)
   // enum AVDurationEstimationMethod av_fmt_ctx_get_duration_estimation_method(const AVFormatContext* ctx);
 
-  TAVPacketList = {packed} record
+  TAVPacketList = { packed } record
     pkt: TAVPacket;
     next: pAVPacketList;
   end;
@@ -1460,8 +1464,8 @@ function avformat_new_stream(s: pAVFormatContext; const c: pAVCodec): pAVStream;
   * failure
 *)
 // int avformat_alloc_output_context2(AVFormatContext **ctx, AVOutputFormat *oformat, const char *format_name, const char *filename);
-function avformat_alloc_output_context2(Var ctx: pAVFormatContext; oformat: pAVOutputFormat; const format_name: pAnsiChar;
-  const filename: pAnsiChar): Integer; cdecl;
+function avformat_alloc_output_context2(Var ctx: pAVFormatContext; oformat: pAVOutputFormat;
+  const format_name: pAnsiChar; const filename: pAnsiChar): Integer; cdecl;
 (*
   // * @addtogroup lavf_decoding
   // * @{
@@ -1550,8 +1554,8 @@ function avformat_alloc_output_context2(Var ctx: pAVFormatContext; oformat: pAVO
 *)
 
 // int avformat_open_input(AVFormatContext **ps, const char *filename, AVInputFormat *fmt, AVDictionary **options);
-function avformat_open_input(var ps: pAVFormatContext; const filename: pAnsiChar; fmt: pAVInputFormat; options: ppAVDictionary)
-  : Integer; cdecl;
+function avformat_open_input(var ps: pAVFormatContext; const filename: pAnsiChar; fmt: pAVInputFormat;
+  options: ppAVDictionary): Integer; cdecl;
 
 // attribute_deprecated
 // int av_demuxer_open(AVFormatContext *ic);
@@ -1641,8 +1645,8 @@ function avformat_find_stream_info(ic: pAVFormatContext; options: ppAVDictionary
 // int related_stream,
 // AVCodec **decoder_ret,
 // int flags);
-function av_find_best_stream(ic: pAVFormatContext; _type: TAVMediaType; wanted_stream_nb: Integer; related_stream: Integer;
-  Var decoder_ret: pAVCodec; flags: Integer): Integer; cdecl;
+function av_find_best_stream(ic: pAVFormatContext; _type: TAVMediaType; wanted_stream_nb: Integer;
+  related_stream: Integer; Var decoder_ret: pAVCodec; flags: Integer): Integer; cdecl;
 
 // #if FF_API_READ_PACKET
 (*
@@ -1815,7 +1819,7 @@ procedure avformat_close_input(Var s: pAVFormatContext); cdecl;
   // * @see av_opt_find, av_dict_set, avio_open, av_oformat_next.
 *)
 // int avformat_write_header(AVFormatContext *s, AVDictionary **options);
-function avformat_write_header(s: pAVFormatContext; options: ppAVDictionary):Integer; cdecl;
+function avformat_write_header(s: pAVFormatContext; options: ppAVDictionary): Integer; cdecl;
 (*
   // * Write a packet to an output media file.
   // *
@@ -1833,7 +1837,7 @@ function avformat_write_header(s: pAVFormatContext; options: ppAVDictionary):Int
   // * @return < 0 on error, = 0 if OK, 1 if flushed and there is no more data to flush
 *)
 // int av_write_frame(AVFormatContext *s, AVPacket *pkt);
-//
+function av_write_frame(s: pAVFormatContext; pkt: pAVPacket): Integer; cdecl;
 (*
   // * Write a packet to an output media file ensuring correct interleaving.
   // *
@@ -1861,7 +1865,7 @@ function avformat_write_header(s: pAVFormatContext; options: ppAVDictionary):Int
   // * @return 0 on success, a negative AVERROR on error.
 *)
 // int av_interleaved_write_frame(AVFormatContext *s, AVPacket *pkt);
-function av_interleaved_write_frame(s:pAVFormatContext; pkt:pAVPacket):Integer; cdecl;
+function av_interleaved_write_frame(s: pAVFormatContext; pkt: pAVPacket): Integer; cdecl;
 
 (*
   // * Write the stream trailer to an output media file and free the
@@ -2223,5 +2227,6 @@ function avformat_write_header; external avformat_dll;
 function av_write_trailer; external avformat_dll;
 function avformat_new_stream; external avformat_dll;
 function av_interleaved_write_frame; external avformat_dll;
+function av_write_frame; external avformat_dll;
 
 end.

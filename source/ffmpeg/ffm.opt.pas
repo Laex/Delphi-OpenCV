@@ -234,7 +234,8 @@ Type
     { } AV_OPT_TYPE_BINARY,
     // < offset must point to a pointer immediately followed by an int for the length
     { } AV_OPT_TYPE_CONST = 128,
-    { } AV_OPT_TYPE_IMAGE_SIZE = $53495A45, // MKBETAG('S', 'I', 'Z', 'E'),  // < offset must point to two consecutive integers
+    { } AV_OPT_TYPE_IMAGE_SIZE = $53495A45,
+    // MKBETAG('S', 'I', 'Z', 'E'),  // < offset must point to two consecutive integers
     { } AV_OPT_TYPE_PIXEL_FMT = $50464D54, // MKBETAG('P', 'F', 'M', 'T'),
     { } AV_OPT_TYPE_SAMPLE_FMT = $53464D54, // MKBETAG('S', 'F', 'M', 'T'),
     { } AV_OPT_TYPE_VIDEO_RATE = $56524154, // MKBETAG('V', 'R', 'A', 'T'),    // < offset must point to AVRational
@@ -674,115 +675,118 @@ const
   // * AVERROR(EINVAL) if the value is not valid
   // */
   // int av_opt_set       (void *obj, const char *name, const char *val, int search_flags);
-  // int av_opt_set_int   (void *obj, const char *name, int64_t     val, int search_flags);
-  // int av_opt_set_double(void *obj, const char *name, double      val, int search_flags);
-  // int av_opt_set_q     (void *obj, const char *name, AVRational  val, int search_flags);
-  // int av_opt_set_bin   (void *obj, const char *name, const uint8_t *val, int size, int search_flags);
-function av_opt_set_bin(obj: Pointer; const name: pAnsiChar; const val: PByte; size: Integer; search_flags: Integer):Integer; cdecl;
-// int av_opt_set_image_size(void *obj, const char *name, int w, int h, int search_flags);
-// int av_opt_set_pixel_fmt (void *obj, const char *name, enum AVPixelFormat fmt, int search_flags);
-// int av_opt_set_sample_fmt(void *obj, const char *name, enum AVSampleFormat fmt, int search_flags);
-// int av_opt_set_video_rate(void *obj, const char *name, AVRational val, int search_flags);
-// int av_opt_set_channel_layout(void *obj, const char *name, int64_t ch_layout, int search_flags);
-//
-/// **
-// * Set a binary option to an integer list.
-// *
-// * @param obj    AVClass object to set options on
-// * @param name   name of the binary option
-// * @param val    pointer to an integer list (must have the correct type with
-// *               regard to the contents of the list)
-// * @param term   list terminator (usually 0 or -1)
-// * @param flags  search flags
-// */
-// #define av_opt_set_int_list(obj, name, val, term, flags) \
-// (av_int_list_length(val, term) > INT_MAX / sizeof(*(val)) ? \
-// AVERROR(EINVAL) : \
-// av_opt_set_bin(obj, name, (const uint8_t *)(val), \
-// av_int_list_length(val, term) * sizeof(*(val)), flags))
-/// **
-// * @}
-// */
-//
-/// **
-// * @defgroup opt_get_funcs Option getting functions
-// * @{
-// * Those functions get a value of the option with the given name from an object.
-// *
-// * @param[in] obj a struct whose first element is a pointer to an AVClass.
-// * @param[in] name name of the option to get.
-// * @param[in] search_flags flags passed to av_opt_find2. I.e. if AV_OPT_SEARCH_CHILDREN
-// * is passed here, then the option may be found in a child of obj.
-// * @param[out] out_val value of the option will be written here
-// * @return >=0 on success, a negative error code otherwise
-// */
-/// **
-// * @note the returned string will be av_malloc()ed and must be av_free()ed by the caller
-// */
-// int av_opt_get       (void *obj, const char *name, int search_flags, uint8_t   **out_val);
-// int av_opt_get_int   (void *obj, const char *name, int search_flags, int64_t    *out_val);
-// int av_opt_get_double(void *obj, const char *name, int search_flags, double     *out_val);
-// int av_opt_get_q     (void *obj, const char *name, int search_flags, AVRational *out_val);
-// int av_opt_get_image_size(void *obj, const char *name, int search_flags, int *w_out, int *h_out);
-// int av_opt_get_pixel_fmt (void *obj, const char *name, int search_flags, enum AVPixelFormat *out_fmt);
-// int av_opt_get_sample_fmt(void *obj, const char *name, int search_flags, enum AVSampleFormat *out_fmt);
-// int av_opt_get_video_rate(void *obj, const char *name, int search_flags, AVRational *out_val);
-// int av_opt_get_channel_layout(void *obj, const char *name, int search_flags, int64_t *ch_layout);
-/// **
-// * @}
-// */
-/// **
-// * Gets a pointer to the requested field in a struct.
-// * This function allows accessing a struct even when its fields are moved or
-// * renamed since the application making the access has been compiled,
-// *
-// * @returns a pointer to the field, it can be cast to the correct type and read
-// *          or written to.
-// */
-// void *av_opt_ptr(const AVClass *avclass, void *obj, const char *name);
-//
-/// **
-// * Free an AVOptionRanges struct and set it to NULL.
-// */
-// void av_opt_freep_ranges(AVOptionRanges **ranges);
-//
-/// **
-// * Get a list of allowed ranges for the given option.
-// *
-// * The returned list may depend on other fields in obj like for example profile.
-// *
-// * @param flags is a bitmask of flags, undefined flags should not be set and should be ignored
-// *              AV_OPT_SEARCH_FAKE_OBJ indicates that the obj is a double pointer to a AVClass instead of a full instance
-// *
-// * The result must be freed with av_opt_freep_ranges.
-// *
-// * @return >= 0 on success, a negative errro code otherwise
-// */
-// int av_opt_query_ranges(AVOptionRanges **, void *obj, const char *key, int flags);
-//
-/// **
-// * Get a default list of allowed ranges for the given option.
-// *
-// * This list is constructed without using the AVClass.query_ranges() callback
-// * and can be used as fallback from within the callback.
-// *
-// * @param flags is a bitmask of flags, undefined flags should not be set and should be ignored
-// *              AV_OPT_SEARCH_FAKE_OBJ indicates that the obj is a double pointer to a AVClass instead of a full instance
-// *
-// * The result must be freed with av_opt_free_ranges.
-// *
-// * @return >= 0 on success, a negative errro code otherwise
-// */
-// int av_opt_query_ranges_default(AVOptionRanges **, void *obj, const char *key, int flags);
-//
-/// **
-// * @}
-// */
+function av_opt_set(obj: Pointer; const name: pAnsiChar; const val: pAnsiChar; search_flags: Integer): Integer; cdecl;
+// int av_opt_set_int   (void *obj, const char *name, int64_t     val, int search_flags);
+// int av_opt_set_double(void *obj, const char *name, double      val, int search_flags);
+// int av_opt_set_q     (void *obj, const char *name, AVRational  val, int search_flags);
+// int av_opt_set_bin   (void *obj, const char *name, const uint8_t *val, int size, int search_flags);
+  function av_opt_set_bin(obj: Pointer; const name: pAnsiChar; const val: PByte; size: Integer; search_flags: Integer)
+    : Integer; cdecl;
+  // int av_opt_set_image_size(void *obj, const char *name, int w, int h, int search_flags);
+  // int av_opt_set_pixel_fmt (void *obj, const char *name, enum AVPixelFormat fmt, int search_flags);
+  // int av_opt_set_sample_fmt(void *obj, const char *name, enum AVSampleFormat fmt, int search_flags);
+  // int av_opt_set_video_rate(void *obj, const char *name, AVRational val, int search_flags);
+  // int av_opt_set_channel_layout(void *obj, const char *name, int64_t ch_layout, int search_flags);
+  //
+  /// **
+  // * Set a binary option to an integer list.
+  // *
+  // * @param obj    AVClass object to set options on
+  // * @param name   name of the binary option
+  // * @param val    pointer to an integer list (must have the correct type with
+  // *               regard to the contents of the list)
+  // * @param term   list terminator (usually 0 or -1)
+  // * @param flags  search flags
+  // */
+  // #define av_opt_set_int_list(obj, name, val, term, flags) \
+  // (av_int_list_length(val, term) > INT_MAX / sizeof(*(val)) ? \
+  // AVERROR(EINVAL) : \
+  // av_opt_set_bin(obj, name, (const uint8_t *)(val), \
+  // av_int_list_length(val, term) * sizeof(*(val)), flags))
+  /// **
+  // * @}
+  // */
+  //
+  /// **
+  // * @defgroup opt_get_funcs Option getting functions
+  // * @{
+  // * Those functions get a value of the option with the given name from an object.
+  // *
+  // * @param[in] obj a struct whose first element is a pointer to an AVClass.
+  // * @param[in] name name of the option to get.
+  // * @param[in] search_flags flags passed to av_opt_find2. I.e. if AV_OPT_SEARCH_CHILDREN
+  // * is passed here, then the option may be found in a child of obj.
+  // * @param[out] out_val value of the option will be written here
+  // * @return >=0 on success, a negative error code otherwise
+  // */
+  /// **
+  // * @note the returned string will be av_malloc()ed and must be av_free()ed by the caller
+  // */
+  // int av_opt_get       (void *obj, const char *name, int search_flags, uint8_t   **out_val);
+  // int av_opt_get_int   (void *obj, const char *name, int search_flags, int64_t    *out_val);
+  // int av_opt_get_double(void *obj, const char *name, int search_flags, double     *out_val);
+  // int av_opt_get_q     (void *obj, const char *name, int search_flags, AVRational *out_val);
+  // int av_opt_get_image_size(void *obj, const char *name, int search_flags, int *w_out, int *h_out);
+  // int av_opt_get_pixel_fmt (void *obj, const char *name, int search_flags, enum AVPixelFormat *out_fmt);
+  // int av_opt_get_sample_fmt(void *obj, const char *name, int search_flags, enum AVSampleFormat *out_fmt);
+  // int av_opt_get_video_rate(void *obj, const char *name, int search_flags, AVRational *out_val);
+  // int av_opt_get_channel_layout(void *obj, const char *name, int search_flags, int64_t *ch_layout);
+  /// **
+  // * @}
+  // */
+  /// **
+  // * Gets a pointer to the requested field in a struct.
+  // * This function allows accessing a struct even when its fields are moved or
+  // * renamed since the application making the access has been compiled,
+  // *
+  // * @returns a pointer to the field, it can be cast to the correct type and read
+  // *          or written to.
+  // */
+  // void *av_opt_ptr(const AVClass *avclass, void *obj, const char *name);
+  //
+  /// **
+  // * Free an AVOptionRanges struct and set it to NULL.
+  // */
+  // void av_opt_freep_ranges(AVOptionRanges **ranges);
+  //
+  /// **
+  // * Get a list of allowed ranges for the given option.
+  // *
+  // * The returned list may depend on other fields in obj like for example profile.
+  // *
+  // * @param flags is a bitmask of flags, undefined flags should not be set and should be ignored
+  // *              AV_OPT_SEARCH_FAKE_OBJ indicates that the obj is a double pointer to a AVClass instead of a full instance
+  // *
+  // * The result must be freed with av_opt_freep_ranges.
+  // *
+  // * @return >= 0 on success, a negative errro code otherwise
+  // */
+  // int av_opt_query_ranges(AVOptionRanges **, void *obj, const char *key, int flags);
+  //
+  /// **
+  // * Get a default list of allowed ranges for the given option.
+  // *
+  // * This list is constructed without using the AVClass.query_ranges() callback
+  // * and can be used as fallback from within the callback.
+  // *
+  // * @param flags is a bitmask of flags, undefined flags should not be set and should be ignored
+  // *              AV_OPT_SEARCH_FAKE_OBJ indicates that the obj is a double pointer to a AVClass instead of a full instance
+  // *
+  // * The result must be freed with av_opt_free_ranges.
+  // *
+  // * @return >= 0 on success, a negative errro code otherwise
+  // */
+  // int av_opt_query_ranges_default(AVOptionRanges **, void *obj, const char *key, int flags);
+  //
+  /// **
+  // * @}
+  // */
 
 implementation
 
 uses ffm.lib;
 
 function av_opt_set_bin; external avutil_dll;
+function av_opt_set; external avutil_dll;
 
 end.

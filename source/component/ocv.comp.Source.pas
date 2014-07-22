@@ -46,37 +46,37 @@ uses
 type
   TocvCameraCaptureSource =
   //
-    (CAP_ANY {= 0} , // autodetect
-    CAP_CAM_0 {=0} , //
-    CAP_CAM_1 {=1} , //
-    CAP_CAM_2 {=2} , //
-    CAP_CAM_3 {=3} , //
-    CAP_CAM_4 {=4} , //
-    CAP_CAM_5 {=5} , //
-    CAP_MIL {= 100} , // MIL proprietary drivers
-    CAP_VFW {= 200} , // platform native
-    CAP_V4L {= 200} , //
-    CAP_V4L2 {= 200} , //
-    CAP_FIREWARE {= 300} , // IEEE 1394 drivers
-    CAP_FIREWIRE {= 300} , //
-    CAP_IEEE1394 {= 300} , //
-    CAP_DC1394 {= 300} , //
-    CAP_CMU1394 {= 300} , //
-    CAP_STEREO {= 400} , // TYZX proprietary drivers
-    CAP_TYZX {= 400} , //
-    TYZX_LEFT {= 400} , //
-    TYZX_RIGHT {= 401} , //
-    TYZX_COLOR {= 402} , //
-    TYZX_Z {= 403} , //
-    CAP_QT {= 500} , // QuickTime
-    CAP_UNICAP {= 600} , // Unicap drivers
-    CAP_DSHOW {= 700} , // DirectShow (via videoInput)
-    CAP_PVAPI {= 800} , // PvAPI, Prosilica GigE SDK
-    CAP_OPENNI {= 900} , // OpenNI (for Kinect)
-    CAP_OPENNI_ASUS {= 910} , // OpenNI (for Asus Xtion)
-    CAP_ANDROID {= 1000} , // Android
-    CAP_XIAPI {= 1100} , // XIMEA Camera API
-    CAP_AVFOUNDATION {= 1200} );
+    (CAP_ANY { = 0 } , // autodetect
+    CAP_CAM_0 { =0 } , //
+    CAP_CAM_1 { =1 } , //
+    CAP_CAM_2 { =2 } , //
+    CAP_CAM_3 { =3 } , //
+    CAP_CAM_4 { =4 } , //
+    CAP_CAM_5 { =5 } , //
+    CAP_MIL { = 100 } , // MIL proprietary drivers
+    CAP_VFW { = 200 } , // platform native
+    CAP_V4L { = 200 } , //
+    CAP_V4L2 { = 200 } , //
+    CAP_FIREWARE { = 300 } , // IEEE 1394 drivers
+    CAP_FIREWIRE { = 300 } , //
+    CAP_IEEE1394 { = 300 } , //
+    CAP_DC1394 { = 300 } , //
+    CAP_CMU1394 { = 300 } , //
+    CAP_STEREO { = 400 } , // TYZX proprietary drivers
+    CAP_TYZX { = 400 } , //
+    TYZX_LEFT { = 400 } , //
+    TYZX_RIGHT { = 401 } , //
+    TYZX_COLOR { = 402 } , //
+    TYZX_Z { = 403 } , //
+    CAP_QT { = 500 } , // QuickTime
+    CAP_UNICAP { = 600 } , // Unicap drivers
+    CAP_DSHOW { = 700 } , // DirectShow (via videoInput)
+    CAP_PVAPI { = 800 } , // PvAPI, Prosilica GigE SDK
+    CAP_OPENNI { = 900 } , // OpenNI (for Kinect)
+    CAP_OPENNI_ASUS { = 910 } , // OpenNI (for Asus Xtion)
+    CAP_ANDROID { = 1000 } , // Android
+    CAP_XIAPI { = 1100 } , // XIMEA Camera API
+    CAP_AVFOUNDATION { = 1200 } );
 
 type
 
@@ -164,6 +164,12 @@ type
     property OnEndOfFile: TNotifyEvent read FOnEndOfFile Write FOnEndOfFile;
   end;
 
+  TocvIPProtocol = ( //
+    ippHTTP, //
+    ippHTTPS, //
+    ippRTSP //
+    ); //
+
   TocvIPCamSource = class(TocvCaptureSource)
   private
     FPort: Word;
@@ -171,6 +177,7 @@ type
     FIP: string;
     FUserName: String;
     FURI: string;
+    FProtocol: TocvIPProtocol;
   protected
     function GetIPCamTarget: AnsiString;
     procedure SetEnabled(Value: Boolean); override;
@@ -180,8 +187,9 @@ type
     property UserName: String read FUserName write FUserName;
     property Password: string read FPassword write FPassword;
     property IP: string read FIP write FIP;
-    property URI: string read FURI write FURI; {TODO: Need rename}
+    property URI: string read FURI write FURI; { TODO: Need rename }
     property Port: Word read FPort write FPort default 554;
+    property Protocol: TocvIPProtocol read FProtocol write FProtocol default ippRTSP;
   end;
 
   TOnNotifyFFMpegPacket = procedure(Sender: TObject; const packet: TAVPacket; const isKeyFrame: Boolean) of object;
@@ -205,7 +213,7 @@ type
     property UserName: String read FUserName write FUserName;
     property Password: string read FPassword write FPassword;
     property IP: string read FIP write FIP;
-    property URI: string read FURI write FURI; {TODO: Need rename}
+    property URI: string read FURI write FURI; { TODO: Need rename }
     property Port: Word read FPort write FPort default 554;
     property OnFFMpegPacket: TOnNotifyFFMpegPacket read FOnNotifyFFMpegPacket write FOnNotifyFFMpegPacket;
   end;
@@ -289,11 +297,11 @@ Type
   end;
 
 Const
-  CameraResolution: array [TocvResolution] of TCameraResolution = ((cWidth: 160; cHeight: 120), (cWidth: 320; cHeight: 240),
-    (cWidth: 424; cHeight: 240), (cWidth: 640; cHeight: 360), (cWidth: 800; cHeight: 448), (cWidth: 960; cHeight: 544),
-    (cWidth: 1280; cHeight: 720));
+  CameraResolution: array [TocvResolution] of TCameraResolution = ((cWidth: 160; cHeight: 120), (cWidth: 320;
+    cHeight: 240), (cWidth: 424; cHeight: 240), (cWidth: 640; cHeight: 360), (cWidth: 800; cHeight: 448), (cWidth: 960;
+    cHeight: 544), (cWidth: 1280; cHeight: 720));
 
-  {TOpenCVCameraThread}
+  { TOpenCVCameraThread }
 
 procedure TocvCaptureThread.Execute;
 Var
@@ -335,7 +343,7 @@ begin
       Suspend;
 end;
 
-{TOpenCVCamera}
+{ TOpenCVCamera }
 
 constructor TocvCameraSource.Create(AOwner: TComponent);
 begin
@@ -407,7 +415,7 @@ begin
   end;
 end;
 
-{TocvCustomSource}
+{ TocvCustomSource }
 
 constructor TocvCustomSource.Create(AOwner: TComponent);
 begin
@@ -459,7 +467,7 @@ begin
 
 end;
 
-{TocvFileSourceclass}
+{ TocvFileSourceclass }
 
 constructor TocvFileSource.Create(AOwner: TComponent);
 begin
@@ -528,7 +536,7 @@ begin
   end;
 end;
 
-{TocvCustomSourceThread}
+{ TocvCustomSourceThread }
 
 constructor TocvCustomSourceThread.Create(CreateSuspended: Boolean);
 begin
@@ -543,17 +551,25 @@ begin
   inherited;
 end;
 
-{TocvIPCamSource}
+{ TocvIPCamSource }
 
 constructor TocvIPCamSource.Create(AOwner: TComponent);
 begin
   inherited;
   FPort := 554;
+  FProtocol := ippRTSP;
 end;
 
 function TocvIPCamSource.GetIPCamTarget: AnsiString;
+const
+  IPProtocolString: array [TocvIPProtocol] of AnsiString = ( //
+    'http://', //
+    'https://', //
+    'rtsp://' //
+    );
+
 begin
-  Result := 'rtsp://';
+  Result := IPProtocolString[FProtocol];
   if Length(Trim(UserName)) <> 0 then
     Result := Result + AnsiString(Trim(UserName)) + ':' + AnsiString(Trim(Password)) + '@';
   Result := Result + AnsiString(IP) + ':' + AnsiString(IntToStr(Port));
@@ -591,7 +607,7 @@ begin
   end;
 end;
 
-{TocvCaptureSource}
+{ TocvCaptureSource }
 
 constructor TocvCaptureSource.Create(AOwner: TComponent);
 begin
@@ -626,7 +642,7 @@ begin
   end;
 end;
 
-{TocvFFMpegIPCamSource}
+{ TocvFFMpegIPCamSource }
 
 constructor TocvFFMpegIPCamSource.Create(AOwner: TComponent);
 begin
@@ -692,7 +708,7 @@ begin
   end;
 end;
 
-{TocvFFMpegIPCamSourceThread}
+{ TocvFFMpegIPCamSourceThread }
 
 constructor TocvFFMpegIPCamSourceThread.Create(AOwner: TocvFFMpegIPCamSource);
 begin
@@ -831,7 +847,7 @@ begin
     end;
 
     if (pCodec^.capabilities and CODEC_CAP_TRUNCATED) = 0 then
-      pCodecCtx^.flags := pCodecCtx^.flags or CODEC_FLAG_TRUNCATED; (*we dont send complete frames*)
+      pCodecCtx^.flags := pCodecCtx^.flags or CODEC_FLAG_TRUNCATED; (* we dont send complete frames *)
     // Open codec
     if avcodec_open2(pCodecCtx, pCodec, nil) < 0 then
     begin
@@ -839,8 +855,8 @@ begin
       Continue;
     end;
 
-    img_convert_context := sws_getCachedContext(nil, pCodecCtx^.Width, pCodecCtx^.Height, pCodecCtx^.pix_fmt, pCodecCtx^.Width,
-      pCodecCtx^.Height, AV_PIX_FMT_BGR24, SWS_BILINEAR, nil, nil, nil);
+    img_convert_context := sws_getCachedContext(nil, pCodecCtx^.Width, pCodecCtx^.Height, pCodecCtx^.pix_fmt,
+      pCodecCtx^.Width, pCodecCtx^.Height, AV_PIX_FMT_BGR24, SWS_BILINEAR, nil, nil, nil);
     if (img_convert_context = nil) then
     begin
       isReconnect := True;
@@ -866,7 +882,8 @@ begin
           avcodec_decode_video2(pCodecCtx, frame, frame_finished, @packet);
           if (frame_finished <> 0) then
           begin
-            sws_scale(img_convert_context, @frame^.data, @frame^.linesize, 0, pCodecCtx^.Height, @iplframe^.imageData, @linesize);
+            sws_scale(img_convert_context, @frame^.data, @frame^.linesize, 0, pCodecCtx^.Height, @iplframe^.imageData,
+              @linesize);
             if Assigned(OnNotifyData) then
               Synchronize(
                 procedure

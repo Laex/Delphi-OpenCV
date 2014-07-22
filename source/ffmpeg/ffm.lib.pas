@@ -12,6 +12,7 @@ const
   avfilter_dll = 'avfilter-4.dll';
   avio_dll = avformat_dll;
   samplefmt_dll = avutil_dll;
+  channel_layout_dll=avutil_dll;
 
 implementation
 
