@@ -5,7 +5,7 @@ unit ffm.imgutils;
 interface
 
 uses
-  ffm.pixfmt;
+  ffm.pixfmt, ffm.frame;
 
 (*
   * This file is part of ffm.
@@ -87,14 +87,16 @@ uses
 *)
 // int av_image_alloc(uint8_t *pointers[4], int linesizes[4],
 // int w, int h, enum AVPixelFormat pix_fmt, int align);
-Type
-   TPointers = array [0 .. 3] of pByte;
-   pPointers = ^TPointers;
-   TLinesizes = array [0 .. 3] of integer;
-   pLinesizes = ^TLinesizes;
+// Type
+// TPointers = array [0 .. 3] of pByte;
+// pPointers = ^TPointers;
+// TLinesizes = array [0 .. 3] of integer;
+// pLinesizes = ^TLinesizes;
 
-function av_image_alloc(Var pointers: TPointers; linesizes: TLinesizes; w: integer; h: integer; pix_fmt: TAVPixelFormat;
-  align: integer): integer; cdecl;
+function av_image_alloc(Var pointers: TAVFrameByteArray; linesizes: TLinesizes; w: integer; h: integer;
+  pix_fmt: TAVPixelFormat; align: integer): integer; cdecl;
+// function av_image_alloc(pointers: pPointers; linesizes: TLinesizes; w: integer; h: integer; pix_fmt: TAVPixelFormat;
+// align: integer): integer; overload; cdecl;
 
 (*
   * Copy image plane from src to dst.
@@ -200,5 +202,9 @@ implementation
 uses ffm.lib;
 
 function av_image_alloc; external avutil_dll;
+// function av_image_alloc(Var pointers: TPointers; linesizes: TLinesizes; w: integer; h: integer; pix_fmt: TAVPixelFormat;
+// align: integer): integer; overload; cdecl; external avutil_dll name 'av_image_alloc';
+// function av_image_alloc(pointers: pPointers; linesizes: TLinesizes; w: integer; h: integer; pix_fmt: TAVPixelFormat;
+// align: integer): integer; overload; cdecl; external avutil_dll name 'av_image_alloc';
 
 end.

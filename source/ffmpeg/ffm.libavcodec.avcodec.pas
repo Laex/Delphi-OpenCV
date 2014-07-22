@@ -322,7 +322,7 @@ Type
 
   TAVCodecID = ( //
     AV_CODEC_ID_NONE, //
-    (*video codecs*)
+    (* video codecs *)
     AV_CODEC_ID_MPEG1VIDEO, //
     AV_CODEC_ID_MPEG2VIDEO, //
     /// < preferred ID for MPEG-1/2 video decoding
@@ -730,7 +730,8 @@ Type
     // AV_CODEC_ID_SMPTE_KLV = $4B4C5641, // MKBETAG('K','L','V','A'),
     // AV_CODEC_ID_DVD_NAV = $444E4156, // MKBETAG('D','N','A','V'),
 
-    AV_CODEC_ID_PROBE = $19000, // < codec_id is not known (like AV_CODEC_ID_NONE) but lavf should attempt to identify it
+    AV_CODEC_ID_PROBE = $19000,
+    // < codec_id is not known (like AV_CODEC_ID_NONE) but lavf should attempt to identify it
 
     AV_CODEC_ID_MPEG2TS = $20000, // **< _FAKE_ codec to indicate a raw MPEG-2 TS
     // * stream (only used by libavformat) *)
@@ -913,8 +914,8 @@ Type
     * @ingroup lavc_decoding
   *)
   TAVDiscard = (
-    (*We leave some space between them for extensions (drop some
-      // * keyframes for intra-only or drop just some bidir frames).*)
+    (* We leave some space between them for extensions (drop some
+      // * keyframes for intra-only or drop just some bidir frames). *)
     AVDISCARD_NONE = -16,
     /// < discard nothing
     AVDISCARD_DEFAULT = 0,
@@ -1025,7 +1026,7 @@ Type
   // #define FF_MAX_B_FRAMES 16
   // #endif
 const
-  (*encoding support
+  (* encoding support
     These flags can be passed in AVCodecContext.flags before initialization.
     Note: Not everything is supported yet.
     * )
@@ -1063,8 +1064,8 @@ const
   /// < Don't draw edges.
   CODEC_FLAG_PSNR = $8000;
   /// < error[?] variables will be set during encoding.
-  CODEC_FLAG_TRUNCATED = $00010000; (** Input bitstream might be truncated at a random
-    // location instead of only at frame boundaries.*)
+  CODEC_FLAG_TRUNCATED = $00010000; (* * Input bitstream might be truncated at a random
+    // location instead of only at frame boundaries. *)
   CODEC_FLAG_NORMALIZE_AQP = $00020000;
   /// < Normalize adaptive quantization.
   CODEC_FLAG_INTERLACED_DCT = $00040000;
@@ -1075,7 +1076,7 @@ const
   /// < Place global headers in extradata instead of every keyframe.
   CODEC_FLAG_BITEXACT = $00800000;
   /// < Use only bitexact stuff (except (I)DCT).
-  (*Fx : Flag for h263+ extra options*)
+  (* Fx : Flag for h263+ extra options *)
   CODEC_FLAG_AC_PRED = $01000000;
   /// < H.263 advanced intra coding / MPEG-4 AC prediction
   CODEC_FLAG_LOOP_FILTER = $00000800;
@@ -1099,12 +1100,12 @@ const
   CODEC_FLAG2_SHOW_ALL = $00400000;
   /// < Show all frames before the first keyframe
 
-  (*Unsupported options :
+  (* Unsupported options :
     *              Syntax Arithmetic coding (SAC)
     *              Reference Picture Selection
-    *              Independent Segment Decoding*)
-  (* /Fx*)
-  (*codec capabilities*)
+    *              Independent Segment Decoding *)
+  (* /Fx *)
+  (* codec capabilities *)
 
   CODEC_CAP_DRAW_HORIZ_BAND = $0001;
   /// < Decoder can use draw_horiz_band callback.
@@ -1116,7 +1117,7 @@ const
   CODEC_CAP_DR1 = $0002;
   CODEC_CAP_TRUNCATED = $0008;
   // #if FF_API_XVMC
-  (*Codec can export data for HW decoding (XvMC).*)
+  (* Codec can export data for HW decoding (XvMC). *)
   // #define CODEC_CAP_HWACCEL         $0010
   // #endif (* FF_API_XVMC *)
   (*
@@ -1528,8 +1529,8 @@ Type
 
   // int (*execute)(struct AVCodecContext *c, int (*func)(struct AVCodecContext *c2, void *arg), void *arg2, int *ret, int count, int size);
   TExecuteFunc = function(c2: pAVCodecContext; arg: pointer): Integer; cdecl;
-  TExecute = function(c: pAVCodecContext; ExecuteFunc: TExecuteFunc; arg2: pointer; ret: PInteger; count: Integer; size: Integer)
-    : Integer; cdecl;
+  TExecute = function(c: pAVCodecContext; ExecuteFunc: TExecuteFunc; arg2: pointer; ret: PInteger; count: Integer;
+    size: Integer): Integer; cdecl;
 
   // int (*execute2)(struct AVCodecContext *c, int (*func)(struct AVCodecContext *c2, void *arg, int jobnr, int threadnr), void *arg2, int *ret, int count);
   TExecuteFunc2 = function(c2: pAVCodecContext; arg: pointer; jobnr: Integer; threadnr: Integer): Integer; cdecl;
@@ -1690,7 +1691,7 @@ Type
     *)
     delay: cint;
 
-    (*video only*)
+    (* video only *)
     (*
       * picture width / height.
       * - encoding: MUST be set by user.
@@ -1785,7 +1786,7 @@ Type
       * - decoding: unused
     *)
     b_quant_factor: cfloat;
-    (*obsolete FIXME remove*)
+    (* obsolete FIXME remove *)
     rc_strategy: cint;
     // #define FF_RC_STRATEGY_XVID 1
     b_frame_strategy: cint;
@@ -2003,12 +2004,12 @@ Type
       * - decoding: Set by libavcodec.
     *)
     inter_matrix: pWord;
-    {*
+    { *
       * scene change detection threshold
       * 0 is default, larger means fewer detected scene changes.
       * - encoding: Set by user.
       * - decoding: unused
-      *}
+      * }
     scenechange_threshold: cint;
     (*
       * noise reduction strength
@@ -2160,12 +2161,12 @@ Type
       * - decoding: unused
     *)
     slices: cint;
-    (*Field order
+    (* Field order
       * - encoding: set by libavcodec
       * - decoding: Set by user.
     *)
     field_order: TAVFieldOrder;
-    (*audio only*)
+    (* audio only *)
     sample_rate: cint;
     /// < samples per second
     channels: cint;
@@ -2177,7 +2178,7 @@ Type
     *)
     sample_fmt: TAVSampleFormat;
     /// < sample format
-    (*The following data should not be initialized.*)
+    (* The following data should not be initialized. *)
     (*
       * Number of samples per channel in an audio frame.
       *
@@ -2324,7 +2325,7 @@ Type
     *)
     // attribute_deprecated
     // void (*release_buffer)(struct AVCodecContext *c, AVFrame *pic);
-    release_buffer: procedure(c: pAVCodecContext; pic: pAVFrame); cdecl; {deprecated;}
+    release_buffer: procedure(c: pAVCodecContext; pic: pAVFrame); cdecl; { deprecated; }
 
     (*
       * Called at the beginning of a frame to get cr buffer for it.
@@ -2340,7 +2341,7 @@ Type
     *)
     // attribute_deprecated
     // int (*reget_buffer)(struct AVCodecContext *c, AVFrame *pic);
-    reget_buffer: function(c: pAVCodecContext; pic: pAVFrame): cint; cdecl; {deprecated;}
+    reget_buffer: function(c: pAVCodecContext; pic: pAVFrame): cint; cdecl; { deprecated; }
 {$ENDIF}
     (*
       * This callback is called at the beginning of each frame to get data
@@ -2623,22 +2624,22 @@ Type
     *)
     timecode_frame_start: cint64;
 
-    (*The RTP callback: This function is called*)
-    (*every time the encoder has a packet to send.*)
-    (*It depends on the encoder if the data starts*)
-    (*with a Start Code (it should). H.263 does.*)
-    (*mb_nb contains the number of macroblocks*)
-    (*encoded in the RTP payload.*)
+    (* The RTP callback: This function is called *)
+    (* every time the encoder has a packet to send. *)
+    (* It depends on the encoder if the data starts *)
+    (* with a Start Code (it should). H.263 does. *)
+    (* mb_nb contains the number of macroblocks *)
+    (* encoded in the RTP payload. *)
     // void (*rtp_callback)(struct AVCodecContext *avctx, void *data, int size, int mb_nb);
     rtp_callback: procedure(avctx: pAVCodecContext; data: pointer; size: cint; mb_nb: cint); cdecl;
     rtp_payload_size: cint; // * The size of the RTP payload: the coder will  *)
-    (*do its best to deliver a chunk with size*)
-    (*below rtp_payload_size, the chunk will start*)
-    (*with a start code on some codecs like H.263.*)
-    (*This doesn't take account of any particular*)
-    (*headers inside the transmitted RTP payload.*)
+    (* do its best to deliver a chunk with size *)
+    (* below rtp_payload_size, the chunk will start *)
+    (* with a start code on some codecs like H.263. *)
+    (* This doesn't take account of any particular *)
+    (* headers inside the transmitted RTP payload. *)
     //
-    (*statistics, used for 2-pass encoding*)
+    (* statistics, used for 2-pass encoding *)
     mv_bits: cint;
     header_bits: cint;
     i_tex_bits: cint;
@@ -2712,11 +2713,11 @@ Type
     *)
     debug_mv: cint;
 {$ENDIF}
-    {*
+    { *
       * Error recognition; may misdetect some more or less valid parts as errors.
       * - encoding: unused
       * - decoding: Set by user.
-      *}
+      * }
     err_recognition: cint;
 
     (*
@@ -2850,7 +2851,8 @@ Type
       * - decoding: Set by libavcodec, user can override.
     *)
     // int (*execute)(struct AVCodecContext *c, int (*func)(struct AVCodecContext *c2, void *arg), void *arg2, int *ret, int count, int size);
-    execute: function(c: pAVCodecContext; func: TExecuteFunc; arg2: pointer; Var ret: cint; count: cint; size: cint): cint; cdecl;
+    execute: function(c: pAVCodecContext; func: TExecuteFunc; arg2: pointer; Var ret: cint; count: cint; size: cint)
+      : cint; cdecl;
 
     (*
       * The codec may call this to execute several independent things.
@@ -3122,7 +3124,7 @@ Type
     profiles: pAVProfile;
     /// < array of recognized profiles, or NULL if unknown, array is terminated by {FF_PROFILE_UNKNOWN}
 
-    (****************************************************************
+    (* ***************************************************************
       // * No fields below this line are part of the public API. They
       // * may not be used outside of libavcodec and can be changed and
       // * removed at will.
@@ -3955,9 +3957,9 @@ function avcodec_find_decoder(id: TAVCodecID): pAVCodec; cdecl;
   *         decoding, otherwise the number of bytes consumed from the input
   *         AVPacket is returned.
 *)
-// int avcodec_decode_audio4(AVCodecContext *avctx, AVFrame *frame,
-// int *got_frame_ptr, const AVPacket *avpkt);
-//
+// int avcodec_decode_audio4(AVCodecContext *avctx, AVFrame *frame, int *got_frame_ptr, const AVPacket *avpkt);
+function avcodec_decode_audio4(avctx: pAVCodecContext; frame: pAVFrame; var got_frame_ptr: Integer;
+  const avpkt: pAVPacket):Integer; cdecl;
 (*
   * Decode the video frame of size avpkt->size from avpkt->data into picture.
   * Some decoders may support multiple frames in a single AVPacket, such
@@ -4051,12 +4053,12 @@ Type
   TAVCodecParserContext = record
     priv_data: pointer;
     parser: pAVCodecParser;
-    frame_offset: int64_t; (*offset of the current frame*)
-    cur_offset: int64_t; (*current offset
-      (* (incremented by each av_parser_parse())*)
-    next_frame_offset: int64_t; (*offset of the next frame*)
-    (*video info*)
-    pict_type: Integer; (*XXX: Put it back in AVCodecContext.*)
+    frame_offset: int64_t; (* offset of the current frame *)
+    cur_offset: int64_t; (* current offset
+      (* (incremented by each av_parser_parse()) *)
+    next_frame_offset: int64_t; (* offset of the next frame *)
+    (* video info *)
+    pict_type: Integer; (* XXX: Put it back in AVCodecContext. *)
     (*
       * This field is used for proper frame duration computation in lavf.
       * It signals, how much longer the frame duration of the current frame
@@ -4066,10 +4068,10 @@ Type
       *
       * It is used by codecs like H.264 to display telecined material.
     *)
-    repeat_pict: Integer; (*XXX: Put it back in AVCodecContext.*)
-    pts: int64_t; (*pts of the current frame*)
-    dts: int64_t; (*dts of the current frame*)
-    (*private data*)
+    repeat_pict: Integer; (* XXX: Put it back in AVCodecContext. *)
+    pts: int64_t; (* pts of the current frame *)
+    dts: int64_t; (* dts of the current frame *)
+    (* private data *)
     last_pts: int64_t;
     last_dts: int64_t;
     fetch_timestamp: Integer;
@@ -4187,7 +4189,7 @@ Type
   ppByte = ^pByte;
 
   TAVCodecParser = record
-    codec_ids: array [0 .. 4] of Integer; (*several codec IDs are permitted*)
+    codec_ids: array [0 .. 4] of Integer; (* several codec IDs are permitted *)
     priv_data_size: Integer;
     // int (*parser_init)(AVCodecParserContext *s);
     parser_init: function(s: pAVCodecParserContext): Integer; cdecl;
@@ -4195,8 +4197,8 @@ Type
     // AVCodecContext *avctx,
     // const uint8_t **poutbuf, int *poutbuf_size,
     // const uint8_t *buf, int buf_size);
-    parser_parse: function(s: pAVCodecParserContext; avctx: pAVCodecContext; const poutbuf: ppByte; poutbuf_size: PInteger;
-      const buf: pByte; buf_size: Integer): Integer; cdecl;
+    parser_parse: function(s: pAVCodecParserContext; avctx: pAVCodecContext; const poutbuf: ppByte;
+      poutbuf_size: PInteger; const buf: pByte; buf_size: Integer): Integer; cdecl;
     // void (*parser_close)(AVCodecParserContext *s);
     parser_close: procedure(s: pAVCodecParserContext); cdecl;
     // int (*split)(AVCodecContext *avctx, const uint8_t *buf, int buf_size);
@@ -4341,8 +4343,8 @@ function avcodec_find_encoder(id: TAVCodecID): pAVCodec; cdecl;
 *)
 // int avcodec_encode_audio2(AVCodecContext *avctx, AVPacket *avpkt,
 // const AVFrame *frame, int *got_packet_ptr);
-function avcodec_encode_audio2(avctx: pAVCodecContext; avpkt: pAVPacket; const frame: pAVFrame; Var got_packet_ptr: Integer)
-  : Integer; cdecl;
+function avcodec_encode_audio2(avctx: pAVCodecContext; avpkt: pAVPacket; const frame: pAVFrame;
+  Var got_packet_ptr: Integer): Integer; cdecl;
 
 // #if FF_API_OLD_ENCODE_VIDEO
 (*
@@ -4400,8 +4402,8 @@ function avcodec_encode_audio2(avctx: pAVCodecContext; avpkt: pAVPacket; const f
 *)
 // int avcodec_encode_video2(AVCodecContext *avctx, AVPacket *avpkt,
 // const AVFrame *frame, int *got_packet_ptr);
-function avcodec_encode_video2(avctx: pAVCodecContext; avpkt: pAVPacket; const frame: pAVFrame; Var got_packet_ptr: Integer)
-  : Integer; cdecl;
+function avcodec_encode_video2(avctx: pAVCodecContext; avpkt: pAVPacket; const frame: pAVFrame;
+  Var got_packet_ptr: Integer): Integer; cdecl;
 
 // int avcodec_encode_subtitle(AVCodecContext *avctx, uint8_t *buf, int buf_size,
 // const AVSubtitle *sub);
@@ -4811,7 +4813,8 @@ function avcodec_fill_audio_frame(frame: pAVFrame; nb_channels: Integer; sample_
   // * keep internally, but the caller's reference remains valid.
 *)
 // void avcodec_flush_buffers(AVCodecContext *avctx);
-//
+procedure avcodec_flush_buffers(avctx: pAVCodecContext); cdecl;
+
 (*
   // * Return codec bits per sample.
   // *
@@ -4941,7 +4944,7 @@ function avcodec_fill_audio_frame(frame: pAVFrame; nb_channels: Integer; sample_
 *)
 // AVBitStreamFilter *av_bitstream_filter_next(AVBitStreamFilter *f);
 //
-(*memory*)
+(* memory *)
 //
 (*
   // * Same behaviour av_fast_malloc but the buffer has additional
@@ -5125,5 +5128,7 @@ function avcodec_find_encoder; external avcodec_dll;
 function avcodec_encode_video2; external avcodec_dll;
 function avcodec_fill_audio_frame; external avcodec_dll;
 function avcodec_encode_audio2; external avcodec_dll;
+procedure avcodec_flush_buffers; external avcodec_dll;
+function avcodec_decode_audio4; external avcodec_dll;
 
 end.

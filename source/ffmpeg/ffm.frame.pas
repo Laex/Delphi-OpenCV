@@ -136,6 +136,9 @@ Type
   pAVBufferRefArray = ^TAVBufferRefArray;
   TAVBufferRefArray = array [0 .. AV_NUM_DATA_POINTERS - 1] of pAVBufferRef;
 
+  TLinesizes = array [0 .. AV_NUM_DATA_POINTERS - 1] of Integer;
+  pLinesizes = ^TLinesizes;
+
   TAVFrame = {packed} record
     (*
       * pointer to the picture/channel planes.
@@ -162,7 +165,7 @@ Type
       * @note The linesize may be larger than the size of usable data -- there
       * may be extra padding present for performance reasons.
     *)
-    linesize: array [0 .. AV_NUM_DATA_POINTERS - 1] of Integer;
+    linesize: TLinesizes;
     (*
       * pointers to the data planes/channels.
       *

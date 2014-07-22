@@ -230,7 +230,7 @@
         <DCC_UnitSearchPath>..;$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
         <VerInfo_Locale>1033</VerInfo_Locale>
-        <VerInfo_Keys>CompanyName=;FileDescription=OpenCV Component;FileVersion=1.0.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductName=OpenCV Component;ProductVersion=1.0.0.0;Comments=;LastCompiledTime=18.07.2014 0:09:25</VerInfo_Keys>
+        <VerInfo_Keys>CompanyName=;FileDescription=OpenCV Component;FileVersion=1.0.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductName=OpenCV Component;ProductVersion=1.0.0.0;Comments=;LastCompiledTime=22.07.2014 15:39:50</VerInfo_Keys>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2_Win64)'!=''">
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>

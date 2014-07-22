@@ -45,7 +45,8 @@ interface
 *)
 Type
   pAVSampleFormat = ^TAVSampleFormat;
-  TAVSampleFormat = (AV_SAMPLE_FMT_NONE = -1, //
+  TAVSampleFormat = ( //
+    AV_SAMPLE_FMT_NONE = -1, //
     AV_SAMPLE_FMT_U8,
     /// < unsigned 8 bits
     AV_SAMPLE_FMT_S16,
@@ -56,7 +57,6 @@ Type
     /// < float
     AV_SAMPLE_FMT_DBL,
     /// < double
-
     AV_SAMPLE_FMT_U8P,
     /// < unsigned 8 bits, planar
     AV_SAMPLE_FMT_S16P,
@@ -67,7 +67,6 @@ Type
     /// < float, planar
     AV_SAMPLE_FMT_DBLP,
     /// < double, planar
-
     AV_SAMPLE_FMT_NB
     /// < Number of sample formats. DO NOT USE if linking dynamically
     );
@@ -77,72 +76,73 @@ Type
     * recognized.
   *)
   // const char *av_get_sample_fmt_name(enum AVSampleFormat sample_fmt);
+function av_get_sample_fmt_name(sample_fmt: TAVSampleFormat): pAnsiChar; cdecl;
 
-  (*
-    * Return a sample format corresponding to name, or AV_SAMPLE_FMT_NONE
-    * on error.
-  *)
-  // enum AVSampleFormat av_get_sample_fmt(const char *name);
+(*
+  * Return a sample format corresponding to name, or AV_SAMPLE_FMT_NONE
+  * on error.
+*)
+// enum AVSampleFormat av_get_sample_fmt(const char *name);
 
-  (*
-    * Return the planar<->{packed} alternative form of the given sample format, or
-    * AV_SAMPLE_FMT_NONE on error. If the passed sample_fmt is already in the
-    * requested planar/{packed} format, the format returned is the same as the
-    * input.
-  *)
-  // enum AVSampleFormat av_get_alt_sample_fmt(enum AVSampleFormat sample_fmt, int planar);
+(*
+  * Return the planar<->{packed} alternative form of the given sample format, or
+  * AV_SAMPLE_FMT_NONE on error. If the passed sample_fmt is already in the
+  * requested planar/{packed} format, the format returned is the same as the
+  * input.
+*)
+// enum AVSampleFormat av_get_alt_sample_fmt(enum AVSampleFormat sample_fmt, int planar);
 
-  (*
-    * Get the {packed} alternative form of the given sample format.
-    *
-    * If the passed sample_fmt is already in {packed} format, the format returned is
-    * the same as the input.
-    *
-    * @return  the {packed} alternative form of the given sample format or
-    AV_SAMPLE_FMT_NONE on error.
-  *)
-  // enum AVSampleFormat av_get_{packed}_sample_fmt(enum AVSampleFormat sample_fmt);
+(*
+  * Get the {packed} alternative form of the given sample format.
+  *
+  * If the passed sample_fmt is already in {packed} format, the format returned is
+  * the same as the input.
+  *
+  * @return  the {packed} alternative form of the given sample format or
+  AV_SAMPLE_FMT_NONE on error.
+*)
+// enum AVSampleFormat av_get_{packed}_sample_fmt(enum AVSampleFormat sample_fmt);
 
-  (*
-    * Get the planar alternative form of the given sample format.
-    *
-    * If the passed sample_fmt is already in planar format, the format returned is
-    * the same as the input.
-    *
-    * @return  the planar alternative form of the given sample format or
-    AV_SAMPLE_FMT_NONE on error.
-  *)
-  // enum AVSampleFormat av_get_planar_sample_fmt(enum AVSampleFormat sample_fmt);
+(*
+  * Get the planar alternative form of the given sample format.
+  *
+  * If the passed sample_fmt is already in planar format, the format returned is
+  * the same as the input.
+  *
+  * @return  the planar alternative form of the given sample format or
+  AV_SAMPLE_FMT_NONE on error.
+*)
+// enum AVSampleFormat av_get_planar_sample_fmt(enum AVSampleFormat sample_fmt);
 
-  (*
-    * Generate a string corresponding to the sample format with
-    * sample_fmt, or a header if sample_fmt is negative.
-    *
-    * @param buf the buffer where to write the string
-    * @param buf_size the size of buf
-    * @param sample_fmt the number of the sample format to print the
-    * corresponding info string, or a negative value to print the
-    * corresponding header.
-    * @return the pointer to the filled buffer or NULL if sample_fmt is
-    * unknown or in case of other errors
-  *)
-  // char *av_get_sample_fmt_string(char *buf, int buf_size, enum AVSampleFormat sample_fmt);
+(*
+  * Generate a string corresponding to the sample format with
+  * sample_fmt, or a header if sample_fmt is negative.
+  *
+  * @param buf the buffer where to write the string
+  * @param buf_size the size of buf
+  * @param sample_fmt the number of the sample format to print the
+  * corresponding info string, or a negative value to print the
+  * corresponding header.
+  * @return the pointer to the filled buffer or NULL if sample_fmt is
+  * unknown or in case of other errors
+*)
+// char *av_get_sample_fmt_string(char *buf, int buf_size, enum AVSampleFormat sample_fmt);
 
 {$IFDEF FF_API_GET_BITS_PER_SAMPLE_FMT}
-  (*
-    * @deprecated Use av_get_bytes_per_sample() instead.
-  *)
-  // attribute_deprecated
-  // int av_get_bits_per_sample_fmt(enum AVSampleFormat sample_fmt);
+(*
+  * @deprecated Use av_get_bytes_per_sample() instead.
+*)
+// attribute_deprecated
+// int av_get_bits_per_sample_fmt(enum AVSampleFormat sample_fmt);
 {$ENDIF}
-  (*
-    * Return number of bytes per sample.
-    *
-    * @param sample_fmt the sample format
-    * @return number of bytes per sample or zero if unknown for the given
-    * sample format
-  *)
-  // int av_get_bytes_per_sample(enum AVSampleFormat sample_fmt);
+(*
+  * Return number of bytes per sample.
+  *
+  * @param sample_fmt the sample format
+  * @return number of bytes per sample or zero if unknown for the given
+  * sample format
+*)
+// int av_get_bytes_per_sample(enum AVSampleFormat sample_fmt);
 function av_get_bytes_per_sample(sample_fmt: TAVSampleFormat): integer; cdecl;
 
 (*
@@ -163,8 +163,9 @@ function av_get_bytes_per_sample(sample_fmt: TAVSampleFormat): integer; cdecl;
   * @param align         buffer size alignment (0 = default, 1 = no alignment)
   * @return              required buffer size, or negative error code on failure
 *)
-// int av_samples_get_buffer_size(int *linesize, int nb_channels, int nb_samples,
-// enum AVSampleFormat sample_fmt, int align);
+// int av_samples_get_buffer_size(int *linesize, int nb_channels, int nb_samples, enum AVSampleFormat sample_fmt, int align);
+function av_samples_get_buffer_size(linesize: pInteger; nb_channels: integer; nb_samples: integer;
+  sample_fmt: TAVSampleFormat; align: integer): integer; cdecl;
 
 (*
   * Fill plane data pointers and linesize for samples with sample
@@ -267,5 +268,7 @@ implementation
 uses ffm.lib;
 
 function av_get_bytes_per_sample; external samplefmt_dll;
+function av_get_sample_fmt_name; external samplefmt_dll;
+function av_samples_get_buffer_size; external samplefmt_dll;
 
 end.
