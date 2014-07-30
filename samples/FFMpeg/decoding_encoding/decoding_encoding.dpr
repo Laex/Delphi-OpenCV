@@ -51,7 +51,8 @@ uses
   ffm.mathematics,
   ffm.avutil,
   ffm.opt,
-  ffm.imgutils;
+  ffm.imgutils,
+  ffm.log;
 
 Const
   INBUF_SIZE = 4096;
@@ -447,7 +448,7 @@ begin
     WriteLn('Could not allocate raw picture buffer');
     Exit;
   end;
-//  got_output:=0;
+  // got_output:=0;
   (* encode 1 second of video *)
   for i := 0 to 24 do
   begin
@@ -500,14 +501,14 @@ begin
       BlockWrite(f, pkt.data^, pkt.size);
       av_free_packet(pkt);
     end;
-    Inc(i);
+    inc(i);
   end;
   (* add sequence end code to have a real mpeg file *)
   BlockWrite(f, endcode, sizeof(endcode));
   Close(f);
-//  avcodec_close(c);
+  // avcodec_close(c);
   av_free(c);
-//  av_freep(frame^.data[0]);
+  // av_freep(frame^.data[0]);
   av_frame_free(frame);
 end;
 
@@ -552,7 +553,7 @@ begin
     else
       WriteLn(format('Saving frame %3d', [frame_count]));
     (* the picture is allocated by the decoder, no need to free it *)
-    pgm_save(frame^.data[0], frame^.linesize[0], avctx^.width, avctx^.height, Format(outfilename, [frame_count]));
+    pgm_save(frame^.data[0], frame^.linesize[0], avctx^.width, avctx^.height, format(outfilename, [frame_count]));
     inc(frame_count);
   end;
   if Assigned(pkt^.data) then
@@ -650,11 +651,24 @@ begin
   av_frame_free(frame);
 end;
 
+procedure avlog(ptr: Pointer; level: Integer; fmt: PAnsiChar; vl: pva_list); cdecl;
+Var
+  line: array [0 .. 1023] of AnsiChar;
+  print_prefix: Integer;
+  A:AnsiString;
+begin
+  print_prefix := 1;
+  av_log_format_line(ptr, level, fmt, vl, @line, sizeof(line), print_prefix);
+  A:=Trim(AnsiString(line));
+  Writeln(A);
+end;
+
 Var
   output_type: String;
 
 begin
   try
+    av_log_set_callback(avlog);
     (* register all the codecs *)
     avcodec_register_all();
     if ParamCount = 0 then

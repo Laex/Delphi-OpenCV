@@ -1,25 +1,25 @@
-//*****************************************************************
-  //                       Delphi-OpenCV Demo
-  //               Copyright (C) 2013 Project Delphi-OpenCV
-  // ****************************************************************
-  // Contributor:
-    // Laentir Valetov
-  // email:laex@bk.ru
-  // ****************************************************************
-  // You may retrieve the latest version of this file at the GitHub,
-  // located at git://github.com/Laex/Delphi-OpenCV.git
-  // ****************************************************************
-  // The contents of this file are used with permission, subject to
-  // the Mozilla Public License Version 1.1 (the "License"); you may
-  // not use this file except in compliance with the License. You may
-  // obtain a copy of the License at
-  // http://www.mozilla.org/MPL/MPL-1_1Final.html
-  //
-  // Software distributed under the License is distributed on an
-  // "AS IS" basis, WITHOUT WARRANTY OF ANY KIND, either express or
-  // implied. See the License for the specific language governing
-  // rights and limitations under the License.
-  //*******************************************************************
+// *****************************************************************
+// Delphi-OpenCV Demo
+// Copyright (C) 2013 Project Delphi-OpenCV
+// ****************************************************************
+// Contributor:
+// Laentir Valetov
+// email:laex@bk.ru
+// ****************************************************************
+// You may retrieve the latest version of this file at the GitHub,
+// located at git://github.com/Laex/Delphi-OpenCV.git
+// ****************************************************************
+// The contents of this file are used with permission, subject to
+// the Mozilla Public License Version 1.1 (the "License"); you may
+// not use this file except in compliance with the License. You may
+// obtain a copy of the License at
+// http://www.mozilla.org/MPL/MPL-1_1Final.html
+//
+// Software distributed under the License is distributed on an
+// "AS IS" basis, WITHOUT WARRANTY OF ANY KIND, either express or
+// implied. See the License for the specific language governing
+// rights and limitations under the License.
+// *******************************************************************
 
 program Squares;
 
@@ -36,7 +36,7 @@ uses
   uResourcePaths;
 
 const
-  filename = cResourceMedia + 'matchshapes.jpg';
+  filename = cResourceMedia + 'pic2.bmp';
   // pic1.bmp...pic6.bmp
   wndname = 'Squares';
 
@@ -81,7 +81,7 @@ begin
   sz := cvSize((img^.width AND -2), (img^.height AND -2));
   timg := cvCloneImage(img); // make a copy of input image
   gray := cvCreateImage(sz, 8, 1);
-  pyr := cvCreateImage(cvSize(sz.width div 2, sz.height div 2), 8, 3);
+  pyr := cvCreateImage(cvSize(sz.width div 2, sz.height div 2), timg^.depth, timg^.nChannels);
 
   // create empty sequence that will contain points -
   // 4 points per square (the square's vertices)
@@ -89,7 +89,8 @@ begin
 
   // select the maximum ROI in the image
   // with the width and height divisible by 2
-  cvSetImageROI(timg, cvRect(0, 0, sz.width, sz.height));
+  // cvSetImageROI(timg, cvRect(0, 0, sz.width, sz.height));
+  cvResetImageROI(timg);
 
   // down-scale and upscale the image to filter out the noise
   cvPyrDown(timg, pyr, 7);
@@ -97,7 +98,7 @@ begin
   tgray := cvCreateImage(sz, 8, 1);
 
   // find squares in every color plane of the image
-  for c := 0 to 2 do
+  for c := 0 to timg^.nChannels-1 do
   begin
     // extract the c-th color plane
     cvSetImageCOI(timg, c + 1);
