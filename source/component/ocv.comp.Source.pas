@@ -202,6 +202,7 @@ type
     FUserName: String;
     FURI: string;
     FOnNotifyFFMpegPacket: TOnNotifyFFMpegPacket;
+    FProtocol: TocvIPProtocol;
   protected
     function GetIPCamTarget: AnsiString;
     procedure SetEnabled(Value: Boolean); override;
@@ -215,6 +216,7 @@ type
     property IP: string read FIP write FIP;
     property URI: string read FURI write FURI; { TODO: Need rename }
     property Port: Word read FPort write FPort default 554;
+    property Protocol: TocvIPProtocol read FProtocol write FProtocol default ippRTSP;
     property OnFFMpegPacket: TOnNotifyFFMpegPacket read FOnNotifyFFMpegPacket write FOnNotifyFFMpegPacket;
   end;
 
@@ -228,6 +230,13 @@ uses
   ffm.frame,
   ffm.swscale,
   ffm.pixfmt;
+
+const
+  IPProtocolString: array [TocvIPProtocol] of AnsiString = ( //
+    'http://', //
+    'https://', //
+    'rtsp://' //
+    );
 
 Type
   TocvCaptureThread = class(TocvCustomSourceThread)
@@ -561,13 +570,6 @@ begin
 end;
 
 function TocvIPCamSource.GetIPCamTarget: AnsiString;
-const
-  IPProtocolString: array [TocvIPProtocol] of AnsiString = ( //
-    'http://', //
-    'https://', //
-    'rtsp://' //
-    );
-
 begin
   Result := IPProtocolString[FProtocol];
   if Length(Trim(UserName)) <> 0 then
@@ -648,6 +650,7 @@ constructor TocvFFMpegIPCamSource.Create(AOwner: TComponent);
 begin
   inherited;
   FPort := 554;
+  FProtocol := ippRTSP;
   if not(csDesigning in ComponentState) then
   begin
     FSourceThread := TocvFFMpegIPCamSourceThread.Create(Self);
@@ -665,7 +668,7 @@ end;
 
 function TocvFFMpegIPCamSource.GetIPCamTarget: AnsiString;
 begin
-  Result := 'rtsp://';
+  Result := IPProtocolString[FProtocol];
   if Length(Trim(UserName)) <> 0 then
     Result := Result + AnsiString(Trim(UserName)) + ':' + AnsiString(Trim(Password)) + '@';
   Result := Result + AnsiString(IP) + ':' + AnsiString(IntToStr(Port));
