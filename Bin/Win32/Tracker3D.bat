@@ -1,1 +1,0 @@
-Tracker3D.exe Tracker3DData\args.yml

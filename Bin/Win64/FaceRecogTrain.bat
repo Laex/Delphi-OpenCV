@@ -1,1 +1,0 @@
-FaceRecog.exe train faces\train.txt
