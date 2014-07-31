@@ -114,7 +114,7 @@ end;
 
 procedure TMainForm.FormDestroy(Sender: TObject);
 begin
-  {TODO: destroy ffmpeg objects}
+  { TODO: destroy ffmpeg objects }
   SDL_DestroyRenderer(renderer);
   SDL_DestroyWindow(sdlWnd);
   SDL_Quit();
@@ -131,9 +131,6 @@ begin
 end;
 
 procedure TMainForm.Decode;
-Var
-  Next: Boolean;
-  R: TSDL_Rect;
 begin
   frame_finished := 1;
   repeat
@@ -160,21 +157,17 @@ begin
           SDL_UpdateTexture(MooseTexture, nil, ImgBuffer, codec_context^.width * SDL_BYTESPERPIXEL(pixel_format));
 
           SDL_RenderClear(renderer);
-          R.x := ClientRect.Left;
-          R.y := ClientRect.Top;
-          R.w := ClientRect.width;
-          R.h := ClientRect.height;
 
-          SDL_RenderCopy(renderer, MooseTexture, nil, @R);
+          SDL_RenderCopy(renderer, MooseTexture, nil, nil);
           SDL_RenderPresent(renderer);
 
           av_frame_unref(pFrame);
           avcodec_get_frame_defaults(pFrame);
-
         end;
       end;
       av_free_packet(packet);
     end;
+    Application.ProcessMessages;
   until frame_finished <> 0;
   PostMessage(Handle, WM_PLAYVIDEO, 0, 0);
 end;
