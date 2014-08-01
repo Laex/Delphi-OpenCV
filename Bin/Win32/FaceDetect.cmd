@@ -1,0 +1,1 @@
+FaceDetect2.exe --cascade=FaceDetectXML\haarcascade_frontalface_alt_tree.xml 0
