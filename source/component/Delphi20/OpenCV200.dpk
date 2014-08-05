@@ -9,21 +9,21 @@ package OpenCV200;
 {$EXTENDEDSYNTAX ON}
 {$IMPORTEDDATA ON}
 {$IOCHECKS ON}
-{$LOCALSYMBOLS OFF}
+{$LOCALSYMBOLS ON}
 {$LONGSTRINGS ON}
 {$OPENSTRINGS ON}
-{$OPTIMIZATION ON}
+{$OPTIMIZATION OFF}
 {$OVERFLOWCHECKS OFF}
 {$RANGECHECKS OFF}
-{$REFERENCEINFO OFF}
+{$REFERENCEINFO ON}
 {$SAFEDIVIDE OFF}
-{$STACKFRAMES OFF}
+{$STACKFRAMES ON}
 {$TYPEDADDRESS OFF}
 {$VARSTRINGCHECKS ON}
 {$WRITEABLECONST OFF}
 {$MINENUMSIZE 1}
 {$IMAGEBASE $400000}
-{$DEFINE RELEASE}
+{$DEFINE DEBUG}
 {$ENDIF IMPLICITBUILDING}
 {$DESCRIPTION 'OpenCV Component'}
 {$RUNONLY}
@@ -31,7 +31,8 @@ package OpenCV200;
 
 requires
   rtl,
-  vcl;
+  vcl,
+  fmx;
 
 contains
   ocv.comp.ImageOperation in '..\ocv.comp.ImageOperation.pas',
@@ -39,6 +40,7 @@ contains
   ocv.comp.Types in '..\ocv.comp.Types.pas',
   ocv.comp.Source in '..\ocv.comp.Source.pas',
   ocv.comp.View in '..\ocv.comp.View.pas',
+  ocv.comp.ViewFMX in '..\ocv.comp.ViewFMX.pas',
   ocv.comp.Proc in '..\ocv.comp.Proc.pas';
 
 end.

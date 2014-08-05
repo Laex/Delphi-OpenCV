@@ -8,14 +8,14 @@ Uses
   ocv.core.types_c;
 
 function ocvHaarCascadeTransform(
-  {} const Source: IocvImage;
-  {} const Cascade: pCvHaarClassifierCascade;
-  {} var HaarRects: TocvRects;
-  {} const MinSize, MaxSize: TcvSize;
-  {} const Equalize: Boolean = True;
-  {} const Scale: Double = 1.3;
-  {} const MinNeighbors: Integer = 3;
-  {} const Flag: TocvHaarCascadeFlagSet = []): Boolean;
+  { } const Source: IocvImage;
+  { } const Cascade: pCvHaarClassifierCascade;
+  { } var HaarRects: TocvRects;
+  { } const MinSize, MaxSize: TcvSize;
+  { } const Equalize: Boolean = True;
+  { } const Scale: Double = 1.3;
+  { } const MinNeighbors: Integer = 3;
+  { } const Flag: TocvHaarCascadeFlagSet = []): Boolean;
 
 function ocvLoadHaarCascade(const HaarCascadeType: TocvHaarCascadeType): pCvHaarClassifierCascade;
 
@@ -37,11 +37,12 @@ Type
     Name: String;
     FileName: String;
   end;
-
-  //
+  ///
   // Run utils\CompressHaar\uCompressHaar.dpr
   // Add to serarch path \Delphi-OpenCV\resource\facedetectxml\
-  //
+  ///
+{$R haarcascade.rc haarcascade.res}
+{$R haarcascade.res}
 {$I haarcascade.inc}
 
 function ocvLoadHaarCascade(const HaarCascadeType: TocvHaarCascadeType): pCvHaarClassifierCascade;
@@ -99,8 +100,7 @@ begin
       gray := Source.GrayImage;
       if Equalize then
         cvEqualizeHist(gray.IpImage, gray.IpImage);
-      detected_objects := cvHaarDetectObjects(gray.IpImage, Cascade, storage, Scale, MinNeighbors, HaarSetToFlag(Flag),
-        MinSize, MaxSize);
+      detected_objects := cvHaarDetectObjects(gray.IpImage, Cascade, storage, Scale, MinNeighbors, HaarSetToFlag(Flag), MinSize, MaxSize);
       if Assigned(detected_objects) then
       begin
         SetLength(HaarRects, detected_objects^.total);

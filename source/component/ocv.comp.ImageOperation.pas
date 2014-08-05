@@ -162,28 +162,26 @@ type
     property Interpolation: TocvInterpolationMethod read FInterpolation write FInterpolation default INTER_LINEAR;
   end;
 
-  TocvColorConversion = (BGR2BGRA, RGB2RGBA, BGRA2BGR, RGBA2RGB, BGR2RGBA, RGB2BGRA, RGBA2BGR, BGRA2RGB, BGR2RGB, RGB2BGR,
-    BGRA2RGBA, RGBA2BGRA, BGR2GRAY, RGB2GRAY, GRAY2BGR, GRAY2RGB, GRAY2BGRA, GRAY2RGBA, BGRA2GRAY, RGBA2GRAY, BGR2BGR565,
-    RGB2BGR565, BGR5652BGR, BGR5652RGB, BGRA2BGR565, RGBA2BGR565, BGR5652BGRA, BGR5652RGBA, GRAY2BGR565, BGR5652GRAY, BGR2BGR555,
-    RGB2BGR555, BGR5552BGR, BGR5552RGB, BGRA2BGR555, RGBA2BGR555, BGR5552BGRA, BGR5552RGBA, GRAY2BGR555, BGR5552GRAY, BGR2XYZ,
-    RGB2XYZ, XYZ2BGR, XYZ2RGB, BGR2YCrCb, RGB2YCrCb, YCrCb2BGR, YCrCb2RGB, BGR2HSV, RGB2HSV, BGR2Lab, RGB2Lab, BayerBG2BGR,
-    BayerGB2BGR, BayerRG2BGR, BayerGR2BGR, BayerBG2RGB, BayerGB2RGB, BayerRG2RGB, BayerGR2RGB, BGR2Luv, RGB2Luv, BGR2HLS, RGB2HLS,
-    HSV2BGR, HSV2RGB, Lab2BGR, Lab2RGB, Luv2BGR, Luv2RGB, HLS2BGR, HLS2RGB, BayerBG2BGR_VNG, BayerGB2BGR_VNG, BayerRG2BGR_VNG,
-    BayerGR2BGR_VNG, BayerBG2RGB_VNG, BayerGB2RGB_VNG, BayerRG2RGB_VNG, BayerGR2RGB_VNG, BGR2HSV_FULL, RGB2HSV_FULL, BGR2HLS_FULL,
-    RGB2HLS_FULL, HSV2BGR_FULL, HSV2RGB_FULL, HLS2BGR_FULL, HLS2RGB_FULL, LBGR2Lab, LRGB2Lab, LBGR2Luv, LRGB2Luv, Lab2LBGR,
-    Lab2LRGB, Luv2LBGR, Luv2LRGB, BGR2YUV, RGB2YUV, YUV2BGR, YUV2RGB, BayerBG2GRAY, BayerGB2GRAY, BayerRG2GRAY, BayerGR2GRAY,
+  TocvColorConversion = (BGR2BGRA, RGB2RGBA, BGRA2BGR, RGBA2RGB, BGR2RGBA, RGB2BGRA, RGBA2BGR, BGRA2RGB, BGR2RGB, RGB2BGR, BGRA2RGBA,
+    RGBA2BGRA, BGR2GRAY, RGB2GRAY, GRAY2BGR, GRAY2RGB, GRAY2BGRA, GRAY2RGBA, BGRA2GRAY, RGBA2GRAY, BGR2BGR565, RGB2BGR565, BGR5652BGR,
+    BGR5652RGB, BGRA2BGR565, RGBA2BGR565, BGR5652BGRA, BGR5652RGBA, GRAY2BGR565, BGR5652GRAY, BGR2BGR555, RGB2BGR555, BGR5552BGR,
+    BGR5552RGB, BGRA2BGR555, RGBA2BGR555, BGR5552BGRA, BGR5552RGBA, GRAY2BGR555, BGR5552GRAY, BGR2XYZ, RGB2XYZ, XYZ2BGR, XYZ2RGB, BGR2YCrCb,
+    RGB2YCrCb, YCrCb2BGR, YCrCb2RGB, BGR2HSV, RGB2HSV, BGR2Lab, RGB2Lab, BayerBG2BGR, BayerGB2BGR, BayerRG2BGR, BayerGR2BGR, BayerBG2RGB,
+    BayerGB2RGB, BayerRG2RGB, BayerGR2RGB, BGR2Luv, RGB2Luv, BGR2HLS, RGB2HLS, HSV2BGR, HSV2RGB, Lab2BGR, Lab2RGB, Luv2BGR, Luv2RGB,
+    HLS2BGR, HLS2RGB, BayerBG2BGR_VNG, BayerGB2BGR_VNG, BayerRG2BGR_VNG, BayerGR2BGR_VNG, BayerBG2RGB_VNG, BayerGB2RGB_VNG, BayerRG2RGB_VNG,
+    BayerGR2RGB_VNG, BGR2HSV_FULL, RGB2HSV_FULL, BGR2HLS_FULL, RGB2HLS_FULL, HSV2BGR_FULL, HSV2RGB_FULL, HLS2BGR_FULL, HLS2RGB_FULL,
+    LBGR2Lab, LRGB2Lab, LBGR2Luv, LRGB2Luv, Lab2LBGR, Lab2LRGB, Luv2LBGR, Luv2LRGB, BGR2YUV, RGB2YUV, YUV2BGR, YUV2RGB, BayerBG2GRAY,
+    BayerGB2GRAY, BayerRG2GRAY, BayerGR2GRAY,
     // YUV 4:2:0 formats family;
-    YUV2RGB_NV12, YUV2BGR_NV12, YUV2RGB_NV21, YUV2BGR_NV21, YUV420sp2RGB, YUV420sp2BGR, YUV2RGBA_NV12, YUV2BGRA_NV12,
-    YUV2RGBA_NV21, YUV2BGRA_NV21, YUV420sp2RGBA, YUV420sp2BGRA, YUV2RGB_YV12, YUV2BGR_YV12, YUV2RGB_IYUV, YUV2BGR_IYUV,
-    YUV2RGB_I420, YUV2BGR_I420, YUV420p2RGB, YUV420p2BGR, YUV2RGBA_YV12, YUV2BGRA_YV12, YUV2RGBA_IYUV, YUV2BGRA_IYUV,
-    YUV2RGBA_I420, YUV2BGRA_I420, YUV420p2RGBA, YUV420p2BGRA, YUV2GRAY_420, YUV2GRAY_NV21, YUV2GRAY_NV12, YUV2GRAY_YV12,
-    YUV2GRAY_IYUV, YUV2GRAY_I420, YUV420sp2GRAY, YUV420p2GRAY,
+    YUV2RGB_NV12, YUV2BGR_NV12, YUV2RGB_NV21, YUV2BGR_NV21, YUV420sp2RGB, YUV420sp2BGR, YUV2RGBA_NV12, YUV2BGRA_NV12, YUV2RGBA_NV21,
+    YUV2BGRA_NV21, YUV420sp2RGBA, YUV420sp2BGRA, YUV2RGB_YV12, YUV2BGR_YV12, YUV2RGB_IYUV, YUV2BGR_IYUV, YUV2RGB_I420, YUV2BGR_I420,
+    YUV420p2RGB, YUV420p2BGR, YUV2RGBA_YV12, YUV2BGRA_YV12, YUV2RGBA_IYUV, YUV2BGRA_IYUV, YUV2RGBA_I420, YUV2BGRA_I420, YUV420p2RGBA,
+    YUV420p2BGRA, YUV2GRAY_420, YUV2GRAY_NV21, YUV2GRAY_NV12, YUV2GRAY_YV12, YUV2GRAY_IYUV, YUV2GRAY_I420, YUV420sp2GRAY, YUV420p2GRAY,
     // YUV 4:2:2 formats family;
-    YUV2RGB_UYVY, YUV2BGR_UYVY, YUV2RGB_Y422, YUV2BGR_Y422, YUV2RGB_UYNV, YUV2BGR_UYNV, YUV2RGBA_UYVY, YUV2BGRA_UYVY,
-    YUV2RGBA_Y422, YUV2BGRA_Y422, YUV2RGBA_UYNV, YUV2BGRA_UYNV, YUV2RGB_YUY2, YUV2BGR_YUY2, YUV2RGB_YVYU, YUV2BGR_YVYU,
-    YUV2RGB_YUYV, YUV2BGR_YUYV, YUV2RGB_YUNV, YUV2BGR_YUNV, YUV2RGBA_YUY2, YUV2BGRA_YUY2, YUV2RGBA_YVYU, YUV2BGRA_YVYU,
-    YUV2RGBA_YUYV, YUV2BGRA_YUYV, YUV2RGBA_YUNV, YUV2BGRA_YUNV, YUV2GRAY_UYVY, YUV2GRAY_YUY2, YUV2GRAY_Y422, YUV2GRAY_UYNV,
-    YUV2GRAY_YVYU, YUV2GRAY_YUYV, YUV2GRAY_YUNV,
+    YUV2RGB_UYVY, YUV2BGR_UYVY, YUV2RGB_Y422, YUV2BGR_Y422, YUV2RGB_UYNV, YUV2BGR_UYNV, YUV2RGBA_UYVY, YUV2BGRA_UYVY, YUV2RGBA_Y422,
+    YUV2BGRA_Y422, YUV2RGBA_UYNV, YUV2BGRA_UYNV, YUV2RGB_YUY2, YUV2BGR_YUY2, YUV2RGB_YVYU, YUV2BGR_YVYU, YUV2RGB_YUYV, YUV2BGR_YUYV,
+    YUV2RGB_YUNV, YUV2BGR_YUNV, YUV2RGBA_YUY2, YUV2BGRA_YUY2, YUV2RGBA_YVYU, YUV2BGRA_YVYU, YUV2RGBA_YUYV, YUV2BGRA_YUYV, YUV2RGBA_YUNV,
+    YUV2BGRA_YUNV, YUV2GRAY_UYVY, YUV2GRAY_YUY2, YUV2GRAY_Y422, YUV2GRAY_UYNV, YUV2GRAY_YVYU, YUV2GRAY_YUYV, YUV2GRAY_YUNV,
     // alpha premultiplication;
     RGBA2mRGBA, mRGBA2RGBA, COLORCVT_MAX);
 
@@ -195,19 +193,18 @@ type
       (IPL_DEPTH_SIGN or 8), IPL_DEPTH_16S, IPL_DEPTH_32S);
 
     cColorConversion: array [TocvColorConversion] of Integer = (CV_BGR2BGRA, CV_RGB2RGBA, CV_BGRA2BGR, CV_RGBA2RGB, CV_BGR2RGBA,
-      CV_RGB2BGRA, CV_RGBA2BGR, CV_BGRA2RGB, CV_BGR2RGB, CV_RGB2BGR, CV_BGRA2RGBA, CV_RGBA2BGRA, CV_BGR2GRAY, CV_RGB2GRAY,
-      CV_GRAY2BGR, CV_GRAY2RGB, CV_GRAY2BGRA, CV_GRAY2RGBA, CV_BGRA2GRAY, CV_RGBA2GRAY, CV_BGR2BGR565, CV_RGB2BGR565,
-      CV_BGR5652BGR, CV_BGR5652RGB, CV_BGRA2BGR565, CV_RGBA2BGR565, CV_BGR5652BGRA, CV_BGR5652RGBA, CV_GRAY2BGR565,
-      CV_BGR5652GRAY, CV_BGR2BGR555, CV_RGB2BGR555, CV_BGR5552BGR, CV_BGR5552RGB, CV_BGRA2BGR555, CV_RGBA2BGR555, CV_BGR5552BGRA,
-      CV_BGR5552RGBA, CV_GRAY2BGR555, CV_BGR5552GRAY, CV_BGR2XYZ, CV_RGB2XYZ, CV_XYZ2BGR, CV_XYZ2RGB, CV_BGR2YCrCb, CV_RGB2YCrCb,
-      CV_YCrCb2BGR, CV_YCrCb2RGB, CV_BGR2HSV, CV_RGB2HSV, CV_BGR2Lab, CV_RGB2Lab, CV_BayerBG2BGR, CV_BayerGB2BGR, CV_BayerRG2BGR,
-      CV_BayerGR2BGR, CV_BayerBG2RGB, CV_BayerGB2RGB, CV_BayerRG2RGB, CV_BayerGR2RGB, CV_BGR2Luv, CV_RGB2Luv, CV_BGR2HLS,
-      CV_RGB2HLS, CV_HSV2BGR, CV_HSV2RGB, CV_Lab2BGR, CV_Lab2RGB, CV_Luv2BGR, CV_Luv2RGB, CV_HLS2BGR, CV_HLS2RGB,
-      CV_BayerBG2BGR_VNG, CV_BayerGB2BGR_VNG, CV_BayerRG2BGR_VNG, CV_BayerGR2BGR_VNG, CV_BayerBG2RGB_VNG, CV_BayerGB2RGB_VNG,
-      CV_BayerRG2RGB_VNG, CV_BayerGR2RGB_VNG, CV_BGR2HSV_FULL, CV_RGB2HSV_FULL, CV_BGR2HLS_FULL, CV_RGB2HLS_FULL, CV_HSV2BGR_FULL,
-      CV_HSV2RGB_FULL, CV_HLS2BGR_FULL, CV_HLS2RGB_FULL, CV_LBGR2Lab, CV_LRGB2Lab, CV_LBGR2Luv, CV_LRGB2Luv, CV_Lab2LBGR,
-      CV_Lab2LRGB, CV_Luv2LBGR, CV_Luv2LRGB, CV_BGR2YUV, CV_RGB2YUV, CV_YUV2BGR, CV_YUV2RGB, CV_BayerBG2GRAY, CV_BayerGB2GRAY,
-      CV_BayerRG2GRAY, CV_BayerGR2GRAY,
+      CV_RGB2BGRA, CV_RGBA2BGR, CV_BGRA2RGB, CV_BGR2RGB, CV_RGB2BGR, CV_BGRA2RGBA, CV_RGBA2BGRA, CV_BGR2GRAY, CV_RGB2GRAY, CV_GRAY2BGR,
+      CV_GRAY2RGB, CV_GRAY2BGRA, CV_GRAY2RGBA, CV_BGRA2GRAY, CV_RGBA2GRAY, CV_BGR2BGR565, CV_RGB2BGR565, CV_BGR5652BGR, CV_BGR5652RGB,
+      CV_BGRA2BGR565, CV_RGBA2BGR565, CV_BGR5652BGRA, CV_BGR5652RGBA, CV_GRAY2BGR565, CV_BGR5652GRAY, CV_BGR2BGR555, CV_RGB2BGR555,
+      CV_BGR5552BGR, CV_BGR5552RGB, CV_BGRA2BGR555, CV_RGBA2BGR555, CV_BGR5552BGRA, CV_BGR5552RGBA, CV_GRAY2BGR555, CV_BGR5552GRAY,
+      CV_BGR2XYZ, CV_RGB2XYZ, CV_XYZ2BGR, CV_XYZ2RGB, CV_BGR2YCrCb, CV_RGB2YCrCb, CV_YCrCb2BGR, CV_YCrCb2RGB, CV_BGR2HSV, CV_RGB2HSV,
+      CV_BGR2Lab, CV_RGB2Lab, CV_BayerBG2BGR, CV_BayerGB2BGR, CV_BayerRG2BGR, CV_BayerGR2BGR, CV_BayerBG2RGB, CV_BayerGB2RGB,
+      CV_BayerRG2RGB, CV_BayerGR2RGB, CV_BGR2Luv, CV_RGB2Luv, CV_BGR2HLS, CV_RGB2HLS, CV_HSV2BGR, CV_HSV2RGB, CV_Lab2BGR, CV_Lab2RGB,
+      CV_Luv2BGR, CV_Luv2RGB, CV_HLS2BGR, CV_HLS2RGB, CV_BayerBG2BGR_VNG, CV_BayerGB2BGR_VNG, CV_BayerRG2BGR_VNG, CV_BayerGR2BGR_VNG,
+      CV_BayerBG2RGB_VNG, CV_BayerGB2RGB_VNG, CV_BayerRG2RGB_VNG, CV_BayerGR2RGB_VNG, CV_BGR2HSV_FULL, CV_RGB2HSV_FULL, CV_BGR2HLS_FULL,
+      CV_RGB2HLS_FULL, CV_HSV2BGR_FULL, CV_HSV2RGB_FULL, CV_HLS2BGR_FULL, CV_HLS2RGB_FULL, CV_LBGR2Lab, CV_LRGB2Lab, CV_LBGR2Luv,
+      CV_LRGB2Luv, CV_Lab2LBGR, CV_Lab2LRGB, CV_Luv2LBGR, CV_Luv2LRGB, CV_BGR2YUV, CV_RGB2YUV, CV_YUV2BGR, CV_YUV2RGB, CV_BayerBG2GRAY,
+      CV_BayerGB2GRAY, CV_BayerRG2GRAY, CV_BayerGR2GRAY,
       // YUV 4:2:0 formats family;
       CV_YUV2RGB_NV12, CV_YUV2BGR_NV12, CV_YUV2RGB_NV21, CV_YUV2BGR_NV21, CV_YUV420sp2RGB, CV_YUV420sp2BGR, CV_YUV2RGBA_NV12,
       CV_YUV2BGRA_NV12, CV_YUV2RGBA_NV21, CV_YUV2BGRA_NV21, CV_YUV420sp2RGBA, CV_YUV420sp2BGRA, CV_YUV2RGB_YV12, CV_YUV2BGR_YV12,
@@ -219,9 +216,8 @@ type
       CV_YUV2RGB_UYVY, CV_YUV2BGR_UYVY, CV_YUV2RGB_Y422, CV_YUV2BGR_Y422, CV_YUV2RGB_UYNV, CV_YUV2BGR_UYNV, CV_YUV2RGBA_UYVY,
       CV_YUV2BGRA_UYVY, CV_YUV2RGBA_Y422, CV_YUV2BGRA_Y422, CV_YUV2RGBA_UYNV, CV_YUV2BGRA_UYNV, CV_YUV2RGB_YUY2, CV_YUV2BGR_YUY2,
       CV_YUV2RGB_YVYU, CV_YUV2BGR_YVYU, CV_YUV2RGB_YUYV, CV_YUV2BGR_YUYV, CV_YUV2RGB_YUNV, CV_YUV2BGR_YUNV, CV_YUV2RGBA_YUY2,
-      CV_YUV2BGRA_YUY2, CV_YUV2RGBA_YVYU, CV_YUV2BGRA_YVYU, CV_YUV2RGBA_YUYV, CV_YUV2BGRA_YUYV, CV_YUV2RGBA_YUNV,
-      CV_YUV2BGRA_YUNV, CV_YUV2GRAY_UYVY, CV_YUV2GRAY_YUY2, CV_YUV2GRAY_Y422, CV_YUV2GRAY_UYNV, CV_YUV2GRAY_YVYU,
-      CV_YUV2GRAY_YUYV, CV_YUV2GRAY_YUNV,
+      CV_YUV2BGRA_YUY2, CV_YUV2RGBA_YVYU, CV_YUV2BGRA_YVYU, CV_YUV2RGBA_YUYV, CV_YUV2BGRA_YUYV, CV_YUV2RGBA_YUNV, CV_YUV2BGRA_YUNV,
+      CV_YUV2GRAY_UYVY, CV_YUV2GRAY_YUY2, CV_YUV2GRAY_Y422, CV_YUV2GRAY_UYNV, CV_YUV2GRAY_YVYU, CV_YUV2GRAY_YUYV, CV_YUV2GRAY_YUNV,
       // alpha premultiplication;
       CV_RGBA2mRGBA, CV_mRGBA2RGBA, CV_COLORCVT_MAX);
   private
@@ -327,8 +323,7 @@ type
     property VideoSource: IocvDataSource Read FocvVideoSource write SetVideoSource_Source2;
     property OnGetSourceImage: TOnGetImage read FOnGetImage write FOnGetImage;
     property OnGetMaskImage: TOnGetImage read FOnGetMaskImage write FOnGetMaskImage;
-    property TransformInterpolation: TocvInterpolationMethod read FTransformInterpolation write FTransformInterpolation
-      default INTER_CUBIC;
+    property TransformInterpolation: TocvInterpolationMethod read FTransformInterpolation write FTransformInterpolation default INTER_CUBIC;
   public
     constructor Create(AOwner: TPersistent); override;
   protected
@@ -419,8 +414,7 @@ type
     property SmoothType: TocvSmoothOperations read FSmoothOperation write SetSmoothOperation default GAUSSIAN;
   end;
 
-  TocvThresholdType = (THRESH_BINARY, THRESH_BINARY_INV, THRESH_TRUNC, THRESH_TOZERO, THRESH_TOZERO_INV, THRESH_MASK,
-    THRESH_OTSU);
+  TocvThresholdType = (THRESH_BINARY, THRESH_BINARY_INV, THRESH_TRUNC, THRESH_TOZERO, THRESH_TOZERO_INV, THRESH_MASK, THRESH_OTSU);
 
   TocvCustomThresholdOperation = class(TocvCustomImageOperation)
   private
@@ -698,8 +692,8 @@ type
 
   TocvMotionDetectCalcRectType = (mdBoundingRect, mdMinAreaRect);
 
-  TocvContourApproximationMethods = (CHAIN_CODE, CHAIN_APPROX_NONE, CHAIN_APPROX_SIMPLE, CHAIN_APPROX_TC89_L1,
-    CHAIN_APPROX_TC89_KCOS, LINK_RUNS);
+  TocvContourApproximationMethods = (CHAIN_CODE, CHAIN_APPROX_NONE, CHAIN_APPROX_SIMPLE, CHAIN_APPROX_TC89_L1, CHAIN_APPROX_TC89_KCOS,
+    LINK_RUNS);
 
   TocvDrawMotionRect = TocvDrawColor;
 
@@ -948,7 +942,7 @@ type
     function GetPropertiesClass: TocvImageOperationClass;
     function GetDisplayName: string; override;
     function GetOwner: TPersistent; override;
-    {IInterface}
+    { IInterface }
     function QueryInterface(const IID: TGUID; out Obj): HResult; stdcall;
     function _AddRef: Integer; stdcall;
     function _Release: Integer; stdcall;
@@ -1024,18 +1018,28 @@ function GetRegisteredImageOperations: TRegisteredImageOperations;
 
 implementation
 
-///
-// Run utils\CompressHaar\uCompressHaar.dpr
-// Add to serarch path \Delphi-OpenCV\resource\facedetectxml\
-///
-{$R haarcascade.rc haarcascade.res}
-{$R haarcascade.res}
-
 uses
   ocv.core_c,
   ocv.imgproc_c,
   ocv.cvutils,
   System.Math;
+
+// {$IFNDEF haarcascadeinc}
+// {$DEFINE haarcascadeinc}
+//
+// Type
+// TocvHaarCascadeRecord = record
+// Name: String;
+// FileName: String;
+// end;
+// ///
+// // Run utils\CompressHaar\uCompressHaar.dpr
+// // Add to serarch path \Delphi-OpenCV\resource\facedetectxml\
+// ///
+// {$R haarcascade.rc haarcascade.res}
+// {$R haarcascade.res}
+// {$I haarcascade.inc}
+// {$ENDIF}
 
 type
   TPersistentAccessProtected = class(TPersistent);
@@ -1050,7 +1054,7 @@ begin
   Result := _RegisteredImageOperations;
 end;
 
-{TocvImageOperation}
+{ TocvImageOperation }
 
 procedure TocvImageOperation.SetOnAfterEachOperation(const Value: TOnOcvNotifyCollectionItem);
 begin
@@ -1190,9 +1194,9 @@ begin
   CS.Leave;
 end;
 
-{TocvImageOperationCanny}
+{ TocvImageOperationCanny }
 
-constructor TocvCannyOperation.Create {(AOwner: TPersistent)};
+constructor TocvCannyOperation.Create { (AOwner: TPersistent) };
 begin
   inherited;
   Threshold1 := 10;
@@ -1207,7 +1211,7 @@ begin
   Result := True;
 end;
 
-{TocvImageOperationGrayScale}
+{ TocvImageOperationGrayScale }
 
 function TocvGrayScaleOperation.DoTransform(const Source: IocvImage; out Destanation: IocvImage): Boolean;
 begin
@@ -1215,7 +1219,7 @@ begin
   Result := True;
 end;
 
-{TocvImageOperationNone}
+{ TocvImageOperationNone }
 
 function TocvNoneOperation.DoTransform(const Source: IocvImage; out Destanation: IocvImage): Boolean;
 begin
@@ -1223,7 +1227,7 @@ begin
   Result := True;
 end;
 
-{TCustomOpenCVImgOperation}
+{ TCustomOpenCVImgOperation }
 
 procedure TocvCustomImageOperation.AssignTo(Dest: TPersistent);
 begin
@@ -1291,11 +1295,11 @@ begin
   Result := inherited GetNamePath;
   lOwner := GetOwner;
   if
-  {} (lOwner <> nil) and
-  {} (
-    {} (csSubComponent in TComponent(lOwner).ComponentStyle) or
-    {} (TPersistentAccessProtected(lOwner).GetOwner <> nil)
-    {} ) then
+  { } (lOwner <> nil) and
+  { } (
+    { } (csSubComponent in TComponent(lOwner).ComponentStyle) or
+    { } (TPersistentAccessProtected(lOwner).GetOwner <> nil)
+    { } ) then
   begin
     S := lOwner.GetNamePath;
     if S <> '' then
@@ -1380,10 +1384,9 @@ begin
   FCriticalSection.Leave;
 end;
 
-{TocvImageOperationSmooth}
+{ TocvImageOperationSmooth }
 Const
-  ocvSmoothOperations: array [TocvSmoothOperations] of Integer = (CV_BLUR_NO_SCALE, CV_BLUR, CV_GAUSSIAN, CV_MEDIAN,
-    CV_BILATERAL);
+  ocvSmoothOperations: array [TocvSmoothOperations] of Integer = (CV_BLUR_NO_SCALE, CV_BLUR, CV_GAUSSIAN, CV_MEDIAN, CV_BILATERAL);
 
 procedure TocvSmoothOperation.AssignTo(Dest: TPersistent);
 begin
@@ -1392,7 +1395,7 @@ begin
     FSmoothOperation := (Dest as TocvSmoothOperation).FSmoothOperation;
 end;
 
-constructor TocvSmoothOperation.Create {(AOwner: TPersistent)};
+constructor TocvSmoothOperation.Create { (AOwner: TPersistent) };
 begin
   inherited;
   FSmoothOperation := GAUSSIAN;
@@ -1422,7 +1425,7 @@ begin
   Result := True;
 end;
 
-{TRegisteredImageOperations}
+{ TRegisteredImageOperations }
 
 function TRegisteredImageOperations.FindByClassName(const ClassName: String): TocvImageOperationClass;
 Var
@@ -1464,7 +1467,7 @@ begin
   RegisterClass(TPersistentClass(IOClass));
 end;
 
-{TocvCustomErodeDilate}
+{ TocvCustomErodeDilate }
 
 procedure TocvCustomErodeDilateOperation.AssignTo(Dest: TPersistent);
 begin
@@ -1473,7 +1476,7 @@ begin
     FMorphOp := (Dest as TocvCustomErodeDilateOperation).MorphOp;
 end;
 
-constructor TocvCustomErodeDilateOperation.Create {(AOwner: TComponent)};
+constructor TocvCustomErodeDilateOperation.Create { (AOwner: TComponent) };
 begin
   inherited;
   Radius := 5;
@@ -1494,7 +1497,7 @@ end;
 const
   EDMorpgOp: array [TocvErodeDilateMode] of Integer = (CV_SHAPE_RECT, CV_SHAPE_CROSS, CV_SHAPE_ELLIPSE, CV_SHAPE_CUSTOM);
 
-  {TocvErode}
+  { TocvErode }
 
 function TocvErodeOperation.DoTransform(const Source: IocvImage; out Destanation: IocvImage): Boolean;
 Var
@@ -1507,7 +1510,7 @@ begin
   Result := True;
 end;
 
-{TocvDilate}
+{ TocvDilate }
 
 function TocvDilateOperation.DoTransform(const Source: IocvImage; out Destanation: IocvImage): Boolean;
 Var
@@ -1520,9 +1523,9 @@ begin
   Result := True;
 end;
 
-{TocvLaplace}
+{ TocvLaplace }
 
-constructor TocvLaplaceOperation.Create {(AOwner: TComponent)};
+constructor TocvLaplaceOperation.Create { (AOwner: TComponent) };
 begin
   inherited;
   Aperture := 3;
@@ -1540,9 +1543,9 @@ begin
   Result := True;
 end;
 
-{TocvSobel}
+{ TocvSobel }
 
-constructor TocvSobelOperation.Create {(AOwner: TComponent)};
+constructor TocvSobelOperation.Create { (AOwner: TComponent) };
 begin
   inherited;
   XOrder := 1;
@@ -1562,7 +1565,7 @@ begin
   Result := True;
 end;
 
-{TocvImageOperationCollectionItem}
+{ TocvImageOperationCollectionItem }
 
 procedure TocvImageOperationCollectionItem.Assign(Source: TPersistent);
 begin
@@ -1705,19 +1708,19 @@ begin
   Result := -1;
 end;
 
-{TocvThresholdOperation}
+{ TocvThresholdOperation }
 
 Const
   cThreshold: array [TocvThresholdType] of Integer = (CV_THRESH_BINARY, CV_THRESH_BINARY_INV, CV_THRESH_TRUNC, CV_THRESH_TOZERO,
     CV_THRESH_TOZERO_INV, CV_THRESH_MASK, CV_THRESH_OTSU);
 
-constructor TocvThresholdOperation.Create {(AOwner: TComponent)};
+constructor TocvThresholdOperation.Create { (AOwner: TComponent) };
 begin
   inherited;
   Threshold := 50;
 end;
 
-constructor TocvCustomThresholdOperation.Create {(AOwner: TComponent)};
+constructor TocvCustomThresholdOperation.Create { (AOwner: TComponent) };
 begin
   inherited;
   MaxValue := 250;
@@ -1741,13 +1744,12 @@ begin
   Result := True;
 end;
 
-{TocvAdaptiveThresholdOperation}
+{ TocvAdaptiveThresholdOperation }
 
 const
-  cAdaptiveThresholdType: array [TocvAdaptiveThresholdType] of Integer = (CV_ADAPTIVE_THRESH_MEAN_C,
-    CV_ADAPTIVE_THRESH_GAUSSIAN_C);
+  cAdaptiveThresholdType: array [TocvAdaptiveThresholdType] of Integer = (CV_ADAPTIVE_THRESH_MEAN_C, CV_ADAPTIVE_THRESH_GAUSSIAN_C);
 
-constructor TocvAdaptiveThresholdOperation.Create {(AOwner: TComponent)};
+constructor TocvAdaptiveThresholdOperation.Create { (AOwner: TComponent) };
 begin
   inherited;
   AdaptiveThresholdType := ADAPTIVE_THRESH_MEAN_C;
@@ -1773,9 +1775,9 @@ begin
   Result := True;
 end;
 
-{TocvContoursOperation}
+{ TocvContoursOperation }
 
-constructor TocvContoursOperation.Create {(AOwner: TComponent)};
+constructor TocvContoursOperation.Create { (AOwner: TComponent) };
 begin
   inherited;
   FOffset := TocvPoint2D32i.Create;
@@ -1822,8 +1824,7 @@ begin
       contoursCont := cvFindContours(th_image.IpImage, storage, @Contours, SizeOf(TCvContour), Integer(RetrievalMode),
         Integer(ApproximationMethod), cvPoint(Offset.X, Offset.Y));
       if ApproxPoly.Enabled then
-        FContours := cvApproxPoly(Contours, SizeOf(TCvContour), storage, CV_POLY_APPROX_DP, ApproxPoly.Eps,
-          Integer(ApproxPoly.Recursive));
+        FContours := cvApproxPoly(Contours, SizeOf(TCvContour), storage, CV_POLY_APPROX_DP, ApproxPoly.Eps, Integer(ApproxPoly.Recursive));
       DoNotifyContours(Destanation, contoursCont, Contours);
       if (contoursCont > 0) and ContourDraw.Enabled then
       begin
@@ -1858,7 +1859,7 @@ begin
     OnContour(Self, Image, ContourCount, Contours);
 end;
 
-{TocvRotateOperation}
+{ TocvRotateOperation }
 
 procedure TocvRotateOperation.AssignTo(Dest: TPersistent);
 begin
@@ -1925,7 +1926,7 @@ begin
   Result := True;
 end;
 
-{TPersistentPoint}
+{ TPersistentPoint }
 
 procedure TocvPoint2D32i.AssignTo(Dest: TPersistent);
 begin
@@ -1934,7 +1935,7 @@ begin
     FSize := (Dest as TocvPoint2D32i).FSize;
 end;
 
-{TocvCountourDraw}
+{ TocvCountourDraw }
 
 procedure TocvDraw.AssignTo(Dest: TPersistent);
 begin
@@ -1982,7 +1983,7 @@ begin
   Result := FOwner;
 end;
 
-{TocvContourApprox}
+{ TocvContourApprox }
 
 procedure TocvContourApprox.AssignTo(Dest: TPersistent);
 begin
@@ -2010,7 +2011,7 @@ begin
   Result := FOwner;
 end;
 
-{TocvAbsDiff}
+{ TocvAbsDiff }
 
 function TocvAbsDiff.DoTransform(const Source: IocvImage; out Destanation: IocvImage): Boolean;
 Var
@@ -2024,7 +2025,7 @@ begin
   Result := True;
 end;
 
-{TocvFaceDetect}
+{ TocvFaceDetect }
 
 constructor TocvHaarCascade.Create(AOwner: TPersistent);
 begin
@@ -2060,15 +2061,15 @@ Var
 begin
   Destanation := Source;
   Result := ocvHaarCascadeTransform(
-    {} Source,
-    {} FCascade,
-    {} FHaarRects,
-    {} MinSize.Size,
-    {} MaxSize.Size,
-    {} Equalize,
-    {} Scale,
-    {} MinNeighbors,
-    {} CascadeFlags);
+    { } Source,
+    { } FCascade,
+    { } FHaarRects,
+    { } MinSize.Size,
+    { } MaxSize.Size,
+    { } Equalize,
+    { } Scale,
+    { } MinNeighbors,
+    { } CascadeFlags);
 
   if Result then
   begin
@@ -2189,7 +2190,7 @@ begin
   Y := AY;
 end;
 
-{TocvContourDraw}
+{ TocvContourDraw }
 
 procedure TocvContourDraw.AssignTo(Dest: TPersistent);
 begin
@@ -2208,7 +2209,7 @@ begin
   FMaxLevel := 2;
 end;
 
-{TocvMatchTemplate}
+{ TocvMatchTemplate }
 
 procedure TocvMatchTemplate.AssignTo(Dest: TPersistent);
 begin
@@ -2252,8 +2253,8 @@ begin
   Destanation := Source;
   if Assigned(IPLTemplate) then
   begin
-    imgMat := cvCreateImage(cvSize(Source.IpImage^.Width - IPLTemplate^.Width + 1, Source.IpImage^.height - IPLTemplate^.height +
-      1), IPL_DEPTH_32F, 1);
+    imgMat := cvCreateImage(cvSize(Source.IpImage^.Width - IPLTemplate^.Width + 1, Source.IpImage^.height - IPLTemplate^.height + 1),
+      IPL_DEPTH_32F, 1);
     cvMatchTemplate(Source.IpImage, IPLTemplate, imgMat, Integer(FMethod));
 
     if Assigned(OnMathTemplateRect) or DrawRect.Enabled then
@@ -2301,7 +2302,7 @@ begin
   end;
 end;
 
-{TocvMotionDetect}
+{ TocvMotionDetect }
 
 procedure TocvMotionDetect.AssignTo(Dest: TPersistent);
 begin
@@ -2365,8 +2366,7 @@ begin
     storage := cvCreateMemStorage(0);
     FContours := AllocMem(SizeOf(TCvSeq));
     try
-      cvFindContours(ThresholdImage.IpImage, storage, @FContours, SizeOf(TCvContour), CV_RETR_LIST, CV_CHAIN_APPROX_SIMPLE,
-        cvPoint(0, 0));
+      cvFindContours(ThresholdImage.IpImage, storage, @FContours, SizeOf(TCvContour), CV_RETR_LIST, CV_CHAIN_APPROX_SIMPLE, cvPoint(0, 0));
 
       black := CV_RGB(0, 0, 0);
       white := CV_RGB(255, 255, 255);
@@ -2385,8 +2385,7 @@ begin
       cvClearMemStorage(storage);
       SetLength(Rects, 0);
 
-      cvFindContours(ThresholdImage.IpImage, storage, @FContours, SizeOf(TCvContour), CV_RETR_LIST, CV_CHAIN_APPROX_NONE,
-        cvPoint(0, 0));
+      cvFindContours(ThresholdImage.IpImage, storage, @FContours, SizeOf(TCvContour), CV_RETR_LIST, CV_CHAIN_APPROX_NONE, cvPoint(0, 0));
 
       if Assigned(FContours) then
       begin
@@ -2439,7 +2438,7 @@ begin
     Result := inherited;
 end;
 
-{TocvCustomImageOperationWithNestedOperation}
+{ TocvCustomImageOperationWithNestedOperation }
 
 constructor TocvCustomImageOperationWithNestedOperation.Create(AOwner: TPersistent);
 begin
@@ -2521,7 +2520,7 @@ begin
   CS.Leave;
 end;
 
-{TocvRectPersistent}
+{ TocvRectPersistent }
 
 procedure TocvRect32i.AssignTo(Dest: TPersistent);
 begin
@@ -2581,7 +2580,7 @@ begin
   FRight := FLeft + Value;
 end;
 
-{TocvCropOperation}
+{ TocvCropOperation }
 
 constructor TocvCropOperation.Create(AOwner: TPersistent);
 begin
@@ -2604,7 +2603,7 @@ begin
   Result := True;
 end;
 
-{TocvImageOperationCollection}
+{ TocvImageOperationCollection }
 
 function TocvImageOperationCollection.Transform(const Source: IocvImage; out Destanation: IocvImage): Boolean;
 
@@ -2641,7 +2640,7 @@ begin
   end;
 end;
 
-{TocvAddWeightedOperation}
+{ TocvAddWeightedOperation }
 
 constructor TocvCommonMathOperation.Create(AOwner: TPersistent);
 begin
@@ -2719,7 +2718,7 @@ begin
     end;
 end;
 
-{TocvWarpAffine}
+{ TocvWarpAffine }
 
 procedure TocvWarpPerspective.AssignTo(Dest: TPersistent);
 begin
@@ -2786,7 +2785,7 @@ begin
   Result := True;
 end;
 
-{TocvAddWeightedOperation}
+{ TocvAddWeightedOperation }
 
 constructor TocvAddWeightedOperation.Create(AOwner: TPersistent);
 begin
@@ -2812,7 +2811,7 @@ begin
   end;
 end;
 
-{TocvQuad}
+{ TocvQuad }
 
 procedure TocvQuad.AssignTo(Dest: TPersistent);
 Var
@@ -2928,7 +2927,7 @@ begin
     FPoints[index] := Value;
 end;
 
-{TocvPoint2D32f}
+{ TocvPoint2D32f }
 
 procedure TocvPoint2D32f.AssignTo(Dest: TPersistent);
 begin
@@ -2946,7 +2945,7 @@ begin
   FY := AY;
 end;
 
-{TocvHoughCircles}
+{ TocvHoughCircles }
 
 procedure TocvHoughCircles.AssignTo(Dest: TPersistent);
 begin
@@ -3013,8 +3012,7 @@ begin
       else
         D := Source;
 
-      results := cvHoughCircles(D.GrayImage.IpImage, storage, Integer(Method), InverseRatio, MinDist, Param1, Param2, MinRadius,
-        MaxRadius);
+      results := cvHoughCircles(D.GrayImage.IpImage, storage, Integer(Method), InverseRatio, MinDist, Param1, Param2, MinRadius, MaxRadius);
       if Assigned(results) then
       begin
         SetLength(Circles, results^.total);
@@ -3038,7 +3036,7 @@ begin
     OnCircles(Self, Destanation, Circles);
 end;
 
-{TocvHoughLines}
+{ TocvHoughLines }
 
 procedure TocvHoughLines.AssignTo(Dest: TPersistent);
 begin
@@ -3098,8 +3096,7 @@ begin
           ocvlines[i].S := line^[0];
           ocvlines[i].E := line^[1];
           if DrawLines.Enabled then
-            cvLine(Destanation.IpImage, line^[0], line^[1], DrawLines.cvColor, DrawLines.Thickness, DrawLines.cvLineType,
-              DrawLines.Shift);
+            cvLine(Destanation.IpImage, line^[0], line^[1], DrawLines.cvColor, DrawLines.Thickness, DrawLines.cvLineType, DrawLines.Shift);
         end;
       end;
 
@@ -3113,7 +3110,7 @@ begin
   end;
 end;
 
-{TocvHoughCirclesSmooth}
+{ TocvHoughCirclesSmooth }
 
 procedure TocvHoughCirclesSmooth.AssignTo(Dest: TPersistent);
 begin
@@ -3140,7 +3137,7 @@ begin
   FEnabled := True;
 end;
 
-{TocvHoughLinesCanny}
+{ TocvHoughLinesCanny }
 
 procedure TocvHoughLinesCanny.AssignTo(Dest: TPersistent);
 begin
@@ -3161,7 +3158,7 @@ begin
   FApertureSize := 3;
 end;
 
-{TocvInRangeOperation}
+{ TocvInRangeOperation }
 
 procedure TocvInRangeSOperation.AssignTo(Dest: TPersistent);
 begin
@@ -3198,7 +3195,7 @@ begin
   end;
 end;
 
-{TocvScalar}
+{ TocvScalar }
 
 procedure TocvScalar.AssignTo(Dest: TPersistent);
 begin
@@ -3221,7 +3218,7 @@ begin
     FCvScalar.val[index] := Value;
 end;
 
-{TocvCvtColorOperation}
+{ TocvCvtColorOperation }
 
 constructor TocvCvtColorOperation.Create(AOwner: TPersistent);
 begin
@@ -3293,7 +3290,7 @@ end;
 // end;
 // end;
 
-{TocvResizeOperation}
+{ TocvResizeOperation }
 
 procedure TocvResizeOperation.AssignTo(Dest: TPersistent);
 begin
@@ -3324,7 +3321,7 @@ begin
     end;
 end;
 
-{TocvMathLogicOperation}
+{ TocvMathLogicOperation }
 
 procedure TocvLogicOperation.AssignTo(Dest: TPersistent);
 begin
@@ -3370,7 +3367,7 @@ begin
   end;
 end;
 
-{TocvLogicSOperation}
+{ TocvLogicSOperation }
 
 procedure TocvLogicSOperation.AssignTo(Dest: TPersistent);
 begin

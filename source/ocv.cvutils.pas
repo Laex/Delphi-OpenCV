@@ -1,47 +1,46 @@
-//**************************************************************************************************
-  //                                 Project Delphi-OpenCV
-  //  **************************************************************************************************
-  //  Contributor:
-    // Laentir Valetov
-  //  email:laex@bk.ru
-  //  Mikhail Grigorev
-  //  email:sleuthound@gmail.com
-  //  **************************************************************************************************
-  //  You may retrieve the latest version of this file at the GitHub,
-  //  located at git://github.com/Laex/Delphi-OpenCV.git
-  //  **************************************************************************************************
-  //  License:
-  //  The contents of this file are subject to the Mozilla Public License Version 1.1 (the "License");
-  //  you may not use this file except in compliance with the License. You may obtain a copy of the
-  //  License at http://www.mozilla.org/MPL/
-  //
-  //  Software distributed under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
-  //  ANY KIND, either express or implied. See the License for the specific language governing rights
-  //  and limitations under the License.
-  //
-  //  Alternatively, the contents of this file may be used under the terms of the
-  //  GNU Lesser General Public License (the  "LGPL License"), in which case the
-  //  provisions of the LGPL License are applicable instead of those above.
-  //  If you wish to allow use of your version of this file only under the terms
-  //  of the LGPL License and not to allow others to use your version of this file
-  //  under the MPL, indicate your decision by deleting  the provisions above and
-  //  replace  them with the notice and other provisions required by the LGPL
-  //  License.  If you do not delete the provisions above, a recipient may use
-  //  your version of this file under either the MPL or the LGPL License.
-  //
-  //  For more information about the LGPL: http://www.gnu.org/copyleft/lesser.html
-  //  **************************************************************************************************
-  //  Warning: Using Delphi XE2 syntax!
-  //  **************************************************************************************************
-  //  The Initial Developer of the Original Code:
-  //  OpenCV: open source computer vision library
-  //  Homepage:    http://ocv.org
-  //  Online docs: http://docs.ocv.org
-  //  Q&A forum:   http://answers.ocv.org
-  //  Dev zone:    http://code.ocv.org
-  //  ************************************************************************************************** *)
+// **************************************************************************************************
+// Project Delphi-OpenCV
+// **************************************************************************************************
+// Contributor:
+// Laentir Valetov
+// email:laex@bk.ru
+// Mikhail Grigorev
+// email:sleuthound@gmail.com
+// **************************************************************************************************
+// You may retrieve the latest version of this file at the GitHub,
+// located at git://github.com/Laex/Delphi-OpenCV.git
+// **************************************************************************************************
+// License:
+// The contents of this file are subject to the Mozilla Public License Version 1.1 (the "License");
+// you may not use this file except in compliance with the License. You may obtain a copy of the
+// License at http://www.mozilla.org/MPL/
+//
+// Software distributed under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
+// ANY KIND, either express or implied. See the License for the specific language governing rights
+// and limitations under the License.
+//
+// Alternatively, the contents of this file may be used under the terms of the
+// GNU Lesser General Public License (the  "LGPL License"), in which case the
+// provisions of the LGPL License are applicable instead of those above.
+// If you wish to allow use of your version of this file only under the terms
+// of the LGPL License and not to allow others to use your version of this file
+// under the MPL, indicate your decision by deleting  the provisions above and
+// replace  them with the notice and other provisions required by the LGPL
+// License.  If you do not delete the provisions above, a recipient may use
+// your version of this file under either the MPL or the LGPL License.
+//
+// For more information about the LGPL: http://www.gnu.org/copyleft/lesser.html
+// **************************************************************************************************
+// Warning: Using Delphi XE2 syntax!
+// **************************************************************************************************
+// The Initial Developer of the Original Code:
+// OpenCV: open source computer vision library
+// Homepage:    http://ocv.org
+// Online docs: http://docs.ocv.org
+// Q&A forum:   http://answers.ocv.org
+// Dev zone:    http://code.ocv.org
+// ************************************************************************************************** *)
 {$I OpenCV.inc}
-
 {$IFDEF VER12P}
 {$POINTERMATH ON}
 {$ENDIF}
@@ -141,7 +140,7 @@ end;
 // ---------------------------------------------------------------------------
 function CreateRGBBitmap(_Grab: PIplImage): HBITMAP;
 
-  function WIDTHBYTES(bits: DWORD): DWORD; {$IFDEF VER9P}inline;{$ENDIF}
+  function WIDTHBYTES(bits: DWORD): DWORD; {$IFDEF VER9P}inline; {$ENDIF}
   begin
     Result := ((((bits) + 31) div 32) * 4);
   end;
@@ -175,9 +174,9 @@ begin
       begin
         for j := 0 to _Grab^.Width - 1 do
         begin
-          App[_Grab^.Width * 3 * (_Grab^.Height - i - 1) + j * 3] := pByte(_Grab^.imageData)[_Grab^.Width * (i) + j];
-          App[_Grab^.Width * 3 * (_Grab^.Height - i - 1) + j * 3 + 1] := pByte(_Grab^.imageData)[_Grab^.Width * (i) + j];
-          App[_Grab^.Width * 3 * (_Grab^.Height - i - 1) + j * 3 + 2] := pByte(_Grab^.imageData)[_Grab^.Width * (i) + j];
+          App[_Grab^.Width * 3 * (_Grab^.Height - i - 1) + j * 3] := PByte(_Grab^.imageData)[_Grab^.Width * (i) + j];
+          App[_Grab^.Width * 3 * (_Grab^.Height - i - 1) + j * 3 + 1] := PByte(_Grab^.imageData)[_Grab^.Width * (i) + j];
+          App[_Grab^.Width * 3 * (_Grab^.Height - i - 1) + j * 3 + 2] := PByte(_Grab^.imageData)[_Grab^.Width * (i) + j];
         end;
       end;
 
@@ -187,7 +186,7 @@ begin
     begin
       for i := 0 to _Grab^.Height - 1 do
       begin
-        CopyMemory(App + _Grab^.Width * 3 * (_Grab^.Height - i - 1), pByte(_Grab^.imageData) + _Grab^.Width * 3 * i, _Grab^.Width * 3);
+        CopyMemory(App + _Grab^.Width * 3 * (_Grab^.Height - i - 1), PByte(_Grab^.imageData) + _Grab^.Width * 3 * i, _Grab^.Width * 3);
         // Копируем память
       end;
 
@@ -228,7 +227,7 @@ const
 Begin
   hue := hue * 0.033333333333333333333333333333333;
   sector := cvFloor(hue);
-//  p := cvRound(255 * (hue - sector));
+  // p := cvRound(255 * (hue - sector));
   if (sector and 1) = 1 then
     p := 255
   else
@@ -241,13 +240,13 @@ Begin
   Result := cvScalar(rgb[2], rgb[1], rgb[0], 0);
 End;
 
-{-----------------------------------------------------------------------------
+{ -----------------------------------------------------------------------------
   Procedure:  IplImage2Bitmap
   Author:     De Sanctis
   Date:       23-set-2005
   Arguments:  iplImg: PIplImage; bitmap: TBitmap
   Description: convert a IplImage to a Windows bitmap
-  -----------------------------------------------------------------------------}
+  ----------------------------------------------------------------------------- }
 procedure IplImage2Bitmap(iplImg: PIplImage; var bitmap: {$IFDEF VER15P}Vcl.Graphics.TBitmap{$ELSE}Graphics.TBitmap{$ENDIF VER15P});
 VAR
   i, j: Integer;
@@ -273,7 +272,7 @@ BEGIN
 
       if (iplImg.ChannelSeq = 'BGR') then
       begin
-        {direct copy of the iplImage row bytes to bitmap row}
+        { direct copy of the iplImage row bytes to bitmap row }
         CopyMemory(RowIn, dataByte, iplImg.WidthStep);
       End
       else if (iplImg.ChannelSeq = 'GRAY') then
@@ -293,7 +292,7 @@ BEGIN
     End;
   Except
   End
-END; {IplImage2Bitmap}
+END; { IplImage2Bitmap }
 
 function cvImage2Bitmap(img: PIplImage): {$IFDEF VER15P}Vcl.Graphics.TBitmap{$ELSE}Graphics.TBitmap{$ENDIF VER15P};
 var
@@ -394,16 +393,16 @@ begin
     SetStretchBltMode(dc, COLORONCOLOR);
     SetMapMode(dc, MM_TEXT);
     // Stretch the image to fit the rectangle
-    iResult := StretchDIBits(dc, rect.left, rect.top, rect.Width, rect.Height, 0, 0, img^.Width, img^.Height, img^.imageData,
-      _dibhdr, DIB_RGB_COLORS, SRCCOPY);
-    Result := (iResult > 0);// and (iResult <> GDI_ERROR);
+    iResult := StretchDIBits(dc, rect.left, rect.top, rect.Width, rect.Height, 0, 0, img^.Width, img^.Height, img^.imageData, _dibhdr,
+      DIB_RGB_COLORS, SRCCOPY);
+    Result := (iResult > 0); // and (iResult <> GDI_ERROR);
   end
   else
   begin
     // Draw without scaling
     iResult := SetDIBitsToDevice(dc, rect.left, rect.top, img^.Width, img^.Height, 0, 0, 0, img^.Height, img^.imageData, _dibhdr,
       DIB_RGB_COLORS);
-    Result := (iResult > 0);// and (iResult <> GDI_ERROR);
+    Result := (iResult > 0); // and (iResult <> GDI_ERROR);
   end;
 end;
 

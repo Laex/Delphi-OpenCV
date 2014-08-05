@@ -33,7 +33,8 @@ requires
   OpenCV200,
   rtl,
   vcl,
-  designide;
+  designide,
+  fmx;
 
 contains
   ocv.comp.IOProperties in '..\ocv.comp.IOProperties.pas',

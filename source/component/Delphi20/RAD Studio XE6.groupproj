@@ -3,10 +3,10 @@
         <ProjectGuid>{BD0EE7BD-ED70-4DCA-AA92-522F18635A55}</ProjectGuid>
     </PropertyGroup>
     <ItemGroup>
-        <Projects Include="OpenCV200.*.dproj">
+        <Projects Include="OpenCV200.dproj">
             <Dependencies/>
         </Projects>
-        <Projects Include="dclOpenCV200.*.dproj">
+        <Projects Include="dclOpenCV200.dproj">
             <Dependencies/>
         </Projects>
     </ItemGroup>
