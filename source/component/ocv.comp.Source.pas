@@ -730,7 +730,8 @@ end;
 
 procedure TocvFFMpegIPCamSource.TerminateSourceThread;
 begin
-  (FSourceThread as TocvFFMpegIPCamSourceThread).FSuspendEvent.SetEvent;
+  if Assigned(FSourceThread) then
+    (FSourceThread as TocvFFMpegIPCamSourceThread).FSuspendEvent.SetEvent;
   inherited;
 end;
 
@@ -852,7 +853,7 @@ begin
     av_dict_set(optionsDict, 'allowed_media_types', 'video', 0);
     av_dict_set(optionsDict, 'reorder_queue_size', '10', 0);
     av_dict_set(optionsDict, 'max_delay', '500000', 0);
-    av_dict_set(optionsDict, 'stimeout',  '1000000', 0);
+    av_dict_set(optionsDict, 'stimeout', '1000000', 0);
 
     ret := avformat_open_input(pFormatCtx, PAnsiChar(FIPCamURL), nil, @optionsDict); // pFormatCtx
     if ret < 0 then
