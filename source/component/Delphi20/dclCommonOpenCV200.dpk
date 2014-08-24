@@ -1,4 +1,4 @@
-package dclOpenCV200;
+package dclCommonOpenCV200;
 
 {$R *.res}
 {$IFDEF IMPLICITBUILDING This IFDEF should not be used by users}
@@ -31,10 +31,7 @@ package dclOpenCV200;
 
 requires
   OpenCV200,
-  rtl,
-  vcl,
-  designide,
-  fmx;
+  designide;
 
 contains
   ocv.comp.IOProperties in '..\ocv.comp.IOProperties.pas',

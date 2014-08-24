@@ -24,7 +24,7 @@
 // *******************************************************************
 {$IFNDEF CLR}
 {$I OpenCV.inc}
-unit ocv.comp.Register;
+unit ocv.comp.RegisterFMX;
 {$ENDIF}
 
 interface
@@ -43,41 +43,11 @@ uses
 {$IFDEF VER6P}DesignIntf, System.Classes, {$ELSE}DsgnIntf, Classes, {$ENDIF VER6P}
 {$ENDIF FPC}
 {$ENDIF}
-  ocv.comp.Source,
-  ocv.comp.ImageOperation,
-  ocv.comp.VideoWriter;
+  ocv.comp.ViewFMX;
 
 procedure Register;
 begin
-  RegisterComponents('OpenCV', [TocvImageOperation, TocvCameraSource, TocvFileSource, TocvIPCamSource,
-    TocvFFMpegIPCamSource, TocvVideoWriter]);
-  RegisterClasses([
-    {} TocvNoneOperation,
-    {} TocvGrayScaleOperation,
-    {} TocvCannyOperation,
-    {} TocvSmoothOperation,
-    {} TocvErodeOperation,
-    {} TocvDilateOperation,
-    {} TocvLaplaceOperation,
-    {} TocvSobelOperation,
-    {} TocvThresholdOperation,
-    {} TocvAdaptiveThresholdOperation,
-    {} TocvContoursOperation,
-    {} TocvRotateOperation,
-    {} TocvAbsDiff,
-    {} TocvHaarCascade,
-    {} TocvMatchTemplate,
-    {} TocvMotionDetect,
-    {} TocvCropOperation,
-    {} TocvAddWeightedOperation,
-    {} TocvWarpPerspective,
-    {} TocvHoughCircles,
-    {} TocvHoughLines,
-    {} TocvInRangeSOperation,
-    {} TocvCvtColorOperation,
-    {} TocvResizeOperation,
-    {} TocvLogicOperation,
-    {} TocvLogicSOperation]);
+  RegisterComponents('OpenCV', [TocvViewFMX]);
 end;
 
 {$IFDEF FPC}
