@@ -35,6 +35,7 @@ requires
   designide;
 
 contains
-  ocv.comp.RegisterVCL in '..\ocv.comp.RegisterVCL.pas';
+  ocv.comp.RegisterVCL in '..\ocv.comp.RegisterVCL.pas',
+  ocv.comp.View in '..\ocv.comp.View.pas';
 
 end.

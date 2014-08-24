@@ -59,6 +59,7 @@ uses
   ocv.core.types_c;
 
 Function hsv2rgb(hue: single): TCvScalar;
+
 procedure IplImage2Bitmap(iplImg: PIplImage; var bitmap: {$IFDEF VER15P}Vcl.Graphics.TBitmap{$ELSE}Graphics.TBitmap{$ENDIF VER15P});
 function cvImage2Bitmap(img: PIplImage): {$IFDEF VER15P}Vcl.Graphics.TBitmap{$ELSE}Graphics.TBitmap{$ENDIF VER15P};
 
@@ -87,18 +88,33 @@ uses
 
 function BitmapToIplImage(const bitmap: {$IFDEF VER15P}Vcl.Graphics.TBitmap{$ELSE}Graphics.TBitmap{$ENDIF VER15P}): PIplImage;
 Var
-  bitmapData: PByte;
+  BMI: BITMAPINFO;
 begin
   Assert(bitmap.PixelFormat = pf24bit); // Пока только такой формат
-
-  bitmapData := bitmap.Scanline[0];
-  Result := cvCreateImage(cvSize(bitmap.Width, bitmap.Height), IPL_DEPTH_8U, 3);
-  CopyMemory(Result^.imageData, bitmapData, Result^.imageSize);
-  Result^.imageDataOrigin := nil;
-  Result^.imageId := nil;
-  Result^.maskROI := nil;
-  Result^.roi := nil;
+  ZeroMemory(@BMI, sizeof(BMI));
+  BMI.bmiHeader.biSize := sizeof(BITMAPINFOHEADER);
+  BMI.bmiHeader.biWidth := bitmap.Width;
+  BMI.bmiHeader.biHeight := -bitmap.Height;
+  BMI.bmiHeader.biPlanes := 1;
+  BMI.bmiHeader.biBitCount := 24; // only 24-bit
+  BMI.bmiHeader.biCompression := BI_RGB;
+  Result := cvCreateImage(cvSize(bitmap.Width, bitmap.Height), IPL_DEPTH_8U, 3); // only 24-bit
+  GetDIBits(bitmap.Canvas.Handle, bitmap.Handle, 0, bitmap.Height, Result^.ImageData, BMI, DIB_RGB_COLORS);
 end;
+
+// function BitmapToIplImage(const bitmap: {$IFDEF VER15P}Vcl.Graphics.TBitmap{$ELSE}Graphics.TBitmap{$ENDIF VER15P}): PIplImage;
+// Var
+// bitmapData: PByte;
+// begin
+// Assert(bitmap.PixelFormat = pf24bit); // Пока только такой формат
+// bitmapData := bitmap.Scanline[0];
+// Result := cvCreateImage(cvSize(bitmap.Width, bitmap.Height), IPL_DEPTH_8U, 3);
+// CopyMemory(Result^.imageData, bitmapData, Result^.imageSize);
+// Result^.imageDataOrigin := nil;
+// Result^.imageId := nil;
+// Result^.maskROI := nil;
+// Result^.roi := nil;
+// end;
 
 function CropIplImage(const src: PIplImage; const roi: TCvRect): PIplImage;
 begin
@@ -151,7 +167,7 @@ Var
   pBits: Pointer;
   i, j: Integer;
 begin
-  lpbi.bmiHeader.biSize := SizeOf(BITMAPINFOHEADER);
+  lpbi.bmiHeader.biSize := sizeof(BITMAPINFOHEADER);
   lpbi.bmiHeader.biWidth := _Grab^.Width;
   lpbi.bmiHeader.biHeight := _Grab^.Height;
   lpbi.bmiHeader.biPlanes := 1;
@@ -174,9 +190,9 @@ begin
       begin
         for j := 0 to _Grab^.Width - 1 do
         begin
-          App[_Grab^.Width * 3 * (_Grab^.Height - i - 1) + j * 3] := PByte(_Grab^.imageData)[_Grab^.Width * (i) + j];
-          App[_Grab^.Width * 3 * (_Grab^.Height - i - 1) + j * 3 + 1] := PByte(_Grab^.imageData)[_Grab^.Width * (i) + j];
-          App[_Grab^.Width * 3 * (_Grab^.Height - i - 1) + j * 3 + 2] := PByte(_Grab^.imageData)[_Grab^.Width * (i) + j];
+          App[_Grab^.Width * 3 * (_Grab^.Height - i - 1) + j * 3] := PByte(_Grab^.ImageData)[_Grab^.Width * (i) + j];
+          App[_Grab^.Width * 3 * (_Grab^.Height - i - 1) + j * 3 + 1] := PByte(_Grab^.ImageData)[_Grab^.Width * (i) + j];
+          App[_Grab^.Width * 3 * (_Grab^.Height - i - 1) + j * 3 + 2] := PByte(_Grab^.ImageData)[_Grab^.Width * (i) + j];
         end;
       end;
 
@@ -186,7 +202,7 @@ begin
     begin
       for i := 0 to _Grab^.Height - 1 do
       begin
-        CopyMemory(App + _Grab^.Width * 3 * (_Grab^.Height - i - 1), PByte(_Grab^.imageData) + _Grab^.Width * 3 * i, _Grab^.Width * 3);
+        CopyMemory(App + _Grab^.Width * 3 * (_Grab^.Height - i - 1), PByte(_Grab^.ImageData) + _Grab^.Width * 3 * i, _Grab^.Width * 3);
         // Копируем память
       end;
 
@@ -267,7 +283,7 @@ BEGIN
       else
         RowIn := bitmap.Scanline[j];
 
-      offset := longint(iplImg.imageData) + iplImg.WidthStep * j;
+      offset := longint(iplImg.ImageData) + iplImg.WidthStep * j;
       dataByte := PByteArray(offset);
 
       if (iplImg.ChannelSeq = 'BGR') then
@@ -322,7 +338,7 @@ begin
     End;
     wStep := img^.WidthStep;
     Channels := img^.nChannels;
-    data := Pointer(img^.imageData);
+    data := Pointer(img^.ImageData);
     for i := 0 to img^.Height - 1 do
     begin
       pb := bmp.Scanline[i];
@@ -346,14 +362,14 @@ Type
 Var
   isrgb: Boolean;
   isgray: Boolean;
-  buf: array [1 .. SizeOf(BITMAPINFOHEADER) + SizeOf(RGBQUAD) * 256] of byte;
+  buf: array [1 .. sizeof(BITMAPINFOHEADER) + sizeof(RGBQUAD) * 256] of byte;
   dibhdr: pBITMAPINFOHEADER;
   _dibhdr: TBitmapInfo ABSOLUTE buf;
   _rgb: pCOLORREF;
   i: Integer;
   iResult: Integer;
 begin
-  if (not Assigned(img)) or (not Assigned(img^.imageData)) then
+  if (not Assigned(img)) or (not Assigned(img^.ImageData)) then
     Exit(false);
 
   isrgb := ('R' = upcase(img^.colorModel[0])) and ('G' = upcase(img^.colorModel[1])) and ('B' = upcase(img^.colorModel[2]));
@@ -365,13 +381,13 @@ begin
     Exit(false);
 
   dibhdr := @buf;
-  _rgb := pCOLORREF(Integer(dibhdr) + SizeOf(BITMAPINFOHEADER));
+  _rgb := pCOLORREF(Integer(dibhdr) + sizeof(BITMAPINFOHEADER));
 
   if (isgray) then
     for i := 0 to 255 do
       _rgb[i] := rgb(i, i, i);
 
-  dibhdr^.biSize := SizeOf(BITMAPINFOHEADER);
+  dibhdr^.biSize := sizeof(BITMAPINFOHEADER);
   dibhdr^.biWidth := img^.Width;
   // Check origin for display
   if img^.Origin = 0 then
@@ -393,14 +409,14 @@ begin
     SetStretchBltMode(dc, COLORONCOLOR);
     SetMapMode(dc, MM_TEXT);
     // Stretch the image to fit the rectangle
-    iResult := StretchDIBits(dc, rect.left, rect.top, rect.Width, rect.Height, 0, 0, img^.Width, img^.Height, img^.imageData, _dibhdr,
+    iResult := StretchDIBits(dc, rect.left, rect.top, rect.Width, rect.Height, 0, 0, img^.Width, img^.Height, img^.ImageData, _dibhdr,
       DIB_RGB_COLORS, SRCCOPY);
     Result := (iResult > 0); // and (iResult <> GDI_ERROR);
   end
   else
   begin
     // Draw without scaling
-    iResult := SetDIBitsToDevice(dc, rect.left, rect.top, img^.Width, img^.Height, 0, 0, 0, img^.Height, img^.imageData, _dibhdr,
+    iResult := SetDIBitsToDevice(dc, rect.left, rect.top, img^.Width, img^.Height, 0, 0, 0, img^.Height, img^.ImageData, _dibhdr,
       DIB_RGB_COLORS);
     Result := (iResult > 0); // and (iResult <> GDI_ERROR);
   end;

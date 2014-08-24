@@ -26,8 +26,9 @@ object Form1: TForm1
     Enabled = True
     UserName = 'admin'
     Password = 'admin'
-    IP = '10.1.1.202'
-    URI = '/cam/realmonitor?channel=1&subtype=0'
+    IP = '10.1.1.201'
+    URI = '/Streaming/Channels/1?transportmode=unicast'
+    OnLostConnection = ocvFFMpegIPCamSource1LostConnection
     Left = 104
     Top = 96
   end

@@ -32,9 +32,11 @@ package dclFMXOpenCV200;
 requires
   OpenCV200,
   dclCommonOpenCV200,
-  designide;
+  designide,
+  fmx;
 
 contains
-  ocv.comp.RegisterFMX in '..\ocv.comp.RegisterFMX.pas';
+  ocv.comp.RegisterFMX in '..\ocv.comp.RegisterFMX.pas',
+  ocv.comp.ViewFMX in '..\ocv.comp.ViewFMX.pas';
 
 end.

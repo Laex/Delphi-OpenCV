@@ -581,19 +581,8 @@ begin
 end;
 
 constructor TocvImage.Create(const Bitmap: TBitmap);
-Var
-  bitmapData: PByte;
 begin
-  Create;
-  Assert(Assigned(Bitmap) and (Bitmap.Width > 0) and (Bitmap.Height > 0));
-  Assert(Bitmap.PixelFormat = pf24bit, 'only 24bit'); // Пока только такой формат - IPL_DEPTH_8U, 3
-  bitmapData := Bitmap.Scanline[0];
-  FImage := cvCreateImage(cvSize(Bitmap.Width, Bitmap.Height), IPL_DEPTH_8U, 3);
-  Move(bitmapData^, FImage^.imageData^, FImage^.imageSize);
-  FImage^.imageDataOrigin := nil;
-  FImage^.imageId := nil;
-  FImage^.maskROI := nil;
-  FImage^.roi := nil;
+  Create(BitmapToIplImage(Bitmap));
 end;
 
 constructor TocvImage.Create;
@@ -804,7 +793,7 @@ end;
 constructor TocvFont.Create;
 begin
   inherited;
-  FillChar(FCvFont, SizeOf(FCvFont), 0);
+  FillChar(FCvFont, sizeof(FCvFont), 0);
   FCvFont.HScale := 0.5;
   FCvFont.VScale := 0.5;
   FCvFont.Thickness := 1;

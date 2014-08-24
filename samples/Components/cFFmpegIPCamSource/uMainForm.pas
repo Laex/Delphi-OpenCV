@@ -11,10 +11,10 @@ type
   TForm1 = class(TForm)
     ocvFFMpegIPCamSource1: TocvFFMpegIPCamSource;
     ocvView1: TocvView;
+    procedure ocvFFMpegIPCamSource1LostConnection(Sender: TObject);
   private
-    {Private declarations}
+    LCCount: Integer;
   public
-    {Public declarations}
   end;
 
 var
@@ -23,5 +23,22 @@ var
 implementation
 
 {$R *.dfm}
+
+procedure TForm1.ocvFFMpegIPCamSource1LostConnection(Sender: TObject);
+Const
+  LostConText = 'Lost connection ';
+Var
+  TW: Integer;
+  LostConBmp: TBitmap;
+begin
+  LostConBmp := TBitmap.Create;
+  LostConBmp.SetSize(ocvView1.Width, ocvView1.Height);
+  LostConBmp.PixelFormat := pf24bit;
+  TW := LostConBmp.Canvas.TextWidth(LostConText);
+  LostConBmp.Canvas.TextOut((ocvView1.Width - TW) div 2, ocvView1.Height div 2, LostConText + ' ' + LCCount.ToString);
+  inc(LCCount);
+  ocvView1.DrawImage(TocvImage.Create(LostConBmp));
+  LostConBmp.Free;
+end;
 
 end.

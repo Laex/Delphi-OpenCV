@@ -78,7 +78,7 @@
         <DCC_Optimize>false</DCC_Optimize>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2_Win32)'!=''">
-        <VerInfo_Keys>CompanyName=;FileDescription=;FileVersion=1.0.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductName=;ProductVersion=1.0.0.0;Comments=;LastCompiledTime=06.08.2014 2:32:04</VerInfo_Keys>
+        <VerInfo_Keys>CompanyName=;FileDescription=;FileVersion=1.0.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductName=;ProductVersion=1.0.0.0;Comments=;LastCompiledTime=24.08.2014 23:58:06</VerInfo_Keys>
     </PropertyGroup>
     <ItemGroup>
         <DelphiCompile Include="$(MainSource)">
@@ -86,13 +86,10 @@
         </DelphiCompile>
         <DCCReference Include="rtl.dcp"/>
         <DCCReference Include="vcl.dcp"/>
-        <DCCReference Include="fmx.dcp"/>
         <DCCReference Include="..\ocv.comp.ImageOperation.pas"/>
         <DCCReference Include="..\ocv.comp.VideoWriter.pas"/>
         <DCCReference Include="..\ocv.comp.Types.pas"/>
         <DCCReference Include="..\ocv.comp.Source.pas"/>
-        <DCCReference Include="..\ocv.comp.View.pas"/>
-        <DCCReference Include="..\ocv.comp.ViewFMX.pas"/>
         <DCCReference Include="..\ocv.comp.Proc.pas"/>
         <BuildConfiguration Include="Debug">
             <Key>Cfg_2</Key>

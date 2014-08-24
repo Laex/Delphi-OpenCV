@@ -203,11 +203,15 @@ type
     FURI: string;
     FOnNotifyFFMpegPacket: TOnNotifyFFMpegPacket;
     FProtocol: TocvIPProtocol;
+    FReconnectDelay: Cardinal;
+    FOnLostConnection: TNotifyEvent;
+    procedure SetReconnectDelay(const Value: Cardinal);
   protected
     function GetIPCamTarget: AnsiString;
     procedure SetEnabled(Value: Boolean); override;
     procedure Loaded; override;
     procedure DoNotifyPacket(const packet: TAVPacket; const isKeyFrame: Boolean);
+    procedure DoLostConnection;
   public
     constructor Create(AOwner: TComponent); override;
   published
@@ -218,6 +222,8 @@ type
     property Port: Word read FPort write FPort default 554;
     property Protocol: TocvIPProtocol read FProtocol write FProtocol default ippRTSP;
     property OnFFMpegPacket: TOnNotifyFFMpegPacket read FOnNotifyFFMpegPacket write FOnNotifyFFMpegPacket;
+    property OnLostConnection: TNotifyEvent read FOnLostConnection write FOnLostConnection;
+    property ReconnectDelay: Cardinal Read FReconnectDelay write SetReconnectDelay default 1000;
   end;
 
 implementation
@@ -256,6 +262,7 @@ Type
     FIPCamURL: AnsiString;
     FSuspendEvent: TEvent;
     FOwner: TocvFFMpegIPCamSource;
+    FReconnectDelay: Cardinal;
     procedure TerminatedSet; override;
   protected
     procedure Execute; override;
@@ -306,9 +313,8 @@ Type
   end;
 
 Const
-  CameraResolution: array [TocvResolution] of TCameraResolution = ((cWidth: 160; cHeight: 120), (cWidth: 320;
-    cHeight: 240), (cWidth: 424; cHeight: 240), (cWidth: 640; cHeight: 360), (cWidth: 800; cHeight: 448), (cWidth: 960;
-    cHeight: 544), (cWidth: 1280; cHeight: 720));
+  CameraResolution: array [TocvResolution] of TCameraResolution = ((cWidth: 160; cHeight: 120), (cWidth: 320; cHeight: 240), (cWidth: 424;
+    cHeight: 240), (cWidth: 640; cHeight: 360), (cWidth: 800; cHeight: 448), (cWidth: 960; cHeight: 544), (cWidth: 1280; cHeight: 720));
 
   { TOpenCVCameraThread }
 
@@ -651,6 +657,7 @@ begin
   inherited;
   FPort := 554;
   FProtocol := ippRTSP;
+  FReconnectDelay := 1000;
   if not(csDesigning in ComponentState) then
   begin
     FSourceThread := TocvFFMpegIPCamSourceThread.Create(Self);
@@ -658,6 +665,12 @@ begin
     FSourceThread.FThreadDelay := FThreadDelay;
     FSourceThread.FreeOnTerminate := True;
   end;
+end;
+
+procedure TocvFFMpegIPCamSource.DoLostConnection;
+begin
+  if Assigned(OnLostConnection) then
+    OnLostConnection(Self);
 end;
 
 procedure TocvFFMpegIPCamSource.DoNotifyPacket(const packet: TAVPacket; const isKeyFrame: Boolean);
@@ -696,8 +709,21 @@ begin
   if FEnabled <> Value then
   begin
     if not(csDesigning in ComponentState) then
+    begin
+      (FSourceThread as TocvFFMpegIPCamSourceThread).FReconnectDelay := ReconnectDelay;
       (FSourceThread as TocvFFMpegIPCamSourceThread).SetIPCamUrl(GetIPCamTarget, Value);
+    end;
     FEnabled := Value;
+  end;
+end;
+
+procedure TocvFFMpegIPCamSource.SetReconnectDelay(const Value: Cardinal);
+begin
+  if FReconnectDelay <> Value then
+  begin
+    FReconnectDelay := Value;
+    if Assigned(FSourceThread) then
+      (FSourceThread as TocvFFMpegIPCamSourceThread).FReconnectDelay := ReconnectDelay;
   end;
 end;
 
@@ -717,6 +743,7 @@ constructor TocvFFMpegIPCamSourceThread.Create(AOwner: TocvFFMpegIPCamSource);
 begin
   inherited Create(False);
   FOwner := AOwner;
+  FReconnectDelay := 1000;
   FSuspendEvent := TEvent.Create;
   FSuspendEvent.ResetEvent;
 end;
@@ -773,6 +800,7 @@ Var
   linesize: array [0 .. 3] of Integer;
 
   isReconnect: Boolean;
+  RDelay: Cardinal;
 begin
   av_register_all();
   avformat_network_init();
@@ -792,13 +820,20 @@ begin
       Break;
 
     ReleaseAllocatedData;
-    if isReconnect then
+    if isReconnect and (FReconnectDelay > 0) then
     begin
-      i := 0;
-      while (not Terminated) and (i < 10) do
+
+      Synchronize(
+        procedure
+        begin
+          FOwner.DoLostConnection;
+        end);
+
+      RDelay := 0;
+      while (not Terminated) and (RDelay < FReconnectDelay) do
       begin
         Sleep(100);
-        Inc(i);
+        Inc(RDelay, 100);
       end;
       if Terminated then
         Break;
@@ -858,8 +893,8 @@ begin
       Continue;
     end;
 
-    img_convert_context := sws_getCachedContext(nil, pCodecCtx^.Width, pCodecCtx^.Height, pCodecCtx^.pix_fmt,
-      pCodecCtx^.Width, pCodecCtx^.Height, AV_PIX_FMT_BGR24, SWS_BILINEAR, nil, nil, nil);
+    img_convert_context := sws_getCachedContext(nil, pCodecCtx^.Width, pCodecCtx^.Height, pCodecCtx^.pix_fmt, pCodecCtx^.Width,
+      pCodecCtx^.Height, AV_PIX_FMT_BGR24, SWS_BILINEAR, nil, nil, nil);
     if (img_convert_context = nil) then
     begin
       isReconnect := True;
@@ -885,8 +920,7 @@ begin
           avcodec_decode_video2(pCodecCtx, frame, frame_finished, @packet);
           if (frame_finished <> 0) then
           begin
-            sws_scale(img_convert_context, @frame^.data, @frame^.linesize, 0, pCodecCtx^.Height, @iplframe^.imageData,
-              @linesize);
+            sws_scale(img_convert_context, @frame^.data, @frame^.linesize, 0, pCodecCtx^.Height, @iplframe^.imageData, @linesize);
             if Assigned(OnNotifyData) then
               Synchronize(
                 procedure
@@ -894,7 +928,7 @@ begin
                   Image: IocvImage;
                 begin
                   Image := TocvImage.CreateClone(iplframe);
-                  OnNotifyData(Self, Image);
+                  OnNotifyData(FOwner, Image);
                   Image := nil;
                 end);
           end;
