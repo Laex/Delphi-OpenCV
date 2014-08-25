@@ -1,8 +1,7 @@
-package dclOpenCV190;
+package dclFMXOpenCV190;
 
 {$R *.res}
-{$R *.otares}
-{$R '..\OpenCV.dcr'}
+{$R *.dres}
 {$IFDEF IMPLICITBUILDING This IFDEF should not be used by users}
 {$ALIGN 8}
 {$ASSERTIONS ON}
@@ -33,12 +32,12 @@ package dclOpenCV190;
 
 requires
   OpenCV190,
-  rtl,
-  vcl,
-  designide;
+  dclCommonOpenCV190,
+  designide,
+  fmx;
 
 contains
-  ocv.comp.IOProperties in '..\ocv.comp.IOProperties.pas',
-  ocv.comp.Register in '..\ocv.comp.Register.pas';
+  ocv.comp.RegisterFMX in '..\ocv.comp.RegisterFMX.pas',
+  ocv.comp.ViewFMX in '..\ocv.comp.ViewFMX.pas';
 
 end.
