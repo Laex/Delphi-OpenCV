@@ -7,13 +7,13 @@
             <Dependencies/>
         </Projects>
         <Projects Include="dclCommonOpenCV200.dproj">
-            <Dependencies/>
+            <Dependencies>OpenCV200.dproj</Dependencies>
         </Projects>
         <Projects Include="dclVCLOpenCV200.dproj">
-            <Dependencies/>
+            <Dependencies>OpenCV200.dproj;dclCommonOpenCV200.dproj</Dependencies>
         </Projects>
         <Projects Include="dclFMXOpenCV200.dproj">
-            <Dependencies/>
+            <Dependencies>OpenCV200.dproj;dclCommonOpenCV200.dproj</Dependencies>
         </Projects>
     </ItemGroup>
     <ProjectExtensions>
@@ -32,31 +32,31 @@
     <Target Name="OpenCV200:Make">
         <MSBuild Projects="OpenCV200.dproj" Targets="Make"/>
     </Target>
-    <Target Name="dclCommonOpenCV200">
+    <Target Name="dclCommonOpenCV200" DependsOnTargets="OpenCV200">
         <MSBuild Projects="dclCommonOpenCV200.dproj"/>
     </Target>
-    <Target Name="dclCommonOpenCV200:Clean">
+    <Target Name="dclCommonOpenCV200:Clean" DependsOnTargets="OpenCV200:Clean">
         <MSBuild Projects="dclCommonOpenCV200.dproj" Targets="Clean"/>
     </Target>
-    <Target Name="dclCommonOpenCV200:Make">
+    <Target Name="dclCommonOpenCV200:Make" DependsOnTargets="OpenCV200:Make">
         <MSBuild Projects="dclCommonOpenCV200.dproj" Targets="Make"/>
     </Target>
-    <Target Name="dclVCLOpenCV200">
+    <Target Name="dclVCLOpenCV200" DependsOnTargets="OpenCV200;dclCommonOpenCV200">
         <MSBuild Projects="dclVCLOpenCV200.dproj"/>
     </Target>
-    <Target Name="dclVCLOpenCV200:Clean">
+    <Target Name="dclVCLOpenCV200:Clean" DependsOnTargets="OpenCV200:Clean;dclCommonOpenCV200:Clean">
         <MSBuild Projects="dclVCLOpenCV200.dproj" Targets="Clean"/>
     </Target>
-    <Target Name="dclVCLOpenCV200:Make">
+    <Target Name="dclVCLOpenCV200:Make" DependsOnTargets="OpenCV200:Make;dclCommonOpenCV200:Make">
         <MSBuild Projects="dclVCLOpenCV200.dproj" Targets="Make"/>
     </Target>
-    <Target Name="dclFMXOpenCV200">
+    <Target Name="dclFMXOpenCV200" DependsOnTargets="OpenCV200;dclCommonOpenCV200">
         <MSBuild Projects="dclFMXOpenCV200.dproj"/>
     </Target>
-    <Target Name="dclFMXOpenCV200:Clean">
+    <Target Name="dclFMXOpenCV200:Clean" DependsOnTargets="OpenCV200:Clean;dclCommonOpenCV200:Clean">
         <MSBuild Projects="dclFMXOpenCV200.dproj" Targets="Clean"/>
     </Target>
-    <Target Name="dclFMXOpenCV200:Make">
+    <Target Name="dclFMXOpenCV200:Make" DependsOnTargets="OpenCV200:Make;dclCommonOpenCV200:Make">
         <MSBuild Projects="dclFMXOpenCV200.dproj" Targets="Make"/>
     </Target>
     <Target Name="Build">
