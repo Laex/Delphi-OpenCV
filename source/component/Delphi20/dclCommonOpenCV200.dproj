@@ -55,6 +55,8 @@
         <Base>true</Base>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base)'!=''">
+        <DCC_DcuOutput>.\$(Platform)\$(Config)</DCC_DcuOutput>
+        <DCC_UnitSearchPath>..;..\..;..\..\ffmpeg;..\..\opengl;..\..\sdl;..\..\sdl2;..\..\utils;$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
         <DCC_F>false</DCC_F>
         <DCC_Description>OpenCV Component</DCC_Description>
         <DCC_ImageBase>00400000</DCC_ImageBase>
@@ -104,6 +106,9 @@
         <DCC_Optimize>false</DCC_Optimize>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2_Win32)'!=''">
+        <DCC_UnitSearchPath>..\..\..\resource\facedetectxml;$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
+        <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
+        <VerInfo_Locale>1033</VerInfo_Locale>
         <VerInfo_Keys>CompanyName=;FileDescription=;FileVersion=1.0.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductName=;ProductVersion=1.0.0.0;Comments=;LastCompiledTime=25.08.2014 3:14:24</VerInfo_Keys>
     </PropertyGroup>
     <ItemGroup>
@@ -158,6 +163,10 @@
                 <Source>
                     <Source Name="MainSource">dclCommonOpenCV200.dpk</Source>
                 </Source>
+                <Excluded_Packages>
+                    <Excluded_Packages Name="$(BDSBIN)\dcloffice2k200.bpl">Microsoft Office 2000 Sample Automation Server Wrapper Components</Excluded_Packages>
+                    <Excluded_Packages Name="$(BDSBIN)\dclofficexp200.bpl">Microsoft Office XP Sample Automation Server Wrapper Components</Excluded_Packages>
+                </Excluded_Packages>
             </Delphi.Personality>
             <Platforms>
                 <Platform value="Android">False</Platform>
