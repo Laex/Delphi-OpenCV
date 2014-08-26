@@ -1,0 +1,60 @@
+﻿	<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+		<PropertyGroup>
+			<ProjectGuid>{AA4534B7-1520-4717-812E-B9ED8095AFB9}</ProjectGuid>
+		</PropertyGroup>
+		<ItemGroup>
+			<Projects Include="OpenCV160.dproj">
+				<Dependencies/>
+			</Projects>
+			<Projects Include="dclCommonOpenCV160.dproj">
+				<Dependencies>OpenCV160.dproj</Dependencies>
+			</Projects>
+			<Projects Include="dclVCLOpenCV160.dproj">
+				<Dependencies>dclCommonOpenCV160.dproj</Dependencies>
+			</Projects>
+		</ItemGroup>
+		<ProjectExtensions>
+			<Borland.Personality>Default.Personality.12</Borland.Personality>
+			<Borland.ProjectType/>
+			<BorlandProject>
+				<Default.Personality/>
+			</BorlandProject>
+		</ProjectExtensions>
+		<Target Name="OpenCV160">
+			<MSBuild Projects="OpenCV160.dproj"/>
+		</Target>
+		<Target Name="OpenCV160:Clean">
+			<MSBuild Projects="OpenCV160.dproj" Targets="Clean"/>
+		</Target>
+		<Target Name="OpenCV160:Make">
+			<MSBuild Projects="OpenCV160.dproj" Targets="Make"/>
+		</Target>
+		<Target Name="dclCommonOpenCV160" DependsOnTargets="OpenCV160">
+			<MSBuild Projects="dclCommonOpenCV160.dproj"/>
+		</Target>
+		<Target Name="dclCommonOpenCV160:Clean" DependsOnTargets="OpenCV160:Clean">
+			<MSBuild Projects="dclCommonOpenCV160.dproj" Targets="Clean"/>
+		</Target>
+		<Target Name="dclCommonOpenCV160:Make" DependsOnTargets="OpenCV160:Make">
+			<MSBuild Projects="dclCommonOpenCV160.dproj" Targets="Make"/>
+		</Target>
+		<Target Name="dclVCLOpenCV160" DependsOnTargets="dclCommonOpenCV160">
+			<MSBuild Projects="dclVCLOpenCV160.dproj"/>
+		</Target>
+		<Target Name="dclVCLOpenCV160:Clean" DependsOnTargets="dclCommonOpenCV160:Clean">
+			<MSBuild Projects="dclVCLOpenCV160.dproj" Targets="Clean"/>
+		</Target>
+		<Target Name="dclVCLOpenCV160:Make" DependsOnTargets="dclCommonOpenCV160:Make">
+			<MSBuild Projects="dclVCLOpenCV160.dproj" Targets="Make"/>
+		</Target>
+		<Target Name="Build">
+			<CallTarget Targets="OpenCV160;dclCommonOpenCV160;dclVCLOpenCV160"/>
+		</Target>
+		<Target Name="Clean">
+			<CallTarget Targets="OpenCV160:Clean;dclCommonOpenCV160:Clean;dclVCLOpenCV160:Clean"/>
+		</Target>
+		<Target Name="Make">
+			<CallTarget Targets="OpenCV160:Make;dclCommonOpenCV160:Make;dclVCLOpenCV160:Make"/>
+		</Target>
+		<Import Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')" Project="$(BDS)\Bin\CodeGear.Group.Targets"/>
+	</Project>

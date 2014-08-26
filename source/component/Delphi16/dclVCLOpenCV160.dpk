@@ -1,4 +1,4 @@
-package OpenCV160;
+package dclVCLOpenCV160;
 
 {$R *.res}
 {$R *.otares}
@@ -27,18 +27,16 @@ package OpenCV160;
 {$DEFINE DEBUG}
 {$ENDIF IMPLICITBUILDING}
 {$DESCRIPTION 'OpenCV Component'}
-{$RUNONLY}
+{$DESIGNONLY}
 {$IMPLICITBUILD OFF}
 
 requires
-  rtl,
-  vcl;
+  OpenCV160,
+  dclCommonOpenCV160,
+  designide;
 
 contains
-  ocv.comp.ImageOperation in '..\ocv.comp.ImageOperation.pas',
-  ocv.comp.VideoWriter in '..\ocv.comp.VideoWriter.pas',
-  ocv.comp.Types in '..\ocv.comp.Types.pas',
-  ocv.comp.Source in '..\ocv.comp.Source.pas',
-  ocv.comp.Proc in '..\ocv.comp.Proc.pas';
+  ocv.comp.RegisterVCL in '..\ocv.comp.RegisterVCL.pas',
+  ocv.comp.View in '..\ocv.comp.View.pas';
 
 end.
