@@ -103,7 +103,11 @@ unit ocv.core.types_c;
 interface
 
 uses
-  WinApi.Windows;
+{$IFDEF VER16P}
+  WinApi.Windows
+{$ELSE}
+  Windows
+{$ENDIF VER16P};
 
 const
   // Ќаименьшее число дл€ которого выполн€етс€ условие 1.0+DBL_EPSILON <> 1.0
@@ -2231,11 +2235,11 @@ implementation
 
 uses
   ocv.core_c,
-{$IFDEF VER15P}
+{$IFDEF VER16P}
   System.SysUtils;
 {$ELSE}
-SysUtils;
-{$ENDIF VER15P}
+  SysUtils;
+{$ENDIF VER16P}
 
 function strdup(const str: pCVChar): pCVChar;
 begin

@@ -29,7 +29,7 @@ unit ocv.comp.Types;
 interface
 
 uses
-{$IFDEF VER15P}
+{$IFDEF VER16P}
   WinApi.Windows,
   System.SysUtils,
   System.Classes,
@@ -42,7 +42,7 @@ uses
   Classes,
   Graphics,
 {$IFNDEF VER5}Types, {$ENDIF VER5}
-{$ENDIF VER15P}
+{$ENDIF VER16P}
   ocv.core_c,
   ocv.core.types_c;
 

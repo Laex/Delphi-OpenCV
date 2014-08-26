@@ -49,19 +49,19 @@ unit ocv.cvutils;
 interface
 
 uses
-{$IFDEF VER15P}
+{$IFDEF VER16P}
   WinApi.Windows,
   Vcl.Graphics,
 {$ELSE}
   Windows,
   Graphics,
-{$ENDIF VER15P}
+{$ENDIF VER16P}
   ocv.core.types_c;
 
 Function hsv2rgb(hue: single): TCvScalar;
 
-procedure IplImage2Bitmap(iplImg: PIplImage; var bitmap: {$IFDEF VER15P}Vcl.Graphics.TBitmap{$ELSE}Graphics.TBitmap{$ENDIF VER15P});
-function cvImage2Bitmap(img: PIplImage): {$IFDEF VER15P}Vcl.Graphics.TBitmap{$ELSE}Graphics.TBitmap{$ENDIF VER15P};
+procedure IplImage2Bitmap(iplImg: PIplImage; var bitmap: {$IFDEF VER16P}Vcl.Graphics.TBitmap{$ELSE}Graphics.TBitmap{$ENDIF VER16P});
+function cvImage2Bitmap(img: PIplImage): {$IFDEF VER16P}Vcl.Graphics.TBitmap{$ELSE}Graphics.TBitmap{$ENDIF VER16P};
 
 function ipDraw(dc: HDC; img: PIplImage; const rect: TRect; const Stretch: Boolean = true): Boolean; overload;
 procedure ipDraw(const x, y: Integer; const _Grab: PIplImage; const Wnd: THandle); overload;
@@ -73,20 +73,20 @@ function ifthen(const Cond: Boolean; const ValueTrue, ValueFalse: pCvArr): pCvAr
 function ifthen(const Cond: Boolean; const ValueTrue, ValueFalse: string): string; overload;
 function ifthen(const Cond: Boolean; const ValueTrue, ValueFalse: TCvScalar): TCvScalar; overload;
 
-function BitmapToIplImage(const bitmap: {$IFDEF VER15P}Vcl.Graphics.TBitmap{$ELSE}Graphics.TBitmap{$ENDIF VER15P}): PIplImage;
+function BitmapToIplImage(const bitmap: {$IFDEF VER16P}Vcl.Graphics.TBitmap{$ELSE}Graphics.TBitmap{$ENDIF VER16P}): PIplImage;
 function CropIplImage(const src: PIplImage; const roi: TCvRect): PIplImage;
 
 implementation
 
 uses
-{$IFDEF VER15P}
+{$IFDEF VER16P}
   System.SysUtils,
 {$ELSE}
   SysUtils,
-{$ENDIF VER15P}
+{$ENDIF VER16P}
   ocv.core_c;
 
-function BitmapToIplImage(const bitmap: {$IFDEF VER15P}Vcl.Graphics.TBitmap{$ELSE}Graphics.TBitmap{$ENDIF VER15P}): PIplImage;
+function BitmapToIplImage(const bitmap: {$IFDEF VER16P}Vcl.Graphics.TBitmap{$ELSE}Graphics.TBitmap{$ENDIF VER16P}): PIplImage;
 Var
   BMI: BITMAPINFO;
 begin
@@ -102,7 +102,7 @@ begin
   GetDIBits(bitmap.Canvas.Handle, bitmap.Handle, 0, bitmap.Height, Result^.ImageData, BMI, DIB_RGB_COLORS);
 end;
 
-// function BitmapToIplImage(const bitmap: {$IFDEF VER15P}Vcl.Graphics.TBitmap{$ELSE}Graphics.TBitmap{$ENDIF VER15P}): PIplImage;
+// function BitmapToIplImage(const bitmap: {$IFDEF VER16P}Vcl.Graphics.TBitmap{$ELSE}Graphics.TBitmap{$ENDIF VER16P}): PIplImage;
 // Var
 // bitmapData: PByte;
 // begin
@@ -263,7 +263,7 @@ End;
   Arguments:  iplImg: PIplImage; bitmap: TBitmap
   Description: convert a IplImage to a Windows bitmap
   ----------------------------------------------------------------------------- }
-procedure IplImage2Bitmap(iplImg: PIplImage; var bitmap: {$IFDEF VER15P}Vcl.Graphics.TBitmap{$ELSE}Graphics.TBitmap{$ENDIF VER15P});
+procedure IplImage2Bitmap(iplImg: PIplImage; var bitmap: {$IFDEF VER16P}Vcl.Graphics.TBitmap{$ELSE}Graphics.TBitmap{$ENDIF VER16P});
 VAR
   i, j: Integer;
   offset: longint;
@@ -310,10 +310,10 @@ BEGIN
   End
 END; { IplImage2Bitmap }
 
-function cvImage2Bitmap(img: PIplImage): {$IFDEF VER15P}Vcl.Graphics.TBitmap{$ELSE}Graphics.TBitmap{$ENDIF VER15P};
+function cvImage2Bitmap(img: PIplImage): {$IFDEF VER16P}Vcl.Graphics.TBitmap{$ELSE}Graphics.TBitmap{$ENDIF VER16P};
 var
   // info: string;
-  bmp: {$IFDEF VER15P}Vcl.Graphics.TBitmap{$ELSE}Graphics.TBitmap{$ENDIF VER15P};
+  bmp: {$IFDEF VER16P}Vcl.Graphics.TBitmap{$ELSE}Graphics.TBitmap{$ENDIF VER16P};
   deep: Integer;
   i, j, K, wStep, Channels: Integer;
   data: PByteArray;
@@ -322,7 +322,7 @@ begin
   Result := NIL;
   if (img <> NIL) then
   begin
-    bmp := {$IFDEF VER15P}Vcl.Graphics.TBitmap.Create{$ELSE}Graphics.TBitmap.Create{$ENDIF VER15P};
+    bmp := {$IFDEF VER16P}Vcl.Graphics.TBitmap.Create{$ELSE}Graphics.TBitmap.Create{$ENDIF VER16P};
     bmp.Width := img^.Width;
     bmp.Height := img^.Height;
     deep := img^.nChannels * img^.depth;
