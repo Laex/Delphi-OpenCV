@@ -1,0 +1,72 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{85CDF5A2-E17D-4817-9220-A9959050668D}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="OpenCV180.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="dclCommonOpenCV180.dproj">
+            <Dependencies>OpenCV180.dproj</Dependencies>
+        </Projects>
+        <Projects Include="dclVCLOpenCV180.dproj">
+            <Dependencies>dclCommonOpenCV180.dproj</Dependencies>
+        </Projects>
+        <Projects Include="dclFMXOpenCV180.dproj">
+            <Dependencies>dclCommonOpenCV180.dproj</Dependencies>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="OpenCV180">
+        <MSBuild Projects="OpenCV180.dproj"/>
+    </Target>
+    <Target Name="OpenCV180:Clean">
+        <MSBuild Projects="OpenCV180.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="OpenCV180:Make">
+        <MSBuild Projects="OpenCV180.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="dclCommonOpenCV180" DependsOnTargets="OpenCV180">
+        <MSBuild Projects="dclCommonOpenCV180.dproj"/>
+    </Target>
+    <Target Name="dclCommonOpenCV180:Clean" DependsOnTargets="OpenCV180:Clean">
+        <MSBuild Projects="dclCommonOpenCV180.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="dclCommonOpenCV180:Make" DependsOnTargets="OpenCV180:Make">
+        <MSBuild Projects="dclCommonOpenCV180.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="dclVCLOpenCV180" DependsOnTargets="dclCommonOpenCV180">
+        <MSBuild Projects="dclVCLOpenCV180.dproj"/>
+    </Target>
+    <Target Name="dclVCLOpenCV180:Clean" DependsOnTargets="dclCommonOpenCV180:Clean">
+        <MSBuild Projects="dclVCLOpenCV180.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="dclVCLOpenCV180:Make" DependsOnTargets="dclCommonOpenCV180:Make">
+        <MSBuild Projects="dclVCLOpenCV180.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="dclFMXOpenCV180" DependsOnTargets="dclCommonOpenCV180">
+        <MSBuild Projects="dclFMXOpenCV180.dproj"/>
+    </Target>
+    <Target Name="dclFMXOpenCV180:Clean" DependsOnTargets="dclCommonOpenCV180:Clean">
+        <MSBuild Projects="dclFMXOpenCV180.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="dclFMXOpenCV180:Make" DependsOnTargets="dclCommonOpenCV180:Make">
+        <MSBuild Projects="dclFMXOpenCV180.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="OpenCV180;dclCommonOpenCV180;dclVCLOpenCV180;dclFMXOpenCV180"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="OpenCV180:Clean;dclCommonOpenCV180:Clean;dclVCLOpenCV180:Clean;dclFMXOpenCV180:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="OpenCV180:Make;dclCommonOpenCV180:Make;dclVCLOpenCV180:Make;dclFMXOpenCV180:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>
