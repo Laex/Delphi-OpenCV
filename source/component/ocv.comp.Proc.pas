@@ -41,7 +41,6 @@ Type
   // Run utils\CompressHaar\uCompressHaar.dpr
   // Add to serarch path \Delphi-OpenCV\resource\facedetectxml\
   ///
-{$R haarcascade.rc haarcascade.res}
 {$R haarcascade.res}
 {$I haarcascade.inc}
 
