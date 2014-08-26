@@ -1022,7 +1022,11 @@ uses
   ocv.core_c,
   ocv.imgproc_c,
   ocv.cvutils,
+{$IFDEF VER16P}
   System.Math;
+{$ELSE}
+  Math;
+{$ENDIF VER16P}
 
 // {$IFNDEF haarcascadeinc}
 // {$DEFINE haarcascadeinc}
@@ -2596,7 +2600,11 @@ end;
 
 function TocvCropOperation.DoTransform(const Source: IocvImage; out Destanation: IocvImage): Boolean;
 begin
+{$IFDEF VER16P}
   if FCropRect.ocvRect.IsEmpty then
+{$ELSE}
+  if IsRectEmpty(FCropRect.ocvRect) then
+{$ENDIF}
     Destanation := Source
   else
     Destanation := Source.Crop(FCropRect.cvRect);

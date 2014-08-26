@@ -409,7 +409,7 @@ begin
     SetStretchBltMode(dc, COLORONCOLOR);
     SetMapMode(dc, MM_TEXT);
     // Stretch the image to fit the rectangle
-    iResult := StretchDIBits(dc, rect.left, rect.top, rect.Width, rect.Height, 0, 0, img^.Width, img^.Height, img^.ImageData, _dibhdr,
+    iResult := StretchDIBits(dc, rect.left, rect.top, {$IFDEF VER16P}rect.Width{$ELSE}rect.Right-rect.Left{$ENDIF}, {$IFDEF VER16P}rect.Height{$ELSE}rect.Bottom-rect.Top{$ENDIF}, 0, 0, img^.Width, img^.Height, img^.ImageData, _dibhdr,
       DIB_RGB_COLORS, SRCCOPY);
     Result := (iResult > 0); // and (iResult <> GDI_ERROR);
   end

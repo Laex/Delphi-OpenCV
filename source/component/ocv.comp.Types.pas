@@ -355,7 +355,7 @@ uses
 
 function cvRect(const oRect: TocvRect): TcvRect;
 begin
-  Result := ocv.core.types_c.cvRect(oRect.Left, oRect.Top, oRect.Width, oRect.Height);
+  Result := ocv.core.types_c.cvRect(oRect.Left, oRect.Top, {$IFDEF VER16P}oRect.Width{$ELSE}oRect.Right-oRect.Left{$ENDIF}, {$IFDEF VER16P}oRect.Height{$ELSE}oRect.Bottom-oRect.Top{$ENDIF});
 end;
 
 function HaarSetToFlag(const CascadeFlags: TocvHaarCascadeFlagSet): Integer;
@@ -738,7 +738,7 @@ procedure TocvCanvas.Ellipse(const CenterX, CenterY: Integer; const Axes: TocvRe
   const Color: TColor; const Thickness: Integer; const LineType: TocvLineType; const Shift: Integer);
 begin
   if Assigned(FOwner) and Assigned(FOwner.FImage) then
-    cvEllipse(FOwner.FImage, cvPoint(CenterX, CenterY), cvSize(Axes.Width, Axes.Height), Angle, start_angle, nd_angle, ColorToCvRGB(Color),
+    cvEllipse(FOwner.FImage, cvPoint(CenterX, CenterY), cvSize({$IFDEF VER16P}Axes.Width{$ELSE}Axes.Right-Axes.Left{$ENDIF}, {$IFDEF VER16P}Axes.Height{$ELSE}Axes.Bottom-Axes.Top{$ENDIF}), Angle, start_angle, nd_angle, ColorToCvRGB(Color),
       Thickness, cLineType[LineType], Shift);
 end;
 
@@ -763,7 +763,7 @@ end;
 procedure TocvCanvas.EllipseBox(const Box: TocvRect; const Angle: Single; const Color: TColor; const Thickness: Integer;
   const LineType: TocvLineType; const Shift: Integer);
 begin
-  EllipseBox(CvBox2D(Box.Left, Box.Top, Box.Width, Box.Height, Angle), Color, Thickness, LineType, Shift);
+  EllipseBox(CvBox2D(Box.Left, Box.Top, {$IFDEF VER16P}Box.Width{$ELSE}Box.Right-Box.Left{$ENDIF}, {$IFDEF VER16P}Box.Height{$ELSE}Box.Bottom-Box.Top{$ENDIF}, Angle), Color, Thickness, LineType, Shift);
 end;
 
 procedure TocvCanvas.Rectangle(const x1, y1, x2, y2: Integer; const Color: TColor; const Thickness: Integer; const LineType: TocvLineType;
@@ -887,8 +887,8 @@ Var
 begin
   Result.x := Left;
   Result.y := Top;
-  Result.Width := Width;
-  Result.Height := Height;
+  Result.Width := {$IFDEF VER16P}Width{$ELSE}Right-Left{$ENDIF};
+  Result.Height := {$IFDEF VER16P}Height{$ELSE}Bottom-Top{$ENDIF};
 end;
 
 end.

@@ -19,13 +19,22 @@ function ocvHaarCascadeTransform(
 
 function ocvLoadHaarCascade(const HaarCascadeType: TocvHaarCascadeType): pCvHaarClassifierCascade;
 
+function IsRectEmpty(const Rect: TocvRect): Boolean;
+
 implementation
 
 Uses
+{$IFDEF VER16P}
   WinApi.Windows,
   System.SysUtils,
   System.Classes,
   System.ZLib,
+{$ELSE}
+  Windows,
+  SysUtils,
+  Classes,
+  ZLib,
+{$ENDIF VER16P}
   ocv.core_c,
   ocv.imgproc_c,
   ocv.cvutils;
@@ -116,6 +125,11 @@ begin
       cvReleaseMemStorage(storage);
     end;
   end;
+end;
+
+function IsRectEmpty(const Rect: TocvRect): Boolean;
+begin
+  Result := (Rect.Right <= Rect.Left) or (Rect.Bottom <= Rect.Top);
 end;
 
 end.

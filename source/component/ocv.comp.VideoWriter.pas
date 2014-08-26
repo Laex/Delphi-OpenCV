@@ -1,10 +1,18 @@
+{$IFNDEF CLR}
+{$I Opencv.inc}
 unit ocv.comp.VideoWriter;
+{$ENDIF}
 
 interface
 
 Uses
+{$IFDEF VER16P}
   System.SysUtils,
   System.Classes,
+{$ELSE}
+  SysUtils,
+  Classes,
+{$ENDIF VER16P}
   ocv.highgui_c,
   ocv.core_c,
   ocv.core.types_c,
