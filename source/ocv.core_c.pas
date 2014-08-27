@@ -1295,7 +1295,7 @@ function cvReadIntByName(const fs: pCvFileStorage; const map: pCvFileNode; const
 // {
 // return !node ? default_value : CV_NODE_IS_STRING(node->tag) ? node->data.str.ptr : 0;
 // }
-function cvReadString(const node: pCvFileNode; const default_value: pCvChar = nil): pCvChar; {$IFDEF VER9P}inline;
+function cvReadString(const node: pCvFileNode; const default_value: pCvChar = nil): pCvChar; {$IFDEF USE_INLINE}inline;
 {$ENDIF}
 // CV_INLINE const char* cvReadStringByName( const CvFileStorage* fs, const CvFileNode* map,
 // const char* name, const char* default_value CV_DEFAULT(NULL) )
@@ -1815,8 +1815,7 @@ begin
   Result := cvReadString(cvGetFileNodeByName(fs, map, name), default_value);
 end;
 
-function cvReadString(const node: pCvFileNode; const default_value: pCvChar = nil): pCvChar; {$IFDEF VER9P}inline;
-{$ENDIF}
+function cvReadString(const node: pCvFileNode; const default_value: pCvChar = nil): pCvChar; {$IFDEF USE_INLINE}inline;{$ENDIF}
 begin
   if Assigned(node) then
   begin

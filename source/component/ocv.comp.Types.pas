@@ -50,9 +50,11 @@ Type
 
   TocvRect = Type TRect;
 
+ {$IFDEF VER16P}
   TocvRectHelper = record helper for TocvRect
     function cvRect: TcvRect;
   end;
+ {$ENDIF}
 
   TocvLine = record
     S, E: TCvPoint;

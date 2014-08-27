@@ -768,7 +768,7 @@ const
 function cvCreateVideoWriter(const filename: pCVChar; fourcc: Integer; fps: Double; frame_size: TCvSize;
   is_color: Integer = 1): pCvVideoWriter; cdecl;
 
-function CV_FOURCC(const c1, c2, c3, c4: CVChar): Integer; {$IFDEF VER9P}inline;{$ENDIF}
+function CV_FOURCC(const c1, c2, c3, c4: CVChar): Integer; {$IFDEF USE_INLINE}inline;{$ENDIF}
 
 
 // CVAPI(CvVideoWriter*) cvCreateImageSequenceWriter( const char* filename,
@@ -873,7 +873,7 @@ procedure cvSetMouseCallback; external highgui_lib;
 procedure cvConvertImage; external highgui_lib;
 procedure cvMoveWindow; external highgui_lib;
 
-function CV_FOURCC(const c1, c2, c3, c4: CVChar): Integer; {$IFDEF VER9P}inline;{$ENDIF}
+function CV_FOURCC(const c1, c2, c3, c4: CVChar): Integer; {$IFDEF USE_INLINE}inline;{$ENDIF}
 begin
   Result := Integer(c1) + (Integer(c2) shl 8) + (Integer(c3) shl 16) + (Integer(c4) shl 24);
 end;

@@ -156,7 +156,7 @@ end;
 // ---------------------------------------------------------------------------
 function CreateRGBBitmap(_Grab: PIplImage): HBITMAP;
 
-  function WIDTHBYTES(bits: DWORD): DWORD; {$IFDEF VER9P}inline; {$ENDIF}
+  function WIDTHBYTES(bits: DWORD): DWORD; {$IFDEF USE_INLINE}inline; {$ENDIF}
   begin
     Result := ((((bits) + 31) div 32) * 4);
   end;

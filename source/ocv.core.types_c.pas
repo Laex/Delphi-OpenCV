@@ -768,9 +768,11 @@ type
   TCvPoint2D32f = record
     x: Single;
     y: Single;
+    {$IFDEF VER16P}
     class operator Subtract(a, b: TCvPoint2D32f): TCvPoint2D32f; // Subtraction of type TCvPoint2D32f
     function Norm: Single;
     function cvPoint:TcvPoint;
+    {$ENDIF}
   end;
 
   TcvPoint2f = TCvPoint2D32f;
@@ -1018,7 +1020,7 @@ const
 {$EXTERNALSYM CV_SET_ELEM_FREE_FLAG}
   // Checks whether the element pointed by ptr belongs to a set or not
   // #define CV_IS_SET_ELEM( ptr )  (((CvSetElem*)(ptr))->flags >= 0)
-function CV_IS_SET_ELEM(ptr: Pointer): Boolean; // {$IFDEF VER9P}inline;{$ENDIF}
+function CV_IS_SET_ELEM(ptr: Pointer): Boolean; // {$IFDEF USE_INLINE}inline;{$ENDIF}
 
 // ***************************************************************************************
 // *                      Multi-dimensional sparse cArray (CvSparseMat)                  *
@@ -1404,7 +1406,7 @@ function CV_CAST_8U(t: Integer): uchar; {$IFDEF USE_INLINE}inline; {$ENDIF}
   }
 *)
 procedure CV_NEXT_SEQ_ELEM(const elem_size: Integer; const Reader: TCvSeqReader);
-// {$IFDEF VER9P}inline;{$ENDIF}
+// {$IFDEF USE_INLINE}inline;{$ENDIF}
 
 // (* Move reader position backward: *)
 // // >> Following declaration is a macro definition!
@@ -1422,7 +1424,7 @@ procedure CV_NEXT_SEQ_ELEM(const elem_size: Integer; const Reader: TCvSeqReader)
   }
 *)
 procedure CV_READ_SEQ_ELEM(const Elem: Pointer; const Reader: TCvSeqReader; const SizeOfElem: Integer);
-// {$IFDEF VER9P}inline;{$ENDIF}
+// {$IFDEF USE_INLINE}inline;{$ENDIF}
 
 
 // (* Read element and move read position backward: *)
@@ -1746,12 +1748,12 @@ procedure CV_SWAP(var a, b: Pointer); {$IFDEF USE_INLINE}inline; {$ENDIF} overlo
 // // >> Following declaration is a macro definition!
 // class function CV_IMIN(
 //
-// const a, b: Integer): Integer; {$IFDEF VER9P}inline;{$ENDIF}
+// const a, b: Integer): Integer; {$IFDEF USE_INLINE}inline;{$ENDIF}
 // { ((a) xor (((a) xor (b)) and (((a) < (b)) - 1))): INT; }
 // // >> Following declaration is a macro definition!
 // class function CV_IMAX(
 //
-// const a, b: Integer): Integer; {$IFDEF VER9P}inline;{$ENDIF}
+// const a, b: Integer): Integer; {$IFDEF USE_INLINE}inline;{$ENDIF}
 // { ((a) xor (((a) xor (b)) and (((a) > (b)) - 1))); }
 //
 // (* absolute value without jumps *)
@@ -1763,17 +1765,17 @@ procedure CV_SWAP(var a, b: Pointer); {$IFDEF USE_INLINE}inline; {$ENDIF} overlo
 // // >> Following declaration is a macro definition!
 // class function CV_CMP(
 //
-// const a, b: Integer): Integer; {$IFDEF VER9P}inline;{$ENDIF}
+// const a, b: Integer): Integer; {$IFDEF USE_INLINE}inline;{$ENDIF}
 // { (((a) > (b)) - ((a) < (b))); }
 // // >> Following declaration is a macro definition!
 // class function CV_SIGN(
 //
-// const a: Integer): Integer; {$IFDEF VER9P}inline;{$ENDIF}
+// const a: Integer): Integer; {$IFDEF USE_INLINE}inline;{$ENDIF}
 // { PCV_CMP((a), 0); }
 // // CV_INLINE
 // class function cvRound<T: packed record >(
 //
-// const v1: T): Integer; {$IFDEF VER9P}inline;{$ENDIF}
+// const v1: T): Integer; {$IFDEF USE_INLINE}inline;{$ENDIF}
 // (*
 // result := _mm_cvtsd_si32(T);
 // {$HPPEMIT '#elif defined _MSC_VER && defined _M_IX86'}
@@ -1867,12 +1869,12 @@ procedure CV_SWAP(var a, b: Pointer); {$IFDEF USE_INLINE}inline; {$ENDIF} overlo
 // {$EXTERNALSYM CV_TYPE_NAME_IMAGE}
 // class function CV_IS_IMAGE_HDR(
 //
-// const img: pIplImage): Integer; {$IFDEF VER9P}inline;{$ENDIF}
+// const img: pIplImage): Integer; {$IFDEF USE_INLINE}inline;{$ENDIF}
 // { ((img) <> 0 and ((IplImage(img))^.nSize = SizeOf(IplImage)) }
 // // >> Following declaration is a macro definition!
 // class function CV_IS_IMAGE(
 //
-// const img: pIplImage): Integer; {$IFDEF VER9P}inline;{$ENDIF}
+// const img: pIplImage): Integer; {$IFDEF USE_INLINE}inline;{$ENDIF}
 // // (CV_IS_IMAGE_HDR(img) and ((IplImage)img)^.imageData <> 0);
 // (* for storing double-precision
 // floating point data in IplImage's */
@@ -1886,31 +1888,31 @@ procedure CV_SWAP(var a, b: Pointer); {$IFDEF USE_INLINE}inline; {$ENDIF} overlo
 // // >> Following declaration is a macro definition!
 // class function CV_MAT_DEPTH(
 //
-// const flags: Integer): Integer; {$IFDEF VER9P}inline;{$ENDIF}
+// const flags: Integer): Integer; {$IFDEF USE_INLINE}inline;{$ENDIF}
 // { ((flags) and CV_MAT_DEPTH_MASK); }
 // // >> Following declaration is a macro definition!
 // class function CV_MAKETYPE(
 //
-// const depth, cn: Integer): Integer; {$IFDEF VER9P}inline;{$ENDIF}
+// const depth, cn: Integer): Integer; {$IFDEF USE_INLINE}inline;{$ENDIF}
 // // (CV_MAT_DEPTH(depth) + (((cn) - 1) shl CV_CN_SHIFT));
 // class function CV_MAKE_TYPE(
 //
-// const depth, cn: Integer): Integer; {$IFDEF VER9P}inline;{$ENDIF}
+// const depth, cn: Integer): Integer; {$IFDEF USE_INLINE}inline;{$ENDIF}
 // // (CV_MAT_DEPTH(depth) + (((cn) - 1) shl CV_CN_SHIFT));
 // // >> Following declaration is a macro definition!
 // class function CV_8UC(
 //
-// const n: Integer): Integer; {$IFDEF VER9P}inline;{$ENDIF}
+// const n: Integer): Integer; {$IFDEF USE_INLINE}inline;{$ENDIF}
 // // CV_MAKETYPE(CV_8U, (n));
 // // >> Following declaration is a macro definition!
 // class function CV_8SC(
 //
-// const n: Integer): Integer; {$IFDEF VER9P}inline;{$ENDIF}
+// const n: Integer): Integer; {$IFDEF USE_INLINE}inline;{$ENDIF}
 // // CV_MAKETYPE(CV_8S, (n));
 // // >> Following declaration is a macro definition!
 // class function CV_16UC(
 //
-// const n: Integer): Integer; {$IFDEF VER9P}inline;{$ENDIF}
+// const n: Integer): Integer; {$IFDEF USE_INLINE}inline;{$ENDIF}
 // // CV_MAKETYPE(CV_16U, (n));
 // (*
 // // >> Following declaration is a macro definition!
@@ -1996,7 +1998,7 @@ function CV_ARE_TYPES_EQ(const mat1, mat2: pCvMat): Boolean; {$IFDEF USE_INLINE}
 // return CV_ELEM_SIZE1(depth)*8 | (depth == CV_8S || depth == CV_16S ||
 // depth == CV_32S ? IPL_DEPTH_SIGN : 0);
 // }
-function cvIplDepth(_type: Integer): Integer; // {$IFDEF VER9P}inline;{$ENDIF}
+function cvIplDepth(_type: Integer): Integer; // {$IFDEF USE_INLINE}inline;{$ENDIF}
 
 //
 // (* ***************************************************************************************\
@@ -2442,7 +2444,7 @@ begin
 end;
 
 procedure CV_READ_SEQ_ELEM(const Elem: Pointer; const Reader: TCvSeqReader; const SizeOfElem: Integer);
-// {$IFDEF VER9P}inline;{$ENDIF}
+// {$IFDEF USE_INLINE}inline;{$ENDIF}
 begin
   // assert( (reader).seq->elem_size == sizeof(elem));
   Assert(Reader.Seq^.elem_size = SizeOfElem);
@@ -2452,7 +2454,7 @@ begin
   CV_NEXT_SEQ_ELEM(SizeOfElem, Reader);
 end;
 
-procedure CV_NEXT_SEQ_ELEM(const elem_size: Integer; const Reader: TCvSeqReader); // {$IFDEF VER9P}inline;{$ENDIF}
+procedure CV_NEXT_SEQ_ELEM(const elem_size: Integer; const Reader: TCvSeqReader); // {$IFDEF USE_INLINE}inline;{$ENDIF}
 Var
   ptr: PInteger;
 begin
@@ -2619,7 +2621,7 @@ begin
   Result := CV_MAKETYPE(CV_8U, 3);
 end;
 
-function CV_IS_SET_ELEM(ptr: Pointer): Boolean; // {$IFDEF VER9P}inline;{$ENDIF}
+function CV_IS_SET_ELEM(ptr: Pointer): Boolean; // {$IFDEF USE_INLINE}inline;{$ENDIF}
 begin
   // #define CV_IS_SET_ELEM( ptr )  (((CvSetElem*)(ptr))->flags >= 0)
   Result := Assigned(ptr) and (pCvSetElem(ptr)^.flags >= 0);
@@ -2695,7 +2697,7 @@ begin
 end;
 
 { TCvPoint2D32f }
-
+{$IFDEF VER16P}
 function TCvPoint2D32f.cvPoint: TcvPoint;
 begin
   Result.x:=Trunc(x);
@@ -2712,6 +2714,7 @@ begin
   Result.x := a.x - b.x;
   Result.y := a.y - b.y;
 end;
+{$ENDIF}
 
 initialization
 
