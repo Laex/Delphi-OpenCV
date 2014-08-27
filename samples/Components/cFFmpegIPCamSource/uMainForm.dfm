@@ -2,8 +2,8 @@ object Form1: TForm1
   Left = 0
   Top = 0
   Caption = 'FFMpeg IP Camera source'
-  ClientHeight = 194
-  ClientWidth = 229
+  ClientHeight = 376
+  ClientWidth = 378
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -11,25 +11,52 @@ object Form1: TForm1
   Font.Name = 'Tahoma'
   Font.Style = []
   OldCreateOrder = False
+  Position = poScreenCenter
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
   object ocvView1: TocvView
     Left = 0
-    Top = 0
-    Width = 229
-    Height = 194
+    Top = 41
+    Width = 378
+    Height = 335
     VideoSource = ocvFFMpegIPCamSource1
     Frames = <>
     Align = alClient
+    ExplicitTop = 56
+    ExplicitWidth = 229
+    ExplicitHeight = 224
+  end
+  object Panel1: TPanel
+    Left = 0
+    Top = 0
+    Width = 378
+    Height = 41
+    Align = alTop
+    Caption = 'Panel1'
+    TabOrder = 1
+    ExplicitWidth = 185
+    DesignSize = (
+      378
+      41)
+    object CBCameraSampleList: TComboBox
+      Left = 16
+      Top = 9
+      Width = 345
+      Height = 21
+      Style = csDropDownList
+      Anchors = [akLeft, akTop, akRight]
+      TabOrder = 0
+      OnChange = CBCameraSampleListChange
+    end
   end
   object ocvFFMpegIPCamSource1: TocvFFMpegIPCamSource
-    Enabled = True
-    UserName = 'admin'
-    Password = 'admin'
-    IP = '10.1.1.201'
-    URI = '/Streaming/Channels/1?transportmode=unicast'
+    Port = 1935
     OnLostConnection = ocvFFMpegIPCamSource1LostConnection
-    Left = 104
-    Top = 96
+    ReconnectDelay = 1500
+    Left = 264
+    Top = 56
   end
 end

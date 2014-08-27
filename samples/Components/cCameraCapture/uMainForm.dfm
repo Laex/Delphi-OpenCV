@@ -145,10 +145,9 @@ object MainForm: TMainForm
     Top = 40
   end
   object ocvpcmsrc1: TocvIPCamSource
-    UserName = 'admin'
-    Password = 'admin'
-    IP = '10.1.1.202'
-    URI = '/cam/realmonitor?channel=1&subtype=0'
+    IP = '80.78.116.125'
+    URI = '/rtplive/plot_hd.stream'
+    Port = 1935
     Left = 336
     Top = 44
   end
