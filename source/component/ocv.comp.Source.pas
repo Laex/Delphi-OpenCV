@@ -194,6 +194,9 @@ type
 
   TOnNotifyFFMpegPacket = procedure(Sender: TObject; const packet: TAVPacket; const isKeyFrame: Boolean) of object;
 
+  TocvFFMpegIPCamEvent = (ffocvTryConnect, ffocvConnected, ffocvLostConnection, ffocvReconnect, ffocvErrorGetStream);
+  TOnocvFFMpegIPCamEvent = procedure(Sender: TObject; const Event: TocvFFMpegIPCamEvent) of object;
+
   TocvFFMpegIPCamSource = class(TocvCustomSource)
   private
     FPort: Word;
@@ -204,7 +207,7 @@ type
     FOnNotifyFFMpegPacket: TOnNotifyFFMpegPacket;
     FProtocol: TocvIPProtocol;
     FReconnectDelay: Cardinal;
-    FOnLostConnection: TNotifyEvent;
+    FOnIPCamEvent: TOnocvFFMpegIPCamEvent;
     procedure SetReconnectDelay(const Value: Cardinal);
     procedure TerminateSourceThread; override;
   protected
@@ -212,7 +215,7 @@ type
     procedure SetEnabled(Value: Boolean); override;
     procedure Loaded; override;
     procedure DoNotifyPacket(const packet: TAVPacket; const isKeyFrame: Boolean);
-    procedure DoLostConnection;
+    procedure DoNotifyEvent(Event: TocvFFMpegIPCamEvent);
   public
     constructor Create(AOwner: TComponent); override;
   published
@@ -223,7 +226,7 @@ type
     property Port: Word read FPort write FPort default 554;
     property Protocol: TocvIPProtocol read FProtocol write FProtocol default ippRTSP;
     property OnFFMpegPacket: TOnNotifyFFMpegPacket read FOnNotifyFFMpegPacket write FOnNotifyFFMpegPacket;
-    property OnLostConnection: TNotifyEvent read FOnLostConnection write FOnLostConnection;
+    property OnIPCamEvent: TOnocvFFMpegIPCamEvent read FOnIPCamEvent write FOnIPCamEvent;
     property ReconnectDelay: Cardinal Read FReconnectDelay write SetReconnectDelay default 1000;
   end;
 
@@ -264,7 +267,9 @@ Type
     FSuspendEvent: TEvent;
     FOwner: TocvFFMpegIPCamSource;
     FReconnectDelay: Cardinal;
+    FisReconnect: Boolean;
     procedure TerminatedSet; override;
+    procedure DoNotyfy(Event: TocvFFMpegIPCamEvent);
   protected
     procedure Execute; override;
   public
@@ -668,10 +673,10 @@ begin
   end;
 end;
 
-procedure TocvFFMpegIPCamSource.DoLostConnection;
+procedure TocvFFMpegIPCamSource.DoNotifyEvent(Event: TocvFFMpegIPCamEvent);
 begin
-  if Assigned(OnLostConnection) then
-    OnLostConnection(Self);
+  if Assigned(OnIPCamEvent) then
+    OnIPCamEvent(Self, Event);
 end;
 
 procedure TocvFFMpegIPCamSource.DoNotifyPacket(const packet: TAVPacket; const isKeyFrame: Boolean);
@@ -762,6 +767,15 @@ begin
   inherited;
 end;
 
+procedure TocvFFMpegIPCamSourceThread.DoNotyfy(Event: TocvFFMpegIPCamEvent);
+begin
+  Synchronize(
+    procedure
+    begin
+      FOwner.DoNotifyEvent(Event);
+    end);
+end;
+
 procedure TocvFFMpegIPCamSourceThread.Execute;
 Var
   optionsDict: pAVDictionary;
@@ -806,8 +820,6 @@ Var
   i, ret, videoStream: Integer;
   frame_finished: Integer;
   linesize: array [0 .. 3] of Integer;
-
-  isReconnect: Boolean;
   RDelay: Cardinal;
 begin
   av_register_all();
@@ -818,7 +830,7 @@ begin
   pCodecCtx := nil;
   iplframe := nil;
   frame := nil;
-  isReconnect := False;
+  FisReconnect := False;
 
   While (not Terminated) do
   begin
@@ -828,25 +840,8 @@ begin
       Break;
 
     ReleaseAllocatedData;
-    if isReconnect and (FReconnectDelay > 0) then
-    begin
 
-      Synchronize(
-        procedure
-        begin
-          FOwner.DoLostConnection;
-        end);
-
-      RDelay := 0;
-      while (not Terminated) and (RDelay < FReconnectDelay) do
-      begin
-        Sleep(100);
-        Inc(RDelay, 100);
-      end;
-      if Terminated then
-        Break;
-      isReconnect := False;
-    end;
+    DoNotyfy(ffocvTryConnect);
 
     av_dict_set(optionsDict, 'rtsp_transport', 'tcp', 0);
     av_dict_set(optionsDict, 'rtsp_flags', 'prefer_tcp', 0);
@@ -858,7 +853,8 @@ begin
     ret := avformat_open_input(pFormatCtx, PAnsiChar(FIPCamURL), nil, @optionsDict); // pFormatCtx
     if ret < 0 then
     begin
-      isReconnect := True;
+      DoNotyfy(ffocvErrorGetStream);
+      FisReconnect := True;
       Continue;
     end;
 
@@ -866,7 +862,8 @@ begin
     optionsDict := nil;
     if avformat_find_stream_info(pFormatCtx, nil) < 0 then
     begin
-      isReconnect := True;
+      DoNotyfy(ffocvErrorGetStream);
+      FisReconnect := True;
       Continue;
     end;
 
@@ -883,7 +880,8 @@ begin
 
     if videoStream = -1 then
     begin
-      isReconnect := True;
+      DoNotyfy(ffocvErrorGetStream);
+      FisReconnect := True;
       Continue;
     end;
 
@@ -893,7 +891,8 @@ begin
     pCodec := avcodec_find_decoder(pCodecCtx^.codec_id);
     if not Assigned(pCodec) then
     begin
-      isReconnect := True;
+      DoNotyfy(ffocvErrorGetStream);
+      FisReconnect := True;
       Continue;
     end;
 
@@ -902,7 +901,8 @@ begin
     // Open codec
     if avcodec_open2(pCodecCtx, pCodec, nil) < 0 then
     begin
-      isReconnect := True;
+      DoNotyfy(ffocvErrorGetStream);
+      FisReconnect := True;
       Continue;
     end;
 
@@ -910,7 +910,8 @@ begin
       pCodecCtx^.Height, AV_PIX_FMT_BGR24, SWS_BILINEAR, nil, nil, nil);
     if (img_convert_context = nil) then
     begin
-      isReconnect := True;
+      DoNotyfy(ffocvErrorGetStream);
+      FisReconnect := True;
       Continue;
     end;
 
@@ -919,7 +920,9 @@ begin
     FillChar(linesize, SizeOf(linesize), 0);
     linesize[0] := iplframe^.widthStep;
 
-    while (not Terminated) and (FSuspendEvent.WaitFor(0) = wrSignaled) do
+    DoNotyfy(ffocvConnected);
+
+    while (not Terminated) and (FSuspendEvent.WaitFor(0) = wrSignaled) and (not FisReconnect) do
       if av_read_frame(pFormatCtx, packet) >= 0 then
       begin
         if (packet.stream_index = videoStream) then
@@ -948,11 +951,27 @@ begin
         end
         else
         begin
-          isReconnect := True;
+          DoNotyfy(ffocvLostConnection);
+          FisReconnect := True;
           Break;
         end;
         av_free_packet(packet);
       end;
+    if (not Terminated) and FisReconnect and (FReconnectDelay > 0) then
+    begin
+
+      DoNotyfy(ffocvReconnect);
+
+      RDelay := 0;
+      while (not Terminated) and (RDelay < FReconnectDelay) do
+      begin
+        Sleep(100);
+        Inc(RDelay, 100);
+      end;
+      if Terminated then
+        Break;
+      FisReconnect := False;
+    end;
   end;
   ReleaseAllocatedData;
   avformat_network_deinit;
@@ -963,6 +982,7 @@ begin
   if (FEnabled <> AEnabled) or (FIPCamURL <> AIPCam) then
   begin
     FSuspendEvent.ResetEvent;
+    FisReconnect := True;
     FIPCamURL := AIPCam;
     FEnabled := AEnabled;
     if FEnabled then

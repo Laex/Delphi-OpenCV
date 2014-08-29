@@ -25,9 +25,6 @@ object Form1: TForm1
     VideoSource = ocvFFMpegIPCamSource1
     Frames = <>
     Align = alClient
-    ExplicitTop = 56
-    ExplicitWidth = 229
-    ExplicitHeight = 224
   end
   object Panel1: TPanel
     Left = 0
@@ -37,7 +34,6 @@ object Form1: TForm1
     Align = alTop
     Caption = 'Panel1'
     TabOrder = 1
-    ExplicitWidth = 185
     DesignSize = (
       378
       41)
@@ -54,7 +50,7 @@ object Form1: TForm1
   end
   object ocvFFMpegIPCamSource1: TocvFFMpegIPCamSource
     Port = 1935
-    OnLostConnection = ocvFFMpegIPCamSource1LostConnection
+    OnIPCamEvent = ocvFFMpegIPCamSource1IPCamEvent
     ReconnectDelay = 1500
     Left = 264
     Top = 56

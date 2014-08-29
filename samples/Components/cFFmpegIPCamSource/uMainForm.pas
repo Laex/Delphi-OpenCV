@@ -18,17 +18,19 @@ type
     UserName: String;
     Password: String;
   end;
+
   PSampleCameraStruct = ^TSampleCameraStruct;
+
   TForm1 = class(TForm)
     ocvFFMpegIPCamSource1: TocvFFMpegIPCamSource;
     ocvView1: TocvView;
     Panel1: TPanel;
     CBCameraSampleList: TComboBox;
-    procedure ocvFFMpegIPCamSource1LostConnection(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure CBCameraSampleListChange(Sender: TObject);
     procedure FormShow(Sender: TObject);
+    procedure ocvFFMpegIPCamSource1IPCamEvent(Sender: TObject; const Event: TocvFFMpegIPCamEvent);
   private
     LCCount: Integer;
     FList: TList;
@@ -42,61 +44,24 @@ var
 const
   // Данные взяты с сайта http://myttk.ru/media/webcam/ с помощью Wireshark
   // Проверены с помощью rtmpdump - http://all-streaming-media.com/record-video-stream/rtmpdump-freeware-console-RTMP-downloading-application.htm
-  SampleCameraList: Array [0..5] of String =(
-    'alias=Ekaterinburg - Area 1905|'+
-    'ip=80.78.116.125|'+
-    'port=1935|'+
-    'protocol=2|'+    // 0 - http, 1 - https, 2 - rtsp
-    'uri=/rtplive/5goda_hd.stream|'+
-    'reconnectdelay=1500|'+
-    'username=|'+
-    'password=',
+  SampleCameraList: Array [0 .. 5] of String = ('alias=Ekaterinburg - Area 1905|' + 'ip=80.78.116.125|' + 'port=1935|' + 'protocol=2|' +
+    // 0 - http, 1 - https, 2 - rtsp
+    'uri=/rtplive/5goda_hd.stream|' + 'reconnectdelay=1500|' + 'username=|' + 'password=',
 
-    'alias=Ekaterinburg - Plotinka|'+
-    'ip=80.78.116.125|'+
-    'port=1935|'+
-    'protocol=2|'+
-    'uri=/rtplive/plot_hd.stream|'+
-    'reconnectdelay=1500|'+
-    'username=|'+
-    'password=',
+    'alias=Ekaterinburg - Plotinka|' + 'ip=80.78.116.125|' + 'port=1935|' + 'protocol=2|' + 'uri=/rtplive/plot_hd.stream|' +
+    'reconnectdelay=1500|' + 'username=|' + 'password=',
 
-    'alias=Zoo - Elephant Dasha|'+
-    'ip=80.78.116.125|'+
-    'port=1935|'+
-    'protocol=2|'+
-    'uri=/rtplive/zoo_ek_sd.stream|'+
-    'reconnectdelay=1500|'+
-    'username=|'+
-    'password=',
+    'alias=Zoo - Elephant Dasha|' + 'ip=80.78.116.125|' + 'port=1935|' + 'protocol=2|' + 'uri=/rtplive/zoo_ek_sd.stream|' +
+    'reconnectdelay=1500|' + 'username=|' + 'password=',
 
-    'alias=Lake Baikal, Listvyanka|'+
-    'ip=stream.baikal-online.ru|'+
-    'port=1935|'+
-    'protocol=2|'+
-    'uri=/live/list.stream|'+
-    'reconnectdelay=3500|'+
-    'username=|'+
-    'password=',
+    'alias=Lake Baikal, Listvyanka|' + 'ip=stream.baikal-online.ru|' + 'port=1935|' + 'protocol=2|' + 'uri=/live/list.stream|' +
+    'reconnectdelay=3500|' + 'username=|' + 'password=',
 
-    'alias=Chita, Square Love and Faithfulness|'+
-    'ip=188.168.81.103|'+
-    'port=1935|'+
-    'protocol=2|'+
-    'uri=/rtplive/Skver-Love.stream|'+
-    'reconnectdelay=3500|'+
-    'username=|'+
-    'password=',
+    'alias=Chita, Square Love and Faithfulness|' + 'ip=188.168.81.103|' + 'port=1935|' + 'protocol=2|' + 'uri=/rtplive/Skver-Love.stream|' +
+    'reconnectdelay=3500|' + 'username=|' + 'password=',
 
-    'alias=Solikamsk, Cathedral Square|'+
-    'ip=80.78.116.125|'+
-    'port=1935|'+
-    'protocol=2|'+
-    'uri=/rtplive/solikamsk_hd.stream|'+
-    'reconnectdelay=2500|'+
-    'username=|'+
-    'password='
-  );
+    'alias=Solikamsk, Cathedral Square|' + 'ip=80.78.116.125|' + 'port=1935|' + 'protocol=2|' + 'uri=/rtplive/solikamsk_hd.stream|' +
+    'reconnectdelay=2500|' + 'username=|' + 'password=');
 
 implementation
 
@@ -107,7 +72,7 @@ var
   P: Integer;
 begin
   P := Pos('=', Value);
-  Result := Trim(Copy(Value, P+1, Length(Value)));
+  Result := Trim(Copy(Value, P + 1, Length(Value)));
 end;
 
 function GetParam(var Value: String): String;
@@ -116,7 +81,7 @@ var
 begin
   P := Pos('|', Value);
   if P > 0 then
-    Result := Trim(Copy(Value, 1, P-1))
+    Result := Trim(Copy(Value, 1, P - 1))
   else
     Result := Trim(Copy(Value, 1, Length(Value)));
   Delete(Value, 1, P);
@@ -125,9 +90,12 @@ end;
 function GetProto(Value: Integer): TocvIPProtocol;
 begin
   case Value of
-    0: Result := ippHTTP;
-    1: Result := ippHTTPS;
-    2: Result := ippRTSP;
+    0:
+      Result := ippHTTP;
+    1:
+      Result := ippHTTPS;
+    2:
+      Result := ippRTSP;
   else
     Result := ippRTSP;
   end;
@@ -141,7 +109,7 @@ var
 begin
   FList := TList.Create;
   FList.Clear;
-  for Cnt := 0 to Length(SampleCameraList)-1 do
+  for Cnt := 0 to Length(SampleCameraList) - 1 do
   begin
     New(Cam);
     Str := SampleCameraList[Cnt];
@@ -160,7 +128,7 @@ begin
     CBCameraSampleList.Clear;
     CBCameraSampleList.Items.BeginUpdate;
     try
-      for Cnt := 0 to FList.Count-1 do
+      for Cnt := 0 to FList.Count - 1 do
         CBCameraSampleList.Items.Add(TSampleCameraStruct(FList[Cnt]^).Alias);
     finally
       CBCameraSampleList.Items.EndUpdate;
@@ -188,7 +156,7 @@ procedure TForm1.CBCameraSampleListChange(Sender: TObject);
 var
   Cam: TSampleCameraStruct;
 begin
-  DrawText('Getting data, please wait...');
+  // DrawText('Getting data, please wait...');
   ocvFFMpegIPCamSource1.Enabled := False;
   Cam := TSampleCameraStruct(FList[(Sender as TComboBox).ItemIndex]^);
   ocvFFMpegIPCamSource1.IP := Cam.IP;
@@ -201,21 +169,20 @@ begin
   ocvFFMpegIPCamSource1.Enabled := True;
 end;
 
-procedure TForm1.ocvFFMpegIPCamSource1LostConnection(Sender: TObject);
-const
-  LostConText = 'Lost connection ';
-var
-  TW: Integer;
-  LostConBmp: TBitmap;
+procedure TForm1.ocvFFMpegIPCamSource1IPCamEvent(Sender: TObject; const Event: TocvFFMpegIPCamEvent);
 begin
-  LostConBmp := TBitmap.Create;
-  LostConBmp.SetSize(ocvView1.Width, ocvView1.Height);
-  LostConBmp.PixelFormat := pf24bit;
-  TW := LostConBmp.Canvas.TextWidth(LostConText);
-  LostConBmp.Canvas.TextOut((ocvView1.Width - TW) div 2, ocvView1.Height div 2, LostConText + ' ' + LCCount.ToString);
-  inc(LCCount);
-  ocvView1.DrawImage(TocvImage.Create(LostConBmp));
-  LostConBmp.Free;
+  case Event of
+    ffocvTryConnect:
+      DrawText('Try connect');
+    ffocvConnected:
+      DrawText('Connected');
+    ffocvLostConnection:
+      DrawText('Lost connection');
+    ffocvReconnect:
+      DrawText('Reconnect');
+    ffocvErrorGetStream:
+      DrawText('Error get stream');
+  end;
 end;
 
 procedure TForm1.DrawText(Value: String);
