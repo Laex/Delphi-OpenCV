@@ -33,7 +33,10 @@ procedure Register;
 
 implementation
 
+{$R OpenCV.dcr}
+
 uses
+  Windows,
 {$IFDEF CLR}
   Borland.Vcl.Design.DesignEditors, Borland.Vcl.Design.DesignIntf,
 {$ELSE}
@@ -43,18 +46,66 @@ uses
 {$IFDEF VER6P}DesignIntf, System.Classes, {$ELSE}DsgnIntf, Classes, {$ENDIF VER6P}
 {$ENDIF FPC}
 {$ENDIF}
-  ocv.comp.View;
+  ocv.comp.View, Graphics, ToolsAPI;
+
+{$IFNDEF FPC}
+{$IF DECLARED(IOTAAboutBoxServices)}
+const
+  OCVVersion = '2.4.9';
+
+resourcestring
+  resPackageName = 'Delphi OpenCV Components v' + OCVVersion;
+  resAboutDescription = 'Delphi OpenCV Components';
+  resAboutURL = 'Web: https://github.com/Laex/Delphi-OpenCV/';
+  resAboutCopyright = 'Copyright (c) 2013-2014 Laentir Valetov and Mikhail Grigorev';
+  resLicense = 'GNU General Public License (GPL) v3.0';
+{$ENDIF}
+{$ENDIF}
 
 procedure Register;
 begin
   RegisterComponents('OpenCV', [TocvView]);
 end;
 
-{$IFDEF FPC}
+{$IFNDEF FPC}
+{$IF DECLARED(IOTAAboutBoxServices)}
+var
+  AboutBoxIndex: Integer = -1;
+
+procedure RegisterAboutBox;
+begin
+  SplashScreenServices.AddPluginBitmap(resPackageName, LoadBitmap(HInstance, 'SPLASH'), False, resLicense);
+  AboutBoxIndex := (BorlandIDEServices as IOTAAboutBoxServices).AddPluginInfo(
+    resPackageName,
+    resAboutDescription + sLineBreak +
+    resAboutCopyright + sLineBreak +
+    resAboutURL,
+    LoadBitmap(HInstance, 'ABOUT'), False, resLicense);
+end;
+
+procedure UnregisterAboutBox;
+begin
+  if AboutBoxIndex <> -1 then
+    (BorlandIDEServices as IOTAAboutBoxServices).RemovePluginInfo(AboutBoxIndex);
+end;
+{$ENDIF}
+{$ENDIF}
 
 initialization
-
-{$I ocv.lrs}
+{$IFNDEF FPC}
+{$IF DECLARED(IOTAAboutBoxServices)}
+  RegisterAboutBox;
+{$ENDIF}
+{$ENDIF}
+{$IFDEF FPC}
+  {$I ocv.lrs}
 {$ENDIF FPC}
+
+{$IFNDEF FPC}
+{$IF DECLARED(IOTAAboutBoxServices)}
+finalization
+  UnRegisterAboutBox;
+{$ENDIF}
+{$ENDIF}
 
 end.
