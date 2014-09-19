@@ -830,11 +830,11 @@ begin
   pCodecCtx := nil;
   iplframe := nil;
   frame := nil;
-  FisReconnect := False;
 
   While (not Terminated) do
   begin
 
+    FisReconnect := False;
     FSuspendEvent.WaitFor;
     if Terminated then
       Break;
@@ -957,7 +957,8 @@ begin
         end;
         av_free_packet(packet);
       end;
-    if (not Terminated) and FisReconnect and (FReconnectDelay > 0) then
+
+    if (not Terminated) and FisReconnect and (FReconnectDelay > 0) and (FSuspendEvent.WaitFor(0) = wrSignaled) then
     begin
 
       DoNotyfy(ffocvReconnect);
