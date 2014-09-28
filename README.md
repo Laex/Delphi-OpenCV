@@ -34,15 +34,18 @@ Add to your PATH variable path to the library "opencv_*.dll" and FFMPEG dll.
 
 Or
 
-For 64-bit<br>
-1. Copy the dll files from the <PROJECT_ROOT>\redist\VC2013x64\ to C:\Windows\System32\<br>
-2. Copy all the dll from <PROJECT_ROOT>\bin\Win64 in the C:\Windows\System32\<br>
-3. Copy the dll files from the <PROJECT_ROOT>\redist\VC2013x86\ to C:\Windows\SysWOW64\<br>
-4. Copy all the dll from <PROJECT_ROOT>\bin\Win32 in the C:\Windows\SysWOW64\<br>
-
-For 32-bit<br>
-1. Copy the dll files from the <PROJECT_ROOT>\redist\VC2013x86\ to C:\Windows\System32\<br>
+For 64-bit
+```
+1. Copy the dll files from the <PROJECT_ROOT>\redist\VC2013x64\ to C:\Windows\System32\
+2. Copy all the dll from <PROJECT_ROOT>\bin\Win64 in the C:\Windows\System32\
+3. Copy the dll files from the <PROJECT_ROOT>\redist\VC2013x86\ to C:\Windows\SysWOW64\
+4. Copy all the dll from <PROJECT_ROOT>\bin\Win32 in the C:\Windows\SysWOW64\
+```
+For 32-bit
+```
+1. Copy the dll files from the <PROJECT_ROOT>\redist\VC2013x86\ to C:\Windows\System32\
 2. Copy all the dll from <PROJECT_ROOT>\bin\Win32 in the C:\Windows\System32\
+```
 
 ```
 <PROJECT_ROOT>\bin\Win32
