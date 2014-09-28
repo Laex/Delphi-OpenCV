@@ -12,7 +12,8 @@ lib
 *.~*
 *.dcu
 *.local
-*.exe
+/bin/Win32/*.exe
+/bin/Win64/*.exe
 *.dsk
 *.identcache
 *.tvsconfig

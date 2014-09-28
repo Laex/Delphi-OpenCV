@@ -46,19 +46,20 @@ uses
 {$IFDEF VER6P}DesignIntf, System.Classes, {$ELSE}DsgnIntf, Classes, {$ENDIF VER6P}
 {$ENDIF FPC}
 {$ENDIF}
-  ocv.comp.View, Graphics, ToolsAPI;
+  ocv.comp.View,
+  ocv.lib,
+  Vcl.Graphics,
+  ToolsAPI;
 
 {$IFNDEF FPC}
 {$IF DECLARED(IOTAAboutBoxServices)}
-const
-  OCVVersion = '2.4.9';
 
 resourcestring
-  resPackageName = 'Delphi OpenCV Components v' + OCVVersion;
+  resPackageName = 'Delphi OpenCV Components v' + CV_VERSION;
   resAboutDescription = 'Delphi OpenCV Components';
   resAboutURL = 'Web: https://github.com/Laex/Delphi-OpenCV/';
   resAboutCopyright = 'Copyright (c) 2013-2014 Laentir Valetov and Mikhail Grigorev';
-  resLicense = 'GNU General Public License (GPL) v3.0';
+  resLicense = 'Mozilla public license. Version 1.1 (MPL-1.1)';
 {$ENDIF}
 {$ENDIF}
 

@@ -49,35 +49,40 @@ uses
 
 procedure Register;
 begin
-  RegisterComponents('OpenCV', [TocvImageOperation, TocvCameraSource, TocvFileSource, TocvIPCamSource,
-    TocvFFMpegIPCamSource, TocvVideoWriter]);
+  RegisterComponents('OpenCV', [
+    { } TocvImageOperation,
+    { } TocvCameraSource,
+    { } TocvFileSource,
+    { } TocvIPCamSource,
+    { } TocvFFMpegIPCamSource,
+    { } TocvVideoWriter]);
   RegisterClasses([
-    {} TocvNoneOperation,
-    {} TocvGrayScaleOperation,
-    {} TocvCannyOperation,
-    {} TocvSmoothOperation,
-    {} TocvErodeOperation,
-    {} TocvDilateOperation,
-    {} TocvLaplaceOperation,
-    {} TocvSobelOperation,
-    {} TocvThresholdOperation,
-    {} TocvAdaptiveThresholdOperation,
-    {} TocvContoursOperation,
-    {} TocvRotateOperation,
-    {} TocvAbsDiff,
-    {} TocvHaarCascade,
-    {} TocvMatchTemplate,
-    {} TocvMotionDetect,
-    {} TocvCropOperation,
-    {} TocvAddWeightedOperation,
-    {} TocvWarpPerspective,
-    {} TocvHoughCircles,
-    {} TocvHoughLines,
-    {} TocvInRangeSOperation,
-    {} TocvCvtColorOperation,
-    {} TocvResizeOperation,
-    {} TocvLogicOperation,
-    {} TocvLogicSOperation]);
+    { } TocvNoneOperation,
+    { } TocvGrayScaleOperation,
+    { } TocvCannyOperation,
+    { } TocvSmoothOperation,
+    { } TocvErodeOperation,
+    { } TocvDilateOperation,
+    { } TocvLaplaceOperation,
+    { } TocvSobelOperation,
+    { } TocvThresholdOperation,
+    { } TocvAdaptiveThresholdOperation,
+    { } TocvContoursOperation,
+    { } TocvRotateOperation,
+    { } TocvAbsDiff,
+    { } TocvHaarCascade,
+    { } TocvMatchTemplate,
+    { } TocvMotionDetect,
+    { } TocvCropOperation,
+    { } TocvAddWeightedOperation,
+    { } TocvWarpPerspective,
+    { } TocvHoughCircles,
+    { } TocvHoughLines,
+    { } TocvInRangeSOperation,
+    { } TocvCvtColorOperation,
+    { } TocvResizeOperation,
+    { } TocvLogicOperation,
+    { } TocvLogicSOperation]);
 end;
 
 {$IFDEF FPC}
