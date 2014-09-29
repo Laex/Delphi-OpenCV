@@ -29,21 +29,24 @@ unit ocv.comp.View;
 interface
 
 uses
-{$IFDEF VER6P}
-  WinApi.Windows,
-  WinApi.Messages,
+{$IFDEF HAS_UNITSCOPE}
+  {$IFDEF MSWINDOWS}
+  Winapi.Windows, Winapi.Messages,
+  {$ENDIF MSWINDOWS}
   System.SysUtils,
   System.Classes,
   Vcl.Controls,
   Vcl.Graphics,
 {$ELSE}
+  {$IFDEF MSWINDOWS}
   Windows,
-  Messages,
+  {$ENDIF MSWINDOWS}
+  {$IFNDEF FPC}Messages, {$ENDIF FPC}
   SysUtils,
   Classes,
   Controls,
   Graphics,
-{$ENDIF VER6P}
+{$ENDIF}
   ocv.comp.Types,
   ocv.core.types_c,
   System.SyncObjs;

@@ -29,8 +29,10 @@ unit ocv.comp.ImageOperation;
 interface
 
 uses
-{$IFDEF VER16P}
+{$IFDEF HAS_UNITSCOPE}
+  {$IFDEF MSWINDOWS}
   Winapi.Windows,
+  {$ENDIF MSWINDOWS}
   Vcl.Graphics,
   System.SysUtils,
   System.Classes,
@@ -38,16 +40,18 @@ uses
   System.Types,
   System.ZLib,
 {$ELSE}
+  {$IFDEF MSWINDOWS}
   Windows,
+  {$ENDIF MSWINDOWS}
   Graphics,
   SysUtils,
   Classes,
   SyncObjs,
-{$IFNDEF VER5}
+{$IFNDEF DELPHI5}
   Types,
-{$ENDIF VER5}
+{$ENDIF}
   ZLib,
-{$ENDIF VER16P}
+{$ENDIF}
   ocv.comp.Types,
   ocv.comp.proc,
   ocv.objdetect_c,
@@ -55,7 +59,7 @@ uses
   ocv.imgproc.types_c;
 
 type
-{$IFDEF VER17P} // XE3..XE6
+{$IFDEF DELPHIXE3_UP} // XE3..XE6
   TArrayDouble = TArray<Double>;
   TArrayInteger = TArray<Integer>;
   TArrayBoolean = TArray<Boolean>;
@@ -1022,11 +1026,11 @@ uses
   ocv.core_c,
   ocv.imgproc_c,
   ocv.cvutils,
-{$IFDEF VER16P}
+{$IFDEF HAS_UNITSCOPE}
   System.Math;
 {$ELSE}
   Math;
-{$ENDIF VER16P}
+{$ENDIF}
 
 // {$IFNDEF haarcascadeinc}
 // {$DEFINE haarcascadeinc}
@@ -2600,7 +2604,7 @@ end;
 
 function TocvCropOperation.DoTransform(const Source: IocvImage; out Destanation: IocvImage): Boolean;
 begin
-{$IFDEF VER16P}
+{$IFDEF DELPHIXE2_UP}
   if FCropRect.ocvRect.IsEmpty then
 {$ELSE}
   if IsRectEmpty(FCropRect.ocvRect) then

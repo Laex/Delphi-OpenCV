@@ -358,9 +358,9 @@ function cvCloneSparseMat(const mat: pCvSparseMat): pCvSparseMat; cdecl;
 function cvInitSparseMatIterator(const mat: pCvSparseMat; mat_iterator: pCvSparseMatIterator): pCvSparseNode; cdecl;
 
 // returns next sparse array node (or NULL if there is no more nodes)
-{$IFDEF VER15P}
+{$IFDEF DELPHIXE_UP}
 function cvGetNextSparseNode(mat_iterator: pCvSparseMatIterator): pCvSparseNode; {$IFDEF USE_INLINE}inline;{$ENDIF}
-{$ENDIF VER15P}
+{$ENDIF}
 
 // **************** matrix iterator: used for n-ary operations on dense arrays *********
 const
@@ -1482,8 +1482,8 @@ function cvInitSparseMatIterator; external core_lib;
 // return NULL;
 // }
 // }
-{$IFDEF VER15P}
 
+{$IFDEF DELPHIXE_UP}
 function cvGetNextSparseNode(mat_iterator: pCvSparseMatIterator): pCvSparseNode;
 var
   idx: Integer;
@@ -1511,7 +1511,8 @@ begin
     Result := nil;
   end;
 end;
-{$ENDIF VER15P}
+{$ENDIF}
+
 function cvInitNArrayIterator; external core_lib;
 function cvNextNArraySlice; external core_lib;
 function cvGetElemType; external core_lib;

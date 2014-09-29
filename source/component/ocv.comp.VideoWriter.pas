@@ -6,13 +6,13 @@ unit ocv.comp.VideoWriter;
 interface
 
 Uses
-{$IFDEF VER16P}
+{$IFDEF HAS_UNITSCOPE}
   System.SysUtils,
   System.Classes,
 {$ELSE}
   SysUtils,
   Classes,
-{$ENDIF VER16P}
+{$ENDIF}
   ocv.highgui_c,
   ocv.core_c,
   ocv.core.types_c,

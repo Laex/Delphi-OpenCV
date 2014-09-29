@@ -95,7 +95,7 @@
 {$WARN UNSAFE_TYPE OFF}
 {$WARN UNSAFE_CODE OFF}
 {$WARN UNSAFE_CAST OFF}
-{$IFDEF VER12P}
+{$IFDEF DELPHI2009_UP}
 {$POINTERMATH ON}
 {$ENDIF}
 unit ocv.core.types_c;
@@ -103,11 +103,15 @@ unit ocv.core.types_c;
 interface
 
 uses
-{$IFDEF VER16P}
+{$IFDEF IFDEF HAS_UNITSCOPE}
+  {$IFDEF MSWINDOWS}
   WinApi.Windows
+  {$ENDIF MSWINDOWS}
 {$ELSE}
+  {$IFDEF MSWINDOWS}
   Windows
-{$ENDIF VER16P};
+  {$ENDIF MSWINDOWS}
+{$ENDIF};
 
 const
   // Ќаименьшее число дл€ которого выполн€етс€ условие 1.0+DBL_EPSILON <> 1.0
@@ -131,9 +135,9 @@ type
   TpCVCharArray = array [0 .. 1] of pCVChar;
   ppCVChar = ^TpCVCharArray;
   CVChar = AnsiChar;
-{$IFNDEF VER16P}
+{$IFNDEF DELPHIXE2_UP}
 {$IFDEF CLR}
-{$IFDEF VER11P}
+{$IFDEF DELPHI2007}
   NativeInt = size_t;
   NativeUInt = size_t;
 {$ELSE}
@@ -768,7 +772,7 @@ type
   TCvPoint2D32f = record
     x: Single;
     y: Single;
-    {$IFDEF VER16P}
+    {$IFDEF DELPHIXE2_UP}
     class operator Subtract(a, b: TCvPoint2D32f): TCvPoint2D32f; // Subtraction of type TCvPoint2D32f
     function Norm: Single;
     function cvPoint:TcvPoint;
@@ -1373,14 +1377,14 @@ type
     (seq)->first->data + (index) * sizeof(elem_type) :           \
     cvGetSeqElem( (CvSeq*)(seq), (index) )))
   }
-{$IFDEF VER15P}
+{$IFDEF DELPHIXE_UP}
 
 function CV_SEQ_ELEM(Seq: pCvSeq; const size_of_elem: Integer; index: Integer): Pointer; {$IFDEF USE_INLINE}inline;
 {$ENDIF}
 { #define CV_GET_SEQ_ELEM( elem_type, seq, index ) CV_SEQ_ELEM( (seq), elem_type, (index) ) }
 function CV_GET_SEQ_ELEM(const size_of_elem: Integer; Seq: pCvSeq; index: Integer): Pointer; {$IFDEF USE_INLINE}inline;
 {$ENDIF}
-{$ENDIF VER15P}
+{$ENDIF DELPHIXE_UP}
 // (* Add element to sequence: *)
 // // >> Following declaration is a macro definition!
 // const CV_WRITE_SEQ_ELEM_VAR(elem_ptr, writer);
@@ -2237,11 +2241,11 @@ implementation
 
 uses
   ocv.core_c,
-{$IFDEF VER16P}
+{$IFDEF HAS_UNITSCOPE}
   System.SysUtils;
 {$ELSE}
   SysUtils;
-{$ENDIF VER16P}
+{$ENDIF}
 
 function strdup(const str: pCVChar): pCVChar;
 begin
@@ -2563,7 +2567,7 @@ begin
     Result := 0;
 end;
 
-{$IFDEF VER15P}
+{$IFDEF DELPHIXE_UP}
 
 function CV_GET_SEQ_ELEM;
 begin
@@ -2584,7 +2588,7 @@ begin
     // cvGetSeqElem( (CvSeq*)(seq), (index) )))
     Result := cvGetSeqElem(Seq, index);
 end;
-{$ENDIF VER15P}
+{$ENDIF}
 
 function CV_8UC1: Integer; {$IFDEF USE_INLINE}inline; {$ENDIF}
 begin
@@ -2630,8 +2634,8 @@ end;
 function CV_IMAGE_ELEM(image: pIplImage; size_elemtype, row, col: Integer): Pointer; {$IFDEF USE_INLINE}inline; {$ENDIF}
 begin
   // (((elemtype*)((image)->imageData + (image)->widthStep*(row)))[(col)])
-  Result := {$IFDEF D7}Pointer({$ENDIF D7}{$IFDEF VER9P}pByte{$ELSE}Integer{$ENDIF}(image^.imageData) + image^.widthStep
-    * row + col * size_elemtype{$IFDEF D7}){$ENDIF D7};
+  Result := {$IFDEF DELPHI7}Pointer({$ENDIF DELPHI7}{$IFDEF DELPHI2005_UP}pByte{$ELSE}Integer{$ENDIF}(image^.imageData) + image^.widthStep
+    * row + col * size_elemtype{$IFDEF DELPHI7}){$ENDIF DELPHI7};
 end;
 
 function cvRealScalar(val0: Double): TCvScalar; {$IFDEF USE_INLINE}inline; {$ENDIF}
@@ -2697,7 +2701,7 @@ begin
 end;
 
 { TCvPoint2D32f }
-{$IFDEF VER16P}
+{$IFDEF DELPHIXE2_UP}
 function TCvPoint2D32f.cvPoint: TcvPoint;
 begin
   Result.x:=Trunc(x);

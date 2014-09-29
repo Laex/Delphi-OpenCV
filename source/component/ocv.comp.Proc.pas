@@ -24,17 +24,21 @@ function IsRectEmpty(const Rect: TocvRect): Boolean;
 implementation
 
 Uses
-{$IFDEF VER16P}
-  WinApi.Windows,
+{$IFDEF HAS_UNITSCOPE}
+  {$IFDEF MSWINDOWS}
+  Winapi.Windows,
+  {$ENDIF MSWINDOWS}
   System.SysUtils,
   System.Classes,
   System.ZLib,
 {$ELSE}
+  {$IFDEF MSWINDOWS}
   Windows,
+  {$ENDIF MSWINDOWS}
   SysUtils,
   Classes,
   ZLib,
-{$ENDIF VER16P}
+{$ENDIF}
   ocv.core_c,
   ocv.imgproc_c,
   ocv.cvutils;

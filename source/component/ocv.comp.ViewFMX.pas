@@ -30,7 +30,7 @@ uses
   System.Classes,
   System.Types,
   FMX.Types,
-{$IFDEF VER20P} // Delphi XE6 and above
+{$IFDEF DELPHIXE6_UP} // Delphi XE6 and above
   FMX.Graphics,
 {$ELSE}
   FMX.PixelFormats,
@@ -38,9 +38,7 @@ uses
   FMX.Controls,
   ocv.comp.Types;
 
-{$IFNDEF VER20P}
-
-// Delphi XE5 and below
+{$IFNDEF DELPHIXE5_UP} // Delphi XE5 and below
 const
   PixelFormatBytes: array [TPixelFormat] of Integer = ( { pfUnknown } 0, { pfA16B16G16R16 } 8, { pfA2R10G10B10 } 4, { pfA2B10G10R10 } 4,
     { pfA8R8G8B8 } 4,
@@ -55,7 +53,7 @@ const
 {$ENDIF}
 
 type
-{$IFNDEF VER20P} // Delphi XE5 and below
+{$IFNDEF DELPHIXE5_UP} // Delphi XE5 and below
   TBitmapHack = class helper for TBitmap
   public
     procedure SetPixelFormat(Value: TPixelFormat);
@@ -123,23 +121,22 @@ implementation
 uses
   System.UITypes;
 
-{$IFNDEF VER20P}
-
-// Delphi XE5 and below
+{$IFNDEF DELPHIXE5_UP} // Delphi XE5 and below
 procedure TBitmapHack.SetPixelFormat(Value: TPixelFormat);
 begin
   Self.FPixelFormat := Value;
 end;
 {$ENDIF}
+
 { TocvVewFMX }
 
 constructor TocvViewFMX.Create(AOwner: TComponent);
 begin
   inherited;
 
-{$IFDEF VER21P}
+{$IFDEF DELPHIXE7_UP} // Delphi XE7 and above
   BackBuffer := TBitmap.Create;
-{$ELSEIF VER20P} // Delphi XE6 and above
+{$ELSE ~DELPHIXE6} // Delphi XE6
   BackBuffer := TBitmap.Create;
   BackBuffer.PixelFormat := TPixelFormat.RGB;
 {$ELSE} // Delphi XE5 and below

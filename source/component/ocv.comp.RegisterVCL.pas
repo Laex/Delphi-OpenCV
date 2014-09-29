@@ -43,7 +43,7 @@ uses
 {$IFDEF FPC}
   PropEdits, ComponentEditors, LResources,
 {$ELSE}
-{$IFDEF VER6P}DesignIntf, System.Classes, {$ELSE}DsgnIntf, Classes, {$ENDIF VER6P}
+{$IFDEF DELPHI6_UP}DesignIntf, System.Classes, {$ELSE}DsgnIntf, Classes, {$ENDIF}
 {$ENDIF FPC}
 {$ENDIF}
   ocv.comp.View,

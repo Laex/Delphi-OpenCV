@@ -35,7 +35,7 @@ uses
 {$IFDEF FPC}
   PropEdits, ComponentEditors, LResources,
 {$ELSE}
-{$IFDEF VER6P}DesignEditors, DesignIntf, System.Classes, {$ELSE}DsgnIntf, Classes, {$ENDIF VER6P}
+{$IFDEF DELPHI6_UP}DesignEditors, DesignIntf, System.Classes, {$ELSE}DsgnIntf, Classes, {$ENDIF}
 {$ENDIF FPC}
 {$ENDIF}
   ocv.comp.ImageOperation;
@@ -106,7 +106,7 @@ type
 implementation
 
 uses
-{$IFDEF VER6P}
+{$IFDEF HAS_UNITSCOPE}
   System.SysUtils,
   System.TypInfo,
   System.RTLConsts,
@@ -114,7 +114,7 @@ uses
   SysUtils,
   TypInfo,
   RTLConsts,
-{$ENDIF VER6P}
+{$ENDIF}
   ocv.comp.Types;
 
 {TImageOperationProperty}

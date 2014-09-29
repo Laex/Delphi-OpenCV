@@ -29,7 +29,7 @@ unit ocv.comp.Source;
 interface
 
 uses
-{$IFDEF VER6P}
+{$IFDEF HAS_UNITSCOPE}
   System.SysUtils,
   System.Classes,
   System.SyncObjs,
@@ -37,7 +37,7 @@ uses
   SysUtils,
   Classes,
   SyncObjs,
-{$ENDIF VER6P}
+{$ENDIF}
   ocv.core.types_c,
   ocv.highgui_c,
   ffm.libavcodec.avcodec,
