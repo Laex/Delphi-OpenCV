@@ -837,7 +837,11 @@ begin
   begin
 
     FisReconnect := False;
+    {$IFDEF DELPHIXE_UP}
     FSuspendEvent.WaitFor;
+    {$ELSE}
+    FSuspendEvent.WaitFor(10000);
+    {$ENDIF}
     if Terminated then
       Break;
 

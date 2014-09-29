@@ -68,7 +68,7 @@ type
     Radius: Integer;
   end;
 
-{$IFDEF DELPHI3_UP}
+{$IFDEF DELPHIXE_UP}
   TocvRects = TArray<TocvRect>;
   TocvCircles = TArray<TocvCircle>;
   TocvLines = TArray<TocvLine>;
