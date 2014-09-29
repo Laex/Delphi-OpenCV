@@ -45,10 +45,7 @@ const
   // Данные взяты с сайта http://myttk.ru/media/webcam/ с помощью Wireshark
   // Проверены с помощью rtmpdump - http://all-streaming-media.com/record-video-stream/rtmpdump-freeware-console-RTMP-downloading-application.htm
   // protocol: 0 - http, 1 - https, 2 - rtsp
-  SampleCameraList: Array [0 .. 6] of String = (
-    'alias=Chelyabinsk - Kirova|' + 'ip=stream1.is74.ru|' + 'port=1935|' + 'protocol=2|' + 'uri=/live/kirovka_1.mp4|' +
-    'reconnectdelay=1500|' + 'username=|' + 'password=',
-
+  SampleCameraList: Array [0 .. 5] of String = (
     'alias=Ekaterinburg - Area 1905|' + 'ip=80.78.116.125|' + 'port=1935|' + 'protocol=2|' + 'uri=/rtplive/5goda_hd.stream|' +
     'reconnectdelay=1500|' + 'username=|' + 'password=',
 
