@@ -192,12 +192,15 @@ var
   TW: Integer;
 begin
   Bmp := TBitmap.Create;
-  Bmp.SetSize(ocvView1.Width, ocvView1.Height);
-  Bmp.PixelFormat := pf24bit;
-  TW := Bmp.Canvas.TextWidth(Value);
-  Bmp.Canvas.TextOut((ocvView1.Width - TW) div 2, ocvView1.Height div 2, Value);
-  ocvView1.DrawImage(TocvImage.Create(Bmp));
-  Bmp.Free;
+  try
+    Bmp.SetSize(ocvView1.Width, ocvView1.Height);
+    Bmp.PixelFormat := pf24bit;
+    TW := Bmp.Canvas.TextWidth(Value);
+    Bmp.Canvas.TextOut((ocvView1.Width - TW) div 2, ocvView1.Height div 2, Value);
+    ocvView1.DrawImage(TocvImage.Create(Bmp));
+  finally
+    Bmp.Free;
+  end;
 end;
 
 end.
