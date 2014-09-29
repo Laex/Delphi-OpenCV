@@ -53,7 +53,7 @@ uses
 type
   TocvRect = type TRect;
 
- {$IFDEF DELPHI5_UP}
+ {$IFDEF DELPHI2009_UP}
   TocvRectHelper = record helper for TocvRect
     function cvRect: TcvRect;
   end;
