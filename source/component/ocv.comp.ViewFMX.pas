@@ -134,10 +134,10 @@ constructor TocvViewFMX.Create(AOwner: TComponent);
 begin
   inherited;
 
-{$IFDEF DELPHIXE7_UP} // Delphi XE7 and above
+{$IFDEF DELPHIXE6_UP} // Delphi XE6 and above
   BackBuffer := TBitmap.Create;
-{$ELSE ~DELPHIXE6} // Delphi XE6
-  BackBuffer := TBitmap.Create;
+{$ENDIF}
+{$IFDEF DELPHIXE6} // Delphi XE6
   BackBuffer.PixelFormat := TPixelFormat.RGB;
 {$ELSE} // Delphi XE5 and below
   BackBuffer := TBitmap.Create(0, 0);
