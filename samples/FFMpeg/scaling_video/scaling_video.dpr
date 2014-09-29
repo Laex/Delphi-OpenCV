@@ -31,8 +31,8 @@ uses
   uResourcePaths;
 
 Var
-  src_data: TPointers;
-  dst_data: TPointers;
+  src_data: TAVFrameByteArray;//TPointers;
+  dst_data: TAVFrameByteArray;//TPointers;
   src_linesize: TLinesizes;
   dst_linesize: TLinesizes;
   src_w: Integer = 320;
@@ -52,7 +52,7 @@ const
   in_filename = cResourceMedia + 'trailer.avi';
   out_filename = cResourceResult + 'trailer-out.avi';
 
-procedure fill_yuv_image(data: TPointers; linesize: TLinesizes; width: Integer; height: Integer; frame_index: Integer);
+procedure fill_yuv_image(data: TAVFrameByteArray{TPointers}; linesize: TLinesizes; width: Integer; height: Integer; frame_index: Integer);
 Var
   x, y: Integer;
 begin
