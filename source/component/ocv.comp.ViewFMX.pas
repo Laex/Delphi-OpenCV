@@ -139,7 +139,8 @@ begin
 {$ENDIF}
 {$IFDEF DELPHIXE6} // Delphi XE6
   BackBuffer.PixelFormat := TPixelFormat.RGB;
-{$ELSE} // Delphi XE5 and below
+{$ENDIF}
+{$IFNDEF DELPHIXE6_UP} // Delphi XE5 and below
   BackBuffer := TBitmap.Create(0, 0);
   BackBuffer.SetPixelFormat(TPixelFormat.pfX8R8G8B8);
 {$ENDIF}
