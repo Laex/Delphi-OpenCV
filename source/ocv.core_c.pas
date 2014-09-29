@@ -1558,7 +1558,7 @@ procedure cvGetRawData; external core_lib;
 
 procedure _cvGetSize(const arr: pCvArr; Var size: TCvSize); external core_lib name 'cvGetSize';
 
-{$IFDEF CPUX86}
+{$IFDEF CPU32}
 function cvGetSize(const arr: pCvArr): TCvSize; assembler;
 asm
   // mov eax,arr // в eax уже хранится адрес arr
@@ -1571,9 +1571,9 @@ asm
   mov Result.width,eax
   mov Result.height,ecx
 end;
-{$ENDIF CPUX86}
+{$ENDIF CPU32}
 
-{$IFDEF CPUX64}
+{$IFDEF CPU64}
 function cvGetSize(const arr: pCvArr): TCvSize; assembler;
 asm
   call _cvGetSize
@@ -1581,7 +1581,7 @@ asm
   shr rax,32
   mov Result.height,eax
 end;
-{$ENDIF CPUX64}
+{$ENDIF CPU64}
 
 procedure cvCopy; external core_lib;
 procedure cvSet(arr: pCvArr; value: TCvScalar; const mask: pCvArr = Nil); external core_lib;
