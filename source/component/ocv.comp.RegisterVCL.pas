@@ -52,16 +52,15 @@ uses
   ToolsAPI;
 
 {$IFNDEF FPC}
-{$IF DECLARED(IOTAAboutBoxServices)}
-
+{$IFDEF DELPHI2005_UP}
 resourcestring
   resPackageName = 'Delphi OpenCV Components v' + CV_VERSION;
   resAboutDescription = 'Delphi OpenCV Components';
   resAboutURL = 'Web: https://github.com/Laex/Delphi-OpenCV/';
   resAboutCopyright = 'Copyright (c) 2013-2014 Laentir Valetov and Mikhail Grigorev';
   resLicense = 'Mozilla public license. Version 1.1 (MPL-1.1)';
-{$ENDIF}
-{$ENDIF}
+{$ENDIF DELPHI2005_UP}
+{$ENDIF FPC}
 
 procedure Register;
 begin
@@ -69,7 +68,7 @@ begin
 end;
 
 {$IFNDEF FPC}
-{$IF DECLARED(IOTAAboutBoxServices)}
+{$IFDEF DELPHI2005_UP}
 var
   AboutBoxIndex: Integer = -1;
 
@@ -89,24 +88,24 @@ begin
   if AboutBoxIndex <> -1 then
     (BorlandIDEServices as IOTAAboutBoxServices).RemovePluginInfo(AboutBoxIndex);
 end;
-{$ENDIF}
-{$ENDIF}
+{$ENDIF DELPHI2005_UP}
+{$ENDIF FPC}
 
 initialization
 {$IFNDEF FPC}
-{$IF DECLARED(IOTAAboutBoxServices)}
+{$IFDEF DELPHI2005_UP}
   RegisterAboutBox;
-{$ENDIF}
-{$ENDIF}
+{$ENDIF DELPHI2005_UP}
+{$ENDIF FPC}
 {$IFDEF FPC}
   {$I ocv.lrs}
 {$ENDIF FPC}
 
 {$IFNDEF FPC}
-{$IF DECLARED(IOTAAboutBoxServices)}
+{$IFDEF DELPHI2005_UP}
 finalization
   UnRegisterAboutBox;
-{$ENDIF}
-{$ENDIF}
+{$ENDIF DELPHI2005_UP}
+{$ENDIF FPC}
 
 end.
