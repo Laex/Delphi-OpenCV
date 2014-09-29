@@ -506,8 +506,8 @@
 {$IFDEF FPC}
   {$MODE DELPHI}
 {$ELSE}
- {$IFDEF CompillerVersion<23}
-  Use RAD Studio XE2 and above.
+ {$IFDEF CompillerVersion<22}
+  Use RAD Studio XE and above.
  {$ENDIF}
 {$ENDIF}
 
