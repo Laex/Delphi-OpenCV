@@ -37,6 +37,7 @@ uses
   System.Classes,
   Vcl.Controls,
   Vcl.Graphics,
+  System.SyncObjs,
 {$ELSE}
   {$IFDEF MSWINDOWS}
   Windows,
@@ -46,10 +47,10 @@ uses
   Classes,
   Controls,
   Graphics,
+  SyncObjs,
 {$ENDIF}
   ocv.comp.Types,
-  ocv.core.types_c,
-  System.SyncObjs;
+  ocv.core.types_c;
 
 type
 
@@ -300,9 +301,12 @@ begin
           begin
             for i := 0 to FFrames.Count - 1 do
               With (FFrames.Items[i] as TocvViewFrame) do
+                {$IFDEF DELPHIXE2_UP}
                 if Enabled and (not DrawRect.AsRect.isEmpty) and Assigned(Image) then
+                {$ELSE}
+                if Enabled and IsRectEmpty(DrawRect.AsRect) and Assigned(Image) then
+                {$ENDIF}
                   ipDraw(DC, Image.IpImage, DrawRect.AsRect);
-
             if Assigned(OnAfterPaint) then
               OnAfterPaint(Self, FImage);
           end;
@@ -326,8 +330,10 @@ begin
   inherited;
   FLock := TCriticalSection.Create;
   FDrawRect := TocvPersistentRect.Create;
+  {$IFDEF DELPHIXE2_UP}
   FDrawRect.FRect.Width := 50;
   FDrawRect.FRect.Height := 50;
+  {$ENDIF}
   FEnabled := false;
 end;
 

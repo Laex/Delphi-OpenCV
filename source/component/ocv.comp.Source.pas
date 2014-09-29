@@ -268,7 +268,9 @@ Type
     FOwner: TocvFFMpegIPCamSource;
     FReconnectDelay: Cardinal;
     FisReconnect: Boolean;
+    {$IFDEF DELPHIXE2_UP}
     procedure TerminatedSet; override;
+    {$ENDIF}
     procedure DoNotyfy(Event: TocvFFMpegIPCamEvent);
   protected
     procedure Execute; override;
@@ -991,10 +993,12 @@ begin
   end;
 end;
 
+{$IFDEF DELPHIXE2_UP}
 procedure TocvFFMpegIPCamSourceThread.TerminatedSet;
 begin
   inherited;
   FSuspendEvent.ResetEvent;
 end;
+{$ENDIF}
 
 end.

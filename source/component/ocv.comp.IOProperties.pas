@@ -35,7 +35,12 @@ uses
 {$IFDEF FPC}
   PropEdits, ComponentEditors, LResources,
 {$ELSE}
-{$IFDEF DELPHI6_UP}DesignEditors, DesignIntf, System.Classes, {$ELSE}DsgnIntf, Classes, {$ENDIF}
+{$IFDEF HAS_UNITSCOPE}
+  System.Classes,
+{$ELSE ~HAS_UNITSCOPE}
+  Classes,
+{$ENDIF ~HAS_UNITSCOPE}
+{$IFDEF DELPHI6_UP}DesignEditors, DesignIntf,{$ELSE}DsgnIntf,{$ENDIF}
 {$ENDIF FPC}
 {$ENDIF}
   ocv.comp.ImageOperation;

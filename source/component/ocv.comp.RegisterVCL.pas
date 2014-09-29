@@ -43,12 +43,18 @@ uses
 {$IFDEF FPC}
   PropEdits, ComponentEditors, LResources,
 {$ELSE}
-{$IFDEF DELPHI6_UP}DesignIntf, System.Classes, {$ELSE}DsgnIntf, Classes, {$ENDIF}
+{$IFDEF HAS_UNITSCOPE}
+  System.Classes,
+  Vcl.Graphics,
+{$ELSE ~HAS_UNITSCOPE}
+  Classes,
+  Graphics,
+{$ENDIF ~HAS_UNITSCOPE}
+{$IFDEF DELPHI6_UP}DesignIntf,{$ELSE}DsgnIntf,{$ENDIF}
 {$ENDIF FPC}
 {$ENDIF}
   ocv.comp.View,
   ocv.lib,
-  Vcl.Graphics,
   ToolsAPI;
 
 {$IFNDEF FPC}
