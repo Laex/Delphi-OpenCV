@@ -10,11 +10,12 @@ Requires installed [Visual C++ redistributable for Visual Studio 2013][2]<br>
  Mikhail Grigorev (email: sleuthhound@gmail.com)
 ```
 ####How to install:
-Download the archive [link][1].<br>
-Unzip it to a convenient directory, thus get the following directory structure.<br>
+Download the archive [link][1]<br>
+Unzip it to a convenient directory, thus get the following directory structure<br>
 ```
 <PROJECT_ROOT> - Directory, such as "C:\OpenCV\"
 	<bin>
+	<redist>
 	<resource>
 	<samples>
 	<source>
@@ -31,6 +32,8 @@ Add the search path for the modules of the project in Delphi IDE (Tools-Options-
 ```
 where ```<PROJECT_ROOT>``` directory, which was unzipped project.<br>
 Add to your PATH variable path to the library "opencv_*.dll" and FFMPEG dll.
+* for Win32 ```<PROJECT_ROOT>\bin\Win32```
+* for Win64 ```<PROJECT_ROOT>\bin\Win64```
 
 Or
 
@@ -46,10 +49,12 @@ For 32-bit
 1. Copy the dll files from the <PROJECT_ROOT>\redist\VC2013x86\ to C:\Windows\System32\
 2. Copy all the dll from <PROJECT_ROOT>\bin\Win32 in the C:\Windows\System32\
 ```
-
+To install the components, open and install
 ```
-<PROJECT_ROOT>\bin\Win32
-<PROJECT_ROOT>\bin\Win64
+<PROJECT_ROOT>\source\component\DelphiXX\OpenCVXXX.dpk
+<PROJECT_ROOT>\source\component\DelphiXX\dclCommonOpenCVXXX.dpk
+<PROJECT_ROOT>\source\component\DelphiXX\dclVCLOpenCVXXX.dpk
+<PROJECT_ROOT>\source\component\DelphiXX\dclFMXOpenCVXXX.dpk
 ```
 Open in Delphi IDE and compile:<br>
 Examples of the use of certain functions and procedures 
@@ -68,15 +73,9 @@ Examples of using FFMPEG library header files are in the
 ```
 <PROJECT_ROOT>\samples\FFMpeg\FFMPEG.groupproj
 ```
-To install the components, open and install
+Examples of use of components
 ```
-<PROJECT_ROOT>\source\component\Delphi20\RAD Studio XE6.groupproj
-```
-Examples of use of components.
-```
-<PROJECT_ROOT>\samples\Components\cCameraCapture\cCameraCapture.dproj
-<PROJECT_ROOT>\samples\Components\cMatchTemplate\cMatchTemplate.dproj
-
+<PROJECT_ROOT>\samples\Components\ComponentsDemo.groupproj
 ```
 [1]: https://github.com/Laex/Delphi-OpenCV/archive/master.zip
 [2]: http://www.microsoft.com/ru-ru/download/details.aspx?id=40784
