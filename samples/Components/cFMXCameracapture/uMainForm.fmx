@@ -1,0 +1,135 @@
+object MainForm: TMainForm
+  Left = 0
+  Top = 0
+  Caption = 'FMX camera capture demo'
+  ClientHeight = 606
+  ClientWidth = 569
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  OnActivate = FormActivate
+  DesignerMasterStyle = 0
+  object chk1: TCheckBox
+    IsChecked = True
+    Position.X = 8.000000000000000000
+    Position.Y = 4.000000000000000000
+    Size.Width = 117.000000000000000000
+    Size.Height = 19.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 2
+    Text = 'Camera Enabled'
+    OnChange = chk1Change
+  end
+  object ocvwfmx1: TocvViewFMX
+    VideoSource = ocvmgprtn1
+    Left = 8.000000000000000000
+    Top = 30.000000000000000000
+    Width = 270.000000000000000000
+    Height = 270.000000000000000000
+    TabOrder = 4
+    Position.X = 8.000000000000000000
+    Position.Y = 24.000000000000000000
+  end
+  object ocvwfmx2: TocvViewFMX
+    VideoSource = ocvpcmsrc1
+    Left = 290.000000000000000000
+    Top = 30.000000000000000000
+    Width = 270.000000000000000000
+    Height = 270.000000000000000000
+    TabOrder = 15
+    Position.X = 292.000000000000000000
+    Position.Y = 24.000000000000000000
+  end
+  object ocvwfmx3: TocvViewFMX
+    VideoSource = ocvfmpgpcmsrc1
+    Left = 8.000000000000000000
+    Top = 328.000000000000000000
+    Width = 270.000000000000000000
+    Height = 270.000000000000000000
+    TabOrder = 16
+    Position.X = 8.000000000000000000
+    Position.Y = 328.000000000000000000
+  end
+  object ocvwfmx4: TocvViewFMX
+    VideoSource = ocvflsrc1
+    Left = 292.000000000000000000
+    Top = 328.000000000000000000
+    Width = 270.000000000000000000
+    Height = 270.000000000000000000
+    TabOrder = 17
+    Position.X = 292.000000000000000000
+    Position.Y = 328.000000000000000000
+  end
+  object chk2: TCheckBox
+    IsChecked = True
+    Position.X = 292.000000000000000000
+    Position.Y = 4.000000000000000000
+    Size.Width = 145.000000000000000000
+    Size.Height = 19.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 18
+    Text = 'IP camera Enabled'
+    OnChange = chk2Change
+  end
+  object chk3: TCheckBox
+    IsChecked = True
+    Position.X = 292.000000000000000000
+    Position.Y = 308.000000000000000000
+    TabOrder = 19
+    Text = 'File source Enabled'
+    OnChange = chk3Change
+  end
+  object chk4: TCheckBox
+    IsChecked = True
+    Position.X = 8.000000000000000000
+    Position.Y = 308.000000000000000000
+    Size.Width = 185.000000000000000000
+    Size.Height = 19.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 20
+    Text = 'IP camera (FFMPEG) Enabled'
+    OnChange = chk4Change
+  end
+  object chk5: TCheckBox
+    IsChecked = True
+    Position.X = 160.000000000000000000
+    Position.Y = 4.000000000000000000
+    TabOrder = 21
+    Text = 'Image operation'
+    OnChange = chk5Change
+  end
+  object ocvcmrsrc1: TocvCameraSource
+    Resolution = r640x360
+    Left = 60
+    Top = 152
+  end
+  object ocvpcmsrc1: TocvIPCamSource
+    IP = '80.78.116.125'
+    URI = '/rtplive/5goda_hd.stream'
+    Port = 1935
+    Left = 416
+    Top = 152
+  end
+  object ocvfmpgpcmsrc1: TocvFFMpegIPCamSource
+    IP = '80.78.116.125'
+    URI = '/rtplive/5goda_hd.stream'
+    Port = 1935
+    Left = 68
+    Top = 452
+  end
+  object ocvflsrc1: TocvFileSource
+    FileName = '..\..\resource\media\768x576.avi'
+    Left = 408
+    Top = 460
+  end
+  object ocvmgprtn1: TocvImageOperation
+    VideoSource = ocvcmrsrc1
+    OperationClassName = 'TocvRotateOperation'
+    Operation.Angle = 90
+    Operation.RotateAroundCenter = True
+    Operation.Scale = 1.000000000000000000
+    Operations = <>
+    Left = 60
+    Top = 200
+  end
+end

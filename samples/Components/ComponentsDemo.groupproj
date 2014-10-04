@@ -15,6 +15,9 @@
         <Projects Include="cVideoWriter\cVideoWriter.dproj">
             <Dependencies/>
         </Projects>
+        <Projects Include="cFMXCameracapture\cFMXCameraCapture.dproj">
+            <Dependencies/>
+        </Projects>
     </ItemGroup>
     <ProjectExtensions>
         <Borland.Personality>Default.Personality.12</Borland.Personality>
@@ -59,14 +62,23 @@
     <Target Name="cVideoWriter:Make">
         <MSBuild Projects="cVideoWriter\cVideoWriter.dproj" Targets="Make"/>
     </Target>
+    <Target Name="cFMXCameraCapture">
+        <MSBuild Projects="cFMXCameracapture\cFMXCameraCapture.dproj"/>
+    </Target>
+    <Target Name="cFMXCameraCapture:Clean">
+        <MSBuild Projects="cFMXCameracapture\cFMXCameraCapture.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="cFMXCameraCapture:Make">
+        <MSBuild Projects="cFMXCameracapture\cFMXCameraCapture.dproj" Targets="Make"/>
+    </Target>
     <Target Name="Build">
-        <CallTarget Targets="cCameraCapture;cMatchTemplate;cFFmpegIPCamSource;cVideoWriter"/>
+        <CallTarget Targets="cCameraCapture;cMatchTemplate;cFFmpegIPCamSource;cVideoWriter;cFMXCameraCapture"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="cCameraCapture:Clean;cMatchTemplate:Clean;cFFmpegIPCamSource:Clean;cVideoWriter:Clean"/>
+        <CallTarget Targets="cCameraCapture:Clean;cMatchTemplate:Clean;cFFmpegIPCamSource:Clean;cVideoWriter:Clean;cFMXCameraCapture:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="cCameraCapture:Make;cMatchTemplate:Make;cFFmpegIPCamSource:Make;cVideoWriter:Make"/>
+        <CallTarget Targets="cCameraCapture:Make;cMatchTemplate:Make;cFFmpegIPCamSource:Make;cVideoWriter:Make;cFMXCameraCapture:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>

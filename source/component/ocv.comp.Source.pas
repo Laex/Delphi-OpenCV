@@ -521,6 +521,8 @@ begin
 end;
 
 procedure TocvFileSource.SetEnabled(Value: Boolean);
+Var
+ pFileName:PAnsiChar;
 begin
   if FEnabled <> Value then
   begin
@@ -532,9 +534,10 @@ begin
         cvReleaseCapture(FCapture);
         FCapture := Nil;
       end;
-      if Value then
+      if Value and FileExists(FileName) then
       begin
-        FCapture := cvCreateFileCapture(PAnsiChar(AnsiString(FileName)));
+        pFileName:=PAnsiChar(@(AnsiString(FileName)[1]));
+        FCapture := cvCreateFileCapture(pFileName);
         if Assigned(FCapture) then
         begin
           (FSourceThread as TocvCaptureThread).Capture := FCapture;

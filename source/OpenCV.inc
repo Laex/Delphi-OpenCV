@@ -1582,7 +1582,8 @@
 // Warnings
 {$IFOPT X+} {$DEFINE EXTENDEDSYNTAX_ON} {$ENDIF}
 
-{$IF DECLARED(FireMonkeyVersion)}
+//{$IF DECLARED(FireMonkeyVersion)}
+{$IF DEFINED(FireMonkeyVersion)}
   {$DEFINE HAS_FMX}
 {$ELSE}
   {$DEFINE HAS_VCL}
