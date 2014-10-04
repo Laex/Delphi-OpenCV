@@ -35,13 +35,13 @@
 // loss of use, data, or profits; or business interruption) however caused
 // and on any theory of liability, whether in contract, strict liability,
 // or tort (including negligence or otherwise) arising in any way out of
-  //   the use of this software, even if advised of the possibility of such damage.
+// the use of this software, even if advised of the possibility of such damage.
 
 // **************************************************************************************************
 // Project Delphi-OpenCV
 // **************************************************************************************************
 // Contributor:
-  // Laentir Valetov
+// Laentir Valetov
 // email:laex@bk.ru
 // Mikhail Grigorev
 // email:sleuthound@gmail.com
@@ -99,33 +99,33 @@ type
   // The sequence of function declarations interface must match the
   // sequence of function declarations in the project "opencv_classes" (C++)
 
-  TocvVideoCapture = class
+  TccvVideoCapture = class
     function open(device: Integer): bool; overload; virtual; stdcall; abstract;
     function openfile(filename: pAnsiChar): bool; overload; virtual; stdcall; abstract;
     function isOpened(): bool; virtual; stdcall; abstract;
     procedure release(); virtual; stdcall; abstract;
     function grab(): bool; virtual; stdcall; abstract;
-    function retrieve(Var image: TocvMat; flag: Integer): bool; virtual; stdcall; abstract;
-    function read(Var image: TocvMat): bool; virtual; stdcall; abstract;
+    function retrieve(Var image: TccvMat; flag: Integer): bool; virtual; stdcall; abstract;
+    function read(Var image: TccvMat): bool; virtual; stdcall; abstract;
     function setValue(propId: Integer; value: double): bool; virtual; stdcall; abstract;
     function getValue(propId: Integer): double; virtual; stdcall; abstract;
+    // ---------------------------
+    class function Create: TccvVideoCapture; overload;
+    class function Create(device: Integer): TccvVideoCapture; overload;
+    class function Create(filename: pAnsiChar): TccvVideoCapture; overload;
+    procedure Free; reintroduce;
   end;
 
-function CreateVideoCapture: TocvVideoCapture; stdcall; overload;
-function CreateVideoCapture(device: Integer): TocvVideoCapture; stdcall; overload;
-function CreateVideoCapture(filename: pAnsiChar): TocvVideoCapture; stdcall; overload;
-procedure DestroyVideoCapture(ex: TocvVideoCapture); stdcall;
-
-// Flags for namedWindow
+  // Flags for namedWindow
 const
   WINDOW_NORMAL = $00000000;
   // the user can resize the window (no constraint) / also use to switch a fullscreen window to a normal size
   WINDOW_AUTOSIZE = $00000001; // the user cannot resize the window, the size is constrainted by the image displayed
-  WINDOW_OPENGL = $00001000; // window with opengl support
+  WINDOW_OPENGL   = $00001000; // window with opengl support
 
   WINDOW_FULLSCREEN = 1; // change the window to fullscreen
-  WINDOW_FREERATIO = $00000100; // the image expends as much as it can (no ratio constraint)
-  WINDOW_KEEPRATIO = $00000000; // the ratio of the image is respected
+  WINDOW_FREERATIO  = $00000100; // the image expends as much as it can (no ratio constraint)
+  WINDOW_KEEPRATIO  = $00000000; // the ratio of the image is respected
 
   // CV_EXPORTS_W void namedWindow(const String& winname, int flags = WINDOW_AUTOSIZE);
 procedure namedWindow(const winname: String; const flags: Integer = WINDOW_AUTOSIZE);
@@ -138,7 +138,7 @@ function startWindowThread(): Integer;
 // CV_EXPORTS_W int waitKey(int delay = 0);
 function waitKey(const delay: Integer = 0): Integer;
 // CV_EXPORTS_W void imshow(const String& winname, InputArray mat);
-procedure imshow(const winname: String; const mat: TocvMat);
+procedure imshow(const winname: String; const mat: TccvMat);
 // CV_EXPORTS_W void resizeWindow(const String& winname, int width, int height);
 procedure resizeWindow(const winname: String; const width, height: Integer);
 // CV_EXPORTS_W void moveWindow(const String& winname, int x, int y);
@@ -151,17 +151,17 @@ function getWindowProperty(const winname: String; const prop_id: Integer): doubl
 // int* value, int count,
 // TrackbarCallback onChange = 0,
 // void* userdata = 0);
-function createTrackbar(const trackbarname: String; const winname: String; value: PInteger; count: Integer; onChange: CvTrackbarCallback2 = nil;
-  userdata: Pointer = nil): Integer;
+function createTrackbar(const trackbarname: String; const winname: String; value: PInteger; count: Integer;
+  onChange: CvTrackbarCallback2 = nil; userdata: Pointer = nil): Integer;
 
 // CV_EXPORTS_W Mat imread( const string& filename, int flags=1 );
-function imread(const filename: string; flag: Integer = 1): TocvMat;
+function imread(const filename: string; flag: Integer = 1): TccvMat;
 // CV_EXPORTS_W bool imwrite( const string& filename, InputArray img, const vector<int>& params=vector<int>());
-function imwrite(const filename: String; const img: TocvMat): bool;
+function imwrite(const filename: String; const img: TccvMat): bool;
 
 type
   TIplImageRecordHelper = record helper for TIplImage
-    function InitFromMat(const mat: TocvMat): TIplImage;
+    function InitFromMat(const mat: TccvMat): TIplImage;
   end;
 
 implementation
@@ -171,20 +171,20 @@ uses
   ocv.cvutils,
   ocv.core_c;
 
-function CreateVideoCapture: TocvVideoCapture; stdcall; external opencv_classes_lib name 'CreateVideoCapture'; overload;
-function CreateVideoCapture(device: Integer): TocvVideoCapture; stdcall; external opencv_classes_lib name 'CreateVideoCaptureDevice'; overload;
-function CreateVideoCapture(filename: pAnsiChar): TocvVideoCapture; stdcall; external opencv_classes_lib name 'CreateVideoCaptureFileName'; overload;
-procedure DestroyVideoCapture(ex: TocvVideoCapture); stdcall; external opencv_classes_lib;
+function CreateVideoCapture: TccvVideoCapture; stdcall; external opencv_classes_lib name 'CreateVideoCapture'; overload;
+function CreateVideoCapture(device: Integer): TccvVideoCapture; stdcall; external opencv_classes_lib name 'CreateVideoCaptureDevice'; overload;
+function CreateVideoCapture(filename: pAnsiChar): TccvVideoCapture; stdcall;  external opencv_classes_lib name 'CreateVideoCaptureFileName'; overload;
+procedure ReleaseVideoCapture(ex: TccvVideoCapture); stdcall; external opencv_classes_lib;
 
-function _imread(const filename: pCvChar; flag: Integer): TocvMat; external opencv_classes_lib name '_imread';
-function _imwrite(const filename: pCvChar; const img: TocvMat): bool; external opencv_classes_lib name '_imwrite';
+function _imread(const filename: pCvChar; flag: Integer): TccvMat; external opencv_classes_lib name '_imread';
+function _imwrite(const filename: pCvChar; const img: TccvMat): bool; external opencv_classes_lib name '_imwrite';
 
-function imread(const filename: string; flag: Integer): TocvMat;
+function imread(const filename: string; flag: Integer): TccvMat;
 begin
   Result := _imread(c_str(filename), flag);
 end;
 
-function imwrite(const filename: String; const img: TocvMat): bool;
+function imwrite(const filename: String; const img: TccvMat): bool;
 begin
   Result := _imwrite(c_str(filename), img);
 end;
@@ -214,7 +214,7 @@ begin
   Result := cvWaitKey(delay);
 end;
 
-procedure imshow(const winname: String; const mat: TocvMat);
+procedure imshow(const winname: String; const mat: TccvMat);
 Var
   IplImage: TIplImage;
 begin
@@ -242,19 +242,41 @@ begin
   Result := cvGetWindowProperty(c_str(winname), prop_id);
 end;
 
-function createTrackbar(const trackbarname: String; const winname: String; value: PInteger; count: Integer; onChange: CvTrackbarCallback2 = nil;
-  userdata: Pointer = nil): Integer;
+function createTrackbar(const trackbarname: String; const winname: String; value: PInteger; count: Integer;
+  onChange: CvTrackbarCallback2 = nil; userdata: Pointer = nil): Integer;
 begin
   Result := cvCreateTrackbar2(c_str(trackbarname), c_str(winname), value, count, onChange, userdata);
 end;
 
 { TIplImageRecordHelper }
 
-function TIplImageRecordHelper.InitFromMat(const mat: TocvMat): TIplImage;
+function TIplImageRecordHelper.InitFromMat(const mat: TccvMat): TIplImage;
 begin
   Assert(mat.dims <= 2);
   cvInitImageHeader(@Self, CvSize(mat.cols, mat.rows), cvIplDepth(mat.flags), mat.channels);
   cvSetData(@Self, mat.data, mat.step1);
+end;
+
+{ TocvVideoCapture }
+
+class function TccvVideoCapture.Create: TccvVideoCapture;
+begin
+  Result := CreateVideoCapture;
+end;
+
+class function TccvVideoCapture.Create(device: Integer): TccvVideoCapture;
+begin
+  Result := CreateVideoCapture(device);
+end;
+
+class function TccvVideoCapture.Create(filename: pAnsiChar): TccvVideoCapture;
+begin
+  Result := CreateVideoCapture(filename);
+end;
+
+procedure TccvVideoCapture.Free;
+begin
+  ReleaseVideoCapture(Self);
 end;
 
 end.

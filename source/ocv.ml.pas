@@ -1,48 +1,8 @@
-// --------------------------------- OpenCV license.txt ---------------------------
-// IMPORTANT: READ BEFORE DOWNLOADING, COPYING, INSTALLING OR USING.
-//
-// By downloading, copying, installing or using the software you agree to this license.
-// If you do not agree to this license, do not download, install,
-// copy or use the software.
-//
-//
-// License Agreement
-// For Open Source Computer Vision Library
-//
-// Copyright (C) 2000-2008, Intel Corporation, all rights reserved.
-// Copyright (C) 2009, Willow Garage Inc., all rights reserved.
-// Third party copyrights are property of their respective owners.
-//
-// Redistribution and use in source and binary forms, with or without modification,
-// are permitted provided that the following conditions are met:
-//
-// * Redistribution's of source code must retain the above copyright notice,
-// this list of conditions and the following disclaimer.
-//
-// * Redistribution's in binary form must reproduce the above copyright notice,
-// this list of conditions and the following disclaimer in the documentation
-// and/or other materials provided with the distribution.
-//
-// * The name of the copyright holders may not be used to endorse or promote products
-// derived from this software without specific prior written permission.
-//
-// This software is provided by the copyright holders and contributors "as is" and
-// any express or implied warranties, including, but not limited to, the implied
-// warranties of merchantability and fitness for a particular purpose are disclaimed.
-// In no event shall the Intel Corporation or contributors be liable for any direct,
-// indirect, incidental, special, exemplary, or consequential damages
-// (including, but not limited to, procurement of substitute goods or services;
-// loss of use, data, or profits; or business interruption) however caused
-// and on any theory of liability, whether in contract, strict liability,
-// or tort (including negligence or otherwise) arising in any way out of
-// the use of this software, even if advised of the possibility of such damage.
-
-
 // **************************************************************************************************
 // Project Delphi-OpenCV
 // **************************************************************************************************
 // Contributors:
-  // Laentir Valetov
+// Laentir Valetov
 // email:laex@bk.ru
 // Mikhail Grigorev
 // Email: sleuthhound@gmail.com
@@ -151,8 +111,8 @@ Uses
 
 const
   /// * Variable type */
-  CV_VAR_NUMERICAL = 0;
-  CV_VAR_ORDERED = 0;
+  CV_VAR_NUMERICAL   = 0;
+  CV_VAR_ORDERED     = 0;
   CV_VAR_CATEGORICAL = 1;
 
   //
@@ -269,11 +229,16 @@ const
   // *                          K-Nearest Neighbour Classifier                                *
   // \****************************************************************************************/
 Type
-  TCvKNearest = class
+  TCvKNearest = class(TObject)
     function train(const trainData: pCvMat; const responses: pCvMat; const sampleIdx: pCvMat = nil;
       is_regression: bool = false; maxK: Integer = 32; updateBase: bool = false): bool; virtual; stdcall; abstract;
     function find_nearest(const samples: pCvMat; k: Integer; results: pCvMat = nil; const neighbors: pSingle = nil;
       neighborResponses: pCvMat = nil; dist: pCvMat = nil): float; virtual; stdcall; abstract;
+    // -----------------------------------
+    class function Create: TCvKNearest; overload;
+    class function Create(const trainData: pCvMat; const responses: pCvMat; const sampleIdx: pCvMat = nil;
+      isRegression: bool = false; max_k: Integer = 32): TCvKNearest; overload;
+    procedure Free; reintroduce;
   end;
 
   // k Nearest Neighbors
@@ -2201,19 +2166,19 @@ Type
   // CV_EXPORTS bool initModule_ml(void);
   // }
 
-function CreateCvKNearest: TCvKNearest; stdcall; overload;
-function CreateCvKNearest(const trainData: pCvMat; const responses: pCvMat; const sampleIdx: pCvMat = nil; isRegression: bool = false; max_k: Integer = 32)
-  : TCvKNearest; stdcall; overload;
-procedure ReleaseCvKNearest(ex: TCvKNearest); stdcall;
+  // function CreateCvKNearest: TCvKNearest; stdcall; overload;
+  // function CreateCvKNearest(const trainData: pCvMat; const responses: pCvMat; const sampleIdx: pCvMat = nil;
+  // isRegression: bool = false; max_k: Integer = 32): TCvKNearest; stdcall; overload;
+  // procedure ReleaseCvKNearest(ex: TCvKNearest); stdcall;
 
 implementation
 
 uses ocv.lib;
 
-function CreateCvKNearest: TCvKNearest; stdcall; external opencv_classes_lib name 'CreateCvKNearest';
-function CreateCvKNearest(const trainData: pCvMat; const responses: pCvMat; const sampleIdx: pCvMat = nil; isRegression: bool = false; max_k: Integer = 32)
-  : TCvKNearest; stdcall; external opencv_classes_lib name 'CreateCvKNearestTR';
-procedure ReleaseCvKNearest; stdcall; external opencv_classes_lib;
+function CreateCvKNearest: TCvKNearest; stdcall; external opencv_classes_lib; overload;
+function CreateCvKNearest(const trainData: pCvMat; const responses: pCvMat; const sampleIdx: pCvMat = nil;
+  isRegression: bool = false; max_k: Integer = 32): TCvKNearest; stdcall; external opencv_classes_lib; overload;
+procedure ReleaseCvKNearest(ex: TCvKNearest); stdcall; external opencv_classes_lib;
 
 { TCvDTreeNode }
 
@@ -2229,6 +2194,24 @@ procedure TCvDTreeNode.set_num_valid(vi, n: Integer);
 begin
   if num_valid <> nil then
     num_valid[vi] := n;
+end;
+
+{ TCvKNearest }
+
+class function TCvKNearest.Create: TCvKNearest;
+begin
+  Result := CreateCvKNearest;
+end;
+
+class function TCvKNearest.Create(const trainData, responses, sampleIdx: pCvMat; isRegression: bool; max_k: Integer)
+  : TCvKNearest;
+begin
+  Result := CreateCvKNearest(trainData, responses, sampleIdx, isRegression, max_k);
+end;
+
+procedure TCvKNearest.Free;
+begin
+  ReleaseCvKNearest(Self);
 end;
 
 end.

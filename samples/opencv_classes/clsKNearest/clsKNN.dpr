@@ -38,21 +38,21 @@ uses
   ocv.ml,
   uResourcePaths;
 
-{DEFINE Test}
+{ DEFINE Test }
 
 Const
   CarTrain_FileName = cResourceMedia + 'car.train';
 {$IFDEF Test}
-  CarTest_FileName = cResourceMedia + 'car.test';
+  CarTest_FileName          = cResourceMedia + 'car.test';
   NUMBER_OF_TESTING_SAMPLES = 345;
 {$ELSE}
-  CarTest_FileName = cResourceMedia + 'car.data';
+  CarTest_FileName          = cResourceMedia + 'car.data';
   NUMBER_OF_TESTING_SAMPLES = 1728;
 {$ENDIF}
-  ATTRIBUTES_PER_SAMPLE = 6; // not the last as this is the class
-  NUMBER_OF_CLASSES = 4; // classes 0->3
+  ATTRIBUTES_PER_SAMPLE                                 = 6; // not the last as this is the class
+  NUMBER_OF_CLASSES                                     = 4; // classes 0->3
   Classes: array [0 .. NUMBER_OF_CLASSES - 1] of String = ('unacc', 'acc', 'good', 'vgood');
-  NUMBER_OF_TRAINING_SAMPLES = 1383;
+  NUMBER_OF_TRAINING_SAMPLES                            = 1383;
 
 function hash(str: AnsiString): Single;
 Var
@@ -155,7 +155,7 @@ begin
         // train K-Nearest Neighbour classifier (using training data)
 
         WriteLn('Using training database: ', CarTrain_FileName);
-        knn := CreateCvKNearest;
+        knn := TCvKNearest.Create;
 
         knn.train(training_data, training_classifications, nil, False, k);
 
@@ -194,7 +194,8 @@ begin
 
         WriteLn(Format('Results on the testing database: %s'#13#10#9'Correct classification: %d (%4.2f%%)'#13#10#9 +
           'Wrong classifications: %d (%4.2f%%)', [CarTest_FileName, correct_class,
-          correct_class * 100 / NUMBER_OF_TESTING_SAMPLES, wrong_class, wrong_class * 100 / NUMBER_OF_TESTING_SAMPLES]));
+          correct_class * 100 / NUMBER_OF_TESTING_SAMPLES, wrong_class,
+          wrong_class * 100 / NUMBER_OF_TESTING_SAMPLES]));
 
         for i := 0 to NUMBER_OF_CLASSES - 1 do
         begin
@@ -204,7 +205,7 @@ begin
       end;
     finally
       // free all memory
-      ReleaseCvKNearest(knn);
+      knn.Free;
       cvReleaseMat(training_data);
       cvReleaseMat(training_classifications);
       cvReleaseMat(testing_data);

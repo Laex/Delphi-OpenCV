@@ -5,17 +5,17 @@
 #include "opencv2\features2d\features2d.hpp"
 
 ///////////////////////////////////////////////////
-TMat * __stdcall CreateMat()
+TMat* __stdcall CreateMat()
 {	
 	return new TMat();
 };
 
-TMat * __stdcall CreateMatRCT(int rows, int cols, int type)
+TMat* __stdcall CreateMatRCT(int rows, int cols, int type)
 {	
 	return new TMat(rows, cols, type);
 };
 
-void __stdcall ReleaseMat(TMat * ex)
+void __stdcall ReleaseMat(TMat* ex)
 {
 	delete ex;
 };
@@ -114,7 +114,7 @@ void __stdcall MSER(TMat m, TVectorOfVectorOfPoint2i ** ex)
 	mm = m.Mat();
 	cv::MSER()(*mm, contours);
 	*ex = new TVectorOfVectorOfPoint2i();
-	for (int i = 0; i < contours.size(); i++)
+	for (int i = 0; i < (int)contours.size(); i++)
 	{
 		(*ex)->push_back(TVectorOfPoint2i(contours[i]));
 	}

@@ -3,7 +3,7 @@
 // Copyright (C) 2013 Project Delphi-OpenCV
 // ****************************************************************
 // Contributor:
-  // Laentir Valetov
+// Laentir Valetov
 // email:laex@bk.ru
 // ****************************************************************
 // You may retrieve the latest version of this file at the GitHub,
@@ -36,13 +36,13 @@ uses
 Const
   VK_ESCAPE = 27;
 
-  DESIRED_CAMERA_WIDTH: Integer = 320;
+  DESIRED_CAMERA_WIDTH: Integer  = 320;
   DESIRED_CAMERA_HEIGHT: Integer = 200;
 
   windowName = 'Test VideoCapture'; // Name shown in the GUI window.
 
   // Get access to the webcam.
-procedure initWebcam(videoCapture: TOCVVideoCapture; cameraNumber: Integer = CV_CAP_ANY);
+procedure initWebcam(videoCapture: TccvVideoCapture; cameraNumber: Integer = CV_CAP_ANY);
 begin
   // Get access to the default camera.
   // Surround the OpenCV call by a try/catch block so we can give a useful error message!
@@ -57,12 +57,12 @@ end;
 
 Var
   cameraNumber: Integer = CV_CAP_ANY;
-  camera: TOCVVideoCapture;
-  cameraFrame: TOCVMat = nil;
+  camera: TccvVideoCapture;
+  cameraFrame: TccvMat = nil;
 
 begin
   try
-    camera := CreateVideoCapture();
+    camera := TccvVideoCapture.Create;
     initWebcam(camera, cameraNumber);
     // Try to set the camera resolution. Note that this only works for some cameras on
     // some computers and only for some drivers, so don't rely on it to work!
@@ -89,7 +89,7 @@ begin
         break; // Quit the program!
     end;
 
-    camera.release;
+    camera.Free;
 
     cvDestroyAllWindows;
   except

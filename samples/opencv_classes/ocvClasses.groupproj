@@ -3,16 +3,16 @@
         <ProjectGuid>{6D5C8898-3ADE-4F7C-B313-B5415AE8794D}</ProjectGuid>
     </PropertyGroup>
     <ItemGroup>
-        <Projects Include="CvKNearest\clsKNN.dproj">
+        <Projects Include="clsKNearest\cls2DPointClassification.dproj">
             <Dependencies/>
         </Projects>
-        <Projects Include="CvKNearest\cls2DPointClassification.dproj">
+        <Projects Include="clsVideoCapture\clsVideoCapture.dproj">
             <Dependencies/>
         </Projects>
-        <Projects Include="TOCVMat\clsMat.dproj">
+        <Projects Include="clsVMat\clsMat.dproj">
             <Dependencies/>
         </Projects>
-        <Projects Include="TOCVVideoCapture\clsVideoCapture.dproj">
+        <Projects Include="clsKNearest\clsKNN.dproj">
             <Dependencies/>
         </Projects>
     </ItemGroup>
@@ -23,50 +23,50 @@
             <Default.Personality/>
         </BorlandProject>
     </ProjectExtensions>
-    <Target Name="clsKNN">
-        <MSBuild Projects="CvKNearest\clsKNN.dproj"/>
-    </Target>
-    <Target Name="clsKNN:Clean">
-        <MSBuild Projects="CvKNearest\clsKNN.dproj" Targets="Clean"/>
-    </Target>
-    <Target Name="clsKNN:Make">
-        <MSBuild Projects="CvKNearest\clsKNN.dproj" Targets="Make"/>
-    </Target>
     <Target Name="cls2DPointClassification">
-        <MSBuild Projects="CvKNearest\cls2DPointClassification.dproj"/>
+        <MSBuild Projects="clsKNearest\cls2DPointClassification.dproj"/>
     </Target>
     <Target Name="cls2DPointClassification:Clean">
-        <MSBuild Projects="CvKNearest\cls2DPointClassification.dproj" Targets="Clean"/>
+        <MSBuild Projects="clsKNearest\cls2DPointClassification.dproj" Targets="Clean"/>
     </Target>
     <Target Name="cls2DPointClassification:Make">
-        <MSBuild Projects="CvKNearest\cls2DPointClassification.dproj" Targets="Make"/>
-    </Target>
-    <Target Name="clsMat">
-        <MSBuild Projects="TOCVMat\clsMat.dproj"/>
-    </Target>
-    <Target Name="clsMat:Clean">
-        <MSBuild Projects="TOCVMat\clsMat.dproj" Targets="Clean"/>
-    </Target>
-    <Target Name="clsMat:Make">
-        <MSBuild Projects="TOCVMat\clsMat.dproj" Targets="Make"/>
+        <MSBuild Projects="clsKNearest\cls2DPointClassification.dproj" Targets="Make"/>
     </Target>
     <Target Name="clsVideoCapture">
-        <MSBuild Projects="TOCVVideoCapture\clsVideoCapture.dproj"/>
+        <MSBuild Projects="clsVideoCapture\clsVideoCapture.dproj"/>
     </Target>
     <Target Name="clsVideoCapture:Clean">
-        <MSBuild Projects="TOCVVideoCapture\clsVideoCapture.dproj" Targets="Clean"/>
+        <MSBuild Projects="clsVideoCapture\clsVideoCapture.dproj" Targets="Clean"/>
     </Target>
     <Target Name="clsVideoCapture:Make">
-        <MSBuild Projects="TOCVVideoCapture\clsVideoCapture.dproj" Targets="Make"/>
+        <MSBuild Projects="clsVideoCapture\clsVideoCapture.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="clsMat">
+        <MSBuild Projects="clsVMat\clsMat.dproj"/>
+    </Target>
+    <Target Name="clsMat:Clean">
+        <MSBuild Projects="clsVMat\clsMat.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="clsMat:Make">
+        <MSBuild Projects="clsVMat\clsMat.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="clsKNN">
+        <MSBuild Projects="clsKNearest\clsKNN.dproj"/>
+    </Target>
+    <Target Name="clsKNN:Clean">
+        <MSBuild Projects="clsKNearest\clsKNN.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="clsKNN:Make">
+        <MSBuild Projects="clsKNearest\clsKNN.dproj" Targets="Make"/>
     </Target>
     <Target Name="Build">
-        <CallTarget Targets="clsKNN;cls2DPointClassification;clsMat;clsVideoCapture"/>
+        <CallTarget Targets="cls2DPointClassification;clsVideoCapture;clsMat;clsKNN"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="clsKNN:Clean;cls2DPointClassification:Clean;clsMat:Clean;clsVideoCapture:Clean"/>
+        <CallTarget Targets="cls2DPointClassification:Clean;clsVideoCapture:Clean;clsMat:Clean;clsKNN:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="clsKNN:Make;cls2DPointClassification:Make;clsMat:Make;clsVideoCapture:Make"/>
+        <CallTarget Targets="cls2DPointClassification:Make;clsVideoCapture:Make;clsMat:Make;clsKNN:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>

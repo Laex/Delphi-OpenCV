@@ -21,9 +21,6 @@
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ocvclasses.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="ocvclassesdll.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -38,18 +35,21 @@
     <ClInclude Include="Resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ocvclasses.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="ocvclassesdll.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="ocvclasses.def">
-      <Filter>Source Files</Filter>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
     <ResourceCompile Include="ocvclasses.rc">
       <Filter>Resource Files</Filter>
     </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ocvclasses.def">
+      <Filter>Source Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

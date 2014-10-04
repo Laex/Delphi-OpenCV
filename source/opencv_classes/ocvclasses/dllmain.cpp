@@ -11,8 +11,7 @@
 
 static AFX_EXTENSION_MODULE ocvclassesDLL = { NULL, NULL };
 
-extern "C" int APIENTRY
-DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
+extern "C" int APIENTRY DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
 {
 	// Remove this if you use lpReserved
 	UNREFERENCED_PARAMETER(lpReserved);

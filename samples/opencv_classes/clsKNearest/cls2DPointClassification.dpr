@@ -3,7 +3,7 @@
 // Copyright (C) 2013 Project Delphi-OpenCV
 // ****************************************************************
 // Contributor:
-  // Laentir Valetov
+// Laentir Valetov
 // email:laex@bk.ru
 // ****************************************************************
 // You may retrieve the latest version of this file at the GitHub,
@@ -82,17 +82,16 @@ begin
     cvSet(@trainClasses2, cvScalar(2));
 
     // learn classifier
-    knn := CreateCvKNearest(trainData, trainClasses, nil, false, K10);
+    knn := TCvKNearest.Create(trainData, trainClasses, nil, false, K10);
     nearests := cvCreateMat(1, K10, CV_32FC1);
 
     for i := 0 to img^.height - 1 do
-    begin
       for j := 0 to img^.width - 1 do
       begin
         pFloat(sample.data)[0] := j;
         pFloat(sample.data)[1] := i;
         // estimate the response and get the neighbors' labels
-        response := knn.find_nearest(@sample, K10, nil, nil, nearests, nil);
+        response := knn.find_nearest(@sample, K10, nil, nil, @nearests, nil);
 
         // compute the number of neighbors representing the majority
         accuracy := 0;
@@ -118,9 +117,8 @@ begin
         end;
         cvSet2D(img, i, j, t);
       end;
-    end;
 
-    ReleaseCvKNearest(knn);
+    knn.Free;
 
     // display the original training samples
     for i := 0 to (train_sample_count div 2) - 1 do

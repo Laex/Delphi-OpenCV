@@ -2255,7 +2255,7 @@ end;
 
 function cv_stricmp(const str1, str2: pCVChar): Integer;
 begin
-  Result := AnsiCompareStr(str1^, str2^);
+  Result := AnsiStrComp(str1, str2);
 end;
 
 procedure strcpy(var str1: pCVChar; const str2: pCVChar);

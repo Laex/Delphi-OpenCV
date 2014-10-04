@@ -3,7 +3,7 @@
         <ProjectGuid>{C63D42FE-D135-473C-A773-6EFDE83EAE78}</ProjectGuid>
         <MainSource>clsVideoCapture.dpr</MainSource>
         <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Release</Config>
+        <Config Condition="'$(Config)'==''">Debug</Config>
         <TargetedPlatforms>17</TargetedPlatforms>
         <AppType>Console</AppType>
         <FrameworkType>None</FrameworkType>

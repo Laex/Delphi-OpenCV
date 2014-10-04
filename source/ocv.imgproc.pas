@@ -4,9 +4,21 @@ interface
 
 uses
   ocv.core,
+  ocv.core.types_c,
   ocv.mat;
 
 const
+
+  BORDER_REPLICATE   = IPL_BORDER_REPLICATE;
+  BORDER_CONSTANT    = IPL_BORDER_CONSTANT;
+  BORDER_REFLECT     = IPL_BORDER_REFLECT;
+  BORDER_WRAP        = IPL_BORDER_WRAP;
+  BORDER_REFLECT_101 = IPL_BORDER_REFLECT_101;
+  BORDER_REFLECT101  = BORDER_REFLECT_101;
+  BORDER_TRANSPARENT = IPL_BORDER_TRANSPARENT;
+  BORDER_DEFAULT     = BORDER_REFLECT_101;
+  BORDER_ISOLATED    = 16;
+
   COLOR_BGR2BGRA = 0;
   COLOR_RGB2RGBA = COLOR_BGR2BGRA;
 
@@ -25,19 +37,19 @@ const
   COLOR_BGRA2RGBA = 5;
   COLOR_RGBA2BGRA = COLOR_BGRA2RGBA;
 
-  COLOR_BGR2GRAY = 6;
-  COLOR_RGB2GRAY = 7;
-  COLOR_GRAY2BGR = 8;
-  COLOR_GRAY2RGB = COLOR_GRAY2BGR;
+  COLOR_BGR2GRAY  = 6;
+  COLOR_RGB2GRAY  = 7;
+  COLOR_GRAY2BGR  = 8;
+  COLOR_GRAY2RGB  = COLOR_GRAY2BGR;
   COLOR_GRAY2BGRA = 9;
   COLOR_GRAY2RGBA = COLOR_GRAY2BGRA;
   COLOR_BGRA2GRAY = 10;
   COLOR_RGBA2GRAY = 11;
 
-  COLOR_BGR2BGR565 = 12;
-  COLOR_RGB2BGR565 = 13;
-  COLOR_BGR5652BGR = 14;
-  COLOR_BGR5652RGB = 15;
+  COLOR_BGR2BGR565  = 12;
+  COLOR_RGB2BGR565  = 13;
+  COLOR_BGR5652BGR  = 14;
+  COLOR_BGR5652RGB  = 15;
   COLOR_BGRA2BGR565 = 16;
   COLOR_RGBA2BGR565 = 17;
   COLOR_BGR5652BGRA = 18;
@@ -46,10 +58,10 @@ const
   COLOR_GRAY2BGR565 = 20;
   COLOR_BGR5652GRAY = 21;
 
-  COLOR_BGR2BGR555 = 22;
-  COLOR_RGB2BGR555 = 23;
-  COLOR_BGR5552BGR = 24;
-  COLOR_BGR5552RGB = 25;
+  COLOR_BGR2BGR555  = 22;
+  COLOR_RGB2BGR555  = 23;
+  COLOR_BGR5552BGR  = 24;
+  COLOR_BGR5552RGB  = 25;
   COLOR_BGRA2BGR555 = 26;
   COLOR_RGBA2BGR555 = 27;
   COLOR_BGR5552BGRA = 28;
@@ -160,8 +172,8 @@ const
   COLOR_YUV2BGR_IYUV = 101;
   COLOR_YUV2RGB_I420 = COLOR_YUV2RGB_IYUV;
   COLOR_YUV2BGR_I420 = COLOR_YUV2BGR_IYUV;
-  COLOR_YUV420p2RGB = COLOR_YUV2RGB_YV12;
-  COLOR_YUV420p2BGR = COLOR_YUV2BGR_YV12;
+  COLOR_YUV420p2RGB  = COLOR_YUV2RGB_YV12;
+  COLOR_YUV420p2BGR  = COLOR_YUV2BGR_YV12;
 
   COLOR_YUV2RGBA_YV12 = 102;
   COLOR_YUV2BGRA_YV12 = 103;
@@ -169,17 +181,17 @@ const
   COLOR_YUV2BGRA_IYUV = 105;
   COLOR_YUV2RGBA_I420 = COLOR_YUV2RGBA_IYUV;
   COLOR_YUV2BGRA_I420 = COLOR_YUV2BGRA_IYUV;
-  COLOR_YUV420p2RGBA = COLOR_YUV2RGBA_YV12;
-  COLOR_YUV420p2BGRA = COLOR_YUV2BGRA_YV12;
+  COLOR_YUV420p2RGBA  = COLOR_YUV2RGBA_YV12;
+  COLOR_YUV420p2BGRA  = COLOR_YUV2BGRA_YV12;
 
-  COLOR_YUV2GRAY_420 = 106;
+  COLOR_YUV2GRAY_420  = 106;
   COLOR_YUV2GRAY_NV21 = COLOR_YUV2GRAY_420;
   COLOR_YUV2GRAY_NV12 = COLOR_YUV2GRAY_420;
   COLOR_YUV2GRAY_YV12 = COLOR_YUV2GRAY_420;
   COLOR_YUV2GRAY_IYUV = COLOR_YUV2GRAY_420;
   COLOR_YUV2GRAY_I420 = COLOR_YUV2GRAY_420;
   COLOR_YUV420sp2GRAY = COLOR_YUV2GRAY_420;
-  COLOR_YUV420p2GRAY = COLOR_YUV2GRAY_420;
+  COLOR_YUV420p2GRAY  = COLOR_YUV2GRAY_420;
 
   // YUV 4:2:2 formats family
   COLOR_YUV2RGB_UYVY = 107;
@@ -240,8 +252,8 @@ const
   COLOR_BGRA2YUV_I420 = 130;
   COLOR_RGBA2YUV_IYUV = COLOR_RGBA2YUV_I420;
   COLOR_BGRA2YUV_IYUV = COLOR_BGRA2YUV_I420;
-  COLOR_RGB2YUV_YV12 = 131;
-  COLOR_BGR2YUV_YV12 = 132;
+  COLOR_RGB2YUV_YV12  = 131;
+  COLOR_BGR2YUV_YV12  = 132;
   COLOR_RGBA2YUV_YV12 = 133;
   COLOR_BGRA2YUV_YV12 = 134;
 
@@ -249,13 +261,56 @@ const
 
   // ! converts image from one color space to another
   // CV_EXPORTS_W void cvtColor( InputArray src, OutputArray dst, int code, int dstCn=0 );
-procedure cvtColor(src: TocvMat; Var dst: TocvMat; code: Integer; dstCn: Integer = 0);
+procedure cvtColor(src: TccvMat; Var dst: TccvMat; code: Integer; dstCn: Integer = 0); stdcall;
+
+Const
+  MORPH_RECT    = 0;
+  MORPH_CROSS   = 1;
+  MORPH_ELLIPSE = 2;
+
+  // ! returns structuring element of the specified shape and size
+  // CV_EXPORTS_W Mat getStructuringElement(int shape, Size ksize, Point anchor=Point(-1,-1));
+function getStructuringElement(shape: Integer; ksize: TccvSize; anchor: TccvPoint { Point(-1,-1) } ): TccvMat;
+  stdcall; overload;
+function getStructuringElement(shape: Integer; ksize: TccvSize): TccvMat; overload;
+
+// ! returns "magic" border value for erosion and dilation. It is automatically transformed to Scalar::all(-DBL_MAX) for dilation.
+// static inline Scalar morphologyDefaultBorderValue() { return Scalar::all(DBL_MAX); }
+function morphologyDefaultBorderValue: TccvScalar; inline;
 
 implementation
 
-procedure cvtColor(src: TocvMat; Var dst: TocvMat; code: Integer; dstCn: Integer = 0);
-begin
+uses ocv.lib;
 
+Var
+  _morphologyDefaultBorderValue: TccvScalar = nil;
+
+  // static inline Scalar morphologyDefaultBorderValue() { return Scalar::all(DBL_MAX); }
+function morphologyDefaultBorderValue: TccvScalar; inline;
+begin
+  if not Assigned(_morphologyDefaultBorderValue) then
+    _morphologyDefaultBorderValue := TccvScalar.Create(0, 0);
+  Result := _morphologyDefaultBorderValue;
 end;
+
+procedure cvtColor; external opencv_classes_lib;
+function getStructuringElement(shape: Integer; ksize: TccvSize; anchor: TccvPoint { Point(-1,-1) } ): TccvMat; stdcall;
+  external opencv_classes_lib;
+
+function getStructuringElement(shape: Integer; ksize: TccvSize): TccvMat;
+Var
+  anchor: TccvPoint;
+begin
+  anchor := TccvPoint.Create(-1, -1);
+  Result := getStructuringElement(shape, ksize, anchor);
+  anchor.Free;
+end;
+
+initialization
+
+finalization
+
+if Assigned(_morphologyDefaultBorderValue) then
+  _morphologyDefaultBorderValue.Free;
 
 end.

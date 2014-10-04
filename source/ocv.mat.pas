@@ -3,7 +3,7 @@
 // Copyright (C) 2013 Project Delphi-OpenCV
 // ****************************************************************
 // Contributor:
-  // Laentir Valetov
+// Laentir Valetov
 // email:laex@bk.ru
 // Mikhail Grigorev
 // email:sleuthound@gmail.com
@@ -33,7 +33,7 @@ uses
   ocv.highgui_c;
 
 Type
-  TocvMat = class
+  TccvMat = class
   public
     // similar to CV_ELEM_SIZE(cvmat->type)
     function elemSize(): size_t; virtual; stdcall; abstract;
@@ -60,20 +60,39 @@ Type
     function cols: Integer; virtual; stdcall; abstract;
     // ! pointer to the data
     function data: pByte; virtual; stdcall; abstract;
-    procedure copyTo(Var m: TocvMat); virtual; stdcall; abstract;
+    procedure copyTo(Var m: TccvMat); virtual; stdcall; abstract;
     // ------------------------------------------------
+    class function Create: TccvMat; overload;
+    class function Create(rows, cols, _type: Integer): TccvMat; overload;
+    procedure Free; reintroduce;
   end;
-
-function CreateMat: TocvMat; stdcall; overload;
-function CreateMat(rows, cols, _type: Integer): TocvMat; stdcall; overload;
-procedure ReleaseMat(ex: TocvMat); stdcall;
 
 implementation
 
 uses ocv.lib;
 
-function CreateMat: TocvMat; stdcall; external opencv_classes_lib name 'CreateMat'; overload;
-function CreateMat(rows, cols, _type: Integer): TocvMat; stdcall; external opencv_classes_lib name 'CreateMatRCT'; overload;
-procedure ReleaseMat; external opencv_classes_lib;
+function CreateMat(rows, cols, _type: Integer): TccvMat; stdcall;
+  external opencv_classes_lib name 'CreateMatRCT'; overload;
+function CreateMat: TccvMat; stdcall; external opencv_classes_lib name 'CreateMat'; overload;
+procedure ReleaseMat(ex: TccvMat); stdcall; external opencv_classes_lib;
+
+{ TocvMat }
+
+{ TocvMat }
+
+class function TccvMat.Create: TccvMat;
+begin
+  Result := CreateMat;
+end;
+
+class function TccvMat.Create(rows, cols, _type: Integer): TccvMat;
+begin
+  Result := CreateMat(rows, cols, _type);
+end;
+
+procedure TccvMat.Free;
+begin
+  ReleaseMat(Self);
+end;
 
 end.

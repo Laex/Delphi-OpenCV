@@ -3,7 +3,7 @@
 // Copyright (C) 2013 Project Delphi-OpenCV
 // ****************************************************************
 // Contributor:
-  // Laentir Valetov
+// Laentir Valetov
 // email:laex@bk.ru
 // ****************************************************************
 // You may retrieve the latest version of this file at the GitHub,
@@ -33,7 +33,7 @@ uses
   ocv.core_c,
   ocv.mat;
 
-procedure Print(const M: TocvMat);
+procedure Print(const M: TccvMat);
 
 Var
   matdata: PByte;
@@ -63,39 +63,39 @@ begin
 end;
 
 Var
-  mat,cmat: TocvMat;
+  mat, cmat: TccvMat;
 
 begin
   try
     Writeln('--------- Create empty MAT');
-    mat := CreateMat;
+    mat := TccvMat.Create;
     Print(mat);
-    ReleaseMat(mat);
+    mat.Free;
     Readln;
     Writeln('--------- Create MAT 2x2 CV_8UC1 - 1 byte, 1 channel');
-    mat := CreateMat(2, 2, CV_8UC1);
+    mat := TccvMat.Create(2, 2, CV_8UC1);
     Print(mat);
-    ReleaseMat(mat);
+    mat.Free;
     Readln;
     Writeln('--------- Create MAT 4x2 CV_32FC2 - single (4-byte floating point), 2 channel');
-    mat := CreateMat(4, 2, CV_32FC2);
+    mat := TccvMat.Create(4, 2, CV_32FC2);
     Print(mat);
-    ReleaseMat(mat);
+    mat.Free;
     Readln;
     Writeln('--------- Create 2x2 MAT');
-    mat := CreateMat(2, 2, CV_8UC1);
+    mat := TccvMat.Create(2, 2, CV_8UC1);
     Print(mat);
-    ReleaseMat(mat);
+    mat.Free;
     Readln;
     Writeln('--------- Create 3x3 MAT');
-    mat := CreateMat(3, 3, CV_8UC1);
+    mat := TccvMat.Create(3, 3, CV_8UC1);
     Print(mat);
     mat.copyTo(cmat);
-    ReleaseMat(mat);
+    mat.Free;
     Readln;
     Writeln('--------- Copy Create 3x3 MAT');
     Print(cmat);
-    ReleaseMat(cmat);
+    cmat.Free;
     Readln;
 
   except
