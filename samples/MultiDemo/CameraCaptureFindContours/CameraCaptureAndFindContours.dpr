@@ -77,6 +77,7 @@ begin
       end;
       cvCvtColor(frame, gframe, CV_BGR2GRAY);
       cvThreshold(gframe, gframe, 128, 255, CV_THRESH_BINARY_INV);
+      cvClearMemStorage(storage);
       cvFindContours(gframe, storage, @contours, SizeOf(TCvContour), CV_RETR_LIST, CV_CHAIN_APPROX_SIMPLE,
         cvPoint(0, 0));
       contours := cvApproxPoly(contours, SizeOf(TCvContour), storage, CV_POLY_APPROX_DP, 5, 1);

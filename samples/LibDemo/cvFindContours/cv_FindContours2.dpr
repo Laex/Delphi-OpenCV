@@ -160,6 +160,7 @@ begin
     cvConvert(img32f, img32s);
 
     // cvFindContours(img32s, storage, @contours, SizeOf(TCvContour), CV_RETR_CCOMP, CV_CHAIN_APPROX_SIMPLE, cvPoint(0, 0));
+    cvClearMemStorage(storage);    
     cvFindContours(img, storage, @contours, SizeOf(TCvContour), CV_RETR_TREE, CV_CHAIN_APPROX_SIMPLE, cvPoint(0, 0));
 
     attrs[0] := 'recursive';

@@ -285,6 +285,7 @@ begin
 
   _contours := nil;
 
+  cvClearMemStorage(_hierarchy);
   contoursCont := cvFindContours(
     dst_th,
     _hierarchy,

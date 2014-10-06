@@ -66,6 +66,7 @@ begin
       // cvAdaptiveThreshold(img_gray, img_gray, 255, CV_ADAPTIVE_THRESH_GAUSSIAN_C, CV_THRESH_BINARY, 21, 7);
       cvShowImage('Threshold image', dst);
       contours := AllocMem(SizeOf(TCvSeq));
+      cvClearMemStorage(storage);
       cvFindContours(dst, storage, @contours, SizeOf(TCvContour), CV_RETR_LIST, CV_CHAIN_APPROX_SIMPLE, cvPoint(0, 0));
       cvDrawContours(image, contours, CV_RGB(100, 200, 0), CV_RGB(200, 100, 0), 2, 2, CV_AA, cvPoint(0, 0));
       cvShowImage('Contour image', image);

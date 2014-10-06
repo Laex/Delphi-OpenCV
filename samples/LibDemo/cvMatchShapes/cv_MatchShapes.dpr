@@ -122,6 +122,7 @@ begin
     storage := cvCreateMemStorage(0);
 
     // Находим контуры
+    cvClearMemStorage(storage);    
     contoursCont := cvFindContours(binI, storage, @contoursI, sizeof(TCvContour), CV_RETR_LIST, CV_CHAIN_APPROX_SIMPLE,
       cvPoint(0, 0));
 
@@ -146,6 +147,7 @@ begin
     cvConvertImage(src, rgb, CV_GRAY2BGR);
 
     // Находим контуры шаблона
+    cvClearMemStorage(storage);
     cvFindContours(binT, storage, @contoursT, sizeof(TCvContour), CV_RETR_LIST, CV_CHAIN_APPROX_SIMPLE, cvPoint(0, 0));
 
     if contoursT <> nil then

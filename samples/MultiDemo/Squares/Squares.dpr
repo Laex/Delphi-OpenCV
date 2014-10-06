@@ -131,6 +131,7 @@ begin
 
       // try
       // find contours and store them all as a list
+      cvClearMemStorage(storage);
       rr := cvFindContours(gray, storage, @contours, sizeof(TCvContour), CV_RETR_LIST, CV_CHAIN_APPROX_SIMPLE,
         CvPoint(0, 0));
 

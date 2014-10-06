@@ -135,6 +135,7 @@ begin
   contoursT := nil;
 
   // находим контуры изображения
+  cvClearMemStorage(storage);
   contoursCont := cvFindContours(
     binI,
     storage,
@@ -197,6 +198,7 @@ begin
     CV_GRAY2BGR);
 
   // находим контуры шаблона
+  cvClearMemStorage(storage);
   cvFindContours(
     binT,
     storage,

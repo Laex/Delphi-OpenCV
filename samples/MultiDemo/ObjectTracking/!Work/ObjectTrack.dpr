@@ -289,6 +289,7 @@ begin
   // SetLength(
   // _hierarchy,
   // 0);
+  cvClearMemStorage(storage);  
   cvFindContours(
     _cimage,
     storage,
@@ -447,6 +448,7 @@ begin
     hierarchy,
     0);
 
+  cvClearMemStorage(_hierarchy);
   contoursCont := cvFindContours(
     dst_th,
     _hierarchy,

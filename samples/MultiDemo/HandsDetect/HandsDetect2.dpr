@@ -69,6 +69,7 @@ begin
   maxn := 0;
 
   // function to find the white objects in the image and return the object boundaries
+  cvClearMemStorage(storage);
   Nc := cvFindContours(img_8uc1, storage, @first_contour, SizeOf(TCvContour), CV_RETR_LIST, CV_CHAIN_APPROX_SIMPLE,
     cvPoint(0, 0));
   // Try all four values and see what happens

@@ -120,6 +120,7 @@ begin
   if (image.NChannels > 1) and (cbDisplayContChecked) then
     cvCvtColor(pcontor, image, CV_GRAY2BGR);
   // warning! findcontours destroy the input image, so display it before the call
+  cvClearMemStorage(storage);  
   nc := cvFindContours(pcontor, storage, @contours, sizeof(TCvContour), CV_RETR_TREE, CV_CHAIN_APPROX_SIMPLE,
     cvPoint(0, 0));
 

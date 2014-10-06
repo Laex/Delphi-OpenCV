@@ -142,6 +142,7 @@ begin
   // cvFindContours modifies input image, so make a copy
   cvCopy(Ctx.thr_image, Ctx.temp_image1, nil);
   // Находим контуры
+  cvClearMemStorage(Stx.temp_st);
   cvFindContours(Ctx.temp_image1, Ctx.temp_st, @contours, sizeof(TCvContour), CV_RETR_EXTERNAL,
     CV_CHAIN_APPROX_NONE { CV_CHAIN_APPROX_SIMPLE } , cvPoint(0, 0));
 

@@ -74,6 +74,7 @@ begin
   white := CV_RGB(255, 255, 255);   // Белый цвет
   s_contours := AllocMem(SizeOf(TCvSeq));
   // Ищем контуры на изображении
+  cvClearMemStorage(s_storage);
   cvFindContours(img_in, s_storage, @s_contours, SizeOf(TCvContour), CV_RETR_LIST, CV_CHAIN_APPROX_SIMPLE, cvPoint(0, 0));
   while (s_contours <> nil) do
   begin
@@ -117,6 +118,7 @@ begin
       difference_img := remove_small_objects(difference_img, 100);
       // End
       contours := AllocMem(SizeOf(TCvSeq));
+      cvClearMemStorage(storage);
       cvFindContours(difference_img, storage, @contours, SizeOf(TCvContour), CV_RETR_LIST, CV_CHAIN_APPROX_NONE, cvPoint(0, 0));
       c := contours;
       while (c <> nil) do

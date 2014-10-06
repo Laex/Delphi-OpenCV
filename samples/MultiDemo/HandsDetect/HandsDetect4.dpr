@@ -169,6 +169,7 @@ begin
 
   // generate all the contours in the threshold image as a list
   contours := AllocMem(SizeOf(TCvSeq));
+  cvClearMemStorage(contourStorage);
   n:=cvFindContours(imgThreshed, contourStorage, @contours, SizeOf(TCvContour), CV_RETR_LIST, CV_CHAIN_APPROX_SIMPLE, cvPoint(0, 0));
 
   // find the largest contour in the list based on bounded box size

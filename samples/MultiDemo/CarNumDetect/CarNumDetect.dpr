@@ -113,6 +113,7 @@ begin
   c := nil;
   contours := AllocMem(SizeOf(TCvContour));
   c := AllocMem(SizeOf(TCvContour));
+  cvClearMemStorage(Ctx.MyStorage);
   cvFindContours(Ctx.MyThresholdImage, Ctx.MyStorage, @contours, SizeOf(TCvContour), CV_RETR_LIST, CV_CHAIN_APPROX_NONE,
     cvPoint(0, 0));
   if contours <> nil then

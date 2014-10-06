@@ -70,6 +70,7 @@ begin
       cvThreshold(img_gray, dst, 128, 255, CV_THRESH_BINARY_INV);
       // cvAdaptiveThreshold(img_gray, img_gray, 255, CV_ADAPTIVE_THRESH_GAUSSIAN_C, CV_THRESH_BINARY, 21, 7);
       contours := nil; // AllocMem(SizeOf(TCvSeq));
+      cvClearMemStorage(storage);      
       cvFindContours(dst, storage, @contours, SizeOf(TCvContour), CV_RETR_EXTERNAL, // Только внешние контуры
         // CV_RETR_CCOMP, //Все контуры с разделением внешние и дырки
         CV_CHAIN_APPROX_SIMPLE, cvPoint(0, 0));
