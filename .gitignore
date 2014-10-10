@@ -1,9 +1,13 @@
+buildtest
 __history
 Debug
 Release
 ipch
 lib
 /resource/result/*.*
+/bin/Win32/*.exe
+/bin/Win64/*.exe
+
 *.ini
 *.bsc
 *.sdf
@@ -12,8 +16,6 @@ lib
 *.~*
 *.dcu
 *.local
-/bin/Win32/*.exe
-/bin/Win64/*.exe
 *.dsk
 *.identcache
 *.tvsconfig

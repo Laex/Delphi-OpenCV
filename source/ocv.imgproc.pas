@@ -276,7 +276,7 @@ function getStructuringElement(shape: Integer; ksize: TccvSize): TccvMat; overlo
 
 // ! returns "magic" border value for erosion and dilation. It is automatically transformed to Scalar::all(-DBL_MAX) for dilation.
 // static inline Scalar morphologyDefaultBorderValue() { return Scalar::all(DBL_MAX); }
-function morphologyDefaultBorderValue: TccvScalar; inline;
+function morphologyDefaultBorderValue: TccvScalar;
 
 implementation
 
@@ -286,7 +286,7 @@ Var
   _morphologyDefaultBorderValue: TccvScalar = nil;
 
   // static inline Scalar morphologyDefaultBorderValue() { return Scalar::all(DBL_MAX); }
-function morphologyDefaultBorderValue: TccvScalar; inline;
+function morphologyDefaultBorderValue: TccvScalar;
 begin
   if not Assigned(_morphologyDefaultBorderValue) then
     _morphologyDefaultBorderValue := TccvScalar.Create(0, 0);
