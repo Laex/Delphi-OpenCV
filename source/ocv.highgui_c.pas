@@ -1,88 +1,54 @@
-// --------------------------------- OpenCV license.txt ---------------------------
-//    IMPORTANT: READ BEFORE DOWNLOADING, COPYING, INSTALLING OR USING.
-  //
-  //    By downloading, copying, installing or using the software you agree to this license.
-  //    If you do not agree to this license, do not download, install,
-  //    copy or use the software.
-  //
-  //
-  //                             License Agreement
-  //                  For Open Source Computer Vision Library
-  //
-  //   Copyright (C) 2000-2008, Intel Corporation, all rights reserved.
-  //   Copyright (C) 2009, Willow Garage Inc., all rights reserved.
-  //   Third party copyrights are property of their respective owners.
-  //
-  //   Redistribution and use in source and binary forms, with or without modification,
-  //   are permitted provided that the following conditions are met:
-  //
-  //     * Redistribution's of source code must retain the above copyright notice,
-  //       this list of conditions and the following disclaimer.
-  //
-  //     * Redistribution's in binary form must reproduce the above copyright notice,
-  //       this list of conditions and the following disclaimer in the documentation
-  //       and/or other materials provided with the distribution.
-  //
-  //     * The name of the copyright holders may not be used to endorse or promote products
-  //       derived from this software without specific prior written permission.
-  //
-  //   This software is provided by the copyright holders and contributors "as is" and
-  //   any express or implied warranties, including, but not limited to, the implied
-  //   warranties of merchantability and fitness for a particular purpose are disclaimed.
-  //   In no event shall the Intel Corporation or contributors be liable for any direct,
-  //   indirect, incidental, special, exemplary, or consequential damages
-  //   (including, but not limited to, procurement of substitute goods or services;
-  //   loss of use, data, or profits; or business interruption) however caused
-  //   and on any theory of liability, whether in contract, strict liability,
-  //   or tort (including negligence or otherwise) arising in any way out of
-    //   the use of this software, even if advised of the possibility of such damage.
+(*
+  **************************************************************************************************
+  Project Delphi-OpenCV
+  **************************************************************************************************
+  Contributor:
+  Laentir Valetov
+  email:laex@bk.ru
+  Mikhail Grigorev
+  email:sleuthound@gmail.com
+  **************************************************************************************************
+  You may retrieve the latest version of this file at the GitHub,
+  located at git://github.com/Laex/Delphi-OpenCV.git
+  **************************************************************************************************
+  License:
+  The contents of this file are subject to the Mozilla Public License Version 1.1 (the "License");
+  you may not use this file except in compliance with the License. You may obtain a copy of the
+  License at http://www.mozilla.org/MPL/
 
-//**************************************************************************************************
-  //                                 Project Delphi-OpenCV
-  //  **************************************************************************************************
-  //  Contributor:
-    // Laentir Valetov
-  //  email:laex@bk.ru
-  //  Mikhail Grigorev
-  //  email:sleuthound@gmail.com
-  //  **************************************************************************************************
-  //  You may retrieve the latest version of this file at the GitHub,
-  //  located at git://github.com/Laex/Delphi-OpenCV.git
-  //  **************************************************************************************************
-  //  License:
-  //  The contents of this file are subject to the Mozilla Public License Version 1.1 (the "License");
-  //  you may not use this file except in compliance with the License. You may obtain a copy of the
-  //  License at http://www.mozilla.org/MPL/
-  //
-  //  Software distributed under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
-  //  ANY KIND, either express or implied. See the License for the specific language governing rights
-  //  and limitations under the License.
-  //
-  //  Alternatively, the contents of this file may be used under the terms of the
-  //  GNU Lesser General Public License (the  "LGPL License"), in which case the
-  //  provisions of the LGPL License are applicable instead of those above.
-  //  If you wish to allow use of your version of this file only under the terms
-  //  of the LGPL License and not to allow others to use your version of this file
-  //  under the MPL, indicate your decision by deleting  the provisions above and
-  //  replace  them with the notice and other provisions required by the LGPL
-  //  License.  If you do not delete the provisions above, a recipient may use
-  //  your version of this file under either the MPL or the LGPL License.
-  //
-  //  For more information about the LGPL: http://www.gnu.org/copyleft/lesser.html
-  //  **************************************************************************************************
-  //  Warning: Using Delphi XE2 syntax!
-  //  **************************************************************************************************
-  //  The Initial Developer of the Original Code:
-  //  OpenCV: open source computer vision library
-  //  Homepage:    http://ocv.org
-  //  Online docs: http://docs.ocv.org
-  //  Q&A forum:   http://answers.ocv.org
-  //  Dev zone:    http://code.ocv.org
-  //  **************************************************************************************************
-  //  Original file:
-  //  opencv\modules\highgui\include\opencv2\highgui\highgui_c.h
-  // *************************************************************************************************
+  Software distributed under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
+  ANY KIND, either express or implied. See the License for the specific language governing rights
+  and limitations under the License.
 
+  Alternatively, the contents of this file may be used under the terms of the
+  GNU Lesser General Public License (the  "LGPL License"), in which case the
+  provisions of the LGPL License are applicable instead of those above.
+  If you wish to allow use of your version of this file only under the terms
+  of the LGPL License and not to allow others to use your version of this file
+  under the MPL, indicate your decision by deleting  the provisions above and
+  replace  them with the notice and other provisions required by the LGPL
+  License.  If you do not delete the provisions above, a recipient may use
+  your version of this file under either the MPL or the LGPL License.
+
+  For more information about the LGPL: http://www.gnu.org/copyleft/lesser.html
+  **************************************************************************************************
+  Warning: Using Delphi XE2 syntax!
+  **************************************************************************************************
+  The Initial Developer of the Original Code:
+  OpenCV: open source computer vision library
+  Homepage:    http://ocv.org
+  Online docs: http://docs.ocv.org
+  Q&A forum:   http://answers.ocv.org
+  Dev zone:    http://code.ocv.org
+  **************************************************************************************************
+  Original file:
+  opencv\modules\highgui\include\opencv2\highgui\highgui_c.h
+  *************************************************************************************************
+*)
+
+//
+{$I OpenCV.inc}
+//
 {$IFDEF DEBUG}
 {$A8,B-,C+,D+,E-,F-,G+,H+,I+,J-,K-,L+,M-,N+,O-,P+,Q+,R+,S-,T-,U-,V+,W+,X+,Y+,Z1}
 {$ELSE}
@@ -107,38 +73,77 @@ uses
 
 (* For font *)
 const
-  CV_FONT_LIGHT = 25; // QFont::Light;
-  CV_FONT_NORMAL = 50; // QFont::Normal;
+  CV_FONT_LIGHT    = 25; // QFont::Light;
+  CV_FONT_NORMAL   = 50; // QFont::Normal;
   CV_FONT_DEMIBOLD = 63; // QFont::DemiBold;
-  CV_FONT_BOLD = 75; // QFont::Bold;
-  CV_FONT_BLACK = 87; // QFont::Black;
-  CV_STYLE_NORMAL = 0; // QFont::StyleNormal;
-  CV_STYLE_ITALIC = 1; // QFont::StyleItalic;
+  CV_FONT_BOLD     = 75; // QFont::Bold;
+  CV_FONT_BLACK    = 87; // QFont::Black;
+  CV_STYLE_NORMAL  = 0; // QFont::StyleNormal;
+  CV_STYLE_ITALIC  = 1; // QFont::StyleItalic;
   CV_STYLE_OBLIQUE = 2; // QFont::StyleOblique;
-  (* --------- *)
 
   // for color cvScalar(blue_component, green_component, red\_component[, alpha_component])
   // and alpha= 0 <-> 0xFF (not transparent <-> transparent)
-  // function cvFontQt(nameFont:PCVChar  ; pointSize : Integer=CV_DEFAULT(-1), CvScalar color CV_DEFAULT(cvScalarAll(0)), Integer weight CV_DEFAULT(CV_FONT_NORMAL),  Integer style CV_DEFAULT(CV_STYLE_NORMAL), Integer spacing CV_DEFAULT(0)):CvFont;
-  //
-  // CVAPI(procedure) cvAddText(var img: CvArr; text: PCVChar; org: CvPoint; var arg2: CvFont);
-  //
-  // CVAPI(procedure) cvDisplayOverlay(v1: 0));
-  // CVAPI(procedure) cvDisplayStatusBar(v1: 0));
-  //
-  // CVAPI(procedure) cvSaveWindowParameters(name: PCVChar);
-  // CVAPI(procedure) cvLoadWindowParameters(name: PCVChar);
-  // CVAPI(Integer) cvStartLoop(Integer (pt2Func(Integer argc, PCVChar argv[]), Integer argc, PCVChar  argv[]);
-  // CVAPI(procedure) cvStopLoop();
-  //
-  // type CV_CDECL *CvButtonCallback = procedure(state: Integer; userdata: Pointer);
-  // const CV_PUSH_BUTTON := 0; CV_CHECKBOX = 1; CV_RADIOBOX = 2
-  //
-  // CVAPI(Integer) cvCreateButton(  PCVChar  button_name CV_DEFAULT(0),CvButtonCallback on_change CV_DEFAULT(0), Pointer  userdata CV_DEFAULT(0) , Integer button_type CV_DEFAULT(CV_PUSH_BUTTON), Integer initial_button_state CV_DEFAULT(0));
+  (*
+    CVAPI(CvFont) cvFontQt(const char* nameFont, int pointSize CV_DEFAULT(-1), CvScalar color CV_DEFAULT(cvScalarAll(0)), int weight CV_DEFAULT(CV_FONT_NORMAL),  int style CV_DEFAULT(CV_STYLE_NORMAL), int spacing CV_DEFAULT(0));
+  *)
+function cvFontQt(const nameFont: pCvChar; pointSize: Integer { = -1 };
+  color: TCvScalar { = CV_DEFAULT(cvScalarAll(0)) }; weight: Integer { = CV_DEFAULT(CV_FONT_NORMAL) };
+  style: Integer { = CV_DEFAULT(CV_STYLE_NORMAL) }; spacing: Integer { = CV_DEFAULT(0) } ): TCvFont; cdecl;
 
-  // ----------------------
-  // * this function is used to set some external parameters in case of X Window */
-  // CVAPI(int) cvInitSystem( int argc, char** argv );
+(*
+  CVAPI(void) cvAddText(const CvArr* img, const char* text, CvPoint org, CvFont *arg2);
+*)
+procedure cvAddText(const img: pCvArr; const text: pCvChar; org: TCvPoint; arg2: pCvFont); cdecl;
+(*
+  CVAPI(void) cvDisplayOverlay(const char* name, const char* text, int delayms CV_DEFAULT(0));
+*)
+procedure cvDisplayOverlay(const name: pCvChar; const text: pCvChar; delayms: Integer = 0); cdecl;
+(*
+  CVAPI(void) cvDisplayStatusBar(const char* name, const char* text, int delayms CV_DEFAULT(0));
+*)
+procedure cvDisplayStatusBar(const name: pCvChar; const text: pCvChar; delayms: Integer = 0); cdecl;
+(*
+  CVAPI(void) cvSaveWindowParameters(const char* name);
+*)
+procedure cvSaveWindowParameters(const name: pCvChar); cdecl;
+(*
+  CVAPI(void) cvLoadWindowParameters(const char* name);
+*)
+procedure cvLoadWindowParameters(const name: pCvChar); cdecl;
+
+Type
+  (* int (*pt2Func)(int argc, char *argv[]) *)
+  TArgvArray = array [0 .. 0] of pCvChar;
+  pArgvArray = ^TArgvArray;
+  Tpt2Func   = function(argc: Integer; argv: pArgvArray): Integer; cdecl;
+  (*
+    CVAPI(int) cvStartLoop(int (*pt2Func)(int argc, char *argv[]), int argc, char* argv[]);
+  *)
+function cvStartLoop(pt2Func: Tpt2Func): Integer; cdecl;
+(*
+  CVAPI(void) cvStopLoop( void );
+*)
+procedure cvStopLoop; cdecl;
+
+Type
+  (* typedef  void (CV_CDECL *CvButtonCallback)(int state, void* userdata); *)
+  TCvButtonCallback = procedure(state: Integer; userdata: Pointer); cdecl;
+
+const
+  (* enum  {CV_PUSH_BUTTON = 0, CV_CHECKBOX = 1, CV_RADIOBOX = 2}; *)
+  CV_PUSH_BUTTON = 0;
+  CV_CHECKBOX    = 1;
+  CV_RADIOBOX    = 2;
+  (*
+    CVAPI(int) cvCreateButton( const char* button_name CV_DEFAULT(NULL),CvButtonCallback on_change CV_DEFAULT(NULL), void* userdata CV_DEFAULT(NULL) , int button_type CV_DEFAULT(CV_PUSH_BUTTON), int initial_button_state CV_DEFAULT(0));
+  *)
+function cvCreateButton(const button_name: pCvChar = nil; on_change: TCvButtonCallback = nil; userdata: Pointer = nil;
+  button_type: Integer = CV_PUSH_BUTTON; initial_button_state: Integer = 0): Integer; cdecl;
+
+// ----------------------
+// * this function is used to set some external parameters in case of X Window */
+// CVAPI(int) cvInitSystem( int argc, char** argv );
 function cvInitSystem(argc: Integer; argv: ppCVChar): Integer; cdecl;
 
 // CVAPI(int) cvStartWindowThread( void );
@@ -147,10 +152,10 @@ function cvStartWindowThread: Integer; cdecl;
 // ---------  YV ---------
 // These 3 flags are used by cvSet/GetWindowProperty;
 const
-  CV_WND_PROP_FULLSCREEN = 0; // to change/get window's fullscreen property
-  CV_WND_PROP_AUTOSIZE = 1; // to change/get window's autosize property
+  CV_WND_PROP_FULLSCREEN  = 0; // to change/get window's fullscreen property
+  CV_WND_PROP_AUTOSIZE    = 1; // to change/get window's autosize property
   CV_WND_PROP_ASPECTRATIO = 2; // to change/get window's aspectratio property
-  CV_WND_PROP_OPENGL = 3; // to change/get window's opengl support
+  CV_WND_PROP_OPENGL      = 3; // to change/get window's opengl support
   // These 2 flags are used by cvNamedWindow and cvSet/GetWindowProperty;
   CV_WINDOW_NORMAL = $00000000;
   // the user can resize the window (no raint)  / also use to switch a fullscreen window to a normal size
@@ -159,45 +164,53 @@ const
   CV_WINDOW_OPENGL = $00001000; // window with opengl support
   // Those flags are only for Qt;
   CV_GUI_EXPANDED = $00000000; // status bar and tool bar
-  CV_GUI_NORMAL = $00000010; // old fashious way
+  CV_GUI_NORMAL   = $00000010; // old fashious way
   // These 3 flags are used by cvNamedWindow and cvSet/GetWindowProperty;
   CV_WINDOW_FULLSCREEN = 1; // change the window to fullscreen
-  CV_WINDOW_FREERATIO = $00000100; // the image expends as much as it can (no ratio raint)
-  CV_WINDOW_KEEPRATIO = $00000000; // the ration image is respected.;
+  CV_WINDOW_FREERATIO  = $00000100; // the image expends as much as it can (no ratio raint)
+  CV_WINDOW_KEEPRATIO  = $00000000; // the ration image is respected.;
 
   (* create window *)
-function cvNamedWindow(const name: pCVChar; flags: Integer = CV_WINDOW_AUTOSIZE): Integer; cdecl;
+function cvNamedWindow(const name: pCvChar; flags: Integer = CV_WINDOW_AUTOSIZE): Integer; cdecl;
 
 // Set and Get Property of the window
-procedure cvSetWindowProperty(name: pCVChar; prop_id: Integer; prop_value: Double); cdecl;
-function cvGetWindowProperty(name: pCVChar; prop_id: Integer): Double; cdecl;
+procedure cvSetWindowProperty(name: pCvChar; prop_id: Integer; prop_value: Double); cdecl;
+function cvGetWindowProperty(name: pCvChar; prop_id: Integer): Double; cdecl;
 
 {
   //display image within window (highgui windows remember their content)
   CVAPI(void) cvShowImage( const char* name, const CvArr* image );
 }
-procedure cvShowImage(const name: pCVChar; const image: pCvArr); cdecl;
+procedure cvShowImage(const name: pCvChar; const image: pCvArr); cdecl;
 // procedure cvShowImage(const name: pCVChar; const image: pIplImage); cdecl; overload;
 // procedure cvShowImage(const name: pCVChar; const image: pCvMat); cdecl; overload;
 
 (* resize/move window *)
-procedure cvResizeWindow(name: pCVChar; width: Integer; height: Integer); cdecl;
+procedure cvResizeWindow(name: pCvChar; width: Integer; height: Integer); cdecl;
 // CVAPI(void) cvMoveWindow( const char* name, int x, int y );
-procedure cvMoveWindow(const name: pCVChar; x: Integer; y: Integer); cdecl;
+procedure cvMoveWindow(const name: pCvChar; x: Integer; y: Integer); cdecl;
 
 (* destroy window and all the trackers associated with it *)
-procedure cvDestroyWindow(const name: pCVChar); cdecl;
+procedure cvDestroyWindow(const name: pCvChar); cdecl;
 procedure cvDestroyAllWindows; cdecl;
-(* get native window handle (HWND in case of Win32 and Widget in case of X Window) *)
-// CVAPI(procedure)cvGetWindowHandle(name: PCVChar);
-(* get name of highgui window given its native handle *)
-// CVAPI(char)cvGetWindowName(Pointer window_handle);
+(*
+  get native window handle (HWND in case of Win32 and Widget in case of X Window)
+
+  CVAPI(void* ) cvGetWindowHandle( const char* name );
+*)
+function cvGetWindowHandle(const name: pCvChar): Pointer; cdecl;
+(*
+  get name of highgui window given its native handle
+
+  CVAPI(const char* ) cvGetWindowName( void* window_handle );
+*)
+function cvGetWindowName(window_handle: Pointer): pCvChar; cdecl;
 
 type
   TCvTrackbarCallback = procedure(pos: Integer); cdecl;
 
   (* create trackbar and display it on top of given window, set callback *)
-function cvCreateTrackbar(const trackbar_name: pCVChar; const window_name: pCVChar; value: PInteger; count: Integer;
+function cvCreateTrackbar(const trackbar_name: pCvChar; const window_name: pCvChar; value: PInteger; count: Integer;
   on_change: TCvTrackbarCallback): Integer; cdecl;
 
 type
@@ -206,32 +219,32 @@ type
   // CVAPI(int) cvCreateTrackbar2( const char* trackbar_name, const char* window_name,
   // int* value, int count, CvTrackbarCallback2 on_change,
   // void* userdata CV_DEFAULT(0));
-function cvCreateTrackbar2(const trackbar_name: pCVChar; const window_name: pCVChar; value: PInteger; count: Integer;
+function cvCreateTrackbar2(const trackbar_name: pCvChar; const window_name: pCvChar; value: PInteger; count: Integer;
   on_change: CvTrackbarCallback2; userdata: Pointer = nil): Integer; cdecl;
 
-//* retrieve or set trackbar position */
-//CVAPI(int) cvGetTrackbarPos( const char* trackbar_name, const char* window_name );
-function cvGetTrackbarPos( const trackbar_name:pCvChar; const window_name:pCvChar):Integer; cdecl;
-//CVAPI(void) cvSetTrackbarPos( const char* trackbar_name, const char* window_name, int pos );
-procedure cvSetTrackbarPos( const trackbar_name:pCVChar; const window_name:pCVChar; pos:Integer); cdecl;
+// * retrieve or set trackbar position */
+// CVAPI(int) cvGetTrackbarPos( const char* trackbar_name, const char* window_name );
+function cvGetTrackbarPos(const trackbar_name: pCvChar; const window_name: pCvChar): Integer; cdecl;
+// CVAPI(void) cvSetTrackbarPos( const char* trackbar_name, const char* window_name, int pos );
+procedure cvSetTrackbarPos(const trackbar_name: pCvChar; const window_name: pCvChar; pos: Integer); cdecl;
 
 const
-  CV_EVENT_MOUSEMOVE = 0;
-  CV_EVENT_LBUTTONDOWN = 1;
-  CV_EVENT_RBUTTONDOWN = 2;
-  CV_EVENT_MBUTTONDOWN = 3;
-  CV_EVENT_LBUTTONUP = 4;
-  CV_EVENT_RBUTTONUP = 5;
-  CV_EVENT_MBUTTONUP = 6;
+  CV_EVENT_MOUSEMOVE     = 0;
+  CV_EVENT_LBUTTONDOWN   = 1;
+  CV_EVENT_RBUTTONDOWN   = 2;
+  CV_EVENT_MBUTTONDOWN   = 3;
+  CV_EVENT_LBUTTONUP     = 4;
+  CV_EVENT_RBUTTONUP     = 5;
+  CV_EVENT_MBUTTONUP     = 6;
   CV_EVENT_LBUTTONDBLCLK = 7;
   CV_EVENT_RBUTTONDBLCLK = 8;
   CV_EVENT_MBUTTONDBLCLK = 9;
-  CV_EVENT_FLAG_LBUTTON = 1;
-  CV_EVENT_FLAG_RBUTTON = 2;
-  CV_EVENT_FLAG_MBUTTON = 4;
-  CV_EVENT_FLAG_CTRLKEY = 8;
+  CV_EVENT_FLAG_LBUTTON  = 1;
+  CV_EVENT_FLAG_RBUTTON  = 2;
+  CV_EVENT_FLAG_MBUTTON  = 4;
+  CV_EVENT_FLAG_CTRLKEY  = 8;
   CV_EVENT_FLAG_SHIFTKEY = 16;
-  CV_EVENT_FLAG_ALTKEY = 32;
+  CV_EVENT_FLAG_ALTKEY   = 32;
 
 type
   CvMouseCallback = procedure(event: Integer; x: Integer; y: Integer; flags: Integer; param: Pointer); cdecl;
@@ -247,7 +260,7 @@ Type
   // typedef void (CV_CDECL *CvMouseCallback )(int event, int x, int y, int flags, void* param);
   TCvMouseCallback = procedure(event: Integer; x, y, flags: Integer; param: Pointer); cdecl;
 
-procedure cvSetMouseCallback(const window_name: pCVChar; on_mouse: TCvMouseCallback; param: Pointer = nil); cdecl;
+procedure cvSetMouseCallback(const window_name: pCvChar; on_mouse: TCvMouseCallback; param: Pointer = nil); cdecl;
 
 const
   CV_LOAD_IMAGE_UNCHANGED = -1;
@@ -265,22 +278,23 @@ const
     using CV_LOAD_IMAGE_ANYCOLOR alone is equivalent to CV_LOAD_IMAGE_UNCHANGED
     unless CV_LOAD_IMAGE_ANYDEPTH is specified images are converted to 8bit *)
   // CVAPI(IplImage*) cvLoadImage(const char* filename,int iscolor CV_DEFAULT(CV_LOAD_IMAGE_COLOR));
-function cvLoadImage(const filename: pCVChar; iscolor: Integer = CV_LOAD_IMAGE_UNCHANGED): pIplImage; cdecl;
+function cvLoadImage(const filename: pCvChar; iscolor: Integer = CV_LOAD_IMAGE_UNCHANGED): pIplImage; cdecl;
 
-// const (;
-// iscolor CV_DEFAULT(CV_LOAD_IMAGE_COLOR): Integer); CVAPI(CvMat)cvLoadImageM(PCVChar filename,
-// Integer iscolor CV_DEFAULT(CV_LOAD_IMAGE_COLOR));
+(*
+  CVAPI(CvMat* ) cvLoadImageM( const char* filename, int iscolor CV_DEFAULT(CV_LOAD_IMAGE_COLOR));
+*)
+function cvLoadImageM(const filename: pCvChar; iscolor: Integer = CV_LOAD_IMAGE_COLOR): pCvMat; cdecl;
 
 const
-  CV_IMWRITE_JPEG_QUALITY = 1;
-  CV_IMWRITE_PNG_COMPRESSION = 16;
-  CV_IMWRITE_PNG_STRATEGY = 17;
-  CV_IMWRITE_PNG_STRATEGY_DEFAULT = 0;
-  CV_IMWRITE_PNG_STRATEGY_FILTERED = 1;
+  CV_IMWRITE_JPEG_QUALITY              = 1;
+  CV_IMWRITE_PNG_COMPRESSION           = 16;
+  CV_IMWRITE_PNG_STRATEGY              = 17;
+  CV_IMWRITE_PNG_STRATEGY_DEFAULT      = 0;
+  CV_IMWRITE_PNG_STRATEGY_FILTERED     = 1;
   CV_IMWRITE_PNG_STRATEGY_HUFFMAN_ONLY = 2;
-  CV_IMWRITE_PNG_STRATEGY_RLE = 3;
-  CV_IMWRITE_PNG_STRATEGY_FIXED = 4;
-  CV_IMWRITE_PXM_BINARY = 32;
+  CV_IMWRITE_PNG_STRATEGY_RLE          = 3;
+  CV_IMWRITE_PNG_STRATEGY_FIXED        = 4;
+  CV_IMWRITE_PXM_BINARY                = 32;
 
   (* save image to file *)
   // CVAPI(Integer)cvSaveImage(PCVChar filename, CvArr * image,
@@ -290,25 +304,47 @@ const
   }
 
   // function cvSaveImage(const filename: pCVChar; const image: pIplImage; const params: PInteger = nil): Integer; cdecl;
-function cvSaveImage(const filename: pCVChar; const image: Pointer; const params: PInteger = nil): Integer; cdecl;
+function cvSaveImage(const filename: pCvChar; const image: Pointer; const params: PInteger = nil): Integer; cdecl;
 
-(* decode image stored in the buffer *)
-// CVAPI(IplImage)cvDecodeImage(CvMat * buf, Integer iscolor CV_DEFAULT(CV_LOAD_IMAGE_COLOR));
-// CVAPI(CvMat)cvDecodeImageM(CvMat * buf, Integer iscolor CV_DEFAULT(CV_LOAD_IMAGE_COLOR));
+(*
+  decode image stored in the buffer
 
-(* encode image and store the result as a byte vector (single-row 8uC1 matrix) *)
-// CVAPI(CvMat)cvEncodeImage(PCVChar ext, CvArr * image,
-// function params CV_DEFAULT(v1: 0)): Integer;
+  CVAPI(IplImage* ) cvDecodeImage( const CvMat* buf, int iscolor CV_DEFAULT(CV_LOAD_IMAGE_COLOR));
+*)
+function cvDecodeImage(const buf: pCvMat; iscolor: Integer = CV_LOAD_IMAGE_COLOR): pIplImage; cdecl;
+(*
+  CVAPI(CvMat* ) cvDecodeImageM( const CvMat* buf, int iscolor CV_DEFAULT(CV_LOAD_IMAGE_COLOR));
+*)
+function cvDecodeImageM(const buf: pCvMat; iscolor: Integer = CV_LOAD_IMAGE_COLOR): pCvMat; cdecl;
+(*
+  encode image and store the result as a byte vector (single-row 8uC1 matrix)
+
+  CVAPI(CvMat* cvEncodeImage( const char* ext, const CvArr* image,
+  const int* params CV_DEFAULT(0) );
+*)
+function cvEncodeImage(const ext: pCvChar; const image: pCvArr; const params: PInteger = nil): pCvMat; cdecl;
 
 const
-  CV_CVTIMG_FLIP = 1;
+  (* enum
+    {
+    CV_CVTIMG_FLIP      =1,
+    CV_CVTIMG_SWAP_RB   =2
+    }; *)
+  CV_CVTIMG_FLIP    = 1;
   CV_CVTIMG_SWAP_RB = 2;
-
-  {
-    /* utility function: convert one image to another with optional vertical flip */
+  (*
+    utility function: convert one image to another with optional vertical flip
+  *)
+  (*
     CVAPI(void) cvConvertImage( const CvArr* src, CvArr* dst, int flags CV_DEFAULT(0));
-  }
-procedure cvConvertImage(const src: pIplImage; dst: pIplImage; flags: Integer = 0); cdecl;
+  *)
+procedure cvConvertImage(const src: pCvArr; dst: pCvArr; flags: Integer = 0); cdecl; overload;
+
+{
+  /* utility function: convert one image to another with optional vertical flip */
+  CVAPI(void) cvConvertImage( const CvArr* src, CvArr* dst, int flags CV_DEFAULT(0));
+}
+procedure cvConvertImage(const src: pIplImage; dst: pIplImage; flags: Integer = 0); cdecl; overload;
 
 (* wait for key event infinitely (delay<=0) or for "delay" milliseconds *)
 function cvWaitKey(delay: Integer = 0): Integer; cdecl;
@@ -335,39 +371,41 @@ type
 
   (* start capturing frames from video file *)
   // CVAPI(CvCapture*) cvCreateFileCapture( const char* filename );
-function cvCreateFileCapture(const filename: pCVChar): pCvCapture; cdecl;
+function cvCreateFileCapture(const filename: pCvChar): pCvCapture; cdecl;
 
 const
-  CV_CAP_ANY = 0; // autodetect
-  CV_CAP_CAM_0 = CV_CAP_ANY;
-  CV_CAP_CAM_1 = 1;
-  CV_CAP_CAM_2 = 2;
-  CV_CAP_CAM_3 = 3;
-  CV_CAP_CAM_4 = 4;
-  CV_CAP_CAM_5 = 5;
-  CV_CAP_MIL = 100; // MIL proprietary drivers
-  CV_CAP_VFW = 200; // platform native
-  CV_CAP_V4L = 200;
-  CV_CAP_V4L2 = 200;
+  CV_CAP_ANY      = 0; // autodetect
+  CV_CAP_CAM_0    = CV_CAP_ANY;
+  CV_CAP_CAM_1    = 1;
+  CV_CAP_CAM_2    = 2;
+  CV_CAP_CAM_3    = 3;
+  CV_CAP_CAM_4    = 4;
+  CV_CAP_CAM_5    = 5;
+  CV_CAP_MIL      = 100; // MIL proprietary drivers
+  CV_CAP_VFW      = 200; // platform native
+  CV_CAP_V4L      = 200;
+  CV_CAP_V4L2     = 200;
   CV_CAP_FIREWARE = 300; // IEEE 1394 drivers
   CV_CAP_FIREWIRE = 300;
   CV_CAP_IEEE1394 = 300;
-  CV_CAP_DC1394 = 300;
-  CV_CAP_CMU1394 = 300;
-  CV_CAP_STEREO = 400; // TYZX proprietary drivers
-  CV_CAP_TYZX = 400;
-  CV_TYZX_LEFT = 400;
+  CV_CAP_DC1394   = 300;
+  CV_CAP_CMU1394  = 300;
+  CV_CAP_STEREO   = 400;
+  // TYZX proprietary drivers
+  CV_CAP_TYZX   = 400;
+  CV_TYZX_LEFT  = 400;
   CV_TYZX_RIGHT = 401;
   CV_TYZX_COLOR = 402;
-  CV_TYZX_Z = 403;
-  CV_CAP_QT = 500; // QuickTime
-  CV_CAP_UNICAP = 600; // Unicap drivers
-  CV_CAP_DSHOW = 700; // DirectShow (via videoInput)
-  CV_CAP_PVAPI = 800; // PvAPI; Prosilica GigE SDK
-  CV_CAP_OPENNI = 900; // OpenNI (for Kinect)
-  CV_CAP_OPENNI_ASUS = 910; // OpenNI (for Asus Xtion)
-  CV_CAP_ANDROID = 1000; // Android
-  CV_CAP_XIAPI = 1100; // XIMEA Camera API
+  CV_TYZX_Z     = 403;
+  CV_CAP_QT     = 500;
+  // QuickTime
+  CV_CAP_UNICAP       = 600; // Unicap drivers
+  CV_CAP_DSHOW        = 700; // DirectShow (via videoInput)
+  CV_CAP_PVAPI        = 800; // PvAPI; Prosilica GigE SDK
+  CV_CAP_OPENNI       = 900; // OpenNI (for Kinect)
+  CV_CAP_OPENNI_ASUS  = 910; // OpenNI (for Asus Xtion)
+  CV_CAP_ANDROID      = 1000; // Android
+  CV_CAP_XIAPI        = 1100; // XIMEA Camera API
   CV_CAP_AVFOUNDATION = 1200;
   // AVFoundation framework for iOS (OS X Lion will have the same API);
 
@@ -375,15 +413,23 @@ const
   // CVAPI(CvCapture)cvCreateCameraCapture(Integer index);
 function cvCreateCameraCapture(index: Longint): pCvCapture; cdecl;
 
-(* grab a frame, return 1 on success, 0 on fail.
-  this cFunction is thought to be fast *)
-// CVAPI(Integer)cvGrabFrame(CvCapture * capture);
+(*
+  grab a frame, return 1 on success, 0 on fail.
+  this function is thought to be fast
 
-(* get the frame grabbed with cvGrabFrame(..)
-  This cFunction may apply some frame processing like
+  CVAPI(int) cvGrabFrame( CvCapture* capture );
+*)
+function cvGrabFrame(capture: pCvCapture): Integer; cdecl;
+
+(*
+  get the frame grabbed with cvGrabFrame(..)
+  This function may apply some frame processing like
   frame decompression, flipping etc.
-  not  not  not DO NOT RELEASE or MODIFY the retrieved frame not  not  not *)
-// CVAPI(IplImage)cvRetrieveFrame(CvCapture * capture, Integer streamIdx CV_DEFAULT(0));
+  !!!DO NOT RELEASE or MODIFY the retrieved frame!!!
+
+  CVAPI(IplImage* ) cvRetrieveFrame( CvCapture* capture, int streamIdx CV_DEFAULT(0) );
+*)
+function cvRetrieveFrame(capture: pCvCapture; streamIdx: Integer = 0): pIplImage; cdecl;
 
 (* Just a combination of cvGrabFrame and cvRetrieveFrame
   not  not  not DO NOT RELEASE or MODIFY the retrieved frame not  not  not *)
@@ -732,15 +778,15 @@ function cvGetCaptureProperty(capture: pCvCapture; property_id: Integer): Double
 function cvSetCaptureProperty(capture: pCvCapture; property_id: Integer; value: Double): Integer; cdecl;
 
 // Return the type of the capturer (eg, CV_CAP_V4W, CV_CAP_UNICAP), which is unknown if created with CV_CAP_ANY
-// CVAPI(Integer)cvGetCaptureDomain(CvCapture * capture);
+(*
+  CVAPI(int)    cvGetCaptureDomain( CvCapture* capture);
+*)
+function cvGetCaptureDomain(capture: pCvCapture): Integer; cdecl;
 
-(* "black box" video file writer structure *)
-// type
-// type
-// CvVideoWriter = deoWriter;
 type
-  TCvVideoWriter = Integer;
-  pCvVideoWriter = ^TCvVideoWriter;
+  (* "black box" video file writer structure *)
+  TCvVideoWriter  = Integer;
+  pCvVideoWriter  = ^TCvVideoWriter;
   ppCvVideoWriter = ^pCvVideoWriter;
   //
   // CV_INLINE
@@ -765,12 +811,10 @@ const
     double fps, CvSize frame_size,
     int is_color CV_DEFAULT(1));
   }
-function cvCreateVideoWriter(const filename: pCVChar; fourcc: Integer; fps: Double; frame_size: TCvSize;
+function cvCreateVideoWriter(const filename: pCvChar; fourcc: Integer; fps: Double; frame_size: TCvSize;
   is_color: Integer = 1): pCvVideoWriter; cdecl;
 
-function CV_FOURCC(const c1, c2, c3, c4: CVChar): Integer; {$IFDEF USE_INLINE}inline;{$ENDIF}
-
-
+function CV_FOURCC(const c1, c2, c3, c4: CVChar): Integer; {$IFDEF USE_INLINE}inline; {$ENDIF}
 // CVAPI(CvVideoWriter*) cvCreateImageSequenceWriter( const char* filename,
 // int is_color CV_DEFAULT(1));
 
@@ -852,8 +896,6 @@ uses ocv.lib;
 
 function cvNamedWindow; external highgui_lib;
 procedure cvShowImage; external highgui_lib;
-// procedure cvShowImage(const name: pCVChar; const image: pIplImage); external highgui_Dll name 'cvShowImage';
-// procedure cvShowImage(const name: pCVChar; const image: pCvMat); external highgui_Dll name 'cvShowImage';
 function cvWaitKey; external highgui_lib;
 procedure cvDestroyWindow; external highgui_lib;
 procedure cvDestroyAllWindows; external highgui_lib;
@@ -870,10 +912,12 @@ function cvCreateVideoWriter; external highgui_lib;
 function cvWriteFrame; external highgui_lib;
 procedure cvReleaseVideoWriter; external highgui_lib;
 procedure cvSetMouseCallback; external highgui_lib;
-procedure cvConvertImage; external highgui_lib;
+procedure cvConvertImage(const src: pCvArr; dst: pCvArr; flags: Integer = 0); cdecl; overload; external highgui_lib;
+procedure cvConvertImage(const src: pIplImage; dst: pIplImage; flags: Integer = 0); cdecl; overload;
+  external highgui_lib;
 procedure cvMoveWindow; external highgui_lib;
 
-function CV_FOURCC(const c1, c2, c3, c4: CVChar): Integer; {$IFDEF USE_INLINE}inline;{$ENDIF}
+function CV_FOURCC(const c1, c2, c3, c4: CVChar): Integer; {$IFDEF USE_INLINE}inline; {$ENDIF}
 begin
   Result := Integer(c1) + (Integer(c2) shl 8) + (Integer(c3) shl 16) + (Integer(c4) shl 24);
 end;
@@ -887,5 +931,29 @@ function cvCreateTrackbar2; external highgui_lib;
 
 function cvGetTrackbarPos; external highgui_lib;
 procedure cvSetTrackbarPos; external highgui_lib;
+
+function cvFontQt; external highgui_lib;
+procedure cvAddText; external highgui_lib;
+procedure cvDisplayOverlay; external highgui_lib;
+procedure cvDisplayStatusBar; external highgui_lib;
+procedure cvSaveWindowParameters; external highgui_lib;
+procedure cvLoadWindowParameters; external highgui_lib;
+function cvStartLoop; external highgui_lib;
+procedure cvStopLoop; external highgui_lib;
+function cvCreateButton; external highgui_lib;
+function cvGetWindowHandle; external highgui_lib;
+function cvGetWindowName; external highgui_lib;
+function cvLoadImageM; external highgui_lib;
+function cvDecodeImage; external highgui_lib;
+function cvDecodeImageM; external highgui_lib;
+function cvEncodeImage; external highgui_lib;
+procedure cvSetOpenGlDrawCallback; external highgui_lib;
+procedure cvSetOpenGlContext; external highgui_lib;
+procedure cvUpdateWindow; external highgui_lib;
+function cvGrabFrame; external highgui_lib;
+function cvRetrieveFrame; external highgui_lib;
+function cvGetCaptureDomain; external highgui_lib;
+procedure cvSetPreprocessFuncWin32_; external highgui_lib;
+procedure cvSetPostprocessFuncWin32_; external highgui_lib;
 
 end.

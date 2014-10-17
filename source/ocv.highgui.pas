@@ -172,8 +172,10 @@ uses
   ocv.core_c;
 
 function CreateVideoCapture: TccvVideoCapture; stdcall; external opencv_classes_lib name 'CreateVideoCapture'; overload;
-function CreateVideoCapture(device: Integer): TccvVideoCapture; stdcall; external opencv_classes_lib name 'CreateVideoCaptureDevice'; overload;
-function CreateVideoCapture(filename: pAnsiChar): TccvVideoCapture; stdcall;  external opencv_classes_lib name 'CreateVideoCaptureFileName'; overload;
+function CreateVideoCapture(device: Integer): TccvVideoCapture; stdcall;
+  external opencv_classes_lib name 'CreateVideoCaptureDevice'; overload;
+function CreateVideoCapture(filename: pAnsiChar): TccvVideoCapture; stdcall;
+  external opencv_classes_lib name 'CreateVideoCaptureFileName'; overload;
 procedure ReleaseVideoCapture(ex: TccvVideoCapture); stdcall; external opencv_classes_lib;
 
 function _imread(const filename: pCvChar; flag: Integer): TccvMat; external opencv_classes_lib name '_imread';

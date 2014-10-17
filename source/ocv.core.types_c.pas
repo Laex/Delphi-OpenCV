@@ -1,89 +1,54 @@
-// --------------------------------- OpenCV license.txt ---------------------------
-// IMPORTANT: READ BEFORE DOWNLOADING, COPYING, INSTALLING OR USING.
-//
-// By downloading, copying, installing or using the software you agree to this license.
-// If you do not agree to this license, do not download, install,
-// copy or use the software.
-//
-//
-// License Agreement
-// For Open Source Computer Vision Library
-//
-// Copyright (C) 2000-2008, Intel Corporation, all rights reserved.
-// Copyright (C) 2009, Willow Garage Inc., all rights reserved.
-// Third party copyrights are property of their respective owners.
-//
-// Redistribution and use in source and binary forms, with or without modification,
-// are permitted provided that the following conditions are met:
-//
-// * Redistribution's of source code must retain the above copyright notice,
-// this list of conditions and the following disclaimer.
-//
-// * Redistribution's in binary form must reproduce the above copyright notice,
-// this list of conditions and the following disclaimer in the documentation
-// and/or other materials provided with the distribution.
-//
-// * The name of the copyright holders may not be used to endorse or promote products
-// derived from this software without specific prior written permission.
-//
-// This software is provided by the copyright holders and contributors "as is" and
-// any express or implied warranties, including, but not limited to, the implied
-// warranties of merchantability and fitness for a particular purpose are disclaimed.
-// In no event shall the Intel Corporation or contributors be liable for any direct,
-// indirect, incidental, special, exemplary, or consequential damages
-// (including, but not limited to, procurement of substitute goods or services;
-// loss of use, data, or profits; or business interruption) however caused
-// and on any theory of liability, whether in contract, strict liability,
-// or tort (including negligence or otherwise) arising in any way out of
-// the use of this software, even if advised of the possibility of such damage.
+(*
+  **************************************************************************************************
+  Project Delphi-OpenCV
+  **************************************************************************************************
+  Contributor:
+  Laentir Valetov
+  email:laex@bk.ru
+  Mikhail Grigorev
+  email:sleuthound@gmail.com
+  **************************************************************************************************
+  You may retrieve the latest version of this file at the GitHub,
+  located at git://github.com/Laex/Delphi-OpenCV.git
+  **************************************************************************************************
+  License:
+  The contents of this file are subject to the Mozilla Public License Version 1.1 (the "License");
+  you may not use this file except in compliance with the License. You may obtain a copy of the
+  License at http://www.mozilla.org/MPL/
 
-// **************************************************************************************************
-// Project Delphi-OpenCV
-// **************************************************************************************************
-// Contributor:
-// Laentir Valetov
-// email:laex@bk.ru
-// Mikhail Grigorev
-// email:sleuthound@gmail.com
-// **************************************************************************************************
-// You may retrieve the latest version of this file at the GitHub,
-// located at git://github.com/Laex/Delphi-OpenCV.git
-// **************************************************************************************************
-// License:
-// The contents of this file are subject to the Mozilla Public License Version 1.1 (the "License");
-// you may not use this file except in compliance with the License. You may obtain a copy of the
-// License at http://www.mozilla.org/MPL/
-//
-// Software distributed under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
-// ANY KIND, either express or implied. See the License for the specific language governing rights
-// and limitations under the License.
-//
-// Alternatively, the contents of this file may be used under the terms of the
-// GNU Lesser General Public License (the  "LGPL License"), in which case the
-// provisions of the LGPL License are applicable instead of those above.
-// If you wish to allow use of your version of this file only under the terms
-// of the LGPL License and not to allow others to use your version of this file
-// under the MPL, indicate your decision by deleting  the provisions above and
-// replace  them with the notice and other provisions required by the LGPL
-// License.  If you do not delete the provisions above, a recipient may use
-// your version of this file under either the MPL or the LGPL License.
-//
-// For more information about the LGPL: http://www.gnu.org/copyleft/lesser.html
-// **************************************************************************************************
-// Warning: Using Delphi XE3 syntax!
-// **************************************************************************************************
-// The Initial Developer of the Original Code:
-// OpenCV: open source computer vision library
-// Homepage:    http://ocv.org
-// Online docs: http://docs.ocv.org
-// Q&A forum:   http://answers.ocv.org
-// Dev zone:    http://code.ocv.org
-// **************************************************************************************************
-// Original file:
-// opencv\modules\core\include\opencv2\core\types_c.h
-// *************************************************************************************************
+  Software distributed under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
+  ANY KIND, either express or implied. See the License for the specific language governing rights
+  and limitations under the License.
 
+  Alternatively, the contents of this file may be used under the terms of the
+  GNU Lesser General Public License (the  "LGPL License"), in which case the
+  provisions of the LGPL License are applicable instead of those above.
+  If you wish to allow use of your version of this file only under the terms
+  of the LGPL License and not to allow others to use your version of this file
+  under the MPL, indicate your decision by deleting  the provisions above and
+  replace  them with the notice and other provisions required by the LGPL
+  License.  If you do not delete the provisions above, a recipient may use
+  your version of this file under either the MPL or the LGPL License.
+
+  For more information about the LGPL: http://www.gnu.org/copyleft/lesser.html
+  **************************************************************************************************
+  Warning: Using Delphi XE3 syntax!
+  **************************************************************************************************
+  The Initial Developer of the Original Code:
+  OpenCV: open source computer vision library
+  Homepage:    http://ocv.org
+  Online docs: http://docs.ocv.org
+  Q&A forum:   http://answers.ocv.org
+  Dev zone:    http://code.ocv.org
+  **************************************************************************************************
+  Original file:
+  opencv\modules\core\include\opencv2\core\types_c.h
+  *************************************************************************************************
+*)
+
+//
 {$I OpenCV.inc}
+//
 {$IFDEF DEBUG}
 {$A8,B-,C+,D+,E-,F-,G+,H+,I+,J+,K-,L+,M-,N+,O-,P+,Q+,R+,S-,T-,U-,V+,W+,X+,Y+,Z1}
 {$ELSE}
@@ -104,25 +69,25 @@ interface
 
 uses
 {$IFDEF IFDEF HAS_UNITSCOPE}
-  {$IFDEF MSWINDOWS}
+{$IFDEF MSWINDOWS}
   WinApi.Windows
-  {$ENDIF MSWINDOWS}
+{$ENDIF MSWINDOWS}
 {$ELSE}
-  {$IFDEF MSWINDOWS}
-  Windows
-  {$ENDIF MSWINDOWS}
+{$IFDEF MSWINDOWS}
+    Windows
+{$ENDIF MSWINDOWS}
 {$ENDIF};
 
 const
   // Ќаименьшее число дл€ которого выполн€етс€ условие 1.0+DBL_EPSILON <> 1.0
   DBL_EPSILON = 2.2204460492503131E-016;
-  DBL_MAX = 1.7976931348623157E+308;
+  DBL_MAX     = 1.7976931348623157E+308;
   FLT_EPSILON = 1.19209290E-07;
-  FLT_MAX = 1E+37;
+  FLT_MAX     = 1E+37;
 
 type
-  Float = Single;
-  pFloat = ^Float;
+  Float   = Single;
+  pFloat  = ^Float;
   ppFloat = ^pFloat;
 
   TSingleArray1D = array [0 .. 1] of Single;
@@ -130,26 +95,26 @@ type
   TSingleArray2D = array [0 .. 1] of pSingleArray1D;
   pSingleArray2D = ^TSingleArray2D;
 
-  TCVChar = AnsiChar;
-  pCVChar = pAnsiChar;
-  TpCVCharArray = array [0 .. 1] of pCVChar;
-  ppCVChar = ^TpCVCharArray;
-  CVChar = AnsiChar;
+  TCVChar       = AnsiChar;
+  pCVChar       = pAnsiChar;
+  TpCVCharArray = array [0 .. 0] of pCVChar;
+  ppCVChar      = ^TpCVCharArray;
+  CVChar        = AnsiChar;
 {$IFNDEF DELPHIXE2_UP}
 {$IFDEF CLR}
 {$IFDEF DELPHI2007}
-  NativeInt = size_t;
+  NativeInt  = size_t;
   NativeUInt = size_t;
 {$ELSE}
-  NativeInt = Integer;
+  NativeInt  = Integer;
   NativeUInt = Cardinal;
 {$ENDIF}
 {$ELSE}
 {$IFDEF FPC}
-  NativeInt = SizeInt;
+  NativeInt  = SizeInt;
   NativeUInt = SizeUInt;
 {$ELSE}
-  NativeInt = Integer;
+  NativeInt  = Integer;
   NativeUInt = Cardinal;
 {$ENDIF}
 {$ENDIF}
@@ -186,7 +151,9 @@ type
   TVoid = record
   end;
 
-  pCvArr = Pointer;
+  pCvArr      = Pointer;
+  TCvArrArray = array [0 .. 0] of pCvArr;
+  pCvArrArray = ^TCvArrArray;
 
   TCv32suf = record
     case Byte of
@@ -212,57 +179,57 @@ type
 {$EXTERNALSYM CVStatus}
 
 const
-  CV_StsOk = 0; (* everithing is ok *)
-  CV_StsBackTrace = -1; (* pseudo error for back trace *)
-  CV_StsError = -2; (* unknown /unspecified error *)
-  CV_StsInternal = -3; (* internal error (bad state) *)
-  CV_StsNoMem = -4; (* insufficient memory *)
-  CV_StsBadArg = -5; (* function arg/param is bad *)
-  CV_StsBadFunc = -6; (* unsupported function *)
-  CV_StsNoConv = -7; (* iter. didn't converge *)
-  CV_StsAutoTrace = -8; (* tracing *)
-  CV_HeaderIsNull = -9; (* image header is 0 *)
-  CV_BadImageSize = -10; (* image size is invalid *)
-  CV_BadOffset = -11; (* offset is invalid *)
-  CV_BadDataPtr = -12; (* *)
-  CV_BadStep = -13; (* *)
-  CV_BadModelOrChSeq = -14; (* *)
-  CV_BadNumChannels = -15; (* *)
-  CV_BadNumChannel1U = -16; (* *)
-  CV_BadDepth = -17; (* *)
-  CV_BadAlphaChannel = -18; (* *)
-  CV_BadOrder = -19; (* *)
-  CV_BadOrigin = -20; (* *)
-  CV_BadAlign = -21; (* *)
-  CV_BadCallBack = -22; (* *)
-  CV_BadTileSize = -23; (* *)
-  CV_BadCOI = -24; (* *)
-  CV_BadROISize = -25; (* *)
-  CV_MaskIsTiled = -26; (* *)
-  CV_StsNullPtr = -27; (* null pointer *)
-  CV_StsVecLengthErr = -28; (* incorrect vector length *)
+  CV_StsOk                     = 0; (* everithing is ok *)
+  CV_StsBackTrace              = -1; (* pseudo error for back trace *)
+  CV_StsError                  = -2; (* unknown /unspecified error *)
+  CV_StsInternal               = -3; (* internal error (bad state) *)
+  CV_StsNoMem                  = -4; (* insufficient memory *)
+  CV_StsBadArg                 = -5; (* function arg/param is bad *)
+  CV_StsBadFunc                = -6; (* unsupported function *)
+  CV_StsNoConv                 = -7; (* iter. didn't converge *)
+  CV_StsAutoTrace              = -8; (* tracing *)
+  CV_HeaderIsNull              = -9; (* image header is 0 *)
+  CV_BadImageSize              = -10; (* image size is invalid *)
+  CV_BadOffset                 = -11; (* offset is invalid *)
+  CV_BadDataPtr                = -12; (* *)
+  CV_BadStep                   = -13; (* *)
+  CV_BadModelOrChSeq           = -14; (* *)
+  CV_BadNumChannels            = -15; (* *)
+  CV_BadNumChannel1U           = -16; (* *)
+  CV_BadDepth                  = -17; (* *)
+  CV_BadAlphaChannel           = -18; (* *)
+  CV_BadOrder                  = -19; (* *)
+  CV_BadOrigin                 = -20; (* *)
+  CV_BadAlign                  = -21; (* *)
+  CV_BadCallBack               = -22; (* *)
+  CV_BadTileSize               = -23; (* *)
+  CV_BadCOI                    = -24; (* *)
+  CV_BadROISize                = -25; (* *)
+  CV_MaskIsTiled               = -26; (* *)
+  CV_StsNullPtr                = -27; (* null pointer *)
+  CV_StsVecLengthErr           = -28; (* incorrect vector length *)
   CV_StsFilterStructContentErr = -29; (* incorr. filter structure content *)
   CV_StsKernelStructContentErr = -30; (* incorr. transform kernel content *)
-  CV_StsFilterOffsetErr = -31; (* incorrect filter ofset value *)
-  CV_StsBadSize = -201; (* the input/output structure size is incorrect *)
-  CV_StsDivByZero = -202; (* division by zero *)
-  CV_StsInplaceNotSupported = -203; (* in-place operation is not supported *)
-  CV_StsObjectNotFound = -204; (* request can't be completed *)
-  CV_StsUnmatchedFormats = -205; (* formats of input/output arrays differ *)
-  CV_StsBadFlag = -206; (* flag is wrong or not supported *)
-  CV_StsBadPoint = -207; (* bad CvPoint *)
-  CV_StsBadMask = -208; (* bad format of mask (neither 8uC1 nor 8sC1) *)
-  CV_StsUnmatchedSizes = -209; (* sizes of input/output structures do not match *)
-  CV_StsUnsupportedFormat = -210; (* the data format/type is not supported by the function *)
-  CV_StsOutOfRange = -211; (* some of parameters are out of range *)
-  CV_StsParseError = -212; (* invalid syntax/structure of the parsed file *)
-  CV_StsNotImplemented = -213; (* the requested function/feature is not implemented *)
-  CV_StsBadMemBlock = -214; (* an allocated block has been corrupted *)
-  CV_StsAssert = -215; (* assertion failed *)
-  CV_GpuNotSupported = -216;
-  CV_GpuApiCallError = -217;
-  CV_OpenGlNotSupported = -218;
-  CV_OpenGlApiCallError = -219;
+  CV_StsFilterOffsetErr        = -31; (* incorrect filter ofset value *)
+  CV_StsBadSize                = -201; (* the input/output structure size is incorrect *)
+  CV_StsDivByZero              = -202; (* division by zero *)
+  CV_StsInplaceNotSupported    = -203; (* in-place operation is not supported *)
+  CV_StsObjectNotFound         = -204; (* request can't be completed *)
+  CV_StsUnmatchedFormats       = -205; (* formats of input/output arrays differ *)
+  CV_StsBadFlag                = -206; (* flag is wrong or not supported *)
+  CV_StsBadPoint               = -207; (* bad CvPoint *)
+  CV_StsBadMask                = -208; (* bad format of mask (neither 8uC1 nor 8sC1) *)
+  CV_StsUnmatchedSizes         = -209; (* sizes of input/output structures do not match *)
+  CV_StsUnsupportedFormat      = -210; (* the data format/type is not supported by the function *)
+  CV_StsOutOfRange             = -211; (* some of parameters are out of range *)
+  CV_StsParseError             = -212; (* invalid syntax/structure of the parsed file *)
+  CV_StsNotImplemented         = -213; (* the requested function/feature is not implemented *)
+  CV_StsBadMemBlock            = -214; (* an allocated block has been corrupted *)
+  CV_StsAssert                 = -215; (* assertion failed *)
+  CV_GpuNotSupported           = -216;
+  CV_GpuApiCallError           = -217;
+  CV_OpenGlNotSupported        = -218;
+  CV_OpenGlApiCallError        = -219;
 
   (* ***************************************************************************************\
     *                             Common macros and  functions                         *
@@ -287,15 +254,17 @@ type
 const
   CV_RNG_COEFF = Cardinal(4164903690);
 {$EXTERNALSYM CV_RNG_COEFF}
-  // CV_INLINE CvRNG cvRNG( int64 seed CV_DEFAULT(-1))
-  // {
-  // CvRNG rng = seed ? (uint64)seed : (uint64)(int64)-1;
-  // return rng;
-  // }
+  (*
+    CV_INLINE CvRNG cvRNG( int64 seed CV_DEFAULT(-1))
+    {
+    CvRNG rng = seed ? (uint64)seed : (uint64)(int64)-1;
+    return rng;
+    }
+  *)
 function cvRNG(seed: int64 = -1): TCvRNG; {$IFDEF USE_INLINE}inline; {$ENDIF}
-(* ***************************************************************************************\
-  *                                  Image cType (IplImage)                                 *
-  *************************************************************************************** *)
+{ ***************************************************************************************
+  *                                  Image cType (IplImage)                             *
+  *************************************************************************************** }
 
 {$IFNDEF HAVE_IPL}
 
@@ -355,19 +324,19 @@ const
 {$EXTERNALSYM IPL_BORDER_WRAP}
   // * Sub-pixel interpolation methods */
 
-  CV_INTER_NN = 0;
-  CV_INTER_LINEAR = 1;
-  CV_INTER_CUBIC = 2;
-  CV_INTER_AREA = 3;
+  CV_INTER_NN       = 0;
+  CV_INTER_LINEAR   = 1;
+  CV_INTER_CUBIC    = 2;
+  CV_INTER_AREA     = 3;
   CV_INTER_LANCZOS4 = 4;
 
 type
 
-  pIplImage = ^TIplImage;
+  pIplImage       = ^TIplImage;
   TpIplImageArray = array [0 .. 1] of pIplImage;
-  ppIplImage = ^TpIplImageArray;
-  pIplROI = ^TIplROI;
-  pIplTileInfo = ^TIplTileInfo;
+  ppIplImage      = ^TpIplImageArray;
+  pIplROI         = ^TIplROI;
+  pIplTileInfo    = ^TIplTileInfo;
 
   TIplROI = record
     coi: Integer; (* 0 - no COI (all channels are selected), 1 - 0th channel is selected ... *)
@@ -377,7 +346,7 @@ type
     height: Integer;
   end;
 
-  TiplCallBack = procedure(img: pIplImage; xIndex: Integer; yIndex: Integer; mode: Integer);
+  TiplCallBack = procedure(img: pIplImage; xIndex: Integer; yIndex: Integer; mode: Integer); cdecl;
 
   TIplTileInfo = record
     callBack: TiplCallBack;
@@ -483,10 +452,8 @@ const
 {$EXTERNALSYM CV_MAT_DEPTH_MASK}
 function CV_8UC1: Integer; {$IFDEF USE_INLINE}inline; {$ENDIF}
 {$EXTERNALSYM CV_8UC1}
-(*
-  CV_8UC2 = CV_MAKETYPE(CV_8U, 2);
-  {$EXTERNALSYM CV_8UC2}
-*)
+function CV_8UC2: Integer; {$IFDEF USE_INLINE}inline; {$ENDIF}
+{$EXTERNALSYM CV_8UC2}
 function CV_8UC3: Integer; {$IFDEF USE_INLINE}inline; {$ENDIF}
 {$EXTERNALSYM CV_8UC3}
 (*
@@ -525,7 +492,7 @@ function CV_8UC3: Integer; {$IFDEF USE_INLINE}inline; {$ENDIF}
 
   // >> Following declaration is a macro definition!
   const
-  CV_16SC(n)CV_MAKETYPE(CV_16S, (n));
+  CV_16SC(n) CV_MAKETYPE(CV_16S, (n));
 *)
 // const
 // CV_32SC2 = CV_MAKETYPE(CV_32S, 2);
@@ -617,7 +584,7 @@ const
 
 type
 
-  pCvMat = ^TCvMat;
+  pCvMat  = ^TCvMat;
   ppCvMat = ^pCvMat;
 
   TCvMat = record
@@ -633,9 +600,9 @@ type
     cols: Integer;
   end;
 
-  (* ***************************************************************************************\
-    *                       Multi-dimensional dense cArray (CvMatND)                          *
-    *************************************************************************************** *)
+  { ***************************************************************************************
+    *                       Multi-dimensional dense cArray (CvMatND)                      *
+    *************************************************************************************** }
 
 const
   CV_MATND_MAGIC_VAL = $42430000;
@@ -772,11 +739,11 @@ type
   TCvPoint2D32f = record
     x: Single;
     y: Single;
-    {$IFDEF DELPHIXE2_UP}
+{$IFDEF DELPHIXE2_UP}
     class operator Subtract(a, b: TCvPoint2D32f): TCvPoint2D32f; // Subtraction of type TCvPoint2D32f
     function Norm: Single;
-    function cvPoint:TcvPoint;
-    {$ENDIF}
+    function cvPoint: TCvPoint;
+{$ENDIF}
   end;
 
   TcvPoint2f = TCvPoint2D32f;
@@ -790,18 +757,22 @@ type
     z: Single;
   end;
 
-function cvPoint3D32f(const x, y, z: Single): TCvPoint3D32f; {$IFDEF USE_INLINE}inline; {$ENDIF}
-
-Type
-  TCvPoint2D64f = record
-    x: Double;
-    y: Double;
-  end;
+  pCvPoint3D64f = ^TCvPoint3D64f;
 
   TCvPoint3D64f = record
     x: Double;
     y: Double;
     z: Double;
+  end;
+
+function cvPoint3D32f(const x, y, z: Single): TCvPoint3D32f; {$IFDEF USE_INLINE}inline; {$ENDIF}
+
+Type
+  pCvPoint2D64f = ^TCvPoint2D64f;
+
+  TCvPoint2D64f = record
+    x: Double;
+    y: Double;
   end;
 
 Const
@@ -849,6 +820,8 @@ Type
 
   (* Line iterator state: *)
 type
+  pCvLineIterator = ^TCvLineIterator;
+
   TCvLineIterator = record
     ptr: ^uchar;
     err: Integer;
@@ -928,9 +901,19 @@ type
     data: Pointer; (* Pointer to the first element of the block. *)
   end;
 
+  TCvSeqBlockArray = array [0 .. 0] of TCvSeqBlock;
+  pCvSeqBlockArray = ^TCvSeqBlockArray;
+
+  TCV_TREE_NODE_FIELDS<node_type> = record
+    flags: Integer; (* Miscellaneous flags. *)
+    header_size: Integer; (* Size of sequence header. *)
+    h_prev: ^node_type; (* Previous sequence. *)
+    h_next: ^node_type; (* Next sequence. *)
+    v_prev: ^node_type; (* 2nd previous sequence. *)
+    v_next: ^node_type; (* 2nd next sequence. *)
+  end;
+
   pCvSeq = ^TCvSeq;
-  pCvSeqArray = array [0 .. 1] of pCvSeq;
-  ppCvSeq = ^pCvSeqArray;
 
   TCvSeq = record
     flags: Integer; (* Miscellaneous flags. *)
@@ -948,6 +931,25 @@ type
     free_blocks: pCvSeqBlock; (* Free blocks list. *)
     first: pCvSeqBlock; (* Pointer to the first sequence block. *)
   end;
+
+  (*
+    Read/Write sequence.
+    Elements can be dynamically inserted to or deleted from the sequence.
+  *)
+  TCV_SEQUENCE_FIELDS = record
+    CV_TREE_NODE_FIELDS: TCV_TREE_NODE_FIELDS<TCvSeq>;
+    total: Integer; (* Total number of elements. *)
+    elem_size: Integer; (* Size of sequence element in bytes. *)
+    block_max: pschar; (* Maximal bound of the last block. *)
+    ptr: pschar; (* Current write pointer. *)
+    delta_elems: Integer; (* Grow seq this many at a time. *)
+    storage: pCvMemStorage; (* Where the seq is stored. *)
+    free_blocks: pCvSeqBlock; (* Free blocks list. *)
+    first: pCvSeqBlock; (* Pointer to the first sequence block. *)
+  end;
+
+  pCvSeqArray = array [0 .. 1] of pCvSeq;
+  ppCvSeq     = ^pCvSeqArray;
 
 const
   CV_TYPE_NAME_SEQ = 'opencv-sequence';
@@ -989,11 +991,25 @@ type
     The MSB(most-significant or sign bit) of the first field (flags) is 0 iff the element exists.
   *)
 type
+  TCV_SET_ELEM_FIELDS<elem_type> = record
+    flags: Integer;
+    next_free: ^elem_type;
+  end;
+
   pCvSetElem = ^TCvSetElem;
 
   TCvSetElem = record
     flags: Integer;
     next_free: pCvSetElem;
+  end;
+
+  TCvSetElemArray = array [0 .. 0] of TCvSetElem;
+  pCvSetElemArray = ^TCvSetElemArray;
+
+  TCV_SET_FIELDS = record
+    CV_SEQUENCE_FIELDS: TCV_SEQUENCE_FIELDS;
+    free_elems: pCvSetElem;
+    active_count: Integer;
   end;
 
   pCvSet = ^TCvSet;
@@ -1022,13 +1038,14 @@ const
 {$EXTERNALSYM CV_SET_ELEM_IDX_MASK}
   CV_SET_ELEM_FREE_FLAG = 1 shl (SizeOf(Integer) * 8 - 1);
 {$EXTERNALSYM CV_SET_ELEM_FREE_FLAG}
-  // Checks whether the element pointed by ptr belongs to a set or not
-  // #define CV_IS_SET_ELEM( ptr )  (((CvSetElem*)(ptr))->flags >= 0)
-function CV_IS_SET_ELEM(ptr: Pointer): Boolean; // {$IFDEF USE_INLINE}inline;{$ENDIF}
-
-// ***************************************************************************************
-// *                      Multi-dimensional sparse cArray (CvSparseMat)                  *
-// ***************************************************************************************
+  (*
+    Checks whether the element pointed by ptr belongs to a set or not
+    #define CV_IS_SET_ELEM( ptr )  (((CvSetElem* )(ptr))->flags >= 0)
+  *)
+function CV_IS_SET_ELEM(ptr: Pointer): Boolean; {$IFDEF USE_INLINE}inline; {$ENDIF}
+{ ***************************************************************************************
+  *                      Multi-dimensional sparse cArray (CvSparseMat)                  *
+  *************************************************************************************** }
 
 const
   CV_SPARSE_MAT_MAGIC_VAL = $42440000;
@@ -1083,75 +1100,109 @@ type
   (*
     We represent a graph as a set of vertices.
     Vertices contain their adjacency lists (more exactly, pointers to first incoming or
-    outcoming edge (or 0 if isolated vertex)) then . Edges are stored in another set.
+    outcoming edge (or 0 if isolated vertex)). Edges are stored in another set.
     There is a singly-linked list of incoming/outcoming edges for each vertex.
 
     Each edge consists of
 
     o   Two pointers to the starting and ending vertices
-    (vtx : array[0..-1] of  and vtx[1] respectively).
+    (vtx[0] and vtx[1] respectively).
 
-    A graph may be oriented or not. In the latter , edges between
+    A graph may be oriented or not. In the latter case, edges between
     vertex i to vertex j are not distinguished during search operations.
 
     o   Two pointers to next edges for the starting and ending vertices, where
-    next : array[0..-1] of  points to the next edge in the vtx[0] adjacency list and
-    next : array[0..0] of  points to the next edge in the vtx[1] adjacency list.
+    next[0] points to the next edge in the vtx[0] adjacency list and
+    next[1] points to the next edge in the vtx[1] adjacency list.
   *)
-  // >> Following declaration is a macro definition!
-  // const
-  // CV_GRAPH_EDGE_FIELDS()Integer flags;
-  // Single weight;
-  //
-  // type;
-  //
-  // type
-  // next:
-  // array [0 .. 1] of;
-  // struct CvGraphVtx * vtx[2] = ^RAPH_EDGE_FIELDS()Integer flags;
-  // Single weight;
-  // struct CvGraphEdge;
-  // end;
-  //
-  // type
-  //
-  // = record
-  // end;
-  // CvGraphEdge;
-  //
-  // type
-  //
-  // = record
-  // end;
-  // CvGraphVtx;
-  //
-  // type
-  //
-  // = record ptr: ^CvPoint2D32f;
-  // end;
-  // CvGraphVtx2D;
-  //
-  // (*
-  // Graph is 'derived' from the set (this is set a of vertices)
-  // and includes another set (edges)
-  // *)
-  /// / >> Following declaration is a macro definition!
-  // const
-  // CV_GRAPH_FIELDS()CV_SET_FIELDS()CvSet * edges;;
-  //
-  // type
-  //
-  // = record
-  // end;
-  // CvGraph;
-  //
-  // const
-  // CV_TYPE_NAME_GRAPH = 'opencv-graph';
-  // {$EXTERNALSYM CV_TYPE_NAME_GRAPH}
+Type
+
+  pCvGraphEdge = ^TCvGraphEdge;
+  pCvGraphVtx  = ^TCvGraphVtx;
+
+  TCV_GRAPH_EDGE_FIELDS = record
+    flags: Integer;
+    weight: Single;
+    next: array [0 .. 1] of pCvGraphEdge;
+    vtx: array [0 .. 1] of pCvGraphVtx;
+  end;
+
+  TCV_GRAPH_VERTEX_FIELDS = record
+    flags: Integer;
+    first: pCvGraphEdge;
+  end;
+
+  (*
+    typedef struct CvGraphEdge
+    {
+    CV_GRAPH_EDGE_FIELDS()
+    } CvGraphEdge;
+  *)
+
+  TCvGraphEdge = record
+    CV_GRAPH_EDGE_FIELDS: TCV_GRAPH_EDGE_FIELDS;
+  end;
+
+  TCvGraphEdgeArray = array [0 .. 0] of pCvGraphEdge;
+  pCvGraphEdgeArray = ^TCvGraphEdgeArray;
+
+  (*
+    typedef struct CvGraphVtx
+    {
+    CV_GRAPH_VERTEX_FIELDS()
+    } CvGraphVtx;
+  *)
+  TCvGraphVtx = record
+    CV_GRAPH_VERTEX_FIELDS: TCV_GRAPH_VERTEX_FIELDS;
+  end;
+
+  TCvGraphVtxArray = array [0 .. 0] of pCvGraphVtx;
+  pCvGraphVtxArray = ^TCvGraphVtxArray;
+
+  (*
+    typedef struct CvGraphVtx2D
+    {
+    CV_GRAPH_VERTEX_FIELDS()
+    CvPoint2D32f* ptr;
+    } CvGraphVtx2D;
+  *)
+  pCvGraphVtx2D = ^TCvGraphVtx2D;
+
+  TCvGraphVtx2D = record
+    CV_GRAPH_VERTEX_FIELDS: TCV_GRAPH_VERTEX_FIELDS;
+    ptr: pCvPoint2D32f;
+  end;
+
+  (*
+    Graph is "derived" from the set (this is set a of vertices)
+    and includes another set (edges)
+  *)
+  TCV_GRAPH_FIELDS = record
+    CV_SET_FIELDS: TCV_SET_FIELDS;
+    edges: pCvSet;
+  end;
+
+  (*
+    typedef struct CvGraph
+    {
+    CV_GRAPH_FIELDS()
+    } CvGraph;
+  *)
+
+  pCvGraph = ^TCvGraph;
+
+  TCvGraph = record
+    CV_GRAPH_FIELDS: TCV_GRAPH_FIELDS;
+    edges: pCvSet;
+  end;
+
+const
+  CV_TYPE_NAME_GRAPH = 'opencv-graph';
 
   (* ********************************** Chain/Countour ************************************ *)
 
 type
+  pCvChain = ^TCvChain;
 
   TCvChain = record
     origin: TCvPoint;
@@ -1364,9 +1415,9 @@ type
     prev_elem: Pointer; // * pointer to previous element */
   end;
 
-  // ****************************************************************************************/
-  // *                                Operations on sequences                               */
-  // ****************************************************************************************/
+  { ****************************************************************************************
+    *                                Operations on sequences                               *
+    **************************************************************************************** }
   {
     #define  CV_SEQ_ELEM( seq, elem_type, index )                    \
     /* assert gives some guarantee that <seq> parameter is valid */  \
@@ -1461,9 +1512,9 @@ procedure CV_READ_SEQ_ELEM(const Elem: Pointer; const Reader: TCvSeqReader; cons
 // CV_NEXT_GRAPH_EDGE(edge, vertex)(Assert((edge)^.vtx: array [0 .. -1] of const = (vertex) or
 // (edge)^.vtx[1] = (vertex)), (edge)^.next[(edge)^.vtx[1] = (vertex)])
 
-(* ***************************************************************************************\
-  *             Data structures for persistence (a.k.a serialization) functionality        *
-  *************************************************************************************** *)
+{ ***************************************************************************************
+  *             Data structures for persistence (a.k.a serialization) functionality     *
+  *************************************************************************************** }
 
 (* "black box" file storage *)
 // type type CvFileStorage = leStorage;
@@ -1521,6 +1572,7 @@ function CvAttrList(const attr: ppCVChar = nil; next: pCvAttrList = nil): TCvAtt
 
 (*
   /* Basic element of the file storage - scalar or collection: */
+
   typedef struct CvFileNode
   {
   int tag;
@@ -1666,14 +1718,24 @@ type
 
   (* All the keys (names) of elements in the readed file storage
     are stored in the hash to speed up the lookup operations: *)
-  // type
-  // CvStringHashNode
-  // begin
-  // Cardinal hashval;
-  // CvStringHashNode
-  // begin
-  // Cardinal hashval;
-  // CvString str;
+type
+  (*
+    typedef struct CvStringHashNode
+    {
+    unsigned hashval;
+    CvString str;
+    struct CvStringHashNode* next;
+    } CvStringHashNode;
+  *)
+
+  pCvStringHashNode = ^TCvStringHashNode;
+
+  TCvStringHashNode = record
+    hashval: Cardinal;
+    str: TCvString;
+    next: pCvStringHashNode;
+  end;
+
   //
   // type
   // CvStringHashNode * next = record
@@ -1710,28 +1772,48 @@ type
   //
   // type CvTypeInfo * next = record end; PCVChar type_name; CvIsInstanceFunc is_instance;
   // CvReleaseFunc release; CvReadFunc read; CvWriteFunc write; CvCloneFunc clone; end; CvTypeInfo;
-  //
-  // (* *** System data types ***** *)
-  //
-  // type
-  //
-  // = record func_addr: ^Pointer; default_func_addr: Pointer; func_names: PCVChar;
-  // search_modules: Integer; loaded_from: Integer; end; CvPluginFuncInfo;
-  //
-  // type CvModuleInfo
-  //
-  // begin
-  //
-  // type CvModuleInfo * next = record end; CvModuleInfo
-  //
-  // begin
-  //
-  // type CvModuleInfo * next = record end; PCVChar name; PCVChar version; CvPluginFuncInfo * func_tab;
-  // end; CvModuleInfo;
-  //
-  (* __OPENCV_CORE_TYPES_H__*/
 
-    (* End of file. *)
+Type
+  (* *** System data types ***** *)
+  (*
+    typedef struct CvPluginFuncInfo
+    {
+    void** func_addr;
+    void* default_func_addr;
+    const char* func_names;
+    int search_modules;
+    int loaded_from;
+    } CvPluginFuncInfo;
+  *)
+
+  PCvPluginFuncInfo = ^TCvPluginFuncInfo;
+
+  TCvPluginFuncInfo = record
+    func_addr: pPointer;
+    default_func_addr: Pointer;
+    func_names: pAnsiChar;
+    search_modules: Integer;
+    loaded_from: Integer;
+  end;
+
+  (*
+    typedef struct CvModuleInfo
+    {
+    struct CvModuleInfo* next;
+    const char* name;
+    const char* version;
+    CvPluginFuncInfo* func_tab;
+    } CvModuleInfo;
+  *)
+
+  PCvModuleInfo = ^TCvModuleInfo;
+
+  TCvModuleInfo = record
+    next: PCvModuleInfo;
+    name: pAnsiChar;
+    version: pAnsiChar;
+    func_tab: PCvPluginFuncInfo;
+  end;
 
   // #define CV_SWAP(a,b,t) ((t) = (a), (a) = (b), (b) = (t))
 procedure CV_SWAP(var a, b, t: pIplImage); {$IFDEF USE_INLINE}inline; {$ENDIF} overload;
@@ -2173,7 +2255,7 @@ function CvTermCriteria(_type: Integer; max_iter: Integer; epsilon: Double): TCv
 *)
 function cvFloor(value: Double): Integer; {$IFDEF USE_INLINE}inline; {$ENDIF}
 function cvScalarAll(val0123: Double): TCvScalar; {$IFDEF USE_INLINE}inline; {$ENDIF}
-function CvPoint(const x: Integer = 0; const y: Integer = 0): TCvPoint; {$IFDEF USE_INLINE}inline; {$ENDIF}
+function cvPoint(const x: Integer = 0; const y: Integer = 0): TCvPoint; {$IFDEF USE_INLINE}inline; {$ENDIF}
 function CvPoint2f(const x: Single = 0; const y: Single = 0): TcvPoint2f; {$IFDEF USE_INLINE}inline; {$ENDIF}
 function CvSize(const width, height: Integer): TCvSize; {$IFDEF USE_INLINE}inline; {$ENDIF}
 function CvScalar(const val0: Double; const val1: Double = 0; const val2: Double = 0; const val3: Double = 0)
@@ -2209,24 +2291,31 @@ const
 function cvMat(const rows, cols: Integer; etype: Integer; data: Pointer = nil): TCvMat;
 function CV_MAT_DEPTH(const flags: Integer): Integer;
 function CV_MAT_TYPE(const flags: Integer): Integer;
-// * Size of each channel item,
-// 0x124489 = 1000 0100 0100 0010 0010 0001 0001 ~ array of sizeof(arr_type_elem) */
-// #define CV_ELEM_SIZE1(type) \
-// ((((sizeof(size_t)<<28)|0x8442211) >> CV_MAT_DEPTH(type)*4) & 15)
+
+(* Size of each channel item,
+
+  0x124489 = 1000 0100 0100 0010 0010 0001 0001 ~ array of sizeof(arr_type_elem) */
+  #define CV_ELEM_SIZE1(type) \
+  ((((sizeof(size_t)<<28)|0x8442211) >> CV_MAT_DEPTH(type)*4) & 15)
+*)
 function CV_ELEM_SIZE1(const _type: Integer): Integer;
 function CV_ELEM_SIZE(const _type: Integer): Integer;
 function CV_MAT_CN(const flags: Integer): Integer;
 function CV_32FC1: Integer; {$IFDEF USE_INLINE}inline; {$ENDIF}
 function CV_32SC1: Integer; {$IFDEF USE_INLINE}inline; {$ENDIF}
 function CV_MAKETYPE(depth, cn: Integer): Integer; {$IFDEF USE_INLINE}inline; {$ENDIF}
-// #define CV_MAT_ELEM( mat, elemtype, row, col )
-// (*(elemtype*)CV_MAT_ELEM_PTR_FAST( mat, row, col, sizeof(elemtype)))
+(*
+  #define CV_MAT_ELEM( mat, elemtype, row, col )
+  (*(elemtype* )CV_MAT_ELEM_PTR_FAST( mat, row, col, sizeof(elemtype)))
+*)
 function CV_MAT_ELEM(const mat: TCvMat; const elemsize: Integer; const row, col: Integer): Pointer;
 {$IFDEF USE_INLINE}inline; {$ENDIF}
-// #define CV_MAT_ELEM_PTR_FAST( mat, row, col, pix_size )
-// (assert( (unsigned)(row) < (unsigned)(mat).rows &&
-// (unsigned)(col) < (unsigned)(mat).cols ),
-// (mat).data.ptr + (size_t)(mat).step*(row) + (pix_size)*(col))
+(*
+  #define CV_MAT_ELEM_PTR_FAST( mat, row, col, pix_size )
+  (assert( (unsigned)(row) < (unsigned)(mat).rows &&
+  (unsigned)(col) < (unsigned)(mat).cols ),
+  (mat).data.ptr + (size_t)(mat).step*(row) + (pix_size)*(col))
+*)
 function CV_MAT_ELEM_PTR_FAST(const mat: TCvMat; const row, col, pix_size: Integer): Pointer; {$IFDEF USE_INLINE}inline;
 {$ENDIF}
 function iif(const Conditional: Boolean; const ifTrue, ifFalse: Variant): Variant; {$IFDEF USE_INLINE}inline;
@@ -2244,7 +2333,7 @@ uses
 {$IFDEF HAS_UNITSCOPE}
   System.SysUtils;
 {$ELSE}
-  SysUtils;
+SysUtils;
 {$ENDIF}
 
 function strdup(const str: pCVChar): pCVChar;
@@ -2359,7 +2448,7 @@ begin
   Result.val[3] := val0123;
 end;
 
-function CvPoint;
+function cvPoint;
 begin
   Result.x := x;
   Result.y := y;
@@ -2448,7 +2537,6 @@ begin
 end;
 
 procedure CV_READ_SEQ_ELEM(const Elem: Pointer; const Reader: TCvSeqReader; const SizeOfElem: Integer);
-// {$IFDEF USE_INLINE}inline;{$ENDIF}
 begin
   // assert( (reader).seq->elem_size == sizeof(elem));
   Assert(Reader.Seq^.elem_size = SizeOfElem);
@@ -2458,7 +2546,7 @@ begin
   CV_NEXT_SEQ_ELEM(SizeOfElem, Reader);
 end;
 
-procedure CV_NEXT_SEQ_ELEM(const elem_size: Integer; const Reader: TCvSeqReader); // {$IFDEF USE_INLINE}inline;{$ENDIF}
+procedure CV_NEXT_SEQ_ELEM(const elem_size: Integer; const Reader: TCvSeqReader);
 Var
   ptr: PInteger;
 begin
@@ -2620,12 +2708,17 @@ begin
   Result := CV_MAKETYPE(CV_64F, 3);
 end;
 
+function CV_8UC2: Integer;
+begin
+  Result := CV_MAKETYPE(CV_8U, 2);
+end;
+
 function CV_8UC3: Integer;
 begin
   Result := CV_MAKETYPE(CV_8U, 3);
 end;
 
-function CV_IS_SET_ELEM(ptr: Pointer): Boolean; // {$IFDEF USE_INLINE}inline;{$ENDIF}
+function CV_IS_SET_ELEM(ptr: Pointer): Boolean;
 begin
   // #define CV_IS_SET_ELEM( ptr )  (((CvSetElem*)(ptr))->flags >= 0)
   Result := Assigned(ptr) and (pCvSetElem(ptr)^.flags >= 0);
@@ -2634,8 +2727,8 @@ end;
 function CV_IMAGE_ELEM(image: pIplImage; size_elemtype, row, col: Integer): Pointer; {$IFDEF USE_INLINE}inline; {$ENDIF}
 begin
   // (((elemtype*)((image)->imageData + (image)->widthStep*(row)))[(col)])
-  Result := {$IFDEF DELPHI7}Pointer({$ENDIF DELPHI7}{$IFDEF DELPHI2005_UP}pByte{$ELSE}Integer{$ENDIF}(image^.imageData) + image^.widthStep
-    * row + col * size_elemtype{$IFDEF DELPHI7}){$ENDIF DELPHI7};
+  Result := {$IFDEF DELPHI7}Pointer({$ENDIF DELPHI7}{$IFDEF DELPHI2005_UP}pByte{$ELSE}Integer{$ENDIF}(image^.imageData)
+    + image^.widthStep * row + col * size_elemtype{$IFDEF DELPHI7}){$ENDIF DELPHI7};
 end;
 
 function cvRealScalar(val0: Double): TCvScalar; {$IFDEF USE_INLINE}inline; {$ENDIF}
@@ -2702,10 +2795,11 @@ end;
 
 { TCvPoint2D32f }
 {$IFDEF DELPHIXE2_UP}
-function TCvPoint2D32f.cvPoint: TcvPoint;
+
+function TCvPoint2D32f.cvPoint: TCvPoint;
 begin
-  Result.x:=Trunc(x);
-  Result.y:=Trunc(y);
+  Result.x := Trunc(x);
+  Result.y := Trunc(y);
 end;
 
 function TCvPoint2D32f.Norm: Single;
