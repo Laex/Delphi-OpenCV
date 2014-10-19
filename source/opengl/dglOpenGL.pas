@@ -1,8 +1,8 @@
 { ============================================================================
 
        OpenGL 4.4 - Headertranslation
-       Version 4.4
-       Date : 2013/07/22
+       Version 4.4a
+       Date : 2014/04/30
 
        Supported environments and targets :
         - (Win32) Delphi 4 and up
@@ -406,8 +406,10 @@
                 Added MAX_VERTEX_ATTRIB_STRIDE stat                      (SW)
                 Added missing functions for GL_EXT_direct_state_access   (SW)
                 GL3.0+ uses non-deprecated way of getting extensions
-                (thanks to frenK)  																			 (SW)
+                (thanks to frenK)  										 (SW)
                 Added missing cdecl for TglXGetVisualFromFBConfig        (SW)
+ Version 4.4a	Fixed parameter type for glGetProgramInfoLog 			 (SW)
+				(thanks to glAwesome)
 
 
 ==============================================================================
@@ -754,7 +756,7 @@ type
 
 
 {$IFDEF FPC}
-  TRect = record
+  TRect = packed record
     Left, Top, Right, Bottom: Longint;
   end;
 {$ENDIF}
@@ -775,7 +777,7 @@ type
   {$IFDEF DGL_WIN}
     PWGLSwap = ^TWGLSwap;
     {$EXTERNALSYM _WGLSWAP}
-      _WGLSWAP = record
+      _WGLSWAP = packed record
         hdc: HDC;
         uiFlags: UINT;
       end;
@@ -8510,7 +8512,7 @@ type
   TglGetAttachedShaders = procedure(programObj: GLhandle; MaxCount: GLsizei; var Count: GLint; shaders: PGLuint); {$IFDEF DGL_WIN}stdcall; {$ELSE}cdecl; {$ENDIF}
   TglGetAttribLocation = function(programObj: GLhandle; char: PGLChar): glint; {$IFDEF DGL_WIN}stdcall; {$ELSE}cdecl; {$ENDIF}
   TglGetProgramiv = procedure(programObj: GLhandle; pname: GLenum; params: PGLInt); {$IFDEF DGL_WIN}stdcall; {$ELSE}cdecl; {$ENDIF}
-  TglGetProgramInfoLog = procedure(programObj: GLHandle; maxLength: glsizei; var length: GLint; infoLog: PGLChar); {$IFDEF DGL_WIN}stdcall; {$ELSE}cdecl; {$ENDIF}
+  TglGetProgramInfoLog = procedure(programObj: GLHandle; maxLength: glsizei; var length: PGLsizei; infoLog: PGLChar); {$IFDEF DGL_WIN}stdcall; {$ELSE}cdecl; {$ENDIF}
   TglGetShaderiv = procedure(shaderObj: GLhandle; pname: GLenum; params: PGLInt); {$IFDEF DGL_WIN}stdcall; {$ELSE}cdecl; {$ENDIF}
   TglGetShaderInfoLog = procedure(shaderObj: GLHandle; maxLength: glsizei; var length: glint; infoLog: PGLChar); {$IFDEF DGL_WIN}stdcall; {$ELSE}cdecl; {$ENDIF}
   TglGetShaderSource = procedure(shaderObj: GLhandle; maxlength: GLsizei; var length: GLsizei; source: PGLChar); {$IFDEF DGL_WIN}stdcall; {$ELSE}cdecl; {$ENDIF}
@@ -14527,7 +14529,7 @@ const
   {$ENDIF}
 {$ENDIF}
 
-function InitOpenGL(LibName: String = OPENGL_LIBNAME; GLlib: String = GLU_LIBNAME): Boolean;
+function InitOpenGL(LibName: String = OPENGL_LIBNAME; GLULibName: String = GLU_LIBNAME): Boolean;
 
 function dglGetProcAddress(ProcName: PAnsiChar; LibHandle: Pointer = nil {$IFDEF DGL_LINUX}; ForceDLSym: Boolean = False{$ENDIF}): Pointer;
 function dglCheckExtension(Extension: AnsiString): Boolean;
@@ -14975,7 +14977,7 @@ end;
 
 
 
-function InitOpenGL(LibName: String; GLlib: String): Boolean;
+function InitOpenGL(LibName: String; GLULibName: String): Boolean;
 begin
   Result := False;
 
@@ -14988,7 +14990,7 @@ begin
 
   // load library
   GL_LibHandle := dglLoadLibrary(PChar(LibName));
-  GLU_LibHandle := dglLoadLibrary(PChar(GLlib));
+  GLU_LibHandle := dglLoadLibrary(PChar(GLULibName));
 
   // load GL functions
   if (GL_LibHandle <> nil) then begin
@@ -20069,4 +20071,3 @@ initialization
 finalization
 
 end.
-
