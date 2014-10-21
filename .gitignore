@@ -1,3 +1,4 @@
+#Directories
 buildtest
 __history
 Debug
@@ -7,7 +8,7 @@ lib
 /resource/result/*.*
 /bin/Win32/*.exe
 /bin/Win64/*.exe
-
+#Files
 *.ini
 *.bsc
 *.sdf
