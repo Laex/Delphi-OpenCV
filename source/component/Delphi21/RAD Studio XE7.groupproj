@@ -15,9 +15,6 @@
         <Projects Include="dclVCLOpenCV210.dproj">
             <Dependencies>dclCommonOpenCV210.dproj</Dependencies>
         </Projects>
-        <Projects Include="..\..\..\samples\Components\cFMXCameracapture\cFMXCameraCapture.dproj">
-            <Dependencies/>
-        </Projects>
     </ItemGroup>
     <ProjectExtensions>
         <Borland.Personality>Default.Personality.12</Borland.Personality>
@@ -62,23 +59,14 @@
     <Target Name="dclVCLOpenCV210:Make" DependsOnTargets="dclCommonOpenCV210:Make">
         <MSBuild Projects="dclVCLOpenCV210.dproj" Targets="Make"/>
     </Target>
-    <Target Name="cFMXCameraCapture">
-        <MSBuild Projects="..\..\..\samples\Components\cFMXCameracapture\cFMXCameraCapture.dproj"/>
-    </Target>
-    <Target Name="cFMXCameraCapture:Clean">
-        <MSBuild Projects="..\..\..\samples\Components\cFMXCameracapture\cFMXCameraCapture.dproj" Targets="Clean"/>
-    </Target>
-    <Target Name="cFMXCameraCapture:Make">
-        <MSBuild Projects="..\..\..\samples\Components\cFMXCameracapture\cFMXCameraCapture.dproj" Targets="Make"/>
-    </Target>
     <Target Name="Build">
-        <CallTarget Targets="OpenCV210;dclCommonOpenCV210;dclFMXOpenCV210;dclVCLOpenCV210;cFMXCameraCapture"/>
+        <CallTarget Targets="OpenCV210;dclCommonOpenCV210;dclFMXOpenCV210;dclVCLOpenCV210"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="OpenCV210:Clean;dclCommonOpenCV210:Clean;dclFMXOpenCV210:Clean;dclVCLOpenCV210:Clean;cFMXCameraCapture:Clean"/>
+        <CallTarget Targets="OpenCV210:Clean;dclCommonOpenCV210:Clean;dclFMXOpenCV210:Clean;dclVCLOpenCV210:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="OpenCV210:Make;dclCommonOpenCV210:Make;dclFMXOpenCV210:Make;dclVCLOpenCV210:Make;cFMXCameraCapture:Make"/>
+        <CallTarget Targets="OpenCV210:Make;dclCommonOpenCV210:Make;dclFMXOpenCV210:Make;dclVCLOpenCV210:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>
