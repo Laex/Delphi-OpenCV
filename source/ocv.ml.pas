@@ -1,46 +1,47 @@
-// **************************************************************************************************
-// Project Delphi-OpenCV
-// **************************************************************************************************
-// Contributors:
-// Laentir Valetov
-// email:laex@bk.ru
-// Mikhail Grigorev
-// Email: sleuthhound@gmail.com
-// **************************************************************************************************
-// You may retrieve the latest version of this file at the GitHub,
-// located at git://github.com/Laex/Delphi-OpenCV.git
-// **************************************************************************************************
-// License:
-// The contents of this file are subject to the Mozilla Public License Version 1.1 (the "License");
-// you may not use this file except in compliance with the License. You may obtain a copy of the
-// License at http://www.mozilla.org/MPL/
-//
-// Software distributed under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
-// ANY KIND, either express or implied. See the License for the specific language governing rights
-// and limitations under the License.
-//
-// Alternatively, the contents of this file may be used under the terms of the
-// GNU Lesser General Public License (the  "LGPL License"), in which case the
-// provisions of the LGPL License are applicable instead of those above.
-// If you wish to allow use of your version of this file only under the terms
-// of the LGPL License and not to allow others to use your version of this file
-// under the MPL, indicate your decision by deleting  the provisions above and
-// replace  them with the notice and other provisions required by the LGPL
-// License.  If you do not delete the provisions above, a recipient may use
-// your version of this file under either the MPL or the LGPL License.
-//
-// For more information about the LGPL: http://www.gnu.org/copyleft/lesser.html
-// **************************************************************************************************
-// The Initial Developer of the Original Code:
-// OpenCV: open source computer vision library
-// Homepage:    http://ocv.org
-// Online docs: http://docs.ocv.org
-// Q&A forum:   http://answers.ocv.org
-// Dev zone:    http://code.ocv.org
-// **************************************************************************************************
-// Original file:
-// opencv\modules\ml\include\opencv2\ml.hpp
-// *************************************************************************************************
+(*
+  **************************************************************************************************
+  Project Delphi-OpenCV
+  **************************************************************************************************
+  Contributors:
+  Laentir Valetov
+  email:laex@bk.ru
+  Mikhail Grigorev
+  Email: sleuthhound@gmail.com
+  **************************************************************************************************
+  You may retrieve the latest version of this file at the GitHub,
+  located at git://github.com/Laex/Delphi-OpenCV.git
+  **************************************************************************************************
+  License:
+  The contents of this file are subject to the Mozilla Public License Version 1.1 (the "License");
+  you may not use this file except in compliance with the License. You may obtain a copy of the
+  License at http://www.mozilla.org/MPL/
+
+  Software distributed under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
+  ANY KIND, either express or implied. See the License for the specific language governing rights
+  and limitations under the License.
+
+  Alternatively, the contents of this file may be used under the terms of the
+  GNU Lesser General Public License (the  "LGPL License"), in which case the
+  provisions of the LGPL License are applicable instead of those above.
+  If you wish to allow use of your version of this file only under the terms
+  of the LGPL License and not to allow others to use your version of this file
+  under the MPL, indicate your decision by deleting  the provisions above and
+  replace  them with the notice and other provisions required by the LGPL
+  License.  If you do not delete the provisions above, a recipient may use
+  your version of this file under either the MPL or the LGPL License.
+
+  For more information about the LGPL: http://www.gnu.org/copyleft/lesser.html
+  **************************************************************************************************
+  The Initial Developer of the Original Code:
+  OpenCV: open source computer vision library
+  Homepage:    http://ocv.org
+  Online docs: http://docs.ocv.org
+  Q&A forum:   http://answers.ocv.org
+  Dev zone:    http://code.ocv.org
+  **************************************************************************************************
+  Original file:
+  opencv\modules\ml\include\opencv2\ml.hpp
+  ************************************************************************************************ *)
 
 unit ocv.ml;
 
@@ -52,112 +53,131 @@ Uses
   WinApi.Windows,
   ocv.core.types_c;
 
-/// ****************************************************************************************\
-// *                               Main struct definitions                                  *
-// \****************************************************************************************/
-//
-/// * log(2*PI) */
-// #define CV_LOG2PI (1.8378770664093454835606594728112)
-//
-/// * columns of <trainData> matrix are training samples */
-// #define CV_COL_SAMPLE 0
-//
-/// * rows of <trainData> matrix are training samples */
-// #define CV_ROW_SAMPLE 1
-//
-// #define CV_IS_ROW_SAMPLE(flags) ((flags) & CV_ROW_SAMPLE)
-//
-// struct CvVectors
-// {
-// int type;
-// int dims, count;
-// CvVectors* next;
-// union
-// {
-// uchar** ptr;
-// float** fl;
-// double** db;
-// } data;
-// };
-//
-// #if 0
-/// * A structure, representing the lattice range of statmodel parameters.
-// It is used for optimizing statmodel parameters by cross-validation method.
-// The lattice is logarithmic, so <step> must be greater then 1. */
-// typedef struct CvParamLattice
-// {
-// double min_val;
-// double max_val;
-// double step;
-// }
-// CvParamLattice;
-//
-// CV_INLINE CvParamLattice cvParamLattice( double min_val, double max_val,
-// double log_step )
-// {
-// CvParamLattice pl;
-// pl.min_val = MIN( min_val, max_val );
-// pl.max_val = MAX( min_val, max_val );
-// pl.step = MAX( log_step, 1. );
-// return pl;
-// }
-//
-// CV_INLINE CvParamLattice cvDefaultParamLattice( void )
-// {
-// CvParamLattice pl = {0,0,0};
-// return pl;
-// }
-// #endif
+(* ***************************************************************************************
+  *                               Main struct definitions                                *
+  *************************************************************************************** *)
 
 const
-  /// * Variable type */
+  (* log(2*PI) *)
+  CV_LOG2PI = (1.8378770664093454835606594728112);
+
+  (* columns of <trainData> matrix are training samples *)
+  CV_COL_SAMPLE = 0;
+
+  (* rows of <trainData> matrix are training samples *)
+  CV_ROW_SAMPLE = 1;
+
+function CV_IS_ROW_SAMPLE(flags: Integer): Boolean; inline;
+
+Type
+  (* struct CvVectors
+    {
+    int type;
+    int dims, count;
+    CvVectors* next;
+    union
+    {
+    uchar** ptr;
+    float** fl;
+    double** db;
+    } data;
+    };
+  *)
+  pCvVectors = ^TCvVectors;
+
+  TCvVectors = record
+    _type: Integer;
+    dims, count: Integer;
+    next: pCvVectors;
+    case data: byte of
+      0:
+        (ptr: ^pByte);
+      1:
+        (fl: ^PSingle);
+      2:
+        (db: ^PDouble);
+  end;
+
+  // #if 0
+  (* A structure, representing the lattice range of statmodel parameters.
+    It is used for optimizing statmodel parameters by cross-validation method.
+    The lattice is logarithmic, so <step> must be greater then 1. *)
+  (*
+    typedef struct CvParamLattice
+    {
+    double min_val;
+    double max_val;
+    double step;
+    }
+    CvParamLattice;
+
+    CV_INLINE CvParamLattice cvParamLattice( double min_val, double max_val,
+    double log_step )
+    {
+    CvParamLattice pl;
+    pl.min_val = MIN( min_val, max_val );
+    pl.max_val = MAX( min_val, max_val );
+    pl.step = MAX( log_step, 1. );
+    return pl;
+    }
+
+    CV_INLINE CvParamLattice cvDefaultParamLattice( void )
+    {
+    CvParamLattice pl = {0,0,0};
+    return pl;
+    }
+  *)
+  // #endif
+
+const
+  (* Variable type *)
   CV_VAR_NUMERICAL   = 0;
   CV_VAR_ORDERED     = 0;
   CV_VAR_CATEGORICAL = 1;
 
-  //
-  // #define CV_TYPE_NAME_ML_SVM         "opencv-ml-svm"
-  // #define CV_TYPE_NAME_ML_KNN         "opencv-ml-knn"
-  // #define CV_TYPE_NAME_ML_NBAYES      "opencv-ml-bayesian"
-  // #define CV_TYPE_NAME_ML_EM          "opencv-ml-em"
-  // #define CV_TYPE_NAME_ML_BOOSTING    "opencv-ml-boost-tree"
-  // #define CV_TYPE_NAME_ML_TREE        "opencv-ml-tree"
-  // #define CV_TYPE_NAME_ML_ANN_MLP     "opencv-ml-ann-mlp"
-  // #define CV_TYPE_NAME_ML_CNN         "opencv-ml-cnn"
-  // #define CV_TYPE_NAME_ML_RTREES      "opencv-ml-random-trees"
-  // #define CV_TYPE_NAME_ML_ERTREES     "opencv-ml-extremely-randomized-trees"
-  // #define CV_TYPE_NAME_ML_GBT         "opencv-ml-gradient-boosting-trees"
-  //
-  // #define CV_TRAIN_ERROR  0
-  // #define CV_TEST_ERROR   1
-  //
-  // class CV_EXPORTS_W CvStatModel
-  // {
-  // public:
-  // CvStatModel();
-  // virtual ~CvStatModel();
-  //
-  // virtual void clear();
-  //
-  // CV_WRAP virtual void save( const char* filename, const char* name=0 ) const;
-  // CV_WRAP virtual void load( const char* filename, const char* name=0 );
-  //
-  // virtual void write( CvFileStorage* storage, const char* name ) const;
-  // virtual void read( CvFileStorage* storage, CvFileNode* node );
-  //
-  // protected:
-  // const char* default_model_name;
-  // };
-  //
-  /// ****************************************************************************************\
-  // *                                 Normal Bayes Classifier                                *
-  // \****************************************************************************************/
-  //
-  /// * The structure, representing the grid range of statmodel parameters.
-  // It is used for optimizing statmodel accuracy by varying model parameters,
-  // the accuracy estimate being computed by cross-validation.
-  // The grid is logarithmic, so <step> must be greater then 1. */
-  //
+  CV_TYPE_NAME_ML_SVM      = 'opencv-ml-svm';
+  CV_TYPE_NAME_ML_KNN      = 'opencv-ml-knn';
+  CV_TYPE_NAME_ML_NBAYES   = 'opencv-ml-bayesian';
+  CV_TYPE_NAME_ML_EM       = 'opencv-ml-em';
+  CV_TYPE_NAME_ML_BOOSTING = 'opencv-ml-boost-tree';
+  CV_TYPE_NAME_ML_TREE     = 'opencv-ml-tree';
+  CV_TYPE_NAME_ML_ANN_MLP  = 'opencv-ml-ann-mlp';
+  CV_TYPE_NAME_ML_CNN      = 'opencv-ml-cnn';
+  CV_TYPE_NAME_ML_RTREES   = 'opencv-ml-random-trees';
+  CV_TYPE_NAME_ML_ERTREES  = 'opencv-ml-extremely-randomized-trees';
+  CV_TYPE_NAME_ML_GBT      = 'opencv-ml-gradient-boosting-trees';
+
+  CV_TRAIN_ERROR = 0;
+  CV_TEST_ERROR  = 1;
+
+  (*
+    class CV_EXPORTS_W CvStatModel
+    {
+    public:
+    CvStatModel();
+    virtual ~CvStatModel();
+
+    virtual void clear();
+
+    CV_WRAP virtual void save( const char* filename, const char* name=0 ) const;
+    CV_WRAP virtual void load( const char* filename, const char* name=0 );
+
+    virtual void write( CvFileStorage* storage, const char* name ) const;
+    virtual void read( CvFileStorage* storage, CvFileNode* node );
+
+    protected:
+    const char* default_model_name;
+    };
+  *)
+  (* ***************************************************************************************
+    *                                 Normal Bayes Classifier                              *
+    *************************************************************************************** *)
+
+  (* The structure, representing the grid range of statmodel parameters.
+    It is used for optimizing statmodel accuracy by varying model parameters,
+    the accuracy estimate being computed by cross-validation.
+    The grid is logarithmic, so <step> must be greater then 1. *)
+
   // class CvMLData;
   //
   // struct CV_EXPORTS_W_MAP CvParamGrid
@@ -225,14 +245,14 @@ const
   // };
   //
   //
-  /// ****************************************************************************************\
-  // *                          K-Nearest Neighbour Classifier                                *
-  // \****************************************************************************************/
+  (* ***************************************************************************************\
+    // *                          K-Nearest Neighbour Classifier                                *
+    // \*************************************************************************************** *)
 Type
   TCvKNearest = class(TObject)
     function train(const trainData: pCvMat; const responses: pCvMat; const sampleIdx: pCvMat = nil;
       is_regression: bool = false; maxK: Integer = 32; updateBase: bool = false): bool; virtual; stdcall; abstract;
-    function find_nearest(const samples: pCvMat; k: Integer; results: pCvMat = nil; const neighbors: pSingle = nil;
+    function find_nearest(const samples: pCvMat; k: Integer; results: pCvMat = nil; const neighbors: PSingle = nil;
       neighborResponses: pCvMat = nil; dist: pCvMat = nil): float; virtual; stdcall; abstract;
     // -----------------------------------
     class function Create: TCvKNearest; overload;
@@ -291,12 +311,12 @@ Type
   // bool regression;
   // CvVectors* samples;
   // };
-  //
-  /// ****************************************************************************************\
-  // *                                   Support Vector Machines                              *
-  // \****************************************************************************************/
-  //
-  /// / SVM training parameters
+
+  (* ***************************************************************************************
+    *                                   Support Vector Machines                            *
+    *************************************************************************************** *)
+
+  // SVM training parameters
   // struct CV_EXPORTS_W_MAP CvSVMParams
   // {
   // CvSVMParams();
@@ -563,10 +583,10 @@ Type
   // CvSVMSolver* solver;
   // CvSVMKernel* kernel;
   // };
-  //
-  /// ****************************************************************************************\
-  // *                              Expectation - Maximization                                *
-  // \****************************************************************************************/
+
+  (* ***************************************************************************************
+    *                              Expectation - Maximization                                *
+    *************************************************************************************** *)
   // namespace cv
   // {
   // class CV_EXPORTS_W EM : public Algorithm
@@ -657,25 +677,19 @@ Type
   // Mat logWeightDivDet;
   // };
   // } // namespace cv
-  //
-  /// ****************************************************************************************\
-  // *                                      Decision Tree                                     *
-  // \****************************************************************************************/\
+
+  (* ***************************************************************************************
+    *                                      Decision Tree                                     *
+    *************************************************************************************** *)
   // struct CvPair16u32s
   // {
   // unsigned short* u;
   // int* i;
   // };
-  //
-  //
+
   // #define CV_DTREE_CAT_DIR(idx,subset) \
   // (2*((subset[(idx)>>5]&(1 << ((idx) & 31)))==0)-1)
 Type
-  TOrd = record
-    c: float;
-    split_point: Integer;
-  end;
-
   pCvDTreeSplit = ^TCvDTreeSplit;
 
   TCvDTreeSplit = record // struct CvDTreeSplit
@@ -685,20 +699,12 @@ Type
     quality: float; // float quality;
     next: pCvDTreeSplit; // CvDTreeSplit* next;
     case byte of
-      // union
-      // {
-      // int subset[2];
       0:
         (subset: array [0 .. 1] of Integer);
       1:
-        (ord: TOrd);
-    // struct
-    // {
-    // float c;
-    // int split_point;
-    // }
-    // ord;
-    // };
+        (c: Single;
+          split_point: Integer;
+        );
   end;
 
   pCvDTreeNode = ^TCvDTreeNode;
@@ -728,8 +734,9 @@ Type
     //
     // // cross-validation pruning data
     cv_Tn: pInteger; // int* cv_Tn;
-    cv_node_risk: pDouble; // double* cv_node_risk;
-    cv_node_error: pDouble; // double* cv_node_error;
+    cv_node_risk: PDouble; // double* cv_node_risk;
+    cv_node_error: PDouble; // double* cv_node_error;
+
     //
     // int get_num_valid(int vi) { return num_valid ? num_valid[vi] : sample_count; }
     function get_num_valid(vi: Integer): Integer;
@@ -738,14 +745,14 @@ Type
   end;
 
   TCvDTreeParams = record // struct CV_EXPORTS_W_MAP CvDTreeParams
-    max_categories: Integer; // CV_PROP_RW int   max_categories                      ;
-    max_depth: Integer; // CV_PROP_RW int   max_depth                           ;
-    min_sample_count: Integer; // CV_PROP_RW int   min_sample_count                    ;
-    cv_folds: Integer; // CV_PROP_RW int   cv_folds                            ;
-    use_surrogates: ByteBool; // CV_PROP_RW bool  use_surrogates                      ;
-    use_1se_rule: ByteBool; // CV_PROP_RW bool  use_1se_rule                        ;
-    truncate_pruned_tree: ByteBool; // CV_PROP_RW bool  truncate_pruned_tree                ;
-    regression_accuracy: float; // CV_PROP_RW float regression_accuracy                 ;
+    max_categories: Integer; // CV_PROP_RW int   max_categories;
+    max_depth: Integer; // CV_PROP_RW int   max_depth;
+    min_sample_count: Integer; // CV_PROP_RW int   min_sample_count;
+    cv_folds: Integer; // CV_PROP_RW int   cv_folds;
+    use_surrogates: ByteBool; // CV_PROP_RW bool  use_surrogates;
+    use_1se_rule: ByteBool; // CV_PROP_RW bool  use_1se_rule;
+    truncate_pruned_tree: ByteBool; // CV_PROP_RW bool  truncate_pruned_tree;
+    regression_accuracy: float; // CV_PROP_RW float regression_accuracy;
     priors: pFloat; // const float* priors;
     //
     // CvDTreeParams();
@@ -967,10 +974,10 @@ Type
   // };
   //
   //
-  /// ****************************************************************************************\
-  // *                                   Random Trees Classifier                              *
-  // \****************************************************************************************/
-  //
+  (* ***************************************************************************************
+    *                                   Random Trees Classifier                              *
+    *************************************************************************************** *)
+
   // class CvRTrees;
   //
   // class CV_EXPORTS CvForestTree: public CvDTree
@@ -984,7 +991,7 @@ Type
   // virtual int get_var_count() const {return data ? data->var_count : 0;}
   // virtual void read( CvFileStorage* fs, CvFileNode* node, CvRTrees* forest, CvDTreeTrainData* _data );
   //
-  // /* dummy methods to avoid warnings: BEGIN */
+  // (* dummy methods to avoid warnings: BEGIN *)
   // virtual bool train( const CvMat* trainData, int tflag,
   // const CvMat* responses, const CvMat* varIdx=0,
   // const CvMat* sampleIdx=0, const CvMat* varType=0,
@@ -995,7 +1002,7 @@ Type
   // virtual void read( CvFileStorage* fs, CvFileNode* node );
   // virtual void read( CvFileStorage* fs, CvFileNode* node,
   // CvDTreeTrainData* data );
-  // /* dummy methods to avoid warnings: END */
+  // (* dummy methods to avoid warnings: END *)
   //
   // protected:
   // friend struct cv::ForestTreeBestSplitFinder;
@@ -1081,10 +1088,10 @@ Type
   // cv::RNG* rng;
   // CvMat* active_var_mask;
   // };
-  //
-  /// ****************************************************************************************\
-  // *                           Extremely randomized trees Classifier                        *
-  // \****************************************************************************************/
+
+  (* ***************************************************************************************
+    *                           Extremely randomized trees Classifier                        *
+    *************************************************************************************** *)
   // struct CV_EXPORTS CvERTreeTrainData : public CvDTreeTrainData
   // {
   // virtual void set_data( const CvMat* trainData, int tflag,
@@ -1142,9 +1149,9 @@ Type
   // };
   //
   //
-  /// ****************************************************************************************\
-  // *                                   Boosted tree classifier                              *
-  // \****************************************************************************************/
+  (* ***************************************************************************************
+    *                                   Boosted tree classifier                              *
+    *************************************************************************************** *)
   //
   // struct CV_EXPORTS_W_MAP CvBoostParams : public CvDTreeParams
   // {
@@ -1175,7 +1182,7 @@ Type
   // CvBoost* ensemble, CvDTreeTrainData* _data );
   // virtual void clear();
   //
-  // /* dummy methods to avoid warnings: BEGIN */
+  // (* dummy methods to avoid warnings: BEGIN *)
   // virtual bool train( const CvMat* trainData, int tflag,
   // const CvMat* responses, const CvMat* varIdx=0,
   // const CvMat* sampleIdx=0, const CvMat* varType=0,
@@ -1186,7 +1193,7 @@ Type
   // virtual void read( CvFileStorage* fs, CvFileNode* node );
   // virtual void read( CvFileStorage* fs, CvFileNode* node,
   // CvDTreeTrainData* data );
-  // /* dummy methods to avoid warnings: END */
+  // (* dummy methods to avoid warnings: END *)
   //
   // protected:
   //
@@ -1302,29 +1309,28 @@ Type
   // CvMat* subtree_weights;
   // bool have_subsample;
   // };
-  //
-  //
-  /// ****************************************************************************************\
-  // *                                   Gradient Boosted Trees                               *
-  // \****************************************************************************************/
-  //
-  /// / DataType: STRUCT CvGBTreesParams
-  /// / Parameters of GBT (Gradient Boosted trees model), including single
-  /// / tree settings and ensemble parameters.
-  /// /
-  /// / weak_count          - count of trees in the ensemble
-  /// / loss_function_type  - loss function used for ensemble training
-  /// / subsample_portion   - portion of whole training set used for
-  /// /                       every single tree training.
-  /// /                       subsample_portion value is in (0.0, 1.0].
-  /// /                       subsample_portion == 1.0 when whole dataset is
-  /// /                       used on each step. Count of sample used on each
-  /// /                       step is computed as
-  /// /                       int(total_samples_count * subsample_portion).
-  /// / shrinkage           - regularization parameter.
-  /// /                       Each tree prediction is multiplied on shrinkage value.
-  //
-  //
+
+  (* ***************************************************************************************
+    *                                   Gradient Boosted Trees                               *
+    *************************************************************************************** *)
+
+  // / DataType: STRUCT CvGBTreesParams
+  // / Parameters of GBT (Gradient Boosted trees model), including single
+  // / tree settings and ensemble parameters.
+  // /
+  // / weak_count          - count of trees in the ensemble
+  // / loss_function_type  - loss function used for ensemble training
+  // / subsample_portion   - portion of whole training set used for
+  // /                       every single tree training.
+  // /                       subsample_portion value is in (0.0, 1.0].
+  // /                       subsample_portion == 1.0 when whole dataset is
+  // /                       used on each step. Count of sample used on each
+  // /                       step is computed as
+  // /                       int(total_samples_count * subsample_portion).
+  // / shrinkage           - regularization parameter.
+  // /                       Each tree prediction is multiplied on shrinkage value.
+
+
   // struct CV_EXPORTS_W_MAP CvGBTreesParams : public CvDTreeParams
   // {
   // CV_PROP_RW int weak_count;
@@ -1336,188 +1342,186 @@ Type
   // CvGBTreesParams( int loss_function_type, int weak_count, float shrinkage,
   // float subsample_portion, int max_depth, bool use_surrogates );
   // };
-  //
-  /// / DataType: CLASS CvGBTrees
-  /// / Gradient Boosting Trees (GBT) algorithm implementation.
-  /// /
-  /// / data             - training dataset
-  /// / params           - parameters of the CvGBTrees
-  /// / weak             - array[0..(class_count-1)] of CvSeq
-  /// /                    for storing tree ensembles
-  /// / orig_response    - original responses of the training set samples
-  /// / sum_response     - predicitons of the current model on the training dataset.
-  /// /                    this matrix is updated on every iteration.
-  /// / sum_response_tmp - predicitons of the model on the training set on the next
-  /// /                    step. On every iteration values of sum_responses_tmp are
-  /// /                    computed via sum_responses values. When the current
-  /// /                    step is complete sum_response values become equal to
-  /// /                    sum_responses_tmp.
-  /// / sampleIdx       - indices of samples used for training the ensemble.
-  /// /                    CvGBTrees training procedure takes a set of samples
-  /// /                    (train_data) and a set of responses (responses).
-  /// /                    Only pairs (train_data[i], responses[i]), where i is
-  /// /                    in sample_idx are used for training the ensemble.
-  /// / subsample_train  - indices of samples used for training a single decision
-  /// /                    tree on the current step. This indices are countered
-  /// /                    relatively to the sample_idx, so that pairs
-  /// /                    (train_data[sample_idx[i]], responses[sample_idx[i]])
-  /// /                    are used for training a decision tree.
-  /// /                    Training set is randomly splited
-  /// /                    in two parts (subsample_train and subsample_test)
-  /// /                    on every iteration accordingly to the portion parameter.
-  /// / subsample_test   - relative indices of samples from the training set,
-  /// /                    which are not used for training a tree on the current
-  /// /                    step.
-  /// / missing          - mask of the missing values in the training set. This
-  /// /                    matrix has the same size as train_data. 1 - missing
-  /// /                    value, 0 - not a missing value.
-  /// / class_labels     - output class labels map.
-  /// / rng              - random number generator. Used for spliting the
-  /// /                    training set.
-  /// / class_count      - count of output classes.
-  /// /                    class_count == 1 in the case of regression,
-  /// /                    and > 1 in the case of classification.
-  /// / delta            - Huber loss function parameter.
-  /// / base_value       - start point of the gradient descent procedure.
-  /// /                    model prediction is
-  /// /                    f(x) = f_0 + sum_{i=1..weak_count-1}(f_i(x)), where
-  /// /                    f_0 is the base value.
-  //
-  //
-  //
+
+  // / DataType: CLASS CvGBTrees
+  // / Gradient Boosting Trees (GBT) algorithm implementation.
+  // /
+  // / data             - training dataset
+  // / params           - parameters of the CvGBTrees
+  // / weak             - array[0..(class_count-1)] of CvSeq
+  // /                    for storing tree ensembles
+  // / orig_response    - original responses of the training set samples
+  // / sum_response     - predicitons of the current model on the training dataset.
+  // /                    this matrix is updated on every iteration.
+  // / sum_response_tmp - predicitons of the model on the training set on the next
+  // /                    step. On every iteration values of sum_responses_tmp are
+  // /                    computed via sum_responses values. When the current
+  // /                    step is complete sum_response values become equal to
+  // /                    sum_responses_tmp.
+  // / sampleIdx       - indices of samples used for training the ensemble.
+  // /                    CvGBTrees training procedure takes a set of samples
+  // /                    (train_data) and a set of responses (responses).
+  // /                    Only pairs (train_data[i], responses[i]), where i is
+  // /                    in sample_idx are used for training the ensemble.
+  // / subsample_train  - indices of samples used for training a single decision
+  // /                    tree on the current step. This indices are countered
+  // /                    relatively to the sample_idx, so that pairs
+  // /                    (train_data[sample_idx[i]], responses[sample_idx[i]])
+  // /                    are used for training a decision tree.
+  // /                    Training set is randomly splited
+  // /                    in two parts (subsample_train and subsample_test)
+  // /                    on every iteration accordingly to the portion parameter.
+  // / subsample_test   - relative indices of samples from the training set,
+  // /                    which are not used for training a tree on the current
+  // /                    step.
+  // / missing          - mask of the missing values in the training set. This
+  // /                    matrix has the same size as train_data. 1 - missing
+  // /                    value, 0 - not a missing value.
+  // / class_labels     - output class labels map.
+  // / rng              - random number generator. Used for spliting the
+  // /                    training set.
+  // / class_count      - count of output classes.
+  // /                    class_count == 1 in the case of regression,
+  // /                    and > 1 in the case of classification.
+  // / delta            - Huber loss function parameter.
+  // / base_value       - start point of the gradient descent procedure.
+  // /                    model prediction is
+  // /                    f(x) = f_0 + sum_{i=1..weak_count-1}(f_i(x)), where
+  // /                    f_0 is the base value.
+
+
+
   // class CV_EXPORTS_W CvGBTrees : public CvStatModel
   // {
   // public:
   //
-  // /*
-  // // DataType: ENUM
-  // // Loss functions implemented in CvGBTrees.
-  // //
-  // // SQUARED_LOSS
-  // // problem: regression
-  // // loss = (x - x')^2
-  // //
-  // // ABSOLUTE_LOSS
-  // // problem: regression
-  // // loss = abs(x - x')
-  // //
-  // // HUBER_LOSS
-  // // problem: regression
-  // // loss = delta*( abs(x - x') - delta/2), if abs(x - x') > delta
-  // //           1/2*(x - x')^2, if abs(x - x') <= delta,
-  // //           where delta is the alpha-quantile of pseudo responses from
-  // //           the training set.
-  // //
-  // // DEVIANCE_LOSS
-  // // problem: classification
-  // //
-  // */
+  (*
+    / DataType: ENUM
+    / Loss functions implemented in CvGBTrees.
+
+    / SQUARED_LOSS
+    / problem: regression
+    / loss = (x - x')^2
+
+    / ABSOLUTE_LOSS
+    / problem: regression
+    / loss = abs(x - x')
+
+    / HUBER_LOSS
+    / problem: regression
+    / loss = delta*( abs(x - x') - delta/2), if abs(x - x') > delta
+    /           1/2*(x - x')^2, if abs(x - x') <= delta,
+    /           where delta is the alpha-quantile of pseudo responses from
+    /           the training set.
+
+    / DEVIANCE_LOSS
+    / problem: classification
+  *)
+
   // enum {SQUARED_LOSS=0, ABSOLUTE_LOSS, HUBER_LOSS=3, DEVIANCE_LOSS};
-  //
-  //
-  // /*
-  // // Default constructor. Creates a model only (without training).
-  // // Should be followed by one form of the train(...) function.
-  // //
-  // // API
-  // // CvGBTrees();
-  //
-  // // INPUT
-  // // OUTPUT
-  // // RESULT
-  // */
+
+  (*
+    // Default constructor. Creates a model only (without training).
+    // Should be followed by one form of the train(...) function.
+    //
+    // API
+    // CvGBTrees();
+
+    // INPUT
+    // OUTPUT
+    // RESULT
+  *)
   // CV_WRAP CvGBTrees();
-  //
-  //
-  // /*
-  // // Full form constructor. Creates a gradient boosting model and does the
-  // // train.
-  // //
-  // // API
-  // // CvGBTrees( const CvMat* trainData, int tflag,
-  // const CvMat* responses, const CvMat* varIdx=0,
-  // const CvMat* sampleIdx=0, const CvMat* varType=0,
-  // const CvMat* missingDataMask=0,
-  // CvGBTreesParams params=CvGBTreesParams() );
-  //
-  // // INPUT
-  // // trainData    - a set of input feature vectors.
-  // //                  size of matrix is
-  // //                  <count of samples> x <variables count>
-  // //                  or <variables count> x <count of samples>
-  // //                  depending on the tflag parameter.
-  // //                  matrix values are float.
-  // // tflag         - a flag showing how do samples stored in the
-  // //                  trainData matrix row by row (tflag=CV_ROW_SAMPLE)
-  // //                  or column by column (tflag=CV_COL_SAMPLE).
-  // // responses     - a vector of responses corresponding to the samples
-  // //                  in trainData.
-  // // varIdx       - indices of used variables. zero value means that all
-  // //                  variables are active.
-  // // sampleIdx    - indices of used samples. zero value means that all
-  // //                  samples from trainData are in the training set.
-  // // varType      - vector of <variables count> length. gives every
-  // //                  variable type CV_VAR_CATEGORICAL or CV_VAR_ORDERED.
-  // //                  varType = 0 means all variables are numerical.
-  // // missingDataMask  - a mask of misiing values in trainData.
-  // //                  missingDataMask = 0 means that there are no missing
-  // //                  values.
-  // // params         - parameters of GTB algorithm.
-  // // OUTPUT
-  // // RESULT
-  // */
+
+  (*
+    Full form constructor. Creates a gradient boosting model and does the
+    train.
+
+    API
+    CvGBTrees( const CvMat* trainData, int tflag,
+    const CvMat* responses, const CvMat* varIdx=0,
+    const CvMat* sampleIdx=0, const CvMat* varType=0,
+    const CvMat* missingDataMask=0,
+    CvGBTreesParams params=CvGBTreesParams() );
+
+    / INPUT
+    / trainData    - a set of input feature vectors.
+    /                  size of matrix is
+    /                  <count of samples> x <variables count>
+    /                  or <variables count> x <count of samples>
+    /                  depending on the tflag parameter.
+    /                  matrix values are float.
+    / tflag         - a flag showing how do samples stored in the
+    /                  trainData matrix row by row (tflag=CV_ROW_SAMPLE)
+    /                  or column by column (tflag=CV_COL_SAMPLE).
+    / responses     - a vector of responses corresponding to the samples
+    /                  in trainData.
+    / varIdx       - indices of used variables. zero value means that all
+    /                  variables are active.
+    / sampleIdx    - indices of used samples. zero value means that all
+    /                  samples from trainData are in the training set.
+    / varType      - vector of <variables count> length. gives every
+    /                  variable type CV_VAR_CATEGORICAL or CV_VAR_ORDERED.
+    /                  varType = 0 means all variables are numerical.
+    / missingDataMask  - a mask of misiing values in trainData.
+    /                  missingDataMask = 0 means that there are no missing
+    /                  values.
+    / params         - parameters of GTB algorithm.
+    / OUTPUT
+    / RESULT
+  *)
+
   // CvGBTrees( const CvMat* trainData, int tflag,
   // const CvMat* responses, const CvMat* varIdx=0,
   // const CvMat* sampleIdx=0, const CvMat* varType=0,
   // const CvMat* missingDataMask=0,
   // CvGBTreesParams params=CvGBTreesParams() );
-  //
-  //
-  // /*
-  // // Destructor.
-  // */
+
+  (*
+    Destructor.
+  *)
   // virtual ~CvGBTrees();
   //
   //
-  // /*
-  // // Gradient tree boosting model training
-  // //
-  // // API
-  // // virtual bool train( const CvMat* trainData, int tflag,
-  // const CvMat* responses, const CvMat* varIdx=0,
-  // const CvMat* sampleIdx=0, const CvMat* varType=0,
-  // const CvMat* missingDataMask=0,
-  // CvGBTreesParams params=CvGBTreesParams(),
-  // bool update=false );
-  //
-  // // INPUT
-  // // trainData    - a set of input feature vectors.
-  // //                  size of matrix is
-  // //                  <count of samples> x <variables count>
-  // //                  or <variables count> x <count of samples>
-  // //                  depending on the tflag parameter.
-  // //                  matrix values are float.
-  // // tflag         - a flag showing how do samples stored in the
-  // //                  trainData matrix row by row (tflag=CV_ROW_SAMPLE)
-  // //                  or column by column (tflag=CV_COL_SAMPLE).
-  // // responses     - a vector of responses corresponding to the samples
-  // //                  in trainData.
-  // // varIdx       - indices of used variables. zero value means that all
-  // //                  variables are active.
-  // // sampleIdx    - indices of used samples. zero value means that all
-  // //                  samples from trainData are in the training set.
-  // // varType      - vector of <variables count> length. gives every
-  // //                  variable type CV_VAR_CATEGORICAL or CV_VAR_ORDERED.
-  // //                  varType = 0 means all variables are numerical.
-  // // missingDataMask  - a mask of misiing values in trainData.
-  // //                  missingDataMask = 0 means that there are no missing
-  // //                  values.
-  // // params         - parameters of GTB algorithm.
-  // // update         - is not supported now. (!)
-  // // OUTPUT
-  // // RESULT
-  // // Error state.
-  // */
+  (*
+    // Gradient tree boosting model training
+    //
+    // API
+    // virtual bool train( const CvMat* trainData, int tflag,
+    const CvMat* responses, const CvMat* varIdx=0,
+    const CvMat* sampleIdx=0, const CvMat* varType=0,
+    const CvMat* missingDataMask=0,
+    CvGBTreesParams params=CvGBTreesParams(),
+    bool update=false );
+
+    // INPUT
+    // trainData    - a set of input feature vectors.
+    //                  size of matrix is
+    //                  <count of samples> x <variables count>
+    //                  or <variables count> x <count of samples>
+    //                  depending on the tflag parameter.
+    //                  matrix values are float.
+    // tflag         - a flag showing how do samples stored in the
+    //                  trainData matrix row by row (tflag=CV_ROW_SAMPLE)
+    //                  or column by column (tflag=CV_COL_SAMPLE).
+    // responses     - a vector of responses corresponding to the samples
+    //                  in trainData.
+    // varIdx       - indices of used variables. zero value means that all
+    //                  variables are active.
+    // sampleIdx    - indices of used samples. zero value means that all
+    //                  samples from trainData are in the training set.
+    // varType      - vector of <variables count> length. gives every
+    //                  variable type CV_VAR_CATEGORICAL or CV_VAR_ORDERED.
+    //                  varType = 0 means all variables are numerical.
+    // missingDataMask  - a mask of misiing values in trainData.
+    //                  missingDataMask = 0 means that there are no missing
+    //                  values.
+    // params         - parameters of GTB algorithm.
+    // update         - is not supported now. (!)
+    // OUTPUT
+    // RESULT
+    // Error state.
+  *)
   // virtual bool train( const CvMat* trainData, int tflag,
   // const CvMat* responses, const CvMat* varIdx=0,
   // const CvMat* sampleIdx=0, const CvMat* varType=0,
@@ -1526,91 +1530,91 @@ Type
   // bool update=false );
   //
   //
-  // /*
-  // // Gradient tree boosting model training
-  // //
-  // // API
-  // // virtual bool train( CvMLData* data,
-  // CvGBTreesParams params=CvGBTreesParams(),
-  // bool update=false ) {return false;};
-  //
-  // // INPUT
-  // // data          - training set.
-  // // params        - parameters of GTB algorithm.
-  // // update        - is not supported now. (!)
-  // // OUTPUT
-  // // RESULT
-  // // Error state.
-  // */
+  (*
+    // Gradient tree boosting model training
+    //
+    // API
+    // virtual bool train( CvMLData* data,
+    CvGBTreesParams params=CvGBTreesParams(),
+    bool update=false ) {return false;};
+
+    // INPUT
+    // data          - training set.
+    // params        - parameters of GTB algorithm.
+    // update        - is not supported now. (!)
+    // OUTPUT
+    // RESULT
+    // Error state.
+  *)
   // virtual bool train( CvMLData* data,
   // CvGBTreesParams params=CvGBTreesParams(),
   // bool update=false );
   //
   //
-  // /*
-  // // Response value prediction
-  // //
-  // // API
-  // // virtual float predict_serial( const CvMat* sample, const CvMat* missing=0,
-  // CvMat* weak_responses=0, CvSlice slice = CV_WHOLE_SEQ,
-  // int k=-1 ) const;
-  //
-  // // INPUT
-  // // sample         - input sample of the same type as in the training set.
-  // // missing        - missing values mask. missing=0 if there are no
-  // //                   missing values in sample vector.
-  // // weak_responses  - predictions of all of the trees.
-  // //                   not implemented (!)
-  // // slice           - part of the ensemble used for prediction.
-  // //                   slice = CV_WHOLE_SEQ when all trees are used.
-  // // k               - number of ensemble used.
-  // //                   k is in {-1,0,1,..,<count of output classes-1>}.
-  // //                   in the case of classification problem
-  // //                   <count of output classes-1> ensembles are built.
-  // //                   If k = -1 ordinary prediction is the result,
-  // //                   otherwise function gives the prediction of the
-  // //                   k-th ensemble only.
-  // // OUTPUT
-  // // RESULT
-  // // Predicted value.
-  // */
+  (*
+    // Response value prediction
+    //
+    // API
+    // virtual float predict_serial( const CvMat* sample, const CvMat* missing=0,
+    CvMat* weak_responses=0, CvSlice slice = CV_WHOLE_SEQ,
+    int k=-1 ) const;
+
+    // INPUT
+    // sample         - input sample of the same type as in the training set.
+    // missing        - missing values mask. missing=0 if there are no
+    //                   missing values in sample vector.
+    // weak_responses  - predictions of all of the trees.
+    //                   not implemented (!)
+    // slice           - part of the ensemble used for prediction.
+    //                   slice = CV_WHOLE_SEQ when all trees are used.
+    // k               - number of ensemble used.
+    //                   k is in {-1,0,1,..,<count of output classes-1>}.
+    //                   in the case of classification problem
+    //                   <count of output classes-1> ensembles are built.
+    //                   If k = -1 ordinary prediction is the result,
+    //                   otherwise function gives the prediction of the
+    //                   k-th ensemble only.
+    // OUTPUT
+    // RESULT
+    // Predicted value.
+  *)
   // virtual float predict_serial( const CvMat* sample, const CvMat* missing=0,
   // CvMat* weakResponses=0, CvSlice slice = CV_WHOLE_SEQ,
   // int k=-1 ) const;
   //
-  // /*
-  // // Response value prediction.
-  // // Parallel version (in the case of TBB existence)
-  // //
-  // // API
-  // // virtual float predict( const CvMat* sample, const CvMat* missing=0,
-  // CvMat* weak_responses=0, CvSlice slice = CV_WHOLE_SEQ,
-  // int k=-1 ) const;
-  //
-  // // INPUT
-  // // sample         - input sample of the same type as in the training set.
-  // // missing        - missing values mask. missing=0 if there are no
-  // //                   missing values in sample vector.
-  // // weak_responses  - predictions of all of the trees.
-  // //                   not implemented (!)
-  // // slice           - part of the ensemble used for prediction.
-  // //                   slice = CV_WHOLE_SEQ when all trees are used.
-  // // k               - number of ensemble used.
-  // //                   k is in {-1,0,1,..,<count of output classes-1>}.
-  // //                   in the case of classification problem
-  // //                   <count of output classes-1> ensembles are built.
-  // //                   If k = -1 ordinary prediction is the result,
-  // //                   otherwise function gives the prediction of the
-  // //                   k-th ensemble only.
-  // // OUTPUT
-  // // RESULT
-  // // Predicted value.
-  // */
+  (*
+    // Response value prediction.
+    // Parallel version (in the case of TBB existence)
+    //
+    // API
+    // virtual float predict( const CvMat* sample, const CvMat* missing=0,
+    CvMat* weak_responses=0, CvSlice slice = CV_WHOLE_SEQ,
+    int k=-1 ) const;
+
+    // INPUT
+    // sample         - input sample of the same type as in the training set.
+    // missing        - missing values mask. missing=0 if there are no
+    //                   missing values in sample vector.
+    // weak_responses  - predictions of all of the trees.
+    //                   not implemented (!)
+    // slice           - part of the ensemble used for prediction.
+    //                   slice = CV_WHOLE_SEQ when all trees are used.
+    // k               - number of ensemble used.
+    //                   k is in {-1,0,1,..,<count of output classes-1>}.
+    //                   in the case of classification problem
+    //                   <count of output classes-1> ensembles are built.
+    //                   If k = -1 ordinary prediction is the result,
+    //                   otherwise function gives the prediction of the
+    //                   k-th ensemble only.
+    // OUTPUT
+    // RESULT
+    // Predicted value.
+  *)
   // virtual float predict( const CvMat* sample, const CvMat* missing=0,
   // CvMat* weakResponses=0, CvSlice slice = CV_WHOLE_SEQ,
   // int k=-1 ) const;
   //
-  // /*
+  // (*
   // // Deletes all the data.
   // //
   // // API
@@ -1623,10 +1627,10 @@ Type
   // //        sample_idx, missing, lass_labels
   // // delta = 0.0
   // // RESULT
-  // */
+  // *)
   // CV_WRAP virtual void clear();
   //
-  // /*
+  // (*
   // // Compute error on the train/test set.
   // //
   // // API
@@ -1641,11 +1645,11 @@ Type
   // // resp  - vector of predicitons
   // // RESULT
   // // Error value.
-  // */
+  // *)
   // virtual float calc_error( CvMLData* _data, int type,
   // std::vector<float> *resp = 0 );
   //
-  // /*
+  // (*
   // //
   // // Write parameters of the gtb model and data. Write learned model.
   // //
@@ -1657,11 +1661,11 @@ Type
   // // name   - model name.
   // // OUTPUT
   // // RESULT
-  // */
+  // *)
   // virtual void write( CvFileStorage* fs, const char* name ) const;
   //
   //
-  // /*
+  // (*
   // //
   // // Read parameters of the gtb model and data. Read learned model.
   // //
@@ -1673,7 +1677,7 @@ Type
   // // node   - file node.
   // // OUTPUT
   // // RESULT
-  // */
+  // *)
   // virtual void read( CvFileStorage* fs, CvFileNode* node );
   //
   //
@@ -1697,7 +1701,7 @@ Type
   //
   // protected:
   //
-  // /*
+  // (*
   // // Compute the gradient vector components.
   // //
   // // API
@@ -1711,11 +1715,11 @@ Type
   // // which correspond to samples used for training
   // // on the current step.
   // // RESULT
-  // */
+  // *)
   // virtual void find_gradient( const int k = 0);
   //
   //
-  // /*
+  // (*
   // //
   // // Change values in tree leaves according to the used loss function.
   // //
@@ -1730,11 +1734,11 @@ Type
   // // changes 'value' fields of the trees' leaves.
   // // changes sum_response_tmp.
   // // RESULT
-  // */
+  // *)
   // virtual void change_values(CvDTree* tree, const int k = 0);
   //
   //
-  // /*
+  // (*
   // //
   // // Find optimal constant prediction value according to the used loss
   // // function.
@@ -1749,11 +1753,11 @@ Type
   // // OUTPUT
   // // RESULT
   // // optimal constant value.
-  // */
+  // *)
   // virtual float find_optimal_value( const CvMat* _Idx );
   //
   //
-  // /*
+  // (*
   // //
   // // Randomly split the whole training set in two parts according
   // // to params.portion.
@@ -1766,11 +1770,11 @@ Type
   // // subsample_train - indices of samples used for training
   // // subsample_test  - indices of samples used for test
   // // RESULT
-  // */
+  // *)
   // virtual void do_subsample();
   //
   //
-  // /*
+  // (*
   // //
   // // Internal recursive function giving an array of subtree tree leaves.
   // //
@@ -1783,11 +1787,11 @@ Type
   // // count        - count of leaves in the subtree.
   // // leaves       - array of pointers to leaves.
   // // RESULT
-  // */
+  // *)
   // void leaves_get( CvDTreeNode** leaves, int& count, CvDTreeNode* node );
   //
   //
-  // /*
+  // (*
   // //
   // // Get leaves of the tree.
   // //
@@ -1800,11 +1804,11 @@ Type
   // // len              - count of the leaves.
   // // RESULT
   // // CvDTreeNode**    - array of pointers to leaves.
-  // */
+  // *)
   // CvDTreeNode** GetLeaves( const CvDTree* dtree, int& len );
   //
   //
-  // /*
+  // (*
   // //
   // // Is it a regression or a classification.
   // //
@@ -1816,11 +1820,11 @@ Type
   // // RESULT
   // // false if it is a classification problem,
   // // true - if regression.
-  // */
+  // *)
   // virtual bool problem_type() const;
   //
   //
-  // /*
+  // (*
   // //
   // // Write parameters of the gtb model.
   // //
@@ -1831,11 +1835,11 @@ Type
   // // fs           - file storage to write parameters to.
   // // OUTPUT
   // // RESULT
-  // */
+  // *)
   // virtual void write_params( CvFileStorage* fs ) const;
   //
   //
-  // /*
+  // (*
   // //
   // // Read parameters of the gtb model and data.
   // //
@@ -1851,7 +1855,7 @@ Type
   // //                their types, etc.).
   // // class_labels - output class labels map.
   // // RESULT
-  // */
+  // *)
   // virtual void read_params( CvFileStorage* fs, CvFileNode* fnode );
   // int get_len(const CvMat* mat) const;
   //
@@ -1876,13 +1880,11 @@ Type
   // float base_value;
   //
   // };
-  //
-  //
-  //
-  /// ****************************************************************************************\
-  // *                              Artificial Neural Networks (ANN)                          *
-  // \****************************************************************************************/
-  //
+
+  (* ***************************************************************************************
+    *                              Artificial Neural Networks (ANN)                          *
+    *************************************************************************************** *)
+
   /// ////////////////////////////////// Multi-Layer Perceptrons //////////////////////////////
   //
   // struct CV_EXPORTS_W_MAP CvANN_MLP_TrainParams
@@ -1997,16 +1999,16 @@ Type
   // cv::RNG* rng;
   // };
   //
-  /// ****************************************************************************************\
-  // *                           Auxilary functions declarations                              *
-  // \****************************************************************************************/
+  (* ***************************************************************************************\
+    // *                           Auxilary functions declarations                              *
+    // \*************************************************************************************** *)
   //
-  /// * Generates <sample> from multivariate normal distribution, where <mean> - is an
-  // average row vector, <cov> - symmetric covariation matrix */
+  (* Generates <sample> from multivariate normal distribution, where <mean> - is an
+    // average row vector, <cov> - symmetric covariation matrix *)
   // CVAPI(void) cvRandMVNormal( CvMat* mean, CvMat* cov, CvMat* sample,
   // CvRNG* rng CV_DEFAULT(0) );
   //
-  /// * Generates sample from gaussian mixture distribution */
+  (* Generates sample from gaussian mixture distribution *)
   // CVAPI(void) cvRandGaussMixture( CvMat* means[],
   // CvMat* covs[],
   // float weights[],
@@ -2016,17 +2018,17 @@ Type
   //
   // #define CV_TS_CONCENTRIC_SPHERES 0
   //
-  /// * creates test set */
+  (* creates test set *)
   // CVAPI(void) cvCreateTestSet( int type, CvMat** samples,
   // int num_samples,
   // int num_features,
   // CvMat** responses,
   // int num_classes, ... );
-  //
-  /// ****************************************************************************************\
-  // *                                      Data                                             *
-  // \****************************************************************************************/
-  //
+
+  (* ***************************************************************************************
+    *                                      Data                                             *
+    *************************************************************************************** *)
+
   // #define CV_COUNT     0
   // #define CV_PORTION   1
   //
@@ -2179,6 +2181,11 @@ function CreateCvKNearest: TCvKNearest; stdcall; external opencv_classes_lib; ov
 function CreateCvKNearest(const trainData: pCvMat; const responses: pCvMat; const sampleIdx: pCvMat = nil;
   isRegression: bool = false; max_k: Integer = 32): TCvKNearest; stdcall; external opencv_classes_lib; overload;
 procedure ReleaseCvKNearest(ex: TCvKNearest); stdcall; external opencv_classes_lib;
+
+function CV_IS_ROW_SAMPLE(flags: Integer): Boolean;
+begin
+  Result := (flags and CV_ROW_SAMPLE) <> 0;
+end;
 
 { TCvDTreeNode }
 

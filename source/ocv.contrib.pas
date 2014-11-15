@@ -1160,7 +1160,12 @@ Var
   src: pIplImage;
   h, v, i, l: Integer;
   isInit: Boolean;
-  pShrinked, pHueFrame, pMotionFrame, pLastGrayFrame, pFilteredFrame, pGrayFrame: PByte;
+//  pShrinked,
+  pHueFrame,
+  pMotionFrame,
+  pLastGrayFrame,
+  pFilteredFrame,
+  pGrayFrame: PByte;
 begin
   src := inputBGRImage;
 
@@ -1174,7 +1179,7 @@ begin
     initData(src, nSamplingDivider, nSamplingDivider);
   end;
 
-  pShrinked := imgShrinked^.imageData;
+//  pShrinked := imgShrinked^.imageData;
   pHueFrame := imgHueFrame^.imageData;
   pMotionFrame := imgMotionFrame^.imageData;
   pLastGrayFrame := imgLastGrayFrame^.imageData;
@@ -1213,7 +1218,7 @@ begin
           ASD_INTENSITY_SET_PIXEL(pMotionFrame, h);
       end;
     end;
-    pShrinked := pShrinked + 3;
+//    pShrinked := pShrinked + 3;
     Inc(pGrayFrame);
     Inc(pLastGrayFrame);
     Inc(pMotionFrame);

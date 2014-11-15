@@ -1,45 +1,47 @@
-// **************************************************************************************************
-// Project Delphi-OpenCV
-// **************************************************************************************************
-// Contributor:
-// Laentir Valetov
-// email:laex@bk.ru
-// Mikhail Grigorev
-// email:sleuthound@gmail.com
-// **************************************************************************************************
-// You may retrieve the latest version of this file at the GitHub,
-// located at git://github.com/Laex/Delphi-OpenCV.git
-// **************************************************************************************************
-// License:
-// The contents of this file are subject to the Mozilla Public License Version 1.1 (the "License");
-// you may not use this file except in compliance with the License. You may obtain a copy of the
-// License at http://www.mozilla.org/MPL/
-//
-// Software distributed under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
-// ANY KIND, either express or implied. See the License for the specific language governing rights
-// and limitations under the License.
-//
-// Alternatively, the contents of this file may be used under the terms of the
-// GNU Lesser General Public License (the  "LGPL License"), in which case the
-// provisions of the LGPL License are applicable instead of those above.
-// If you wish to allow use of your version of this file only under the terms
-// of the LGPL License and not to allow others to use your version of this file
-// under the MPL, indicate your decision by deleting  the provisions above and
-// replace  them with the notice and other provisions required by the LGPL
-// License.  If you do not delete the provisions above, a recipient may use
-// your version of this file under either the MPL or the LGPL License.
-//
-// For more information about the LGPL: http://www.gnu.org/copyleft/lesser.html
-// **************************************************************************************************
-// Warning: Using Delphi XE3 syntax!
-// **************************************************************************************************
-// The Initial Developer of the Original Code:
-// OpenCV: open source computer vision library
-// Homepage:    http://ocv.org
-// Online docs: http://docs.ocv.org
-// Q&A forum:   http://answers.ocv.org
-// Dev zone:    http://code.ocv.org
-// **************************************************************************************************
+(*
+  **************************************************************************************************
+  Project Delphi-OpenCV
+  **************************************************************************************************
+  Contributor:
+  Laentir Valetov
+  email:laex@bk.ru
+  Mikhail Grigorev
+  email:sleuthound@gmail.com
+  **************************************************************************************************
+  You may retrieve the latest version of this file at the GitHub,
+  located at git://github.com/Laex/Delphi-OpenCV.git
+  **************************************************************************************************
+  License:
+  The contents of this file are subject to the Mozilla Public License Version 1.1 (the "License");
+  you may not use this file except in compliance with the License. You may obtain a copy of the
+  License at http://www.mozilla.org/MPL/
+
+  Software distributed under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
+  ANY KIND, either express or implied. See the License for the specific language governing rights
+  and limitations under the License.
+
+  Alternatively, the contents of this file may be used under the terms of the
+  GNU Lesser General Public License (the  "LGPL License"), in which case the
+  provisions of the LGPL License are applicable instead of those above.
+  If you wish to allow use of your version of this file only under the terms
+  of the LGPL License and not to allow others to use your version of this file
+  under the MPL, indicate your decision by deleting  the provisions above and
+  replace  them with the notice and other provisions required by the LGPL
+  License.  If you do not delete the provisions above, a recipient may use
+  your version of this file under either the MPL or the LGPL License.
+
+  For more information about the LGPL: http://www.gnu.org/copyleft/lesser.html
+  **************************************************************************************************
+  Warning: Using Delphi XE3 syntax!
+  **************************************************************************************************
+  The Initial Developer of the Original Code:
+  OpenCV: open source computer vision library
+  Homepage:    http://ocv.org
+  Online docs: http://docs.ocv.org
+  Q&A forum:   http://answers.ocv.org
+  Dev zone:    http://code.ocv.org
+  **************************************************************************************************
+*)
 
 //
 {$I OpenCV.inc}
@@ -185,11 +187,11 @@ function Scalar(const v0: double = 0; const v1: double = 0; const v2: double = 0
 function Scalar(const S: TccvScalar; const v0: double = 0; const v1: double = 0; const v2: double = 0;
   const v3: double = 0): TccvScalar; overload;
 
-// ! draws the circle outline or a solid circle in the image
-// CV_EXPORTS_W void circle(
-// CV_IN_OUT Mat& img, Point center, int radius,
-// const Scalar& color, int thickness=1,
-// int lineType=8, int shift=0);
+(* ! draws the circle outline or a solid circle in the image
+
+  CV_EXPORTS_W void circle(CV_IN_OUT Mat& img, Point center, int radius,
+  const Scalar& color, int thickness=1,int lineType=8, int shift=0);
+*)
 procedure circle(img: TccvMat; center: TccvPoint; radius: integer; const color: TccvScalar; thickness: integer = 1;
   lineType: integer = 8; shift: integer = 0); stdcall;
 

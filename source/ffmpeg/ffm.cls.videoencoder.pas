@@ -18,7 +18,7 @@ Type
     MAX_AUDIO_PACKET_SIZE = (128 * 1024);
   private
     // output file name
-    outputFilename: string;
+    outputFilename: AnsiString;
     // output format.
     pOutFormat: pAVOutputFormat;
     // format context
@@ -90,10 +90,14 @@ Type
 implementation
 
 Uses
-  System.SysUtils,
   Winapi.Windows,
+  System.SysUtils,
+  System.AnsiStrings,
   System.Math,
-  ffm.mem, ffm.avutil, ffm.samplefmt, ffm.mathematics;
+  ffm.mem,
+  ffm.avutil,
+  ffm.samplefmt,
+  ffm.mathematics;
 
 { TNVRVideoEncoder }
 
@@ -101,19 +105,19 @@ function TFFMVideoEncoder.AddAudioSample(const pFormatContext: pAVFormatContext;
   const soundBuffer: pByte; const soundBufferSize: Integer): boolean;
 Var
   pCodecCxt: pAVCodecContext;
-  packSizeInSize: DWORD;
+  packSizeInSize: Integer; // DWORD;
   nCountSamples: Integer;
   nCurrentSize: Integer;
-  nWriteSamples: Integer;
+  // nWriteSamples: Integer;
   pSoundBuffer: pByte;
   pAudioFrame: pAVFrame;
-  nBufferShift: Integer;
+  // nBufferShift: Integer;
   nCurrentBufferSize: Integer;
   pkt: TAVPacket;
   nOutputSize, error: Integer;
 begin
 
-  pCodecCxt := nil;
+  // pCodecCxt := nil;
   Result := true;
 
   pCodecCxt := pStream^.codec;
@@ -129,7 +133,7 @@ begin
   nAudioBufferSizeCurrent := nAudioBufferSizeCurrent + soundBufferSize;
 
   nCurrentSize := nAudioBufferSizeCurrent;
-  nWriteSamples := 0;
+  // nWriteSamples := 0;
   pSoundBuffer := audioBuffer;
 
   while (nCurrentSize >= packSizeInSize) do
@@ -140,7 +144,7 @@ begin
 
     // Audio frame should be equal or smaller pCodecCxt^.frame_size.
     pAudioFrame^.nb_samples := min(pCodecCxt^.frame_size div av_get_bytes_per_sample(AV_SAMPLE_FMT_S16), nCountSamples);
-    nBufferShift := nWriteSamples * av_get_bytes_per_sample(AV_SAMPLE_FMT_S16);
+    // nBufferShift := nWriteSamples * av_get_bytes_per_sample(AV_SAMPLE_FMT_S16);
     nCurrentBufferSize := pAudioFrame^.nb_samples * av_get_bytes_per_sample(AV_SAMPLE_FMT_S16);
 
     if avcodec_fill_audio_frame(pAudioFrame, 1, AV_SAMPLE_FMT_S16, pSoundBuffer, nCurrentBufferSize, 1) <> 0 then
@@ -178,7 +182,7 @@ begin
     nCurrentSize := nCurrentSize - nCurrentBufferSize;
     pSoundBuffer := pSoundBuffer + nCurrentBufferSize;
 
-    nWriteSamples := nWriteSamples + pAudioFrame^.nb_samples;
+    // nWriteSamples := nWriteSamples + pAudioFrame^.nb_samples;
     avcodec_free_frame(pAudioFrame);
   end;
 
@@ -191,8 +195,8 @@ function TFFMVideoEncoder.AddAudioStream(const pContext: pAVFormatContext; const
 Var
   pCodecCxt: pAVCodecContext;
 begin
-  pCodecCxt := nil;
-  Result := nil;
+  // pCodecCxt := nil;
+  // Result := nil;
   // Try create stream.
   Result := avformat_new_stream(pContext, nil);
   if not Assigned(Result) then
@@ -222,12 +226,12 @@ end;
 function TFFMVideoEncoder.AddFrame(const frame: pAVFrame; const soundBuffer: pByte; const soundBufferSize: Integer;
   const framepixfmt: TAVPixelFormat): boolean;
 Var
-  nOutputSize: Integer;
+  // nOutputSize: Integer;
   pVideoCodec: pAVCodecContext;
 begin
   Result := true;
-  nOutputSize := 0;
-  pVideoCodec := nil;
+  // nOutputSize := 0;
+  // pVideoCodec := nil;
 
   if Assigned(pVideoStream) and Assigned(frame) and Assigned(frame^.data[0]) then
   begin
@@ -276,7 +280,7 @@ Var
   error: Integer;
 begin
 
-  Result := false;
+  // Result := false;
 
   if (pFormatContext^.oformat^.flags and AVFMT_RAWPICTURE) <> 0 then
   begin
@@ -328,10 +332,10 @@ function TFFMVideoEncoder.AddVideoStream(const pContext: pAVFormatContext; const
 Var
   pCodecCxt: pAVCodecContext;
 begin
-  pCodecCxt := nil;
-  Result := nil;
+  // pCodecCxt := nil;
+  // Result := nil;
 
-  Result := avformat_new_stream(pContext, 0);
+  Result := avformat_new_stream(pContext, nil);
   if not Assigned(Result) then
   begin
     // printf("Cannot add new vidoe stream\n");
@@ -431,7 +435,7 @@ Var
   picture_buf: pByte;
   size: Integer;
 begin
-  picture_buf := nil;
+  // picture_buf := nil;
   Result := avcodec_alloc_frame();
   if not Assigned(Result) then
   begin
@@ -464,7 +468,7 @@ begin
   // Todo: Maybe you need write audio samples from audioBuffer to file before cloasing.
   if Assigned(pFormatContext) then
   begin
-//    flush_encoder;
+    // flush_encoder;
     av_write_trailer(pFormatContext);
     Free;
   end;
@@ -481,6 +485,7 @@ Var
   ret, got_output: Integer;
   pkt: TAVPacket;
 begin
+  Result := 0;
   (* get the delayed frames *)
   av_init_packet(@pkt);
   got_output := 1;
@@ -544,7 +549,7 @@ begin
 
   // Initialize libavcodec
   av_register_all();
-  if SameText(container, 'auto') then
+  if System.AnsiStrings.SameText(container, 'auto') then
     // Create format
     pOutFormat := av_guess_format(nil, filename, nil)
   else
@@ -558,7 +563,8 @@ begin
     if Assigned(pFormatContext) then
     begin
       pFormatContext^.oformat := pOutFormat;
-      CopyMemory(@pFormatContext^.filename, filename, min(strlen(filename), sizeof(pFormatContext^.filename)));
+      CopyMemory(@pFormatContext^.filename, filename, min(System.AnsiStrings.strlen(filename),
+        sizeof(pFormatContext^.filename)));
 
       // Add video and audio stream
       pVideoStream := AddVideoStream(pFormatContext, pOutFormat^.video_codec);
@@ -608,8 +614,8 @@ Var
   pCodecCxt: pAVCodecContext;
   pCodec: pAVCodec;
 begin
-  pCodecCxt := nil;
-  pCodec := nil;
+  // pCodecCxt := nil;
+  // pCodec := nil;
   pCodecCxt := pStream^.codec;
   // Find the audio encoder.
   pCodec := avcodec_find_encoder(pCodecCxt^.codec_id);
