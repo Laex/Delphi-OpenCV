@@ -1,14 +1,13 @@
 #pragma once
 
 #include "stdafx.h"
+#include "ocvexport.h"
 #include "ocvclasses.h"
-
-#define ICLASS_API __stdcall
-#define ICLASS_EXPORT extern "C" 
-//__declspec(dllexport)
+#include "dnaclasses.h"
 
 ICLASS_EXPORT TMat* ICLASS_API CreateMat();
 ICLASS_EXPORT TMat* ICLASS_API CreateMatRCT(int rows, int cols, int type);
+ICLASS_EXPORT TMat* ICLASS_API CreateMatFromImage(IplImage* m);
 ICLASS_EXPORT void ICLASS_API ReleaseMat(TMat * ex);
 ICLASS_EXPORT TVideoCapture* ICLASS_API CreateVideoCapture();
 ICLASS_EXPORT TVideoCapture* ICLASS_API CreateVideoCaptureDevice(int device);
@@ -26,3 +25,14 @@ ICLASS_EXPORT void ICLASS_API ReleaseVec3b(TVec3d * ex);
 ICLASS_EXPORT void ICLASS_API ReleasePoint2i(TPoint2i * ex);
 ICLASS_EXPORT void ICLASS_API ReleaseVectorOfPoint2i(TVectorOfPoint2i * ex);
 ICLASS_EXPORT void ICLASS_API MSER(TMat m, TVectorOfVectorOfPoint2i ** ex);
+
+ICLASS_EXPORT TCVectorRect* ICLASS_API CreateCVectorRect();
+ICLASS_EXPORT void ICLASS_API ReleaseCVectorRect(TCVectorRect* ex);
+ICLASS_EXPORT TCVectorInt* ICLASS_API CreateCVectorInt();
+ICLASS_EXPORT void ICLASS_API ReleaseCVectorInt(TCVectorInt* ex);
+ICLASS_EXPORT TCVectorDouble* ICLASS_API CreateCVectorDouble();
+ICLASS_EXPORT void ICLASS_API ReleaseCVectorDouble(TCVectorDouble* ex);
+
+ICLASS_EXPORT TCascadeClassifier* ICLASS_API CreateCascadeClassifier();
+ICLASS_EXPORT TCascadeClassifier* ICLASS_API CreateCascadeClassifierFromFile(const char* filename);
+ICLASS_EXPORT void ICLASS_API ReleaseCascadeClassifier(TCascadeClassifier* ex);

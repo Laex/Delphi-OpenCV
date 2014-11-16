@@ -100,6 +100,11 @@ type
   TpCVCharArray = array [0 .. 0] of pCVChar;
   ppCVChar      = ^TpCVCharArray;
   CVChar        = AnsiChar;
+{$IFNDEF WIN64}
+  size_t = UInt32;
+{$ELSE}
+  size_t = UInt64;
+{$ENDIF}
 {$IFNDEF DELPHIXE2_UP}
 {$IFDEF CLR}
 {$IFDEF DELPHI2007}
@@ -170,7 +175,7 @@ type
       0:
         (i: int64);
       1:
-        (u: uint64);
+        (u: UInt64);
       2:
         (f: Double);
   end;
@@ -247,7 +252,7 @@ const
 
   { ************** Random number generation ****************** }
 type
-  TCvRNG = uint64;
+  TCvRNG = UInt64;
   pCvRNG = ^TCvRNG;
   { EXTERNALSYM CvRNG }
 
@@ -383,6 +388,9 @@ type
     BorderConst: array [0 .. 3] of Integer; (* Ditto. *)
     imageDataOrigin: pByte; (* Pointer to very origin of image data *)
   end;
+
+  TcvImage        = TIplImage;
+  pcvImage        = pIplImage;
 
   // type       _IplTileInfo IplTileInfo = ;
   pIplConvKernel = ^TIplConvKernel;
@@ -2742,7 +2750,7 @@ end;
 function cvRNG(seed: int64 = -1): TCvRNG; {$IFDEF USE_INLINE}inline; {$ENDIF}
 begin
   // CvRNG rng = seed ? (uint64)seed : (uint64)(int64)-1;
-  Result := iif(seed > 0, seed, uint64(int64(-1)));
+  Result := iif(seed > 0, seed, UInt64(int64(-1)));
 end;
 
 function CV_ELEM_SIZE1(const _type: Integer): Integer;

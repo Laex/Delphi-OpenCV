@@ -21,7 +21,10 @@
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ocvclassesdll.cpp">
+    <ClCompile Include="dnaclasses.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ocvclasses.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -39,6 +42,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ocvclassesdll.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="dnaclasses.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ocvexport.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -7,7 +7,8 @@ DESCRIPTION  'Wrapper for OpenCV classes'
 
 EXPORTS
     CreateMat							
-	CreateMatRCT						
+	CreateMatRCT
+	CreateMatFromImage						
 	ReleaseMat							
 
 	CreateVideoCapture					
@@ -27,4 +28,15 @@ EXPORTS
 	ReleaseVectorOfPoint2i				
 	ReleaseVectorOfVectorOfPoint2i		
 	
-	MSER								
+	MSER
+	
+	CreateCVectorRect
+	ReleaseCVectorRect
+	CreateCVectorInt
+	ReleaseCVectorInt
+	CreateCVectorDouble
+	ReleaseCVectorDouble
+
+	CreateCascadeClassifier
+	CreateCascadeClassifierFromFile
+	ReleaseCascadeClassifier

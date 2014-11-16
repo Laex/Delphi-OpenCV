@@ -30,6 +30,7 @@ interface
 uses
   WinApi.Windows,
   ocv.core.types_c,
+  ocv.core_c,
   ocv.highgui_c;
 
 Type
@@ -64,6 +65,7 @@ Type
     // ------------------------------------------------
     class function Create: TccvMat; overload;
     class function Create(rows, cols, _type: Integer): TccvMat; overload;
+    class function Create(image: pcvImage): TccvMat; overload;
     procedure Free; reintroduce;
   end;
 
@@ -73,6 +75,7 @@ uses ocv.lib;
 
 function CreateMat(rows, cols, _type: Integer): TccvMat; stdcall;
   external opencv_classes_lib name 'CreateMatRCT'; overload;
+function CreateMat(m: pIplImage): TccvMat; stdcall; external opencv_classes_lib name 'CreateMatFromImage'; overload;
 function CreateMat: TccvMat; stdcall; external opencv_classes_lib name 'CreateMat'; overload;
 procedure ReleaseMat(ex: TccvMat); stdcall; external opencv_classes_lib;
 
@@ -88,6 +91,11 @@ end;
 class function TccvMat.Create(rows, cols, _type: Integer): TccvMat;
 begin
   Result := CreateMat(rows, cols, _type);
+end;
+
+class function TccvMat.Create(image: pcvImage): TccvMat;
+begin
+  Result := CreateMat(image);
 end;
 
 procedure TccvMat.Free;
