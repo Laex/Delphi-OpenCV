@@ -6,8 +6,10 @@ Release
 ipch
 lib
 /resource/result/*.*
-/bin/Win32/*.exe
-/bin/Win64/*.exe
+*.exe
+*.dll
+!opencv_classes249.dll
+!opencv_classes249d.dll
 #Files
 *.ini
 *.bsc

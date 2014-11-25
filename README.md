@@ -1,19 +1,24 @@
 ###Delphi-OpenCV
 * OpenCV version - 2.4.9<br>
 * Development environment - Delphi 2010-XE7<br>
-
-Requires installed [Visual C++ redistributable for Visual Studio 2013][2]<br>
-
-#####Contributors:
+####Contributors:
 ```
  Laentir Valetov (email: laex@bk.ru)
  Mikhail Grigorev (email: sleuthhound@gmail.com)
 ```
+
+####Requirements:
+* Requires installed [Visual C++ redistributable for Visual Studio 2013][2]<br>
+* Some examples (FFMPEG) required [SDL 2.0 and SDL 1.2][3]<br>
+* <b>Warning! Dynamic OpenCV library is not included in the repository!</b><br>
+Dynamic library OpenCV need to download [here] [4]
+* Shared library FFMPEG for Windows can be downloaded from [link] [5]
+
 ####How to install:
-Download the archive [link][1]<br>
+Download the [archive][1]<br>
 Unzip it to a convenient directory, thus get the following directory structure<br>
 ```
-<PROJECT_ROOT> - Directory, such as "C:\OpenCV\"
+<PROJECT_ROOT> - Directory, for example, "C:\Delphi\OpenCV\"
 	<bin>
 	<redist>
 	<resource>
@@ -33,11 +38,8 @@ Add the search path for the modules of the project in Delphi IDE (Tools-Options-
 where ```<PROJECT_ROOT>``` directory, which was unzipped project.<br>
 Add to your PATH variable path to the library "opencv_*.dll" and FFMPEG dll.
 * for Win32 ```<PROJECT_ROOT>\bin\Win32```
-* for Win64 ```<PROJECT_ROOT>\bin\Win64```
-
-Or
-
-For 64-bit
+* for Win64 ```<PROJECT_ROOT>\bin\Win64```<br>
+<b>OR</b><br>For 64-bit
 ```
 1. Copy the dll files from the <PROJECT_ROOT>\redist\VC2013x64\ to C:\Windows\System32\
 2. Copy all the dll from <PROJECT_ROOT>\bin\Win64 in the C:\Windows\System32\
@@ -79,3 +81,6 @@ Examples of use of components
 ```
 [1]: https://github.com/Laex/Delphi-OpenCV/archive/master.zip
 [2]: http://www.microsoft.com/ru-ru/download/details.aspx?id=40784
+[3]: https://www.libsdl.org/index.php
+[4]: http://opencv.org/downloads.html
+[5]: http://ffmpeg.zeranoe.com/builds/
