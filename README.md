@@ -1,22 +1,37 @@
-###Delphi-OpenCV
+##Delphi-OpenCV
 * OpenCV version - 2.4.9<br>
 * Development environment - Delphi 2010-XE7<br>
 
-####Contributors:
+<b>Contributors:</b>
 ```
  Laentir Valetov (email: laex@bk.ru)
  Mikhail Grigorev (email: sleuthhound@gmail.com)
 ```
-
-####Requirements:
+##Requirements:
 * Requires installed [Visual C++ redistributable for Visual Studio 2013][2]<br>
 * Some examples (FFMPEG) required [SDL 2.0 and SDL 1.2][3]<br>
 * <b>Warning! Dynamic OpenCV library is not included in the repository!</b><br>
 Dynamic library OpenCV need to download [here] [4]
 * Shared library FFMPEG for Windows can be downloaded from [link] [5]
 
-####How to install:
-Download the [archive][1]<br>
+<b>Note:</b>
+```
+Do not forget to add to your PATH variable path to the library "opencv_*.dll" and FFMPEG dll.
+
+If for some reason the installation of "Visual C ++ redistributable for Visual Studio 2013" was held fails, you can:
+--- for 64-bit ---
+1. Copy the dll files from the <PROJECT_ROOT>\redist\VC2013x64\ to C:\Windows\System32\
+2. Copy all the dll from <PROJECT_ROOT>\bin\Win64 in the C:\Windows\System32\
+3. Copy the dll files from the <PROJECT_ROOT>\redist\VC2013x86\ to C:\Windows\SysWOW64\
+4. Copy all the dll from <PROJECT_ROOT>\bin\Win32 in the C:\Windows\SysWOW64\
+
+--- for 32-bit ---
+1. Copy the dll files from the <PROJECT_ROOT>\redist\VC2013x86\ to C:\Windows\System32\
+2. Copy all the dll from <PROJECT_ROOT>\bin\Win32 in the C:\Windows\System32\
+```
+
+##How to install:
+Download the [archive][1].<br>
 Unzip it to a convenient directory, thus get the following directory structure<br>
 ```
 <PROJECT_ROOT> - Directory, for example, "C:\Delphi\OpenCV\"
@@ -37,21 +52,7 @@ Add the search path for the modules of the project in Delphi IDE (Tools-Options-
 <PROJECT_ROOT>\resource\facedetectxml
 ```
 where ```<PROJECT_ROOT>``` directory, which was unzipped project.<br>
-Add to your PATH variable path to the library "opencv_*.dll" and FFMPEG dll.
-* for Win32 ```<PROJECT_ROOT>\bin\Win32```
-* for Win64 ```<PROJECT_ROOT>\bin\Win64```<br>
-<b>OR</b><br>For 64-bit
-```
-1. Copy the dll files from the <PROJECT_ROOT>\redist\VC2013x64\ to C:\Windows\System32\
-2. Copy all the dll from <PROJECT_ROOT>\bin\Win64 in the C:\Windows\System32\
-3. Copy the dll files from the <PROJECT_ROOT>\redist\VC2013x86\ to C:\Windows\SysWOW64\
-4. Copy all the dll from <PROJECT_ROOT>\bin\Win32 in the C:\Windows\SysWOW64\
-```
-For 32-bit
-```
-1. Copy the dll files from the <PROJECT_ROOT>\redist\VC2013x86\ to C:\Windows\System32\
-2. Copy all the dll from <PROJECT_ROOT>\bin\Win32 in the C:\Windows\System32\
-```
+
 To install the components, open and install
 ```
 <PROJECT_ROOT>\source\component\DelphiXX\OpenCVXXX.dpk
