@@ -916,6 +916,18 @@ const
 function cvNorm(const arr1: pCvArr; const arr2: pCvArr = nil; norm_type: Integer = CV_L2; const mask: pCvArr = nil)
   : double; cdecl;
 
+(*
+
+  CVAPI(void)  cvNormalize( const CvArr* src, CvArr* dst,
+  double a CV_DEFAULT(1.), double b CV_DEFAULT(0.),
+  int norm_type CV_DEFAULT(CV_L2),
+  const CvArr* mask CV_DEFAULT(NULL) );
+
+*)
+procedure cvNormalize(const src: pCvArr; dst: pCvArr; A: double { = CV_DEFAULT(1) }; B: double { =CV_DEFAULT(0.) };
+  norm_type: Integer { =CV_DEFAULT(CV_L2) }; const mask: pCvArr = nil); cdecl;
+
+
 // ****************************************************************************************
 // *                                Matrix operations
 // ****************************************************************************************
@@ -2439,9 +2451,7 @@ procedure cvLine; external core_lib;
 
 procedure cvCopyImage; external core_lib name 'cvCopy';
 
-function CV_RGB(
-
-  const r, g, B: double): TCvScalar; {$IFDEF USE_INLINE}inline; {$ENDIF}
+function CV_RGB(const r, g, B: double): TCvScalar; {$IFDEF USE_INLINE}inline; {$ENDIF}
 begin
   result := CvScalar(B, g, r, 0);
 end;
