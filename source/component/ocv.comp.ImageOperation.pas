@@ -60,11 +60,11 @@ uses
 
 type
 {$IFDEF DELPHIXE3_UP} // XE3..XE6
-  TArrayDouble  = TArray<Double>;
+  TArrayDouble = TArray<Double>;
   TArrayInteger = TArray<Integer>;
   TArrayBoolean = TArray<Boolean>;
 {$ELSE} // D7...XE2
-  TArrayDouble  = Array of Double;
+  TArrayDouble = Array of Double;
   TArrayInteger = Array of Integer;
   TArrayBoolean = Array of Boolean;
 {$ENDIF}
@@ -564,7 +564,7 @@ type
   // published
   // end;
 
-  TocvInterpolationWarpingFlag    = (WARP_FILL_OUTLIERS, WARP_INVERSE_MAP);
+  TocvInterpolationWarpingFlag = (WARP_FILL_OUTLIERS, WARP_INVERSE_MAP);
   TocvInterpolationWarpingFlagSet = set of TocvInterpolationWarpingFlag;
 
   TocvRotateOperation = class(TocvCustomImageOperation)
@@ -594,7 +594,7 @@ type
   protected
     procedure AssignTo(Dest: TPersistent); override;
   public type
-    TOcvQuadPoints     = array [0 .. 3] of TocvPoint2D32f;
+    TOcvQuadPoints = array [0 .. 3] of TocvPoint2D32f;
     TCvPoint2D32fArray = array [0 .. 3] of TCvPoint2D32f;
   protected
     FPoints: TOcvQuadPoints;
@@ -3233,12 +3233,15 @@ end;
 
 function TocvInRangeSOperation.DoTransform(const Source: IocvImage; out Destanation: IocvImage): Boolean;
 begin
-  Destanation := Source.Clone;
-  try
-    cvInRangeS(Source.IpImage, FLower.CvScalar, FUpper.CvScalar, Destanation.IpImage);
-    Result := True;
-  except
-    Result := False;
+  Result := FLower.CvScalar < FUpper.CvScalar;
+  if Result then
+  begin
+    Destanation := Source.Clone.GrayImage;
+    try
+      cvInRangeS(Source.IpImage, FLower.CvScalar, FUpper.CvScalar, Destanation.IpImage);
+    except
+      Result := False;
+    end;
   end;
 end;
 

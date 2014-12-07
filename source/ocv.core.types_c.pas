@@ -86,8 +86,8 @@ const
   FLT_MAX     = 1E+37;
 
 type
-  Float   = Single;
-  pFloat  = ^Float;
+  Float = Single;
+  pFloat = ^Float;
   ppFloat = ^pFloat;
 
   TSingleArray1D = array [0 .. 1] of Single;
@@ -95,11 +95,11 @@ type
   TSingleArray2D = array [0 .. 1] of pSingleArray1D;
   pSingleArray2D = ^TSingleArray2D;
 
-  TCVChar       = AnsiChar;
-  pCVChar       = pAnsiChar;
+  TCVChar = AnsiChar;
+  pCVChar = pAnsiChar;
   TpCVCharArray = array [0 .. 0] of pCVChar;
-  ppCVChar      = ^TpCVCharArray;
-  CVChar        = AnsiChar;
+  ppCVChar = ^TpCVCharArray;
+  CVChar = AnsiChar;
 {$IFNDEF WIN64}
   size_t = UInt32;
 {$ELSE}
@@ -108,18 +108,18 @@ type
 {$IFNDEF DELPHIXE2_UP}
 {$IFDEF CLR}
 {$IFDEF DELPHI2007}
-  NativeInt  = size_t;
+  NativeInt = size_t;
   NativeUInt = size_t;
 {$ELSE}
-  NativeInt  = Integer;
+  NativeInt = Integer;
   NativeUInt = Cardinal;
 {$ENDIF}
 {$ELSE}
 {$IFDEF FPC}
-  NativeInt  = SizeInt;
+  NativeInt = SizeInt;
   NativeUInt = SizeUInt;
 {$ELSE}
-  NativeInt  = Integer;
+  NativeInt = Integer;
   NativeUInt = Cardinal;
 {$ENDIF}
 {$ENDIF}
@@ -156,7 +156,7 @@ type
   TVoid = record
   end;
 
-  pCvArr      = Pointer;
+  pCvArr = Pointer;
   TCvArrArray = array [0 .. 0] of pCvArr;
   pCvArrArray = ^TCvArrArray;
 
@@ -337,11 +337,11 @@ const
 
 type
 
-  pIplImage       = ^TIplImage;
+  pIplImage = ^TIplImage;
   TpIplImageArray = array [0 .. 1] of pIplImage;
-  ppIplImage      = ^TpIplImageArray;
-  pIplROI         = ^TIplROI;
-  pIplTileInfo    = ^TIplTileInfo;
+  ppIplImage = ^TpIplImageArray;
+  pIplROI = ^TIplROI;
+  pIplTileInfo = ^TIplTileInfo;
 
   TIplROI = record
     coi: Integer; (* 0 - no COI (all channels are selected), 1 - 0th channel is selected ... *)
@@ -389,8 +389,8 @@ type
     imageDataOrigin: pByte; (* Pointer to very origin of image data *)
   end;
 
-  TcvImage        = TIplImage;
-  pcvImage        = pIplImage;
+  TcvImage = TIplImage;
+  pcvImage = pIplImage;
 
   // type       _IplTileInfo IplTileInfo = ;
   pIplConvKernel = ^TIplConvKernel;
@@ -592,7 +592,7 @@ const
 
 type
 
-  pCvMat  = ^TCvMat;
+  pCvMat = ^TCvMat;
   ppCvMat = ^pCvMat;
 
   TCvMat = record
@@ -858,6 +858,8 @@ type
 
   TCvScalar = record
     val: array [0 .. 3] of Double;
+    class operator LessThan(a,b: TCvScalar): boolean;
+    class operator GreaterThan(a,b: TCvScalar): boolean;
   end;
 
   (* ************************************************************************************** *)
@@ -957,7 +959,7 @@ type
   end;
 
   pCvSeqArray = array [0 .. 1] of pCvSeq;
-  ppCvSeq     = ^pCvSeqArray;
+  ppCvSeq = ^pCvSeqArray;
 
 const
   CV_TYPE_NAME_SEQ = 'opencv-sequence';
@@ -1050,7 +1052,7 @@ const
     Checks whether the element pointed by ptr belongs to a set or not
     #define CV_IS_SET_ELEM( ptr )  (((CvSetElem* )(ptr))->flags >= 0)
   *)
-function CV_IS_SET_ELEM(ptr: Pointer): Boolean; {$IFDEF USE_INLINE}inline; {$ENDIF}
+function CV_IS_SET_ELEM(ptr: Pointer): boolean; {$IFDEF USE_INLINE}inline; {$ENDIF}
 { ***************************************************************************************
   *                      Multi-dimensional sparse cArray (CvSparseMat)                  *
   *************************************************************************************** }
@@ -1126,7 +1128,7 @@ type
 Type
 
   pCvGraphEdge = ^TCvGraphEdge;
-  pCvGraphVtx  = ^TCvGraphVtx;
+  pCvGraphVtx = ^TCvGraphVtx;
 
   TCV_GRAPH_EDGE_FIELDS = record
     flags: Integer;
@@ -1346,14 +1348,14 @@ const
   /// / >> Following declaration is a macro definition!
 
   // CV_IS_SEQ_CLOSED(seq)(((seq)^.flags and CV_SEQ_FLAG_CLOSED) <> 0);
-function CV_IS_SEQ_CLOSED(const Seq: pCvSeq): Boolean; {$IFDEF USE_INLINE}inline; {$ENDIF}
+function CV_IS_SEQ_CLOSED(const Seq: pCvSeq): boolean; {$IFDEF USE_INLINE}inline; {$ENDIF}
 /// / >> Following declaration is a macro definition!
 // const
 // CV_IS_SEQ_CONVEX(seq)0;
 
 // Following declaration is a macro definition!
 // CV_IS_SEQ_HOLE(seq)(((seq)^.flags and CV_SEQ_FLAG_HOLE) <> 0);
-function CV_IS_SEQ_HOLE(const Seq: pCvSeq): Boolean; {$IFDEF USE_INLINE}inline; {$ENDIF}
+function CV_IS_SEQ_HOLE(const Seq: pCvSeq): boolean; {$IFDEF USE_INLINE}inline; {$ENDIF}
 /// / >> Following declaration is a macro definition!
 // const
 // CV_IS_SEQ_SIMPLE(seq)1;
@@ -1690,12 +1692,12 @@ const
   CV_NODE_NAMED = 64;
 {$EXTERNALSYM CV_NODE_NAMED}
   // CV_NODE_IS_INT(flags)        (CV_NODE_TYPE(flags) == CV_NODE_INT)
-function CV_NODE_IS_INT(const flags: Integer): Boolean; {$IFDEF USE_INLINE}inline; {$ENDIF}
+function CV_NODE_IS_INT(const flags: Integer): boolean; {$IFDEF USE_INLINE}inline; {$ENDIF}
 // CV_NODE_IS_REAL(flags)       (CV_NODE_TYPE(flags) == CV_NODE_REAL)
-function CV_NODE_IS_REAL(const flags: Integer): Boolean; {$IFDEF USE_INLINE}inline; {$ENDIF}
+function CV_NODE_IS_REAL(const flags: Integer): boolean; {$IFDEF USE_INLINE}inline; {$ENDIF}
 // const CV_NODE_IS_INT(flags)(CV_NODE_TYPE(flags) = CV_NODE_INT)
 // const CV_NODE_IS_REAL(flags) (CV_NODE_TYPE(flags) = CV_NODE_REAL)
-function CV_NODE_IS_STRING(const flags: Integer): Boolean; {$IFDEF USE_INLINE}inline; {$ENDIF}
+function CV_NODE_IS_STRING(const flags: Integer): boolean; {$IFDEF USE_INLINE}inline; {$ENDIF}
 // (CV_NODE_TYPE(flags) = CV_NODE_STRING)
 // const CV_NODE_IS_SEQ(flags) (CV_NODE_TYPE(flags) = CV_NODE_SEQ)
 // const CV_NODE_IS_MAP(flags) (CV_NODE_TYPE(flags) = CV_NODE_MAP)
@@ -2032,7 +2034,7 @@ procedure CV_SWAP(var a, b: Pointer); {$IFDEF USE_INLINE}inline; {$ENDIF} overlo
 //
 // const CV_IS_MASK_ARR(mat)(((mat)^.cType and (CV_MAT_TYPE_MASK and ~ CV_8SC1)) = 0)
 
-function CV_ARE_TYPES_EQ(const mat1, mat2: pCvMat): Boolean; {$IFDEF USE_INLINE}inline; {$ENDIF}
+function CV_ARE_TYPES_EQ(const mat1, mat2: pCvMat): boolean; {$IFDEF USE_INLINE}inline; {$ENDIF}
 // const CV_ARE_CNS_EQ(mat1, mat2)((((mat1)^.cType xor (mat2)^.cType) and CV_MAT_CN_MASK) = 0)
 //
 // const CV_ARE_DEPTHS_EQ(mat1, mat2)((((mat1)^.cType xor (mat2)^.cType) and CV_MAT_DEPTH_MASK) = 0)
@@ -2326,9 +2328,9 @@ function CV_MAT_ELEM(const mat: TCvMat; const elemsize: Integer; const row, col:
 *)
 function CV_MAT_ELEM_PTR_FAST(const mat: TCvMat; const row, col, pix_size: Integer): Pointer; {$IFDEF USE_INLINE}inline;
 {$ENDIF}
-function iif(const Conditional: Boolean; const ifTrue, ifFalse: Variant): Variant; {$IFDEF USE_INLINE}inline;
+function iif(const Conditional: boolean; const ifTrue, ifFalse: Variant): Variant; {$IFDEF USE_INLINE}inline;
 {$ENDIF} overload;
-function iif(const Conditional: Boolean; const ifTrue, ifFalse: Pointer): Pointer; {$IFDEF USE_INLINE}inline;
+function iif(const Conditional: boolean; const ifTrue, ifFalse: Pointer): Pointer; {$IFDEF USE_INLINE}inline;
 {$ENDIF} overload;
 
 function CvBox2D(const cX, cY, width, height, angle: Single): TCvBox2D;
@@ -2503,7 +2505,7 @@ begin
   Result := Round(value);
 end;
 
-function iif(const Conditional: Boolean; const ifTrue, ifFalse: Variant): Variant; {$IFDEF USE_INLINE}inline;
+function iif(const Conditional: boolean; const ifTrue, ifFalse: Variant): Variant; {$IFDEF USE_INLINE}inline;
 {$ENDIF} overload;
 begin
   if Conditional then
@@ -2512,7 +2514,7 @@ begin
     Result := ifFalse;
 end;
 
-function iif(const Conditional: Boolean; const ifTrue, ifFalse: Pointer): Pointer; {$IFDEF USE_INLINE}inline;
+function iif(const Conditional: boolean; const ifTrue, ifFalse: Pointer): Pointer; {$IFDEF USE_INLINE}inline;
 {$ENDIF} overload;
 begin
   if Conditional then
@@ -2539,7 +2541,7 @@ begin
   Result := CV_NODE_TYPE(flags) = CV_NODE_REAL;
 end;
 
-function CV_NODE_IS_STRING(const flags: Integer): Boolean; {$IFDEF USE_INLINE}inline; {$ENDIF}
+function CV_NODE_IS_STRING(const flags: Integer): boolean; {$IFDEF USE_INLINE}inline; {$ENDIF}
 begin
   Result := CV_NODE_TYPE(flags) = CV_NODE_STRING
 end;
@@ -2726,7 +2728,7 @@ begin
   Result := CV_MAKETYPE(CV_8U, 3);
 end;
 
-function CV_IS_SET_ELEM(ptr: Pointer): Boolean;
+function CV_IS_SET_ELEM(ptr: Pointer): boolean;
 begin
   // #define CV_IS_SET_ELEM( ptr )  (((CvSetElem*)(ptr))->flags >= 0)
   Result := Assigned(ptr) and (pCvSetElem(ptr)^.flags >= 0);
@@ -2773,17 +2775,17 @@ begin
     Result := Result or Integer(IPL_DEPTH_SIGN);
 end;
 
-function CV_ARE_TYPES_EQ(const mat1, mat2: pCvMat): Boolean; {$IFDEF USE_INLINE}inline; {$ENDIF}
+function CV_ARE_TYPES_EQ(const mat1, mat2: pCvMat): boolean; {$IFDEF USE_INLINE}inline; {$ENDIF}
 begin
   Result := ((((mat1)^._type xor (mat2)^._type) and CV_MAT_TYPE_MASK) = 0);
 end;
 
-function CV_IS_SEQ_CLOSED(const Seq: pCvSeq): Boolean; {$IFDEF USE_INLINE}inline; {$ENDIF}
+function CV_IS_SEQ_CLOSED(const Seq: pCvSeq): boolean; {$IFDEF USE_INLINE}inline; {$ENDIF}
 begin
   Result := (Seq^.flags and CV_SEQ_FLAG_CLOSED) <> 0;
 end;
 
-function CV_IS_SEQ_HOLE(const Seq: pCvSeq): Boolean; {$IFDEF USE_INLINE}inline; {$ENDIF}
+function CV_IS_SEQ_HOLE(const Seq: pCvSeq): boolean; {$IFDEF USE_INLINE}inline; {$ENDIF}
 begin
   Result := (Seq^.flags and CV_SEQ_FLAG_HOLE) <> 0;
 end;
@@ -2821,6 +2823,17 @@ begin
   Result.y := a.y - b.y;
 end;
 {$ENDIF}
+{ TCvScalar }
+
+class operator TCvScalar.GreaterThan(a,b: TCvScalar): boolean;
+begin
+  Result := (a.val[0] > b.val[0]) and (a.val[1] > b.val[1]) and (a.val[2] > b.val[2]) and (a.val[3] >= b.val[3]);
+end;
+
+class operator TCvScalar.LessThan(a,b: TCvScalar): boolean;
+begin
+  Result := (a.val[0] < b.val[0]) and (a.val[1] < b.val[1]) and (a.val[2] < b.val[2]) and (a.val[3] <= b.val[3]);
+end;
 
 initialization
 

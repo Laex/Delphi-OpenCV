@@ -1,45 +1,48 @@
-// **************************************************************************************************
-// Project Delphi-OpenCV
-// **************************************************************************************************
-// Contributor:
-// Laentir Valetov
-// email:laex@bk.ru
-// Mikhail Grigorev
-// email:sleuthound@gmail.com
-// **************************************************************************************************
-// You may retrieve the latest version of this file at the GitHub,
-// located at git://github.com/Laex/Delphi-OpenCV.git
-// **************************************************************************************************
-// License:
-// The contents of this file are subject to the Mozilla Public License Version 1.1 (the "License");
-// you may not use this file except in compliance with the License. You may obtain a copy of the
-// License at http://www.mozilla.org/MPL/
-//
-// Software distributed under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
-// ANY KIND, either express or implied. See the License for the specific language governing rights
-// and limitations under the License.
-//
-// Alternatively, the contents of this file may be used under the terms of the
-// GNU Lesser General Public License (the  "LGPL License"), in which case the
-// provisions of the LGPL License are applicable instead of those above.
-// If you wish to allow use of your version of this file only under the terms
-// of the LGPL License and not to allow others to use your version of this file
-// under the MPL, indicate your decision by deleting  the provisions above and
-// replace  them with the notice and other provisions required by the LGPL
-// License.  If you do not delete the provisions above, a recipient may use
-// your version of this file under either the MPL or the LGPL License.
-//
-// For more information about the LGPL: http://www.gnu.org/copyleft/lesser.html
-// **************************************************************************************************
-// Warning: Using Delphi XE2 syntax!
-// **************************************************************************************************
-// The Initial Developer of the Original Code:
-// OpenCV: open source computer vision library
-// Homepage:    http://ocv.org
-// Online docs: http://docs.ocv.org
-// Q&A forum:   http://answers.ocv.org
-// Dev zone:    http://code.ocv.org
-// ************************************************************************************************** *)
+(*
+  **************************************************************************************************
+  Project Delphi-OpenCV
+  **************************************************************************************************
+  Contributor:
+  Laentir Valetov
+  email:laex@bk.ru
+  Mikhail Grigorev
+  email:sleuthound@gmail.com
+  **************************************************************************************************
+  You may retrieve the latest version of this file at the GitHub,
+  located at git://github.com/Laex/Delphi-OpenCV.git
+  **************************************************************************************************
+  License:
+  The contents of this file are subject to the Mozilla Public License Version 1.1 (the "License");
+  you may not use this file except in compliance with the License. You may obtain a copy of the
+  License at http://www.mozilla.org/MPL/
+
+  Software distributed under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
+  ANY KIND, either express or implied. See the License for the specific language governing rights
+  and limitations under the License.
+
+  Alternatively, the contents of this file may be used under the terms of the
+  GNU Lesser General Public License (the  "LGPL License"), in which case the
+  provisions of the LGPL License are applicable instead of those above.
+  If you wish to allow use of your version of this file only under the terms
+  of the LGPL License and not to allow others to use your version of this file
+  under the MPL, indicate your decision by deleting  the provisions above and
+  replace  them with the notice and other provisions required by the LGPL
+  License.  If you do not delete the provisions above, a recipient may use
+  your version of this file under either the MPL or the LGPL License.
+
+  For more information about the LGPL: http://www.gnu.org/copyleft/lesser.html
+  **************************************************************************************************
+  Warning: Using Delphi XE2 syntax!
+  **************************************************************************************************
+  The Initial Developer of the Original Code:
+  OpenCV: open source computer vision library
+  Homepage:    http://ocv.org
+  Online docs: http://docs.ocv.org
+  Q&A forum:   http://answers.ocv.org
+  Dev zone:    http://code.ocv.org
+  **************************************************************************************************
+*)
+
 {$I OpenCV.inc}
 {$IFDEF DELPHI2009_UP}
 {$POINTERMATH ON}
@@ -65,7 +68,7 @@ uses
 Function hsv2rgb(hue: single): TCvScalar;
 
 procedure IplImage2Bitmap(iplImg: PIplImage; var bitmap:
-  {$IFDEF DELPHIXE2_UP}Vcl.Graphics.TBitmap{$ELSE}Graphics.TBitmap{$ENDIF});
+{$IFDEF DELPHIXE2_UP}Vcl.Graphics.TBitmap{$ELSE}Graphics.TBitmap{$ENDIF});
 function cvImage2Bitmap(img: PIplImage): {$IFDEF DELPHIXE2_UP}Vcl.Graphics.TBitmap{$ELSE}Graphics.TBitmap{$ENDIF};
 
 function ipDraw(dc: HDC; img: PIplImage; const rect: TRect; const Stretch: Boolean = true): Boolean; overload;
@@ -79,8 +82,11 @@ function ifthen(const Cond: Boolean; const ValueTrue, ValueFalse: string): strin
 function ifthen(const Cond: Boolean; const ValueTrue, ValueFalse: TCvScalar): TCvScalar; overload;
 
 function BitmapToIplImage(const bitmap:
-  {$IFDEF DELPHIXE2_UP}Vcl.Graphics.TBitmap{$ELSE}Graphics.TBitmap{$ENDIF}): PIplImage;
+{$IFDEF DELPHIXE2_UP}Vcl.Graphics.TBitmap{$ELSE}Graphics.TBitmap{$ENDIF}): PIplImage;
 function CropIplImage(const src: PIplImage; const roi: TCvRect): PIplImage;
+
+procedure ocvRGBToHSV(const R, G, B: single; out H, S, V: single);
+procedure ocvHSVToRGB(H, S, V: single; out R, G, B: single);
 
 implementation
 
@@ -90,10 +96,10 @@ uses
 {$ELSE}
   SysUtils,
 {$ENDIF}
-  ocv.core_c;
+  ocv.core_c, System.Math;
 
 function BitmapToIplImage(const bitmap:
-  {$IFDEF DELPHIXE2_UP}Vcl.Graphics.TBitmap{$ELSE}Graphics.TBitmap{$ENDIF}): PIplImage;
+{$IFDEF DELPHIXE2_UP}Vcl.Graphics.TBitmap{$ELSE}Graphics.TBitmap{$ENDIF}): PIplImage;
 Var
   BMI: BITMAPINFO;
 begin
@@ -274,7 +280,7 @@ End;
   Description: convert a IplImage to a Windows bitmap
   ----------------------------------------------------------------------------- }
 procedure IplImage2Bitmap(iplImg: PIplImage; var bitmap:
-  {$IFDEF DELPHIXE2_UP}Vcl.Graphics.TBitmap{$ELSE}Graphics.TBitmap{$ENDIF});
+{$IFDEF DELPHIXE2_UP}Vcl.Graphics.TBitmap{$ELSE}Graphics.TBitmap{$ENDIF});
 VAR
   i, j: Integer;
   offset: longint;
@@ -367,7 +373,7 @@ end;
 function ipDraw(dc: HDC; img: PIplImage; const rect: TRect; const Stretch: Boolean = true): Boolean;
 
 Type
-  pCOLORREF         = ^COLORREF;
+  pCOLORREF = ^COLORREF;
   pBITMAPINFOHEADER = ^BITMAPINFOHEADER;
 
 Var
@@ -422,9 +428,9 @@ begin
     SetMapMode(dc, MM_TEXT);
     // Stretch the image to fit the rectangle
     iResult := StretchDIBits(dc, rect.left, rect.top,
-      {$IFDEF DELPHIXE2_UP}rect.Width{$ELSE}rect.Right - rect.left{$ENDIF},
-      {$IFDEF DELPHIXE2_UP}rect.Height{$ELSE}rect.Bottom - rect.top{$ENDIF}, 0, 0, img^.Width, img^.Height,
-      img^.ImageData, _dibhdr, DIB_RGB_COLORS, SRCCOPY);
+{$IFDEF DELPHIXE2_UP}rect.Width{$ELSE}rect.Right - rect.left{$ENDIF},
+{$IFDEF DELPHIXE2_UP}rect.Height{$ELSE}rect.Bottom - rect.top{$ENDIF}, 0, 0, img^.Width, img^.Height, img^.ImageData,
+      _dibhdr, DIB_RGB_COLORS, SRCCOPY);
     Result := (iResult > 0); // and (iResult <> GDI_ERROR);
   end
   else
@@ -433,6 +439,150 @@ begin
     iResult := SetDIBitsToDevice(dc, rect.left, rect.top, img^.Width, img^.Height, 0, 0, 0, img^.Height, img^.ImageData,
       _dibhdr, DIB_RGB_COLORS);
     Result := (iResult > 0); // and (iResult <> GDI_ERROR);
+  end;
+end;
+
+procedure ocvHSVToRGB(H, S, V: single; out R, G, B: single);
+{
+  in
+  H = Hue. Range is from 0..180. or H < 0 for gray
+  S = Satration. Range is 0..255 where 0 is white and 255 is no saturation.
+  V = Value. Range is 0..255
+
+  out
+  R = 0..255
+  G = 0..255
+  B = 0..255
+
+  If H < 0 then the result is a gray value R=V, G=V, B=V
+}
+const
+  SectionSize = 60 / 360;
+var
+  Section: single;
+  SectionIndex: Integer;
+  F: single;
+  p, q, t: single;
+begin
+  H := H / 180;
+  S := S / 255;
+
+  if H < 0 then
+  begin
+    R := V;
+    G := R;
+    B := R;
+  end
+  else
+  begin
+    Section := H / SectionSize;
+    SectionIndex := Floor(Section);
+    F := Section - SectionIndex;
+    p := V * (1 - S);
+    q := V * (1 - S * F);
+    t := V * (1 - S * (1 - F));
+    case SectionIndex of
+      0:
+        begin
+          R := V;
+          G := t;
+          B := p;
+        end;
+      1:
+        begin
+          R := q;
+          G := V;
+          B := p;
+        end;
+      2:
+        begin
+          R := p;
+          G := V;
+          B := t;
+        end;
+      3:
+        begin
+          R := p;
+          G := q;
+          B := V;
+        end;
+      4:
+        begin
+          R := t;
+          G := p;
+          B := V;
+        end;
+    else
+      R := V;
+      G := p;
+      B := q;
+    end;
+  end;
+end;
+
+procedure ocvRGBToHSV(const R, G, B: single; out H, S, V: single);
+{
+  in
+  R = 0..255
+  G = 0..255
+  B = 0..255
+
+  out
+  H = Hue. -1 for grey scale or range 0..180. 0..180 represents 0..360 degrees
+  S = Saturation. Range = 0..255. 0 = white, 255 = no saturation.
+  V = Value or intensity. Range 0..255
+}
+var
+  rgb: array [0 .. 2] of single;
+  MinIndex, MaxIndex: Integer;
+  Range: single;
+begin
+  rgb[0] := R;
+  rgb[1] := G;
+  rgb[2] := B;
+
+  MinIndex := 0;
+  if G < R then
+    MinIndex := 1;
+
+  if B < rgb[MinIndex] then
+    MinIndex := 2;
+
+  MaxIndex := 0;
+  if G > R then
+    MaxIndex := 1;
+
+  if B > rgb[MaxIndex] then
+    MaxIndex := 2;
+
+  Range := rgb[MaxIndex] - rgb[MinIndex];
+
+  // Check for a gray level
+  if Range = 0 then
+  begin
+    H := -1; // Can't determine on greys, so set to -1
+    S := 0; // Gray is at the center;
+    V := R; // could choose R, G, or B because they are all the same value.
+  end
+  else
+  begin
+    case MaxIndex of
+      0:
+        H := (G - B) / Range;
+      1:
+        H := 2 + (B - R) / Range;
+      2:
+        H := 4 + (R - G) / Range;
+    end;
+    S := Range / rgb[MaxIndex];
+    V := rgb[MaxIndex];
+    H := H * (1 / 6);
+    if H < 0 then
+      H := 1 + H;
+
+    H := H * 180;
+    S := S * 255;
+    V := V;
   end;
 end;
 

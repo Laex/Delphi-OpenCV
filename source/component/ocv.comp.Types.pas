@@ -43,7 +43,6 @@ uses
 {$ELSE}
   Vcl.Graphics,
 {$ENDIF HAS_FMX}
-
 {$ELSE}
 {$IFDEF MSWINDOWS}
   Windows,
@@ -75,15 +74,19 @@ type
     Radius: Integer;
   end;
 
+  TocvPixel = record
+    r, g, b, a: byte;
+  end;
+
 {$IFDEF DELPHIXE_UP}
 
-  TocvRects   = TArray<TocvRect>;
+  TocvRects = TArray<TocvRect>;
   TocvCircles = TArray<TocvCircle>;
-  TocvLines   = TArray<TocvLine>;
+  TocvLines = TArray<TocvLine>;
 {$ELSE}
-  TocvRects   = Array of TocvRect;
+  TocvRects = Array of TocvRect;
   TocvCircles = Array of TocvCircle;
-  TocvLines   = array of TocvLine;
+  TocvLines = array of TocvLine;
 {$ENDIF}
   TocvLineType = (LT_FILLED, LT_8, LT_AA);
 
@@ -146,12 +149,15 @@ type
     function GetCanvas: IocvCanvas;
     function Resize(const nW, nH: Integer; const interpolation: Integer = CV_INTER_LINEAR): IocvImage;
     function Scale(const dw, dh: Single; const interpolation: Integer = CV_INTER_LINEAR): IocvImage;
+    function GetPixel(const x, y: Integer): TocvPixel;
+    procedure SetPixel(const x, y: Integer; const P: TocvPixel);
     // -------------------------------------------
     property IpImage: pIplImage Read GetIplImage;
     property isGray: Boolean Read GetisGray;
     property Width: Integer Read GetWidth;
     property Height: Integer Read GetHeight;
     property Canvas: IocvCanvas Read GetCanvas;
+    property Pixel[const x, y: Integer]: TocvPixel read GetPixel write SetPixel;
   end;
 
   TocvFont = class(TInterfacedObject, IocvFont)
@@ -223,6 +229,8 @@ type
     function GetWidth: Integer;
     function GetHeight: Integer;
     function GetCanvas: IocvCanvas;
+    function GetPixel(const x, y: Integer): TocvPixel;
+    procedure SetPixel(const x, y: Integer; const P: TocvPixel);
   public
     constructor Create; overload;
     constructor Create(const AImage: pIplImage); overload;
@@ -243,23 +251,24 @@ type
     property Width: Integer Read GetWidth;
     property Height: Integer Read GetHeight;
     property Canvas: IocvCanvas Read GetCanvas;
+    property Pixel[const x, y: Integer]: TocvPixel read GetPixel write SetPixel;
   end;
 
   TOnOcvNotifyCollectionItem = procedure(PrevOperation, Operation, NextOperation: TObject; const IplImage: IocvImage;
     Var ContinueTransform: Boolean) of object;
 
-  TOnOcvNotify          = procedure(Sender: TObject; Var IplImage: IocvImage) of object;
-  TOnOcvAfterViewPaint  = procedure(Sender: TObject; const IplImage: IocvImage) of object;
-  TOnOcvAfterTransform  = TOnOcvNotify;
+  TOnOcvNotify = procedure(Sender: TObject; Var IplImage: IocvImage) of object;
+  TOnOcvAfterViewPaint = procedure(Sender: TObject; const IplImage: IocvImage) of object;
+  TOnOcvAfterTransform = TOnOcvNotify;
   TOnOcvBeforeTransform = procedure(Sender: TObject; const IplImage: IocvImage; Var ContinueTransform: Boolean)
     of object;
   TOnOcvContour = procedure(Sender: TObject; const IplImage: IocvImage; const ContourCount: Integer;
     const Contours: pCvSeq) of object;
   TOnOcvHaarCascade = procedure(Sender: TObject; const IplImage: IocvImage; const HaarRects: TocvRects) of object;
-  TOnOcvRect        = procedure(Sender: TObject; const IplImage: IocvImage; const Rect: TocvRect) of object;
-  TOnOcvRects       = procedure(Sender: TObject; const IplImage: IocvImage; const Rects: TocvRects) of object;
-  TOnOcvCircles     = procedure(Sender: TObject; const IplImage: IocvImage; const Circles: TocvCircles) of object;
-  TOnOcvLines       = procedure(Sender: TObject; const IplImage: IocvImage; const Lines: TocvLines) of object;
+  TOnOcvRect = procedure(Sender: TObject; const IplImage: IocvImage; const Rect: TocvRect) of object;
+  TOnOcvRects = procedure(Sender: TObject; const IplImage: IocvImage; const Rects: TocvRects) of object;
+  TOnOcvCircles = procedure(Sender: TObject; const IplImage: IocvImage; const Circles: TocvCircles) of object;
+  TOnOcvLines = procedure(Sender: TObject; const IplImage: IocvImage; const Lines: TocvLines) of object;
 
   IocvDataReceiver = interface
     ['{F67DEC9E-CCE0-49D2-AB9B-AD7E1020C5DC}']
@@ -346,7 +355,7 @@ type
     hcFrontalFaceDefaut, hcFullBody, hcLeftEye2Splits, hcLowerBody, hcMcsEyePairBig, hcMcsEyePairSmall, hcMcsLeftEar,
     hcMcsLeftEye, hcMcsMouth, hcMcsNose, hcMcsRightEar, hcMcsRightEye, hcMcsUpperBody, hcProfileFace, hcRightEye2Splits,
     hcSmile, hcUpperBody, hcPlateNumberRus);
-  TocvHaarCascadeFlag    = (HAAR_DO_CANNY_PRUNING, HAAR_SCALE_IMAGE, HAAR_FIND_BIGGEST_OBJECT, HAAR_DO_ROUGH_SEARCH);
+  TocvHaarCascadeFlag = (HAAR_DO_CANNY_PRUNING, HAAR_SCALE_IMAGE, HAAR_FIND_BIGGEST_OBJECT, HAAR_DO_ROUGH_SEARCH);
   TocvHaarCascadeFlagSet = set of TocvHaarCascadeFlag;
 
 function HaarSetToFlag(const CascadeFlags: TocvHaarCascadeFlagSet): Integer;
@@ -634,6 +643,18 @@ end;
 function TocvImage.GetCanvas: IocvCanvas;
 begin
   Result := FocvCanvas as IocvCanvas;
+end;
+
+function TocvImage.GetPixel(const x, y: Integer): TocvPixel;
+begin
+  Result.b := byte(CV_IMAGE_ELEM(FImage, SizeOf(byte), y, (x * FImage^.nChannels) + 0)^);
+  Result.g := byte(CV_IMAGE_ELEM(FImage, SizeOf(byte), y, (x * FImage^.nChannels) + 1)^);
+  Result.r := byte(CV_IMAGE_ELEM(FImage, SizeOf(byte), y, (x * FImage^.nChannels) + 2)^);
+end;
+
+procedure TocvImage.SetPixel(const x, y: Integer; const P: TocvPixel);
+begin
+
 end;
 
 function TocvImage.GetHeight: Integer;

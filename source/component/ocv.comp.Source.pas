@@ -1,27 +1,29 @@
-// *****************************************************************
-// Delphi-OpenCV Demo
-// Copyright (C) 2013 Project Delphi-OpenCV
-// ****************************************************************
-// Contributor:
-// Laentir Valetov
-// email:laex@bk.ru
-// ****************************************************************
-// You may retrieve the latest version of this file at the GitHub,
-// located at git://github.com/Laex/Delphi-OpenCV.git
-// ****************************************************************
-// The contents of this file are used with permission, subject to
-// the Mozilla Public License Version 1.1 (the "License"); you may
-// not use this file except in compliance with the License. You may
-// obtain a copy of the License at
-// http://www.mozilla.org/MPL/MPL-1_1Final.html
-//
-// Software distributed under the License is distributed on an
-// "AS IS" basis, WITHOUT WARRANTY OF ANY KIND, either express or
-// implied. See the License for the specific language governing
-// rights and limitations under the License.
-// *******************************************************************
+(*
+  *****************************************************************
+  Delphi-OpenCV Demo
+  Copyright (C) 2013 Project Delphi-OpenCV
+  ****************************************************************
+  Contributor:
+  Laentir Valetov
+  email:laex@bk.ru
+  ****************************************************************
+  You may retrieve the latest version of this file at the GitHub,
+  located at git://github.com/Laex/Delphi-OpenCV.git
+  ****************************************************************
+  The contents of this file are used with permission, subject to
+  the Mozilla Public License Version 1.1 (the "License"); you may
+  not use this file except in compliance with the License. You may
+  obtain a copy of the License at
+  http://www.mozilla.org/MPL/MPL-1_1Final.html
 
-{$IFNDEF CLR}
+  Software distributed under the License is distributed on an
+  "AS IS" basis, WITHOUT WARRANTY OF ANY KIND, either express or
+  implied. See the License for the specific language governing
+  rights and limitations under the License.
+  *******************************************************************
+*)
+
+{$IFNDEF CLR }
 {$I OpenCV.inc}
 unit ocv.comp.Source;
 {$ENDIF}
@@ -268,9 +270,9 @@ Type
     FOwner: TocvFFMpegIPCamSource;
     FReconnectDelay: Cardinal;
     FisReconnect: Boolean;
-    {$IFDEF DELPHIXE2_UP}
+{$IFDEF DELPHIXE2_UP}
     procedure TerminatedSet; override;
-    {$ENDIF}
+{$ENDIF}
     procedure DoNotyfy(Event: TocvFFMpegIPCamEvent);
   protected
     procedure Execute; override;
@@ -321,8 +323,9 @@ Type
   end;
 
 Const
-  CameraResolution: array [TocvResolution] of TCameraResolution = ((cWidth: 160; cHeight: 120), (cWidth: 320; cHeight: 240), (cWidth: 424;
-    cHeight: 240), (cWidth: 640; cHeight: 360), (cWidth: 800; cHeight: 448), (cWidth: 960; cHeight: 544), (cWidth: 1280; cHeight: 720));
+  CameraResolution: array [TocvResolution] of TCameraResolution = ((cWidth: 160; cHeight: 120), (cWidth: 320;
+    cHeight: 240), (cWidth: 424; cHeight: 240), (cWidth: 640; cHeight: 360), (cWidth: 800; cHeight: 448), (cWidth: 960;
+    cHeight: 544), (cWidth: 1280; cHeight: 720));
 
   { TOpenCVCameraThread }
 
@@ -522,7 +525,7 @@ end;
 
 procedure TocvFileSource.SetEnabled(Value: Boolean);
 Var
- pFileName:PAnsiChar;
+  pFileName: PAnsiChar;
 begin
   if FEnabled <> Value then
   begin
@@ -536,7 +539,7 @@ begin
       end;
       if Value and FileExists(FileName) then
       begin
-        pFileName:=PAnsiChar(@(AnsiString(FileName)[1]));
+        pFileName := PAnsiChar(@(AnsiString(FileName)[1]));
         FCapture := cvCreateFileCapture(pFileName);
         if Assigned(FCapture) then
         begin
@@ -840,11 +843,11 @@ begin
   begin
 
     FisReconnect := False;
-    {$IFDEF DELPHIXE_UP}
+{$IFDEF DELPHIXE_UP}
     FSuspendEvent.WaitFor;
-    {$ELSE}
+{$ELSE}
     FSuspendEvent.WaitFor(10000);
-    {$ENDIF}
+{$ENDIF}
     if Terminated then
       Break;
 
@@ -915,8 +918,8 @@ begin
       Continue;
     end;
 
-    img_convert_context := sws_getCachedContext(nil, pCodecCtx^.Width, pCodecCtx^.Height, pCodecCtx^.pix_fmt, pCodecCtx^.Width,
-      pCodecCtx^.Height, AV_PIX_FMT_BGR24, SWS_BILINEAR, nil, nil, nil);
+    img_convert_context := sws_getCachedContext(nil, pCodecCtx^.Width, pCodecCtx^.Height, pCodecCtx^.pix_fmt,
+      pCodecCtx^.Width, pCodecCtx^.Height, AV_PIX_FMT_BGR24, SWS_BILINEAR, nil, nil, nil);
     if (img_convert_context = nil) then
     begin
       DoNotyfy(ffocvErrorGetStream);
@@ -945,7 +948,8 @@ begin
           avcodec_decode_video2(pCodecCtx, frame, frame_finished, @packet);
           if (frame_finished <> 0) then
           begin
-            sws_scale(img_convert_context, @frame^.data, @frame^.linesize, 0, pCodecCtx^.Height, @iplframe^.imageData, @linesize);
+            sws_scale(img_convert_context, @frame^.data, @frame^.linesize, 0, pCodecCtx^.Height, @iplframe^.imageData,
+              @linesize);
             if Assigned(OnNotifyData) then
               Synchronize(
                 procedure
@@ -1001,6 +1005,7 @@ begin
 end;
 
 {$IFDEF DELPHIXE2_UP}
+
 procedure TocvFFMpegIPCamSourceThread.TerminatedSet;
 begin
   inherited;

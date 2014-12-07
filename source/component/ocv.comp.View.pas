@@ -30,19 +30,19 @@ interface
 
 uses
 {$IFDEF HAS_UNITSCOPE}
-  {$IFDEF MSWINDOWS}
+{$IFDEF MSWINDOWS}
   Winapi.Windows, Winapi.Messages,
-  {$ENDIF MSWINDOWS}
+{$ENDIF MSWINDOWS}
   System.SysUtils,
   System.Classes,
   Vcl.Controls,
   Vcl.Graphics,
   System.SyncObjs,
 {$ELSE}
-  {$IFDEF MSWINDOWS}
+{$IFDEF MSWINDOWS}
   Windows,
-  {$ENDIF MSWINDOWS}
-  {$IFNDEF FPC}Messages, {$ENDIF FPC}
+{$ENDIF MSWINDOWS}
+{$IFNDEF FPC}Messages, {$ENDIF FPC}
   SysUtils,
   Classes,
   Controls,
@@ -93,7 +93,7 @@ type
     function Lock: Boolean;
     procedure Unlock;
   protected
-    {IInterface}
+    { IInterface }
     function QueryInterface(const IID: TGUID; out Obj): HResult; stdcall;
     function _AddRef: integer; stdcall;
     function _Release: integer; stdcall;
@@ -133,6 +133,7 @@ type
     destructor Destroy; override;
     procedure DrawImage(const IplImage: IocvImage);
     property Canvas: TCanvas read FCanvas;
+    property Image: IocvImage read FImage;
   published
     property VideoSource: IocvDataSource Read FocvVideoSource write SetOpenCVVideoSource;
     property Proportional: Boolean read FProportional write FProportional default false;
@@ -162,7 +163,7 @@ implementation
 uses
   ocv.cvutils;
 
-{TOpenCVView}
+{ TOpenCVView }
 
 constructor TocvView.Create(AOwner: TComponent);
 begin
@@ -301,11 +302,11 @@ begin
           begin
             for i := 0 to FFrames.Count - 1 do
               With (FFrames.Items[i] as TocvViewFrame) do
-                {$IFDEF DELPHIXE2_UP}
+{$IFDEF DELPHIXE2_UP}
                 if Enabled and (not DrawRect.AsRect.isEmpty) and Assigned(Image) then
-                {$ELSE}
+{$ELSE}
                 if Enabled and IsRectEmpty(DrawRect.AsRect) and Assigned(Image) then
-                {$ENDIF}
+{$ENDIF}
                   ipDraw(DC, Image.IpImage, DrawRect.AsRect);
             if Assigned(OnAfterPaint) then
               OnAfterPaint(Self, FImage);
@@ -323,17 +324,17 @@ begin
   end;
 end;
 
-{TocvViewFrame}
+{ TocvViewFrame }
 
 constructor TocvViewFrame.Create(Collection: TCollection);
 begin
   inherited;
   FLock := TCriticalSection.Create;
   FDrawRect := TocvPersistentRect.Create;
-  {$IFDEF DELPHIXE2_UP}
+{$IFDEF DELPHIXE2_UP}
   FDrawRect.FRect.Width := 50;
   FDrawRect.FRect.Height := 50;
-  {$ENDIF}
+{$ENDIF}
   FEnabled := false;
 end;
 
@@ -410,7 +411,7 @@ begin
   Result := -1;
 end;
 
-{TPersistentRect}
+{ TPersistentRect }
 
 procedure TocvPersistentRect.AssignTo(Dest: TPersistent);
 begin
