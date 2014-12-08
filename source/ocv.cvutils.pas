@@ -85,8 +85,8 @@ function BitmapToIplImage(const bitmap:
 {$IFDEF DELPHIXE2_UP}Vcl.Graphics.TBitmap{$ELSE}Graphics.TBitmap{$ENDIF}): PIplImage;
 function CropIplImage(const src: PIplImage; const roi: TCvRect): PIplImage;
 
-procedure ocvRGBToHSV(const R, G, B: single; out H, S, V: single);
-procedure ocvHSVToRGB(H, S, V: single; out R, G, B: single);
+procedure ocvRGBToHSV(const R, G, B: byte; out _H, _S, _V: byte);
+procedure ocvHSVToRGB(const _H, _S, _V: byte; out _R, _G, _B: byte);
 
 implementation
 
@@ -442,7 +442,7 @@ begin
   end;
 end;
 
-procedure ocvHSVToRGB(H, S, V: single; out R, G, B: single);
+procedure ocvHSVToRGB(const _H, _S, _V: byte; out _R, _G, _B: byte);
 {
   in
   H = Hue. Range is from 0..180. or H < 0 for gray
@@ -463,64 +463,65 @@ var
   SectionIndex: Integer;
   F: single;
   p, q, t: single;
+  H, S: single;
 begin
-  H := H / 180;
-  S := S / 255;
+  H := _H / 180;
+  S := _S / 255;
 
   if H < 0 then
   begin
-    R := V;
-    G := R;
-    B := R;
+    _R := _V;
+    _G := _R;
+    _B := _R;
   end
   else
   begin
     Section := H / SectionSize;
     SectionIndex := Floor(Section);
     F := Section - SectionIndex;
-    p := V * (1 - S);
-    q := V * (1 - S * F);
-    t := V * (1 - S * (1 - F));
+    p := _V * (1 - S);
+    q := _V * (1 - S * F);
+    t := _V * (1 - S * (1 - F));
     case SectionIndex of
       0:
         begin
-          R := V;
-          G := t;
-          B := p;
+          _R := _V;
+          _G := Trunc(t);
+          _B := Trunc(p);
         end;
       1:
         begin
-          R := q;
-          G := V;
-          B := p;
+          _R := Trunc(q);
+          _G := _V;
+          _B := Trunc(p);
         end;
       2:
         begin
-          R := p;
-          G := V;
-          B := t;
+          _R := Trunc(p);
+          _G := _V;
+          _B := Trunc(t);
         end;
       3:
         begin
-          R := p;
-          G := q;
-          B := V;
+          _R := Trunc(p);
+          _G := Trunc(q);
+          _B := _V;
         end;
       4:
         begin
-          R := t;
-          G := p;
-          B := V;
+          _R := Trunc(t);
+          _G := Trunc(p);
+          _B := _V;
         end;
     else
-      R := V;
-      G := p;
-      B := q;
+      _R := _V;
+      _G := Trunc(p);
+      _B := Trunc(q);
     end;
   end;
 end;
 
-procedure ocvRGBToHSV(const R, G, B: single; out H, S, V: single);
+procedure ocvRGBToHSV(const R, G, B: byte; out _H, _S, _V: byte);
 {
   in
   R = 0..255
@@ -536,6 +537,7 @@ var
   rgb: array [0 .. 2] of single;
   MinIndex, MaxIndex: Integer;
   Range: single;
+  H, S, V: single;
 begin
   rgb[0] := R;
   rgb[1] := G;
@@ -560,9 +562,9 @@ begin
   // Check for a gray level
   if Range = 0 then
   begin
-    H := -1; // Can't determine on greys, so set to -1
-    S := 0; // Gray is at the center;
-    V := R; // could choose R, G, or B because they are all the same value.
+    _H := 0; // Can't determine on greys, so set to -1
+    _S := 0; // Gray is at the center;
+    _V := R; // could choose R, G, or B because they are all the same value.
   end
   else
   begin
@@ -580,9 +582,9 @@ begin
     if H < 0 then
       H := 1 + H;
 
-    H := H * 180;
-    S := S * 255;
-    V := V;
+    _H := Trunc(H * 180);
+    _S := Trunc(S * 255);
+    _V := Trunc(V);
   end;
 end;
 

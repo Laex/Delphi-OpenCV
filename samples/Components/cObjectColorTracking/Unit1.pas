@@ -54,7 +54,7 @@ end;
 
 procedure TForm1.frm3trckbr1Change(Sender: TObject);
 Var
-  R, G, B: Single;
+  R, G, B: Byte;
 begin
   ((Sender as TTrackBar).Parent as TFrame2).trckbr1Change(Sender);
   ((ocvmgprtn1.Operations.Items[2] as TocvImageOperationCollectionItem).Operation as TocvInRangeSOperation)
@@ -94,8 +94,8 @@ end;
 
 procedure TForm1.UpdateTrack;
 Var
-  H, S, V: Single;
-  R, G, B: Single;
+  H, S, V: Byte;
+  R, G, B: Byte;
   H1, S1, V1: Integer;
 begin
   pnl1.Caption := '(R:' + SelectedPixel.R.ToString() + ',G:' + SelectedPixel.G.ToString() + ',B:' +

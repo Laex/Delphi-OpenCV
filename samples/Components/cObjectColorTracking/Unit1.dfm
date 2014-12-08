@@ -130,13 +130,7 @@ object Form1: TForm1
     Height = 34
     TabOrder = 9
     inherited lbl1: TLabel
-      Height = 34
-      Margins.Bottom = 0
       Caption = 'Range'
-    end
-    inherited lbl2: TLabel
-      Height = 34
-      Margins.Bottom = 0
     end
     inherited trckbr1: TTrackBar
       Max = 40

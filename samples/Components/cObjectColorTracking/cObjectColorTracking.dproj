@@ -3,7 +3,7 @@
         <ProjectGuid>{E56078FF-356A-459E-9A21-AD24F8DD0A4A}</ProjectGuid>
         <ProjectVersion>16.1</ProjectVersion>
         <FrameworkType>VCL</FrameworkType>
-        <MainSource>cObjecColorTracking.dpr</MainSource>
+        <MainSource>cObjectColorTracking.dpr</MainSource>
         <Base>True</Base>
         <Config Condition="'$(Config)'==''">Debug</Config>
         <Platform Condition="'$(Platform)'==''">Win32</Platform>
@@ -43,7 +43,7 @@
         <Manifest_File>$(BDS)\bin\default_app.manifest</Manifest_File>
         <VerInfo_Keys>CompanyName=;FileDescription=;FileVersion=1.0.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductName=;ProductVersion=1.0.0.0;Comments=</VerInfo_Keys>
         <VerInfo_Locale>1049</VerInfo_Locale>
-        <SanitizedProjectName>cObjecColorTracking</SanitizedProjectName>
+        <SanitizedProjectName>cObjectColorTracking</SanitizedProjectName>
         <DCC_Namespace>System;Xml;Data;Datasnap;Web;Soap;Vcl;Vcl.Imaging;Vcl.Touch;Vcl.Samples;Vcl.Shell;$(DCC_Namespace)</DCC_Namespace>
         <DCC_DcuOutput>.\$(Platform)\$(Config)</DCC_DcuOutput>
         <DCC_ExeOutput>..\..\..\bin\$(Platform)</DCC_ExeOutput>
@@ -57,7 +57,6 @@
         <DCC_Namespace>Winapi;System.Win;Data.Win;Datasnap.Win;Web.Win;Soap.Win;Xml.Win;Bde;$(DCC_Namespace)</DCC_Namespace>
         <VerInfo_Locale>1033</VerInfo_Locale>
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
-        <Manifest_File>$(BDS)\bin\default_app.manifest</Manifest_File>
         <DCC_UsePackage>cxSchedulerTreeBrowserRS20;JvGlobus;JvMM;cxGridRS20;dxFireDACServerModeRS20;JvManagedThreads;NxGridRun_dxe7;dxPScxExtCommonRS20;dxPSdxLCLnkRS20;dxSkinOffice2007SilverRS20;cxPageControlRS20;dxPSdxSpreadSheetLnkRS20;FireDACPgDriver;JvCrypt;DBXInterBaseDriver;DataSnapServer;DataSnapCommon;JvNet;dxSkinsdxBarPainterRS20;dxSkinSharpRS20;JvDotNetCtrls;DbxCommonDriver;dxLayoutControlRS20;vclimg;dxSkinSilverRS20;NxDBGridRun_dxe7;dbxcds;dxSkinsdxNavBarPainterRS20;DatasnapConnectorsFreePascal;JvXPCtrls;NxCommonDsgn_dxe7;dxPSCoreRS20;dxSkinOffice2013LightGrayRS20;vcldb;NxSheetRun_dxe7;dxPSTeeChartRS20;dxSkinOffice2013WhiteRS20;dxSkinMcSkinRS20;CustomIPTransport;NxCollectionDsgn_dxe7;dsnap;IndyIPServer;dxSkinCoffeeRS20;dxSkinGlassOceansRS20;IndyCore;dxSkinOffice2010SilverRS20;dxComnRS20;CloudService;dxFlowChartRS20;dxSkinOffice2013DarkGrayRS20;FmxTeeUI;FireDACIBDriver;dxDBXServerModeRS20;cxTreeListdxBarPopupMenuRS20;dxSkinOffice2007PinkRS20;dxSkinSpringTimeRS20;dxPsPrVwAdvRS20;JvDB;JvRuntimeDesign;dxPScxGridLnkRS20;dxSkiniMaginaryRS20;dxSkinDevExpressDarkStyleRS20;cxSchedulerGridRS20;dxtrmdRS20;dsnapxml;JclDeveloperTools;FireDACDb2Driver;NxDBGridDsgn_dxe7;dxSpreadSheetRS20;dxSkinMoneyTwinsRS20;dxSkinOffice2007GreenRS20;dxPScxTLLnkRS20;cxPivotGridOLAPRS20;dxPSdxFCLnkRS20;bindcompfmx;FireDACODBCDriver;RESTBackendComponents;dbrtl;FireDACCommon;bindcomp;inetdb;JvPluginSystem;DBXOdbcDriver;JvCmp;vclFireDAC;JvTimeFramework;xmlrtl;cxSpreadSheetRS20;ibxpress;dxSkinOffice2007BlackRS20;dxPScxSSLnkRS20;FireDACCommonDriver;bindengine;vclactnband;soaprtl;FMXTee;dxGDIPlusRS20;bindcompvcl;Jcl;vclie;cxVerticalGridRS20;cxSchedulerRS20;dxSkinBlackRS20;FireDACMSSQLDriver;DBXInformixDriver;dxSkinSummer2008RS20;Intraweb;cxBarEditItemRS20;DataSnapServerMidas;dsnapcon;DBXFirebirdDriver;inet;dxBarRS20;cxDataRS20;dxSkinDarkSideRS20;JvPascalInterpreter;FireDACMySQLDriver;soapmidas;vclx;dxPScxVGridLnkRS20;dxSkinLondonLiquidSkyRS20;dxCoreRS20;DBXSybaseASADriver;RESTComponents;dxPSPrVwRibbonRS20;dbexpress;dxPSLnksRS20;IndyIPClient;dxSpellCheckerRS20;dxBarExtItemsRS20;dxdbtrRS20;FireDACSqliteDriver;FireDACDSDriver;cxSchedulerRibbonStyleEventEditorRS20;DBXSqliteDriver;fmx;dxSkinVS2010RS20;JvDlgs;IndySystem;frxe21;TeeDB;tethering;dxPScxPCProdRS20;dxSkinXmas2008BlueRS20;vclib;dxTabbedMDIRS20;DataSnapClient;frx21;dxmdsRS20;DataSnapProviderClient;DBXSybaseASEDriver;dxdborRS20;dxPSdxDBTVLnkRS20;MetropolisUILiveTile;dxPScxSchedulerLnkRS20;dxSkinCaramelRS20;dxSkinLiquidSkyRS20;vcldsnap;dxGaugeControlRS20;dxSkinDevExpressStyleRS20;fmxFireDAC;cxPivotGridChartRS20;DBXDb2Driver;DBXOracleDriver;dxSkinOffice2010BlueRS20;JvCore;dcldxSkinsCoreRS20;vclribbon;cxExportRS20;dxServerModeRS20;dxSkinscxSchedulerPainterRS20;dxSkinMetropolisDarkRS20;fmxase;vcl;DBXMSSQLDriver;IndyIPCommon;CodeSiteExpressPkg;dxSkinBlueRS20;dxSkinsdxDLPainterRS20;DataSnapFireDAC;FireDACDBXDriver;dxBarExtDBItemsRS20;JvAppFrm;soapserver;dxPSDBTeeChartRS20;dxSkinOffice2010BlackRS20;inetdbxpress;dxADOServerModeRS20;dxSkinBlueprintRS20;dxSkinFoggyRS20;dxSkinSharpPlusRS20;FireDACInfxDriver;cxPivotGridRS20;JvDocking;adortl;JvWizards;dxRibbonRS20;FireDACASADriver;dxSkinHighContrastRS20;JvHMI;dxSkinTheAsphaltWorldRS20;JvBands;NxInspectorRun_dxe7;dxBarDBNavRS20;dxSkinscxPCPainterRS20;emsclientfiredac;rtl;DbxClientDriver;frxTee21;dxNavBarRS20;dxSkinMetropolisRS20;dxDockingRS20;Tee;JclContainers;dxSkinOffice2007BlueRS20;dxSkinsdxRibbonPainterRS20;frxDB21;dxSkinValentineRS20;JvSystem;DataSnapNativeClient;svnui;JvControls;IndyProtocols;DBXMySQLDriver;dxPScxCommonRS20;dxSkinSevenClassicRS20;dxSkinPumpkinRS20;bindcompdbx;TeeUI;JvJans;JvPrintPreview;JvPageComps;JvStdCtrls;JvCustom;NxCommonRun_dxe7;dxSkinDarkRoomRS20;FireDACADSDriver;vcltouch;NxInspectorDsgn_dxe7;dxSkinStardustRS20;cxEditorsRS20;emsclient;dxorgcRS20;dxPSdxDBOCLnkRS20;VCLRESTComponents;FireDAC;VclSmp;NxGridDsgn_dxe7;dxSkinsCoreRS20;DataSnapConnectors;dxSkinSevenRS20;cxLibraryRS20;fmxobj;NxCollectionRun_dxe7;JclVcl;OpenCV210;dxMapControlRS20;svn;dxWizardControlRS20;dxSkinLilianRS20;FireDACOracleDriver;fmxdae;dxPScxPivotGridLnkRS20;dxSkinWhiteprintRS20;dxPSdxOCLnkRS20;dxThemeRS20;FireDACMSAccDriver;DataSnapIndy10ServerTransport;cxTreeListRS20;dxTileControlRS20;$(DCC_UsePackage)</DCC_UsePackage>
         <VerInfo_Keys>CompanyName=;FileDescription=;FileVersion=1.0.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductName=;ProductVersion=1.0.0.0;Comments=</VerInfo_Keys>
     </PropertyGroup>
@@ -114,7 +113,7 @@
         <BorlandProject>
             <Delphi.Personality>
                 <Source>
-                    <Source Name="MainSource">cObjecColorTracking.dpr</Source>
+                    <Source Name="MainSource">cObjectColorTracking.dpr</Source>
                 </Source>
                 <Excluded_Packages>
                     <Excluded_Packages Name="$(BDSBIN)\dcloffice2k210.bpl">Microsoft Office 2000 Sample Automation Server Wrapper Components</Excluded_Packages>
@@ -122,9 +121,15 @@
                 </Excluded_Packages>
             </Delphi.Personality>
             <Deployment>
-                <DeployFile LocalName="Win32\Debug\cObjecColorTracking.exe" Configuration="Debug" Class="ProjectOutput">
+                <DeployFile LocalName="..\..\..\bin\Win32\cObjectColorTracking.exe" Configuration="Debug" Class="ProjectOutput">
                     <Platform Name="Win32">
-                        <RemoteName>cObjecColorTracking.exe</RemoteName>
+                        <RemoteName>cObjectColorTracking.exe</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Win32\Debug\cObjectColorTracking.exe" Configuration="Debug" Class="ProjectOutput">
+                    <Platform Name="Win32">
+                        <RemoteName>cObjectColorTracking.exe</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>

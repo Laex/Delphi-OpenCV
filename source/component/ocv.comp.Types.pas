@@ -74,12 +74,23 @@ type
     Radius: Integer;
   end;
 
+  TocvColorEncode = (ceRGB, ceGRAY);
+
   TocvPixel = record
-    r, g, b, a: byte;
+    case c: TocvColorEncode of
+      ceRGB:
+        (R, G, B: byte);
+      ceGRAY:
+        (GV: byte);
   end;
 
-{$IFDEF DELPHIXE_UP}
+const
+  cmRGB: TA4CVChar  = 'RGB'#0;
+  cmBGR: TA4CVChar  = 'BGR'#0;
+  cmGRAY: TA4CVChar = 'GRAY';
 
+Type
+{$IFDEF DELPHIXE_UP}
   TocvRects = TArray<TocvRect>;
   TocvCircles = TArray<TocvCircle>;
   TocvLines = TArray<TocvLine>;
@@ -123,7 +134,7 @@ type
       const LineType: TocvLineType = LT_8; const Shift: Integer = 0); overload;
     procedure Rectangle(const ARect: TocvRect; const Color: TColor = clRed; const Thickness: Integer = 1;
       const LineType: TocvLineType = LT_8; const Shift: Integer = 0); overload;
-    procedure Circle(const x, y, r: Integer; const Color: TColor = clRed; const Thickness: Integer = 1;
+    procedure Circle(const x, y, R: Integer; const Color: TColor = clRed; const Thickness: Integer = 1;
       const LineType: TocvLineType = LT_8; const Shift: Integer = 0);
     procedure Ellipse(const CenterX, CenterY: Integer; const Axes: TocvRect; const Angle: double;
       const start_angle: double; const nd_angle: double; const Color: TColor = clRed; const Thickness: Integer = 1;
@@ -364,8 +375,10 @@ function ocvRect(Left, Top, Right, Bottom: Integer): TocvRect;
 function ocvRectCenter(cX, cY, Width, Height: Integer): TocvRect;
 function cvRect(const oRect: TocvRect): TcvRect;
 
-procedure GetRGBValue(const AColor: TColor; var r, g, b: byte);
+procedure GetRGBValue(const AColor: TColor; var R, G, B: byte);
 function ColorToCvRGB(const Color: TColor): TCvScalar;
+
+function ocvPixel(const R, G, B: byte): TocvPixel;
 
 const
   cLineType: array [TocvLineType] of Integer = (CV_FILLED, 8, CV_AA);
@@ -376,6 +389,14 @@ uses
   ocv.imgproc_c,
   ocv.imgproc.types_c,
   ocv.highgui_c, ocv.cvutils;
+
+function ocvPixel(const R, G, B: byte): TocvPixel;
+begin
+  Result.c := ceRGB;
+  Result.R := R;
+  Result.G := G;
+  Result.B := B;
+end;
 
 function cvRect(const oRect: TocvRect): TcvRect;
 begin
@@ -467,13 +488,13 @@ end;
 
 procedure TocvDataSource.NotifyReceiver(const IplImage: IocvImage);
 Var
-  r: Pointer; // IocvDataReceiver;
+  R: Pointer; // IocvDataReceiver;
   LockList: TList; // <IocvDataReceiver>;
 begin
   LockList := FOpenCVVideoReceivers.LockList;
   try
-    for r in LockList do
-      IocvDataReceiver(r).TakeImage(IplImage);
+    for R in LockList do
+      IocvDataReceiver(R).TakeImage(IplImage);
   finally
     FOpenCVVideoReceivers.UnlockList;
   end;
@@ -647,14 +668,51 @@ end;
 
 function TocvImage.GetPixel(const x, y: Integer): TocvPixel;
 begin
-  Result.b := byte(CV_IMAGE_ELEM(FImage, SizeOf(byte), y, (x * FImage^.nChannels) + 0)^);
-  Result.g := byte(CV_IMAGE_ELEM(FImage, SizeOf(byte), y, (x * FImage^.nChannels) + 1)^);
-  Result.r := byte(CV_IMAGE_ELEM(FImage, SizeOf(byte), y, (x * FImage^.nChannels) + 2)^);
+  FillChar(Result, SizeOf(Result), 0);
+  if FImage.colorModel = cmRGB then
+  begin
+    Result.c := ceRGB;
+    if FImage.channelSeq = cmRGB then
+    begin
+      Result.R := byte(CV_IMAGE_ELEM(FImage, SizeOf(byte), y, (x * FImage^.nChannels) + 0)^);
+      Result.G := byte(CV_IMAGE_ELEM(FImage, SizeOf(byte), y, (x * FImage^.nChannels) + 1)^);
+      Result.B := byte(CV_IMAGE_ELEM(FImage, SizeOf(byte), y, (x * FImage^.nChannels) + 2)^);
+    end
+    else
+    begin
+      Result.B := byte(CV_IMAGE_ELEM(FImage, SizeOf(byte), y, (x * FImage^.nChannels) + 0)^);
+      Result.G := byte(CV_IMAGE_ELEM(FImage, SizeOf(byte), y, (x * FImage^.nChannels) + 1)^);
+      Result.R := byte(CV_IMAGE_ELEM(FImage, SizeOf(byte), y, (x * FImage^.nChannels) + 2)^);
+    end;
+  end
+  else if FImage.colorModel = cmGRAY then
+  begin
+    Result.c := ceGRAY;
+    Result.GV := byte(CV_IMAGE_ELEM(FImage, SizeOf(byte), y, (x * FImage^.nChannels))^);
+  end;
 end;
 
 procedure TocvImage.SetPixel(const x, y: Integer; const P: TocvPixel);
 begin
-
+  case P.c of
+    ceRGB:
+      begin
+        if FImage.channelSeq = cmRGB then
+        begin
+          byte(CV_IMAGE_ELEM(FImage, SizeOf(byte), y, (x * FImage^.nChannels) + 0)^) := P.R;
+          byte(CV_IMAGE_ELEM(FImage, SizeOf(byte), y, (x * FImage^.nChannels) + 1)^) := P.G;
+          byte(CV_IMAGE_ELEM(FImage, SizeOf(byte), y, (x * FImage^.nChannels) + 2)^) := P.B;
+        end
+        else
+        begin
+          byte(CV_IMAGE_ELEM(FImage, SizeOf(byte), y, (x * FImage^.nChannels) + 0)^) := P.B;
+          byte(CV_IMAGE_ELEM(FImage, SizeOf(byte), y, (x * FImage^.nChannels) + 1)^) := P.G;
+          byte(CV_IMAGE_ELEM(FImage, SizeOf(byte), y, (x * FImage^.nChannels) + 2)^) := P.R;
+        end;
+      end;
+    ceGRAY:
+      byte(CV_IMAGE_ELEM(FImage, SizeOf(byte), y, (x * FImage^.nChannels))^) := P.GV;
+  end;
 end;
 
 function TocvImage.GetHeight: Integer;
@@ -704,11 +762,11 @@ end;
 
 function TocvImage.Resize(const nW, nH: Integer; const interpolation: Integer = CV_INTER_LINEAR): IocvImage;
 Var
-  r: pIplImage;
+  R: pIplImage;
 begin
-  r := cvCreateImage(cvSize(nW, nH), FImage^.depth, FImage^.nChannels);
-  cvResize(FImage, r, interpolation);
-  Result := TocvImage.Create(r);
+  R := cvCreateImage(cvSize(nW, nH), FImage^.depth, FImage^.nChannels);
+  cvResize(FImage, R, interpolation);
+  Result := TocvImage.Create(R);
 end;
 
 function TocvImage.Same: IocvImage;
@@ -733,22 +791,22 @@ begin
   inherited Remove(Pointer(Item));
 end;
 
-procedure GetRGBValue(const AColor: TColor; var r, g, b: byte);
+procedure GetRGBValue(const AColor: TColor; var R, G, B: byte);
 Var
   RGBColor: TColor;
 begin
   RGBColor := ColorToRGB(AColor);
-  r := GetRValue(RGBColor);
-  g := GetGValue(RGBColor);
-  b := GetBValue(RGBColor);
+  R := GetRValue(RGBColor);
+  G := GetGValue(RGBColor);
+  B := GetBValue(RGBColor);
 end;
 
 function ColorToCvRGB(const Color: TColor): TCvScalar;
 var
-  r, g, b: byte;
+  R, G, B: byte;
 begin
-  GetRGBValue(Color, r, g, b);
-  Result := CV_RGB(r, g, b);
+  GetRGBValue(Color, R, G, B);
+  Result := CV_RGB(R, G, B);
 end;
 
 { TocvCanvas }
@@ -837,7 +895,7 @@ end;
 constructor TocvFont.Create;
 begin
   inherited;
-  FillChar(FCvFont, sizeof(FCvFont), 0);
+  FillChar(FCvFont, SizeOf(FCvFont), 0);
   FCvFont.HScale := 0.5;
   FCvFont.VScale := 0.5;
   FCvFont.Thickness := 1;
@@ -927,7 +985,7 @@ end;
 
 function TocvRectHelper.cvRect: TcvRect;
 Var
-  r: TcvRect;
+  R: TcvRect;
 begin
   Result.x := Left;
   Result.y := Top;

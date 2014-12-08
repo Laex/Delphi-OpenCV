@@ -1,4 +1,4 @@
-program cObjecColorTracking;
+program cObjectColorTracking;
 
 uses
   Vcl.Forms,
