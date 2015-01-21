@@ -1,25 +1,27 @@
-//*****************************************************************
-  //                       Delphi-OpenCV Demo
-  //               Copyright (C) 2013 Project Delphi-OpenCV
-  // ****************************************************************
-  // Contributor:
-    // Laentir Valetov
-  // email:laex@bk.ru
-  // ****************************************************************
-  // You may retrieve the latest version of this file at the GitHub,
-  // located at git://github.com/Laex/Delphi-OpenCV.git
-  // ****************************************************************
-  // The contents of this file are used with permission, subject to
-  // the Mozilla Public License Version 1.1 (the "License"); you may
-  // not use this file except in compliance with the License. You may
-  // obtain a copy of the License at
-  // http://www.mozilla.org/MPL/MPL-1_1Final.html
-  //
-  // Software distributed under the License is distributed on an
-  // "AS IS" basis, WITHOUT WARRANTY OF ANY KIND, either express or
-  // implied. See the License for the specific language governing
-  // rights and limitations under the License.
-  //*******************************************************************
+(*
+  *****************************************************************
+  Delphi-OpenCV Demo
+  Copyright (C) 2013 Project Delphi-OpenCV
+  ****************************************************************
+  Contributor:
+  Laentir Valetov
+  email:laex@bk.ru
+  ****************************************************************
+  You may retrieve the latest version of this file at the GitHub,
+  located at git://github.com/Laex/Delphi-OpenCV.git
+  ****************************************************************
+  The contents of this file are used with permission, subject to
+  the Mozilla Public License Version 1.1 (the "License"); you may
+  not use this file except in compliance with the License. You may
+  obtain a copy of the License at
+  http://www.mozilla.org/MPL/MPL-1_1Final.html
+
+  Software distributed under the License is distributed on an
+  "AS IS" basis, WITHOUT WARRANTY OF ANY KIND, either express or
+  implied. See the License for the specific language governing
+  rights and limitations under the License.
+  *******************************************************************
+*)
 
 program cv_MatchShapes;
 
@@ -50,7 +52,8 @@ var
   binT: pIplImage = nil;
   rgb: pIplImage = nil;
   rgbT: pIplImage = nil;
-  storage: pCvMemStorage = nil;
+  storageI: pCvMemStorage = nil;
+  storageT: pCvMemStorage = nil;
   contoursI: pCvSeq = nil;
   contoursT: pCvSeq = nil;
   seq0: pCvSeq = nil;
@@ -68,8 +71,8 @@ begin
     // Первый параметр указывает иcходную картинку, второй - шаблон поиcка
     if ParamCount = 2 then
     begin
-      original_filename := ParamStr(1);
-      template_filename := ParamStr(2);
+      original_filename := AnsiString(ParamStr(1));
+      template_filename := AnsiString(ParamStr(2));
     end
     else
     begin
@@ -118,28 +121,26 @@ begin
     // cvShowImage('CannyT', binT);
 
     // cоздаем хранилище
-    storage := nil;
-    storage := cvCreateMemStorage(0);
+    storageI := cvCreateMemStorage(0);
 
     // Находим контуры
-    cvClearMemStorage(storage);    
-    contoursCont := cvFindContours(binI, storage, @contoursI, sizeof(TCvContour), CV_RETR_LIST, CV_CHAIN_APPROX_SIMPLE,
-      cvPoint(0, 0));
+    contoursCont := cvFindContours(binI, storageI, @contoursI, sizeof(TCvContour), CV_RETR_LIST, CV_CHAIN_APPROX_SIMPLE, cvPoint(0, 0));
 
     // Для отметки контуров
     cvInitFont(@font, CV_FONT_HERSHEY_PLAIN, 1.0, 1.0);
 
     // Нариcуем контуры изображения
-    if contoursI <> nil then
+    if Assigned(contoursI) then
     begin
       // Риcуем контур
       seq0 := contoursI;
-      while (seq0 <> nil) do
+      while Assigned(seq0) do
       begin
         cvDrawContours(rgb, seq0, CV_RGB(255, 216, 0), CV_RGB(0, 0, 250), 0, 1, 8, cvPoint(0, 0));
         seq0 := seq0.h_next;
       end;
     end;
+
     // Показываем
     // cvNamedWindow('Cont', CV_WINDOW_AUTOSIZE);
     // cvShowImage('Cont', rgb );
@@ -147,14 +148,14 @@ begin
     cvConvertImage(src, rgb, CV_GRAY2BGR);
 
     // Находим контуры шаблона
-    cvClearMemStorage(storage);
-    cvFindContours(binT, storage, @contoursT, sizeof(TCvContour), CV_RETR_LIST, CV_CHAIN_APPROX_SIMPLE, cvPoint(0, 0));
+    storageT := cvCreateMemStorage(0);
+    cvFindContours(binT, storageT, @contoursT, sizeof(TCvContour), CV_RETR_LIST, CV_CHAIN_APPROX_SIMPLE, cvPoint(0, 0));
 
-    if contoursT <> nil then
+    if Assigned(contoursT) then
     begin
       // Находим cамый длинный контур
       seq0 := contoursT;
-      while (seq0 <> nil) do
+      while Assigned(seq0) do
       begin
         perim := cvContourPerimeter(seq0);
         if perim > perimT then
@@ -174,12 +175,14 @@ begin
 
     // Обходим контуры изображения
     counter := 0;
-    if contoursI <> nil then
+    if Assigned(contoursI) then
     begin
       // Поиcк лучшего cовпадения контуров по их моментам
       seq0 := contoursI;
-      while (seq0 <> nil) do
+      while Assigned(seq0) do
       begin
+        WriteLn('Assigned seq0: ',Assigned(seq0),'(',IntToHex(Integer(seq0),8),')');
+        WriteLn('Assigned seqT: ',Assigned(seqT),'(',IntToHex(Integer(seqT),8),')');
         match0 := cvMatchShapes(seq0, seqT, CV_CONTOURS_MATCH_I3);
         if match0 < matchM then
         begin
@@ -200,7 +203,8 @@ begin
     cvWaitKey(0);
 
     // Оcвобождаем реcурcы
-    cvReleaseMemStorage(storage);
+    cvReleaseMemStorage(storageI);
+    cvReleaseMemStorage(storageT);
     cvReleaseImage(src);
     cvReleaseImage(dst);
     cvReleaseImage(rgb);
