@@ -282,7 +282,7 @@ Type
   // trained Latent SVM detector in internal representation
 
   // CVAPI(CvLatentSvmDetector*) cvLoadLatentSvmDetector(const char* filename);
-function cvLoadLatentSvmDetector(const filename: pCVChar): pCvLatentSvmDetector; stdcall;
+function cvLoadLatentSvmDetector(const filename: pCVChar): pCvLatentSvmDetector; cdecl;
 
 // release memory allocated for CvLatentSvmDetector structure
 //
@@ -293,7 +293,7 @@ function cvLoadLatentSvmDetector(const filename: pCVChar): pCvLatentSvmDetector;
 // OUTPUT
 
 // CVAPI(void) cvReleaseLatentSvmDetector(CvLatentSvmDetector** detector);
-procedure cvReleaseLatentSvmDetector(Var detector: pCvLatentSvmDetector); stdcall;
+procedure cvReleaseLatentSvmDetector(Var detector: pCvLatentSvmDetector); cdecl;
 
 
 // find rectangular regions in the given image that are likely
@@ -320,7 +320,7 @@ procedure cvReleaseLatentSvmDetector(Var detector: pCvLatentSvmDetector); stdcal
 // float overlap_threshold CV_DEFAULT(0.5f),
 // int numThreads CV_DEFAULT(-1));
 function cvLatentSvmDetectObjects(image: pIplImage; detector: pCvLatentSvmDetector; storage: pCvMemStorage;
-  overlap_threshold: single = 0.5; numThreads: Integer = -1): pCvSeq; stdcall;
+  overlap_threshold: single = 0.5; numThreads: Integer = -1): pCvSeq; cdecl;
 
 // #ifdef __cplusplus
 // }

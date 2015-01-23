@@ -10,6 +10,7 @@
 #include "opencv2\highgui\highgui.hpp"
 #include "opencv2\ml\ml.hpp"
 #include "opencv2\features2d\features2d.hpp"
+#include "opencv2\nonfree\features2d.hpp"
 #include "opencv2\objdetect\objdetect.hpp"
 
 using namespace cv;
@@ -272,4 +273,16 @@ public:
 	virtual int ICLASS_API getFeatureType() { return FCascadeClassifier.getFeatureType(); };	
 	virtual bool ICLASS_API setImage(TMat m) { return FCascadeClassifier.setImage(*m.Mat()); };
 	*/
+};
+
+class OCV_CLASS_EXPORT TSURF
+{
+private:
+	SurfFeatureDetector FSURF;
+public:
+	TSURF() : FSURF() {};
+	TSURF(double hessianThreshold,
+		int nOctaves = 4, int nOctaveLayers = 2,
+		BOOL extended = true, BOOL upright = false) : FSURF(hessianThreshold, nOctaves, nOctaveLayers, extended, upright) {};
+	~TSURF(){};
 };

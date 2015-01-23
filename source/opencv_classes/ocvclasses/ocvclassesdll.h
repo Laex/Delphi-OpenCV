@@ -36,3 +36,7 @@ ICLASS_EXPORT void ICLASS_API ReleaseCVectorDouble(TCVectorDouble* ex);
 ICLASS_EXPORT TCascadeClassifier* ICLASS_API CreateCascadeClassifier();
 ICLASS_EXPORT TCascadeClassifier* ICLASS_API CreateCascadeClassifierFromFile(const char* filename);
 ICLASS_EXPORT void ICLASS_API ReleaseCascadeClassifier(TCascadeClassifier* ex);
+
+ICLASS_EXPORT TSURF* ICLASS_API CreateSURF();
+ICLASS_EXPORT TSURF* ICLASS_API CreateSURFFromValue(double hessianThreshold,int nOctaves, int nOctaveLayers,BOOL extended, BOOL upright);
+ICLASS_EXPORT void ICLASS_API ReleaseSURF(TSURF* ex);

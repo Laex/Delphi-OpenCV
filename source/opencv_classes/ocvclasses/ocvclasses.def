@@ -40,3 +40,7 @@ EXPORTS
 	CreateCascadeClassifier
 	CreateCascadeClassifierFromFile
 	ReleaseCascadeClassifier
+
+	CreateSURF
+	CreateSURFFromValue
+	ReleaseSURF

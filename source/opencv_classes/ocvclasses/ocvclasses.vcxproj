@@ -43,15 +43,15 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\OpenCV\build\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\OpenCV\build\x86\vc12\lib\;$(LibraryPath)</LibraryPath>
+    <IncludePath>F:\OpenCV\build\include;$(IncludePath)</IncludePath>
+    <LibraryPath>F:\OpenCV\build\x86\vc12\lib\;$(LibraryPath)</LibraryPath>
     <OutDir>..\..\..\bin\Win32</OutDir>
     <TargetName>opencv_classes249d</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>C:\OpenCV\build\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\OpenCV\build\x86\vc12\lib\;$(LibraryPath)</LibraryPath>
+    <IncludePath>F:\OpenCV\build\include;$(IncludePath)</IncludePath>
+    <LibraryPath>F:\OpenCV\build\x86\vc12\lib\;$(LibraryPath)</LibraryPath>
     <OutDir>..\..\..\bin\Win32</OutDir>
     <TargetName>opencv_classes249</TargetName>
   </PropertyGroup>

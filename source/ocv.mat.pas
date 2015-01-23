@@ -81,8 +81,6 @@ procedure ReleaseMat(ex: TccvMat); stdcall; external opencv_classes_lib;
 
 { TocvMat }
 
-{ TocvMat }
-
 class function TccvMat.Create: TccvMat;
 begin
   Result := CreateMat;

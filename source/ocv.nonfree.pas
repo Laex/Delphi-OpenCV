@@ -60,4 +60,8 @@ uses ocv.lib;
 
 function initModule_nonfree; external nonfree_lib index 894;
 
+initialization
+
+initModule_nonfree;
+
 end.

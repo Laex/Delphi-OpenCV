@@ -142,3 +142,22 @@ void ICLASS_API ReleaseCascadeClassifier(TCascadeClassifier* ex)
 {
 	delete ex;
 };
+
+///////////////////////////////////////////////
+
+TSURF* ICLASS_API CreateSURF()
+{
+	return new TSURF();
+};
+
+TSURF* ICLASS_API CreateSURFFromValue(double hessianThreshold,
+	int nOctaves = 4, int nOctaveLayers = 2,
+	BOOL extended = true, BOOL upright = false)
+{
+	return new TSURF(hessianThreshold,nOctaves, nOctaveLayers,extended, upright);
+};
+
+void ICLASS_API ReleaseSURF(TSURF* ex)
+{
+	delete ex;
+};

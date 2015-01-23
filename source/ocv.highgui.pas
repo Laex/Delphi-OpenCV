@@ -157,7 +157,7 @@ function createTrackbar(const trackbarname: String; const winname: String; value
 // CV_EXPORTS_W Mat imread( const string& filename, int flags=1 );
 function imread(const filename: string; flag: Integer = 1): TccvMat;
 // CV_EXPORTS_W bool imwrite( const string& filename, InputArray img, const vector<int>& params=vector<int>());
-function imwrite(const filename: String; const img: TccvMat): bool;
+//function imwrite(const filename: String; const img: TccvMat): bool;
 
 type
   TIplImageRecordHelper = record helper for TIplImage
@@ -178,18 +178,19 @@ function CreateVideoCapture(filename: pAnsiChar): TccvVideoCapture; stdcall;
   external opencv_classes_lib name 'CreateVideoCaptureFileName'; overload;
 procedure ReleaseVideoCapture(ex: TccvVideoCapture); stdcall; external opencv_classes_lib;
 
-function _imread(const filename: pCvChar; flag: Integer): TccvMat; external opencv_classes_lib name '_imread';
-function _imwrite(const filename: pCvChar; const img: TccvMat): bool; external opencv_classes_lib name '_imwrite';
+// function _imread(const filename: pCvChar; flag: Integer): TccvMat; external opencv_classes_lib name '_imread';
+// function _imwrite(const filename: pCvChar; const img: TccvMat): bool; external opencv_classes_lib name '_imwrite';
 
 function imread(const filename: string; flag: Integer): TccvMat;
 begin
-  Result := _imread(c_str(filename), flag);
+  // Result := _imread(c_str(filename), flag);
+  Result := TccvMat.Create(cvLoadImage(pAnsiChar(AnsiString(filename)), flag));
 end;
 
-function imwrite(const filename: String; const img: TccvMat): bool;
-begin
-  Result := _imwrite(c_str(filename), img);
-end;
+// function imwrite(const filename: String; const img: TccvMat): bool;
+// begin
+// Result := _imwrite(c_str(filename), img);
+// end;
 
 procedure namedWindow(const winname: String; const flags: Integer = WINDOW_AUTOSIZE);
 begin
