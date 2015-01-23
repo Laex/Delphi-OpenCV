@@ -44,3 +44,12 @@ EXPORTS
 	CreateSURF
 	CreateSURFFromValue
 	ReleaseSURF
+	CreateCVectorKeyPoint
+	ReleaseCVectorKeyPoint
+	CreateCVectorDMatch
+	ReleaseCVectorDMatch
+	CreateBFMatcher
+	ReleaseBFMatcher
+	DrawMatches
+	CreateSIFT
+	ReleaseSIFT

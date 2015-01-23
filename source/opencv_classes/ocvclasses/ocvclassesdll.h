@@ -40,3 +40,17 @@ ICLASS_EXPORT void ICLASS_API ReleaseCascadeClassifier(TCascadeClassifier* ex);
 ICLASS_EXPORT TSURF* ICLASS_API CreateSURF();
 ICLASS_EXPORT TSURF* ICLASS_API CreateSURFFromValue(double hessianThreshold,int nOctaves, int nOctaveLayers,BOOL extended, BOOL upright);
 ICLASS_EXPORT void ICLASS_API ReleaseSURF(TSURF* ex);
+ICLASS_EXPORT TCVectorKeyPoint* ICLASS_API CreateCVectorKeyPoint();
+ICLASS_EXPORT void ICLASS_API ReleaseCVectorKeyPoint(TCVectorKeyPoint* ex);
+ICLASS_EXPORT TCVectorDMatch* ICLASS_API CreateCVectorDMatch();
+ICLASS_EXPORT void ICLASS_API ReleaseCVectorDMatch(TCVectorDMatch* ex);
+ICLASS_EXPORT TBFMatcher* ICLASS_API CreateBFMatcher(int normType = NORM_L2, BOOL crossCheck = false);
+ICLASS_EXPORT void ICLASS_API ReleaseBFMatcher(TBFMatcher* ex);
+ICLASS_EXPORT void ICLASS_API DrawMatches(
+	TMat* img1, TCVectorKeyPoint* keypoints1,
+	TMat* img2, TCVectorKeyPoint* keypoints2,
+	TCVectorDMatch* matches1to2, TMat** outImg);
+ICLASS_EXPORT TSIFT* ICLASS_API CreateSIFT(int nfeatures = 0, int nOctaveLayers = 3,
+	double contrastThreshold = 0.04, double edgeThreshold = 10,
+	double sigma = 1.6);
+ICLASS_EXPORT void ICLASS_API ReleaseSIFT(TSIFT* ex);

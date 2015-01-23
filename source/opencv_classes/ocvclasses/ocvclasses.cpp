@@ -1,8 +1,9 @@
 
-#include <vector>
+//#include <vector>
 #include "stdafx.h"
 #include "ocvexport.h"
 #include "ocvclasses.h"
+#include "dnaclasses.h"
 #include "opencv2\features2d\features2d.hpp"
 
 ///////////////////////////////////////////////////
@@ -160,4 +161,58 @@ TSURF* ICLASS_API CreateSURFFromValue(double hessianThreshold,
 void ICLASS_API ReleaseSURF(TSURF* ex)
 {
 	delete ex;
+};
+
+TSIFT* ICLASS_API CreateSIFT(int nfeatures = 0, int nOctaveLayers = 3,
+	double contrastThreshold = 0.04, double edgeThreshold = 10,
+	double sigma = 1.6)
+{
+	return new TSIFT(nfeatures, nOctaveLayers,
+		contrastThreshold, edgeThreshold, sigma);
+};
+
+void ICLASS_API ReleaseSIFT(TSIFT* ex)
+{
+	delete ex;
+};
+
+TBFMatcher* ICLASS_API CreateBFMatcher(int normType = NORM_L2, BOOL crossCheck = false)
+{
+	return new TBFMatcher(normType, crossCheck);
+};
+
+void ICLASS_API ReleaseBFMatcher(TBFMatcher* ex)
+{
+	delete ex;
+};
+
+// Draws matches of keypints from two images on output image.
+void ICLASS_API DrawMatches(
+	TMat* img1, TCVectorKeyPoint* keypoints1,
+	TMat* img2, TCVectorKeyPoint* keypoints2,
+	TCVectorDMatch* matches1to2, TMat** outImg)
+{
+	vector<KeyPoint> k1, k2;	
+	for (size_t i = 0; i < keypoints1->size(); i++)
+	{
+		TKeyPoint K = *keypoints1->at(i);
+		k1.push_back(KeyPoint(K.x, K.y, K.size, K.angle, K.response, K.octave, K.class_id));
+	}
+	for (size_t i = 0; i < keypoints2->size(); i++)
+	{
+		TKeyPoint K = *keypoints2->at(i);
+		k2.push_back(KeyPoint(K.x, K.y, K.size, K.angle, K.response, K.octave, K.class_id));
+	}
+	
+	vector<DMatch> m1to2;
+	for (size_t i = 0; i < matches1to2->size(); i++)
+	{
+		TDMatch K = *matches1to2->at(i);
+		m1to2.push_back(DMatch(K.queryIdx, K.trainIdx, K.imgIdx, K.distance));
+	}
+	
+	Mat oImg;
+	drawMatches(*img1->Mat(), k1, *img2->Mat(), k2, m1to2, oImg);
+
+	*outImg = new TMat(oImg);
 };

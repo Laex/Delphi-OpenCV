@@ -171,7 +171,7 @@ public:
 	TVectorOfPoint2i(int _Count) : FVectorOfPoint2i(_Count) {}
 	TVectorOfPoint2i(std::vector<cv::Point> v) : FVectorOfPoint2i()
 	{
-		for (int i = 0; i < (int)v.size(); i++)
+		for (size_t i = 0; i < (int)v.size(); i++)
 		{
 			FVectorOfPoint2i.push_back(TPoint2i(v[i]));
 		}
@@ -222,13 +222,13 @@ public:
 		CvSize minSize = CvSize(),
 		CvSize maxSize = CvSize())
 	{
-		vector<Rect> o;				
-		FCascadeClassifier.detectMultiScale(*image->Mat(), o, scaleFactor, minNeighbors, flags, Size(minSize), Size(maxSize));		
-		for (int i = 0; i < o.size(); i++)
+		vector<Rect> o;
+		FCascadeClassifier.detectMultiScale(*image->Mat(), o, scaleFactor, minNeighbors, flags, Size(minSize), Size(maxSize));
+		for (size_t i = 0; i < o.size(); i++)
 		{
 			Rect R = o[i];
 			objects->Vector()->push_back(CRect(R.x, R.y, R.width, R.height));
-		}		
+		}
 	};
 
 	/*
@@ -253,24 +253,24 @@ public:
 		CvSize maxSize = CvSize(),
 		bool outputRejectLevels = false)
 	{
-		vector<Rect> o;		
+		vector<Rect> o;
 		FCascadeClassifier.detectMultiScale(*image->Mat(), o, *rejectLevels->Vector(), *levelWeights->Vector(),
-			scaleFactor, minNeighbors, flags, Size(minSize), Size(maxSize), outputRejectLevels);		
-		for (int i = 0; i < o.size(); i++)
+			scaleFactor, minNeighbors, flags, Size(minSize), Size(maxSize), outputRejectLevels);
+		for (size_t i = 0; i < o.size(); i++)
 		{
-			Rect R = o[i];			
+			Rect R = o[i];
 			objects->Vector()->push_back(CRect(R.x, R.y, R.width, R.height));
 		}
-		
+
 	};
 	virtual bool ICLASS_API isOldFormatCascade() { return FCascadeClassifier.isOldFormatCascade(); };
 	/*
-	virtual CvSize ICLASS_API getOriginalWindowSize() 
-	{ 
-		CvSize R = FCascadeClassifier.getOriginalWindowSize();
-		return R;
-	};	
-	virtual int ICLASS_API getFeatureType() { return FCascadeClassifier.getFeatureType(); };	
+	virtual CvSize ICLASS_API getOriginalWindowSize()
+	{
+	CvSize R = FCascadeClassifier.getOriginalWindowSize();
+	return R;
+	};
+	virtual int ICLASS_API getFeatureType() { return FCascadeClassifier.getFeatureType(); };
 	virtual bool ICLASS_API setImage(TMat m) { return FCascadeClassifier.setImage(*m.Mat()); };
 	*/
 };
@@ -278,11 +278,385 @@ public:
 class OCV_CLASS_EXPORT TSURF
 {
 private:
-	SurfFeatureDetector FSURF;
+	SURF FSURF;
 public:
 	TSURF() : FSURF() {};
 	TSURF(double hessianThreshold,
 		int nOctaves = 4, int nOctaveLayers = 2,
 		BOOL extended = true, BOOL upright = false) : FSURF(hessianThreshold, nOctaves, nOctaveLayers, extended, upright) {};
 	~TSURF(){};
+
+	virtual void ICLASS_API detect(TMat* image, CV_OUT TCVectorKeyPoint* keypoints, TMat* mask = NULL)
+	{
+		vector<KeyPoint> keypoints1;
+		if (mask)
+			FSURF.detect(*image->Mat(), keypoints1, *mask->Mat()); else
+			FSURF.detect(*image->Mat(), keypoints1);
+		for (size_t i = 0; i < keypoints1.size(); i++)
+		{
+			keypoints->Vector()->push_back(CKeyPoint(keypoints1[i]));
+		}
+	};
+	virtual void ICLASS_API compute(TMat* image, TCVectorKeyPoint* keypoints, TMat** descriptors)
+	{
+		vector<KeyPoint> keypoints1;
+		for (size_t i = 0; i < keypoints->size(); i++)
+		{
+			TKeyPoint K = *keypoints->at(i);
+			keypoints1.push_back(KeyPoint(K.x, K.y, K.size, K.angle, K.response, K.octave, K.class_id));
+		};
+		Mat m;
+		FSURF.compute(*image->Mat(), keypoints1, m);
+		*descriptors = new TMat(m);
+	};
+};
+
+
+class OCV_CLASS_EXPORT TBFMatcher
+{
+private:
+	BFMatcher FBFMatcher;
+public:
+	TBFMatcher() : FBFMatcher() {};
+	TBFMatcher(int normType = NORM_L2, BOOL crossCheck = false) : FBFMatcher(normType, crossCheck) {};
+	~TBFMatcher(){};
+	virtual void ICLASS_API match(TMat* queryDescriptors, TMat* trainDescriptors,
+		CV_OUT TCVectorDMatch* matches, TMat* mask = NULL)
+	{
+		vector<DMatch> m;
+		if (mask)
+			FBFMatcher.match(*queryDescriptors->Mat(), *trainDescriptors->Mat(), m, *mask->Mat()); else
+			FBFMatcher.match(*queryDescriptors->Mat(), *trainDescriptors->Mat(), m);
+		for (size_t i = 0; i < m.size(); i++)
+		{
+			matches->push_back(CDMatch(m[i]));
+		}
+	};
+};
+
+class OCV_CLASS_EXPORT TSIFT
+{
+private:
+	SIFT FSIFT;
+public:
+	TSIFT() : FSIFT() {};
+	TSIFT(int nfeatures = 0, int nOctaveLayers = 3,
+		double contrastThreshold = 0.04, double edgeThreshold = 10,
+		double sigma = 1.6) : FSIFT(nfeatures, nOctaveLayers,
+		contrastThreshold, edgeThreshold,sigma) {};
+	~TSIFT(){};
+
+	virtual void ICLASS_API detect(TMat* image, CV_OUT TCVectorKeyPoint* keypoints, TMat* mask = NULL)
+	{
+		vector<KeyPoint> keypoints1;
+		if (mask)
+			FSIFT.detect(*image->Mat(), keypoints1, *mask->Mat()); else
+			FSIFT.detect(*image->Mat(), keypoints1);
+		for (size_t i = 0; i < keypoints1.size(); i++)
+		{
+			keypoints->Vector()->push_back(CKeyPoint(keypoints1[i]));
+		}
+	};
+	virtual void ICLASS_API compute(TMat* image, TCVectorKeyPoint* keypoints, TMat** descriptors)
+	{
+		vector<KeyPoint> keypoints1;
+		for (size_t i = 0; i < keypoints->size(); i++)
+		{
+			TKeyPoint K = *keypoints->at(i);
+			keypoints1.push_back(KeyPoint(K.x, K.y, K.size, K.angle, K.response, K.octave, K.class_id));
+		};
+		Mat m;
+		FSIFT.compute(*image->Mat(), keypoints1, m);
+		*descriptors = new TMat(m);
+	};
+};
+
+class OCV_CLASS_EXPORT TBRISK
+{
+private:
+	BRISK FBRISK;
+public:
+	TBRISK() : FBRISK() {};
+	TBRISK(int thresh = 30, int octaves = 3, float patternScale = 1.0f) : FBRISK(thresh, octaves, patternScale) {};
+	~TBRISK(){};
+
+	virtual void ICLASS_API detect(TMat* image, CV_OUT TCVectorKeyPoint* keypoints, TMat* mask = NULL)
+	{
+		vector<KeyPoint> keypoints1;
+		if (mask)
+			FBRISK.detect(*image->Mat(), keypoints1, *mask->Mat()); else
+			FBRISK.detect(*image->Mat(), keypoints1);
+		for (size_t i = 0; i < keypoints1.size(); i++)
+		{
+			keypoints->Vector()->push_back(CKeyPoint(keypoints1[i]));
+		}
+	};
+	virtual void ICLASS_API compute(TMat* image, TCVectorKeyPoint* keypoints, TMat** descriptors)
+	{
+		vector<KeyPoint> keypoints1;
+		for (size_t i = 0; i < keypoints->size(); i++)
+		{
+			TKeyPoint K = *keypoints->at(i);
+			keypoints1.push_back(KeyPoint(K.x, K.y, K.size, K.angle, K.response, K.octave, K.class_id));
+		};
+		Mat m;
+		FBRISK.compute(*image->Mat(), keypoints1, m);
+		*descriptors = new TMat(m);
+	};
+};
+
+class OCV_CLASS_EXPORT TORB
+{
+private:
+	ORB Detector;
+public:
+	TORB() : Detector() {};
+	TORB(int nfeatures = 500, float scaleFactor = 1.2f, int nlevels = 8, int edgeThreshold = 31,
+		int firstLevel = 0, int WTA_K = 2, int scoreType = ORB::HARRIS_SCORE, int patchSize = 31) : Detector(
+		nfeatures, scaleFactor, nlevels, edgeThreshold,
+		firstLevel, WTA_K, scoreType, patchSize) {};
+	~TORB(){};
+
+	virtual void ICLASS_API detect(TMat* image, CV_OUT TCVectorKeyPoint* keypoints, TMat* mask = NULL)
+	{
+		vector<KeyPoint> keypoints1;
+		if (mask)
+			Detector.detect(*image->Mat(), keypoints1, *mask->Mat()); else
+			Detector.detect(*image->Mat(), keypoints1);
+		for (size_t i = 0; i < keypoints1.size(); i++)
+		{
+			keypoints->Vector()->push_back(CKeyPoint(keypoints1[i]));
+		}
+	};
+	virtual void ICLASS_API compute(TMat* image, TCVectorKeyPoint* keypoints, TMat** descriptors)
+	{
+		vector<KeyPoint> keypoints1;
+		for (size_t i = 0; i < keypoints->size(); i++)
+		{
+			TKeyPoint K = *keypoints->at(i);
+			keypoints1.push_back(KeyPoint(K.x, K.y, K.size, K.angle, K.response, K.octave, K.class_id));
+		};
+		Mat m;
+		Detector.compute(*image->Mat(), keypoints1, m);
+		*descriptors = new TMat(m);
+	};
+};
+
+class OCV_CLASS_EXPORT TFREAK
+{
+private:
+	FREAK Detector;
+public:
+	TFREAK() : Detector() {};
+	TFREAK(BOOL orientationNormalized = true,
+		BOOL scaleNormalized = true,
+		float patternScale = 22.0f,
+		int nOctaves = 4,
+		const vector<int>& selectedPairs = vector<int>()) : Detector(orientationNormalized, scaleNormalized, patternScale, nOctaves, selectedPairs) {};
+	~TFREAK(){};
+
+	virtual void ICLASS_API compute(TMat* image, TCVectorKeyPoint* keypoints, TMat** descriptors)
+	{
+		vector<KeyPoint> keypoints1;
+		for (size_t i = 0; i < keypoints->size(); i++)
+		{
+			TKeyPoint K = *keypoints->at(i);
+			keypoints1.push_back(KeyPoint(K.x, K.y, K.size, K.angle, K.response, K.octave, K.class_id));
+		};
+		Mat m;
+		Detector.compute(*image->Mat(), keypoints1, m);
+		*descriptors = new TMat(m);
+	};
+};
+
+class OCV_CLASS_EXPORT TMSER
+{
+private:
+	cv::MSER Detector;
+public:
+	TMSER() : Detector() {};
+	TMSER(int _delta = 5, int _min_area = 60, int _max_area = 14400,
+		double _max_variation = 0.25, double _min_diversity = .2,
+		int _max_evolution = 200, double _area_threshold = 1.01,
+		double _min_margin = 0.003, int _edge_blur_size = 5) : Detector(
+		_delta, _min_area, _max_area ,_max_variation, _min_diversity,
+		_max_evolution , _area_threshold,
+		_min_margin , _edge_blur_size) {};
+	~TMSER(){};
+
+	virtual void ICLASS_API detect(TMat* image, CV_OUT TCVectorKeyPoint* keypoints, TMat* mask = NULL)
+	{
+		vector<KeyPoint> keypoints1;
+		if (mask)
+			Detector.detect(*image->Mat(), keypoints1, *mask->Mat()); else
+			Detector.detect(*image->Mat(), keypoints1);
+		for (size_t i = 0; i < keypoints1.size(); i++)
+		{
+			keypoints->Vector()->push_back(CKeyPoint(keypoints1[i]));
+		}
+	};
+};
+
+class OCV_CLASS_EXPORT TStarDetector
+{
+private:
+	StarDetector Detector;
+public:
+	TStarDetector() : Detector() {};
+	TStarDetector(int _maxSize = 45, int _responseThreshold = 30,
+		int _lineThresholdProjected = 10,
+		int _lineThresholdBinarized = 8,
+		int _suppressNonmaxSize = 5) : Detector(_maxSize, _responseThreshold,
+		_lineThresholdProjected,_lineThresholdBinarized,_suppressNonmaxSize) {};
+	~TStarDetector(){};
+
+	virtual void ICLASS_API detect(TMat* image, CV_OUT TCVectorKeyPoint* keypoints, TMat* mask = NULL)
+	{
+		vector<KeyPoint> keypoints1;
+		if (mask)
+			Detector.detect(*image->Mat(), keypoints1, *mask->Mat()); else
+			Detector.detect(*image->Mat(), keypoints1);
+		for (size_t i = 0; i < keypoints1.size(); i++)
+		{
+			keypoints->Vector()->push_back(CKeyPoint(keypoints1[i]));
+		}
+	};
+};
+
+class OCV_CLASS_EXPORT TFastFeatureDetector
+{
+private:
+	FastFeatureDetector Detector;
+public:
+	TFastFeatureDetector() : Detector() {};
+	TFastFeatureDetector(int threshold = 10, BOOL nonmaxSuppression = true) : Detector(threshold, nonmaxSuppression) {};
+	~TFastFeatureDetector(){};
+
+	virtual void ICLASS_API detect(TMat* image, CV_OUT TCVectorKeyPoint* keypoints, TMat* mask = NULL)
+	{
+		vector<KeyPoint> keypoints1;
+		if (mask)
+			Detector.detect(*image->Mat(), keypoints1, *mask->Mat()); else
+			Detector.detect(*image->Mat(), keypoints1);
+		for (size_t i = 0; i < keypoints1.size(); i++)
+		{
+			keypoints->Vector()->push_back(CKeyPoint(keypoints1[i]));
+		}
+	};
+
+};
+
+class OCV_CLASS_EXPORT TGFTTDetector
+{
+private:
+	GFTTDetector Detector;
+public:
+	TGFTTDetector(int maxCorners = 1000, double qualityLevel = 0.01, double minDistance = 1,
+		int blockSize = 3, BOOL useHarrisDetector = false, double k = 0.04) : Detector(maxCorners, qualityLevel, minDistance,
+		blockSize, useHarrisDetector, k) {};
+	~TGFTTDetector(){};
+
+	virtual void ICLASS_API detect(TMat* image, CV_OUT TCVectorKeyPoint* keypoints, TMat* mask = NULL)
+	{
+		vector<KeyPoint> keypoints1;
+		if (mask)
+			Detector.detect(*image->Mat(), keypoints1, *mask->Mat()); else
+			Detector.detect(*image->Mat(), keypoints1);
+		for (size_t i = 0; i < keypoints1.size(); i++)
+		{
+			keypoints->Vector()->push_back(CKeyPoint(keypoints1[i]));
+		}
+	};
+
+};
+
+class OCV_CLASS_EXPORT TSimpleBlobDetector
+{
+private:
+	SimpleBlobDetector Detector;
+public:	
+	TSimpleBlobDetector(SimpleBlobDetector::Params &parameters = SimpleBlobDetector::Params()) : Detector(parameters) {};
+	~TSimpleBlobDetector(){};
+
+	virtual void ICLASS_API detect(TMat* image, CV_OUT TCVectorKeyPoint* keypoints, TMat* mask = NULL)
+	{
+		vector<KeyPoint> keypoints1;
+		if (mask)
+			Detector.detect(*image->Mat(), keypoints1, *mask->Mat()); else
+			Detector.detect(*image->Mat(), keypoints1);
+		for (size_t i = 0; i < keypoints1.size(); i++)
+		{
+			keypoints->Vector()->push_back(CKeyPoint(keypoints1[i]));
+		}
+	};
+};
+
+class OCV_CLASS_EXPORT TDenseFeatureDetector
+{
+private:
+	DenseFeatureDetector Detector;
+public:	
+	TDenseFeatureDetector(float initFeatureScale = 1.f, int featureScaleLevels = 1,
+		float featureScaleMul = 0.1f,
+		int initXyStep = 6, int initImgBound = 0,
+		BOOL varyXyStepWithScale = true,
+		BOOL varyImgBoundWithScale = false) : Detector(initFeatureScale, featureScaleLevels,
+		featureScaleMul,initXyStep, initImgBound,varyXyStepWithScale,varyImgBoundWithScale) {};
+	~TDenseFeatureDetector(){};
+
+	virtual void ICLASS_API detect(TMat* image, CV_OUT TCVectorKeyPoint* keypoints, TMat* mask = NULL)
+	{
+		vector<KeyPoint> keypoints1;
+		if (mask)
+			Detector.detect(*image->Mat(), keypoints1, *mask->Mat()); else
+			Detector.detect(*image->Mat(), keypoints1);
+		for (size_t i = 0; i < keypoints1.size(); i++)
+		{
+			keypoints->Vector()->push_back(CKeyPoint(keypoints1[i]));
+		}
+	};
+};
+
+class OCV_CLASS_EXPORT TGridAdaptedFeatureDetector
+{
+private:
+	GridAdaptedFeatureDetector Detector;
+public:	
+	TGridAdaptedFeatureDetector(const Ptr<FeatureDetector>& detector = 0,
+		int maxTotalKeypoints = 1000,
+		int gridRows = 4, int gridCols = 4) : Detector(detector,maxTotalKeypoints,gridRows, gridCols) {};
+	~TGridAdaptedFeatureDetector(){};
+
+	virtual void ICLASS_API detect(TMat* image, CV_OUT TCVectorKeyPoint* keypoints, TMat* mask = NULL)
+	{
+		vector<KeyPoint> keypoints1;
+		if (mask)
+			Detector.detect(*image->Mat(), keypoints1, *mask->Mat()); else
+			Detector.detect(*image->Mat(), keypoints1);
+		for (size_t i = 0; i < keypoints1.size(); i++)
+		{
+			keypoints->Vector()->push_back(CKeyPoint(keypoints1[i]));
+		}
+	};
+};
+
+class OCV_CLASS_EXPORT TPyramidAdaptedFeatureDetector
+{
+private:
+	PyramidAdaptedFeatureDetector Detector;
+public:
+	TPyramidAdaptedFeatureDetector(const Ptr<FeatureDetector>& detector, int maxLevel = 2) : Detector(detector, maxLevel) {};
+	~TPyramidAdaptedFeatureDetector(){};
+
+	virtual void ICLASS_API detect(TMat* image, CV_OUT TCVectorKeyPoint* keypoints, TMat* mask = NULL)
+	{
+		vector<KeyPoint> keypoints1;
+		if (mask)
+			Detector.detect(*image->Mat(), keypoints1, *mask->Mat()); else
+			Detector.detect(*image->Mat(), keypoints1);
+		for (size_t i = 0; i < keypoints1.size(); i++)
+		{
+			keypoints->Vector()->push_back(CKeyPoint(keypoints1[i]));
+		}
+	};
 };
