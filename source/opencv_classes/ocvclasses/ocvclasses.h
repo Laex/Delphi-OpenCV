@@ -279,7 +279,7 @@ class OCV_CLASS_EXPORT TSURF
 {
 private:
 	SURF FSURF;
-public:
+public:	
 	TSURF() : FSURF() {};
 	TSURF(double hessianThreshold,
 		int nOctaves = 4, int nOctaveLayers = 2,
@@ -316,8 +316,7 @@ class OCV_CLASS_EXPORT TBFMatcher
 {
 private:
 	BFMatcher FBFMatcher;
-public:
-	TBFMatcher() : FBFMatcher() {};
+public:	
 	TBFMatcher(int normType = NORM_L2, BOOL crossCheck = false) : FBFMatcher(normType, crossCheck) {};
 	~TBFMatcher(){};
 	virtual void ICLASS_API match(TMat* queryDescriptors, TMat* trainDescriptors,
@@ -338,8 +337,7 @@ class OCV_CLASS_EXPORT TSIFT
 {
 private:
 	SIFT FSIFT;
-public:
-	TSIFT() : FSIFT() {};
+public:	
 	TSIFT(int nfeatures = 0, int nOctaveLayers = 3,
 		double contrastThreshold = 0.04, double edgeThreshold = 10,
 		double sigma = 1.6) : FSIFT(nfeatures, nOctaveLayers,
@@ -375,8 +373,7 @@ class OCV_CLASS_EXPORT TBRISK
 {
 private:
 	BRISK FBRISK;
-public:
-	TBRISK() : FBRISK() {};
+public:	
 	TBRISK(int thresh = 30, int octaves = 3, float patternScale = 1.0f) : FBRISK(thresh, octaves, patternScale) {};
 	~TBRISK(){};
 
@@ -570,6 +567,31 @@ public:
 
 };
 
+typedef struct TSimpleBlobDetectorParams
+{
+	float thresholdStep;
+	float minThreshold;
+	float maxThreshold;
+	size_t minRepeatability;
+	float minDistBetweenBlobs;
+
+	bool filterByColor;
+	uchar blobColor;
+
+	BOOL filterByArea;
+	float minArea, maxArea;
+
+	BOOL filterByCircularity;
+	float minCircularity, maxCircularity;
+
+	BOOL filterByInertia;
+	float minInertiaRatio, maxInertiaRatio;
+
+	BOOL filterByConvexity;
+	float minConvexity, maxConvexity;
+
+} TSimpleBlobDetectorParams;
+
 class OCV_CLASS_EXPORT TSimpleBlobDetector
 {
 private:
@@ -617,46 +639,46 @@ public:
 	};
 };
 
-class OCV_CLASS_EXPORT TGridAdaptedFeatureDetector
+class OCV_CLASS_EXPORT TBriefDescriptorExtractor
 {
 private:
-	GridAdaptedFeatureDetector Detector;
-public:	
-	TGridAdaptedFeatureDetector(const Ptr<FeatureDetector>& detector = 0,
-		int maxTotalKeypoints = 1000,
-		int gridRows = 4, int gridCols = 4) : Detector(detector,maxTotalKeypoints,gridRows, gridCols) {};
-	~TGridAdaptedFeatureDetector(){};
+	BriefDescriptorExtractor Detector;
+public:
+	TBriefDescriptorExtractor() : Detector() {};
+	TBriefDescriptorExtractor(int bytes = 32) : Detector(bytes) {};
+	~TBriefDescriptorExtractor(){};
 
-	virtual void ICLASS_API detect(TMat* image, CV_OUT TCVectorKeyPoint* keypoints, TMat* mask = NULL)
+	virtual void ICLASS_API compute(TMat* image, TCVectorKeyPoint* keypoints, TMat** descriptors)
 	{
 		vector<KeyPoint> keypoints1;
-		if (mask)
-			Detector.detect(*image->Mat(), keypoints1, *mask->Mat()); else
-			Detector.detect(*image->Mat(), keypoints1);
-		for (size_t i = 0; i < keypoints1.size(); i++)
+		for (size_t i = 0; i < keypoints->size(); i++)
 		{
-			keypoints->Vector()->push_back(CKeyPoint(keypoints1[i]));
-		}
+			TKeyPoint K = *keypoints->at(i);
+			keypoints1.push_back(KeyPoint(K.x, K.y, K.size, K.angle, K.response, K.octave, K.class_id));
+		};
+		Mat m;
+		Detector.compute(*image->Mat(), keypoints1, m);
+		*descriptors = new TMat(m);
 	};
 };
 
-class OCV_CLASS_EXPORT TPyramidAdaptedFeatureDetector
+class OCV_CLASS_EXPORT TFlannBasedMatcher
 {
 private:
-	PyramidAdaptedFeatureDetector Detector;
+	FlannBasedMatcher FBFMatcher;
 public:
-	TPyramidAdaptedFeatureDetector(const Ptr<FeatureDetector>& detector, int maxLevel = 2) : Detector(detector, maxLevel) {};
-	~TPyramidAdaptedFeatureDetector(){};
-
-	virtual void ICLASS_API detect(TMat* image, CV_OUT TCVectorKeyPoint* keypoints, TMat* mask = NULL)
+	TFlannBasedMatcher() : FBFMatcher() {};
+	~TFlannBasedMatcher(){};
+	virtual void ICLASS_API match(TMat* queryDescriptors, TMat* trainDescriptors,
+		CV_OUT TCVectorDMatch* matches, TMat* mask = NULL)
 	{
-		vector<KeyPoint> keypoints1;
+		vector<DMatch> m;
 		if (mask)
-			Detector.detect(*image->Mat(), keypoints1, *mask->Mat()); else
-			Detector.detect(*image->Mat(), keypoints1);
-		for (size_t i = 0; i < keypoints1.size(); i++)
+			FBFMatcher.match(*queryDescriptors->Mat(), *trainDescriptors->Mat(), m, *mask->Mat()); else
+			FBFMatcher.match(*queryDescriptors->Mat(), *trainDescriptors->Mat(), m);
+		for (size_t i = 0; i < m.size(); i++)
 		{
-			keypoints->Vector()->push_back(CKeyPoint(keypoints1[i]));
+			matches->push_back(CDMatch(m[i]));
 		}
 	};
 };

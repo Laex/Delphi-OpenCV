@@ -46,8 +46,10 @@ begin
     'Using the SURF desriptor:'#13#10#13#10'Usage:'#13#10#9'matcher_simple <image1> <image2>');
 end;
 
-{$DEFINE USE_SURF }
-{.$DEFINE USE_SIFT}
+{ .$DEFINE USE_SURF }
+{ .$DEFINE USE_SIFT }
+{ .$DEFINE USE_ORB }
+{$DEFINE USE_BRISK}
 
 Var
 {$IFDEF USE_SURF}
@@ -58,13 +60,21 @@ Var
   detector: TSiftFeatureDetector;
   extractor: TSiftDescriptorExtractor;
 {$ENDIF}
+{$IFDEF USE_ORB}
+  detector: TORBFeatureDetector;
+  extractor: TORBDescriptorExtractor;
+{$ENDIF}
+{$IFDEF USE_BRISK}
+  detector: TBRISKFeatureDetector;
+  extractor: TBRISKDescriptorExtractor;
+{$ENDIF}
   img1, img2: TccvMat;
   keypoints1, keypoints2: TCVectorKeyPoint;
   descriptors1: TccvMat;
   descriptors2: TccvMat;
-  matcher: TBFMatcher;
   matches: TCVectorDMatch;
   img_matches: TccvMat;
+  matcher: TBFMatcher;
 
 begin
   try
@@ -87,31 +97,31 @@ begin
     end;
 
 {$IFDEF USE_SURF}
-    // detecting keypoints
     detector := TSurfFeatureDetector.Create(400);
-    keypoints1 := TCVectorKeyPoint.Create;
-    keypoints2 := TCVectorKeyPoint.Create;
-    detector.detect(img1, keypoints1);
-    detector.detect(img2, keypoints2);
-
-    // computing descriptors
-    extractor := TSurfDescriptorExtractor.Create;
-    extractor.compute(img1, keypoints1, descriptors1);
-    extractor.compute(img2, keypoints2, descriptors2);
+    extractor := TSurfFeatureDetector.Create;
 {$ENDIF}
 {$IFDEF USE_SIFT}
-    // detecting keypoints
     detector := TSiftFeatureDetector.Create;
+    extractor := TSiftDescriptorExtractor.Create;
+{$ENDIF}
+{$IFDEF USE_ORB}
+    detector := TORBFeatureDetector.Create;
+    extractor := TORBDescriptorExtractor.Create;
+{$ENDIF}
+{$IFDEF USE_BRISK}
+    detector := TBRISKFeatureDetector.Create;
+    extractor := TBRISKDescriptorExtractor.Create;
+{$ENDIF}
+    // detecting keypoints
     keypoints1 := TCVectorKeyPoint.Create;
     keypoints2 := TCVectorKeyPoint.Create;
     detector.detect(img1, keypoints1);
     detector.detect(img2, keypoints2);
 
     // computing descriptors
-    extractor := TSiftDescriptorExtractor.Create;
     extractor.compute(img1, keypoints1, descriptors1);
     extractor.compute(img2, keypoints2, descriptors2);
-{$ENDIF}
+
     // matching descriptors
     matcher := TBFMatcher.Create(NORM_L2);
     matches := TCVectorDMatch.Create;

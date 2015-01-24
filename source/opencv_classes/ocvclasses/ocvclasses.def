@@ -41,15 +41,42 @@ EXPORTS
 	CreateCascadeClassifierFromFile
 	ReleaseCascadeClassifier
 
-	CreateSURF
-	CreateSURFFromValue
+	CreateSURF	
 	ReleaseSURF
-	CreateCVectorKeyPoint
-	ReleaseCVectorKeyPoint
-	CreateCVectorDMatch
-	ReleaseCVectorDMatch
-	CreateBFMatcher
-	ReleaseBFMatcher
-	DrawMatches
 	CreateSIFT
 	ReleaseSIFT
+
+	CreateCVectorKeyPoint
+	ReleaseCVectorKeyPoint
+	
+	CreateCVectorDMatch
+	ReleaseCVectorDMatch
+	
+	CreateBFMatcher
+	ReleaseBFMatcher
+	
+	DrawMatches
+	
+	CreateBRISK
+	ReleaseBRISK
+	CreateORB
+	ReleaseORB
+	CreateFREAK
+	ReleaseFREAK
+	CreateMSER
+	ReleaseMSER
+	CreateStarDetector
+	ReleaseStarDetector
+	CreateFastFeatureDetector
+	ReleaseFastFeatureDetector
+	CreateGFTTDetector
+	ReleaseGFTTDetector
+	CreateSimpleBlobDetector
+	CreateSimpleBlobDetectorDefault
+	ReleaseSimpleBlobDetector
+	CreateDenseFeatureDetector
+	ReleaseDenseFeatureDetector
+	CreateBriefDescriptorExtractor
+	ReleaseBriefDescriptorExtractor
+	CreateFlannBasedMatcher
+	ReleaseFlannBasedMatcher
