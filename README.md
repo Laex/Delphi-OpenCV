@@ -81,7 +81,9 @@ Examples of use of components
 ```
 <PROJECT_ROOT>\samples\Components\ComponentsDemo.groupproj
 ```
-<a href='https://pledgie.com/campaigns/28083'><img alt='Click here to lend your support to: Delphi-OpenCV and make a donation at pledgie.com !' src='https://pledgie.com/campaigns/28083.png?skin_name=chrome' border='0' ></a>
+<br><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=5Z5JQ7C9JCJQN">Donate (PayPal USD)</a>
+<br><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=WQYST8J8PR4K2">Donate (PayPal EUR)</a>
+<br><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=XN8D6TJMSXPFL">Donate (PayPal RUB)</a>
 <br>Yandex Money: 410012802258318
 
 [1]: https://github.com/Laex/Delphi-OpenCV/archive/master.zip
