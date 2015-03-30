@@ -25,16 +25,16 @@ implementation
 
 Uses
 {$IFDEF HAS_UNITSCOPE}
-  {$IFDEF MSWINDOWS}
+{$IFDEF MSWINDOWS}
   Winapi.Windows,
-  {$ENDIF MSWINDOWS}
+{$ENDIF MSWINDOWS}
   System.SysUtils,
   System.Classes,
   System.ZLib,
 {$ELSE}
-  {$IFDEF MSWINDOWS}
+{$IFDEF MSWINDOWS}
   Windows,
-  {$ENDIF MSWINDOWS}
+{$ENDIF MSWINDOWS}
   SysUtils,
   Classes,
   ZLib,
@@ -101,7 +101,7 @@ Var
   detected_objects: pCvSeq;
   i: Integer;
   cvr: pCvRect;
-  r, g, b: byte;
+  // r, g, b: byte;
 begin
   SetLength(HaarRects, 0);
   Result := False;

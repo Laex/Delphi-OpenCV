@@ -575,6 +575,7 @@ begin
         H := 2 + (B - R) / Range;
       2:
         H := 4 + (R - G) / Range;
+        else H:=0;
     end;
     S := Range / rgb[MaxIndex];
     V := rgb[MaxIndex];

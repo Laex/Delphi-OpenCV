@@ -89,6 +89,8 @@ type
   Float = Single;
   pFloat = ^Float;
   ppFloat = ^pFloat;
+  pPointer = ^Pointer;
+  ppvoid = pPointer;
 
   TSingleArray1D = array [0 .. 1] of Single;
   pSingleArray1D = ^TSingleArray1D;
@@ -279,7 +281,7 @@ function cvRNG(seed: int64 = -1): TCvRNG; {$IFDEF USE_INLINE}inline; {$ENDIF}
   * Copyright (c) 1995 Intel Corporation.
 *)
 const
-  IPL_DEPTH_SIGN = $80000000;
+  IPL_DEPTH_SIGN = Integer($80000000);
 {$EXTERNALSYM IPL_DEPTH_SIGN}
   IPL_DEPTH_1U = 1;
 {$EXTERNALSYM IPL_DEPTH_1U}
@@ -293,7 +295,7 @@ const
     floating point data in IplImage's }
   IPL_DEPTH_64F = 64;
 {$EXTERNALSYM IPL_DEPTH_64F}
-  IPL_DEPTH_8S: TCvRNG = (IPL_DEPTH_SIGN or 8);
+  IPL_DEPTH_8S: TCvRNG = TCvRNG(IPL_DEPTH_SIGN or 8);
 {$EXTERNALSYM IPL_DEPTH_8S}
   IPL_DEPTH_16S = (IPL_DEPTH_SIGN or 16);
 {$EXTERNALSYM IPL_DEPTH_16S}

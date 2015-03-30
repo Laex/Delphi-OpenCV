@@ -24,10 +24,14 @@
 *)
 unit ocv.objdetect;
 
+{$I OpenCV.inc}
+
 interface
 
 Uses
-  WinApi.Windows,
+{$IFDEF MSWINDOWS}
+  Winapi.Windows,
+{$ENDIF MSWINDOWS}
   ocv.Mat,
   ocv.cclasses,
   ocv.core.types_c;

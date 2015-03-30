@@ -48,7 +48,7 @@ type
   *)
   pAVRational = ^TAVRational;
 
-  TAVRational = {packed} record
+  TAVRational = { packed } record
     num: Integer;
     /// < numerator
     den: Integer;
@@ -162,6 +162,14 @@ type
   // * @}
   // */
 
+function AVRational(const num, den: Integer): TAVRational; inline;
+
 implementation
+
+function AVRational(const num, den: Integer): TAVRational;
+begin
+  Result.num := num;
+  Result.den := den;
+end;
 
 end.

@@ -24,10 +24,14 @@
 *)
 unit ocv.features2d;
 
+{$I OpenCV.inc}
+
 interface
 
 Uses
-  WinApi.Windows,
+{$IFDEF MSWINDOWS}
+  Winapi.Windows,
+{$ENDIF MSWINDOWS}
   ocv.cclasses,
   ocv.mat;
 

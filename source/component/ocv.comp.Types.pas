@@ -578,9 +578,9 @@ end;
 function TocvImage.AsBitmap: TBitmap;
 var
   deep: Integer;
-  i, j, K, wStep, Channels: Integer;
-  data: PByteArray;
-  pb: PByteArray;
+//  i, j, K, wStep, Channels: Integer;
+//  data: PByteArray;
+//  pb: PByteArray;
 begin
   if (FImage <> NIL) then
   begin
@@ -931,7 +931,7 @@ end;
 
 function TocvFont.GetFontName: string;
 begin
-  Result := FCvFont.nameFont;
+  Result := String(FCvFont.nameFont);
 end;
 
 function TocvFont.GetFontThickness: Integer;
@@ -984,8 +984,8 @@ end;
 { TocvRectHelper }
 
 function TocvRectHelper.cvRect: TcvRect;
-Var
-  R: TcvRect;
+//Var
+//  R: TcvRect;
 begin
   Result.x := Left;
   Result.y := Top;

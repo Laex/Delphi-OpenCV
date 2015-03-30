@@ -127,13 +127,14 @@ Type
     * @{
   *)
 const
-  // #define FF_LAMBDA_SHIFT 7
-  // #define FF_LAMBDA_SCALE (1<<FF_LAMBDA_SHIFT)
-  // #define FF_QP2LAMBDA 118 ///< factor to convert from H.263 QP to lambda
-  // #define FF_LAMBDA_MAX (256*128-1)
-  //
-  // #define FF_QUALITY_SCALE FF_LAMBDA_SCALE //FIXME maybe remove
-  //
+  FF_LAMBDA_SHIFT = 7;
+  FF_LAMBDA_SCALE = 1 shl FF_LAMBDA_SHIFT;
+  FF_QP2LAMBDA    = 118;
+  /// < factor to convert from H.263 QP to lambda
+  FF_LAMBDA_MAX = (256 * 128 - 1);
+
+  FF_QUALITY_SCALE = FF_LAMBDA_SCALE; // FIXME maybe remove
+
   (*
     // * @}
     // * @defgroup lavu_time Timestamp specific

@@ -45,12 +45,15 @@
 
 unit ocv.ml;
 
+{$I OpenCV.inc}
 {$POINTERMATH ON}
 
 interface
 
 Uses
-  WinApi.Windows,
+{$IFDEF MSWINDOWS}
+  Winapi.Windows,
+{$ENDIF MSWINDOWS}
   ocv.core.types_c;
 
 (* ***************************************************************************************
@@ -250,14 +253,14 @@ const
     // \*************************************************************************************** *)
 Type
   TCvKNearest = class(TObject)
-    function train(const trainData: pCvMat; const responses: pCvMat; const sampleIdx: pCvMat = nil;
-      is_regression: bool = false; maxK: Integer = 32; updateBase: bool = false): bool; virtual; stdcall; abstract;
+    function train(const trainData: pCvMat; const responses: pCvMat; const sampleIdx: pCvMat = nil; is_regression: bool = false;
+      maxK: Integer = 32; updateBase: bool = false): bool; virtual; stdcall; abstract;
     function find_nearest(const samples: pCvMat; k: Integer; results: pCvMat = nil; const neighbors: PSingle = nil;
       neighborResponses: pCvMat = nil; dist: pCvMat = nil): float; virtual; stdcall; abstract;
     // -----------------------------------
     class function Create: TCvKNearest; overload;
-    class function Create(const trainData: pCvMat; const responses: pCvMat; const sampleIdx: pCvMat = nil;
-      isRegression: bool = false; max_k: Integer = 32): TCvKNearest; overload;
+    class function Create(const trainData: pCvMat; const responses: pCvMat; const sampleIdx: pCvMat = nil; isRegression: bool = false;
+      max_k: Integer = 32): TCvKNearest; overload;
     procedure Free; reintroduce;
   end;
 
@@ -2178,8 +2181,8 @@ implementation
 uses ocv.lib;
 
 function CreateCvKNearest: TCvKNearest; stdcall; external opencv_classes_lib; overload;
-function CreateCvKNearest(const trainData: pCvMat; const responses: pCvMat; const sampleIdx: pCvMat = nil;
-  isRegression: bool = false; max_k: Integer = 32): TCvKNearest; stdcall; external opencv_classes_lib; overload;
+function CreateCvKNearest(const trainData: pCvMat; const responses: pCvMat; const sampleIdx: pCvMat = nil; isRegression: bool = false;
+  max_k: Integer = 32): TCvKNearest; stdcall; external opencv_classes_lib; overload;
 procedure ReleaseCvKNearest(ex: TCvKNearest); stdcall; external opencv_classes_lib;
 
 function CV_IS_ROW_SAMPLE(flags: Integer): Boolean;
@@ -2210,8 +2213,7 @@ begin
   Result := CreateCvKNearest;
 end;
 
-class function TCvKNearest.Create(const trainData, responses, sampleIdx: pCvMat; isRegression: bool; max_k: Integer)
-  : TCvKNearest;
+class function TCvKNearest.Create(const trainData, responses, sampleIdx: pCvMat; isRegression: bool; max_k: Integer): TCvKNearest;
 begin
   Result := CreateCvKNearest(trainData, responses, sampleIdx, isRegression, max_k);
 end;

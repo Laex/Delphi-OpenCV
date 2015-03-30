@@ -1,5 +1,6 @@
 unit ffm.cls.videoencoder;
 
+{$I OpenCV.inc}
 {$POINTERMATH ON}
 
 interface
@@ -90,7 +91,9 @@ Type
 implementation
 
 Uses
+{$IFDEF MSWINDOWS}
   Winapi.Windows,
+{$ENDIF MSWINDOWS}
   System.SysUtils,
   System.AnsiStrings,
   System.Math,
@@ -101,8 +104,8 @@ Uses
 
 { TNVRVideoEncoder }
 
-function TFFMVideoEncoder.AddAudioSample(const pFormatContext: pAVFormatContext; const pStream: pAVStream;
-  const soundBuffer: pByte; const soundBufferSize: Integer): boolean;
+function TFFMVideoEncoder.AddAudioSample(const pFormatContext: pAVFormatContext; const pStream: pAVStream; const soundBuffer: pByte;
+  const soundBufferSize: Integer): boolean;
 Var
   pCodecCxt: pAVCodecContext;
   packSizeInSize: Integer; // DWORD;
@@ -242,8 +245,8 @@ begin
       // RGB to YUV420P.
       if not Assigned(pImgConvertCtx) then
       begin
-        pImgConvertCtx := sws_getContext(pVideoCodec^.width, pVideoCodec^.height, framepixfmt, pVideoCodec^.width,
-          pVideoCodec^.height, pVideoCodec^.pix_fmt, SWS_BICUBLIN, nil, nil, nil);
+        pImgConvertCtx := sws_getContext(pVideoCodec^.width, pVideoCodec^.height, framepixfmt, pVideoCodec^.width, pVideoCodec^.height,
+          pVideoCodec^.pix_fmt, SWS_BICUBLIN, nil, nil, nil);
       end;
 
       // Allocate picture.
@@ -252,8 +255,7 @@ begin
       // if NeedConvert(framepixfmt) and Assigned(pImgConvertCtx) then
       // begin
       // Convert RGB to YUV.
-      sws_scale(pImgConvertCtx, @frame^.data, @frame^.linesize, 0, pVideoCodec^.height, @pCurrentPicture^.data,
-        @pCurrentPicture^.linesize);
+      sws_scale(pImgConvertCtx, @frame^.data, @frame^.linesize, 0, pVideoCodec^.height, @pCurrentPicture^.data, @pCurrentPicture^.linesize);
       // end;
 
       Result := AddVideoFrame(pCurrentPicture, pVideoStream^.codec);
@@ -563,8 +565,7 @@ begin
     if Assigned(pFormatContext) then
     begin
       pFormatContext^.oformat := pOutFormat;
-      CopyMemory(@pFormatContext^.filename, filename, min(System.AnsiStrings.strlen(filename),
-        sizeof(pFormatContext^.filename)));
+      CopyMemory(@pFormatContext^.filename, filename, min(System.AnsiStrings.strlen(filename), sizeof(pFormatContext^.filename)));
 
       // Add video and audio stream
       pVideoStream := AddVideoStream(pFormatContext, pOutFormat^.video_codec);
@@ -581,8 +582,7 @@ begin
       if Assigned(pAudioStream) then
         Result := OpenAudio(pFormatContext, pAudioStream);
 
-      if Result and ((pOutFormat^.flags and AVFMT_NOFILE) = 0) and
-        (avio_open(pFormatContext^.pb, filename, AVIO_FLAG_WRITE) < 0) then
+      if Result and ((pOutFormat^.flags and AVFMT_NOFILE) = 0) and (avio_open(pFormatContext^.pb, filename, AVIO_FLAG_WRITE) < 0) then
       begin
         Result := false;
         // printf(" Cannot open file\ n ");

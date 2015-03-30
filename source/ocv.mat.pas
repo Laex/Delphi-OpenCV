@@ -27,10 +27,14 @@
 
 unit ocv.mat;
 
+{$I OpenCV.inc}
+
 interface
 
 uses
-  WinApi.Windows,
+{$IFDEF MSWINDOWS}
+  Winapi.Windows,
+{$ENDIF MSWINDOWS}
   ocv.core.types_c,
   ocv.core_c,
   ocv.highgui_c;

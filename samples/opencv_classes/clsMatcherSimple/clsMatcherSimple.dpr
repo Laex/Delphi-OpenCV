@@ -46,10 +46,10 @@ begin
     'Using the SURF desriptor:'#13#10#13#10'Usage:'#13#10#9'matcher_simple <image1> <image2>');
 end;
 
-{ .$DEFINE USE_SURF }
-{ .$DEFINE USE_SIFT }
-{ .$DEFINE USE_ORB }
-{$DEFINE USE_BRISK}
+{.$DEFINE USE_SURF }
+{.$DEFINE USE_SIFT }
+{$DEFINE USE_ORB}
+{.$DEFINE USE_BRISK}
 
 Var
 {$IFDEF USE_SURF}

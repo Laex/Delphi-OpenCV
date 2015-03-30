@@ -62,7 +62,7 @@ unit ocv.core;
 interface
 
 uses
-  ocv.mat, ocv.core.types_c, Winapi.Windows;
+  ocv.mat, ocv.core.types_c;
 
 Type
 
@@ -166,7 +166,7 @@ Type
     // returns (v0, -v1, -v2, -v3)
     function conj: TccvScalar_<Tp>; virtual; stdcall; abstract;
     // returns true iff v1 == v2 == v3 == 0
-    function isReal: bool; virtual; stdcall; abstract;
+    function isReal: LongBool; virtual; stdcall; abstract;
     //
     function GetVec(const Index: integer): Tp; virtual; stdcall; abstract;
     procedure SetVec(const Index: integer; const Value: Tp); virtual; stdcall; abstract;
@@ -207,7 +207,7 @@ procedure line(img: TccvMat; pt1, pt2: TccvPoint; color: TccvScalar; thickness: 
 // int thickness=1, int lineType=8,
 // bool bottomLeftOrigin=false );
 procedure putText(img: TccvMat; text: String; org: TccvPoint; fontFace: integer; fontScale: double; color: TccvScalar;
-  thickness: integer = 1; lineType: integer = 8; bottomLeftOrigin: bool = false); stdcall;
+  thickness: integer = 1; lineType: integer = 8; bottomLeftOrigin: LongBool = false); stdcall;
 
 /// ////////////////////////////////////////////////////////////////////////
 // function CreateVec3d(): TccvVec3d; stdcall; overload;
