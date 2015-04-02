@@ -1,4 +1,4 @@
-##Delphi-OpenCV
+#Delphi-OpenCV
 * OpenCV version - 2.4.9<br>
 * Development environment - Delphi 2010-XE7<br>
 
@@ -8,26 +8,40 @@
  Mikhail Grigorev (email: sleuthhound@gmail.com)
 ```
 ##Requirements:
-* Requires installed [Visual C++ redistributable for Visual Studio 2013][2]<br>
-* Some examples (FFMPEG) required [SDL 2.0 and SDL 1.2][3]<br>
-* <b>Warning! Dynamic OpenCV library is not included in the repository!</b><br>
-Dynamic library OpenCV need to download [here] [4]
-* Shared library FFMPEG for Windows can be downloaded from [link] [5]
-
-<b>Note:</b>
+* Visual C++ redistributable for Visual Studio 2013<br>
+Files: msvcp120.dll, msvcr120.dll, msvcp120d.dll, msvcr120d.dll
 ```
-Do not forget to add to your PATH variable path to the library "opencv_*.dll" and FFMPEG dll.
+(1) 32-bit in the "Delphi-OpenCV\redist\VC2013x86\"
+(2) 64-bit in the "Delphi-OpenCV\redist\VC2013x64\"
+```
+* Shared library FFMPEG for Windows can be downloaded from [here][5]<br>
+Files: avcodec-56.dll, avdevice-56.dll, avfilter-5.dll, avformat-56.dll, avutil-54.dll, postproc-53.dll,
+swresample-1.dll, swscale-3.dll 
+```
+(3) FFmpeg 32-bit Shared
+(4) FFmpeg 64-bit Shared
+```
+* Dynamic library OpenCV need to download [here][4]<br>
+Files: _249.dll and _249d.dll
+```
+After installing OpenCV:<br>
+(5) 32-bit in the C:\OpenCV\build\x86\vc12\bin\
+(6) 64-bit in the C:\OpenCV\build\x64\vc12\bin\
+```
+* Some examples (FFMPEG) required [SDL 2.0 and SDL 1.2][3]<br>
+```
+(7) SDL.dll and SDL2.dll
+```
 
-If for some reason the installation of "Visual C ++ redistributable for Visual Studio 2013" was held fails, you can:
---- for 64-bit ---
-1. Copy the dll files from the <PROJECT_ROOT>\redist\VC2013x64\ to C:\Windows\System32\
-2. Copy all the dll from <PROJECT_ROOT>\bin\Win64 in the C:\Windows\System32\
-3. Copy the dll files from the <PROJECT_ROOT>\redist\VC2013x86\ to C:\Windows\SysWOW64\
-4. Copy all the dll from <PROJECT_ROOT>\bin\Win32 in the C:\Windows\SysWOW64\
-
---- for 32-bit ---
-1. Copy the dll files from the <PROJECT_ROOT>\redist\VC2013x86\ to C:\Windows\System32\
-2. Copy all the dll from <PROJECT_ROOT>\bin\Win32 in the C:\Windows\System32\
+####Copy files
+<b>OS Windows 64-bit</b><br>
+```
+Target platform 64-bit: (2),(4),(6) -> "C:\Windows\System32\"
+Target platform 32-bit: (1),(3),(5),(7) -> "C:\Windows\SysWOW64\"
+```
+<b>OS Windows 32-bit</b><br>
+```
+Target platform 32-bit: (1),(3),(5),(7) -> "C:\Windows\System32\"
 ```
 
 ##How to install:
@@ -81,7 +95,9 @@ Examples of use of components
 ```
 <PROJECT_ROOT>\samples\Components\ComponentsDemo.groupproj
 ```
-<a href='https://pledgie.com/campaigns/28083'><img alt='Click here to lend your support to: Delphi-OpenCV and make a donation at pledgie.com !' src='https://pledgie.com/campaigns/28083.png?skin_name=chrome' border='0' ></a>
+<br><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=5Z5JQ7C9JCJQN">Donate (PayPal USD)</a>
+<br><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=WQYST8J8PR4K2">Donate (PayPal EUR)</a>
+<br><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=XN8D6TJMSXPFL">Donate (PayPal RUB)</a>
 <br>Yandex Money: 410012802258318
 
 [1]: https://github.com/Laex/Delphi-OpenCV/archive/master.zip
