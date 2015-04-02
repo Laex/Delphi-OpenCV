@@ -43,21 +43,9 @@
   **************************************************************************************************
 *)
 
-//
-{$I OpenCV.inc}
-//
-{$IFDEF DEBUG}
-{$A8,B-,C+,D+,E-,F-,G+,H+,I+,J-,K-,L+,M-,N+,O-,P+,Q+,R+,S-,T-,U-,V+,W+,X+,Y+,Z1}
-{$ELSE}
-{$A8,B-,C-,D-,E-,F-,G+,H+,I+,J-,K-,L-,M-,N+,O+,P+,Q-,R-,S-,T-,U-,V+,W-,X+,Y-,Z1}
-{$ENDIF}
-{$WARN SYMBOL_DEPRECATED OFF}
-{$WARN SYMBOL_PLATFORM OFF}
-{$WARN UNIT_PLATFORM OFF}
-{$WARN UNSAFE_TYPE OFF}
-{$WARN UNSAFE_CODE OFF}
-{$WARN UNSAFE_CAST OFF}
 unit ocv.core;
+
+{$I OpenCV.inc}
 
 interface
 
@@ -138,7 +126,7 @@ Type
   end;
 
   TccvVectorOfPoint2i = TccvVectorOfPoint<TccvPoint2i>;
-  TccvVectorOfPoint   = TccvVectorOfPoint2i;
+  TccvVectorOfPoint = TccvVectorOfPoint2i;
 
   TccvVectorOfVectorOfPoint<T> = class
   public
@@ -182,18 +170,17 @@ Type
     procedure Free; reintroduce;
   end;
 
-function Scalar(const v0: double = 0; const v1: double = 0; const v2: double = 0; const v3: double = 0)
+function Scalar(const v0: double = 0; const v1: double = 0; const v2: double = 0; const v3: double = 0): TccvScalar; overload;
+function Scalar(const S: TccvScalar; const v0: double = 0; const v1: double = 0; const v2: double = 0; const v3: double = 0)
   : TccvScalar; overload;
-function Scalar(const S: TccvScalar; const v0: double = 0; const v1: double = 0; const v2: double = 0;
-  const v3: double = 0): TccvScalar; overload;
 
 (* ! draws the circle outline or a solid circle in the image
 
   CV_EXPORTS_W void circle(CV_IN_OUT Mat& img, Point center, int radius,
   const Scalar& color, int thickness=1,int lineType=8, int shift=0);
 *)
-procedure circle(img: TccvMat; center: TccvPoint; radius: integer; const color: TccvScalar; thickness: integer = 1;
-  lineType: integer = 8; shift: integer = 0); stdcall;
+procedure circle(img: TccvMat; center: TccvPoint; radius: integer; const color: TccvScalar; thickness: integer = 1; lineType: integer = 8;
+  shift: integer = 0); stdcall;
 
 // ! draws the line segment (pt1, pt2) in the image
 // CV_EXPORTS_W void line(CV_IN_OUT Mat& img, Point pt1, Point pt2, const Scalar& color,
@@ -251,14 +238,13 @@ procedure ReleaseVectorOfVectorOfPoint2i(ex: TccvVectorOfVectorOfPoint2i); stdca
 
 procedure MSER(m: TccvMat; var ex: TccvVectorOfVectorOfPoint2i); stdcall; external opencv_classes_lib;
 
-function Scalar(const v0: double = 0; const v1: double = 0; const v2: double = 0; const v3: double = 0)
-  : TccvScalar; overload;
+function Scalar(const v0: double = 0; const v1: double = 0; const v2: double = 0; const v3: double = 0): TccvScalar; overload;
 begin
   Result := TccvScalar.Create(v0, v1, v2, v3);
 end;
 
-function Scalar(const S: TccvScalar; const v0: double = 0; const v1: double = 0; const v2: double = 0;
-  const v3: double = 0): TccvScalar; overload;
+function Scalar(const S: TccvScalar; const v0: double = 0; const v1: double = 0; const v2: double = 0; const v3: double = 0)
+  : TccvScalar; overload;
 begin
   S[0] := v0;
   S[1] := v1;

@@ -29,7 +29,7 @@ object Form1: TForm1
     Top = 371
     Width = 292
     Height = 34
-    TabOrder = 0
+    TabOrder = 5
     inherited lbl1: TLabel
       Caption = 'H max:'
     end
@@ -43,7 +43,7 @@ object Form1: TForm1
     Top = 334
     Width = 292
     Height = 34
-    TabOrder = 1
+    TabOrder = 4
     inherited lbl1: TLabel
       Caption = 'V min:'
     end
@@ -56,7 +56,7 @@ object Form1: TForm1
     Top = 408
     Width = 292
     Height = 34
-    TabOrder = 2
+    TabOrder = 7
     inherited lbl1: TLabel
       Caption = 'S min:'
     end
@@ -83,7 +83,7 @@ object Form1: TForm1
     Top = 445
     Width = 292
     Height = 34
-    TabOrder = 4
+    TabOrder = 9
     inherited lbl1: TLabel
       Caption = 'S max:'
     end
@@ -96,7 +96,7 @@ object Form1: TForm1
     Top = 371
     Width = 292
     Height = 34
-    TabOrder = 5
+    TabOrder = 6
     inherited lbl1: TLabel
       Caption = 'V max:'
     end
@@ -121,14 +121,14 @@ object Form1: TForm1
     BorderStyle = bsSingle
     Caption = 'Selected color'
     ParentBackground = False
-    TabOrder = 8
+    TabOrder = 11
   end
   inline frm22: TFrame2
     Left = 299
     Top = 408
     Width = 292
     Height = 34
-    TabOrder = 9
+    TabOrder = 8
     inherited lbl1: TLabel
       Caption = 'Range'
     end
@@ -157,7 +157,8 @@ object Form1: TForm1
     Width = 97
     Height = 17
     Caption = 'Mask'
-    TabOrder = 11
+    Enabled = False
+    TabOrder = 0
   end
   object ocvcmrsrc1: TocvCameraSource
     Enabled = True

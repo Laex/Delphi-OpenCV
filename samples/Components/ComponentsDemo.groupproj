@@ -18,6 +18,9 @@
         <Projects Include="cFMXCameracapture\cFMXCameraCapture.dproj">
             <Dependencies/>
         </Projects>
+        <Projects Include="cObjectColorTracking\cObjectColorTracking.dproj">
+            <Dependencies/>
+        </Projects>
     </ItemGroup>
     <ProjectExtensions>
         <Borland.Personality>Default.Personality.12</Borland.Personality>
@@ -71,14 +74,23 @@
     <Target Name="cFMXCameraCapture:Make">
         <MSBuild Projects="cFMXCameracapture\cFMXCameraCapture.dproj" Targets="Make"/>
     </Target>
+    <Target Name="cObjectColorTracking">
+        <MSBuild Projects="cObjectColorTracking\cObjectColorTracking.dproj"/>
+    </Target>
+    <Target Name="cObjectColorTracking:Clean">
+        <MSBuild Projects="cObjectColorTracking\cObjectColorTracking.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="cObjectColorTracking:Make">
+        <MSBuild Projects="cObjectColorTracking\cObjectColorTracking.dproj" Targets="Make"/>
+    </Target>
     <Target Name="Build">
-        <CallTarget Targets="cCameraCapture;cMatchTemplate;cFFmpegIPCamSource;cVideoWriter;cFMXCameraCapture"/>
+        <CallTarget Targets="cCameraCapture;cMatchTemplate;cFFmpegIPCamSource;cVideoWriter;cFMXCameraCapture;cObjectColorTracking"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="cCameraCapture:Clean;cMatchTemplate:Clean;cFFmpegIPCamSource:Clean;cVideoWriter:Clean;cFMXCameraCapture:Clean"/>
+        <CallTarget Targets="cCameraCapture:Clean;cMatchTemplate:Clean;cFFmpegIPCamSource:Clean;cVideoWriter:Clean;cFMXCameraCapture:Clean;cObjectColorTracking:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="cCameraCapture:Make;cMatchTemplate:Make;cFFmpegIPCamSource:Make;cVideoWriter:Make;cFMXCameraCapture:Make"/>
+        <CallTarget Targets="cCameraCapture:Make;cMatchTemplate:Make;cFFmpegIPCamSource:Make;cVideoWriter:Make;cFMXCameraCapture:Make;cObjectColorTracking:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>

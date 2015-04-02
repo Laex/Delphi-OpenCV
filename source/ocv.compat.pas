@@ -1,70 +1,59 @@
-﻿// **************************************************************************************************
-// Project Delphi-OpenCV
-// **************************************************************************************************
-// Contributor:
-// Laentir Valetov
-// email:laex@bk.ru
-// Mikhail Grigorev
-// email:sleuthound@gmail.com
-// **************************************************************************************************
-// You may retrieve the latest version of this file at the GitHub,
-// located at git://github.com/Laex/Delphi-OpenCV.git
-// **************************************************************************************************
-// License:
-// The contents of this file are subject to the Mozilla Public License Version 1.1 (the "License");
-// you may not use this file except in compliance with the License. You may obtain a copy of the
-// License at http://www.mozilla.org/MPL/
-//
-// Software distributed under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
-// ANY KIND, either express or implied. See the License for the specific language governing rights
-// and limitations under the License.
-//
-// Alternatively, the contents of this file may be used under the terms of the
-// GNU Lesser General Public License (the  "LGPL License"), in which case the
-// provisions of the LGPL License are applicable instead of those above.
-// If you wish to allow use of your version of this file only under the terms
-// of the LGPL License and not to allow others to use your version of this file
-// under the MPL, indicate your decision by deleting  the provisions above and
-// replace  them with the notice and other provisions required by the LGPL
-// License.  If you do not delete the provisions above, a recipient may use
-// your version of this file under either the MPL or the LGPL License.
-//
-// For more information about the LGPL: http://www.gnu.org/copyleft/lesser.html
-// **************************************************************************************************
-// Warning: Using Delphi XE3 syntax!
-// **************************************************************************************************
-// The Initial Developer of the Original Code:
-// OpenCV: open source computer vision library
-// Homepage:    http://ocv.org
-// Online docs: http://docs.ocv.org
-// Q&A forum:   http://answers.ocv.org
-// Dev zone:    http://code.ocv.org
-// **************************************************************************************************
-// Original file:
-// opencv\modules\legacy\include\opencv2\legacy\compat.hpp
-// *************************************************************************************************
+﻿(*
+  **************************************************************************************************
+  Project Delphi-OpenCV
+  **************************************************************************************************
+  Contributor:
+  Laentir Valetov
+  email:laex@bk.ru
+  Mikhail Grigorev
+  email:sleuthound@gmail.com
+  **************************************************************************************************
+  You may retrieve the latest version of this file at the GitHub,
+  located at git://github.com/Laex/Delphi-OpenCV.git
+  **************************************************************************************************
+  License:
+  The contents of this file are subject to the Mozilla Public License Version 1.1 (the "License");
+  you may not use this file except in compliance with the License. You may obtain a copy of the
+  License at http://www.mozilla.org/MPL/
 
-//
-{$I OpenCV.inc}
-//
+  Software distributed under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
+  ANY KIND, either express or implied. See the License for the specific language governing rights
+  and limitations under the License.
 
-{$IFDEF DEBUG}
-{$A8,B-,C+,D+,E-,F-,G+,H+,I+,J-,K-,L+,M-,N+,O-,P+,Q+,R+,S-,T-,U-,V+,W+,X+,Y+,Z1}
-{$ELSE}
-{$A8,B-,C-,D-,E-,F-,G+,H+,I+,J-,K-,L-,M-,N+,O+,P+,Q-,R-,S-,T-,U-,V+,W-,X+,Y-,Z1}
-{$ENDIF}
-{$WARN SYMBOL_DEPRECATED OFF}
-{$WARN SYMBOL_PLATFORM OFF}
-{$WARN UNIT_PLATFORM OFF}
-{$WARN UNSAFE_TYPE OFF}
-{$WARN UNSAFE_CODE OFF}
-{$WARN UNSAFE_CAST OFF}
-{$POINTERMATH ON}
+  Alternatively, the contents of this file may be used under the terms of the
+  GNU Lesser General Public License (the  "LGPL License"), in which case the
+  provisions of the LGPL License are applicable instead of those above.
+  If you wish to allow use of your version of this file only under the terms
+  of the LGPL License and not to allow others to use your version of this file
+  under the MPL, indicate your decision by deleting  the provisions above and
+  replace  them with the notice and other provisions required by the LGPL
+  License.  If you do not delete the provisions above, a recipient may use
+  your version of this file under either the MPL or the LGPL License.
+
+  For more information about the LGPL: http://www.gnu.org/copyleft/lesser.html
+  **************************************************************************************************
+  Warning: Using Delphi XE3 syntax!
+  **************************************************************************************************
+  The Initial Developer of the Original Code:
+  OpenCV: open source computer vision library
+  Homepage:    http://ocv.org
+  Online docs: http://docs.ocv.org
+  Q&A forum:   http://answers.ocv.org
+  Dev zone:    http://code.ocv.org
+  **************************************************************************************************
+  Original file:
+  opencv\modules\legacy\include\opencv2\legacy\compat.hpp
+  *************************************************************************************************
+*)
+
 unit ocv.compat;
+
+{$I OpenCV.inc}
+{$POINTERMATH ON}
 
 interface
 
-uses ocv.core.types_c, ocv.imgproc.types_c;
+uses ocv.core.types_c, ocv.imgproc.types_c, ocv.core_c;
 
 type
   // typedef int CvMatType;
@@ -145,7 +134,7 @@ type
   *)
 function cvMatArray(rows: Integer; cols: Integer; type_: Integer; count: Integer; data: Pointer = nil): TCvMat; cdecl;
 
-//
+
 // #define cvUpdateMHIByTime  cvUpdateMotionHistory
 //
 // #define cvAccMask cvAcc
@@ -166,12 +155,25 @@ function cvMean(const image: pCvArr; const mask: pCvArr = nil): double; cdecl;
 *)
 function cvSumPixels(const image: pCvArr): double; cdecl;
 
-// CV_EXPORTS void  cvMean_StdDev( const CvArr* image, double* mean, double* sdv,
-// const CvArr* mask CV_DEFAULT(0));
-//
-// CV_EXPORTS void cvmPerspectiveProject( const CvMat* mat, const CvArr* src, CvArr* dst );
-// CV_EXPORTS void cvFillImage( CvArr* mat, double color );
-//
+(*
+  CV_EXPORTS void  cvMean_StdDev( const CvArr* image, double* mean, double* sdv,
+  const CvArr* mask CV_DEFAULT(0));
+*)
+
+procedure cvMean_StdDev(const image: pCvArr; mean: PDouble; sdv: PDouble; const mask: pCvArr = nil); cdecl;
+
+(*
+  CV_EXPORTS void cvmPerspectiveProject( const CvMat* mat, const CvArr* src, CvArr* dst );
+*)
+
+procedure cvmPerspectiveProject(const mat: PCvMat; const src: pCvArr; dst: pCvArr); cdecl;
+
+(*
+  CV_EXPORTS void cvFillImage( CvArr* mat, double color );
+*)
+
+procedure cvFillImage(mat: pCvArr; color: double); cdecl;
+
 // #define cvCvtPixToPlane cvSplit
 // #define cvCvtPlaneToPix cvMerge
 type
@@ -189,33 +191,52 @@ type
     param: array [0 .. 1] of TCvScalar; (* parameters of RNG *)
   end;
 
-  /// * Changes RNG range while preserving RNG state */
-  // CV_EXPORTS void  cvRandSetRange( CvRandState* state, double param1,
-  // double param2, int index CV_DEFAULT(-1));
-  //
-  // CV_EXPORTS void  cvRandInit( CvRandState* state, double param1,
-  // double param2, int seed,
-  // int disttype CV_DEFAULT(CV_RAND_UNI));
-  //
-  /// * Fills array with random numbers */
-  // CV_EXPORTS void cvRand( CvRandState* state, CvArr* arr );
-  //
-  // #define cvRandNext( _state ) cvRandInt( &(_state)->state )
-  //
-  // CV_EXPORTS void cvbRand( CvRandState* state, float* dst, int len );
-  //
-  // CV_EXPORTS void  cvbCartToPolar( const float* y, const float* x,
-  // float* magnitude, float* angle, int len );
-  // CV_EXPORTS void  cvbFastArctan( const float* y, const float* x, float* angle, int len );
-  // CV_EXPORTS void  cvbSqrt( const float* x, float* y, int len );
-  // CV_EXPORTS void  cvbInvSqrt( const float* x, float* y, int len );
-  // CV_EXPORTS void  cvbReciprocal( const float* x, float* y, int len );
-  // CV_EXPORTS void  cvbFastExp( const float* x, double* y, int len );
-  // CV_EXPORTS void  cvbFastLog( const double* x, float* y, int len );
-
   (*
-    CV_EXPORTS CvRect  cvContourBoundingRect( void* point_set, int update CV_DEFAULT(0));
+    Changes RNG range while preserving RNG state
+
+    CV_EXPORTS void  cvRandSetRange( CvRandState* state, double param1,
+    double param2, int index CV_DEFAULT(-1));
   *)
+
+procedure cvRandSetRange(state: pCvRandState; param1: double; param2: double; index: Integer = -1); cdecl;
+
+(*
+  CV_EXPORTS void  cvRandInit( CvRandState* state, double param1,
+  double param2, int seed,
+  int disttype CV_DEFAULT(CV_RAND_UNI));
+*)
+procedure cvRandInit(state: pCvRandState; param1: double; param2: double; seed: Integer; disttype: Integer = CV_RAND_UNI); cdecl;
+
+(*
+  Fills array with random numbers
+
+  CV_EXPORTS void cvRand( CvRandState* state, CvArr* arr );
+*)
+
+procedure cvRand(state: pCvRandState; arr: pCvArr); cdecl;
+
+// #define cvRandNext( _state ) cvRandInt( &(_state)->state )
+
+// CV_EXPORTS void cvbRand( CvRandState* state, float* dst, int len );
+procedure cvbRand(state: pCvRandState; dst: PSingle; len: Integer); cdecl;
+// CV_EXPORTS void  cvbCartToPolar( const float* y, const float* x, float* magnitude, float* angle, int len );
+procedure cvbCartToPolar(const y: PSingle; const x: PSingle; Var magnitude: Single; Var angle: Single; len: Integer); cdecl;
+// CV_EXPORTS void  cvbFastArctan( const float* y, const float* x, float* angle, int len );
+procedure cvbFastArctan(const y: PSingle; const x: PSingle; Var angle: Single; len: Integer); cdecl;
+// CV_EXPORTS void  cvbSqrt( const float* x, float* y, int len );
+procedure cvbSqrt(const x: PSingle; Var y: Single; len: Integer); cdecl;
+// CV_EXPORTS void  cvbInvSqrt( const float* x, float* y, int len );
+procedure cvbInvSqrt(const x: PSingle; Var y: Single; len: Integer); cdecl;
+// CV_EXPORTS void  cvbReciprocal( const float* x, float* y, int len );
+procedure cvbReciprocal(const x: PSingle; var y: Single; len: Integer); cdecl;
+// CV_EXPORTS void  cvbFastExp( const float* x, double* y, int len );
+procedure cvbFastExp(const x: PSingle; Var y: double; len: Integer); cdecl;
+// CV_EXPORTS void  cvbFastLog( const double* x, float* y, int len );
+procedure cvbFastLog(const x: PDouble; Var y: Single; len: Integer); cdecl;
+
+(*
+  CV_EXPORTS CvRect  cvContourBoundingRect( void* point_set, int update CV_DEFAULT(0));
+*)
 function cvContourBoundingRect(point_set: Pointer; update: Integer = 0): TCvRect; cdecl;
 
 (*
@@ -224,7 +245,6 @@ function cvContourBoundingRect(point_set: Pointer; update: Integer = 0): TCvRect
 function cvPseudoInverse(const src: pCvArr; dst: pCvArr): double; cdecl;
 
 // #define cvPseudoInv cvPseudoInverse
-//
 // #define cvContourMoments( contour, moments ) cvMoments( contour, moments, 0 )
 //
 // #define cvGetPtrAt              cvPtr2D
@@ -261,63 +281,91 @@ function cvPseudoInverse(const src: pCvArr; dst: pCvArr): double; cdecl;
 //
 // #define cvCopyImage( src, dst )         cvCopy( src, dst, 0 )
 // #define cvReleaseMatHeader              cvReleaseMat
-//
-/// * Calculates exact convex hull of 2d point set */
-// CV_EXPORTS void cvConvexHull( CvPoint* points, int num_points,
-// CvRect* bound_rect,
-// int orientation, int* hull, int* hullsize );
-//
-//
-// CV_EXPORTS void cvMinAreaRect( CvPoint* points, int n,
-// int left, int bottom,
-// int right, int top,
-// CvPoint2D32f* anchor,
-// CvPoint2D32f* vect1,
-// CvPoint2D32f* vect2 );
-//
-// typedef int CvDisType;
-// typedef int CvChainApproxMethod;
-// typedef int CvContourRetrievalMode;
-//
-// CV_EXPORTS  void  cvFitLine3D( CvPoint3D32f* points, int count, int dist,
-// void *param, float reps, float aeps, float* line );
-//
-/// * Fits a line into set of 2d points in a robust way (M-estimator technique) */
-// CV_EXPORTS  void  cvFitLine2D( CvPoint2D32f* points, int count, int dist,
-// void *param, float reps, float aeps, float* line );
-//
+
+(*
+  Calculates exact convex hull of 2d point set
+
+  CV_EXPORTS void cvConvexHull( CvPoint* points, int num_points,
+  CvRect* bound_rect,
+  int orientation, int* hull, int* hullsize );
+*)
+procedure cvConvexHull(points: PCvPoint; num_points: Integer; bound_rect: PCvRect; orientation: Integer; Var hull: Integer;
+  Var hullsize: Integer); cdecl;
+
+(*
+  CV_EXPORTS void cvMinAreaRect( CvPoint* points, int n,
+  int left, int bottom,
+  int right, int top,
+  CvPoint2D32f* anchor,
+  CvPoint2D32f* vect1,
+  CvPoint2D32f* vect2 );
+*)
+procedure cvMinAreaRect(points: PCvPoint; n: Integer; left: Integer; bottom: Integer; right: Integer; top: Integer; anchor: PCvPoint2D32f;
+  vect1: PCvPoint2D32f; vect2: PCvPoint2D32f); cdecl;
+
+Type
+  TCvDisType = type Integer;
+  TCvChainApproxMethod = type Integer;
+  TCvContourRetrievalMode = type Integer;
+
+  (*
+    CV_EXPORTS  void  cvFitLine3D( CvPoint3D32f* points, int count, int dist,
+    void *param, float reps, float aeps, float* line );
+  *)
+procedure cvFitLine3D(points: PCvPoint3D32f; count: Integer; dist: Integer; param: Pointer; reps: Single; aeps: Single;
+  Var line: Single); cdecl;
+
+(*
+  Fits a line into set of 2d points in a robust way (M-estimator technique)
+
+  CV_EXPORTS  void  cvFitLine2D( CvPoint2D32f* points, int count, int dist,
+  void *param, float reps, float aeps, float* line );
+*)
+
+procedure cvFitLine2D(points: PCvPoint2D32f; count: Integer; dist: Integer; param: Pointer; reps: Single; aeps: Single;
+  Var line: Single); cdecl;
+
 // CV_EXPORTS  void  cvFitEllipse( const CvPoint2D32f* points, int count, CvBox2D* box );
-//
-/// * Projects 2d points to one of standard coordinate planes
-// (i.e. removes one of coordinates) */
-// CV_EXPORTS  void  cvProject3D( CvPoint3D32f* points3D, int count,
-// CvPoint2D32f* points2D,
-// int xIndx CV_DEFAULT(0),
-// int yIndx CV_DEFAULT(1));
-//
-/// * Retrieves value of the particular bin
-// of x-dimensional (x=1,2,3,...) histogram */
-// #define cvQueryHistValue_1D( hist, idx0 ) \
-// ((float)cvGetReal1D( (hist)->bins, (idx0)))
-// #define cvQueryHistValue_2D( hist, idx0, idx1 ) \
-// ((float)cvGetReal2D( (hist)->bins, (idx0), (idx1)))
-// #define cvQueryHistValue_3D( hist, idx0, idx1, idx2 ) \
-// ((float)cvGetReal3D( (hist)->bins, (idx0), (idx1), (idx2)))
-// #define cvQueryHistValue_nD( hist, idx ) \
-// ((float)cvGetRealND( (hist)->bins, (idx)))
-//
-/// * Returns pointer to the particular bin of x-dimesional histogram.
-// For sparse histogram the bin is created if it didn't exist before */
-// #define cvGetHistValue_1D( hist, idx0 ) \
-// ((float*)cvPtr1D( (hist)->bins, (idx0), 0))
-// #define cvGetHistValue_2D( hist, idx0, idx1 ) \
-// ((float*)cvPtr2D( (hist)->bins, (idx0), (idx1), 0))
-// #define cvGetHistValue_3D( hist, idx0, idx1, idx2 ) \
-// ((float*)cvPtr3D( (hist)->bins, (idx0), (idx1), (idx2), 0))
-// #define cvGetHistValue_nD( hist, idx ) \
-// ((float*)cvPtrND( (hist)->bins, (idx), 0))
-//
-//
+procedure cvFitEllipse(const points: PCvPoint2D32f; count: Integer; Var box: TCvBox2D); cdecl;
+
+(*
+  Projects 2d points to one of standard coordinate planes
+  (i.e. removes one of coordinates)
+
+  CV_EXPORTS  void  cvProject3D( CvPoint3D32f* points3D, int count,
+  CvPoint2D32f* points2D,
+  int xIndx CV_DEFAULT(0),
+  int yIndx CV_DEFAULT(1));
+*)
+
+procedure cvProject3D(points3D: PCvPoint3D32f; count: Integer; points2D: PCvPoint2D32f; xIndx: Integer = 0; yIndx: Integer = 1); cdecl;
+
+(* Retrieves value of the particular bin
+  of x-dimensional (x=1,2,3,...) histogram
+
+  #define cvQueryHistValue_1D( hist, idx0 ) \
+  ((float)cvGetReal1D( (hist)->bins, (idx0)))
+  #define cvQueryHistValue_2D( hist, idx0, idx1 ) \
+  ((float)cvGetReal2D( (hist)->bins, (idx0), (idx1)))
+  #define cvQueryHistValue_3D( hist, idx0, idx1, idx2 ) \
+  ((float)cvGetReal3D( (hist)->bins, (idx0), (idx1), (idx2)))
+  #define cvQueryHistValue_nD( hist, idx ) \
+  ((float)cvGetRealND( (hist)->bins, (idx)))
+*)
+
+(* Returns pointer to the particular bin of x-dimesional histogram.
+  For sparse histogram the bin is created if it didn't exist before
+
+  #define cvGetHistValue_1D( hist, idx0 ) \
+  ((float* )cvPtr1D( (hist)->bins, (idx0), 0))
+  #define cvGetHistValue_2D( hist, idx0, idx1 ) \
+  ((float* )cvPtr2D( (hist)->bins, (idx0), (idx1), 0))
+  #define cvGetHistValue_3D( hist, idx0, idx1, idx2 ) \
+  ((float* )cvPtr3D( (hist)->bins, (idx0), (idx1), (idx2), 0))
+  #define cvGetHistValue_nD( hist, idx ) \
+  ((float* )cvPtrND( (hist)->bins, (idx), 0))
+*)
+
 // #define CV_IS_SET_ELEM_EXISTS CV_IS_SET_ELEM
 
 (*
@@ -325,8 +373,7 @@ function cvPseudoInverse(const src: pCvArr; dst: pCvArr): double; cdecl;
   double theta, int threshold,
   float* lines, int linesNumber );
 *)
-function cvHoughLines(image: pCvArr; rho: double; theta: double; threshold: Integer; lines: pfloat;
-  linesNumber: Integer): Integer; cdecl;
+function cvHoughLines(image: pCvArr; rho: double; theta: double; threshold: Integer; lines: pfloat; linesNumber: Integer): Integer; cdecl;
 
 (*
   CV_EXPORTS  int  cvHoughLinesP( CvArr* image, double rho,
@@ -334,16 +381,16 @@ function cvHoughLines(image: pCvArr; rho: double; theta: double; threshold: Inte
   int lineLength, int lineGap,
   int* lines, int linesNumber );
 *)
-function cvHoughLinesP(image: pCvArr; rho: double; theta: double; threshold: Integer; lineLength: Integer;
-  lineGap: Integer; lines: pInteger; linesNumber: Integer): Integer; cdecl;
+function cvHoughLinesP(image: pCvArr; rho: double; theta: double; threshold: Integer; lineLength: Integer; lineGap: Integer;
+  lines: pInteger; linesNumber: Integer): Integer; cdecl;
 
 (*
   CV_EXPORTS  int  cvHoughLinesSDiv( CvArr* image, double rho, int srn,
   double theta, int stn, int threshold,
   float* lines, int linesNumber );
 *)
-function cvHoughLinesSDiv(image: pCvArr; rho: double; srn: Integer; theta: double; stn: Integer; threshold: Integer;
-  lines: pfloat; linesNumber: Integer): Integer; cdecl;
+function cvHoughLinesSDiv(image: pCvArr; rho: double; srn: Integer; theta: double; stn: Integer; threshold: Integer; lines: pfloat;
+  linesNumber: Integer): Integer; cdecl;
 
 (*
   CV_EXPORTS  float  cvCalcEMD( const float* signature1, int size1,
@@ -354,327 +401,433 @@ function cvHoughLinesSDiv(image: pCvArr; rho: double; srn: Integer; theta: doubl
   void* user_param CV_DEFAULT(0));
 *)
 function cvCalcEMD(const signature1: pfloat; size1: Integer; const signature2: pfloat; size2: Integer; dims: Integer;
-  dist_type: Integer = CV_DIST_L2; dist_func: TCvDistanceFunction = nil; lower_bound: pfloat = nil;
-  user_param: Pointer = nil): float; cdecl;
+  dist_type: Integer = CV_DIST_L2; dist_func: TCvDistanceFunction = nil; lower_bound: pfloat = nil; user_param: Pointer = nil)
+  : float; cdecl;
 
-//
-// CV_EXPORTS  void  cvKMeans( int num_clusters, float** samples,
-// int num_samples, int vec_size,
-// CvTermCriteria termcrit, int* cluster_idx );
-//
-// CV_EXPORTS void  cvStartScanGraph( CvGraph* graph, CvGraphScanner* scanner,
-// CvGraphVtx* vtx CV_DEFAULT(NULL),
-// int mask CV_DEFAULT(CV_GRAPH_ALL_ITEMS));
-//
+(*
+  CV_EXPORTS  void  cvKMeans( int num_clusters, float** samples,
+  int num_samples, int vec_size,
+  CvTermCriteria termcrit, int* cluster_idx );
+*)
+
+procedure cvKMeans(num_clusters: Integer; Var samples: PSingle; num_samples: Integer; vec_size: Integer; termcrit: TCvTermCriteria;
+  Var cluster_idx: Integer); cdecl;
+
+(*
+  CV_EXPORTS void  cvStartScanGraph( CvGraph* graph, CvGraphScanner* scanner,
+  CvGraphVtx* vtx CV_DEFAULT(NULL),
+  int mask CV_DEFAULT(CV_GRAPH_ALL_ITEMS));
+*)
+
+procedure cvStartScanGraph(graph: PCvGraph; scanner: PCvGraphScanner; vtx: PCvGraphVtx = nil; mask: Integer = CV_GRAPH_ALL_ITEMS); cdecl;
+
 // CV_EXPORTS  void  cvEndScanGraph( CvGraphScanner* scanner );
-//
-//
-/// * old drawing functions */
-// CV_EXPORTS void  cvLineAA( CvArr* img, CvPoint pt1, CvPoint pt2,
-// double color, int scale CV_DEFAULT(0));
-//
-// CV_EXPORTS void  cvCircleAA( CvArr* img, CvPoint center, int radius,
-// double color, int scale CV_DEFAULT(0) );
-//
-// CV_EXPORTS void  cvEllipseAA( CvArr* img, CvPoint center, CvSize axes,
-// double angle, double start_angle,
-// double end_angle, double color,
-// int scale CV_DEFAULT(0) );
-//
-// CV_EXPORTS void  cvPolyLineAA( CvArr* img, CvPoint** pts, int* npts, int contours,
-// int is_closed, double color, int scale CV_DEFAULT(0) );
-//
-/// ****************************************************************************************\
-// *                                   Pixel Access Macros                                  *
-// \****************************************************************************************/
-//
-// typedef struct _CvPixelPosition8u
-// {
-// uchar*  currline;      /* pointer to the start of the current pixel line   */
-// uchar*  topline;       /* pointer to the start of the top pixel line       */
-// uchar*  bottomline;    /* pointer to the start of the first line           */
-// /* which is below the image                         */
-// int     x;                      /* current x coordinate ( in pixels )               */
-// int     width;                  /* width of the image  ( in pixels )                */
-// int     height;                 /* height of the image  ( in pixels )               */
-// int     step;                   /* distance between lines ( in elements of single   */
-// /* plane )                                          */
-// int     step_arr[3];            /* array: ( 0, -step, step ). It is used for        */
-// /* vertical moving                                  */
-// } CvPixelPosition8u;
-//
-/// * this structure differs from the above only in data type */
-// typedef struct _CvPixelPosition8s
-// {
-// schar*  currline;
-// schar*  topline;
-// schar*  bottomline;
-// int     x;
-// int     width;
-// int     height;
-// int     step;
-// int     step_arr[3];
-// } CvPixelPosition8s;
-//
-/// * this structure differs from the CvPixelPosition8u only in data type */
-// typedef struct _CvPixelPosition32f
-// {
-// float*  currline;
-// float*  topline;
-// float*  bottomline;
-// int     x;
-// int     width;
-// int     height;
-// int     step;
-// int     step_arr[3];
-// } CvPixelPosition32f;
-//
-//
-/// * Initialize one of the CvPixelPosition structures.   */
-/// *  pos    - initialized structure                     */
-/// *  origin - pointer to the left-top corner of the ROI */
-/// *  step   - width of the whole image in bytes         */
-/// *  roi    - width & height of the ROI                 */
-/// *  x, y   - initial position                          */
-// #define CV_INIT_PIXEL_POS(pos, origin, _step, roi, _x, _y, orientation)    \
-// (                                                                        \
-// (pos).step = (_step)/sizeof((pos).currline[0]) * (orientation ? -1 : 1), \
-// (pos).width = (roi).width,                                               \
-// (pos).height = (roi).height,                                             \
-// (pos).bottomline = (origin) + (pos).step*(pos).height,                   \
-// (pos).topline = (origin) - (pos).step,                                   \
-// (pos).step_arr[0] = 0,                                                   \
-// (pos).step_arr[1] = -(pos).step,                                         \
-// (pos).step_arr[2] = (pos).step,                                          \
-// (pos).x = (_x),                                                          \
-// (pos).currline = (origin) + (pos).step*(_y) )
-//
-//
-/// * Move to specified point ( absolute shift ) */
-/// *  pos    - position structure               */
-/// *  x, y   - coordinates of the new position  */
-/// *  cs     - number of the image channels     */
-// #define CV_MOVE_TO( pos, _x, _y, cs )                                                   \
-// ((pos).currline = (_y) >= 0 && (_y) < (pos).height ? (pos).topline + ((_y)+1)*(pos).step : 0, \
-// (pos).x = (_x) >= 0 && (_x) < (pos).width ? (_x) : 0, (pos).currline + (_x) * (cs) )
-//
-/// * Get current coordinates                    */
-/// *  pos    - position structure               */
-/// *  x, y   - coordinates of the new position  */
-/// *  cs     - number of the image channels     */
-// #define CV_GET_CURRENT( pos, cs )  ((pos).currline + (pos).x * (cs))
-//
-/// * Move by one pixel relatively to current position */
-/// *  pos    - position structure                     */
-/// *  cs     - number of the image channels           */
-//
-/// * left */
-// #define CV_MOVE_LEFT( pos, cs ) \
-// ( --(pos).x >= 0 ? (pos).currline + (pos).x*(cs) : 0 )
-//
-/// * right */
-// #define CV_MOVE_RIGHT( pos, cs ) \
-// ( ++(pos).x < (pos).width ? (pos).currline + (pos).x*(cs) : 0 )
-//
-/// * up */
-// #define CV_MOVE_UP( pos, cs ) \
-// (((pos).currline -= (pos).step) != (pos).topline ? (pos).currline + (pos).x*(cs) : 0 )
-//
-/// * down */
-// #define CV_MOVE_DOWN( pos, cs ) \
-// (((pos).currline += (pos).step) != (pos).bottomline ? (pos).currline + (pos).x*(cs) : 0 )
-//
-/// * left up */
-// #define CV_MOVE_LU( pos, cs ) ( CV_MOVE_LEFT(pos, cs), CV_MOVE_UP(pos, cs))
-//
-/// * right up */
-// #define CV_MOVE_RU( pos, cs ) ( CV_MOVE_RIGHT(pos, cs), CV_MOVE_UP(pos, cs))
-//
-/// * left down */
-// #define CV_MOVE_LD( pos, cs ) ( CV_MOVE_LEFT(pos, cs), CV_MOVE_DOWN(pos, cs))
-//
-/// * right down */
-// #define CV_MOVE_RD( pos, cs ) ( CV_MOVE_RIGHT(pos, cs), CV_MOVE_DOWN(pos, cs))
-//
-//
-//
-/// * Move by one pixel relatively to current position with wrapping when the position     */
-/// * achieves image boundary                                                              */
-/// *  pos    - position structure                                                         */
-/// *  cs     - number of the image channels                                               */
-//
-/// * left */
-// #define CV_MOVE_LEFT_WRAP( pos, cs ) \
-// ((pos).currline + ( --(pos).x >= 0 ? (pos).x : ((pos).x = (pos).width-1))*(cs))
-//
-/// * right */
-// #define CV_MOVE_RIGHT_WRAP( pos, cs ) \
-// ((pos).currline + ( ++(pos).x < (pos).width ? (pos).x : ((pos).x = 0))*(cs) )
-//
-/// * up */
-// #define CV_MOVE_UP_WRAP( pos, cs ) \
-// ((((pos).currline -= (pos).step) != (pos).topline ? \
-// (pos).currline : ((pos).currline = (pos).bottomline - (pos).step)) + (pos).x*(cs) )
-//
-/// * down */
-// #define CV_MOVE_DOWN_WRAP( pos, cs ) \
-// ((((pos).currline += (pos).step) != (pos).bottomline ? \
-// (pos).currline : ((pos).currline = (pos).topline + (pos).step)) + (pos).x*(cs) )
-//
-/// * left up */
-// #define CV_MOVE_LU_WRAP( pos, cs ) ( CV_MOVE_LEFT_WRAP(pos, cs), CV_MOVE_UP_WRAP(pos, cs))
-/// * right up */
-// #define CV_MOVE_RU_WRAP( pos, cs ) ( CV_MOVE_RIGHT_WRAP(pos, cs), CV_MOVE_UP_WRAP(pos, cs))
-/// * left down */
-// #define CV_MOVE_LD_WRAP( pos, cs ) ( CV_MOVE_LEFT_WRAP(pos, cs), CV_MOVE_DOWN_WRAP(pos, cs))
-/// * right down */
-// #define CV_MOVE_RD_WRAP( pos, cs ) ( CV_MOVE_RIGHT_WRAP(pos, cs), CV_MOVE_DOWN_WRAP(pos, cs))
-//
-/// * Numeric constants which used for moving in arbitrary direction  */
-// enum
-// {
-// CV_SHIFT_NONE = 2,
-// CV_SHIFT_LEFT = 1,
-// CV_SHIFT_RIGHT = 3,
-// CV_SHIFT_UP = 6,
-// CV_SHIFT_DOWN = 10,
-// CV_SHIFT_LU = 5,
-// CV_SHIFT_RU = 7,
-// CV_SHIFT_LD = 9,
-// CV_SHIFT_RD = 11
-// };
-//
-/// * Move by one pixel in specified direction                                     */
-/// *  pos    - position structure                                                 */
-/// *  shift  - direction ( it's value must be one of the CV_SHIFT_Ö constants ) */
-/// *  cs     - number of the image channels                                       */
-// #define CV_MOVE_PARAM( pos, shift, cs )                                             \
-// ( (pos).currline += (pos).step_arr[(shift)>>2], (pos).x += ((shift)&3)-2,       \
-// ((pos).currline != (pos).topline && (pos).currline != (pos).bottomline &&       \
-// (pos).x >= 0 && (pos).x < (pos).width) ? (pos).currline + (pos).x*(cs) : 0 )
-//
-/// * Move by one pixel in specified direction with wrapping when the               */
-/// * position achieves image boundary                                              */
-/// *  pos    - position structure                                                  */
-/// *  shift  - direction ( it's value must be one of the CV_SHIFT_Ö constants )  */
-/// *  cs     - number of the image channels                                        */
-// #define CV_MOVE_PARAM_WRAP( pos, shift, cs )                                        \
-// ( (pos).currline += (pos).step_arr[(shift)>>2],                                 \
-// (pos).currline = ((pos).currline == (pos).topline ?                             \
-// (pos).bottomline - (pos).step :                                                 \
-// (pos).currline == (pos).bottomline ?                                            \
-// (pos).topline + (pos).step : (pos).currline),                                   \
-// \
-// (pos).x += ((shift)&3)-2,                                                       \
-// (pos).x = ((pos).x < 0 ? (pos).width-1 : (pos).x >= (pos).width ? 0 : (pos).x), \
-// \
-// (pos).currline + (pos).x*(cs) )
-//
+procedure cvEndScanGraph(scanner: PCvGraphScanner); cdecl;
+
+(* old drawing functions *)
+
+(*
+  CV_EXPORTS void  cvLineAA( CvArr* img, CvPoint pt1, CvPoint pt2,
+  double color, int scale CV_DEFAULT(0));
+*)
+procedure cvLineAA(img: pCvArr; pt1: TCvPoint; pt2: TCvPoint; color: double; scale: Integer = 0); cdecl;
+
+(*
+  CV_EXPORTS void  cvCircleAA( CvArr* img, CvPoint center, int radius,
+  double color, int scale CV_DEFAULT(0) );
+*)
+procedure cvCircleAA(img: pCvArr; center: TCvPoint; radius: Integer; color: double; scale: Integer = 0); cdecl;
+
+(*
+  CV_EXPORTS void  cvEllipseAA( CvArr* img, CvPoint center, CvSize axes,
+  double angle, double start_angle,
+  double end_angle, double color,
+  int scale CV_DEFAULT(0) );
+*)
+procedure cvEllipseAA(img: pCvArr; center: TCvPoint; axes: TCvSize; angle: double; start_angle: double; end_angle: double; color: double;
+  scale: Integer = 0); cdecl;
+
+(*
+  CV_EXPORTS void  cvPolyLineAA( CvArr* img, CvPoint** pts, int* npts, int contours,
+  int is_closed, double color, int scale CV_DEFAULT(0) );
+*)
+procedure cvPolyLineAA(img: pCvArr; Var pts: PCvPoint; Var npts: Integer; contours: Integer; is_closed: Integer; color: double;
+  scale: Integer = 0); cdecl;
+
+(* ***************************************************************************************\
+  *                                   Pixel Access Macros                                  *
+  \*************************************************************************************** *)
+Type
+  // typedef struct _CvPixelPosition8u
+  // {
+  // uchar*  currline;      /* pointer to the start of the current pixel line   */
+  // uchar*  topline;       /* pointer to the start of the top pixel line       */
+  // uchar*  bottomline;    /* pointer to the start of the first line           */
+  // /* which is below the image                         */
+  // int     x;                      /* current x coordinate ( in pixels )               */
+  // int     width;                  /* width of the image  ( in pixels )                */
+  // int     height;                 /* height of the image  ( in pixels )               */
+  // int     step;                   /* distance between lines ( in elements of single   */
+  // /* plane )                                          */
+  // int     step_arr[3];            /* array: ( 0, -step, step ). It is used for        */
+  // /* vertical moving                                  */
+  // } CvPixelPosition8u;
+
+  TCvPixelPosition8u = record
+    currline: PUChar; (* pointer to the start of the current pixel line *)
+    topline: PUChar; (* pointer to the start of the top pixel line *)
+    bottomline: PUChar; (* pointer to the start of the first line *)
+    (* which is below the image *)
+    x: Integer; (* current x coordinate ( in pixels ) *)
+    width: Integer; (* width of the image  ( in pixels ) *)
+    height: Integer; (* height of the image  ( in pixels ) *)
+    step: Integer; (* distance between lines ( in elements of single *)
+    (* plane ) *)
+    step_arr: array [0 .. 2] of Integer; (* array: ( 0, -step, step ). It is used for *)
+    (* vertical moving *)
+  end;
+
+  /// * this structure differs from the above only in data type */
+  // typedef struct _CvPixelPosition8s
+  // {
+  // schar*  currline;
+  // schar*  topline;
+  // schar*  bottomline;
+  // int     x;
+  // int     width;
+  // int     height;
+  // int     step;
+  // int     step_arr[3];
+  // } CvPixelPosition8s;
+
+  TCvPixelPosition8s = record
+    currline: Pschar;
+    topline: Pschar;
+    bottomline: Pschar;
+    x: Integer;
+    width: Integer;
+    height: Integer;
+    step: Integer;
+    step_arr: array [0 .. 2] of Integer;
+  end;
+
+  /// * this structure differs from the CvPixelPosition8u only in data type */
+  // typedef struct _CvPixelPosition32f
+  // {
+  // float*  currline;
+  // float*  topline;
+  // float*  bottomline;
+  // int     x;
+  // int     width;
+  // int     height;
+  // int     step;
+  // int     step_arr[3];
+  // } CvPixelPosition32f;
+
+  TCvPixelPosition32f = record
+    currline: PSingle;
+    topline: PSingle;
+    bottomline: PSingle;
+    x: Integer;
+    width: Integer;
+    height: Integer;
+    step: Integer;
+    step_arr: array [0 .. 2] of Integer;
+  end;
+
+  (* Initialize one of the CvPixelPosition structures. *)
+  (* pos    - initialized structure *)
+  (* origin - pointer to the left-top corner of the ROI *)
+  (* step   - width of the whole image in bytes *)
+  (* roi    - width & height of the ROI *)
+  (* x, y   - initial position *)
+  // #define CV_INIT_PIXEL_POS(pos, origin, _step, roi, _x, _y, orientation)    \
+  // (                                                                        \
+  // (pos).step = (_step)/sizeof((pos).currline[0]) * (orientation ? -1 : 1), \
+  // (pos).width = (roi).width,                                               \
+  // (pos).height = (roi).height,                                             \
+  // (pos).bottomline = (origin) + (pos).step*(pos).height,                   \
+  // (pos).topline = (origin) - (pos).step,                                   \
+  // (pos).step_arr[0] = 0,                                                   \
+  // (pos).step_arr[1] = -(pos).step,                                         \
+  // (pos).step_arr[2] = (pos).step,                                          \
+  // (pos).x = (_x),                                                          \
+  // (pos).currline = (origin) + (pos).step*(_y) )
+
+  (* Move to specified point ( absolute shift ) *)
+  (* pos    - position structure *)
+  (* x, y   - coordinates of the new position *)
+  (* cs     - number of the image channels *)
+  // #define CV_MOVE_TO( pos, _x, _y, cs )                                                   \
+  // ((pos).currline = (_y) >= 0 && (_y) < (pos).height ? (pos).topline + ((_y)+1)*(pos).step : 0, \
+  // (pos).x = (_x) >= 0 && (_x) < (pos).width ? (_x) : 0, (pos).currline + (_x) * (cs) )
+
+  (* Get current coordinates *)
+  (* pos    - position structure *)
+  (* x, y   - coordinates of the new position *)
+  (* cs     - number of the image channels *)
+  // #define CV_GET_CURRENT( pos, cs )  ((pos).currline + (pos).x * (cs))
+
+  (* Move by one pixel relatively to current position *)
+  (* pos    - position structure *)
+  (* cs     - number of the image channels *)
+
+  (* left *)
+  // #define CV_MOVE_LEFT( pos, cs ) \
+  // ( --(pos).x >= 0 ? (pos).currline + (pos).x*(cs) : 0 )
+
+  (* right *)
+  // #define CV_MOVE_RIGHT( pos, cs ) \
+  // ( ++(pos).x < (pos).width ? (pos).currline + (pos).x*(cs) : 0 )
+
+  (* up *)
+  // #define CV_MOVE_UP( pos, cs ) \
+  // (((pos).currline -= (pos).step) != (pos).topline ? (pos).currline + (pos).x*(cs) : 0 )
+
+  (* down *)
+  // #define CV_MOVE_DOWN( pos, cs ) \
+  // (((pos).currline += (pos).step) != (pos).bottomline ? (pos).currline + (pos).x*(cs) : 0 )
+
+  (* left up *)
+  // #define CV_MOVE_LU( pos, cs ) ( CV_MOVE_LEFT(pos, cs), CV_MOVE_UP(pos, cs))
+
+  (* right up *)
+  // #define CV_MOVE_RU( pos, cs ) ( CV_MOVE_RIGHT(pos, cs), CV_MOVE_UP(pos, cs))
+
+  (* left down *)
+  // #define CV_MOVE_LD( pos, cs ) ( CV_MOVE_LEFT(pos, cs), CV_MOVE_DOWN(pos, cs))
+
+  (* right down *)
+  // #define CV_MOVE_RD( pos, cs ) ( CV_MOVE_RIGHT(pos, cs), CV_MOVE_DOWN(pos, cs))
+
+  (* Move by one pixel relatively to current position with wrapping when the position     */
+    (* achieves image boundary                                                              */
+    (*  pos    - position structure                                                         */
+    (*  cs     - number of the image channels                                               */
+    //
+    (* left *)
+  // #define CV_MOVE_LEFT_WRAP( pos, cs ) \
+  // ((pos).currline + ( --(pos).x >= 0 ? (pos).x : ((pos).x = (pos).width-1))*(cs))
+  //
+  (* right *)
+  // #define CV_MOVE_RIGHT_WRAP( pos, cs ) \
+  // ((pos).currline + ( ++(pos).x < (pos).width ? (pos).x : ((pos).x = 0))*(cs) )
+  //
+  (* up *)
+  // #define CV_MOVE_UP_WRAP( pos, cs ) \
+  // ((((pos).currline -= (pos).step) != (pos).topline ? \
+  // (pos).currline : ((pos).currline = (pos).bottomline - (pos).step)) + (pos).x*(cs) )
+  //
+  (* down *)
+  // #define CV_MOVE_DOWN_WRAP( pos, cs ) \
+  // ((((pos).currline += (pos).step) != (pos).bottomline ? \
+  // (pos).currline : ((pos).currline = (pos).topline + (pos).step)) + (pos).x*(cs) )
+
+  (* left up *)
+  // #define CV_MOVE_LU_WRAP( pos, cs ) ( CV_MOVE_LEFT_WRAP(pos, cs), CV_MOVE_UP_WRAP(pos, cs))
+  (* right up *)
+  // #define CV_MOVE_RU_WRAP( pos, cs ) ( CV_MOVE_RIGHT_WRAP(pos, cs), CV_MOVE_UP_WRAP(pos, cs))
+  (* left down *)
+  // #define CV_MOVE_LD_WRAP( pos, cs ) ( CV_MOVE_LEFT_WRAP(pos, cs), CV_MOVE_DOWN_WRAP(pos, cs))
+  (* right down *)
+  // #define CV_MOVE_RD_WRAP( pos, cs ) ( CV_MOVE_RIGHT_WRAP(pos, cs), CV_MOVE_DOWN_WRAP(pos, cs))
+
+  (* Numeric constants which used for moving in arbitrary direction *)
+  // enum
+  // {
+  // CV_SHIFT_NONE = 2,
+  // CV_SHIFT_LEFT = 1,
+  // CV_SHIFT_RIGHT = 3,
+  // CV_SHIFT_UP = 6,
+  // CV_SHIFT_DOWN = 10,
+  // CV_SHIFT_LU = 5,
+  // CV_SHIFT_RU = 7,
+  // CV_SHIFT_LD = 9,
+  // CV_SHIFT_RD = 11
+  // };
+
+  (* Move by one pixel in specified direction *)
+  (* pos    - position structure *)
+  (* shift  - direction ( it's value must be one of the CV_SHIFT_Ö constants ) *)
+  (* cs     - number of the image channels *)
+  // #define CV_MOVE_PARAM( pos, shift, cs )                                             \
+  // ( (pos).currline += (pos).step_arr[(shift)>>2], (pos).x += ((shift)&3)-2,       \
+  // ((pos).currline != (pos).topline && (pos).currline != (pos).bottomline &&       \
+  // (pos).x >= 0 && (pos).x < (pos).width) ? (pos).currline + (pos).x*(cs) : 0 )
+
+  (* Move by one pixel in specified direction with wrapping when the *)
+  (* position achieves image boundary *)
+  (* pos    - position structure *)
+  (* shift  - direction ( it's value must be one of the CV_SHIFT_Ö constants ) *)
+  (* cs     - number of the image channels *)
+  // #define CV_MOVE_PARAM_WRAP( pos, shift, cs )                                        \
+  // ( (pos).currline += (pos).step_arr[(shift)>>2],                                 \
+  // (pos).currline = ((pos).currline == (pos).topline ?                             \
+  // (pos).bottomline - (pos).step :                                                 \
+  // (pos).currline == (pos).bottomline ?                                            \
+  // (pos).topline + (pos).step : (pos).currline),                                   \
+  // \
+  // (pos).x += ((shift)&3)-2,                                                       \
+  // (pos).x = ((pos).x < 0 ? (pos).width-1 : (pos).x >= (pos).width ? 0 : (pos).x), \
+  // \
+  // (pos).currline + (pos).x*(cs) )
+
 Type
   // typedef float*   CvVect32f;
-  TCvVect32f = pSingle;
+  TCvVect32f = PSingle;
   // typedef float*   CvMatr32f;
-  TCvMatr32f = pSingle;
+  TCvMatr32f = PSingle;
   // typedef double*  CvVect64d;
   TCvVect64d = PDouble;
   // typedef double*  CvMatr64d;
   TCvMatr64d = PDouble;
-  //
-  // CV_EXPORTS void cvUnDistortOnce( const CvArr* src, CvArr* dst,
-  // const float* intrinsic_matrix,
-  // const float* distortion_coeffs,
-  // int interpolate );
-  //
-  /// * the two functions below have quite hackerish implementations, use with care
-  // (or, which is better, switch to cvUndistortInitMap and cvRemap instead */
-  // CV_EXPORTS void cvUnDistortInit( const CvArr* src,
-  // CvArr* undistortion_map,
-  // const float* A, const float* k,
-  // int interpolate );
-  //
-  // CV_EXPORTS void  cvUnDistort( const CvArr* src, CvArr* dst,
-  // const CvArr* undistortion_map,
-  // int interpolate );
-  //
-  /// * Find fundamental matrix */
-  // CV_EXPORTS void  cvFindFundamentalMatrix( int* points1, int* points2,
-  // int numpoints, int method, float* matrix );
 
   (*
-    CV_EXPORTS int cvFindChessBoardCornerGuesses( const void* arr, void* thresharr,
-    CvMemStorage* storage,
-    CvSize pattern_size, CvPoint2D32f * corners,
-    int *corner_count );
+    CV_EXPORTS void cvUnDistortOnce( const CvArr* src, CvArr* dst,
+    const float* intrinsic_matrix,
+    const float* distortion_coeffs,
+    int interpolate );
   *)
-function cvFindChessBoardCornerGuesses(const arr: Pointer; thresharr: Pointer; storage: pCvMemStorage;
-  pattern_size: TCvSize; corners: pCvPoint2D32f; corner_count: pInteger): Integer; cdecl;
+procedure cvUnDistortOnce(const src: pCvArr; dst: pCvArr; const intrinsic_matrix: PSingle; const distortion_coeffs: PSingle;
+  interpolate: Integer); cdecl;
 
-//
-/// * Calibrates camera using multiple views of calibration pattern */
-// CV_EXPORTS void cvCalibrateCamera( int image_count, int* _point_counts,
-// CvSize image_size, CvPoint2D32f* _image_points, CvPoint3D32f* _object_points,
-// float* _distortion_coeffs, float* _camera_matrix, float* _translation_vectors,
-// float* _rotation_matrices, int flags );
-//
-//
-// CV_EXPORTS void cvCalibrateCamera_64d( int image_count, int* _point_counts,
-// CvSize image_size, CvPoint2D64f* _image_points, CvPoint3D64f* _object_points,
-// double* _distortion_coeffs, double* _camera_matrix, double* _translation_vectors,
-// double* _rotation_matrices, int flags );
-//
-//
-/// * Find 3d position of object given intrinsic camera parameters,
-// 3d model of the object and projection of the object into view plane */
-// CV_EXPORTS void cvFindExtrinsicCameraParams( int point_count,
-// CvSize image_size, CvPoint2D32f* _image_points,
-// CvPoint3D32f* _object_points, float* focal_length,
-// CvPoint2D32f principal_point, float* _distortion_coeffs,
-// float* _rotation_vector, float* _translation_vector );
-//
-/// * Variant of the previous function that takes double-precision parameters */
-// CV_EXPORTS void cvFindExtrinsicCameraParams_64d( int point_count,
-// CvSize image_size, CvPoint2D64f* _image_points,
-// CvPoint3D64f* _object_points, double* focal_length,
-// CvPoint2D64f principal_point, double* _distortion_coeffs,
-// double* _rotation_vector, double* _translation_vector );
-//
-/// * Rodrigues transform */
-// enum
-// {
-// CV_RODRIGUES_M2V = 0,
-// CV_RODRIGUES_V2M = 1
-// };
-//
-/// * Converts rotation_matrix matrix to rotation_matrix vector or vice versa */
-// CV_EXPORTS void  cvRodrigues( CvMat* rotation_matrix, CvMat* rotation_vector,
-// CvMat* jacobian, int conv_type );
-//
-/// * Does reprojection of 3d object points to the view plane */
-// CV_EXPORTS void  cvProjectPoints( int point_count, CvPoint3D64f* _object_points,
-// double* _rotation_vector, double*  _translation_vector,
-// double* focal_length, CvPoint2D64f principal_point,
-// double* _distortion, CvPoint2D64f* _image_points,
-// double* _deriv_points_rotation_matrix,
-// double* _deriv_points_translation_vect,
-// double* _deriv_points_focal,
-// double* _deriv_points_principal_point,
-// double* _deriv_points_distortion_coeffs );
-//
-//
-/// * Simpler version of the previous function */
-// CV_EXPORTS void  cvProjectPointsSimple( int point_count, CvPoint3D64f* _object_points,
-// double* _rotation_matrix, double*  _translation_vector,
-// double* _camera_matrix, double* _distortion, CvPoint2D64f* _image_points );
-//
-//
+(*
+  the two functions below have quite hackerish implementations, use with care
+  (or, which is better, switch to cvUndistortInitMap and cvRemap instead
+
+  CV_EXPORTS void cvUnDistortInit( const CvArr* src,
+  CvArr* undistortion_map,
+  const float* A, const float* k,
+  int interpolate );
+
+  CV_EXPORTS void  cvUnDistort( const CvArr* src, CvArr* dst,
+  const CvArr* undistortion_map,
+  int interpolate );
+*)
+
+procedure cvUnDistortInit(const src: pCvArr; undistortion_map: pCvArr; const A: PSingle; const k: PSingle; interpolate: Integer); cdecl;
+procedure cvUnDistort(const src: pCvArr; dst: pCvArr; const undistortion_map: pCvArr; interpolate: Integer); cdecl;
+
+(*
+  Find fundamental matrix
+
+  CV_EXPORTS void  cvFindFundamentalMatrix( int* points1, int* points2,
+  int numpoints, int method, float* matrix );
+*)
+
+procedure cvFindFundamentalMatrix(Var points1: Integer; Var points2: Integer; numpoints: Integer; method: Integer;
+  Var matrix: Single); cdecl;
+
+(*
+  CV_EXPORTS int cvFindChessBoardCornerGuesses( const void* arr, void* thresharr,
+  CvMemStorage* storage,
+  CvSize pattern_size, CvPoint2D32f * corners,
+  int *corner_count );
+*)
+function cvFindChessBoardCornerGuesses(const arr: Pointer; thresharr: Pointer; storage: pCvMemStorage; pattern_size: TCvSize;
+  corners: PCvPoint2D32f; corner_count: pInteger): Integer; cdecl;
+
+(*
+  Calibrates camera using multiple views of calibration pattern
+
+  CV_EXPORTS void cvCalibrateCamera( int image_count, int* _point_counts,
+  CvSize image_size, CvPoint2D32f* _image_points, CvPoint3D32f* _object_points,
+  float* _distortion_coeffs, float* _camera_matrix, float* _translation_vectors,
+  float* _rotation_matrices, int flags );
+*)
+procedure cvCalibrateCamera(image_count: Integer; Var _point_counts: Integer; image_size: TCvSize; _image_points: PCvPoint2D32f;
+  _object_points: PCvPoint3D32f; _distortion_coeffs: PSingle; _camera_matrix: PSingle; _translation_vectors: PSingle;
+  _rotation_matrices: PSingle; flags: Integer); cdecl;
+
+(*
+  CV_EXPORTS void cvCalibrateCamera_64d( int image_count, int* _point_counts,
+  CvSize image_size, CvPoint2D64f* _image_points, CvPoint3D64f* _object_points,
+  double* _distortion_coeffs, double* _camera_matrix, double* _translation_vectors,
+  double* _rotation_matrices, int flags );
+*)
+procedure cvCalibrateCamera_64d(image_count: Integer; Var _point_counts: Integer; image_size: TCvSize; _image_points: PCvPoint2D64f;
+  _object_points: PCvPoint3D64f; _distortion_coeffs: PDouble; _camera_matrix: PDouble; _translation_vectors: PDouble;
+  _rotation_matrices: PDouble; flags: Integer); cdecl;
+
+(*
+  Find 3d position of object given intrinsic camera parameters,
+  3d model of the object and projection of the object into view plane
+
+  CV_EXPORTS void cvFindExtrinsicCameraParams( int point_count,
+  CvSize image_size, CvPoint2D32f* _image_points,
+  CvPoint3D32f* _object_points, float* focal_length,
+  CvPoint2D32f principal_point, float* _distortion_coeffs,
+  float* _rotation_vector, float* _translation_vector );
+*)
+
+procedure cvFindExtrinsicCameraParams(point_count: Integer; image_size: TCvSize; _image_points: PCvPoint2D32f;
+  _object_points: PCvPoint3D32f; focal_length: PSingle; principal_point: TCvPoint2D32f; _distortion_coeffs: PSingle;
+  _rotation_vector: PSingle; _translation_vector: PSingle); cdecl;
+
+(*
+  Variant of the previous function that takes double-precision parameters
+
+  CV_EXPORTS void cvFindExtrinsicCameraParams_64d( int point_count,
+  CvSize image_size, CvPoint2D64f* _image_points,
+  CvPoint3D64f* _object_points, double* focal_length,
+  CvPoint2D64f principal_point, double* _distortion_coeffs,
+  double* _rotation_vector, double* _translation_vector );
+*)
+
+procedure cvFindExtrinsicCameraParams_64d(point_count: Integer; image_size: TCvSize; _image_points: PCvPoint2D64f;
+  _object_points: PCvPoint3D64f; focal_length: PDouble; principal_point: TCvPoint2D64f; _distortion_coeffs: PDouble;
+  _rotation_vector: PDouble; _translation_vector: PDouble); cdecl;
+
+const
+  (* Rodrigues transform *)
+  CV_RODRIGUES_M2V = 0;
+  CV_RODRIGUES_V2M = 1;
+
+  (*
+    Converts rotation_matrix matrix to rotation_matrix vector or vice versa
+
+    CV_EXPORTS void  cvRodrigues( CvMat* rotation_matrix, CvMat* rotation_vector,
+    CvMat* jacobian, int conv_type );
+  *)
+procedure cvRodrigues(rotation_matrix: PCvMat; rotation_vector: PCvMat; jacobian: PCvMat; conv_type: Integer); cdecl;
+
+(*
+  Does reprojection of 3d object points to the view plane
+
+  CV_EXPORTS void  cvProjectPoints( int point_count, CvPoint3D64f* _object_points,
+  double* _rotation_vector, double*  _translation_vector,
+  double* focal_length, CvPoint2D64f principal_point,
+  double* _distortion, CvPoint2D64f* _image_points,
+  double* _deriv_points_rotation_matrix,
+  double* _deriv_points_translation_vect,
+  double* _deriv_points_focal,
+  double* _deriv_points_principal_point,
+  double* _deriv_points_distortion_coeffs );
+*)
+
+procedure cvProjectPoints(point_count: Integer; _object_points: PCvPoint3D64f; _rotation_vector: PDouble; _translation_vector: PDouble;
+  focal_length: PDouble; principal_point: TCvPoint2D64f; _distortion: PDouble; _image_points: PCvPoint2D64f;
+  _deriv_points_rotation_matrix: PDouble; _deriv_points_translation_vect: PDouble; _deriv_points_focal: PDouble;
+  _deriv_points_principal_point: PDouble; _deriv_points_distortion_coeffs: PDouble); cdecl;
+
+(*
+  Simpler version of the previous function
+
+  CV_EXPORTS void  cvProjectPointsSimple( int point_count, CvPoint3D64f* _object_points,
+  double* _rotation_matrix, double*  _translation_vector,
+  double* _camera_matrix, double* _distortion, CvPoint2D64f* _image_points );
+*)
+
+procedure cvProjectPointsSimple(point_count: Integer; _object_points: PCvPoint3D64f; _rotation_matrix: PDouble;
+  _translation_vector: PDouble; _camera_matrix: PDouble; _distortion: PDouble; _image_points: PCvPoint2D64f); cdecl;
+
 // #define cvMake2DPoints cvConvertPointsHomogeneous
 // #define cvMake3DPoints cvConvertPointsHomogeneous
 //
 // #define cvWarpPerspectiveQMatrix cvGetPerspectiveTransform
 //
 // #define cvConvertPointsHomogenious cvConvertPointsHomogeneous
-//
-//
+
 /// /////////////////////////////////// feature extractors: obsolete API //////////////////////////////////
 
 type
@@ -718,19 +871,20 @@ type
   // CVAPI(CvSURFParams) cvSURFParams( double hessianThreshold, int extended CV_DEFAULT(0) );
 function cvSURFParams(hessianThreshold: double; _extended: Integer = 0): TCvSURFParams; cdecl;
 
-/// / If useProvidedKeyPts!=0, keypoints are not detected, but descriptors are computed
-/// /  at the locations provided in keypoints (a CvSeq of CvSURFPoint).
-// CVAPI(void) cvExtractSURF( const CvArr* img, const CvArr* mask,
-// CvSeq** keypoints, CvSeq** descriptors,
-// CvMemStorage* storage, CvSURFParams params,
-// int useProvidedKeyPts CV_DEFAULT(0)  );
-procedure cvExtractSURF(const img: pCvArr; const mask: pCvArr; keypoints: ppCvSeq; descriptors: ppCvSeq;
-  storage: pCvMemStorage; params: TCvSURFParams; useProvidedKeyPts: Integer = 0); cdecl;
+(*
+  If useProvidedKeyPts!=0, keypoints are not detected, but descriptors are computed
+  at the locations provided in keypoints (a CvSeq of CvSURFPoint).
+
+  CVAPI(void) cvExtractSURF( const CvArr* img, const CvArr* mask,
+  CvSeq** keypoints, CvSeq** descriptors,
+  CvMemStorage* storage, CvSURFParams params,
+  int useProvidedKeyPts CV_DEFAULT(0)  );
+*)
+procedure cvExtractSURF(const img: pCvArr; const mask: pCvArr; keypoints: ppCvSeq; descriptors: ppCvSeq; storage: pCvMemStorage;
+  params: TCvSURFParams; useProvidedKeyPts: Integer = 0); cdecl;
 
 Type
-  (*
-    Maximal Stable Regions Parameters
-  *)
+  (* Maximal Stable Regions Parameters *)
   (* typedef struct CvMSERParams
     {
     //! delta, in the code, it compares (size_{i}-size_{i-delta})/size_{i-delta}
@@ -788,30 +942,43 @@ Type
     double min_margin CV_DEFAULT(.003),
     int edge_blur_size CV_DEFAULT(5) );
   *)
-function cvMSERParams(delta: Integer = 5; min_area: Integer = 60; max_area: Integer = 14400;
-  max_variation: float = 0.25; min_diversity: float = 0.2; max_evolution: Integer = 200; area_threshold: double = 1.01;
-  min_margin: double = 0.003; edge_blur_size: Integer = 5): TCvMSERParams; cdecl;
+function cvMSERParams(delta: Integer = 5; min_area: Integer = 60; max_area: Integer = 14400; max_variation: float = 0.25;
+  min_diversity: float = 0.2; max_evolution: Integer = 200; area_threshold: double = 1.01; min_margin: double = 0.003;
+  edge_blur_size: Integer = 5): TCvMSERParams; cdecl;
 
-/// / Extracts the contours of Maximally Stable Extremal Regions
-// CVAPI(void) cvExtractMSER( CvArr* _img, CvArr* _mask, CvSeq** contours, CvMemStorage* storage, CvMSERParams params );
-//
-//
-// typedef struct CvStarKeypoint
-// {
-// CvPoint pt;
-// int size;
-// float response;
-// } CvStarKeypoint;
-//
-// CV_INLINE CvStarKeypoint cvStarKeypoint(CvPoint pt, int size, float response)
-// {
-// CvStarKeypoint kpt;
-// kpt.pt = pt;
-// kpt.size = size;
-// kpt.response = response;
-// return kpt;
-// }
+(*
+  Extracts the contours of Maximally Stable Extremal Regions
+
+  CVAPI(void) cvExtractMSER( CvArr* _img, CvArr* _mask, CvSeq** contours, CvMemStorage* storage, CvMSERParams params );
+*)
+procedure cvExtractMSER(_img: pCvArr; _mask: pCvArr; Var contours: PCvSeq; storage: pCvMemStorage; params: TCvMSERParams); cdecl;
+
 Type
+  (*
+    typedef struct CvStarKeypoint
+    {
+    CvPoint pt;
+    int size;
+    float response;
+    } CvStarKeypoint;
+  *)
+  TCvStarKeypoint = record
+    pt: TCvPoint;
+    size: Integer;
+    response: Single;
+  end;
+
+  (*
+    CV_INLINE CvStarKeypoint cvStarKeypoint(CvPoint pt, int size, float response)
+    {
+    CvStarKeypoint kpt;
+    kpt.pt = pt;
+    kpt.size = size;
+    kpt.response = response;
+    return kpt;
+    }
+  *)
+
   (* typedef struct CvStarDetectorParams
     {
     int maxSize;
@@ -850,16 +1017,15 @@ Type
     // return params;
     // }
   *)
-function cvStarDetectorParams(maxSize: Integer = 45; responseThreshold: Integer = 30;
-  lineThresholdProjected: Integer = 10; lineThresholdBinarized: Integer = 8; suppressNonmaxSize: Integer = 5)
-  : TCvStarDetectorParams; inline;
+function cvStarDetectorParams(maxSize: Integer = 45; responseThreshold: Integer = 30; lineThresholdProjected: Integer = 10;
+  lineThresholdBinarized: Integer = 8; suppressNonmaxSize: Integer = 5): TCvStarDetectorParams; inline;
 
 (*
   CVAPI(CvSeq* ) cvGetStarKeypoints( const CvArr* img, CvMemStorage* storage,
   CvStarDetectorParams params CV_DEFAULT(cvStarDetectorParams()));
 *)
 function cvGetStarKeypoints(const img: pCvArr; storage: pCvMemStorage;
-  params: TCvStarDetectorParams { = CV_DEFAULT(cvStarDetectorParams()) } ): pCvSeq; cdecl;
+  params: TCvStarDetectorParams { = CV_DEFAULT(cvStarDetectorParams()) } ): PCvSeq; cdecl;
 
 implementation
 
@@ -926,9 +1092,8 @@ function cvMSERParams; external libname;
 procedure cvExtractMSER; external libname;
 function cvGetStarKeypoints; external libname;
 
-function cvStarDetectorParams(maxSize: Integer = 45; responseThreshold: Integer = 30;
-  lineThresholdProjected: Integer = 10; lineThresholdBinarized: Integer = 8; suppressNonmaxSize: Integer = 5)
-  : TCvStarDetectorParams; inline;
+function cvStarDetectorParams(maxSize: Integer = 45; responseThreshold: Integer = 30; lineThresholdProjected: Integer = 10;
+  lineThresholdBinarized: Integer = 8; suppressNonmaxSize: Integer = 5): TCvStarDetectorParams; inline;
 begin
   Result.maxSize := maxSize;
   Result.responseThreshold := responseThreshold;

@@ -90,6 +90,7 @@ begin
   yy := Trunc(O.Image.Height * Y / O.Height);
   SelectedPixel := O.Image.Pixel[xx, yy];
   UpdateTrack;
+  chk1.Enabled:=True;
 end;
 
 procedure TForm1.UpdateTrack;
