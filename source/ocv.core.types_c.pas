@@ -120,7 +120,7 @@ procedure strcat(var str1: pCVChar; const str2: pCVChar);
 type
   uchar = Byte;
 {$EXTERNALSYM uchar}
-  puchar=PByte;
+  puchar = PByte;
   ushort = Word;
 {$EXTERNALSYM ushort}
   schar = ShortInt;
@@ -370,11 +370,11 @@ type
     imageId: Pointer; (* "           " *)
     tileInfo: pIplTileInfo; (* "           " *)
     imageSize: Integer; (* Image data size in bytes *)
-    imageData: pByte; (* Pointer to aligned image data. *)
+    imageData: PByte; (* Pointer to aligned image data. *)
     widthStep: Integer; (* Size of aligned image row in bytes. *)
     BorderMode: array [0 .. 3] of Integer; (* Ignored by ocv. *)
     BorderConst: array [0 .. 3] of Integer; (* Ditto. *)
-    imageDataOrigin: pByte; (* Pointer to very origin of image data *)
+    imageDataOrigin: PByte; (* Pointer to very origin of image data *)
   end;
 
   TcvImage = TIplImage;
@@ -619,7 +619,7 @@ type
   end;
 
   TCvMatNDdata = record
-    ptr: pByte;
+    ptr: PByte;
     fl: pSingle;
     db: pDouble;
     i: PInteger;
@@ -846,8 +846,8 @@ type
 
   TCvScalar = record
     val: array [0 .. 3] of Double;
-    class operator LessThan(a,b: TCvScalar): boolean;
-    class operator GreaterThan(a,b: TCvScalar): boolean;
+    class operator LessThan(a, b: TCvScalar): boolean;
+    class operator GreaterThan(a, b: TCvScalar): boolean;
   end;
 
   (* ************************************************************************************** *)
@@ -1624,8 +1624,7 @@ Type
   // typedef void* (CV_CDECL *CvReadFunc)( CvFileStorage* storage, CvFileNode* node );
   TCvReadFunc = function(storage: pCvFileStorage; node: pCvFileNode): Pointer; cdecl;
   // typedef void (CV_CDECL *CvWriteFunc)( CvFileStorage* storage, const char* name,const void* struct_ptr, CvAttrList attributes );
-  TCvWriteFunc = procedure(storage: pCvFileStorage; const name: pCVChar; const struct_ptr: pPointer;
-    attributes: TCvAttrList); cdecl;
+  TCvWriteFunc = procedure(storage: pCvFileStorage; const name: pCVChar; const struct_ptr: pPointer; attributes: TCvAttrList); cdecl;
   // typedef void* (CV_CDECL *CvCloneFunc)( const void* struct_ptr );
   TCvCloneFunc = function(const struct_ptr: pPointer): Pointer; cdecl;
 
@@ -2205,26 +2204,28 @@ function cvPointFrom32f(point: TCvPoint2D32f): TCvPoint; {$IFDEF USE_INLINE}inli
 // }
 
 function cvRealScalar(val0: Double): TCvScalar; {$IFDEF USE_INLINE}inline; {$ENDIF}
-// (*************************************************************************************** *)
-// (* Dynamic Data structures *)
-// (*************************************************************************************** *)
-// (* ******************************* Memory storage *************************************** *)
-// (*
-// const
-// CV_IS_STORAGE(storage)((storage) <> 0 and (((CvMemStorage(storage))^.signature and CV_MAGIC_MASK)
-// = CV_STORAGE_MAGIC_VAL)
-// *)
-//
-// (* ********************************** Sequence ****************************************** *)
-//
-// (* ************************************** Set ******************************************* *)
-// (*
-// { Checks whether the element pointed by ptr belongs to a set or not }
-// CV_IS_SET_ELEM(ptr)(((CvSetElem(ptr))^.flags >= 0)
-// *)
+(* ************************************************************************************** *)
+(* Dynamic Data structures *)
+(* ************************************************************************************** *)
+(* ******************************* Memory storage *************************************** *)
+(*
+  const
+  CV_IS_STORAGE(storage)((storage) <> 0 and (((CvMemStorage(storage))^.signature and CV_MAGIC_MASK)
+  = CV_STORAGE_MAGIC_VAL)
+*)
 
-// (* ********************************** CvTermCriteria ************************************ *)
-// (* CV_INLINE CvTermCriteria CvTermCriteria(Integer cType, Integer max_iter, Double epsilon)
+(* ********************************** Sequence ****************************************** *)
+
+(* ************************************** Set ******************************************* *)
+(*
+  { Checks whether the element pointed by ptr belongs to a set or not }
+  CV_IS_SET_ELEM(ptr)(((CvSetElem(ptr))^.flags >= 0)
+*)
+
+(* ********************************** CvTermCriteria ************************************ *)
+(*
+  CV_INLINE CvTermCriteria CvTermCriteria(Integer cType, Integer max_iter, Double epsilon)
+*)
 function CvTermCriteria(_type: Integer; max_iter: Integer; epsilon: Double): TCvTermCriteria; {$IFDEF USE_INLINE}inline;
 {$ENDIF}
 (*
@@ -2256,8 +2257,7 @@ function cvScalarAll(val0123: Double): TCvScalar; {$IFDEF USE_INLINE}inline; {$E
 function cvPoint(const x: Integer = 0; const y: Integer = 0): TCvPoint; {$IFDEF USE_INLINE}inline; {$ENDIF}
 function CvPoint2f(const x: Single = 0; const y: Single = 0): TcvPoint2f; {$IFDEF USE_INLINE}inline; {$ENDIF}
 function CvSize(const width, height: Integer): TCvSize; {$IFDEF USE_INLINE}inline; {$ENDIF}
-function CvScalar(const val0: Double; const val1: Double = 0; const val2: Double = 0; const val3: Double = 0)
-  : TCvScalar;
+function CvScalar(const val0: Double; const val1: Double = 0; const val2: Double = 0; const val3: Double = 0): TCvScalar;
 {$IFDEF USE_INLINE}inline; {$ENDIF}
 function cvRandInt(Var rng: TCvRNG): Cardinal; {$IFDEF USE_INLINE}inline; {$ENDIF}
 function CvRect(Const x, y, width, height: Integer): TCvRect; {$IFDEF USE_INLINE}inline; {$ENDIF}
@@ -2405,8 +2405,7 @@ end;
 
 function CV_ELEM_SIZE;
 begin
-  Result := (CV_MAT_CN(_type) shl ((((SizeOf(NativeInt) div 4 + 1) * (16384 or $3A50)) shr CV_MAT_DEPTH(_type) *
-    2) and 3));
+  Result := (CV_MAT_CN(_type) shl ((((SizeOf(NativeInt) div 4 + 1) * (16384 or $3A50)) shr CV_MAT_DEPTH(_type) * 2) and 3));
 end;
 
 function CV_32SC1: Integer;
@@ -2725,8 +2724,8 @@ end;
 function CV_IMAGE_ELEM(image: pIplImage; size_elemtype, row, col: Integer): Pointer; {$IFDEF USE_INLINE}inline; {$ENDIF}
 begin
   // (((elemtype*)((image)->imageData + (image)->widthStep*(row)))[(col)])
-  Result := {$IFDEF DELPHI7}Pointer({$ENDIF DELPHI7}{$IFDEF DELPHI2005_UP}pByte{$ELSE}Integer{$ENDIF}(image^.imageData)
-    + image^.widthStep * row + col * size_elemtype{$IFDEF DELPHI7}){$ENDIF DELPHI7};
+  Result := {$IFDEF DELPHI7}Pointer({$ENDIF DELPHI7}{$IFDEF DELPHI2005_UP}PByte{$ELSE}Integer{$ENDIF}(image^.imageData) + image^.widthStep *
+    row + col * size_elemtype{$IFDEF DELPHI7}){$ENDIF DELPHI7};
 end;
 
 function cvRealScalar(val0: Double): TCvScalar; {$IFDEF USE_INLINE}inline; {$ENDIF}
@@ -2813,12 +2812,12 @@ end;
 {$ENDIF}
 { TCvScalar }
 
-class operator TCvScalar.GreaterThan(a,b: TCvScalar): boolean;
+class operator TCvScalar.GreaterThan(a, b: TCvScalar): boolean;
 begin
   Result := (a.val[0] > b.val[0]) and (a.val[1] > b.val[1]) and (a.val[2] > b.val[2]) and (a.val[3] >= b.val[3]);
 end;
 
-class operator TCvScalar.LessThan(a,b: TCvScalar): boolean;
+class operator TCvScalar.LessThan(a, b: TCvScalar): boolean;
 begin
   Result := (a.val[0] < b.val[0]) and (a.val[1] < b.val[1]) and (a.val[2] < b.val[2]) and (a.val[3] <= b.val[3]);
 end;

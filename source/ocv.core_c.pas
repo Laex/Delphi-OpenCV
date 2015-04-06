@@ -576,8 +576,8 @@ procedure cvGetRawData(arr: pCvArr; data: pByte; step: pInteger = nil; roi_size:
 { Returns width and height of array in elements
   CVAPI(CvSize) cvGetSize( const pCvArr* arr );
 }
-function cvGetSize(const arr: pCvArr): TCvSize; // cdecl;
-procedure _cvGetSize(const arr: pCvArr; Var size: TCvSize); cdecl;
+function cvGetSize(const arr: pCvArr): TCvSize; {$IF DEFINED(DelphiOCVVersion_30)}cdecl; {$ENDIF}
+// procedure _cvGetSize(const arr: pCvArr; Var size: TCvSize); cdecl;
 
 { Copies source array to destination array */
   CVAPI(void)  cvCopy( const pCvArr* src, pCvArr* dst,
@@ -1783,15 +1783,18 @@ procedure cvRemoveNodeFromTree(node: Pointer; frame: Pointer); cdecl;
 // CVAPI(CvSeq*) cvTreeToNodeSeq( const void* first, int header_size,CvMemStorage* storage );
 function cvTreeToNodeSeq(const first: Pointer; header_size: Integer; storage: pCvMemStorage): pCvSeq; cdecl;
 
-// * The function implements the K-means algorithm for clustering an array of sample
-// vectors in a specified number of classes */
+(*
+  The function implements the K-means algorithm for clustering an array of sample
+  vectors in a specified number of classes
+
+  CVAPI(int) cvKMeans2( const CvArr* samples, int cluster_count, CvArr* labels,
+  CvTermCriteria termcrit, int attempts CV_DEFAULT(1),
+  CvRNG* rng CV_DEFAULT(0), int flags CV_DEFAULT(0),
+  CvArr* _centers CV_DEFAULT(0), double* compactness CV_DEFAULT(0) );
+*)
 const
   CV_KMEANS_USE_INITIAL_LABELS = 1;
 
-  // CVAPI(int) cvKMeans2( const CvArr* samples, int cluster_count, CvArr* labels,
-  // CvTermCriteria termcrit, int attempts CV_DEFAULT(1),
-  // CvRNG* rng CV_DEFAULT(0), int flags CV_DEFAULT(0),
-  // CvArr* _centers CV_DEFAULT(0), double* compactness CV_DEFAULT(0) );
 function cvKMeans2(const samples: pCvArr; cluster_count: Integer; labels: pCvArr; termcrit: TCvTermCriteria; attempts: Integer = 1;
   rng: pCvRNG = nil; flags: Integer = 0; _centers: pCvArr = nil; compactness: pDouble = nil): Integer; cdecl;
 
@@ -2025,8 +2028,8 @@ function cvLoad(const filename: pCvChar; memstorage: pCvMemStorage = Nil; const 
 
 { helper functions for RNG initialization and accurate time measurement:
   uses internal clock counter on x86 }
-function cvGetTickCount: int64; {$IFDEF USE_INLINE}inline; {$ENDIF}
-function cvGetTickFrequency: double;
+function cvGetTickCount: int64; cdecl; // {$IFDEF USE_INLINE}inline; {$ENDIF}
+function cvGetTickFrequency: double; cdecl;
 
 // *********************************** CPU capabilities ***********************************/
 // CVAPI(int) cvCheckHardwareSupport(int feature);
@@ -2302,10 +2305,8 @@ procedure cvReleaseData; external core_lib;
 procedure cvSetData; external core_lib;
 procedure cvGetRawData; external core_lib;
 
-procedure _cvGetSize(const arr: pCvArr;
-
-  Var size: TCvSize); external core_lib name 'cvGetSize';
-
+{$IF DEFINED(DelphiOCVVersion_29)}
+procedure _cvGetSize(const arr: pCvArr; Var size: TCvSize); cdecl; external core_lib name 'cvGetSize';
 {$IFDEF CPU32}
 
 function cvGetSize(const arr: pCvArr): TCvSize; assembler;
@@ -2331,6 +2332,9 @@ asm
   mov Result.height,eax
 end;
 {$ENDIF CPU64}
+{$ELSEIF DEFINED(DelphiOCVVersion_30)}
+function cvGetSize(const arr: pCvArr): TCvSize; external core_lib;
+{$ENDIF}
 procedure cvCopy; external core_lib;
 procedure cvSet(arr: pCvArr; value: TCvScalar;
 
@@ -2521,26 +2525,29 @@ end;
 procedure cvRelease(var struct_ptr: Pointer); external core_lib name 'cvRelease';
 procedure cvRelease(var struct_ptr: pCvSeq); external core_lib name 'cvRelease';
 
-{$IFDEF MSWINDOWS}
+// {$IFDEF MSWINDOWS}
+//
+// function cvGetTickCount;
+// begin
+// result := GetTickCount;
+// end;
+//
+// function GetTickFrequency: double;
+// Var
+// freq: TLargeInteger;
+// begin
+// QueryPerformanceFrequency(freq);
+// result := freq;
+// end;
+// {$ENDIF ~MSWINDOWS}
+//
+// function cvGetTickFrequency: double;
+// begin
+// result := GetTickFrequency() * 1E-6;
+// end;
 
-function cvGetTickCount;
-begin
-  result := GetTickCount;
-end;
-
-function GetTickFrequency: double;
-Var
-  freq: TLargeInteger;
-begin
-  QueryPerformanceFrequency(freq);
-  result := freq;
-end;
-{$ENDIF ~MSWINDOWS}
-
-function cvGetTickFrequency: double;
-begin
-  result := GetTickFrequency() * 1E-6;
-end;
+function cvGetTickCount; external core_lib;
+function cvGetTickFrequency; external core_lib;
 
 function cvCheckHardwareSupport; external core_lib;
 function cvGetNumThreads; external core_lib;

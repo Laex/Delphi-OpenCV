@@ -1,26 +1,27 @@
-//*****************************************************************
-  //                       Delphi-OpenCV Demo
-  //               Copyright (C) 2013 Project Delphi-OpenCV
-  // ****************************************************************
-  // Contributor:
-  // Mikhail Grigorev
-  // email: sleuthhound@gmail.com
-  // ****************************************************************
-  // You may retrieve the latest version of this file at the GitHub,
-  // located at git://github.com/Laex/Delphi-OpenCV.git
-  // ****************************************************************
-  // The contents of this file are used with permission, subject to
-  // the Mozilla Public License Version 1.1 (the "License"); you may
-  // not use this file except in compliance with the License. You may
-  // obtain a copy of the License at
-  // http://www.mozilla.org/MPL/MPL-1_1Final.html
-  //
-  // Software distributed under the License is distributed on an
-  // "AS IS" basis, WITHOUT WARRANTY OF ANY KIND, either express or
-  // implied. See the License for the specific language governing
-  // rights and limitations under the License.
-  //*******************************************************************
+(*
+  *****************************************************************
+  Delphi-OpenCV Demo
+  Copyright (C) 2013 Project Delphi-OpenCV
+  ****************************************************************
+  Contributor:
+  Mikhail Grigorev
+  email: sleuthhound@gmail.com
+  ****************************************************************
+  You may retrieve the latest version of this file at the GitHub,
+  located at git://github.com/Laex/Delphi-OpenCV.git
+  ****************************************************************
+  The contents of this file are used with permission, subject to
+  the Mozilla Public License Version 1.1 (the "License"); you may
+  not use this file except in compliance with the License. You may
+  obtain a copy of the License at
+  http://www.mozilla.org/MPL/MPL-1_1Final.html
 
+  Software distributed under the License is distributed on an
+  "AS IS" basis, WITHOUT WARRANTY OF ANY KIND, either express or
+  implied. See the License for the specific language governing
+  rights and limitations under the License.
+  *******************************************************************
+*)
 
 program MotionDetect;
 
@@ -38,8 +39,8 @@ uses
   ocv.imgproc.types_c;
 
 {$DEFINE RECT}
-//{$DEFINE RECT} - using cvBoundingRect - work correctly
-//{DEFINE RECT} - not defined RECT - using cvMinAreaRect2
+// {$DEFINE RECT} - using cvBoundingRect - work correctly
+// {DEFINE RECT} - not defined RECT - using cvMinAreaRect2
 
 var
   storage: pCvMemStorage = nil;
@@ -58,7 +59,7 @@ var
   key: integer;
   first: boolean = true;
 
-// Удаление мелких контуров
+  // Удаление мелких контуров
 function remove_small_objects(img_in: pIplImage; size: integer): pIplImage;
 var
   img_out: pIplImage;
@@ -67,11 +68,11 @@ var
   black, white: TCvScalar;
   area: double;
 begin
-  img_out := cvCloneImage(img_in);  // Клонируем изображение
+  img_out := cvCloneImage(img_in); // Клонируем изображение
   s_storage := cvCreateMemStorage(0); // Создаем хранилище
   s_contours := nil;
-  black := CV_RGB(0, 0, 0);         // Черный цвет
-  white := CV_RGB(255, 255, 255);   // Белый цвет
+  black := CV_RGB(0, 0, 0); // Черный цвет
+  white := CV_RGB(255, 255, 255); // Белый цвет
   s_contours := AllocMem(SizeOf(TCvSeq));
   // Ищем контуры на изображении
   cvClearMemStorage(s_storage);
@@ -79,7 +80,7 @@ begin
   while (s_contours <> nil) do
   begin
     area := cvContourArea(s_contours, CV_WHOLE_SEQ);
-    if abs(area) <= size then  // Если площадь меньше порога, то удаляем
+    if abs(area) <= size then // Если площадь меньше порога, то удаляем
       cvDrawContours(img_out, s_contours, black, black, -1, CV_FILLED, 8, cvPoint(0, 0))
     else
       cvDrawContours(img_out, s_contours, white, white, -1, CV_FILLED, 8, cvPoint(0, 0));
@@ -125,13 +126,12 @@ begin
       begin
 {$IFDEF RECT}
         rect := cvBoundingRect(c, 0);
-        cvRectangle(frame, cvPoint(rect.x, rect.y), cvPoint(rect.x + rect.width, rect.y + rect.height),
-          cvScalar(0, 0, 255, 0), 2, 8, 0);
+        cvRectangle(frame, cvPoint(rect.x, rect.y), cvPoint(rect.x + rect.width, rect.y + rect.height), cvScalar(0, 0, 255, 0), 2, 8, 0);
 {$ELSE}
         rect2d := cvMinAreaRect2(c);
-        cvRectangle(frame, cvPoint(Round(rect2d.center.x - rect2d.size.width / 2),
-          Round(rect2d.center.y - rect2d.size.height / 2)), cvPoint(Round(rect2d.center.x + rect2d.size.width / 2),
-          Round(rect2d.center.y + rect2d.size.height / 2)), cvScalar(0, 0, 255, 0), 2, 8, 0);
+        cvRectangle(frame, cvPoint(Round(rect2d.center.x - rect2d.size.width / 2), Round(rect2d.center.y - rect2d.size.height / 2)),
+          cvPoint(Round(rect2d.center.x + rect2d.size.width / 2), Round(rect2d.center.y + rect2d.size.height / 2)),
+          cvScalar(0, 0, 255, 0), 2, 8, 0);
 {$ENDIF}
         c := c.h_next;
       end;

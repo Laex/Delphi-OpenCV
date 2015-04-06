@@ -7,7 +7,7 @@
         <TargetedPlatforms>3</TargetedPlatforms>
         <AppType>Application</AppType>
         <FrameworkType>VCL</FrameworkType>
-        <ProjectVersion>16.0</ProjectVersion>
+        <ProjectVersion>16.1</ProjectVersion>
         <Platform Condition="'$(Platform)'==''">Win32</Platform>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Config)'=='Base' or '$(Base)'!=''">
@@ -110,13 +110,13 @@
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2_Win32)'!=''">
         <DCC_DcuOutput>.\$(Platform)\$(Config)</DCC_DcuOutput>
-        <VerInfo_Build>1</VerInfo_Build>
+        <VerInfo_Build>2</VerInfo_Build>
         <DCC_MapFile>3</DCC_MapFile>
         <VerInfo_AutoIncVersion>true</VerInfo_AutoIncVersion>
         <VerInfo_Locale>1033</VerInfo_Locale>
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
         <DCC_ExeOutput>..\..\..\bin\$(Platform)</DCC_ExeOutput>
-        <VerInfo_Keys>CompanyName=Mikhail Grigorev;FileDescription=LockWorkstation;FileVersion=1.0.0.1;InternalName=LockWorkstation;LegalCopyright=Mikhail Grigorev;LegalTrademarks=Mikhail Grigorev;OriginalFilename=LockWorkstation;ProductName=LockWorkstation;ProductVersion=1.0.0.0;Comments=www.im-history.ru</VerInfo_Keys>
+        <VerInfo_Keys>CompanyName=Mikhail Grigorev;FileDescription=LockWorkstation;FileVersion=1.0.0.2;InternalName=LockWorkstation;LegalCopyright=Mikhail Grigorev;LegalTrademarks=Mikhail Grigorev;OriginalFilename=LockWorkstation;ProductName=LockWorkstation;ProductVersion=1.0.0.0;Comments=www.im-history.ru</VerInfo_Keys>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2_Win64)'!=''">
         <DCC_DcuOutput>.\$(Platform)\$(Config)</DCC_DcuOutput>
@@ -203,3 +203,11 @@
     <Import Project="$(BDS)\Bin\CodeGear.Delphi.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Delphi.Targets')"/>
     <Import Project="$(APPDATA)\Embarcadero\$(BDSAPPDATABASEDIR)\$(PRODUCTVERSION)\UserTools.proj" Condition="Exists('$(APPDATA)\Embarcadero\$(BDSAPPDATABASEDIR)\$(PRODUCTVERSION)\UserTools.proj')"/>
 </Project>
+
+<!-- EurekaLog First Line
+[Exception Log]
+EurekaLog Version=7007
+Activate=0
+DeleteMapAfterCompile=1
+Encrypt Password=""
+EurekaLog Last Line -->

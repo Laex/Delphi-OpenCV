@@ -1,6 +1,13 @@
 {$IFNDEF OPENCV_INC}
 {$DEFINE OPENCV_INC}
 
+{$DEFINE DelphiOCVVersion_29}
+{.$DEFINE DelphiOCVVersion_30}
+
+{$IF DEFINED(DelphiOCVVersion_29) and DEFINED(DelphiOCVVersion_30)}
+        Error!!
+{$ENDIF}
+
 {$IFDEF DEBUG}
 {$A8,B-,C+,D+,E-,F-,G+,H+,I+,J+,K-,L+,M-,N+,O-,P+,Q+,R+,S-,T-,U-,V+,W+,X+,Y+,Z1}
 {$ELSE}

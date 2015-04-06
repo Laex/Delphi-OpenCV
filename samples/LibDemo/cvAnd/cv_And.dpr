@@ -106,16 +106,17 @@ end;
 Var
   framemin, framemax: Double;
   c: Integer;
-  S: TCvSize;
+  // S: TCvSize;
 
 begin
   try
     // получаем картинку
     image := cvLoadImage(filename);
     WriteLn(Format('[i] image: %s', [filename]));
-
     // cоздаём картинки
-    S := cvGetSize(image);
+    // S := cvGetSize(image);
+    // S := cvGetSize(image);
+    // ccvGetSize(image, S);
     rgb := cvCreateImage(cvGetSize(image), IPL_DEPTH_8U, 3);
     r_plane := cvCreateImage(cvGetSize(image), IPL_DEPTH_8U, 1);
     g_plane := cvCreateImage(cvGetSize(image), IPL_DEPTH_8U, 1);
