@@ -53,9 +53,9 @@ unit ocv.core_c;
 interface
 
 uses
-{$IFDEF MSWINDOWS}
-  WinApi.Windows,
-{$ENDIF ~MSWINDOWS}
+//{$IFDEF MSWINDOWS}
+//  WinApi.Windows,
+//{$ENDIF ~MSWINDOWS}
   ocv.core.types_c;
 
 { ****************************************************************************************

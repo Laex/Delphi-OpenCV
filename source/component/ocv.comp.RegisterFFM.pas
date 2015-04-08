@@ -6,8 +6,6 @@
   Contributor:
   Laentir Valetov
   email:laex@bk.ru
-  Mikhail Grigorev
-  email:sleuthound@gmail.com
   ****************************************************************
   You may retrieve the latest version of this file at the GitHub,
   located at git://github.com/Laex/Delphi-OpenCV.git
@@ -24,9 +22,10 @@
   rights and limitations under the License.
   *******************************************************************
 *)
+
 {$IFNDEF CLR}
 {$I OpenCV.inc}
-unit ocv.comp.RegisterVCL;
+unit ocv.comp.RegisterFFM;
 {$ENDIF}
 
 interface
@@ -35,10 +34,7 @@ procedure Register;
 
 implementation
 
-{$R OpenCV.dcr}
-
 uses
-  Windows,
 {$IFDEF CLR}
   Borland.Vcl.Design.DesignEditors, Borland.Vcl.Design.DesignIntf,
 {$ELSE}
@@ -47,73 +43,24 @@ uses
 {$ELSE}
 {$IFDEF HAS_UNITSCOPE}
   System.Classes,
-  Vcl.Graphics,
 {$ELSE ~HAS_UNITSCOPE}
   Classes,
-  Graphics,
 {$ENDIF ~HAS_UNITSCOPE}
 {$IFDEF DELPHI6_UP}DesignIntf, {$ELSE}DsgnIntf, {$ENDIF}
 {$ENDIF FPC}
 {$ENDIF}
-  ocv.comp.View,
-  ocv.lib,
-  ToolsAPI;
-
-{$IFNDEF FPC}
-{$IFDEF DELPHI2005_UP}
-
-resourcestring
-  resPackageName = 'Delphi OpenCV Components v' + CV_VERSION;
-  resAboutDescription = 'Delphi OpenCV Components';
-  resAboutURL = 'Web: https://github.com/Laex/Delphi-OpenCV/';
-  resAboutCopyright = 'Copyright (c) 2013-2014 Laentir Valetov and Mikhail Grigorev';
-  resLicense = 'Mozilla public license. Version 1.1 (MPL-1.1)';
-{$ENDIF DELPHI2005_UP}
-{$ENDIF FPC}
+  ocv.comp.FFMSource;
 
 procedure Register;
 begin
-  RegisterComponents('OpenCV', [TocvView]);
+  RegisterComponents('OpenCV', [TocvFFMpegIPCamSource]);
 end;
 
-{$IFNDEF FPC}
-{$IFDEF DELPHI2005_UP}
-
-var
-  AboutBoxIndex: Integer = -1;
-
-procedure RegisterAboutBox;
-begin
-  SplashScreenServices.AddPluginBitmap(resPackageName, LoadBitmap(HInstance, 'SPLASH'), False, resLicense);
-  AboutBoxIndex := (BorlandIDEServices as IOTAAboutBoxServices).AddPluginInfo(resPackageName,
-    resAboutDescription + sLineBreak + resAboutCopyright + sLineBreak + resAboutURL, LoadBitmap(HInstance, 'ABOUT'), False, resLicense);
-end;
-
-procedure UnregisterAboutBox;
-begin
-  if AboutBoxIndex <> -1 then
-    (BorlandIDEServices as IOTAAboutBoxServices).RemovePluginInfo(AboutBoxIndex);
-end;
-{$ENDIF DELPHI2005_UP}
-{$ENDIF FPC}
+{$IFDEF FPC}
 
 initialization
 
-{$IFNDEF FPC}
-{$IFDEF DELPHI2005_UP}
-  RegisterAboutBox;
-{$ENDIF DELPHI2005_UP}
-{$ENDIF FPC}
-{$IFDEF FPC}
 {$I ocv.lrs}
-{$ENDIF FPC}
-{$IFNDEF FPC}
-{$IFDEF DELPHI2005_UP}
-
-finalization
-
-UnregisterAboutBox;
-{$ENDIF DELPHI2005_UP}
 {$ENDIF FPC}
 
 end.

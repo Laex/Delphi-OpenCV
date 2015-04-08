@@ -865,6 +865,24 @@
       {$UNDEF UNKNOWN_COMPILER_VERSION}
     {$ENDIF VER280}
 
+    {$IFDEF VER290} // RAD Studio XE8
+      {$DEFINE BDS}
+      {$DEFINE BDS15}
+      {$DEFINE COMPILER21}
+      {$IFDEF BCB}
+        {$DEFINE BCB21}
+      {$ELSE}
+        {$DEFINE DELPHI21}
+        {$DEFINE DELPHIXE7} // synonym to DELPHI21
+        {$DEFINE DELPHICOMPILER21}
+        {$DEFINE DELPHI22}
+        {$DEFINE DELPHIXE8} // synonym to DELPHI22
+        {$DEFINE DELPHICOMPILER22}
+      {$ENDIF BCB}
+      {$DEFINE RTL280_UP}
+      {$UNDEF UNKNOWN_COMPILER_VERSION}
+    {$ENDIF VER280}
+
     {$IFDEF UNKNOWN_COMPILER_VERSION} // adjust for newer version (always use latest version)
       {$DEFINE BDS}
       {$DEFINE BDS15}

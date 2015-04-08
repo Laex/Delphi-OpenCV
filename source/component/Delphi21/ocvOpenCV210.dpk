@@ -1,4 +1,4 @@
-package OpenCV210;
+package ocvOpenCV210;
 
 {$R *.res}
 {$IFDEF IMPLICITBUILDING This IFDEF should not be used by users}
@@ -30,14 +30,6 @@ package OpenCV210;
 {$IMPLICITBUILD OFF}
 
 requires
-  rtl,
-  vcl;
-
-contains
-  ocv.comp.ImageOperation in '..\ocv.comp.ImageOperation.pas',
-  ocv.comp.VideoWriter in '..\ocv.comp.VideoWriter.pas',
-  ocv.comp.Types in '..\ocv.comp.Types.pas',
-  ocv.comp.Source in '..\ocv.comp.Source.pas',
-  ocv.comp.Proc in '..\ocv.comp.Proc.pas';
+  rtl;
 
 end.

@@ -1,7 +1,6 @@
-package dclCommonOpenCV210;
+package dclFMXOpenCV220;
 
 {$R *.res}
-{$R *.dres}
 {$IFDEF IMPLICITBUILDING This IFDEF should not be used by users}
 {$ALIGN 8}
 {$ASSERTIONS ON}
@@ -31,11 +30,13 @@ package dclCommonOpenCV210;
 {$IMPLICITBUILD OFF}
 
 requires
-  ocvOpenCV210,
+  fmx,
+  ocvOpenCV220,
+  dclCommonOpenCV220,
   designide;
 
 contains
-  ocv.comp.IOProperties in '..\ocv.comp.IOProperties.pas',
-  ocv.comp.Register in '..\ocv.comp.Register.pas';
+  ocv.comp.RegisterFMX in '..\ocv.comp.RegisterFMX.pas',
+  ocv.comp.ViewFMX in '..\ocv.comp.ViewFMX.pas';
 
 end.

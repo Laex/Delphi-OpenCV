@@ -29,9 +29,10 @@ unit ocv.features2d;
 interface
 
 Uses
-{$IFDEF MSWINDOWS}
-  Winapi.Windows,
-{$ENDIF MSWINDOWS}
+  // {$IFDEF MSWINDOWS}
+  // Winapi.Windows,
+  // {$ENDIF MSWINDOWS}
+  ocv.core.types_c,
   ocv.cclasses,
   ocv.mat;
 
@@ -68,8 +69,8 @@ Type
     procedure detect(image: TccvMat; keypoints: TCVectorKeyPoint; mask: TccvMat = nil); virtual; stdcall; abstract;
     procedure compute(image: TccvMat; keypoints: TCVectorKeyPoint; Var descriptors: TccvMat); virtual; stdcall; abstract;
     // ------------------------------------------------
-    class function Create(hessianThreshold: double = 400; nOctaves: Integer = 4; nOctaveLayers: Integer = 2; extended: BOOL = true;
-      upright: BOOL = false): TSURF; overload;
+    class function Create(hessianThreshold: double = 400; nOctaves: Integer = 4; nOctaveLayers: Integer = 2; extended: boolean = true;
+      upright: boolean = false): TSURF; overload;
     procedure Free; reintroduce;
   end;
 
@@ -126,7 +127,7 @@ Type
   public
     procedure compute(image: TccvMat; keypoints: TCVectorKeyPoint; Var descriptors: TccvMat); virtual; stdcall; abstract;
     // ------------------------------------------------
-    class function Create(orientationNormalized: BOOL = true; scaleNormalized: BOOL = true; patternScale: Single = 22.0;
+    class function Create(orientationNormalized: boolean = true; scaleNormalized: boolean = true; patternScale: Single = 22.0;
       nOctaves: Integer = 4): TFREAK; overload;
     procedure Free; reintroduce;
   end;
@@ -160,7 +161,7 @@ Type
   public
     procedure detect(image: TccvMat; keypoints: TCVectorKeyPoint; mask: TccvMat = nil); virtual; stdcall; abstract;
     // ------------------------------------------------
-    class function Create(threshold: Integer = 10; nonmaxSuppression: BOOL = true): TFastFeatureDetector; overload;
+    class function Create(threshold: Integer = 10; nonmaxSuppression: boolean = true): TFastFeatureDetector; overload;
     procedure Free; reintroduce;
   end;
 
@@ -169,7 +170,7 @@ Type
     procedure detect(image: TccvMat; keypoints: TCVectorKeyPoint; mask: TccvMat = nil); virtual; stdcall; abstract;
     // ------------------------------------------------
     class function Create(maxCorners: Integer = 1000; qualityLevel: double = 0.01; minDistance: double = 1; blockSize: Integer = 3;
-      useHarrisDetector: BOOL = false; k: double = 0.04): TGFTTDetector; overload;
+      useHarrisDetector: boolean = false; k: double = 0.04): TGFTTDetector; overload;
     procedure Free; reintroduce;
   end;
 
@@ -183,22 +184,22 @@ Type
     minRepeatability: size_t;
     minDistBetweenBlobs: Single;
 
-    filterByColor: Boolean;
+    filterByColor: boolean;
     blobColor: uchar;
 
-    filterByArea: BOOL;
+    filterByArea: boolean;
     minArea: Single;
     maxArea: Single;
 
-    filterByCircularity: BOOL;
+    filterByCircularity: boolean;
     minCircularity: Single;
     maxCircularity: Single;
 
-    filterByInertia: BOOL;
+    filterByInertia: boolean;
     minInertiaRatio: Single;
     maxInertiaRatio: Single;
 
-    filterByConvexity: BOOL;
+    filterByConvexity: boolean;
     minConvexity: Single;
     maxConvexity: Single;
     // -------------------------------
@@ -219,7 +220,7 @@ Type
     procedure detect(image: TccvMat; keypoints: TCVectorKeyPoint; mask: TccvMat = nil); virtual; stdcall; abstract;
     // ------------------------------------------------
     class function Create(initFeatureScale: Single = 1; featureScaleLevels: Integer = 1; featureScaleMul: Single = 0.1;
-      initXyStep: Integer = 6; initImgBound: Integer = 0; varyXyStepWithScale: BOOL = true; varyImgBoundWithScale: BOOL = false)
+      initXyStep: Integer = 6; initImgBound: Integer = 0; varyXyStepWithScale: boolean = true; varyImgBoundWithScale: boolean = false)
       : TDenseFeatureDetector; overload;
     procedure Free; reintroduce;
   end;
@@ -269,7 +270,7 @@ type
     procedure match(queryDescriptors: TccvMat; trainDescriptors: TccvMat; matces: TCVectorDMatch; mask: TccvMat = Nil); virtual;
       stdcall; abstract;
     // ---------------------
-    class function Create(normType: Integer = NORM_L2; crossCheck: BOOL = false): TBFMatcher;
+    class function Create(normType: Integer = NORM_L2; crossCheck: boolean = false): TBFMatcher;
     procedure Free; reintroduce;
   end;
 
@@ -290,8 +291,8 @@ implementation
 uses
   ocv.lib, System.Math;
 
-function CreateSURF(hessianThreshold: double; nOctaves: Integer = 4; nOctaveLayers: Integer = 2; extended: BOOL = true;
-  upright: BOOL = false): TSURF; stdcall; external opencv_classes_lib;
+function CreateSURF(hessianThreshold: double; nOctaves: Integer = 4; nOctaveLayers: Integer = 2; extended: boolean = true;
+  upright: boolean = false): TSURF; stdcall; external opencv_classes_lib;
 procedure ReleaseSURF(ex: TSURF); stdcall; external opencv_classes_lib;
 
 function CreateSIFT(nfeatures: Integer = 0; nOctaveLayers: Integer = 3; contrastThreshold: double = 0.04; edgeThreshold: double = 10;
@@ -304,7 +305,7 @@ procedure ReleaseCVectorKeyPoint(ex: TCVectorKeyPoint); stdcall; external opencv
 function CreateCVectorDMatch(): TCVectorDMatch; stdcall; external opencv_classes_lib;
 procedure ReleaseCVectorDMatch(ex: TCVectorDMatch); stdcall; external opencv_classes_lib;
 
-function CreateBFMatcher(normType: Integer = NORM_L2; crossCheck: BOOL = false): TBFMatcher; stdcall; external opencv_classes_lib;
+function CreateBFMatcher(normType: Integer = NORM_L2; crossCheck: boolean = false): TBFMatcher; stdcall; external opencv_classes_lib;
 procedure ReleaseBFMatcher(ex: TBFMatcher); stdcall; external opencv_classes_lib;
 
 procedure DrawMatches; stdcall; external opencv_classes_lib;
@@ -315,8 +316,8 @@ function CreateORB(nfeatures: Integer = 500; scaleFactor: Single = 1.2; nlevels:
   firstLevel: Integer = 0; WTA_K: Integer = 2; scoreType: Integer = HARRIS_SCORE; patchSize: Integer = 31): TORB; stdcall;
   external opencv_classes_lib;
 procedure ReleaseORB(ex: TORB); stdcall; external opencv_classes_lib;
-function CreateFREAK(orientationNormalized: BOOL = true; scaleNormalized: BOOL = true; patternScale: Single = 22.0; nOctaves: Integer = 4)
-  : TFREAK; stdcall; external opencv_classes_lib;
+function CreateFREAK(orientationNormalized: boolean = true; scaleNormalized: boolean = true; patternScale: Single = 22.0;
+  nOctaves: Integer = 4): TFREAK; stdcall; external opencv_classes_lib;
 procedure ReleaseFREAK(ex: TFREAK); stdcall; external opencv_classes_lib;
 function CreateMSER(_delta: Integer = 5; _min_area: Integer = 60; _max_area: Integer = 14400; _max_variation: double = 0.25;
   _min_diversity: double = 0.2; _max_evolution: Integer = 200; _area_threshold: double = 1.01; _min_margin: double = 0.003;
@@ -325,18 +326,18 @@ procedure ReleaseMSER(ex: TMSER); stdcall; external opencv_classes_lib;
 function CreateStarDetector(_maxSize: Integer = 45; _responseThreshold: Integer = 30; _lineThresholdProjected: Integer = 10;
   _lineThresholdBinarized: Integer = 8; _suppressNonmaxSize: Integer = 5): TStarDetector; stdcall; external opencv_classes_lib;
 procedure ReleaseStarDetector(ex: TStarDetector); stdcall; external opencv_classes_lib;
-function CreateFastFeatureDetector(threshold: Integer = 10; nonmaxSuppression: BOOL = true): TFastFeatureDetector; stdcall;
+function CreateFastFeatureDetector(threshold: Integer = 10; nonmaxSuppression: boolean = true): TFastFeatureDetector; stdcall;
   external opencv_classes_lib;
 procedure ReleaseFastFeatureDetector(ex: TFastFeatureDetector); stdcall; external opencv_classes_lib;
 function CreateGFTTDetector(maxCorners: Integer = 1000; qualityLevel: double = 0.01; minDistance: double = 1; blockSize: Integer = 3;
-  useHarrisDetector: BOOL = false; k: double = 0.04): TGFTTDetector; stdcall; external opencv_classes_lib;
+  useHarrisDetector: boolean = false; k: double = 0.04): TGFTTDetector; stdcall; external opencv_classes_lib;
 procedure ReleaseGFTTDetector(ex: TGFTTDetector); stdcall; external opencv_classes_lib;
 function CreateSimpleBlobDetector(SimpleBlobDetectorParams: TSimpleBlobDetectorParams): TSimpleBlobDetector; stdcall;
   external opencv_classes_lib;
 function CreateSimpleBlobDetectorDefault(): TSimpleBlobDetector; stdcall; external opencv_classes_lib;
 procedure ReleaseSimpleBlobDetector(ex: TSimpleBlobDetector); stdcall; external opencv_classes_lib;
 function CreateDenseFeatureDetector(initFeatureScale: Single = 1; featureScaleLevels: Integer = 1; featureScaleMul: Single = 0.1;
-  initXyStep: Integer = 6; initImgBound: Integer = 0; varyXyStepWithScale: BOOL = true; varyImgBoundWithScale: BOOL = false)
+  initXyStep: Integer = 6; initImgBound: Integer = 0; varyXyStepWithScale: boolean = true; varyImgBoundWithScale: boolean = false)
   : TDenseFeatureDetector; stdcall; external opencv_classes_lib;
 procedure ReleaseDenseFeatureDetector(ex: TDenseFeatureDetector); stdcall; external opencv_classes_lib;
 function CreateBriefDescriptorExtractor(bytes: Integer = 32): TBriefDescriptorExtractor; stdcall; external opencv_classes_lib;
@@ -346,7 +347,7 @@ procedure ReleaseFlannBasedMatcher(ex: TFlannBasedMatcher); stdcall; external op
 
 { TSURF }
 
-class function TSURF.Create(hessianThreshold: double; nOctaves, nOctaveLayers: Integer; extended, upright: BOOL): TSURF;
+class function TSURF.Create(hessianThreshold: double; nOctaves, nOctaveLayers: Integer; extended, upright: boolean): TSURF;
 begin
   Result := CreateSURF(hessianThreshold, nOctaves, nOctaveLayers, extended, upright);
 end;
@@ -382,7 +383,7 @@ end;
 
 { TBFMatcher }
 
-class function TBFMatcher.Create(normType: Integer = NORM_L2; crossCheck: BOOL = false): TBFMatcher;
+class function TBFMatcher.Create(normType: Integer = NORM_L2; crossCheck: boolean = false): TBFMatcher;
 begin
   Result := CreateBFMatcher(normType, crossCheck);
 end;
@@ -431,7 +432,7 @@ end;
 
 { TFREAK }
 
-class function TFREAK.Create(orientationNormalized, scaleNormalized: BOOL; patternScale: Single; nOctaves: Integer): TFREAK;
+class function TFREAK.Create(orientationNormalized, scaleNormalized: boolean; patternScale: Single; nOctaves: Integer): TFREAK;
 begin
   Result := CreateFREAK(orientationNormalized, scaleNormalized, patternScale, nOctaves);
 end;
@@ -470,7 +471,7 @@ end;
 
 { TFastFeatureDetector }
 
-class function TFastFeatureDetector.Create(threshold: Integer; nonmaxSuppression: BOOL): TFastFeatureDetector;
+class function TFastFeatureDetector.Create(threshold: Integer; nonmaxSuppression: boolean): TFastFeatureDetector;
 begin
   Result := CreateFastFeatureDetector(threshold, nonmaxSuppression);
 end;
@@ -482,7 +483,7 @@ end;
 
 { TGFTTDetector }
 
-class function TGFTTDetector.Create(maxCorners: Integer; qualityLevel, minDistance: double; blockSize: Integer; useHarrisDetector: BOOL;
+class function TGFTTDetector.Create(maxCorners: Integer; qualityLevel, minDistance: double; blockSize: Integer; useHarrisDetector: boolean;
   k: double): TGFTTDetector;
 begin
   Result := CreateGFTTDetector(maxCorners, qualityLevel, minDistance, blockSize, useHarrisDetector, k);
@@ -545,7 +546,7 @@ end;
 { TDenseFeatureDetector }
 
 class function TDenseFeatureDetector.Create(initFeatureScale: Single; featureScaleLevels: Integer; featureScaleMul: Single;
-  initXyStep, initImgBound: Integer; varyXyStepWithScale, varyImgBoundWithScale: BOOL): TDenseFeatureDetector;
+  initXyStep, initImgBound: Integer; varyXyStepWithScale, varyImgBoundWithScale: boolean): TDenseFeatureDetector;
 begin
   Result := CreateDenseFeatureDetector(initFeatureScale, featureScaleLevels, featureScaleMul, initXyStep, initImgBound, varyXyStepWithScale,
     varyImgBoundWithScale);

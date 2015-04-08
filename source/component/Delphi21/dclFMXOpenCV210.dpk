@@ -31,10 +31,10 @@ package dclFMXOpenCV210;
 {$IMPLICITBUILD OFF}
 
 requires
-  OpenCV210,
+  fmx,
+  ocvOpenCV210,
   dclCommonOpenCV210,
-  designide,
-  fmx;
+  designide;
 
 contains
   ocv.comp.RegisterFMX in '..\ocv.comp.RegisterFMX.pas',

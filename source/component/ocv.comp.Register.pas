@@ -45,7 +45,7 @@ uses
 {$ELSE ~HAS_UNITSCOPE}
   Classes,
 {$ENDIF ~HAS_UNITSCOPE}
-{$IFDEF DELPHI6_UP}DesignIntf,{$ELSE}DsgnIntf,{$ENDIF}
+{$IFDEF DELPHI6_UP}DesignIntf, {$ELSE}DsgnIntf, {$ENDIF}
 {$ENDIF FPC}
 {$ENDIF}
   ocv.comp.Source,
@@ -59,7 +59,7 @@ begin
     { } TocvCameraSource,
     { } TocvFileSource,
     { } TocvIPCamSource,
-    { } TocvFFMpegIPCamSource,
+    // { } TocvFFMpegIPCamSource,
     { } TocvVideoWriter]);
   RegisterClasses([
     { } TocvNoneOperation,
@@ -91,7 +91,9 @@ begin
 end;
 
 {$IFDEF FPC}
+
 initialization
+
 {$I ocv.lrs}
 {$ENDIF FPC}
 

@@ -29,9 +29,9 @@ unit ocv.objdetect;
 interface
 
 Uses
-{$IFDEF MSWINDOWS}
-  Winapi.Windows,
-{$ENDIF MSWINDOWS}
+//{$IFDEF MSWINDOWS}
+//  Winapi.Windows,
+//{$ENDIF MSWINDOWS}
   ocv.Mat,
   ocv.cclasses,
   ocv.core.types_c;

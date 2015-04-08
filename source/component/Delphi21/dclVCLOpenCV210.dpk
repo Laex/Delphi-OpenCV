@@ -31,7 +31,7 @@ package dclVCLOpenCV210;
 {$IMPLICITBUILD OFF}
 
 requires
-  OpenCV210,
+  ocvOpenCV210,
   dclCommonOpenCV210,
   designide;
 

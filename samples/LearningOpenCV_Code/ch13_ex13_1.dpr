@@ -1,3 +1,59 @@
+(*
+  *****************************************************************
+  Delphi-OpenCV Demo
+  Copyright (C) 2013 Project Delphi-OpenCV
+  ****************************************************************
+  Contributor:
+  Laentir Valetov
+  email:laex@bk.ru
+  ****************************************************************
+  You may retrieve the latest version of this file at the GitHub,
+  located at git://github.com/Laex/Delphi-OpenCV.git
+  ****************************************************************
+  The contents of this file are used with permission, subject to
+  the Mozilla Public License Version 1.1 (the "License"); you may
+  not use this file except in compliance with the License. You may
+  obtain a copy of the License at
+  http://www.mozilla.org/MPL/MPL-1_1Final.html
+
+  Software distributed under the License is distributed on an
+  "AS IS" basis, WITHOUT WARRANTY OF ANY KIND, either express or
+  implied. See the License for the specific language governing
+  rights and limitations under the License.
+  *******************************************************************
+*)
+
+//
+// Example 13-1. Using K-means
+//
+//
+(*
+  *************** License:**************************
+  Oct. 3, 2008
+  Right to use this code in any way you want without warrenty, support or any guarentee of it working.
+
+  BOOK: It would be nice if you cited it:
+  Learning OpenCV: Computer Vision with the OpenCV Library
+  by Gary Bradski and Adrian Kaehler
+  Published by O'Reilly Media, October 3, 2008
+
+  AVAILABLE AT:
+  http://www.amazon.com/Learning-OpenCV-Computer-Vision-Library/dp/0596516134
+  Or: http://oreilly.com/catalog/9780596516130/
+  ISBN-10: 0596516134 or: ISBN-13: 978-0596516130
+
+  OTHER OPENCV SITES:
+  * The source code is on sourceforge at:
+  http://sourceforge.net/projects/opencvlibrary/
+  * The OpenCV wiki page (As of Oct 1, 2008 this is down for changing over servers, but should come back):
+  http://opencvlibrary.sourceforge.net/
+  * An active user group is at:
+  http://tech.groups.yahoo.com/group/OpenCV/
+  * The minutes of weekly OpenCV development meetings are at:
+  http://pr.willowgarage.com/wiki/OpenCV
+  **************************************************
+*)
+
 program ch13_ex13_1;
 
 {$APPTYPE CONSOLE}
@@ -20,7 +76,6 @@ Var
   color_tab: array [0 .. MAX_CLUSTERS - 1] of TCvScalar;
   img: PIplImage;
   rng: TCvRNG;
-
   k, cluster_count: Integer;
   i, sample_count: Integer;
   points: PCvMat;
@@ -68,8 +123,8 @@ begin
       (* shuffle samples *)
       for i := 0 to sample_count div 2 do
       begin
-        pt1 := pCvPoint2D32f(@(pFloat(points^.data)[2*(cvRandInt(rng) mod sample_count)]));
-        pt2 := pCvPoint2D32f(@(pFloat(points^.data)[2*(cvRandInt(rng) mod sample_count)]));
+        pt1 := pCvPoint2D32f(@(pFloat(points^.data)[2 * (cvRandInt(rng) mod sample_count)]));
+        pt2 := pCvPoint2D32f(@(pFloat(points^.data)[2 * (cvRandInt(rng) mod sample_count)]));
         temp := pt1^;
         pt1^ := pt2^;
         pt2^ := temp;
@@ -79,7 +134,7 @@ begin
       cvZero(img);
       for i := 0 to sample_count - 1 do
       begin
-        pt := PCvPoint2D32f(@pFloat(points^.data)[i*2])^;
+        pt := pCvPoint2D32f(@pFloat(points^.data)[i * 2])^;
         cluster_idx := pInteger(clusters^.data)[i];
         cvCircle(img, cvPointFrom32f(pt), 2, color_tab[cluster_idx], CV_FILLED);
       end;

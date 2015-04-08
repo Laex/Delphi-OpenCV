@@ -32,9 +32,9 @@ unit ocv.mat;
 interface
 
 uses
-{$IFDEF MSWINDOWS}
-  Winapi.Windows,
-{$ENDIF MSWINDOWS}
+//{$IFDEF MSWINDOWS}
+//  Winapi.Windows,
+//{$ENDIF MSWINDOWS}
   ocv.core.types_c,
   ocv.core_c,
   ocv.highgui_c;
@@ -55,7 +55,7 @@ Type
     // ! returns step/elemSize1()
     function step1(i: Integer = 0): size_t; virtual; stdcall; abstract;
     // ! returns true if matrix data is NULL
-    function empty: bool; virtual; stdcall; abstract;
+    function empty: LongBool; virtual; stdcall; abstract;
     // ! returns the total number of matrix elements
     function total: size_t; virtual; stdcall; abstract;
     // * ! includes several bit - fields: - the magic signature - continuity flag - depth - number of channels * /

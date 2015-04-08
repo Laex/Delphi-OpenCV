@@ -1,25 +1,28 @@
-// ****************************************************************
-// Delphi-OpenCV Demo
-// Copyright (C) 2013 Project Delphi-OpenCV
-// ****************************************************************
-// Contributor:
-// Laentir Valetov
-// email:laex@bk.ru
-// ****************************************************************
-// You may retrieve the latest version of this file at the GitHub,
-// located at git://github.com/Laex/Delphi-OpenCV.git
-// ****************************************************************
-// The contents of this file are used with permission, subject to
-// the Mozilla Public License Version 1.1 (the "License"); you may
-// not use this file except in compliance with the License. You may
-// obtain a copy of the License at
-// http://www.mozilla.org/MPL/MPL-1_1Final.html
-//
-// Software distributed under the License is distributed on an
-// "AS IS" basis, WITHOUT WARRANTY OF ANY KIND, either express or
-// implied. See the License for the specific language governing
-// rights and limitations under the License.
-// ****************************************************************
+(*
+  ****************************************************************
+  Delphi-OpenCV Demo
+  Copyright (C) 2013 Project Delphi-OpenCV
+  ****************************************************************
+  Contributor:
+  Laentir Valetov
+  email:laex@bk.ru
+  ****************************************************************
+  You may retrieve the latest version of this file at the GitHub,
+  located at git://github.com/Laex/Delphi-OpenCV.git
+  ****************************************************************
+  The contents of this file are used with permission, subject to
+  the Mozilla Public License Version 1.1 (the "License"); you may
+  not use this file except in compliance with the License. You may
+  obtain a copy of the License at
+  http://www.mozilla.org/MPL/MPL-1_1Final.html
+
+  Software distributed under the License is distributed on an
+  "AS IS" basis, WITHOUT WARRANTY OF ANY KIND, either express or
+  implied. See the License for the specific language governing
+  rights and limitations under the License.
+  ****************************************************************
+*)
+
 unit ocv.comp.ViewFMX;
 
 {$I OpenCV.inc}
@@ -35,10 +38,10 @@ uses
 {$ELSE}
   FMX.PixelFormats,
 {$ENDIF}
-  FMX.Controls,
-  ocv.comp.Types;
+  FMX.Controls, ocv.comp.Types;
 
 {$IFNDEF DELPHIXE5_UP}
+
 // Delphi XE5 and below
 const
   PixelFormatBytes: array [TPixelFormat] of Integer = ( { pfUnknown } 0, { pfA16B16G16R16 } 8, { pfA2R10G10B10 } 4,
@@ -128,6 +131,7 @@ uses
   System.UITypes;
 
 {$IFNDEF DELPHIXE5_UP}
+
 // Delphi XE5 and below
 procedure TBitmapHack.SetPixelFormat(Value: TPixelFormat);
 begin

@@ -52,16 +52,16 @@ unit ocv.core.types_c;
 
 interface
 
-uses
-{$IFDEF IFDEF HAS_UNITSCOPE}
-{$IFDEF MSWINDOWS}
-  WinApi.Windows
-{$ENDIF MSWINDOWS}
-{$ELSE}
-{$IFDEF MSWINDOWS}
-    Windows
-{$ENDIF MSWINDOWS}
-{$ENDIF};
+// uses
+// {$IFDEF IFDEF HAS_UNITSCOPE}
+// {$IFDEF MSWINDOWS}
+// WinApi.Windows
+// {$ENDIF MSWINDOWS}
+// {$ELSE}
+// {$IFDEF MSWINDOWS}
+// Windows
+// {$ENDIF MSWINDOWS}
+// {$ENDIF};
 
 const
   // Ќаименьшее число дл€ которого выполн€етс€ условие 1.0+DBL_EPSILON <> 1.0
@@ -87,11 +87,11 @@ type
   TpCVCharArray = array [0 .. 0] of pCVChar;
   ppCVChar = ^TpCVCharArray;
   CVChar = AnsiChar;
-{$IFNDEF WIN64}
-  size_t = UInt32;
-{$ELSE}
-  size_t = UInt64;
-{$ENDIF}
+  // {$IFNDEF WIN64}
+  // size_t = UInt32;
+  // {$ELSE}
+  // size_t = UInt64;
+  // {$ENDIF}
 {$IFNDEF DELPHIXE2_UP}
 {$IFDEF CLR}
 {$IFDEF DELPHI2007}
@@ -111,6 +111,9 @@ type
 {$ENDIF}
 {$ENDIF}
 {$ENDIF}
+  uint = NativeUInt;
+  size_t = NativeUInt;
+
 function strdup(const str: pCVChar): pCVChar;
 function cv_stricmp(const str1, str2: pCVChar): Integer;
 procedure strcpy(var str1: pCVChar; const str2: pCVChar); overload;
@@ -2336,8 +2339,9 @@ SysUtils;
 
 function strdup(const str: pCVChar): pCVChar;
 begin
-  Result := Allocmem(Length(str) * SizeOf(CVChar));
-  CopyMemory(Result, str, Length(str) * SizeOf(CVChar));
+  Result := AllocMem(Length(str) * SizeOf(CVChar));
+  Move(str^, Result^, Length(str) * SizeOf(CVChar));
+  // CopyMemory(Result, str, Length(str) * SizeOf(CVChar));
 end;
 
 function cv_stricmp(const str1, str2: pCVChar): Integer;
@@ -2350,8 +2354,9 @@ Var
   n: Integer;
 begin
   n := Length(str2) * SizeOf(CVChar);
-  str1 := Allocmem(n);
-  CopyMemory(str1, str2, n);
+  str1 := AllocMem(n);
+  Move(str2^, str1^, n);
+  // CopyMemory(str1, str2, n);
 end;
 
 procedure strcpync(const str1: pCVChar; const str2: pCVChar);
@@ -2359,7 +2364,8 @@ Var
   n: Integer;
 begin
   n := Length(str2) * SizeOf(CVChar);
-  CopyMemory(str1, str2, n);
+  Move(str2^, str1^, n);
+  // CopyMemory(str1, str2, n);
 end;
 
 procedure strcat(var str1: pCVChar; const str2: pCVChar);
@@ -2368,7 +2374,8 @@ Var
 begin
   n := Length(str1) * SizeOf(CVChar);
   ReallocMem(str1, (Length(str1) + Length(str2)) * SizeOf(CVChar));
-  CopyMemory(str1 + n, str2, Length(str2) * SizeOf(CVChar));
+  Move(str2^, pCVChar(str1 + n)^, Length(str2) * SizeOf(CVChar));
+  // CopyMemory(str1 + n, str2, Length(str2) * SizeOf(CVChar));
 end;
 
 function CV_MAT_ELEM_PTR_FAST(const mat: TCvMat; const row, col, pix_size: Integer): Pointer;
@@ -2538,7 +2545,8 @@ begin
   // assert( (reader).seq->elem_size == sizeof(elem));
   Assert(Reader.Seq^.elem_size = SizeOfElem);
   // memcpy( &(elem), (reader).ptr, sizeof((elem)));
-  CopyMemory(Elem, Reader.ptr, SizeOfElem);
+  Move(Reader.ptr^, Elem^, SizeOfElem);
+  // CopyMemory(Elem, Reader.ptr, SizeOfElem);
   // CV_NEXT_SEQ_ELEM( sizeof(elem), reader )
   CV_NEXT_SEQ_ELEM(SizeOfElem, Reader);
 end;

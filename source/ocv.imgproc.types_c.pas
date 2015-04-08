@@ -60,7 +60,7 @@ unit ocv.imgproc.types_c;
 interface
 
 uses
-  Windows,
+//  Windows,
   ocv.core.types_c;
 
 (* Connected component structure *)

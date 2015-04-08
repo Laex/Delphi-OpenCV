@@ -2171,10 +2171,12 @@ procedure TocvHaarCascade.SetHaarCascade(const Value: TocvHaarCascadeType);
   var
     BufSize: Cardinal;
   begin
+{$IFDEF MSWINDOWS}
     BufSize := GetTempPath(0, nil);
     SetLength(Result, BufSize);
     GetTempPath(BufSize, PChar(Result));
     Result := Trim(Result);
+{$ENDIF MSWINDOWS}
   end;
 
 // Var

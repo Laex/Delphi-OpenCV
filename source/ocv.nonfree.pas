@@ -50,9 +50,9 @@ unit ocv.nonfree;
 
 interface
 
-uses windows;
+//uses windows;
 
-function initModule_nonfree(): bool; cdecl;
+function initModule_nonfree(): LongBool; cdecl;
 
 implementation
 

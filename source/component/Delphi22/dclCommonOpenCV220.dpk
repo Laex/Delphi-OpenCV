@@ -1,4 +1,4 @@
-package dclCommonOpenCV210;
+package dclCommonOpenCV220;
 
 {$R *.res}
 {$R *.dres}
@@ -31,7 +31,7 @@ package dclCommonOpenCV210;
 {$IMPLICITBUILD OFF}
 
 requires
-  ocvOpenCV210,
+  ocvOpenCV220,
   designide;
 
 contains

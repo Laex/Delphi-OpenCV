@@ -53,9 +53,9 @@ unit ocv.highgui;
 interface
 
 uses
-{$IFDEF MSWINDOWS}
-  Winapi.Windows,
-{$ENDIF MSWINDOWS}
+//{$IFDEF MSWINDOWS}
+//  Winapi.Windows,
+//{$ENDIF MSWINDOWS}
   ocv.mat,
   ocv.core.types_c,
   ocv.highgui_c;
@@ -67,14 +67,14 @@ type
   // sequence of function declarations in the project "opencv_classes" (C++)
 
   TccvVideoCapture = class
-    function open(device: Integer): bool; overload; virtual; stdcall; abstract;
-    function openfile(filename: pAnsiChar): bool; overload; virtual; stdcall; abstract;
-    function isOpened(): bool; virtual; stdcall; abstract;
+    function open(device: Integer): boolean; overload; virtual; stdcall; abstract;
+    function openfile(filename: pAnsiChar): boolean; overload; virtual; stdcall; abstract;
+    function isOpened(): boolean; virtual; stdcall; abstract;
     procedure release(); virtual; stdcall; abstract;
-    function grab(): bool; virtual; stdcall; abstract;
-    function retrieve(Var image: TccvMat; flag: Integer): bool; virtual; stdcall; abstract;
-    function read(Var image: TccvMat): bool; virtual; stdcall; abstract;
-    function setValue(propId: Integer; value: double): bool; virtual; stdcall; abstract;
+    function grab(): boolean; virtual; stdcall; abstract;
+    function retrieve(Var image: TccvMat; flag: Integer): boolean; virtual; stdcall; abstract;
+    function read(Var image: TccvMat): boolean; virtual; stdcall; abstract;
+    function setValue(propId: Integer; value: double): boolean; virtual; stdcall; abstract;
     function getValue(propId: Integer): double; virtual; stdcall; abstract;
     // ---------------------------
     class function Create: TccvVideoCapture; overload;
@@ -123,8 +123,8 @@ function createTrackbar(const trackbarname: String; const winname: String; value
 
 // CV_EXPORTS_W Mat imread( const string& filename, int flags=1 );
 function imread(const filename: string; flag: Integer = 1): TccvMat;
-// CV_EXPORTS_W bool imwrite( const string& filename, InputArray img, const vector<int>& params=vector<int>());
-// function imwrite(const filename: String; const img: TccvMat): bool;
+// CV_EXPORTS_W boolean imwrite( const string& filename, InputArray img, const vector<int>& params=vector<int>());
+// function imwrite(const filename: String; const img: TccvMat): boolean;
 
 type
   TIplImageRecordHelper = record helper for TIplImage
@@ -146,7 +146,7 @@ function CreateVideoCapture(filename: pAnsiChar): TccvVideoCapture; stdcall;
 procedure ReleaseVideoCapture(ex: TccvVideoCapture); stdcall; external opencv_classes_lib;
 
 // function _imread(const filename: pCvChar; flag: Integer): TccvMat; external opencv_classes_lib name '_imread';
-// function _imwrite(const filename: pCvChar; const img: TccvMat): bool; external opencv_classes_lib name '_imwrite';
+// function _imwrite(const filename: pCvChar; const img: TccvMat): boolean; external opencv_classes_lib name '_imwrite';
 
 function imread(const filename: string; flag: Integer): TccvMat;
 begin
@@ -154,7 +154,7 @@ begin
   Result := TccvMat.Create(cvLoadImage(pAnsiChar(AnsiString(filename)), flag));
 end;
 
-// function imwrite(const filename: String; const img: TccvMat): bool;
+// function imwrite(const filename: String; const img: TccvMat): boolean;
 // begin
 // Result := _imwrite(c_str(filename), img);
 // end;

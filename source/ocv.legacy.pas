@@ -67,7 +67,7 @@ unit ocv.legacy;
 interface
 
 uses
-  Windows,
+//  Windows,
   ocv.core.types_c,
   ocv.imgproc.types_c,
   ocv.compat;
