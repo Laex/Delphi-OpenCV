@@ -41,4 +41,4 @@ lib
 *.local
 *.identcache 
 *.cmd
-/source/component/Delphi22/*.stat
+*.stat

@@ -53,9 +53,9 @@ unit ocv.core_c;
 interface
 
 uses
-//{$IFDEF MSWINDOWS}
-//  WinApi.Windows,
-//{$ENDIF ~MSWINDOWS}
+  // {$IFDEF MSWINDOWS}
+  // WinApi.Windows,
+  // {$ENDIF ~MSWINDOWS}
   ocv.core.types_c;
 
 { ****************************************************************************************
@@ -784,7 +784,7 @@ procedure cvInRange(const src: pIplImage; const lower: pIplImage; const upper: p
 procedure cvInRangeS(const src: pIplImage; lower: TCvScalar; upper: TCvScalar; dst: pIplImage); cdecl;
 
 const
-  CV_RAND_UNI    = 0;
+  CV_RAND_UNI = 0;
   CV_RAND_NORMAL = 1;
 
   // CVAPI(void)cvRandArr(CvRNG * rng, CvArr * arr, int dist_type, CvScalar param1, CvScalar param2);
@@ -878,18 +878,18 @@ procedure cvFlip(const src: pCvArr; dst: pCvArr = nil; flip_mode: Integer = 0); 
 
 const
   // * types of array norm */
-  CV_C         = 1;
-  CV_L1        = 2;
-  CV_L2        = 4;
+  CV_C = 1;
+  CV_L1 = 2;
+  CV_L2 = 4;
   CV_NORM_MASK = 7;
-  CV_RELATIVE  = 8;
-  CV_DIFF      = 16;
-  CV_MINMAX    = 32;
+  CV_RELATIVE = 8;
+  CV_DIFF = 16;
+  CV_MINMAX = 32;
 
-  CV_DIFF_C      = (CV_DIFF or CV_C);
-  CV_DIFF_L1     = (CV_DIFF or CV_L1);
-  CV_DIFF_L2     = (CV_DIFF or CV_L2);
-  CV_RELATIVE_C  = (CV_RELATIVE or CV_C);
+  CV_DIFF_C = (CV_DIFF or CV_C);
+  CV_DIFF_L1 = (CV_DIFF or CV_L1);
+  CV_DIFF_L2 = (CV_DIFF or CV_L2);
+  CV_RELATIVE_C = (CV_RELATIVE or CV_C);
   CV_RELATIVE_L1 = (CV_RELATIVE or CV_L1);
   CV_RELATIVE_L2 = (CV_RELATIVE or CV_L2);
 
@@ -940,12 +940,12 @@ procedure cvGEMM(const src1: pCvArr; const src2: pCvArr; alpha: double; const sr
 // #define cvMatMulAddEx cvGEMM
 
 const
-  CV_LU       = 0;
-  CV_SVD      = 1;
-  CV_SVD_SYM  = 2;
+  CV_LU = 0;
+  CV_SVD = 1;
+  CV_SVD_SYM = 2;
   CV_CHOLESKY = 3;
-  CV_QR       = 4;
-  CV_NORMAL   = 16;
+  CV_QR = 4;
+  CV_NORMAL = 16;
 
   // * Inverts matrix */
   // CVAPI(double)  cvInvert( const CvArr* src, CvArr* dst,
@@ -1093,13 +1093,13 @@ procedure cvMinMaxLoc(const arr: pIplImage; min_val: pDouble; max_val: pDouble; 
 // ****************************************************************************************
 
 Const
-  CV_DXT_FORWARD       = 0;
-  CV_DXT_INVERSE       = 1;
-  CV_DXT_SCALE         = 2; // * divide result by size of array */
-  CV_DXT_INV_SCALE     = (CV_DXT_INVERSE + CV_DXT_SCALE);
+  CV_DXT_FORWARD = 0;
+  CV_DXT_INVERSE = 1;
+  CV_DXT_SCALE = 2; // * divide result by size of array */
+  CV_DXT_INV_SCALE = (CV_DXT_INVERSE + CV_DXT_SCALE);
   CV_DXT_INVERSE_SCALE = CV_DXT_INV_SCALE;
-  CV_DXT_ROWS          = 4; // * transform each row individually */
-  CV_DXT_MUL_CONJ      = 8; // * conjugate the second argument of cvMulSpectrums */
+  CV_DXT_ROWS = 4; // * transform each row individually */
+  CV_DXT_MUL_CONJ = 8; // * conjugate the second argument of cvMulSpectrums */
 
   // * Discrete Fourier Transform:
   // complex->complex,
@@ -1400,16 +1400,16 @@ function cvGraphVtxDegreeByPtr(const graph: pCvGraph; const vtx: pCvGraphVtx): I
 *)
 
 const
-  CV_GRAPH_VERTEX       = 1;
-  CV_GRAPH_TREE_EDGE    = 2;
-  CV_GRAPH_BACK_EDGE    = 4;
+  CV_GRAPH_VERTEX = 1;
+  CV_GRAPH_TREE_EDGE = 2;
+  CV_GRAPH_BACK_EDGE = 4;
   CV_GRAPH_FORWARD_EDGE = 8;
-  CV_GRAPH_CROSS_EDGE   = 16;
-  CV_GRAPH_ANY_EDGE     = 30;
-  CV_GRAPH_NEW_TREE     = 32;
+  CV_GRAPH_CROSS_EDGE = 16;
+  CV_GRAPH_ANY_EDGE = 30;
+  CV_GRAPH_NEW_TREE = 32;
   CV_GRAPH_BACKTRACKING = 64;
-  CV_GRAPH_OVER         = -1;
-  CV_GRAPH_ALL_ITEMS    = -1;
+  CV_GRAPH_OVER = -1;
+  CV_GRAPH_ALL_ITEMS = -1;
   (*
     flags for graph vertices and edges
   *)
@@ -1421,7 +1421,7 @@ const
   // (((CvGraphEdge*)(edge))->flags & CV_GRAPH_ITEM_VISITED_FLAG)
 
   CV_GRAPH_SEARCH_TREE_NODE_FLAG = (1 shl 29);
-  CV_GRAPH_FORWARD_EDGE_FLAG     = (1 shl 28);
+  CV_GRAPH_FORWARD_EDGE_FLAG = (1 shl 28);
 
 Type
   (* typedef  struct CvGraphScanner
@@ -2047,16 +2047,16 @@ procedure cvSetNumThreads(threads: Integer = 0); cdecl;
 function cvGetThreadNum: Integer; cdecl;
 
 const
-  CV_CPU_NONE             = 0;
-  CV_CPU_MMX              = 1;
-  CV_CPU_SSE              = 2;
-  CV_CPU_SSE2             = 3;
-  CV_CPU_SSE3             = 4;
-  CV_CPU_SSSE3            = 5;
-  CV_CPU_SSE4_1           = 6;
-  CV_CPU_SSE4_2           = 7;
-  CV_CPU_POPCNT           = 8;
-  CV_CPU_AVX              = 10;
+  CV_CPU_NONE = 0;
+  CV_CPU_MMX = 1;
+  CV_CPU_SSE = 2;
+  CV_CPU_SSE2 = 3;
+  CV_CPU_SSE3 = 4;
+  CV_CPU_SSSE3 = 5;
+  CV_CPU_SSE4_1 = 6;
+  CV_CPU_SSE4_2 = 7;
+  CV_CPU_POPCNT = 8;
+  CV_CPU_AVX = 10;
   CV_HARDWARE_MAX_FEATURE = 255;
 
   // ********************************** Error Handling **************************************/
@@ -2070,7 +2070,7 @@ function cvGetErrStatus: Integer; cdecl;
 procedure cvSetErrStatus(status: Integer); cdecl;
 
 const
-  CV_ErrModeLeaf   = 0; // * Print error and exit program */
+  CV_ErrModeLeaf = 0; // * Print error and exit program */
   CV_ErrModeParent = 1; // * Print error and continue */
   CV_ErrModeSilent = 2; // * Don't print and continue */
 
@@ -2306,12 +2306,17 @@ procedure cvSetData; external core_lib;
 procedure cvGetRawData; external core_lib;
 
 {$IF DEFINED(DelphiOCVVersion_29)}
+//{$IFDEF VER290}
+//function cvGetSize(const arr: pCvArr): TCvSize; external core_lib;
+//{$ELSE}
+//// ----------------------
 procedure _cvGetSize(const arr: pCvArr; Var size: TCvSize); cdecl; external core_lib name 'cvGetSize';
 {$IFDEF CPU32}
 
 function cvGetSize(const arr: pCvArr): TCvSize; assembler;
 asm
   // mov eax,arr // в eax уже хранится адрес arr
+//  push eax
   push edx      // в edx адрес переменной Result - сохраняем, т.к. _cvGetSize возвращает результат в eax:edx
   push eax
   call _cvGetSize
@@ -2332,6 +2337,8 @@ asm
   mov Result.height,eax
 end;
 {$ENDIF CPU64}
+//{$ENDIF}
+// -------------------
 {$ELSEIF DEFINED(DelphiOCVVersion_30)}
 function cvGetSize(const arr: pCvArr): TCvSize; external core_lib;
 {$ENDIF}

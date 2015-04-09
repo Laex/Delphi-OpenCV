@@ -409,7 +409,7 @@ end;
 
 procedure TocvCustomSource.SetEnabled(Value: Boolean);
 begin
-  FEnabled:=Value;
+  FEnabled := Value;
 end;
 
 procedure TocvCustomSource.TerminateSourceThread;
@@ -479,6 +479,7 @@ begin
         if Assigned(FCapture) then
         begin
           (FSourceThread as TocvCaptureThread).Capture := FCapture;
+          (FSourceThread as TocvCaptureThread).OnNoData := OnNoData; // Here is the addition
           FSourceThread.Resume;
         end;
       end;

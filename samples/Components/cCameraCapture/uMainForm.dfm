@@ -30,7 +30,7 @@ object MainForm: TMainForm
     Width = 145
     Height = 21
     Style = csDropDownList
-    TabOrder = 0
+    TabOrder = 4
     OnChange = cbb1Change
     Items.Strings = (
       'None'
@@ -51,7 +51,7 @@ object MainForm: TMainForm
     Caption = 'Camera enabled'
     Checked = True
     State = cbChecked
-    TabOrder = 1
+    TabOrder = 0
     OnClick = chk1Click
   end
   object ocvw1: TocvView
@@ -101,7 +101,7 @@ object MainForm: TMainForm
     Width = 129
     Height = 17
     Caption = 'IP Camera enabled'
-    TabOrder = 6
+    TabOrder = 1
     OnClick = chk2Click
   end
   object chk3: TCheckBox
@@ -110,7 +110,7 @@ object MainForm: TMainForm
     Width = 187
     Height = 17
     Caption = 'File source'
-    TabOrder = 7
+    TabOrder = 5
     OnClick = chk3Click
   end
   object ocvmgprtn1: TocvImageOperation
