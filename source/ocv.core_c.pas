@@ -921,6 +921,7 @@ procedure cvCrossProduct(const src1: pCvArr; const src2: pCvArr; dst: pCvArr); c
 
 // * Matrix transform: dst = A*B + C, C is optional */
 // #define cvMatMulAdd( src1, src2, src3, dst ) cvGEMM( (src1), (src2), 1., (src3), 1., (dst), 0 )
+procedure cvMatMulAdd(const src1, src2, src3: pCvArr; dst: pCvArr);
 // #define cvMatMul( src1, src2, dst )  cvMatMulAdd( (src1), (src2), NULL, (dst))
 
 const
@@ -2306,17 +2307,17 @@ procedure cvSetData; external core_lib;
 procedure cvGetRawData; external core_lib;
 
 {$IF DEFINED(DelphiOCVVersion_29)}
-//{$IFDEF VER290}
-//function cvGetSize(const arr: pCvArr): TCvSize; external core_lib;
-//{$ELSE}
-//// ----------------------
+// {$IFDEF VER290}
+// function cvGetSize(const arr: pCvArr): TCvSize; external core_lib;
+// {$ELSE}
+/// / ----------------------
 procedure _cvGetSize(const arr: pCvArr; Var size: TCvSize); cdecl; external core_lib name 'cvGetSize';
 {$IFDEF CPU32}
 
 function cvGetSize(const arr: pCvArr): TCvSize; assembler;
 asm
   // mov eax,arr // в eax уже хранится адрес arr
-//  push eax
+  // push eax
   push edx      // в edx адрес переменной Result - сохраняем, т.к. _cvGetSize возвращает результат в eax:edx
   push eax
   call _cvGetSize
@@ -2337,7 +2338,7 @@ asm
   mov Result.height,eax
 end;
 {$ENDIF CPU64}
-//{$ENDIF}
+// {$ENDIF}
 // -------------------
 {$ELSEIF DEFINED(DelphiOCVVersion_30)}
 function cvGetSize(const arr: pCvArr): TCvSize; external core_lib;
@@ -2638,6 +2639,12 @@ procedure cvExp; external core_lib;
 procedure cvLog; external core_lib;
 
 procedure cvCrossProduct; external core_lib;
+
+procedure cvMatMulAdd(const src1, src2, src3: pCvArr; dst: pCvArr);
+begin
+  cvGEMM(src1, src2, 1, src3, 1, dst, 0);
+end;
+
 procedure cvGEMM; external core_lib;
 function cvInvert; external core_lib;
 

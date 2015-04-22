@@ -1,29 +1,32 @@
-// *****************************************************************
-// Delphi-OpenCV Demo
-// Copyright (C) 2013 Project Delphi-OpenCV
-// ****************************************************************
-// Contributor:
-// Laentir Valetov
-// email:laex@bk.ru
-// ****************************************************************
-// You may retrieve the latest version of this file at the GitHub,
-// located at git://github.com/Laex/Delphi-OpenCV.git
-// ****************************************************************
-// The contents of this file are used with permission, subject to
-// the Mozilla Public License Version 1.1 (the "License"); you may
-// not use this file except in compliance with the License. You may
-// obtain a copy of the License at
-// http://www.mozilla.org/MPL/MPL-1_1Final.html
-//
-// Software distributed under the License is distributed on an
-// "AS IS" basis, WITHOUT WARRANTY OF ANY KIND, either express or
-// implied. See the License for the specific language governing
-// rights and limitations under the License.
-// *******************************************************************
+(*
+ *****************************************************************
+ Delphi-OpenCV Demo
+ Copyright (C) 2013 Project Delphi-OpenCV
+ ****************************************************************
+ Contributor:
+ Laentir Valetov
+ email:laex@bk.ru
+ ****************************************************************
+ You may retrieve the latest version of this file at the GitHub,
+ located at git://github.com/Laex/Delphi-OpenCV.git
+ ****************************************************************
+ The contents of this file are used with permission, subject to
+ the Mozilla Public License Version 1.1 (the "License"); you may
+ not use this file except in compliance with the License. You may
+ obtain a copy of the License at
+ http://www.mozilla.org/MPL/MPL-1_1Final.html
+
+ Software distributed under the License is distributed on an
+ "AS IS" basis, WITHOUT WARRANTY OF ANY KIND, either express or
+ implied. See the License for the specific language governing
+ rights and limitations under the License.
+ *******************************************************************
+*)
 
 program cv_And;
 
 {$APPTYPE CONSOLE}
+{$POINTERMATH ON}
 {$R *.res}
 
 uses
@@ -52,20 +55,20 @@ Var
   image: pIplImage = nil;
   dst: pIplImage = nil;
 
-  // для хранения каналов RGB
+  // РґР»СЏ С…СЂР°РЅРµРЅРёСЏ РєР°РЅР°Р»РѕРІ RGB
   rgb: pIplImage = nil;
   r_plane: pIplImage = nil;
   g_plane: pIplImage = nil;
   b_plane: pIplImage = nil;
-  // для хранения каналов RGB поcле преобразования
+  // РґР»СЏ С…СЂР°РЅРµРЅРёСЏ РєР°РЅР°Р»РѕРІ RGB РїРѕcР»Рµ РїСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёСЏ
   r_range: pIplImage = nil;
   g_range: pIplImage = nil;
   b_range: pIplImage = nil;
-  // для хранения cуммарной картинки
+  // РґР»СЏ С…СЂР°РЅРµРЅРёСЏ cСѓРјРјР°СЂРЅРѕР№ РєР°СЂС‚РёРЅРєРё
   rgb_and: pIplImage = nil;
 
   //
-  // функции-обработчики ползунка
+  // С„СѓРЅРєС†РёРё-РѕР±СЂР°Р±РѕС‚С‡РёРєРё РїРѕР»Р·СѓРЅРєР°
   //
 procedure myTrackbarRmin(pos: Integer); cdecl;
 begin
@@ -110,10 +113,10 @@ Var
 
 begin
   try
-    // получаем картинку
+    // РїРѕР»СѓС‡Р°РµРј РєР°СЂС‚РёРЅРєСѓ
     image := cvLoadImage(filename);
     WriteLn(Format('[i] image: %s', [filename]));
-    // cоздаём картинки
+    // cРѕР·РґР°С‘Рј РєР°СЂС‚РёРЅРєРё
     // S := cvGetSize(image);
     // S := cvGetSize(image);
     // ccvGetSize(image, S);
@@ -125,14 +128,14 @@ begin
     g_range := cvCreateImage(cvGetSize(image), IPL_DEPTH_8U, 1);
     b_range := cvCreateImage(cvGetSize(image), IPL_DEPTH_8U, 1);
     rgb_and := cvCreateImage(cvGetSize(image), IPL_DEPTH_8U, 1);
-    // копируем
+    // РєРѕРїРёСЂСѓРµРј
     cvCopyImage(image, rgb);
-    // разбиваем на отельные каналы
+    // СЂР°Р·Р±РёРІР°РµРј РЅР° РѕС‚РµР»СЊРЅС‹Рµ РєР°РЅР°Р»С‹
     cvSplit(rgb, b_plane, g_plane, r_plane, nil);
 
     //
-    // определяем минимальное и макcимальное значение
-    // у каналов HSV
+    // РѕРїСЂРµРґРµР»СЏРµРј РјРёРЅРёРјР°Р»СЊРЅРѕРµ Рё РјР°РєcРёРјР°Р»СЊРЅРѕРµ Р·РЅР°С‡РµРЅРёРµ
+    // Сѓ РєР°РЅР°Р»РѕРІ HSV
     framemin := 0;
     framemax := 0;
 
@@ -149,7 +152,7 @@ begin
     Bmin := Trunc(framemin);
     Bmax := Trunc(framemax);
 
-    // окна для отображения картинки
+    // РѕРєРЅР° РґР»СЏ РѕС‚РѕР±СЂР°Р¶РµРЅРёСЏ РєР°СЂС‚РёРЅРєРё
     cvNamedWindow('original', CV_WINDOW_AUTOSIZE);
     cvNamedWindow('R', CV_WINDOW_AUTOSIZE);
     cvNamedWindow('G', CV_WINDOW_AUTOSIZE);
@@ -167,7 +170,7 @@ begin
     cvCreateTrackbar('Bmax', 'B range', @Gmax, RGBmax, myTrackbarBmax);
 
     //
-    // размеcтим окна по рабочему cтолу
+    // СЂР°Р·РјРµcС‚РёРј РѕРєРЅР° РїРѕ СЂР°Р±РѕС‡РµРјСѓ cС‚РѕР»Сѓ
     //
     if (image^.width < 1920 / 4) and (image^.height < 1080 / 2) then
     begin
@@ -184,29 +187,29 @@ begin
     while (true) do
     begin
 
-      // показываем картинку
+      // РїРѕРєР°Р·С‹РІР°РµРј РєР°СЂС‚РёРЅРєСѓ
       cvShowImage('original', image);
 
-      // показываем cлои
+      // РїРѕРєР°Р·С‹РІР°РµРј cР»РѕРё
       cvShowImage('R', r_plane);
       cvShowImage('G', g_plane);
       cvShowImage('B', b_plane);
 
-      // показываем результат порогового преобразования
+      // РїРѕРєР°Р·С‹РІР°РµРј СЂРµР·СѓР»СЊС‚Р°С‚ РїРѕСЂРѕРіРѕРІРѕРіРѕ РїСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёСЏ
       cvShowImage('R range', r_range);
       cvShowImage('G range', g_range);
       cvShowImage('B range', b_range);
 
-      // cкладываем
+      // cРєР»Р°РґС‹РІР°РµРј
       cvAnd(r_range, g_range, rgb_and);
       cvAnd(rgb_and, b_range, rgb_and);
 
-      // показываем результат
+      // РїРѕРєР°Р·С‹РІР°РµРј СЂРµР·СѓР»СЊС‚Р°С‚
       cvShowImage('rgb and', rgb_and);
 
       c := cvWaitKey(33);
       if (c = 27) then
-        // еcли нажата ESC - выходим
+        // РµcР»Рё РЅР°Р¶Р°С‚Р° ESC - РІС‹С…РѕРґРёРј
         break;
 
     end;
@@ -215,7 +218,7 @@ begin
     WriteLn(Format('[i][G] %d : %d', [Gmin, Gmax]));
     WriteLn(Format('[i][B] %d : %d', [Bmin, Bmax]));
 
-    // оcвобождаем реcурcы
+    // РѕcРІРѕР±РѕР¶РґР°РµРј СЂРµcСѓСЂcС‹
     cvReleaseImage(image);
     cvReleaseImage(rgb);
     cvReleaseImage(r_plane);
@@ -225,7 +228,7 @@ begin
     cvReleaseImage(g_range);
     cvReleaseImage(b_range);
     cvReleaseImage(rgb_and);
-    // удаляем окна
+    // СѓРґР°Р»СЏРµРј РѕРєРЅР°
     cvDestroyAllWindows();
   except
     on E: Exception do

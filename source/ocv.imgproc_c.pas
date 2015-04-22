@@ -167,8 +167,8 @@ procedure cvPyrUp(const src: pIplImage; dst: pIplImage; filter: Integer = CV_GAU
   int calc CV_DEFAULT(1),
   int filter CV_DEFAULT(CV_GAUSSIAN_5x5) );
 *)
-function cvCreatePyramid(const img: pCvArr; extra_layers: Integer; rate: double; const layer_sizes: pCvSize = nil;
-  bufarr: pCvArr = nil; calc: Integer = 1; filter: Integer = CV_GAUSSIAN_5x5): ppCvMat; cdecl;
+function cvCreatePyramid(const img: pCvArr; extra_layers: Integer; rate: double; const layer_sizes: pCvSize = nil; bufarr: pCvArr = nil;
+  calc: Integer = 1; filter: Integer = CV_GAUSSIAN_5x5): ppCvMat; cdecl;
 (*
   Releases pyramid
 
@@ -186,6 +186,13 @@ procedure cvReleasePyramid(var pyramid: ppCvMat; extra_layers: Integer); cdecl;
 procedure cvPyrMeanShiftFiltering(const src: pCvArr; dst: pCvArr; sp: double; sr: double; max_level: Integer { = 1 };
   termcrit: TCvTermCriteria { = CV_DEFAULT(cvTermCriteria(CV_TERMCRIT_ITER + CV_TERMCRIT_EPS, 5, 1)) } ); cdecl;
 
+(*
+  Segments image using seed "markers"
+
+  CVAPI(void) cvWatershed( const CvArr* image, CvArr* markers );
+*)
+procedure cvWatershed(const image: pCvArr; markers: pCvArr); cdecl;
+
 {
   /* Calculates an image derivative using generalized Sobel
   (aperture_size = 1,3,5,7) or Scharr (aperture_size = -1) operator.
@@ -198,8 +205,7 @@ procedure cvPyrMeanShiftFiltering(const src: pCvArr; dst: pCvArr; sp: double; sr
   int yorder,
   int aperture_size CV_DEFAULT(3));
 }
-procedure cvSobel(const src: pIplImage; dst: pIplImage; xorder: Integer; yorder: Integer;
-  aperture_size: Integer = 3); cdecl;
+procedure cvSobel(const src: pIplImage; dst: pIplImage; xorder: Integer; yorder: Integer; aperture_size: Integer = 3); cdecl;
 
 {
   /* Calculates the image Laplacian: (d2/dx + d2/dy)I */
@@ -260,8 +266,7 @@ procedure cvWarpPerspective(const src: pIplImage; dst: pIplImage; const map_matr
   CvMat* map_matrix );
 
 }
-function cvGetPerspectiveTransform(const src: pCvPoint2D32f; const dst: pCvPoint2D32f; map_matrix: pCvMat)
-  : pCvMat; cdecl;
+function cvGetPerspectiveTransform(const src: pCvPoint2D32f; const dst: pCvPoint2D32f; map_matrix: pCvMat): pCvMat; cdecl;
 {
   /* Performs generic geometric transformation using the specified coordinate maps */
   CVAPI(void)  cvRemap(
@@ -308,8 +313,7 @@ procedure cvUndistort2(const src: pCvArr; dst: pCvArr; const camera_matrix: pCvA
   CvArr* mapx,
   CvArr* mapy );
 }
-procedure cvInitUndistortMap(const camera_matrix: pCvMat; const distortion_coeffs: pCvMat; mapx: pCvArr;
-  mapy: pCvArr); cdecl;
+procedure cvInitUndistortMap(const camera_matrix: pCvMat; const distortion_coeffs: pCvMat; mapx: pCvArr; mapy: pCvArr); cdecl;
 
 
 // (* Computes undistortion+rectification map for a head of stereo camera *)
@@ -325,15 +329,15 @@ procedure cvInitUndistortMap(const camera_matrix: pCvMat; const distortion_coeff
 // const CvMat* dist_coeffs,
 // const CvMat* R CV_DEFAULT(0),
 // const CvMat* P CV_DEFAULT(0));
-procedure cvUndistortPoints(const src: pCvMat; dst: pCvMat; const camera_matrix: pCvMat; const dist_coeffs: pCvMat;
-  const R: pCvMat = nil; const P: pCvMat = nil); cdecl;
+procedure cvUndistortPoints(const src: pCvMat; dst: pCvMat; const camera_matrix: pCvMat; const dist_coeffs: pCvMat; const R: pCvMat = nil;
+  const P: pCvMat = nil); cdecl;
 
 // * creates structuring element used for morphological operations */
 // CVAPI(IplConvKernel*)  cvCreateStructuringElementEx(
 // int cols, int  rows, int  anchor_x, int  anchor_y,
 // int shape, int* values CV_DEFAULT(NULL) );
-function cvCreateStructuringElementEx(cols: Integer; rows: Integer; anchor_x: Integer; anchor_y: Integer;
-  shape: Integer; values: PInteger = nil): pIplConvKernel; cdecl;
+function cvCreateStructuringElementEx(cols: Integer; rows: Integer; anchor_x: Integer; anchor_y: Integer; shape: Integer;
+  values: PInteger = nil): pIplConvKernel; cdecl;
 
 // (* releases structuring element *)
 // CVAPI(procedure)  cvReleaseStructuringElement( element: array of IplConvKernel);
@@ -344,8 +348,8 @@ procedure cvReleaseStructuringElement(Var element: pIplConvKernel); cdecl;
 // CVAPI(void)  cvMorphologyEx( const CvArr* src, CvArr* dst,
 // CvArr* temp, IplConvKernel* element,
 // int operation, int iterations CV_DEFAULT(1) );
-procedure cvMorphologyEx(const src: pIplImage; dst: pIplImage; temp: pIplImage; element: pIplConvKernel;
-  operation: Integer; iterations: Integer = 1); cdecl;
+procedure cvMorphologyEx(const src: pIplImage; dst: pIplImage; temp: pIplImage; element: pIplConvKernel; operation: Integer;
+  iterations: Integer = 1); cdecl;
 
 // * Calculates all spatial and central moments up to the 3rd order */
 // CVAPI(void) cvMoments( const CvArr* arr, CvMoments* moments, int binary CV_DEFAULT(0));
@@ -390,8 +394,7 @@ procedure cvGetHuMoments(moments: pCvMoments; hu_moments: pCvHuMoments); cdecl;
   CVAPI(int)  cvSampleLine( const CvArr* image, CvPoint pt1, CvPoint pt2, void* buffer,
   int connectivity CV_DEFAULT(8));
 *)
-function cvSampleLine(const image: pCvArr; pt1: TCvPoint; pt2: TCvPoint; buffer: Pointer; connectivity: Integer = 8)
-  : Integer; cdecl;
+function cvSampleLine(const image: pCvArr; pt1: TCvPoint; pt2: TCvPoint; buffer: Pointer; connectivity: Integer = 8): Integer; cdecl;
 (*
   Retrieves the rectangular image region with specified center from the input array.
   dst(x,y) <- src(x + center.x - dst_width/2, y + center.y - dst_height/2).
@@ -432,9 +435,8 @@ procedure cvMatchTemplate(const image: pCvArr; const templ: pCvArr; result: pCvA
   float* lower_bound CV_DEFAULT(NULL),
   void* userdata CV_DEFAULT(NULL));
 *)
-function cvCalcEMD2(const signature1: pCvArr; const signature2: pCvArr; distance_type: Integer;
-  distance_func: TCvDistanceFunction = nil; const cost_matrix: pCvArr = nil; flow: pCvArr = nil;
-  lower_bound: pfloat = nil; userdata: Pointer = nil): float; cdecl;
+function cvCalcEMD2(const signature1: pCvArr; const signature2: pCvArr; distance_type: Integer; distance_func: TCvDistanceFunction = nil;
+  const cost_matrix: pCvArr = nil; flow: pCvArr = nil; lower_bound: pfloat = nil; userdata: Pointer = nil): float; cdecl;
 
 // ****************************************************************************************
 // *                              Contours retrieving                                     *
@@ -442,17 +444,17 @@ function cvCalcEMD2(const signature1: pCvArr; const signature2: pCvArr; distance
 const
   // * contour retrieval mode */
   CV_RETR_EXTERNAL = 0;
-  CV_RETR_LIST     = 1;
-  CV_RETR_CCOMP    = 2;
-  CV_RETR_TREE     = 3;
+  CV_RETR_LIST = 1;
+  CV_RETR_CCOMP = 2;
+  CV_RETR_TREE = 3;
 
   // * contour approximation method */
-  CV_CHAIN_CODE             = 0;
-  CV_CHAIN_APPROX_NONE      = 1;
-  CV_CHAIN_APPROX_SIMPLE    = 2;
-  CV_CHAIN_APPROX_TC89_L1   = 3;
+  CV_CHAIN_CODE = 0;
+  CV_CHAIN_APPROX_NONE = 1;
+  CV_CHAIN_APPROX_SIMPLE = 2;
+  CV_CHAIN_APPROX_TC89_L1 = 3;
   CV_CHAIN_APPROX_TC89_KCOS = 4;
-  CV_LINK_RUNS              = 5;
+  CV_LINK_RUNS = 5;
 
 type
 
@@ -571,8 +573,8 @@ function cvEndFindContours(Var scanner: pCvContourScanner): pCvSeq; cdecl;
   int  minimal_perimeter CV_DEFAULT(0),
   int  recursive CV_DEFAULT(0));
 *)
-function cvApproxChains(src_seq: pCvSeq; storage: pCvMemStorage; method: Integer = CV_CHAIN_APPROX_SIMPLE;
-  parameter: double = 0; minimal_perimeter: Integer = 0; recursive: Integer = 0): pCvSeq; cdecl;
+function cvApproxChains(src_seq: pCvSeq; storage: pCvMemStorage; method: Integer = CV_CHAIN_APPROX_SIMPLE; parameter: double = 0;
+  minimal_perimeter: Integer = 0; recursive: Integer = 0): pCvSeq; cdecl;
 (*
   Initializes Freeman chain reader.
   The reader is used to iteratively get coordinates of all the chain points.
@@ -617,8 +619,7 @@ function cvApproxPoly(
   int is_closed CV_DEFAULT(-1));
 *)
 
-function cvArcLength(const curve: Pointer; slice: TCvSlice { = CV_WHOLE_SEQ }; is_closed: Integer { = 1 } )
-  : double; cdecl;
+function cvArcLength(const curve: Pointer; slice: TCvSlice { = CV_WHOLE_SEQ }; is_closed: Integer { = 1 } ): double; cdecl;
 
 (*
   CV_INLINE double cvContourPerimeter( const void* contour )
@@ -651,8 +652,7 @@ function cvMinEnclosingCircle(points: pCvArr; center: pCvPoint2D32f; radius: pSi
   CVAPI(double)  cvMatchShapes( const void* object1, const void* object2,
   int method, double parameter CV_DEFAULT(0));
 }
-function cvMatchShapes(const object1: Pointer; const object2: Pointer; method: Integer; parameter: double = 0)
-  : double; cdecl;
+function cvMatchShapes(const object1: Pointer; const object2: Pointer; method: Integer; parameter: double = 0): double; cdecl;
 
 {
   /* Calculates exact convex hull of 2d point set */
@@ -661,8 +661,8 @@ function cvMatchShapes(const object1: Pointer; const object2: Pointer; method: I
   int orientation CV_DEFAULT(CV_CLOCKWISE),
   int return_points CV_DEFAULT(0));
 }
-function cvConvexHull2(const input: pCvSeq; hull_storage: Pointer = nil; orientation: Integer = CV_CLOCKWISE;
-  return_points: Integer = 0): pCvSeq; cdecl;
+function cvConvexHull2(const input: pCvSeq; hull_storage: Pointer = nil; orientation: Integer = CV_CLOCKWISE; return_points: Integer = 0)
+  : pCvSeq; cdecl;
 
 {
   /* Checks whether the contour is convex or not (returns 1 if convex, 0 if not) */
@@ -704,8 +704,7 @@ procedure cvBoxPoints(box: TCvBox2D; pt: TBoxPoints); cdecl;
   CvContour* contour_header,
   CvSeqBlock* block );
 *)
-function cvPointSeqFromMat(seq_kind: Integer; const mat: pCvArr; contour_header: pCvContour; block: pCvSeqBlock)
-  : pCvSeq; cdecl;
+function cvPointSeqFromMat(seq_kind: Integer; const mat: pCvArr; contour_header: pCvContour; block: pCvSeqBlock): pCvSeq; cdecl;
 (*
   Checks whether the point is inside polygon, outside, on an edge (at a vertex).
   Returns positive, negative or zero value, correspondingly.
@@ -727,8 +726,7 @@ function cvPointPolygonTest(const contour: pCvArr; pt: TCvPoint2D32f; measure_di
   float** ranges CV_DEFAULT(NULL),
   int uniform CV_DEFAULT(1));
 }
-function cvCreateHist(dims: Integer; sizes: PInteger; _type: Integer; ranges: Pointer = nil; uniform: Integer = 1)
-  : pCvHistogram; cdecl;
+function cvCreateHist(dims: Integer; sizes: PInteger; _type: Integer; ranges: Pointer = nil; uniform: Integer = 1): pCvHistogram; cdecl;
 // function cvCreateHist(dims: Integer; sizes: PInteger; _type: Integer; ranges: ppFloat = nil;
 // uniform: Integer = 1): pCvHistogram; cdecl; overload;
 
@@ -740,8 +738,8 @@ function cvCreateHist(dims: Integer; sizes: PInteger; _type: Integer; ranges: Po
   float* data, float** ranges CV_DEFAULT(NULL),
   int uniform CV_DEFAULT(1));
 *)
-function cvMakeHistHeaderForArray(dims: Integer; sizes: PInteger; hist: pCvHistogram; data: pfloat;
-  ranges: ppfloat = nil; uniform: Integer = 1): pCvHistogram; cdecl;
+function cvMakeHistHeaderForArray(dims: Integer; sizes: PInteger; hist: pCvHistogram; data: pfloat; ranges: ppfloat = nil;
+  uniform: Integer = 1): pCvHistogram; cdecl;
 
 // * Releases histogram */
 // CVAPI(void)  cvReleaseHist( CvHistogram** hist );
@@ -758,8 +756,8 @@ procedure cvClearHist(hist: pCvHistogram); cdecl;
   int* min_idx CV_DEFAULT(NULL),
   int* max_idx CV_DEFAULT(NULL));
 }
-procedure cvGetMinMaxHistValue(const hist: pCvHistogram; min_value: pSingle; max_value: pSingle;
-  min_idx: PInteger = nil; max_idx: PInteger = nil); cdecl;
+procedure cvGetMinMaxHistValue(const hist: pCvHistogram; min_value: pSingle; max_value: pSingle; min_idx: PInteger = nil;
+  max_idx: PInteger = nil); cdecl;
 
 // (* Clear all histogram bins that are below the threshold *)
 // CVAPI(procedure)  cvThreshHist(var hist: CvHistogram; threshold: Double);
@@ -789,8 +787,7 @@ function cvCompareHist(hist1: pCvHistogram; hist2: pCvHistogram; method: Integer
   int accumulate CV_DEFAULT(0),
   const CvArr* mask CV_DEFAULT(NULL) );
 }
-procedure cvCalcArrHist(var arr: pIplImage; hist: pCvHistogram; accumulate: Integer = 0;
-  const mask: pIplImage = nil); cdecl;
+procedure cvCalcArrHist(var arr: pIplImage; hist: pCvHistogram; accumulate: Integer = 0; const mask: pIplImage = nil); cdecl;
 
 // CV_INLINE  void  cvCalcHist(
 // IplImage** image,
@@ -912,8 +909,7 @@ procedure cvFloodFill(
   double threshold2,
   int  aperture_size CV_DEFAULT(3) );
 }
-procedure cvCanny(const image: pIplImage; edges: pIplImage; threshold1: double; threshold2: double;
-  aperture_size: Integer = 3); cdecl;
+procedure cvCanny(const image: pIplImage; edges: pIplImage; threshold1: double; threshold2: double; aperture_size: Integer = 3); cdecl;
 
 // (* Runs canny edge detector *) CVAPI(
 // procedure)cvCanny(CvArr * image: array of
@@ -947,8 +943,8 @@ procedure cvCanny(const image: pIplImage; edges: pIplImage; threshold1: double; 
   CvSize zero_zone,
   CvTermCriteria  criteria );
 }
-procedure cvFindCornerSubPix(const image: pIplImage; corners: pCvPoint2D32f; count: Integer; win: TCvSize;
-  zero_zone: TCvSize; criteria: TCvTermCriteria); cdecl;
+procedure cvFindCornerSubPix(const image: pIplImage; corners: pCvPoint2D32f; count: Integer; win: TCvSize; zero_zone: TCvSize;
+  criteria: TCvTermCriteria); cdecl;
 
 
 // function; var Adjust corner position using some sort of gradient search * )CVAPI(
@@ -968,9 +964,9 @@ procedure cvFindCornerSubPix(const image: pIplImage; corners: pCvPoint2D32f; cou
   int use_harris CV_DEFAULT(0),
   double k CV_DEFAULT(0.04) );
 }
-procedure cvGoodFeaturesToTrack(const image: pIplImage; eig_image: pIplImage; temp_image: pIplImage;
-  corners: pCvPoint2D32f; corner_count: PInteger; quality_level: double; min_distance: double;
-  const mask: pIplImage = nil; block_size: Integer = 3; use_harris: Integer = 0; k: double = 0.04); cdecl;
+procedure cvGoodFeaturesToTrack(const image: pIplImage; eig_image: pIplImage; temp_image: pIplImage; corners: pCvPoint2D32f;
+  corner_count: PInteger; quality_level: double; min_distance: double; const mask: pIplImage = nil; block_size: Integer = 3;
+  use_harris: Integer = 0; k: double = 0.04); cdecl;
 
 
 // (* Finds lines on binary image using one of several methods.

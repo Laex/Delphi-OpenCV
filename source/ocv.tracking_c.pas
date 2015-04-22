@@ -244,7 +244,7 @@ Type
     CP: Integer; (* number of control vector dimensions *)
 
     (* backward compatibility fields *)
-{$IFDEF 1}
+//{$IFDEF 1}
     PosterState: PSingle; (* =state_pre->data.fl *)
     PriorState: PSingle; (* =state_post->data.fl *)
     DynamMatr: PSingle; (* =transition_matrix->data.fl *)
@@ -254,9 +254,9 @@ Type
     KalmGainMatr: PSingle; (* =gain->data.fl *)
     PriorErrorCovariance: PSingle; (* =error_cov_pre->data.fl *)
     PosterErrorCovariance: PSingle; (* =error_cov_post->data.fl *)
-    Temp1: PSingle; (* temp1->data.fl *)
-    Temp2: PSingle; (* temp2->data.fl *)
-{$ENDIF}
+    _Temp1: PSingle; (* temp1->data.fl *)
+    _Temp2: PSingle; (* temp2->data.fl *)
+//{$ENDIF}
     state_pre: pCvMat; (* predicted state (x'(k)):
       x(k)=A*x(k-1)+B*u(k) *)
     state_post: pCvMat; (* corrected state (x(k)):
