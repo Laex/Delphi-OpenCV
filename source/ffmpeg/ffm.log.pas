@@ -222,8 +222,7 @@ procedure av_log_set_level(level: Integer); cdecl;
 *)
 // void av_log_set_callback(void (*callback)(void*, int, const char*, va_list));
 Type
-  Tav_log_set_callback = procedure(prt: Pointer; level: Integer; fmt: PAnsiChar; vl: PVA_LIST);
-cdecl varargs;
+  Tav_log_set_callback = procedure(prt: Pointer; level: Integer; fmt: PAnsiChar; vl: PVA_LIST); cdecl varargs;
 
 procedure av_log_set_callback(callbackproc: Tav_log_set_callback); cdecl;
 

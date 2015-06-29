@@ -32,9 +32,6 @@ unit ocv.mat;
 interface
 
 uses
-//{$IFDEF MSWINDOWS}
-//  Winapi.Windows,
-//{$ENDIF MSWINDOWS}
   ocv.core.types_c,
   ocv.core_c,
   ocv.highgui_c;

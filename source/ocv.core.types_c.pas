@@ -66,9 +66,9 @@ interface
 const
   // Ќаименьшее число дл€ которого выполн€етс€ условие 1.0+DBL_EPSILON <> 1.0
   DBL_EPSILON = 2.2204460492503131E-016;
-  DBL_MAX     = 1.7976931348623157E+308;
+  DBL_MAX = 1.7976931348623157E+308;
   FLT_EPSILON = 1.19209290E-07;
-  FLT_MAX     = 1E+37;
+  FLT_MAX = 1E+37;
 
 type
   Float = Single;
@@ -175,57 +175,57 @@ type
 {$EXTERNALSYM CVStatus}
 
 const
-  CV_StsOk                     = 0; (* everithing is ok *)
-  CV_StsBackTrace              = -1; (* pseudo error for back trace *)
-  CV_StsError                  = -2; (* unknown /unspecified error *)
-  CV_StsInternal               = -3; (* internal error (bad state) *)
-  CV_StsNoMem                  = -4; (* insufficient memory *)
-  CV_StsBadArg                 = -5; (* function arg/param is bad *)
-  CV_StsBadFunc                = -6; (* unsupported function *)
-  CV_StsNoConv                 = -7; (* iter. didn't converge *)
-  CV_StsAutoTrace              = -8; (* tracing *)
-  CV_HeaderIsNull              = -9; (* image header is 0 *)
-  CV_BadImageSize              = -10; (* image size is invalid *)
-  CV_BadOffset                 = -11; (* offset is invalid *)
-  CV_BadDataPtr                = -12; (* *)
-  CV_BadStep                   = -13; (* *)
-  CV_BadModelOrChSeq           = -14; (* *)
-  CV_BadNumChannels            = -15; (* *)
-  CV_BadNumChannel1U           = -16; (* *)
-  CV_BadDepth                  = -17; (* *)
-  CV_BadAlphaChannel           = -18; (* *)
-  CV_BadOrder                  = -19; (* *)
-  CV_BadOrigin                 = -20; (* *)
-  CV_BadAlign                  = -21; (* *)
-  CV_BadCallBack               = -22; (* *)
-  CV_BadTileSize               = -23; (* *)
-  CV_BadCOI                    = -24; (* *)
-  CV_BadROISize                = -25; (* *)
-  CV_MaskIsTiled               = -26; (* *)
-  CV_StsNullPtr                = -27; (* null pointer *)
-  CV_StsVecLengthErr           = -28; (* incorrect vector length *)
+  CV_StsOk = 0; (* everithing is ok *)
+  CV_StsBackTrace = -1; (* pseudo error for back trace *)
+  CV_StsError = -2; (* unknown /unspecified error *)
+  CV_StsInternal = -3; (* internal error (bad state) *)
+  CV_StsNoMem = -4; (* insufficient memory *)
+  CV_StsBadArg = -5; (* function arg/param is bad *)
+  CV_StsBadFunc = -6; (* unsupported function *)
+  CV_StsNoConv = -7; (* iter. didn't converge *)
+  CV_StsAutoTrace = -8; (* tracing *)
+  CV_HeaderIsNull = -9; (* image header is 0 *)
+  CV_BadImageSize = -10; (* image size is invalid *)
+  CV_BadOffset = -11; (* offset is invalid *)
+  CV_BadDataPtr = -12; (* *)
+  CV_BadStep = -13; (* *)
+  CV_BadModelOrChSeq = -14; (* *)
+  CV_BadNumChannels = -15; (* *)
+  CV_BadNumChannel1U = -16; (* *)
+  CV_BadDepth = -17; (* *)
+  CV_BadAlphaChannel = -18; (* *)
+  CV_BadOrder = -19; (* *)
+  CV_BadOrigin = -20; (* *)
+  CV_BadAlign = -21; (* *)
+  CV_BadCallBack = -22; (* *)
+  CV_BadTileSize = -23; (* *)
+  CV_BadCOI = -24; (* *)
+  CV_BadROISize = -25; (* *)
+  CV_MaskIsTiled = -26; (* *)
+  CV_StsNullPtr = -27; (* null pointer *)
+  CV_StsVecLengthErr = -28; (* incorrect vector length *)
   CV_StsFilterStructContentErr = -29; (* incorr. filter structure content *)
   CV_StsKernelStructContentErr = -30; (* incorr. transform kernel content *)
-  CV_StsFilterOffsetErr        = -31; (* incorrect filter ofset value *)
-  CV_StsBadSize                = -201; (* the input/output structure size is incorrect *)
-  CV_StsDivByZero              = -202; (* division by zero *)
-  CV_StsInplaceNotSupported    = -203; (* in-place operation is not supported *)
-  CV_StsObjectNotFound         = -204; (* request can't be completed *)
-  CV_StsUnmatchedFormats       = -205; (* formats of input/output arrays differ *)
-  CV_StsBadFlag                = -206; (* flag is wrong or not supported *)
-  CV_StsBadPoint               = -207; (* bad CvPoint *)
-  CV_StsBadMask                = -208; (* bad format of mask (neither 8uC1 nor 8sC1) *)
-  CV_StsUnmatchedSizes         = -209; (* sizes of input/output structures do not match *)
-  CV_StsUnsupportedFormat      = -210; (* the data format/type is not supported by the function *)
-  CV_StsOutOfRange             = -211; (* some of parameters are out of range *)
-  CV_StsParseError             = -212; (* invalid syntax/structure of the parsed file *)
-  CV_StsNotImplemented         = -213; (* the requested function/feature is not implemented *)
-  CV_StsBadMemBlock            = -214; (* an allocated block has been corrupted *)
-  CV_StsAssert                 = -215; (* assertion failed *)
-  CV_GpuNotSupported           = -216;
-  CV_GpuApiCallError           = -217;
-  CV_OpenGlNotSupported        = -218;
-  CV_OpenGlApiCallError        = -219;
+  CV_StsFilterOffsetErr = -31; (* incorrect filter ofset value *)
+  CV_StsBadSize = -201; (* the input/output structure size is incorrect *)
+  CV_StsDivByZero = -202; (* division by zero *)
+  CV_StsInplaceNotSupported = -203; (* in-place operation is not supported *)
+  CV_StsObjectNotFound = -204; (* request can't be completed *)
+  CV_StsUnmatchedFormats = -205; (* formats of input/output arrays differ *)
+  CV_StsBadFlag = -206; (* flag is wrong or not supported *)
+  CV_StsBadPoint = -207; (* bad CvPoint *)
+  CV_StsBadMask = -208; (* bad format of mask (neither 8uC1 nor 8sC1) *)
+  CV_StsUnmatchedSizes = -209; (* sizes of input/output structures do not match *)
+  CV_StsUnsupportedFormat = -210; (* the data format/type is not supported by the function *)
+  CV_StsOutOfRange = -211; (* some of parameters are out of range *)
+  CV_StsParseError = -212; (* invalid syntax/structure of the parsed file *)
+  CV_StsNotImplemented = -213; (* the requested function/feature is not implemented *)
+  CV_StsBadMemBlock = -214; (* an allocated block has been corrupted *)
+  CV_StsAssert = -215; (* assertion failed *)
+  CV_GpuNotSupported = -216;
+  CV_GpuApiCallError = -217;
+  CV_OpenGlNotSupported = -218;
+  CV_OpenGlApiCallError = -219;
 
   (* ***************************************************************************************\
     *                             Common macros and  functions                         *
@@ -320,10 +320,10 @@ const
 {$EXTERNALSYM IPL_BORDER_WRAP}
   // * Sub-pixel interpolation methods */
 
-  CV_INTER_NN       = 0;
-  CV_INTER_LINEAR   = 1;
-  CV_INTER_CUBIC    = 2;
-  CV_INTER_AREA     = 3;
+  CV_INTER_NN = 0;
+  CV_INTER_LINEAR = 1;
+  CV_INTER_CUBIC = 2;
+  CV_INTER_AREA = 3;
   CV_INTER_LANCZOS4 = 4;
 
 type
@@ -587,6 +587,7 @@ type
   ppCvMat = ^pCvMat;
 
   TCvMat = record
+  public
     _type: Integer;
     step: Integer;
 
@@ -597,6 +598,24 @@ type
 
     rows: Integer;
     cols: Integer;
+  private
+    function GetMatByte(const row, col: Integer): Byte; inline;
+    function GetMatDouble(const row, col: Integer): Double; inline;
+    function GetMatInteger(const row, col: Integer): Integer; inline;
+    function GetMatSingle(const row, col: Integer): Single; inline;
+    procedure SetMatByte(const row, col: Integer; const Value: Byte); inline;
+    procedure SetMatDouble(const row, col: Integer; const Value: Double); inline;
+    procedure SetMatInteger(const row, col, Value: Integer); inline;
+    procedure SetMatSingle(const row, col: Integer; const Value: Single); inline;
+  public
+    function AsDouble: PDouble; inline;
+    function AsInteger: PInteger; inline;
+    function AsByte: PByte; inline;
+    function AsSingle: PSingle; inline;
+    property MatDouble[const row, col: Integer]: Double Read GetMatDouble write SetMatDouble;
+    property MatSingle[const row, col: Integer]: Single Read GetMatSingle write SetMatSingle;
+    property MatInteger[const row, col: Integer]: Integer Read GetMatInteger write SetMatInteger;
+    property MatByte[const row, col: Integer]: Byte Read GetMatByte write SetMatByte;
   end;
 
   { ***************************************************************************************
@@ -623,8 +642,8 @@ type
 
   TCvMatNDdata = record
     ptr: PByte;
-    fl: pSingle;
-    db: pDouble;
+    fl: PSingle;
+    db: PDouble;
     i: PInteger;
     s: pSmallInt;
   end;
@@ -681,7 +700,7 @@ type
     bins: pIplImage;
     thresh: array [0 .. CV_MAX_DIM - 1, 0 .. 1] of Single;
     (* For uniform histograms. *)
-    thresh2: pSingle; (* For non-uniform histograms. *)
+    thresh2: PSingle; (* For non-uniform histograms. *)
     mat: TCvMatND; (* Embedded matrix header for array histograms. *)
   end;
 
@@ -1627,7 +1646,8 @@ Type
   // typedef void* (CV_CDECL *CvReadFunc)( CvFileStorage* storage, CvFileNode* node );
   TCvReadFunc = function(storage: pCvFileStorage; node: pCvFileNode): Pointer; cdecl;
   // typedef void (CV_CDECL *CvWriteFunc)( CvFileStorage* storage, const char* name,const void* struct_ptr, CvAttrList attributes );
-  TCvWriteFunc = procedure(storage: pCvFileStorage; const name: pCVChar; const struct_ptr: pPointer; attributes: TCvAttrList); cdecl;
+  TCvWriteFunc = procedure(storage: pCvFileStorage; const name: pCVChar; const struct_ptr: pPointer;
+    attributes: TCvAttrList); cdecl;
   // typedef void* (CV_CDECL *CvCloneFunc)( const void* struct_ptr );
   TCvCloneFunc = function(const struct_ptr: pPointer): Pointer; cdecl;
 
@@ -2255,16 +2275,17 @@ function CvTermCriteria(_type: Integer; max_iter: Integer; epsilon: Double): TCv
   #endif
   }
 *)
-function cvFloor(value: Double): Integer; {$IFDEF USE_INLINE}inline; {$ENDIF}
+function cvFloor(Value: Double): Integer; {$IFDEF USE_INLINE}inline; {$ENDIF}
 function cvScalarAll(val0123: Double): TCvScalar; {$IFDEF USE_INLINE}inline; {$ENDIF}
 function cvPoint(const x: Integer = 0; const y: Integer = 0): TCvPoint; {$IFDEF USE_INLINE}inline; {$ENDIF}
 function CvPoint2f(const x: Single = 0; const y: Single = 0): TcvPoint2f; {$IFDEF USE_INLINE}inline; {$ENDIF}
 function CvSize(const width, height: Integer): TCvSize; {$IFDEF USE_INLINE}inline; {$ENDIF}
-function CvScalar(const val0: Double; const val1: Double = 0; const val2: Double = 0; const val3: Double = 0): TCvScalar;
+function CvScalar(const val0: Double; const val1: Double = 0; const val2: Double = 0; const val3: Double = 0)
+  : TCvScalar;
 {$IFDEF USE_INLINE}inline; {$ENDIF}
 function cvRandInt(Var rng: TCvRNG): Cardinal; {$IFDEF USE_INLINE}inline; {$ENDIF}
 function CvRect(Const x, y, width, height: Integer): TCvRect; {$IFDEF USE_INLINE}inline; {$ENDIF}
-function cvRound(value: Double): Integer;
+function cvRound(Value: Double): Integer;
 
 const
   cvZeroRect: TCvRect = (x: 0; y: 0; width: 0; height: 0);
@@ -2412,7 +2433,8 @@ end;
 
 function CV_ELEM_SIZE;
 begin
-  Result := (CV_MAT_CN(_type) shl ((((SizeOf(NativeInt) div 4 + 1) * (16384 or $3A50)) shr CV_MAT_DEPTH(_type) * 2) and 3));
+  Result := (CV_MAT_CN(_type) shl ((((SizeOf(NativeInt) div 4 + 1) * (16384 or $3A50)) shr CV_MAT_DEPTH(_type) *
+    2) and 3));
 end;
 
 function CV_32SC1: Integer;
@@ -2496,7 +2518,7 @@ end;
 
 function cvRound;
 begin
-  Result := Round(value);
+  Result := Round(Value);
 end;
 
 function iif(const Conditional: boolean; const ifTrue, ifFalse: Variant): Variant; {$IFDEF USE_INLINE}inline;
@@ -2568,8 +2590,8 @@ Var
   diff: TCv32suf;
   i: Integer;
 begin
-  i := cvRound(value);
-  diff.f := (value - i);
+  i := cvRound(Value);
+  diff.f := (Value - i);
   if diff.i < 0 then
     Dec(i);
   Result := i;
@@ -2732,8 +2754,8 @@ end;
 function CV_IMAGE_ELEM(image: pIplImage; size_elemtype, row, col: Integer): Pointer; {$IFDEF USE_INLINE}inline; {$ENDIF}
 begin
   // (((elemtype*)((image)->imageData + (image)->widthStep*(row)))[(col)])
-  Result := {$IFDEF DELPHI7}Pointer({$ENDIF DELPHI7}{$IFDEF DELPHI2005_UP}PByte{$ELSE}Integer{$ENDIF}(image^.imageData) + image^.widthStep *
-    row + col * size_elemtype{$IFDEF DELPHI7}){$ENDIF DELPHI7};
+  Result := {$IFDEF DELPHI7}Pointer({$ENDIF DELPHI7}{$IFDEF DELPHI2005_UP}PByte{$ELSE}Integer{$ENDIF}(image^.imageData)
+    + image^.widthStep * row + col * size_elemtype{$IFDEF DELPHI7}){$ENDIF DELPHI7};
 end;
 
 function cvRealScalar(val0: Double): TCvScalar; {$IFDEF USE_INLINE}inline; {$ENDIF}
@@ -2828,6 +2850,68 @@ end;
 class operator TCvScalar.LessThan(a, b: TCvScalar): boolean;
 begin
   Result := (a.val[0] < b.val[0]) and (a.val[1] < b.val[1]) and (a.val[2] < b.val[2]) and (a.val[3] <= b.val[3]);
+end;
+
+{ TCvMat }
+
+function TCvMat.AsByte: PByte;
+begin
+  Result := data;
+end;
+
+function TCvMat.AsDouble: PDouble;
+begin
+  Result := data;
+end;
+
+function TCvMat.AsInteger: PInteger;
+begin
+  Result := data;
+end;
+
+function TCvMat.AsSingle: PSingle;
+begin
+  Result := data;
+end;
+
+function TCvMat.GetMatByte(const row, col: Integer): Byte;
+begin
+  Result := PByte(CV_MAT_ELEM(Self, SizeOf(Byte), row, col))^;
+end;
+
+function TCvMat.GetMatDouble(const row, col: Integer): Double;
+begin
+  Result := PDouble(CV_MAT_ELEM(Self, SizeOf(Double), row, col))^;
+end;
+
+function TCvMat.GetMatInteger(const row, col: Integer): Integer;
+begin
+  Result := PInteger(CV_MAT_ELEM(Self, SizeOf(Integer), row, col))^;
+end;
+
+function TCvMat.GetMatSingle(const row, col: Integer): Single;
+begin
+  Result := PSingle(CV_MAT_ELEM(Self, SizeOf(Single), row, col))^;
+end;
+
+procedure TCvMat.SetMatByte(const row, col: Integer; const Value: Byte);
+begin
+  PByte(CV_MAT_ELEM(Self, SizeOf(Byte), row, col))^ := Value;
+end;
+
+procedure TCvMat.SetMatDouble(const row, col: Integer; const Value: Double);
+begin
+  PDouble(CV_MAT_ELEM(Self, SizeOf(Double), row, col))^ := Value;
+end;
+
+procedure TCvMat.SetMatInteger(const row, col, Value: Integer);
+begin
+  PInteger(CV_MAT_ELEM(Self, SizeOf(Integer), row, col))^ := Value;
+end;
+
+procedure TCvMat.SetMatSingle(const row, col: Integer; const Value: Single);
+begin
+  PSingle(CV_MAT_ELEM(Self, SizeOf(Single), row, col))^ := Value;
 end;
 
 initialization

@@ -274,6 +274,7 @@ begin
       try
         FLock.Enter;
         try
+          frame:=nil;
           frame := cvQueryFrame(FCapture);
         finally
           FLock.Leave;
