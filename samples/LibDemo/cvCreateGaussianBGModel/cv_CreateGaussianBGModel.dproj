@@ -150,7 +150,7 @@
                     <Source Name="MainSource">cv_CreateGaussianBGModel.dpr</Source>
                 </Source>
             </Delphi.Personality>
-            <Deployment Version="1">
+            <Deployment Version="2">
                 <DeployClass Required="true" Name="DependencyPackage">
                     <Platform Name="iOSDevice64">
                         <Operation>1</Operation>
@@ -469,13 +469,13 @@
                         <Operation>1</Operation>
                     </Platform>
                 </DeployClass>
-                <ProjectRoot Platform="Win64" Name="$(PROJECTNAME)"/>
+                <ProjectRoot Platform="iOSDevice32" Name="$(PROJECTNAME).app"/>
                 <ProjectRoot Platform="Android" Name="$(PROJECTNAME)"/>
                 <ProjectRoot Platform="Win32" Name="$(PROJECTNAME)"/>
                 <ProjectRoot Platform="iOSDevice64" Name="$(PROJECTNAME).app"/>
+                <ProjectRoot Platform="Win64" Name="$(PROJECTNAME)"/>
                 <ProjectRoot Platform="OSX32" Name="$(PROJECTNAME)"/>
                 <ProjectRoot Platform="iOSSimulator" Name="$(PROJECTNAME).app"/>
-                <ProjectRoot Platform="iOSDevice32" Name="$(PROJECTNAME).app"/>
             </Deployment>
             <Platforms>
                 <Platform value="OSX32">False</Platform>

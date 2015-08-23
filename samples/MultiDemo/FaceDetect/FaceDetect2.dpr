@@ -1,26 +1,27 @@
-//*****************************************************************
-  //                       Delphi-OpenCV Demo
-  //               Copyright (C) 2013 Project Delphi-OpenCV
-  // ****************************************************************
-  // Contributor:
-    // Laentir Valetov
-  // email:laex@bk.ru
-  // ****************************************************************
-  // You may retrieve the latest version of this file at the GitHub,
-  // located at git://github.com/Laex/Delphi-OpenCV.git
-  // ****************************************************************
-  // The contents of this file are used with permission, subject to
-  // the Mozilla Public License Version 1.1 (the "License"); you may
-  // not use this file except in compliance with the License. You may
-  // obtain a copy of the License at
-  // http://www.mozilla.org/MPL/MPL-1_1Final.html
-  //
-  // Software distributed under the License is distributed on an
-  // "AS IS" basis, WITHOUT WARRANTY OF ANY KIND, either express or
-  // implied. See the License for the specific language governing
-  // rights and limitations under the License.
-  //*******************************************************************
+(*
+  *****************************************************************
+  Delphi-OpenCV Demo
+  Copyright (C) 2013 Project Delphi-OpenCV
+  ****************************************************************
+  Contributor:
+  Laentir Valetov
+  email:laex@bk.ru
+  ****************************************************************
+  You may retrieve the latest version of this file at the GitHub,
+  located at git://github.com/Laex/Delphi-OpenCV.git
+  ****************************************************************
+  The contents of this file are used with permission, subject to
+  the Mozilla Public License Version 1.1 (the "License"); you may
+  not use this file except in compliance with the License. You may
+  obtain a copy of the License at
+  http://www.mozilla.org/MPL/MPL-1_1Final.html
 
+  Software distributed under the License is distributed on an
+  "AS IS" basis, WITHOUT WARRANTY OF ANY KIND, either express or
+  implied. See the License for the specific language governing
+  rights and limitations under the License.
+  *******************************************************************
+*)
 program FaceDetect;
 
 {$APPTYPE CONSOLE}
@@ -67,8 +68,7 @@ begin
   begin
     // There can be more than one face in an image. So create a growable sequence of faces.
     // Detect the objects and store them in the sequence
-    faces := cvHaarDetectObjects(image, cascade, storage, 1.1, 2, CV_HAAR_DO_CANNY_PRUNING, cvSize(40, 40),
-      cvSize(0, 0));
+    faces := cvHaarDetectObjects(image, cascade, storage, 1.1, 2, CV_HAAR_DO_CANNY_PRUNING, cvSize(40, 40), cvSize(0, 0));
 
     // Loop the number of faces found.
     for i := 1 to faces^.total do

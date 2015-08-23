@@ -99,12 +99,12 @@ type
   protected
     FSourceThread: TocvCustomSourceThread;
     FThreadDelay: Integer;
+    FEnabled: Boolean;
     procedure OnNotifyData(Sender: TObject; Var IplImage: IocvImage); virtual;
     procedure SetEnabled(Value: Boolean); virtual;
     function GetEnabled: Boolean; override;
     procedure TerminateSourceThread; virtual;
   private
-    FEnabled: Boolean;
     FOnImage: TOnOcvNotify;
     procedure ReleaseSource; virtual;
   public

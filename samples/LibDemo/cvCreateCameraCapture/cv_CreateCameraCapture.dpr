@@ -42,7 +42,6 @@ var
   frame, capframe: PIplImage;
   counter: Integer;
   filename: pCVChar;
-  c: Integer;
 
 begin
   try
@@ -54,15 +53,12 @@ begin
     width := cvGetCaptureProperty(capture, CV_CAP_PROP_FRAME_WIDTH);
     height := cvGetCaptureProperty(capture, CV_CAP_PROP_FRAME_HEIGHT);
     WriteLn(Format('[i] %.0f x %.0f', [width, height]));
-    frame := Nil;
     cvNamedWindow('capture', CV_WINDOW_AUTOSIZE);
     WriteLn('[i] press Enter for capture image');
     WriteLn('[i] press Space for captured image info');
     WriteLn('[i] press Esc for quit!');
     counter := 0;
-    filename := AllocMem(512);
 
-    frame := nil;
     capframe := nil;
     while true do
     begin
@@ -71,7 +67,7 @@ begin
       if Assigned(frame) then
       begin
         if not Assigned(capframe) then
-          capframe := cvCreateImage(cvGetSize(frame), frame^.depth, frame.nChannels);
+          capframe := cvCreateImage(cvGetSize(frame), frame^.depth, frame^.nChannels);
         cvCopyImage(frame, capframe);
       end;
       // показываем

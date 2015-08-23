@@ -179,7 +179,7 @@ begin
       (FSourceThread as TocvFFMpegIPCamSourceThread).FReconnectDelay := ReconnectDelay;
       (FSourceThread as TocvFFMpegIPCamSourceThread).SetIPCamUrl(GetIPCamTarget, Value);
     end;
-    Enabled := Value;
+    FEnabled := Value;
   end;
 end;
 

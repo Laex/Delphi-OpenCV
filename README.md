@@ -1,6 +1,6 @@
 #Delphi-OpenCV
 * OpenCV version - 2.4.11<br>
-* Development environment - Delphi 2010-XE7<br>
+* Development environment - Delphi 2010-XE8<br>
 
 <b>Contributors:</b>
 ```
@@ -24,7 +24,7 @@ swresample-1.dll, swscale-3.dll
 * Dynamic library OpenCV need to download [here][4]<br>
 Files: _2411.dll and _2411d.dll
 ```
-After installing OpenCV:<br>
+After installing OpenCV:
 (5) 32-bit in the C:\OpenCV\build\x86\vc12\bin\
 (6) 64-bit in the C:\OpenCV\build\x64\vc12\bin\
 ```

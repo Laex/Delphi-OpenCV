@@ -38,9 +38,9 @@ uses
   ocv.imgproc_c,
   ocv.imgproc.types_c;
 
-{$DEFINE RECT}
-// {$DEFINE RECT} - using cvBoundingRect - work correctly
-// {DEFINE RECT} - not defined RECT - using cvMinAreaRect2
+// {$DEFINE RECT}
+// {$DEFINE RECT} //- using cvBoundingRect - work correctly
+{ DEFINE RECT } // - not defined RECT - using cvMinAreaRect2
 
 var
   storage: pCvMemStorage = nil;
@@ -76,7 +76,8 @@ begin
   s_contours := AllocMem(SizeOf(TCvSeq));
   // »щем контуры на изображении
   cvClearMemStorage(s_storage);
-  cvFindContours(img_in, s_storage, @s_contours, SizeOf(TCvContour), CV_RETR_LIST, CV_CHAIN_APPROX_SIMPLE, cvPoint(0, 0));
+  cvFindContours(img_in, s_storage, @s_contours, SizeOf(TCvContour), CV_RETR_LIST, CV_CHAIN_APPROX_SIMPLE,
+    cvPoint(0, 0));
   while (s_contours <> nil) do
   begin
     area := cvContourArea(s_contours, CV_WHOLE_SEQ);
@@ -120,18 +121,20 @@ begin
       // End
       contours := AllocMem(SizeOf(TCvSeq));
       cvClearMemStorage(storage);
-      cvFindContours(difference_img, storage, @contours, SizeOf(TCvContour), CV_RETR_LIST, CV_CHAIN_APPROX_NONE, cvPoint(0, 0));
+      cvFindContours(difference_img, storage, @contours, SizeOf(TCvContour), CV_RETR_LIST, CV_CHAIN_APPROX_NONE,
+        cvPoint(0, 0));
       c := contours;
       while (c <> nil) do
       begin
 {$IFDEF RECT}
         rect := cvBoundingRect(c, 0);
-        cvRectangle(frame, cvPoint(rect.x, rect.y), cvPoint(rect.x + rect.width, rect.y + rect.height), cvScalar(0, 0, 255, 0), 2, 8, 0);
+        cvRectangle(frame, cvPoint(rect.x, rect.y), cvPoint(rect.x + rect.width, rect.y + rect.height),
+          cvScalar(0, 0, 255, 0), 2, 8, 0);
 {$ELSE}
         rect2d := cvMinAreaRect2(c);
-        cvRectangle(frame, cvPoint(Round(rect2d.center.x - rect2d.size.width / 2), Round(rect2d.center.y - rect2d.size.height / 2)),
-          cvPoint(Round(rect2d.center.x + rect2d.size.width / 2), Round(rect2d.center.y + rect2d.size.height / 2)),
-          cvScalar(0, 0, 255, 0), 2, 8, 0);
+        cvRectangle(frame, cvPoint(Round(rect2d.center.x - rect2d.size.width / 2),
+          Round(rect2d.center.y - rect2d.size.height / 2)), cvPoint(Round(rect2d.center.x + rect2d.size.width / 2),
+          Round(rect2d.center.y + rect2d.size.height / 2)), cvScalar(0, 0, 255, 0), 2, 8, 0);
 {$ENDIF}
         c := c.h_next;
       end;

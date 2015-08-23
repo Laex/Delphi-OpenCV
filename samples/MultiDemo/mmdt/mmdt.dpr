@@ -1,30 +1,31 @@
-//*****************************************************************
-  //                       Delphi-OpenCV Demo
-  //               Copyright (C) 2013 Project Delphi-OpenCV
-  // ****************************************************************
-  // Contributor:
-    // Laentir Valetov
-  // email:laex@bk.ru
-  // ****************************************************************
-  // You may retrieve the latest version of this file at the GitHub,
-  // located at git://github.com/Laex/Delphi-OpenCV.git
-  // ****************************************************************
-  // The contents of this file are used with permission, subject to
-  // the Mozilla Public License Version 1.1 (the "License"); you may
-  // not use this file except in compliance with the License. You may
-  // obtain a copy of the License at
-  // http://www.mozilla.org/MPL/MPL-1_1Final.html
-  //
-  // Software distributed under the License is distributed on an
-  // "AS IS" basis, WITHOUT WARRANTY OF ANY KIND, either express or
-  // implied. See the License for the specific language governing
-  // rights and limitations under the License.
-  //  ***************************************************************
-  //  Original file:
-  //  http://vidikon.com/download/multimd.zip
-  //  http://blog.vidikon.com/?p=447
-  //  *************************************************************** *)
+(*
+  *****************************************************************
+  Delphi-OpenCV Demo
+  Copyright (C) 2013 Project Delphi-OpenCV
+  ****************************************************************
+  Contributor:
+  Laentir Valetov
+  email:laex@bk.ru
+  ****************************************************************
+  You may retrieve the latest version of this file at the GitHub,
+  located at git://github.com/Laex/Delphi-OpenCV.git
+  ****************************************************************
+  The contents of this file are used with permission, subject to
+  the Mozilla Public License Version 1.1 (the "License"); you may
+  not use this file except in compliance with the License. You may
+  obtain a copy of the License at
+  http://www.mozilla.org/MPL/MPL-1_1Final.html
 
+  Software distributed under the License is distributed on an
+  "AS IS" basis, WITHOUT WARRANTY OF ANY KIND, either express or
+  implied. See the License for the specific language governing
+  rights and limitations under the License.
+  ***************************************************************
+  Original file:
+  http://vidikon.com/download/multimd.zip
+  http://blog.vidikon.com/?p=447
+  ***************************************************************
+*)
 program mmdt;
 
 {$APPTYPE CONSOLE}
@@ -52,9 +53,10 @@ var
   all_camera: Integer = 0;
   capture: array [0 .. MAX_CAMERA - 1] of pCvCapture;
   allcam: Integer;
-threadvar
+  threadvar
   // thread
-  NumMultiThread: Integer;
+    NumMultiThread: Integer;
+
 var
   UnloadCapture, WindowCapture: array [0 .. MAX_CAMERA - 1] of Integer;
 
@@ -113,7 +115,8 @@ Var
   DetectZone: Integer;
   jj, i1, j1, xx, yy: Integer;
 begin
-  timestamp := GetTickCount / CLOCKS_PER_SEC; // get current time in seconds
+  timestamp := GetTickCount / CLOCKS_PER_SEC;
+  // get current time in seconds
   size := CvSize(img^.width, img^.height); // get current frame size
   idx1 := last[camera];
   DetectZone := 0;
@@ -185,9 +188,10 @@ begin
       magnitude := 100;
     end
     else
-    begin // i-th motion component
+    begin
+      // i-th motion component
       comp_rect := pCvConnectedComp(cvGetSeqElem(seq, i))^.rect;
-      if (comp_rect.width + comp_rect.height < 50) then // reject very small components
+      if (comp_rect.width + comp_rect.height < 100) then // reject very small components
         continue;
 
       color := CV_RGB(255, 0, 0);
@@ -207,7 +211,8 @@ begin
 
     // calculate orientation
     angle := cvCalcGlobalOrientation(orient[camera], mask[camera], mhi[camera], timestamp, MHI_DURATION);
-    angle := 360.0 - angle; // adjust for images with top-left origin
+    angle := 360.0 - angle;
+    // adjust for images with top-left origin
 
     count := cvNorm(silh, 0, CV_L1, 0); // calculate number of points within silhouette ROI
 
@@ -334,16 +339,16 @@ begin
         waitkey := MINMSEC
       else
         waitkey := MAXMSEC;
-       if (localWindowCapture <> WindowCapture[localNumMultiThread]) then
-       begin
-       if (localWindowCapture > 0) then
-       cvDestroyWindow(pCvChar(@buf[1]))
-       else
-       cvNamedWindow(pCvChar(@buf[1]), 1);
-       localWindowCapture := WindowCapture[localNumMultiThread];
-       end;
-       if (localWindowCapture <> 0) then
-      cvShowImage(pCvChar(@buf[1]), image);
+      if (localWindowCapture <> WindowCapture[localNumMultiThread]) then
+      begin
+        if (localWindowCapture > 0) then
+          cvDestroyWindow(pCvChar(@buf[1]))
+        else
+          cvNamedWindow(pCvChar(@buf[1]), 1);
+        localWindowCapture := WindowCapture[localNumMultiThread];
+      end;
+      if (localWindowCapture <> 0) then
+        cvShowImage(pCvChar(@buf[1]), image);
       if (detect > 0) and (OUTJPG <> 0) then
       begin
         buf1 := PATHJPG + Format('cam%dn', [localNumMultiThread]);
@@ -359,8 +364,7 @@ begin
         if (OUTAVI <> 0) then
         begin
           if not Assigned(logpolar_frame) then
-            logpolar_frame := cvCreateImage(CvSize(image1^.width div 2, image1^.height div 2), image1^.depth,
-              image1^.nChannels);
+            logpolar_frame := cvCreateImage(CvSize(image1^.width div 2, image1^.height div 2), image1^.depth, image1^.nChannels);
           cvResize(image1, logpolar_frame, 2);
           cvWriteFrame(cvVideoWriter, logpolar_frame);
         end;
@@ -377,8 +381,8 @@ begin
       // WriteCam[localNumMultiThread]:=1;
     end;
     cvReleaseCapture(capture[localNumMultiThread]);
-     if (localWindowCapture <> 0) then
-    cvDestroyWindow(pCvChar(@buf[1]));
+    if (localWindowCapture <> 0) then
+      cvDestroyWindow(pCvChar(@buf[1]));
     cvReleaseVideoWriter(cvVideoWriter);
   end;
   if (OUTLOG <> 0) then
@@ -432,7 +436,7 @@ begin
       if not Assigned(capture[i]) then
         continue;
       UnloadCapture[i] := 1;
-//      WindowCapture[i] := ww;
+      // WindowCapture[i] := ww;
       Inc(all_camera);
       cvReleaseCapture(capture[i]);
     end;
