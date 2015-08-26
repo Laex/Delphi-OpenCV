@@ -4,7 +4,7 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, ffm.libavcodec.avcodec,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, ffm.libavcodec.avcodec, ocv.comp.FFMSource,
   ocv.comp.Types, ocv.comp.Source, ocv.comp.View, Vcl.StdCtrls, Vcl.ExtCtrls;
 
 type

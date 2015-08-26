@@ -1,6 +1,7 @@
 //
 {$POINTERMATH ON}
 {$MINENUMSIZE 4} (* use 4-byte enums *)
+{$WRITEABLECONST ON}
 //
 // swscale
 {$DEFINE FF_API_SWS_GETCONTEXT}

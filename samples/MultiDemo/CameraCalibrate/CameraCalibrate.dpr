@@ -281,15 +281,15 @@ begin
 
     // сќ’–јЌя≈ћ ¬Ќ”“–≈ЌЌ»≈ ѕј–јћ≈“–џ » ƒ»с“ќрс»ё
     // Parameters and maintains internal distortion
-    cvSave(cResourceResult + 'Intrinsics.xml', intrinsic_matrix);
-    cvSave(cResourceResult + 'Distortion.xml', distortion_coeffs);
+    cvSave(PAnsiChar(cResourceResult + 'Intrinsics.xml'), intrinsic_matrix);
+    cvSave(PAnsiChar(cResourceResult + 'Distortion.xml'), distortion_coeffs);
 
     // -------------------------------------------------------------
 
     // ѕ–»ћ≈– «ј√–”« » Ё“»’ ћј“–»÷ Ќј«јƒ ¬ ѕ–ќ√–јћћћ”:
     // Loading examples of these matrices back into the program:
-    intrinsic := cvLoad(cResourceResult + 'Intrinsics.xml');
-    Distortion := cvLoad(cResourceResult + 'Distortion.xml');
+    intrinsic := cvLoad(PAnsiChar(cResourceResult + 'Intrinsics.xml'));
+    Distortion := cvLoad(PAnsiChar(cResourceResult + 'Distortion.xml'));
 
     // cтроим карту андиcторcии, которую мы будем иcпользовать
     // дл€ вcех поcледующих кадров.

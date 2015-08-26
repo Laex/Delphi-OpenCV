@@ -47,7 +47,7 @@
 {$IFDEF DELPHI2009_UP}
 {$POINTERMATH ON}
 {$ENDIF}
-unit ocv.cvutils;
+unit ocv.utils;
 
 interface
 

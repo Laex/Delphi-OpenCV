@@ -128,7 +128,8 @@ type
 implementation
 
 uses
-  System.UITypes;
+  System.UITypes,
+  ocv.fmxutils;
 
 {$IFNDEF DELPHIXE5_UP}
 
@@ -197,35 +198,11 @@ begin
     if Assigned(OnBeforePaint) then
       OnBeforePaint(Self, FImage);
 
-    BackBuffer.Canvas.BeginScene;
-    if (BackBuffer.Width <> FImage.Width) or (BackBuffer.Height <> FImage.Height) then
-      BackBuffer.SetSize(FImage.Width, FImage.Height);
-    if BackBuffer.Map(TMapAccess.maWrite, M) then
-      try
-        SrcData := pByte(FImage.IpImage^.imageData);
-        DestData := pByte(M.Data);
-        nC := FImage.IpImage^.nChannels;
-        for i := 0 to M.Width * M.Height - 1 do
-        begin
-          DestData[i * PixelFormatBytes[BackBuffer.PixelFormat] + 0] := SrcData[i * nC + 0];
-          DestData[i * PixelFormatBytes[BackBuffer.PixelFormat] + 1] := SrcData[i * nC + 1];
-          DestData[i * PixelFormatBytes[BackBuffer.PixelFormat] + 2] := SrcData[i * nC + 2];
-          DestData[i * PixelFormatBytes[BackBuffer.PixelFormat] + 3] := $FF;
-        end;
-      finally
-        BackBuffer.Unmap(M);
-      end;
-    BackBuffer.Canvas.EndScene;
+    IPLImageToFMXBitmap(FImage.IpImage, BackBuffer);
     Canvas.DrawBitmap(BackBuffer, RectF(0, 0, BackBuffer.Width, BackBuffer.Height), PaintRect, 1, True);
-
-    // Canvas.Stroke.Thickness := 1;
-    // Canvas.Stroke.Kind := TBrushKind.bkSolid;
-    // Canvas.Stroke.Color := TAlphaColorRec.Black;
-    // Canvas.DrawRect(RectF(0, 0, Width, Height), 0, 0, AllCorners, 1);
 
     if Assigned(OnAfterPaint) then
       OnAfterPaint(Self, FImage);
-
   end;
 end;
 

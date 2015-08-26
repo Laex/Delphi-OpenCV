@@ -1,25 +1,25 @@
 unit uResourcePaths;
 
+{$WRITEABLECONST ON}
+
 interface
 
 Const
   cResourceMedia = '..\..\resource\media\';
   cResourceFaceDetect = '..\..\resource\facedetectxml\';
+  cResourceResultDefault = '..\..\resource\result\';
 
-function cResourceResult: string;
+function cResourceResult: AnsiString;
 
 implementation
 
 uses
   System.SysUtils;
 
-const
-  ResourceResultDefault = '..\..\resource\result\';
-
-function cResourceResult: string;
+function cResourceResult: AnsiString;
 begin
-  if DirectoryExists(ResourceResultDefault) then
-    Result := ResourceResultDefault
+  if DirectoryExists(cResourceResultDefault) then
+    Result := cResourceResultDefault
   else
     Result := '';
 end;

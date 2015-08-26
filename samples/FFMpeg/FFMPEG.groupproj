@@ -18,6 +18,9 @@
         <Projects Include="VideoEncoder\ffmVideoEncoder.dproj">
             <Dependencies/>
         </Projects>
+        <Projects Include="ffm_SDL2_VCL_player\ffm_SDL2_VCL_player.dproj">
+            <Dependencies/>
+        </Projects>
     </ItemGroup>
     <ProjectExtensions>
         <Borland.Personality>Default.Personality.12</Borland.Personality>
@@ -71,14 +74,23 @@
     <Target Name="ffmVideoEncoder:Make">
         <MSBuild Projects="VideoEncoder\ffmVideoEncoder.dproj" Targets="Make"/>
     </Target>
+    <Target Name="ffm_SDL2_VCL_player">
+        <MSBuild Projects="ffm_SDL2_VCL_player\ffm_SDL2_VCL_player.dproj"/>
+    </Target>
+    <Target Name="ffm_SDL2_VCL_player:Clean">
+        <MSBuild Projects="ffm_SDL2_VCL_player\ffm_SDL2_VCL_player.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="ffm_SDL2_VCL_player:Make">
+        <MSBuild Projects="ffm_SDL2_VCL_player\ffm_SDL2_VCL_player.dproj" Targets="Make"/>
+    </Target>
     <Target Name="Build">
-        <CallTarget Targets="ffmpeg_sample_player;filtering_video;metadata;scaling_video;ffmVideoEncoder"/>
+        <CallTarget Targets="ffmpeg_sample_player;filtering_video;metadata;scaling_video;ffmVideoEncoder;ffm_SDL2_VCL_player"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="ffmpeg_sample_player:Clean;filtering_video:Clean;metadata:Clean;scaling_video:Clean;ffmVideoEncoder:Clean"/>
+        <CallTarget Targets="ffmpeg_sample_player:Clean;filtering_video:Clean;metadata:Clean;scaling_video:Clean;ffmVideoEncoder:Clean;ffm_SDL2_VCL_player:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="ffmpeg_sample_player:Make;filtering_video:Make;metadata:Make;scaling_video:Make;ffmVideoEncoder:Make"/>
+        <CallTarget Targets="ffmpeg_sample_player:Make;filtering_video:Make;metadata:Make;scaling_video:Make;ffmVideoEncoder:Make;ffm_SDL2_VCL_player:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>

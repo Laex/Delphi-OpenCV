@@ -35,7 +35,7 @@ uses
   uResourcePaths;
 
 const
-  filename = cResourceResult + 'capture.avi';
+  filename = cResourceResultDefault + 'capture.avi';
 
 var
   capture: pCvCapture;

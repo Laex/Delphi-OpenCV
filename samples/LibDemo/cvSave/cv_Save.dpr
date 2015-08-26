@@ -39,7 +39,7 @@ uses
   uResourcePaths;
 
 const
-  kernet_filename = cResourceResult + 'kernel.xml';
+  kernet_filename = cResourceResultDefault + 'kernel.xml';
 
 var
   kernel: array [0 .. 8] of Single;
