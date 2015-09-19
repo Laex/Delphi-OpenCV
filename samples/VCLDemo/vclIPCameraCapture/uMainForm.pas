@@ -82,7 +82,7 @@ implementation
 
 {$R *.dfm}
 
-uses ocv.core.types_c, ocv.cvutils;
+uses ocv.core.types_c, ocv.utils;
 
 procedure TMainForm.ButtonStartCaptureClick(Sender: TObject);
 var

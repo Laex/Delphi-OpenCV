@@ -38,7 +38,7 @@ uses
   ocv.imgproc_c,
   ocv.imgproc.types_c,
   ocv.core.types_c,
-  ocv.cvutils;
+  ocv.utils;
 
 // default capture width and height
 const

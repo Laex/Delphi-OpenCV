@@ -83,7 +83,7 @@ uses
   ocv.highgui_c,
   ocv.core.types_c,
   ocv.legacy,
-  ocv.cvutils;
+  ocv.utils;
 
 procedure TMainForm.btn1Click(Sender: TObject);
 const

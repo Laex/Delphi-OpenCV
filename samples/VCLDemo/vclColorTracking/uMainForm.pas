@@ -86,7 +86,7 @@ Uses
   ocv.core_c,
   ocv.imgproc_c,
   ocv.imgproc.types_c,
-  ocv.cvutils;
+  ocv.utils;
 
 procedure TMainForm.FormDestroy(Sender: TObject);
 begin

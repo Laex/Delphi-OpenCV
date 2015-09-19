@@ -135,7 +135,7 @@ implementation
 
 uses
   ocv.lib,
-  ocv.cvutils,
+  ocv.utils,
   ocv.core_c;
 
 function CreateVideoCapture: TccvVideoCapture; stdcall; external opencv_classes_lib name 'CreateVideoCapture'; overload;

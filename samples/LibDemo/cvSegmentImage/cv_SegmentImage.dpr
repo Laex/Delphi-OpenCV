@@ -34,7 +34,7 @@ uses
   ocv.imgproc.types_c,
   ocv.imgproc_c,
   ocv.legacy,
-  ocv.cvutils;
+  ocv.utils;
 
 const
   CAMERA_INDEX = CV_CAP_ANY;

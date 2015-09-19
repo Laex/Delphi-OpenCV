@@ -63,7 +63,7 @@ implementation
 
 uses
   ocv.core_c,
-  ocv.core.types_c, ocv.cvutils;
+  ocv.core.types_c, ocv.utils;
 
 procedure TMainForm.btn1Click(Sender: TObject);
 begin

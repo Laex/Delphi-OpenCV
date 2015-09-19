@@ -108,7 +108,7 @@ Uses
   ocv.core_c,
   ocv.imgproc_c,
   ocv.imgproc.types_c,
-  ocv.cvutils;
+  ocv.utils;
 
 const
   FRAME_WIDTH = 640;

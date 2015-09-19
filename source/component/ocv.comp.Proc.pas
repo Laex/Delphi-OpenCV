@@ -41,7 +41,7 @@ Uses
 {$ENDIF}
   ocv.core_c,
   ocv.imgproc_c,
-  ocv.cvutils;
+  ocv.utils;
 
 {$I Opencv.inc}
 

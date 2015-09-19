@@ -2350,12 +2350,12 @@ procedure cvSet(arr: pCvArr; value: TCvScalar;
 
 procedure cvSet(mat: pCvMat; i, j: Integer; val: Single); {$IFDEF USE_INLINE}inline; {$ENDIF}
 var
-  type_: Integer;
+//  type_: Integer;
   ptr: pByte;
   pf: PSingle;
 begin
-  type_ := CV_MAT_TYPE(mat._type);
-  assert((i < mat^.rows) and (j < mat^.cols) and (type_ = CV_32FC1));
+//  type_ := CV_MAT_TYPE(mat._type);
+  assert((i < mat^.rows) and (j < mat^.cols) and (CV_MAT_TYPE(mat._type) = CV_32FC1));
   ptr := mat^.data;
   Inc(ptr, mat.step * i + sizeof(Single) * j);
   pf := PSingle(ptr);
@@ -2518,12 +2518,12 @@ function cvGet(
 
   const mat: pCvMat; i, j: Integer): Single; {$IFDEF USE_INLINE}inline; {$ENDIF}
 var
-  type_: Integer;
+//  type_: Integer;
   ptr: pByte;
   pf: PSingle;
 begin
-  type_ := CV_MAT_TYPE(mat^._type);
-  assert((i < mat^.rows) and (j < mat^.cols) and (type_ = CV_32FC1));
+//  type_ := CV_MAT_TYPE(mat^._type);
+  assert((i < mat^.rows) and (j < mat^.cols) and (CV_MAT_TYPE(mat^._type) = CV_32FC1));
   ptr := mat^.data;
   Inc(ptr, mat.step * i + sizeof(Single) * j);
   pf := PSingle(ptr);

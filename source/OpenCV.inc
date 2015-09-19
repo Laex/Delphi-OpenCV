@@ -900,6 +900,27 @@
       {$UNDEF UNKNOWN_COMPILER_VERSION}
     {$ENDIF VER290}
 
+    {$IFDEF VER300} // RAD Studio Delphi 10 Seattle
+      {$DEFINE BDS}
+      {$DEFINE BDS15}
+      {$DEFINE COMPILER21} //temporary
+      {$DEFINE COMPILER22}
+      {$IFDEF BCB}
+        {$DEFINE BCB21}
+        {$DEFINE BCB22}
+      {$ELSE}
+        {$DEFINE DELPHI21}
+        {$DEFINE DELPHIXE7} // synonym to DELPHI21
+        {$DEFINE DELPHICOMPILER21}      
+        {$DEFINE DELPHI22}
+        {$DEFINE DELPHIXE8} // synonym to DELPHI22
+        {$DEFINE DELPHICOMPILER22}
+      {$ENDIF BCB}
+      {$DEFINE RTL280_UP}
+      {$DEFINE RTL290_UP}
+      {$UNDEF UNKNOWN_COMPILER_VERSION}
+    {$ENDIF VER290}
+
     {$IFDEF UNKNOWN_COMPILER_VERSION} // adjust for newer version (always use latest version)
       {$DEFINE BDS}
       {$DEFINE BDS15}

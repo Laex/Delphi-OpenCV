@@ -61,8 +61,8 @@ Type
     FReconnectDelay: Cardinal;
     FOnIPCamEvent: TOnocvFFMpegIPCamEvent;
     procedure SetReconnectDelay(const Value: Cardinal);
-    procedure TerminateSourceThread; override;
   protected
+    procedure TerminateSourceThread; override;
     function GetIPCamTarget: AnsiString;
     procedure SetEnabled(Value: Boolean); override;
     procedure Loaded; override;

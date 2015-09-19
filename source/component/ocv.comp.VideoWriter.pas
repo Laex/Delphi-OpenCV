@@ -178,7 +178,7 @@ end;
 
 procedure TocvVideoWriter.SetFourCC(const Value: AnsiString);
 begin
-  if not SameText(FFourCC, Value) then
+  if not AnsiSameText(FFourCC, Value) then
   begin
     CloseWriter;
     FFourCC := Value;

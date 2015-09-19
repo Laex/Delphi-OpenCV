@@ -1,0 +1,84 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{BD0EE7BD-ED70-4DCA-AA92-522F18635A55}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="ocvOpenCV300.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="dclCommonOpenCV300.dproj">
+            <Dependencies>ocvOpenCV300.dproj</Dependencies>
+        </Projects>
+        <Projects Include="dclFMXOpenCV300.dproj">
+            <Dependencies>dclCommonOpenCV300.dproj</Dependencies>
+        </Projects>
+        <Projects Include="dclVCLOpenCV300.dproj">
+            <Dependencies>dclCommonOpenCV300.dproj</Dependencies>
+        </Projects>
+        <Projects Include="dclFFMSource300.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="ocvOpenCV300">
+        <MSBuild Projects="ocvOpenCV300.dproj"/>
+    </Target>
+    <Target Name="ocvOpenCV300:Clean">
+        <MSBuild Projects="ocvOpenCV300.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="ocvOpenCV300:Make">
+        <MSBuild Projects="ocvOpenCV300.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="dclCommonOpenCV300" DependsOnTargets="ocvOpenCV300">
+        <MSBuild Projects="dclCommonOpenCV300.dproj"/>
+    </Target>
+    <Target Name="dclCommonOpenCV300:Clean" DependsOnTargets="ocvOpenCV300:Clean">
+        <MSBuild Projects="dclCommonOpenCV300.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="dclCommonOpenCV300:Make" DependsOnTargets="ocvOpenCV300:Make">
+        <MSBuild Projects="dclCommonOpenCV300.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="dclFMXOpenCV300" DependsOnTargets="dclCommonOpenCV300">
+        <MSBuild Projects="dclFMXOpenCV300.dproj"/>
+    </Target>
+    <Target Name="dclFMXOpenCV300:Clean" DependsOnTargets="dclCommonOpenCV300:Clean">
+        <MSBuild Projects="dclFMXOpenCV300.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="dclFMXOpenCV300:Make" DependsOnTargets="dclCommonOpenCV300:Make">
+        <MSBuild Projects="dclFMXOpenCV300.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="dclVCLOpenCV300" DependsOnTargets="dclCommonOpenCV300">
+        <MSBuild Projects="dclVCLOpenCV300.dproj"/>
+    </Target>
+    <Target Name="dclVCLOpenCV300:Clean" DependsOnTargets="dclCommonOpenCV300:Clean">
+        <MSBuild Projects="dclVCLOpenCV300.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="dclVCLOpenCV300:Make" DependsOnTargets="dclCommonOpenCV300:Make">
+        <MSBuild Projects="dclVCLOpenCV300.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="dclFFMSource300">
+        <MSBuild Projects="dclFFMSource300.dproj"/>
+    </Target>
+    <Target Name="dclFFMSource300:Clean">
+        <MSBuild Projects="dclFFMSource300.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="dclFFMSource300:Make">
+        <MSBuild Projects="dclFFMSource300.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="ocvOpenCV300;dclCommonOpenCV300;dclFMXOpenCV300;dclVCLOpenCV300;dclFFMSource300"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="ocvOpenCV300:Clean;dclCommonOpenCV300:Clean;dclFMXOpenCV300:Clean;dclVCLOpenCV300:Clean;dclFFMSource300:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="ocvOpenCV300:Make;dclCommonOpenCV300:Make;dclFMXOpenCV300:Make;dclVCLOpenCV300:Make;dclFFMSource300:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>
