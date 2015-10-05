@@ -140,7 +140,7 @@ object MainForm: TMainForm
   end
   object ocvcmrsrc1: TocvCameraSource
     Enabled = True
-    Resolution = r320x240
+    Resolution = r1280x720
     Left = 32
     Top = 40
   end

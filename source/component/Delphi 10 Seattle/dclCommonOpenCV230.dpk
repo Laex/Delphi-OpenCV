@@ -1,6 +1,7 @@
-package ocvOpenCV300;
+package dclCommonOpenCV230;
 
 {$R *.res}
+{$R *.dres}
 {$IFDEF IMPLICITBUILDING This IFDEF should not be used by users}
 {$ALIGN 8}
 {$ASSERTIONS ON}
@@ -26,10 +27,15 @@ package ocvOpenCV300;
 {$DEFINE RELEASE}
 {$ENDIF IMPLICITBUILDING}
 {$DESCRIPTION 'OpenCV Component'}
-{$RUNONLY}
+{$DESIGNONLY}
 {$IMPLICITBUILD OFF}
 
 requires
-  rtl;
+  ocvOpenCV230,
+  designide;
+
+contains
+  ocv.comp.IOProperties in '..\ocv.comp.IOProperties.pas',
+  ocv.comp.Register in '..\ocv.comp.Register.pas';
 
 end.

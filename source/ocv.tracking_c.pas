@@ -46,23 +46,7 @@
   *************************************************************************************************
 *)
 
-//
 {$I OpenCV.inc}
-//
-{$IFDEF DEBUG}
-{$A8,B-,C+,D+,E-,F-,G+,H+,I+,J-,K-,L+,M-,N+,O-,P+,Q+,R+,S-,T-,U-,V+,W+,X+,Y+,Z1}
-{$ELSE}
-{$A8,B-,C-,D-,E-,F-,G+,H+,I+,J-,K-,L-,M-,N+,O+,P+,Q-,R-,S-,T-,U-,V+,W-,X+,Y-,Z1}
-{$ENDIF}
-{$WARN SYMBOL_DEPRECATED OFF}
-{$WARN SYMBOL_PLATFORM OFF}
-{$WARN UNIT_PLATFORM OFF}
-{$WARN UNSAFE_TYPE OFF}
-{$WARN UNSAFE_CODE OFF}
-{$WARN UNSAFE_CAST OFF}
-//
-{$I OpenCV.inc}
-//
 unit ocv.tracking_c;
 
 interface
@@ -75,9 +59,9 @@ uses ocv.core.types_c, ocv.imgproc.types_c;
 
 // ************************************ optical flow ***************************************
 const
-  CV_LKFLOW_PYR_A_READY       = 1;
-  CV_LKFLOW_PYR_B_READY       = 2;
-  CV_LKFLOW_INITIAL_GUESSES   = 4;
+  CV_LKFLOW_PYR_A_READY = 1;
+  CV_LKFLOW_PYR_B_READY = 2;
+  CV_LKFLOW_INITIAL_GUESSES = 4;
   CV_LKFLOW_GET_MIN_EIGENVALS = 8;
 
   (*
@@ -99,11 +83,22 @@ const
     CvTermCriteria criteria,
     int       flags );
   *)
+
+{$IFDEF SAFELOADLIB}
+
+Type
+  TcvCalcOpticalFlowPyrLK = procedure(const prev: pIplImage; const curr: pIplImage; prev_pyr: pIplImage; curr_pyr: pIplImage;
+    const prev_features: pCvPoint2D32f; curr_features: pCvPoint2D32f; count: Integer; win_size: TCvSize; level: Integer; status: pCVChar;
+    track_error: PSingle; criteria: TCvTermCriteria; flags: Integer); cdecl;
+
+Var
+  cvCalcOpticalFlowPyrLK: TcvCalcOpticalFlowPyrLK;
+{$ELSE}
 {$EXTERNALSYM cvCalcOpticalFlowPyrLK}
 procedure cvCalcOpticalFlowPyrLK(const prev: pIplImage; const curr: pIplImage; prev_pyr: pIplImage; curr_pyr: pIplImage;
-  const prev_features: pCvPoint2D32f; curr_features: pCvPoint2D32f; count: Integer; win_size: TCvSize; level: Integer;
-  status: pCVChar; track_error: PSingle; criteria: TCvTermCriteria; flags: Integer); cdecl;
-
+  const prev_features: pCvPoint2D32f; curr_features: pCvPoint2D32f; count: Integer; win_size: TCvSize; level: Integer; status: pCVChar;
+  track_error: PSingle; criteria: TCvTermCriteria; flags: Integer); cdecl;
+{$ENDIF}
 (* Modification of a previous sparse optical flow algorithm to calculate
   affine flow
 
@@ -116,23 +111,38 @@ procedure cvCalcOpticalFlowPyrLK(const prev: pIplImage; const curr: pIplImage; p
   char* status, float* track_error,
   CvTermCriteria criteria, int flags );
 *)
-{$EXTERNALSYM cvCalcAffineFlowPyrLK}
-procedure cvCalcAffineFlowPyrLK(const prev: pCvArr; const curr: pCvArr; prev_pyr: pCvArr; curr_pyr: pCvArr;
-  const prev_features: pCvPoint2D32f; var curr_features: TCvPoint2D32f; var matrices: Single; count: Integer;
-  win_size: TCvSize; level: Integer; status: pCVChar; var track_error: Single; criteria: TCvTermCriteria;
-  flags: Integer); cdecl;
+{$IFDEF SAFELOADLIB}
 
+Type
+  TcvCalcAffineFlowPyrLK = procedure(const prev: pCvArr; const curr: pCvArr; prev_pyr: pCvArr; curr_pyr: pCvArr; const prev_features: pCvPoint2D32f;
+    var curr_features: TCvPoint2D32f; var matrices: Single; count: Integer; win_size: TCvSize; level: Integer; status: pCVChar;
+    var track_error: Single; criteria: TCvTermCriteria; flags: Integer); cdecl;
+
+Var
+  cvCalcAffineFlowPyrLK: TcvCalcAffineFlowPyrLK;
+{$ELSE}
+{$EXTERNALSYM cvCalcAffineFlowPyrLK}
+procedure cvCalcAffineFlowPyrLK(const prev: pCvArr; const curr: pCvArr; prev_pyr: pCvArr; curr_pyr: pCvArr; const prev_features: pCvPoint2D32f;
+  var curr_features: TCvPoint2D32f; var matrices: Single; count: Integer; win_size: TCvSize; level: Integer; status: pCVChar; var track_error: Single;
+  criteria: TCvTermCriteria; flags: Integer); cdecl;
+{$ENDIF}
 (*
   Estimate rigid transformation between 2 images or 2 point sets
 
   CVAPI(int)  cvEstimateRigidTransform( const CvArr* A, const CvArr* B,
   CvMat* M, int full_affine );
 *)
+{$IFDEF SAFELOADLIB}
 
+Type
+  TcvEstimateRigidTransform = function(const A: pCvArr; const B: pCvArr; var M: TCvMat; full_affine: Integer): Integer; cdecl;
+
+var
+  cvEstimateRigidTransform: TcvEstimateRigidTransform;
+{$ELSE}
 {$EXTERNALSYM cvEstimateRigidTransform}
-function cvEstimateRigidTransform(const A: pCvArr; const B: pCvArr; var M: TCvMat; full_affine: Integer)
-  : Integer; cdecl;
-
+function cvEstimateRigidTransform(const A: pCvArr; const B: pCvArr; var M: TCvMat; full_affine: Integer): Integer; cdecl;
+{$ENDIF}
 (*
   Estimate optical flow for each pixel using the two-frame G. Farneback algorithm
 
@@ -141,10 +151,19 @@ function cvEstimateRigidTransform(const A: pCvArr; const B: pCvArr; var M: TCvMa
   int winsize, int iterations, int poly_n,
   double poly_sigma, int flags );
 *)
-{$EXTERNALSYM cvCalcOpticalFlowFarneback}
-procedure cvCalcOpticalFlowFarneback(const prev: pCvMat; const next: pCvMat; flow: pCvMat; pyr_scale: double;
-  levels: Integer; winsize: Integer; iterations: Integer; poly_n: Integer; poly_sigma: double; flags: Integer); cdecl;
+{$IFDEF SAFELOADLIB}
 
+type
+  TcvCalcOpticalFlowFarneback = procedure(const prev: pCvMat; const next: pCvMat; flow: pCvMat; pyr_scale: double; levels: Integer; winsize: Integer;
+    iterations: Integer; poly_n: Integer; poly_sigma: double; flags: Integer); cdecl;
+
+var
+  cvCalcOpticalFlowFarneback: TcvCalcOpticalFlowFarneback;
+{$ELSE}
+{$EXTERNALSYM cvCalcOpticalFlowFarneback}
+procedure cvCalcOpticalFlowFarneback(const prev: pCvMat; const next: pCvMat; flow: pCvMat; pyr_scale: double; levels: Integer; winsize: Integer;
+  iterations: Integer; poly_n: Integer; poly_sigma: double; flags: Integer); cdecl;
+{$ENDIF}
 (* ******************************** motion templates ************************************ *)
 
 (* *****************************************************************************************
@@ -163,9 +182,17 @@ procedure cvCalcOpticalFlowFarneback(const prev: pCvMat; const next: pCvMat; flo
   CVAPI(void)    cvUpdateMotionHistory( const CvArr* silhouette, CvArr* mhi,
   double timestamp, double duration );
 *)
+{$IFDEF SAFELOADLIB}
+
+Type
+  TcvUpdateMotionHistory = procedure(const silhouette: pCvArr; mhi: pCvArr; timestamp: double; duration: double); cdecl;
+
+var
+  cvUpdateMotionHistory: TcvUpdateMotionHistory;
+{$ELSE}
 {$EXTERNALSYM cvUpdateMotionHistory}
 procedure cvUpdateMotionHistory(const silhouette: pCvArr; mhi: pCvArr; timestamp: double; duration: double); cdecl;
-
+{$ENDIF}
 (*
   Calculates gradient of the motion history image and fills
   a mask indicating where the gradient is valid
@@ -174,10 +201,19 @@ procedure cvUpdateMotionHistory(const silhouette: pCvArr; mhi: pCvArr; timestamp
   double delta1, double delta2,
   int aperture_size CV_DEFAULT(3));
 *)
+{$IFDEF SAFELOADLIB}
+
+Type
+  TcvCalcMotionGradient = procedure(const mhi: pCvArr; mask: pCvArr; orientation: pCvArr; delta1: double; delta2: double;
+    aperture_size: Integer = 3); cdecl;
+
+var
+  cvCalcMotionGradient: TcvCalcMotionGradient;
+{$ELSE}
 {$EXTERNALSYM cvCalcMotionGradient}
 procedure cvCalcMotionGradient(const mhi: pCvArr; mask: pCvArr; orientation: pCvArr; delta1: double; delta2: double;
   aperture_size: Integer = 3); cdecl;
-
+{$ENDIF}
 (* Calculates average motion direction within a selected motion region
   (region can be selected by setting ROIs and/or by composing a valid gradient mask
   with the region mask)
@@ -186,10 +222,19 @@ procedure cvCalcMotionGradient(const mhi: pCvArr; mask: pCvArr; orientation: pCv
   const CvArr* mhi, double timestamp,
   double duration );
 *)
-{$EXTERNALSYM cvCalcGlobalOrientation}
-function cvCalcGlobalOrientation(const orientation: pCvArr; const mask: pCvArr; const mhi: pCvArr; timestamp: double;
-  duration: double): double; cdecl;
+{$IFDEF SAFELOADLIB}
 
+type
+  TcvCalcGlobalOrientation = function(const orientation: pCvArr; const mask: pCvArr; const mhi: pCvArr; timestamp: double; duration: double)
+    : double; cdecl;
+
+var
+  cvCalcGlobalOrientation: TcvCalcGlobalOrientation;
+{$ELSE}
+{$EXTERNALSYM cvCalcGlobalOrientation}
+function cvCalcGlobalOrientation(const orientation: pCvArr; const mask: pCvArr; const mhi: pCvArr; timestamp: double; duration: double)
+  : double; cdecl;
+{$ENDIF}
 (* Splits a motion history image into a few parts corresponding to separate independent motions
   (e.g. left hand, right hand)
 
@@ -197,10 +242,17 @@ function cvCalcGlobalOrientation(const orientation: pCvArr; const mask: pCvArr; 
   CvMemStorage* storage,
   double timestamp, double seg_thresh );
 *)
-{$EXTERNALSYM cvSegmentMotion}
-function cvSegmentMotion(const mhi: pCvArr; seg_mask: pCvArr; storage: pCvMemStorage; timestamp: double;
-  seg_thresh: double): pCvSeq; cdecl;
+{$IFDEF SAFELOADLIB}
 
+type
+  TcvSegmentMotion = function(const mhi: pCvArr; seg_mask: pCvArr; storage: pCvMemStorage; timestamp: double; seg_thresh: double): pCvSeq; cdecl;
+
+var
+  cvSegmentMotion: TcvSegmentMotion;
+{$ELSE}
+{$EXTERNALSYM cvSegmentMotion}
+function cvSegmentMotion(const mhi: pCvArr; seg_mask: pCvArr; storage: pCvMemStorage; timestamp: double; seg_thresh: double): pCvSeq; cdecl;
+{$ENDIF}
 (* ****************************************************************************************
   *                                       Tracking                                        *
   *************************************************************************************** *)
@@ -213,19 +265,36 @@ function cvSegmentMotion(const mhi: pCvArr; seg_mask: pCvArr; storage: pCvMemSto
   CvTermCriteria criteria, CvConnectedComp* comp,
   CvBox2D* box CV_DEFAULT(NULL) );
 *)
-{$EXTERNALSYM cvCamShift}
-function cvCamShift(const prob_image: pIplImage; window: TCvRect; criteria: TCvTermCriteria; comp: pCvConnectedComp;
-  box: pCvBox2D = nil): Integer; cdecl;
+{$IFDEF SAFELOADLIB}
 
+type
+  TcvCamShift = function(const prob_image: pIplImage; window: TCvRect; criteria: TCvTermCriteria; comp: pCvConnectedComp; box: pCvBox2D = nil)
+    : Integer; cdecl;
+
+var
+  cvCamShift: TcvCamShift;
+{$ELSE}
+{$EXTERNALSYM cvCamShift}
+function cvCamShift(const prob_image: pIplImage; window: TCvRect; criteria: TCvTermCriteria; comp: pCvConnectedComp; box: pCvBox2D = nil)
+  : Integer; cdecl;
+{$ENDIF}
 (* Implements MeanShift algorithm - determines object position
   from the object histogram back project
 
   CVAPI(int)  cvMeanShift( const CvArr* prob_image, CvRect  window,
   CvTermCriteria criteria, CvConnectedComp* comp );
 *)
+{$IFDEF SAFELOADLIB}
+
+type
+  TcvMeanShift = function(const prob_image: pCvArr; window: TCvRect; criteria: TCvTermCriteria; var comp: TCvConnectedComp): Integer; cdecl;
+
+var
+  cvMeanShift: TcvMeanShift;
+{$ELSE}
 {$EXTERNALSYM cvMeanShift}
-function cvMeanShift(const prob_image: pCvArr; window: TCvRect; criteria: TCvTermCriteria; var comp: TCvConnectedComp)
-  : Integer; cdecl;
+function cvMeanShift(const prob_image: pCvArr; window: TCvRect; criteria: TCvTermCriteria; var comp: TCvConnectedComp): Integer; cdecl;
+{$ENDIF}
 
 (*
   standard Kalman filter (in G. Welch' and G. Bishop's notation):
@@ -244,7 +313,7 @@ Type
     CP: Integer; (* number of control vector dimensions *)
 
     (* backward compatibility fields *)
-//{$IFDEF 1}
+    // {$IFDEF 1}
     PosterState: PSingle; (* =state_pre->data.fl *)
     PriorState: PSingle; (* =state_post->data.fl *)
     DynamMatr: PSingle; (* =transition_matrix->data.fl *)
@@ -256,7 +325,7 @@ Type
     PosterErrorCovariance: PSingle; (* =error_cov_post->data.fl *)
     _Temp1: PSingle; (* temp1->data.fl *)
     _Temp2: PSingle; (* temp2->data.fl *)
-//{$ENDIF}
+    // {$ENDIF}
     state_pre: pCvMat; (* predicted state (x'(k)):
       x(k)=A*x(k-1)+B*u(k) *)
     state_post: pCvMat; (* corrected state (x(k)):
@@ -286,50 +355,120 @@ Type
     CVAPI(CvKalman* ) cvCreateKalman( int dynam_params, int measure_params,
     int control_params CV_DEFAULT(0));
   *)
+{$IFDEF SAFELOADLIB}
+
+type
+  TcvCreateKalman = function(dynam_params: Integer; measure_params: Integer; control_params: Integer = 0): pCvKalman; cdecl;
+
+var
+  cvCreateKalman: TcvCreateKalman;
+{$ELSE}
 {$EXTERNALSYM cvCreateKalman}
-
 function cvCreateKalman(dynam_params: Integer; measure_params: Integer; control_params: Integer = 0): pCvKalman; cdecl;
-
+{$ENDIF}
 (*
   Releases Kalman filter state
 
   CVAPI(void)  cvReleaseKalman( CvKalman** kalman);
 *)
+{$IFDEF SAFELOADLIB}
+
+type
+  TcvReleaseKalman = procedure(var kalman: pCvKalman); cdecl;
+
+var
+  cvReleaseKalman: TcvReleaseKalman;
+{$ELSE}
 {$EXTERNALSYM cvReleaseKalman}
 procedure cvReleaseKalman(var kalman: pCvKalman); cdecl;
-
+{$ENDIF}
 (*
   Updates Kalman filter by time (predicts future state of the system)
 
   CVAPI(const CvMat*  cvKalmanPredict( CvKalman* kalman,
   const CvMat* control CV_DEFAULT(NULL));
 *)
+{$IFDEF SAFELOADLIB}
+
+type
+  TcvKalmanPredict = function(var kalman: TCvKalman; const control: pCvMat = nil): pCvMat; cdecl;
+
+var
+  cvKalmanPredict: TcvKalmanPredict;
+{$ELSE}
 {$EXTERNALSYM cvKalmanPredict}
 function cvKalmanPredict(var kalman: TCvKalman; const control: pCvMat = nil): pCvMat; cdecl;
-
+{$ENDIF}
 (* Updates Kalman filter by measurement
   (corrects state of the system and internal matrices)
 
   CVAPI(const CvMat* )  cvKalmanCorrect( CvKalman* kalman, const CvMat* measurement );
 *)
+{$IFDEF SAFELOADLIB}
+
+type
+  TcvKalmanCorrect = function(var kalman: TCvKalman; const measurement: pCvMat): pCvMat; cdecl;
+
+var
+  cvKalmanCorrect: TcvKalmanCorrect;
+{$ELSE}
 {$EXTERNALSYM cvKalmanCorrect}
 function cvKalmanCorrect(var kalman: TCvKalman; const measurement: pCvMat): pCvMat; cdecl;
 
 Type
   TcvKalmanPredict = function(var kalman: TCvKalman; const control: pCvMat = nil): pCvMat; cdecl;
   TcvKalmanCorrect = function(var kalman: TCvKalman; const measurement: pCvMat): pCvMat; cdecl;
+{$ENDIF}
 
 Var
 {$EXTERNALSYM cvKalmanUpdateByTime}
-  cvKalmanUpdateByTime: TcvKalmanPredict = cvKalmanPredict;
+  cvKalmanUpdateByTime: TcvKalmanPredict {$IFNDEF SAFELOADLIB} = cvKalmanPredict {$ENDIF};
 {$EXTERNALSYM cvKalmanUpdateByMeasurement}
-  cvKalmanUpdateByMeasurement: TcvKalmanCorrect = cvKalmanCorrect;
+  cvKalmanUpdateByMeasurement: TcvKalmanCorrect{$IFNDEF SAFELOADLIB} = cvKalmanCorrect{$ENDIF};
 
 implementation
 
 uses
   ocv.lib;
 
+{$IFDEF SAFELOADLIB}
+
+Var
+  TrackingDLL: Cardinal;
+
+procedure Init_opencv_Tracking_lib;
+begin
+  TrackingDLL := ocvLoadLibrary(opencv_photo_lib);
+  Assert(TrackingDLL <> 0, 'Can not init ' + tracking_lib);
+
+  cvCalcOpticalFlowPyrLK := ocvGetProcAddress('cvCalcOpticalFlowPyrLK', TrackingDLL);
+  cvCalcAffineFlowPyrLK := ocvGetProcAddress('cvCalcAffineFlowPyrLK', TrackingDLL);
+  cvEstimateRigidTransform := ocvGetProcAddress('cvEstimateRigidTransform', TrackingDLL);
+  cvCalcOpticalFlowFarneback := ocvGetProcAddress('cvCalcOpticalFlowFarneback', TrackingDLL);
+  cvUpdateMotionHistory := ocvGetProcAddress('cvUpdateMotionHistory', TrackingDLL);
+  cvCalcMotionGradient := ocvGetProcAddress('cvCalcMotionGradient', TrackingDLL);
+  cvCalcGlobalOrientation := ocvGetProcAddress('cvCalcGlobalOrientation', TrackingDLL);
+  cvSegmentMotion := ocvGetProcAddress('cvSegmentMotion', TrackingDLL);
+  cvCamShift := ocvGetProcAddress('cvCamShift', TrackingDLL);
+  cvMeanShift := ocvGetProcAddress('cvMeanShift', TrackingDLL);
+  cvCreateKalman := ocvGetProcAddress('cvCreateKalman', TrackingDLL);
+  cvReleaseKalman := ocvGetProcAddress('cvReleaseKalman', TrackingDLL);
+  cvKalmanPredict := ocvGetProcAddress('cvKalmanPredict', TrackingDLL);
+  cvKalmanCorrect := ocvGetProcAddress('cvKalmanCorrect', TrackingDLL);
+
+  cvKalmanUpdateByTime := cvKalmanPredict;
+  cvKalmanUpdateByMeasurement := cvKalmanCorrect;
+end;
+
+initialization
+
+{$IFDEF SAFELOADLIB}
+  Init_opencv_Tracking_lib;
+{$ENDIF}
+
+finalization
+
+{$ELSE}
 function cvCamShift; external tracking_lib;
 procedure cvCalcOpticalFlowPyrLK; external tracking_lib;
 procedure cvCalcOpticalFlowFarneback; external tracking_lib;
@@ -345,5 +484,6 @@ function cvCreateKalman; external tracking_lib;
 function cvKalmanPredict; external tracking_lib;
 function cvKalmanCorrect; external tracking_lib;
 procedure cvReleaseKalman; external tracking_lib;
+{$ENDIF}
 
 end.

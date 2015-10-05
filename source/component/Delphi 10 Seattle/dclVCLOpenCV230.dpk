@@ -1,4 +1,4 @@
-package dclCommonOpenCV300;
+package dclVCLOpenCV230;
 
 {$R *.res}
 {$R *.dres}
@@ -31,11 +31,12 @@ package dclCommonOpenCV300;
 {$IMPLICITBUILD OFF}
 
 requires
-  ocvOpenCV300,
+  ocvOpenCV230,
+  dclCommonOpenCV230,
   designide;
 
 contains
-  ocv.comp.IOProperties in '..\ocv.comp.IOProperties.pas',
-  ocv.comp.Register in '..\ocv.comp.Register.pas';
+  ocv.comp.RegisterVCL in '..\ocv.comp.RegisterVCL.pas',
+  ocv.comp.View in '..\ocv.comp.View.pas';
 
 end.

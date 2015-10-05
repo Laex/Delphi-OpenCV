@@ -1,7 +1,6 @@
-package dclVCLOpenCV300;
+package dclFFMSource230;
 
 {$R *.res}
-{$R *.dres}
 {$IFDEF IMPLICITBUILDING This IFDEF should not be used by users}
 {$ALIGN 8}
 {$ASSERTIONS ON}
@@ -10,33 +9,31 @@ package dclVCLOpenCV300;
 {$EXTENDEDSYNTAX ON}
 {$IMPORTEDDATA ON}
 {$IOCHECKS ON}
-{$LOCALSYMBOLS OFF}
+{$LOCALSYMBOLS ON}
 {$LONGSTRINGS ON}
 {$OPENSTRINGS ON}
-{$OPTIMIZATION ON}
+{$OPTIMIZATION OFF}
 {$OVERFLOWCHECKS OFF}
 {$RANGECHECKS OFF}
-{$REFERENCEINFO OFF}
+{$REFERENCEINFO ON}
 {$SAFEDIVIDE OFF}
-{$STACKFRAMES OFF}
+{$STACKFRAMES ON}
 {$TYPEDADDRESS OFF}
 {$VARSTRINGCHECKS ON}
 {$WRITEABLECONST OFF}
 {$MINENUMSIZE 1}
 {$IMAGEBASE $400000}
-{$DEFINE RELEASE}
+{$DEFINE DEBUG}
 {$ENDIF IMPLICITBUILDING}
-{$DESCRIPTION 'OpenCV Component'}
-{$DESIGNONLY}
-{$IMPLICITBUILD OFF}
+{$IMPLICITBUILD ON}
 
 requires
-  ocvOpenCV300,
-  dclCommonOpenCV300,
+  ocvOpenCV230,
+  dclCommonOpenCV230,
   designide;
 
 contains
-  ocv.comp.RegisterVCL in '..\ocv.comp.RegisterVCL.pas',
-  ocv.comp.View in '..\ocv.comp.View.pas';
+  ocv.comp.RegisterFFM in '..\ocv.comp.RegisterFFM.pas',
+  ocv.comp.FFMSource in '..\ocv.comp.FFMSource.pas';
 
 end.

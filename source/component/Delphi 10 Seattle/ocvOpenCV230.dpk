@@ -1,4 +1,4 @@
-package dclFMXOpenCV300;
+package ocvOpenCV230;
 
 {$R *.res}
 {$IFDEF IMPLICITBUILDING This IFDEF should not be used by users}
@@ -26,17 +26,10 @@ package dclFMXOpenCV300;
 {$DEFINE RELEASE}
 {$ENDIF IMPLICITBUILDING}
 {$DESCRIPTION 'OpenCV Component'}
-{$DESIGNONLY}
+{$RUNONLY}
 {$IMPLICITBUILD OFF}
 
 requires
-  fmx,
-  ocvOpenCV300,
-  dclCommonOpenCV300,
-  designide;
-
-contains
-  ocv.comp.RegisterFMX in '..\ocv.comp.RegisterFMX.pas',
-  ocv.comp.ViewFMX in '..\ocv.comp.ViewFMX.pas';
+  rtl;
 
 end.

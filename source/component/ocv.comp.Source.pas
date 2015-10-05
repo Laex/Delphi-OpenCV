@@ -42,6 +42,7 @@ uses
 {$ENDIF}
   ocv.core.types_c,
   ocv.highgui_c,
+  ocv.Classes,
   ocv.comp.Types;
 
 type
@@ -118,9 +119,16 @@ type
     property FPS: Double read GetFPS;
   end;
 
+{$IFDEF DelphiOCVVersion_30}
+
+  TcsVideoCapture = IVideoCapture;
+{$ELSE}
+  TcsVideoCapture = pCvCapture;
+{$ENDIF}
+
   TocvCaptureSource = class(TocvCustomSource)
   protected
-    FCapture: pCvCapture;
+    FCapture: TcsVideoCapture;
     procedure Loaded; override;
   private
     procedure ReleaseSource; override;
@@ -204,18 +212,19 @@ const
 implementation
 
 uses
-  ocv.core_c;
+  ocv.core_c,
+  ocv.utils;
 
 Type
   TocvCaptureThread = class(TocvCustomSourceThread)
   private
-    procedure SetCapture(const Value: pCvCapture); virtual;
+    procedure SetCapture(const Value: TcsVideoCapture); virtual;
   protected
-    FCapture: pCvCapture;
+    FCapture: TcsVideoCapture;
   protected
     procedure Execute; override;
   public
-    property Capture: pCvCapture read FCapture write SetCapture;
+    property Capture: TcsVideoCapture read FCapture write SetCapture;
   end;
 
 const
@@ -266,7 +275,12 @@ Const
 
 procedure TocvCaptureThread.Execute;
 Var
+{$IFDEF DelphiOCVVersion_30}
+  frame: IMat;
+  I: TIplImage;
+{$ELSE}
   frame: pIplImage;
+{$ENDIF}
 begin
   while not Terminated do
     if Assigned(FCapture) then
@@ -274,8 +288,12 @@ begin
       try
         FLock.Enter;
         try
-          frame:=nil;
+          frame := nil;
+{$IFDEF DelphiOCVVersion_30}
+          FCapture.Read(frame);
+{$ELSE}
           frame := cvQueryFrame(FCapture);
+{$ENDIF}
         finally
           FLock.Leave;
         end;
@@ -289,7 +307,12 @@ begin
                 Var
                   Image: IocvImage;
                 begin
+{$IFDEF DelphiOCVVersion_30}
+                  I.InitFromMat(frame);
+                  Image := TocvImage.CreateClone(@I);
+{$ELSE}
                   Image := TocvImage.CreateClone(frame);
+{$ENDIF}
                   OnNotifyData(Self, Image);
                   Image := nil;
                 end);
@@ -337,16 +360,26 @@ begin
       if Assigned(FCapture) and FEnabled then
       begin
         (FSourceThread as TocvCaptureThread).Capture := nil;
+{$IFNDEF DelphiOCVVersion_30}
         cvReleaseCapture(FCapture);
+{$ENDIF}
         FCapture := Nil;
       end;
       if Value then
       begin
+{$IFDEF DelphiOCVVersion_30}
+        FCapture := TVideoCapture.Create(ocvCameraCaptureSource[FCaptureSource]);
+{$ELSE}
         FCapture := cvCreateCameraCapture(ocvCameraCaptureSource[FCaptureSource]);
+{$ENDIF}
         if Assigned(FCapture) then
         begin
           SetCameraResolution;
+{$IFDEF DelphiOCVVersion_30}
+          FFPS := FCapture.Prop[CV_CAP_PROP_FPS];
+{$ELSE}
           FFPS := cvGetCaptureProperty(FCapture, CV_CAP_PROP_FPS);
+{$ENDIF}
           (FSourceThread as TocvCaptureThread).Capture := FCapture;
           FSourceThread.Resume;
         end;
@@ -358,8 +391,13 @@ end;
 
 procedure TocvCameraSource.SetCameraResolution;
 begin
+{$IFDEF DelphiOCVVersion_30}
+  FCapture.Prop[CV_CAP_PROP_FRAME_WIDTH] := CameraResolution[FResolution].cWidth;
+  FCapture.Prop[CV_CAP_PROP_FRAME_HEIGHT] := CameraResolution[FResolution].cHeight;
+{$ELSE}
   cvSetCaptureProperty(FCapture, CV_CAP_PROP_FRAME_WIDTH, CameraResolution[FResolution].cWidth);
   cvSetCaptureProperty(FCapture, CV_CAP_PROP_FRAME_HEIGHT, CameraResolution[FResolution].cHeight);
+{$ENDIF}
 end;
 
 procedure TocvCameraSource.SetResolution(const Value: TocvResolution);
@@ -460,8 +498,10 @@ begin
 end;
 
 procedure TocvFileSource.SetEnabled(Value: Boolean);
+{$IFNDEF DelphiOCVVersion_30}
 Var
   pFileName: PAnsiChar;
+{$ENDIF}
 begin
   if FEnabled <> Value then
   begin
@@ -470,13 +510,19 @@ begin
       if Assigned(FCapture) and FEnabled then
       begin
         (FSourceThread as TocvCaptureThread).Capture := nil;
+{$IFNDEF DelphiOCVVersion_30}
         cvReleaseCapture(FCapture);
+{$ENDIF}
         FCapture := Nil;
       end;
       if Value and FileExists(FileName) then
       begin
+{$IFDEF DelphiOCVVersion_30}
+        FCapture := TVideoCapture.Create(FileName);
+{$ELSE}
         pFileName := PAnsiChar(@(AnsiString(FileName)[1]));
         FCapture := cvCreateFileCapture(pFileName);
+{$ENDIF}
         if Assigned(FCapture) then
         begin
           (FSourceThread as TocvCaptureThread).Capture := FCapture;
@@ -549,12 +595,18 @@ begin
       if Assigned(FCapture) and FEnabled then
       begin
         (FSourceThread as TocvCaptureThread).Capture := nil;
+{$IFNDEF DelphiOCVVersion_30}
         cvReleaseCapture(FCapture);
+{$ENDIF}
         FCapture := Nil;
       end;
       if Value then
       begin
+{$IFDEF DelphiOCVVersion_30}
+        FCapture := TVideoCapture.Create(GetIPCamTarget);
+{$ELSE}
         FCapture := cvCreateFileCapture(PAnsiChar(GetIPCamTarget));
+{$ENDIF}
         if Assigned(FCapture) then
         begin
           (FSourceThread as TocvCaptureThread).Capture := FCapture;
@@ -596,12 +648,14 @@ begin
   inherited;
   if Assigned(FCapture) then
   begin
+{$IFNDEF DelphiOCVVersion_30}
     cvReleaseCapture(FCapture);
+{$ENDIF}
     FCapture := nil;
   end;
 end;
 
-procedure TocvCaptureThread.SetCapture(const Value: pCvCapture);
+procedure TocvCaptureThread.SetCapture(const Value: TcsVideoCapture);
 begin
   FLock.Enter;
   try

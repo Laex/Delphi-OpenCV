@@ -35,29 +35,29 @@
 
 *)
 
-unit ocv.lib;
-
 {$I OpenCV.inc}
+
+unit ocv.lib;
 
 interface
 
 const
 {$IFDEF DelphiOCVVersion_29}
-  CV_VERSION_EPOCH    = '2';
-  CV_VERSION_MAJOR    = '4';
-  CV_VERSION_MINOR    = '11';
+  CV_VERSION_EPOCH = '2';
+  CV_VERSION_MAJOR = '4';
+  CV_VERSION_MINOR = '11';
   CV_VERSION_REVISION = '0';
 {$ELSEIF DEFINED(DelphiOCVVersion_30)}
-  CV_VERSION_EPOCH    = '3';
-  CV_VERSION_MAJOR    = '0';
-  CV_VERSION_MINOR    = '0';
+  CV_VERSION_EPOCH = '3';
+  CV_VERSION_MAJOR = '0';
+  CV_VERSION_MINOR = '0';
   CV_VERSION_REVISION = '0';
 {$ENDIF}
   CV_VERSION = CV_VERSION_EPOCH + '.' + CV_VERSION_MAJOR + '.' + CV_VERSION_MINOR + '.' + CV_VERSION_REVISION;
 
   // * old  style version constants*/
-  CV_MAJOR_VERSION    = CV_VERSION_EPOCH;
-  CV_MINOR_VERSION    = CV_VERSION_MAJOR;
+  CV_MAJOR_VERSION = CV_VERSION_EPOCH;
+  CV_MINOR_VERSION = CV_VERSION_MAJOR;
   CV_SUBMINOR_VERSION = CV_VERSION_MINOR;
 
   CV_VERSION_DLL = CV_VERSION_EPOCH + CV_VERSION_MAJOR + CV_VERSION_MINOR;
@@ -255,7 +255,86 @@ opencv_photo_lib = {$IFDEF MSWINDOWS}
 {$ENDIF}
 {$ENDIF}
 {$ENDIF}
+{$IFDEF SAFELOADLIB}
+function ocvLoadLibrary(const Name: String): Cardinal;
+function ocvFreeLibrary(const LibHandle: Cardinal; const Remove: Boolean = true): Boolean;
+function ocvGetProcAddress(const ProcName: String; const LibHandle: Cardinal = 0; const Check: Boolean = true): Pointer;
+
+{$ENDIF}
 
 implementation
+
+{$IFDEF SAFELOADLIB}
+
+Uses
+  Winapi.Windows,
+  System.Generics.Collections,
+  ocv.utils;
+
+Type
+  TOCVLibHandles = TDictionary<String, Cardinal>;
+
+Var
+  OCVLibHandles: TOCVLibHandles;
+
+function ocvLoadLibrary(const Name: String): Cardinal;
+begin
+  if not OCVLibHandles.TryGetValue(Name, Result) then
+  begin
+    Result := LoadLibrary(LPCWSTR(Name));
+    OCVLibHandles.Add(Name, Result);
+  end;
+end;
+
+function ocvFreeLibrary(const LibHandle: Cardinal; const Remove: Boolean): Boolean;
+Var
+  P: TPair<String, Cardinal>;
+begin
+  if LibHandle = 0 then
+    Result := False
+  else
+  begin
+    Result := FreeLibrary(LibHandle);
+    if Remove and OCVLibHandles.ContainsValue(LibHandle) then
+      for P in OCVLibHandles do
+        if P.Value = LibHandle then
+        begin
+          OCVLibHandles.Remove(P.Key);
+          Break;
+        end;
+  end;
+end;
+
+function ocvGetProcAddress(const ProcName: String; const LibHandle: Cardinal; const Check: Boolean): Pointer;
+begin
+  if LibHandle = 0 then
+    Result := nil
+  else
+  begin
+    Result := GetProcAddress(LibHandle, LPCSTR(ProcName));
+  end;
+
+  Assert(Assigned(Result), 'Can not load proc ' + ProcName);
+end;
+
+procedure ocvFreeLibraries;
+Var
+  P: TPair<String, Cardinal>;
+begin
+  for P in OCVLibHandles do
+    ocvFreeLibrary(P.Value, False);
+  OCVLibHandles.Clear;
+end;
+
+initialization
+
+OCVLibHandles := TOCVLibHandles.Create;
+
+finalization
+
+ocvFreeLibraries;
+OCVLibHandles.Free;
+
+{$ENDIF}
 
 end.

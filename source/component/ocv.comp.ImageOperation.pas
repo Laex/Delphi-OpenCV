@@ -57,7 +57,8 @@ uses
   ocv.comp.proc,
   ocv.objdetect_c,
   ocv.core.types_c,
-  ocv.imgproc.types_c;
+  ocv.imgproc.types_c,
+  ocv.editor;
 
 type
 {$IFDEF DELPHIXE3_UP} // XE3..XE6
@@ -860,6 +861,21 @@ type
     property CascadeFlags: TocvHaarCascadeFlagSet read FCascadeFlags write FCascadeFlags default [];
     property OnHaarCascade: TOnOcvHaarCascade read FOnHaarCascade write FOnHaarCascade;
     property NotifyOnlyWhenFound: Boolean index 1 Read GetBoolParam write SetBoolParam;
+  end;
+
+  TocvEditorOperation = (eopNone, eopSature, eopExpo, eopHue, eopTemperature, eopWhite, eopShadow, eopContrast, eopClarity);
+
+  TocvEditor = class(TocvCustomImageOperation)
+  private
+    FStep: Integer;
+    FEditorOperation: TocvEditorOperation;
+  public
+    constructor Create(AOwner: TPersistent); override;
+    destructor Destroy; override;
+    function DoTransform(const Source: IocvImage; out Destanation: IocvImage): Boolean; override;
+  published
+    property Step: Integer read FStep Write FStep;
+    property EditorOperation: TocvEditorOperation read FEditorOperation write FEditorOperation;
   end;
 
   TocvContourDraw = class(TocvDraw)
@@ -3444,6 +3460,57 @@ begin
   end;
 end;
 
+{ TocvEditor }
+
+constructor TocvEditor.Create(AOwner: TPersistent);
+begin
+  inherited;
+  FStep := 10;
+  FEditorOperation := eopNone;
+end;
+
+destructor TocvEditor.Destroy;
+begin
+
+  inherited;
+end;
+
+function TocvEditor.DoTransform(const Source: IocvImage; out Destanation: IocvImage): Boolean;
+Var
+  iImage: pIplImage;
+begin
+  try
+    case EditorOperation of
+      eopNone:
+        begin
+          Destanation := Source;
+          Exit;
+        end;
+      eopSature:
+        Sature(Step, Source.IpImage, iImage);
+      eopExpo:
+        Expo(Step, Source.IpImage, iImage);
+      eopHue:
+        Hue(Step, Source.IpImage, iImage);
+      eopTemperature:
+        Temperature(Step, Source.IpImage, iImage);
+      eopWhite:
+        white(Step, Source.IpImage, iImage);
+      eopShadow:
+        Shadow(Step, Source.IpImage, iImage);
+      eopContrast:
+        Contrast(Step, Source.IpImage, iImage);
+      eopClarity:
+        Clarity(Step, Source.IpImage, iImage);
+    end;
+    Destanation := TocvImage.Create(iImage);
+    Result := True;
+  except
+    Destanation := Source;
+    Result := False;
+  end;
+end;
+
 initialization
 
 GetRegisteredImageOperations.RegisterIOClass(TocvNoneOperation, 'None');
@@ -3472,6 +3539,7 @@ GetRegisteredImageOperations.RegisterIOClass(TocvCvtColorOperation, 'ColorOperat
 GetRegisteredImageOperations.RegisterIOClass(TocvResizeOperation, 'Resize');
 GetRegisteredImageOperations.RegisterIOClass(TocvLogicOperation, 'Logic');
 GetRegisteredImageOperations.RegisterIOClass(TocvLogicSOperation, 'LogicS');
+GetRegisteredImageOperations.RegisterIOClass(TocvEditor,'Editor');
 
 finalization
 

@@ -69,14 +69,15 @@ uses ocv.core_c, ocv.core.types_c;
 /// ****************************************************************************************\
 // *                         Haar-like Object Detection functions                           *
 // \****************************************************************************************/
-//
-// #define CV_HAAR_MAGIC_VAL    0x42500000
-// #define CV_TYPE_NAME_HAAR    "opencv-haar-classifier"
-//
-// #define CV_IS_HAAR_CLASSIFIER( haar )                                                    \
-// ((haar) != NULL &&                                                                   \
-// (((const CvHaarClassifierCascade*)(haar))->flags & CV_MAGIC_MASK)==CV_HAAR_MAGIC_VAL)
 const
+  // #define CV_HAAR_MAGIC_VAL    0x42500000
+  CV_HAAR_MAGIC_VAL = $42500000;
+  // #define CV_TYPE_NAME_HAAR    "opencv-haar-classifier"
+  CV_TYPE_NAME_HAAR = 'opencv-haar-classifier';
+
+  // #define CV_IS_HAAR_CLASSIFIER( haar )                                                    \
+  // ((haar) != NULL &&                                                                   \
+  // (((const CvHaarClassifierCascade*)(haar))->flags & CV_MAGIC_MASK)==CV_HAAR_MAGIC_VAL)
   // #define CV_HAAR_FEATURE_MAX  3
   CV_HAAR_FEATURE_MAX = 3;
 
@@ -145,22 +146,25 @@ Type
   // CvRect rect;
   // int neighbors;
   // } CvAvgComp;
+  TCvAvgComp = record
+    rect: TCvRect;
+    neighbors: Integer;
+  end;
 
   // Loads haar classifier cascade from a directory.
   // It is obsolete: convert your cascade to xml and use cvLoad instead
   // CVAPI(CvHaarClassifierCascade*) cvLoadHaarClassifierCascade(
   // const char* directory, CvSize orig_window_size);
-function cvLoadHaarClassifierCascade(const directory: PAnsiChar; orig_window_size: TCvSize)
-  : pCvHaarClassifierCascade; cdecl;
+function cvLoadHaarClassifierCascade(const directory: PAnsiChar; orig_window_size: TCvSize): pCvHaarClassifierCascade; cdecl;
 
 // CVAPI(void) cvReleaseHaarClassifierCascade( CvHaarClassifierCascade** cascade );
 procedure cvReleaseHaarClassifierCascade(Var cascade: pCvHaarClassifierCascade); cdecl;
 
 Const
-  CV_HAAR_DO_CANNY_PRUNING    = 1;
-  CV_HAAR_SCALE_IMAGE         = 2;
+  CV_HAAR_DO_CANNY_PRUNING = 1;
+  CV_HAAR_SCALE_IMAGE = 2;
   CV_HAAR_FIND_BIGGEST_OBJECT = 4;
-  CV_HAAR_DO_ROUGH_SEARCH     = 8;
+  CV_HAAR_DO_ROUGH_SEARCH = 8;
 
   // CVAPI(CvSeq*) cvHaarDetectObjects( const CvArr* image,
   // CvHaarClassifierCascade* cascade, CvMemStorage* storage,
@@ -169,9 +173,9 @@ Const
   // CvSize min_size CV_DEFAULT(cvSize(0,0)), CvSize max_size CV_DEFAULT(cvSize(0,0)));
 
   // CVAPI(CvSeq*)
-function cvHaarDetectObjects(const image: pCvArr; cascade: pCvHaarClassifierCascade; storage: pCvMemStorage;
-  scale_factor: Double { 1.1 }; min_neighbors: Integer { 3 }; flags: Integer { 0 };
-  min_size: TCvSize { CV_DEFAULT(cvSize(0,0)) }; max_size: TCvSize { CV_DEFAULT(cvSize(0,0)) } ): pCvSeq; cdecl;
+function cvHaarDetectObjects(const image: pCvArr; cascade: pCvHaarClassifierCascade; storage: pCvMemStorage; scale_factor: Double { 1.1 };
+  min_neighbors: Integer { 3 }; flags: Integer { 0 }; min_size: TCvSize { CV_DEFAULT(cvSize(0,0)) }; max_size: TCvSize { CV_DEFAULT(cvSize(0,0)) } )
+  : pCvSeq; cdecl;
 
 (*
   sets images for haar classifier cascade
@@ -180,22 +184,20 @@ function cvHaarDetectObjects(const image: pCvArr; cascade: pCvHaarClassifierCasc
   const CvArr* sum, const CvArr* sqsum,
   const CvArr* tilted_sum, double scale );
 *)
-procedure cvSetImagesForHaarClassifierCascade(cascade: pCvHaarClassifierCascade; const sum: pCvArr; const sqsum: pCvArr;
-  const tilted_sum: pCvArr; scale: Double); cdecl;
+procedure cvSetImagesForHaarClassifierCascade(cascade: pCvHaarClassifierCascade; const sum: pCvArr; const sqsum: pCvArr; const tilted_sum: pCvArr;
+  scale: Double); cdecl;
 
 (*
   runs the cascade on the specified window
-*)
-(*
+
   CVAPI(int) cvRunHaarClassifierCascade( const CvHaarClassifierCascade* cascade,
   CvPoint pt, int start_stage CV_DEFAULT(0));
 *)
-function cvRunHaarClassifierCascade(const cascade: pCvHaarClassifierCascade; pt: TCvPoint; start_stage: Integer = 0)
-  : Integer; cdecl;
+function cvRunHaarClassifierCascade(const cascade: pCvHaarClassifierCascade; pt: TCvPoint; start_stage: Integer = 0): Integer; cdecl;
 
-/// ****************************************************************************************\
-// *                         Latent SVM Object Detection functions                          *
-// \****************************************************************************************/
+// ****************************************************************************************
+// *                         Latent SVM Object Detection functions                        *
+// ****************************************************************************************
 
 // DataType: STRUCT position
 /// / Structure describes the position of the filter in the feature pyramid
@@ -284,68 +286,72 @@ Type
   // CVAPI(CvLatentSvmDetector*) cvLoadLatentSvmDetector(const char* filename);
 function cvLoadLatentSvmDetector(const filename: pCVChar): pCvLatentSvmDetector; cdecl;
 
-// release memory allocated for CvLatentSvmDetector structure
-//
-// API
-// void cvReleaseLatentSvmDetector(CvLatentSvmDetector** detector);
-// INPUT
-// detector             - CvLatentSvmDetector structure to be released
-// OUTPUT
+(*
+  release memory allocated for CvLatentSvmDetector structure
 
-// CVAPI(void) cvReleaseLatentSvmDetector(CvLatentSvmDetector** detector);
+  API
+  void cvReleaseLatentSvmDetector(CvLatentSvmDetector** detector);
+  INPUT
+  detector             - CvLatentSvmDetector structure to be released
+  OUTPUT
+
+  CVAPI(void) cvReleaseLatentSvmDetector(CvLatentSvmDetector** detector);
+*)
 procedure cvReleaseLatentSvmDetector(Var detector: pCvLatentSvmDetector); cdecl;
 
+(*
+  find rectangular regions in the given image that are likely
+  to contain objects and corresponding confidence levels
 
-// find rectangular regions in the given image that are likely
-// to contain objects and corresponding confidence levels
-//
-// CvSeq* cvLatentSvmDetectObjects(const IplImage* image,
-// CvLatentSvmDetector* detector,
-// CvMemStorage* storage,
-// float overlap_threshold = 0.5f,
-// int numThreads = -1);
-// INPUT
-// image                - image to detect objects in
-// detector             - Latent SVM detector in internal representation
-// storage              - memory storage to store the resultant sequence
-// of the object candidate rectangles
-// overlap_threshold    - threshold for the non-maximum suppression algorithm
-// = 0.5f [here will be the reference to original paper]
-// OUTPUT
-// sequence of detected objects (bounding boxes and confidence levels stored in CvObjectDetection structures)
+  CvSeq* cvLatentSvmDetectObjects(const IplImage* image,
+  CvLatentSvmDetector* detector,
+  CvMemStorage* storage,
+  float overlap_threshold = 0.5f,
+  int numThreads = -1);
+  INPUT
+  image                - image to detect objects in
+  detector             - Latent SVM detector in internal representation
+  storage              - memory storage to store the resultant sequence
+  of the object candidate rectangles
+  overlap_threshold    - threshold for the non-maximum suppression algorithm
+  = 0.5f [here will be the reference to original paper]
+  OUTPUT
+  sequence of detected objects (bounding boxes and confidence levels stored in CvObjectDetection structures)
 
-// CVAPI(CvSeq*) cvLatentSvmDetectObjects(IplImage* image,
-// CvLatentSvmDetector* detector,
-// CvMemStorage* storage,
-// float overlap_threshold CV_DEFAULT(0.5f),
-// int numThreads CV_DEFAULT(-1));
-function cvLatentSvmDetectObjects(image: pIplImage; detector: pCvLatentSvmDetector; storage: pCvMemStorage;
-  overlap_threshold: single = 0.5; numThreads: Integer = -1): pCvSeq; cdecl;
+  CVAPI(CvSeq* ) cvLatentSvmDetectObjects(IplImage* image,
+  CvLatentSvmDetector* detector,
+  CvMemStorage* storage,
+  float overlap_threshold CV_DEFAULT(0.5f),
+  int numThreads CV_DEFAULT(-1));
+*)
+function cvLatentSvmDetectObjects(image: pIplImage; detector: pCvLatentSvmDetector; storage: pCvMemStorage; overlap_threshold: single = 0.5;
+  numThreads: Integer = -1): pCvSeq; cdecl;
 
-// #ifdef __cplusplus
-// }
-//
-// CV_EXPORTS CvSeq* cvHaarDetectObjectsForROC( const CvArr* image,
-// CvHaarClassifierCascade* cascade, CvMemStorage* storage,
-// std::vector<int>& rejectLevels, std::vector<double>& levelWeightds,
-// double scale_factor = 1.1,
-// int min_neighbors = 3, int flags = 0,
-// CvSize min_size = cvSize(0, 0), CvSize max_size = cvSize(0, 0),
-// bool outputRejectLevels = false );
-//
-// struct CvDataMatrixCode
-// {
-// char msg[4];
-// CvMat* original;
-// CvMat* corners;
-// };
-//
-// CV_EXPORTS std::deque<CvDataMatrixCode> cvFindDataMatrix(CvMat *im);
-//
-// #endif
-//
-//
-// #endif /* __OPENCV_OBJDETECT_C_H__ */
+(*
+  #ifdef __cplusplus
+  }
+
+  CV_EXPORTS CvSeq* cvHaarDetectObjectsForROC( const CvArr* image,
+  CvHaarClassifierCascade* cascade, CvMemStorage* storage,
+  std::vector<int>& rejectLevels, std::vector<double>& levelWeightds,
+  double scale_factor = 1.1,
+  int min_neighbors = 3, int flags = 0,
+  CvSize min_size = cvSize(0, 0), CvSize max_size = cvSize(0, 0),
+  bool outputRejectLevels = false );
+*)
+
+(*
+  struct CvDataMatrixCode
+  {
+  char msg[4];
+  CvMat* original;
+  CvMat* corners;
+  };
+
+  // CV_EXPORTS std::deque<CvDataMatrixCode> cvFindDataMatrix(CvMat *im);
+
+  #endif
+*)
 
 implementation
 

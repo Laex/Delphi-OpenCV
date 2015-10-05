@@ -45,20 +45,8 @@
   opencv\modules\photo\include\opencv2\photo\photo_c.h
   *************************************************************************************************
 *)
-//
+
 {$I OpenCV.inc}
-//
-{$IFDEF DEBUG}
-{$A8,B-,C+,D+,E-,F-,G+,H+,I+,J-,K-,L+,M-,N+,O-,P+,Q+,R+,S-,T-,U-,V+,W+,X+,Y+,Z1}
-{$ELSE}
-{$A8,B-,C-,D-,E-,F-,G+,H+,I+,J-,K-,L-,M-,N+,O+,P+,Q-,R-,S-,T-,U-,V+,W-,X+,Y-,Z1}
-{$ENDIF}
-{$WARN SYMBOL_DEPRECATED OFF}
-{$WARN SYMBOL_PLATFORM OFF}
-{$WARN UNIT_PLATFORM OFF}
-{$WARN UNSAFE_TYPE OFF}
-{$WARN UNSAFE_CODE OFF}
-{$WARN UNSAFE_CAST OFF}
 unit ocv.photo_c;
 
 interface
@@ -69,28 +57,58 @@ const
   (*
     Inpainting algorithms
   *)
-  (* enum
-    {
-    CV_INPAINT_NS      =0,
-    CV_INPAINT_TELEA   =1
-    }; *)
-
-  CV_INPAINT_NS    = 0;
+  CV_INPAINT_NS = 0;
   CV_INPAINT_TELEA = 1;
+
   (*
     Inpaints the selected region in the image
-  *)
-  (*
+
     CVAPI(void) cvInpaint( const CvArr* src, const CvArr* inpaint_mask,
     CvArr* dst, double inpaintRange, int flags );
   *)
-procedure cvInpaint(const src: pCvArr; const inpaint_mask: pCvArr; dst: pCvArr; inpaintRange: double;
-  flags: Integer); cdecl;
+
+{$IFDEF SAFELOADLIB}
+
+Type
+  TcvInpaint = procedure(const src: pCvArr; const inpaint_mask: pCvArr; dst: pCvArr; inpaintRange: double; flags: Integer); cdecl;
+
+Var
+  cvInpaint: TcvInpaint = nil;
+{$ELSE}
+procedure cvInpaint(const src: pCvArr; const inpaint_mask: pCvArr; dst: pCvArr; inpaintRange: double; flags: Integer); cdecl;
+{$ENDIF}
 
 implementation
 
 uses ocv.lib;
 
+{$IFDEF SAFELOADLIB}
+
+Var
+  PhotoDLL: Cardinal;
+
+procedure Init_opencv_photo_lib;
+begin
+  PhotoDLL := ocvLoadLibrary(opencv_photo_lib);
+  Assert(PhotoDLL <> 0, 'Can not init ' + opencv_photo_lib);
+
+  cvInpaint := ocvGetProcAddress('cvInpaint', PhotoDLL);
+
+end;
+
+{$ELSE}
 procedure cvInpaint; external opencv_photo_lib;
+{$ENDIF}
+
+initialization
+
+{$IFDEF SAFELOADLIB}
+  Init_opencv_photo_lib;
+{$ENDIF}
+
+finalization
+
+{$IFDEF SAFELOADLIB}
+{$ENDIF}
 
 end.

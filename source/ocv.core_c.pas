@@ -165,8 +165,7 @@ const
     int step CV_DEFAULT(CV_AUTOSTEP) );
   }
 {$EXTERNALSYM cvInitMatHeader}
-function cvInitMatHeader(mat: pCvMat; rows: Integer; cols: Integer; _type: Integer; data: Pointer = nil; step: Integer = CV_AUTOSTEP)
-  : pCvMat; cdecl;
+function cvInitMatHeader(mat: pCvMat; rows: Integer; cols: Integer; _type: Integer; data: Pointer = nil; step: Integer = CV_AUTOSTEP): pCvMat; cdecl;
 
 { Allocates and initializes CvMat header and allocates data
   CVAPI(CvMat*)  cvCreateMat( int rows, int cols, int type );
@@ -422,8 +421,7 @@ function cvPtr3D(const arr: pCvArr; idx0, idx1, idx2: Integer; cType: pInteger =
   unsigned* precalc_hashval CV_DEFAULT(NULL));
 }
 {$EXTERNALSYM cvPtrND}
-function cvPtrND(const arr: pCvArr; idx: pInteger; cType: pInteger = nil; create_node: Integer = 1; precalc_hashval: punsigned = nil)
-  : pCvArr; cdecl;
+function cvPtrND(const arr: pCvArr; idx: pInteger; cType: pInteger = nil; create_node: Integer = 1; precalc_hashval: punsigned = nil): pCvArr; cdecl;
 
 { value = arr(idx0,idx1,...)
   CVAPI(CvScalar) cvGet1D( const pCvArr* arr, int idx0 );
@@ -529,8 +527,7 @@ function cvGetImage(const arr: pCvArr; image_header: pIplImage): pIplImage; cdec
   (new_cn), (new_dims), (new_sizes))
 }
 {$EXTERNALSYM cvReshapeMatND}
-function cvReshapeMatND(const arr: pCvArr; sizeof_header: Integer; header: pCvArr; new_cn, new_dims: Integer; new_sizes: pInteger)
-  : pCvArr; cdecl;
+function cvReshapeMatND(const arr: pCvArr; sizeof_header: Integer; header: pCvArr; new_cn, new_dims: Integer; new_sizes: pInteger): pCvArr; cdecl;
 {$EXTERNALSYM cvReshapeND}
 function cvReshapeND(const arr: pCvArr; sizeof_header: Integer; header: pCvArr; new_cn, new_dims: Integer; new_sizes: pInteger): pCvArr;
 {$IFDEF USE_INLINE}inline; {$ENDIF}
@@ -748,8 +745,7 @@ procedure cvAbsDiff(const src1: pCvArr; const src2: pCvArr; dst: pCvArr); cdecl;
 function cvGet(const mat: pCvMat; i, j: Integer): Single; {$IFDEF USE_INLINE}inline; {$ENDIF}
 procedure cvCopyImage(const src: pIplImage; dst: pIplImage; const mask: pIplImage = nil); cdecl;
 procedure cvCvtPixToPlane(const src: pIplImage; dst0: pIplImage; dst1: pIplImage; dst2: pIplImage; dst3: pIplImage); cdecl;
-procedure cvCvtPlaneToPix(const src0: pIplImage; const src1: pIplImage; const src2: pIplImage; const src3: pIplImage;
-  dst: pIplImage); cdecl;
+procedure cvCvtPlaneToPix(const src0: pIplImage; const src1: pIplImage; const src2: pIplImage; const src3: pIplImage; dst: pIplImage); cdecl;
 
 { dst(idx) = src1(idx) | src2(idx) */
   CVAPI(void) cvOr( const CvArr* src1, const CvArr* src2,
@@ -934,8 +930,7 @@ const
   // CVAPI(void)  cvGEMM( const CvArr* src1, const CvArr* src2, double alpha,
   // const CvArr* src3, double beta, CvArr* dst,
   // int tABC CV_DEFAULT(0));
-procedure cvGEMM(const src1: pCvArr; const src2: pCvArr; alpha: double; const src3: pCvArr; beta: double; dst: pCvArr;
-  tABC: Integer = 0); cdecl;
+procedure cvGEMM(const src1: pCvArr; const src2: pCvArr; alpha: double; const src3: pCvArr; beta: double; dst: pCvArr; tABC: Integer = 0); cdecl;
 
 
 // #define cvMatMulAddEx cvGEMM
@@ -1261,8 +1256,8 @@ procedure cvCvtSeqToArray(const seq: pCvSeq; elements: pCvArr; slice: TCvSlice {
   int elem_size, void* elements, int total,
   CvSeq* seq, CvSeqBlock* block );
 *)
-function cvMakeSeqHeaderForArray(seq_type: Integer; header_size: Integer; elem_size: Integer; elements: Pointer; total: Integer;
-  seq: pCvSeq; block: pCvSeqBlock): pCvSeq; cdecl;
+function cvMakeSeqHeaderForArray(seq_type: Integer; header_size: Integer; elem_size: Integer; elements: Pointer; total: Integer; seq: pCvSeq;
+  block: pCvSeqBlock): pCvSeq; cdecl;
 
 (*
   Extracts sequence slice (with or without copying sequence elements)
@@ -1295,8 +1290,7 @@ function cvCreateSet(set_flags: Integer; header_size: Integer; elem_size: Intege
   int vtx_size, int edge_size,
   CvMemStorage* storage );
 *)
-function cvCreateGraph(graph_flags: Integer; header_size: Integer; vtx_size: Integer; edge_size: Integer; storage: pCvMemStorage)
-  : pCvGraph; cdecl;
+function cvCreateGraph(graph_flags: Integer; header_size: Integer; vtx_size: Integer; edge_size: Integer; storage: pCvMemStorage): pCvGraph; cdecl;
 
 (*
   Adds new vertex to the graph
@@ -1329,8 +1323,8 @@ function cvGraphRemoveVtxByPtr(graph: pCvGraph; vtx: pCvGraphVtx): Integer; cdec
   const CvGraphEdge* edge CV_DEFAULT(NULL),
   CvGraphEdge** inserted_edge CV_DEFAULT(NULL) );
 *)
-function cvGraphAddEdge(graph: pCvGraph; start_idx: Integer; end_idx: Integer; const edge: pCvGraphEdge = nil;
-  inserted_edge: pCvGraphEdgeArray = nil): Integer; cdecl;
+function cvGraphAddEdge(graph: pCvGraph; start_idx: Integer; end_idx: Integer; const edge: pCvGraphEdge = nil; inserted_edge: pCvGraphEdgeArray = nil)
+  : Integer; cdecl;
 (*
   CVAPI(int)  cvGraphAddEdgeByPtr( CvGraph* graph,
   CvGraphVtx* start_vtx, CvGraphVtx* end_vtx,
@@ -1476,6 +1470,14 @@ function cvNextGraphItem(scanner: pCvGraphScanner): Integer; cdecl;
 *)
 function cvCloneGraph(const graph: pCvGraph; storage: pCvMemStorage): pCvGraph; cdecl;
 
+(* Does look-up transformation. Elements of the source array
+  (that should be 8uC1 or 8sC1) are used as indexes in lutarr 256-element table
+
+  CVAPI(void) cvLUT( const CvArr* src, CvArr* dst, const CvArr* lut );
+
+*)
+procedure cvLUT(const src: pCvArr; dst: pCvArr; const lut: pCvArr); cdecl;
+
 (*
   Adds new element to the set and returns pointer to it
 
@@ -1578,8 +1580,7 @@ const
     CvScalar color, int thickness CV_DEFAULT(1),
     int line_type CV_DEFAULT(8), int shift CV_DEFAULT(0) );
   }
-procedure cvLine(img: pCvArr; pt1, pt2: TCvPoint; color: TCvScalar; thickness: Integer = 1; line_type: Integer = 8;
-  shift: Integer = 0); cdecl;
+procedure cvLine(img: pCvArr; pt1, pt2: TCvPoint; color: TCvScalar; thickness: Integer = 1; line_type: Integer = 8; shift: Integer = 0); cdecl;
 
 { Draws a rectangle specified by a CvRect structure
   procedure cvRectangleR(8: v1: ); shift CV_DEFAULT(0): Integer): Integer;
@@ -1737,8 +1738,8 @@ function cvColorToScalar(packed_color: double; arrtype: Integer): TCvScalar; cde
   CVAPI(int) cvEllipse2Poly( CvPoint center, CvSize axes,
   int angle, int arc_start, int arc_end, CvPoint * pts, int delta );
 *)
-function cvEllipse2Poly(center: TCvPoint; axes: TCvSize; angle: Integer; arc_start: Integer; arc_end: Integer; pts: pCVPoint;
-  delta: Integer): Integer; cdecl;
+function cvEllipse2Poly(center: TCvPoint; axes: TCvSize; angle: Integer; arc_start: Integer; arc_end: Integer; pts: pCVPoint; delta: Integer)
+  : Integer; cdecl;
 
 { Draws contour outlines or filled interiors on the image
   CVAPI(void)  cvDrawContours( pCvArr *img, CvSeq* contour,
@@ -1796,8 +1797,8 @@ function cvTreeToNodeSeq(const first: Pointer; header_size: Integer; storage: pC
 const
   CV_KMEANS_USE_INITIAL_LABELS = 1;
 
-function cvKMeans2(const samples: pCvArr; cluster_count: Integer; labels: pCvArr; termcrit: TCvTermCriteria; attempts: Integer = 1;
-  rng: pCvRNG = nil; flags: Integer = 0; _centers: pCvArr = nil; compactness: pDouble = nil): Integer; cdecl;
+function cvKMeans2(const samples: pCvArr; cluster_count: Integer; labels: pCvArr; termcrit: TCvTermCriteria; attempts: Integer = 1; rng: pCvRNG = nil;
+  flags: Integer = 0; _centers: pCvArr = nil; compactness: pDouble = nil): Integer; cdecl;
 
 (*
   ***************************************************************************************\
@@ -1844,8 +1845,8 @@ type
   (* typedef  IplImage* (CV_STDCALL* Cv_iplCreateImageHeader)
     (int,int,int,char*,char*,int,int,int,int,int,
     IplROI*,IplImage*,void*,IplTileInfo *)
-  TCv_iplCreateImageHeader = function(A: Integer; B: Integer; C: Integer; D: pCvChar; E: pCvChar; F: Integer; g: Integer; H: Integer;
-    i: Integer; j: Integer; K: pIplROI; L: pIplImage; M: Pointer; N: PIplTileInfo): pIplImage; stdcall;
+  TCv_iplCreateImageHeader = function(A: Integer; B: Integer; C: Integer; D: pCvChar; E: pCvChar; F: Integer; g: Integer; H: Integer; i: Integer;
+    j: Integer; K: pIplROI; L: pIplImage; M: Pointer; N: PIplTileInfo): pIplImage; stdcall;
 
   (* typedef  void (CV_STDCALL* Cv_iplAllocateImageData)(IplImage*,int,int); *)
   TCv_iplAllocateImageData = procedure(A: pIplImage; B: Integer); stdcall;
@@ -1865,8 +1866,8 @@ type
     Cv_iplCreateROI create_roi,
     Cv_iplCloneImage clone_image );
   *)
-procedure cvSetIPLAllocators(create_header: TCv_iplCreateImageHeader; allocate_data: TCv_iplAllocateImageData;
-  deallocate: TCv_iplDeallocate; create_roi: TCv_iplCreateROI; clone_image: TCv_iplCloneImage); cdecl;
+procedure cvSetIPLAllocators(create_header: TCv_iplCreateImageHeader; allocate_data: TCv_iplAllocateImageData; deallocate: TCv_iplDeallocate;
+  create_roi: TCv_iplCreateROI; clone_image: TCv_iplCloneImage); cdecl;
 
 { ****************************************************************************************
   *                                    Data Persistence                                  *
@@ -1878,8 +1879,7 @@ procedure cvSetIPLAllocators(create_header: TCv_iplCreateImageHeader; allocate_d
   CVAPI(CvFileStorage*)  cvOpenFileStorage( const char* filename, CvMemStorage* memstorage,
   int flags, const char* encoding CV_DEFAULT(NULL) );
 }
-function cvOpenFileStorage(const filename: pCvChar; memstorage: pCvMemStorage; flags: Integer; const encoding: pCvChar = nil)
-  : pCvFileStorage; cdecl;
+function cvOpenFileStorage(const filename: pCvChar; memstorage: pCvMemStorage; flags: Integer; const encoding: pCvChar = nil): pCvFileStorage; cdecl;
 
 { closes file storage and deallocates buffers
   CVAPI(void) cvReleaseFileStorage( CvFileStorage** fs );
@@ -1924,8 +1924,8 @@ function cvReadString(const node: pCvFileNode; const default_value: pCvChar = ni
 // {
 // return cvReadString( cvGetFileNodeByName( fs, map, name ), default_value );
 // }
-function cvReadStringByName(const fs: pCvFileStorage; const map: pCvFileNode; const name: pCvChar; const default_value: pCvChar = nil)
-  : pCvChar; {$IFDEF USE_INLINE}inline; {$ENDIF}
+function cvReadStringByName(const fs: pCvFileStorage; const map: pCvFileNode; const name: pCvChar; const default_value: pCvChar = nil): pCvChar;
+{$IFDEF USE_INLINE}inline; {$ENDIF}
 { decodes standard or user-defined object and returns it
   CVAPI(void*) cvRead( CvFileStorage* fs, CvFileNode* node,
   CvAttrList* attributes CV_DEFAULT(NULL));
@@ -2022,8 +2022,7 @@ procedure cvSave(const filename: pCvChar; const struct_ptr: Pointer; const name:
   cdecl; overload;
 procedure cvSave(const filename: pCvChar; const struct_ptr: Pointer; const name: pCvChar = Nil; const comment: pCvChar = Nil); overload;
 {$IFDEF USE_INLINE}inline; {$ENDIF}
-function cvLoad(const filename: pCvChar; memstorage: pCvMemStorage = Nil; const name: pCvChar = nil; const real_name: ppCvChar = nil)
-  : Pointer; cdecl;
+function cvLoad(const filename: pCvChar; memstorage: pCvMemStorage = Nil; const name: pCvChar = nil; const real_name: ppCvChar = nil): Pointer; cdecl;
 
 { *********************************** Measuring Execution Time *************************** }
 
@@ -2087,8 +2086,7 @@ function cvSetErrMode(mode: Integer): Integer; cdecl;
   writing message to stderr, terminating application etc.)
   depending on the current error mode *)
 // CVAPI(void) cvError( int status, const char* func_name,const char* err_msg, const char* file_name, int line );
-procedure cvError(status: Integer; const func_name: pCvChar; const err_msg: pCvChar; const file_name: pCvChar = nil;
-  line: Integer = 0); cdecl;
+procedure cvError(status: Integer; const func_name: pCvChar; const err_msg: pCvChar; const file_name: pCvChar = nil; line: Integer = 0); cdecl;
 
 (*
   Retrieves textual description of the error given its code
@@ -2137,20 +2135,20 @@ function cvRedirectError(error_handler: TCvErrorCallback; userdata: Pointer = ni
   CVAPI(int) cvNulDevReport( int status, const char* func_name, const char* err_msg,
   const char* file_name, int line, void* userdata );
 *)
-function cvNulDevReport(status: Integer; const func_name: pCvChar; const err_msg: pCvChar; const file_name: pCvChar; line: Integer;
-  userdata: Pointer): Integer; cdecl;
+function cvNulDevReport(status: Integer; const func_name: pCvChar; const err_msg: pCvChar; const file_name: pCvChar; line: Integer; userdata: Pointer)
+  : Integer; cdecl;
 (*
   CVAPI(int) cvStdErrReport( int status, const char* func_name, const char* err_msg,
   const char* file_name, int line, void* userdata );
 *)
-function cvStdErrReport(status: Integer; const func_name: pCvChar; const err_msg: pCvChar; const file_name: pCvChar; line: Integer;
-  userdata: Pointer): Integer; cdecl;
+function cvStdErrReport(status: Integer; const func_name: pCvChar; const err_msg: pCvChar; const file_name: pCvChar; line: Integer; userdata: Pointer)
+  : Integer; cdecl;
 (*
   CVAPI(int) cvGuiBoxReport( int status, const char* func_name, const char* err_msg,
   const char* file_name, int line, void* userdata );
 *)
-function cvGuiBoxReport(status: Integer; const func_name: pCvChar; const err_msg: pCvChar; const file_name: pCvChar; line: Integer;
-  userdata: Pointer): Integer; cdecl;
+function cvGuiBoxReport(status: Integer; const func_name: pCvChar; const err_msg: pCvChar; const file_name: pCvChar; line: Integer; userdata: Pointer)
+  : Integer; cdecl;
 
 implementation
 
@@ -2350,11 +2348,11 @@ procedure cvSet(arr: pCvArr; value: TCvScalar;
 
 procedure cvSet(mat: pCvMat; i, j: Integer; val: Single); {$IFDEF USE_INLINE}inline; {$ENDIF}
 var
-//  type_: Integer;
+  // type_: Integer;
   ptr: pByte;
   pf: PSingle;
 begin
-//  type_ := CV_MAT_TYPE(mat._type);
+  // type_ := CV_MAT_TYPE(mat._type);
   assert((i < mat^.rows) and (j < mat^.cols) and (CV_MAT_TYPE(mat._type) = CV_32FC1));
   ptr := mat^.data;
   Inc(ptr, mat.step * i + sizeof(Single) * j);
@@ -2470,8 +2468,7 @@ begin
   // return !node ? default_value :
   // CV_NODE_IS_INT(node->tag) ? node->data.i :
   // CV_NODE_IS_REAL(node->tag) ? cvRound(node->data.f) : 0x7fffffff;
-  result := iif(not Assigned(node), default_value, iif(CV_NODE_IS_INT(node^.tag), node^.i, iif(CV_NODE_IS_REAL(node^.tag), node^.F,
-    $7FFFFFFF)));
+  result := iif(not Assigned(node), default_value, iif(CV_NODE_IS_INT(node^.tag), node^.i, iif(CV_NODE_IS_REAL(node^.tag), node^.F, $7FFFFFFF)));
 end;
 
 function cvReadIntByName;
@@ -2518,11 +2515,11 @@ function cvGet(
 
   const mat: pCvMat; i, j: Integer): Single; {$IFDEF USE_INLINE}inline; {$ENDIF}
 var
-//  type_: Integer;
+  // type_: Integer;
   ptr: pByte;
   pf: PSingle;
 begin
-//  type_ := CV_MAT_TYPE(mat^._type);
+  // type_ := CV_MAT_TYPE(mat^._type);
   assert((i < mat^.rows) and (j < mat^.cols) and (CV_MAT_TYPE(mat^._type) = CV_32FC1));
   ptr := mat^.data;
   Inc(ptr, mat.step * i + sizeof(Single) * j);
