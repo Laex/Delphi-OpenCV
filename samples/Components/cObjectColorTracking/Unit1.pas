@@ -44,7 +44,7 @@ implementation
 Uses ocv.core.types_c,
   System.Math,
   ocv.core_c,
-  ocv.cvutils, ocv.imgproc_c, ocv.imgproc.types_c;
+  ocv.utils, ocv.imgproc_c, ocv.imgproc.types_c;
 
 procedure TForm1.frm22trckbr1Change(Sender: TObject);
 begin

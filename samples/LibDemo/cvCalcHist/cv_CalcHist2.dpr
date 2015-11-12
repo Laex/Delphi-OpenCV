@@ -40,7 +40,7 @@ uses
   ocv.core.types_c,
   ocv.imgproc_c,
   ocv.imgproc.types_c,
-  ocv.cvutils;
+  ocv.utils;
 
 Const
   CAMERA_INDEX = CV_CAP_ANY;

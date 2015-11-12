@@ -35,7 +35,7 @@ uses
   ocv.imgproc_c,
   ocv.imgproc.types_c,
   ocv.tracking_c,
-  ocv.cvutils;
+  ocv.utils;
 
 var
   image: pIplImage = nil;
