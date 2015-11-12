@@ -6,7 +6,7 @@ program art;
 uses
   System.SysUtils,
   System.Math,
-  ocv.cvutils,
+  ocv.utils,
   ocv.core_c,
   ocv.highgui_c,
   ocv.core.types_c,

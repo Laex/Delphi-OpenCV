@@ -388,7 +388,7 @@ implementation
 uses
   ocv.imgproc_c,
   ocv.imgproc.types_c,
-  ocv.highgui_c, ocv.cvutils;
+  ocv.highgui_c, ocv.utils;
 
 function ocvPixel(const R, G, B: byte): TocvPixel;
 begin

@@ -161,7 +161,7 @@ type
 implementation
 
 uses
-  ocv.cvutils;
+  ocv.utils;
 
 { TOpenCVView }
 

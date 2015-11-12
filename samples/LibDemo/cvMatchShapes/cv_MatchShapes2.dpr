@@ -36,7 +36,7 @@ uses
   ocv.core.types_c,
   ocv.imgproc_c,
   ocv.imgproc.types_c,
-  ocv.cvutils,
+  ocv.utils,
   uResourcePaths;
 
 // сравнение объектов по моментам их контуров

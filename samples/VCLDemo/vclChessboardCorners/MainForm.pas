@@ -74,7 +74,7 @@ implementation
 
 uses
   ocv.core_c,
-  ocv.cvutils,
+  ocv.utils,
   ocv.calib3d_c,
   ocv.imgproc_c,
   ocv.imgproc.types_c;

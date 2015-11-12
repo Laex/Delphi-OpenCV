@@ -57,7 +57,7 @@ program ch10_ex10_1;
 
 uses
   System.SysUtils,
-  ocv.cvutils,
+  ocv.utils,
   ocv.core_c,
   ocv.highgui_c,
   ocv.core.types_c,

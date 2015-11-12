@@ -1024,7 +1024,7 @@ implementation
 uses
   ocv.core_c,
   ocv.imgproc_c,
-  ocv.cvutils,
+  ocv.utils,
 {$IFDEF HAS_UNITSCOPE}
   System.Math;
 {$ELSE}

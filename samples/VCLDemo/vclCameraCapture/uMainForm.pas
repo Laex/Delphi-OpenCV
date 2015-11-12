@@ -79,7 +79,7 @@ implementation
 
 {$R *.dfm}
 
-uses ocv.core.types_c, ocv.cvutils;
+uses ocv.core.types_c, ocv.utils;
 
 procedure TMainForm.FormDestroy(Sender: TObject);
 begin
