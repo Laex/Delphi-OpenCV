@@ -75,30 +75,87 @@ const
   (*
     CVAPI(CvFont) cvFontQt(const char* nameFont, int pointSize CV_DEFAULT(-1), CvScalar color CV_DEFAULT(cvScalarAll(0)), int weight CV_DEFAULT(CV_FONT_NORMAL),  int style CV_DEFAULT(CV_STYLE_NORMAL), int spacing CV_DEFAULT(0));
   *)
+
+{$IFDEF SAFELOADLIB}
+
+Type
+  TcvFontQt = function(const nameFont: pCvChar; pointSize: Integer { = -1 }; color: TCvScalar { = CV_DEFAULT(cvScalarAll(0)) };
+    weight: Integer { = CV_DEFAULT(CV_FONT_NORMAL) }; style: Integer { = CV_DEFAULT(CV_STYLE_NORMAL) }; spacing: Integer { = CV_DEFAULT(0) } )
+    : TCvFont; cdecl;
+
+var
+  cvFontQt: TcvFontQt;
+
+{$ELSE}
 function cvFontQt(const nameFont: pCvChar; pointSize: Integer { = -1 }; color: TCvScalar { = CV_DEFAULT(cvScalarAll(0)) };
   weight: Integer { = CV_DEFAULT(CV_FONT_NORMAL) }; style: Integer { = CV_DEFAULT(CV_STYLE_NORMAL) }; spacing: Integer { = CV_DEFAULT(0) } )
   : TCvFont; cdecl;
-
+{$ENDIF}
 (*
   CVAPI(void) cvAddText(const CvArr* img, const char* text, CvPoint org, CvFont *arg2);
 *)
+{$IFDEF SAFELOADLIB}
+
+Type
+  TcvAddText = procedure(const img: pCvArr; const text: pCvChar; org: TCvPoint; arg2: pCvFont); cdecl;
+
+var
+  cvAddText: TcvAddText;
+{$ELSE}
 procedure cvAddText(const img: pCvArr; const text: pCvChar; org: TCvPoint; arg2: pCvFont); cdecl;
+{$ENDIF}
 (*
   CVAPI(void) cvDisplayOverlay(const char* name, const char* text, int delayms CV_DEFAULT(0));
 *)
+{$IFDEF SAFELOADLIB}
+
+type
+  TcvDisplayOverlay = procedure(const name: pCvChar; const text: pCvChar; delayms: Integer = 0); cdecl;
+
+var
+  cvDisplayOverlay: TcvDisplayOverlay;
+{$ELSE}
 procedure cvDisplayOverlay(const name: pCvChar; const text: pCvChar; delayms: Integer = 0); cdecl;
+{$ENDIF}
 (*
   CVAPI(void) cvDisplayStatusBar(const char* name, const char* text, int delayms CV_DEFAULT(0));
 *)
+{$IFDEF SAFELOADLIB}
+
+type
+  TcvDisplayStatusBar = procedure(const name: pCvChar; const text: pCvChar; delayms: Integer = 0); cdecl;
+
+var
+  cvDisplayStatusBar: TcvDisplayStatusBar;
+{$ELSE}
 procedure cvDisplayStatusBar(const name: pCvChar; const text: pCvChar; delayms: Integer = 0); cdecl;
+{$ENDIF}
 (*
   CVAPI(void) cvSaveWindowParameters(const char* name);
 *)
+{$IFDEF SAFELOADLIB}
+
+type
+  TcvSaveWindowParameters = procedure(const name: pCvChar); cdecl;
+
+var
+  cvSaveWindowParameters: TcvSaveWindowParameters;
+{$ELSE}
 procedure cvSaveWindowParameters(const name: pCvChar); cdecl;
+{$ENDIF}
 (*
   CVAPI(void) cvLoadWindowParameters(const char* name);
 *)
+{$IFDEF SAFELOADLIB}
+
+type
+  TcvLoadWindowParameters = procedure(const name: pCvChar); cdecl;
+
+Var
+  cvLoadWindowParameters: TcvLoadWindowParameters;
+{$ELSE}
 procedure cvLoadWindowParameters(const name: pCvChar); cdecl;
+{$ENDIF}
 
 Type
   (* int (*pt2Func)(int argc, char *argv[]) *)
@@ -108,11 +165,29 @@ Type
   (*
     CVAPI(int) cvStartLoop(int (*pt2Func)(int argc, char *argv[]), int argc, char* argv[]);
   *)
+{$IFDEF SAFELOADLIB}
+
+type
+  TcvStartLoop = function(pt2Func: Tpt2Func): Integer; cdecl;
+
+var
+  cvStartLoop: TcvStartLoop;
+{$ELSE}
 function cvStartLoop(pt2Func: Tpt2Func): Integer; cdecl;
+{$ENDIF}
 (*
   CVAPI(void) cvStopLoop( void );
 *)
+{$IFDEF SAFELOADLIB}
+
+type
+  TcvStopLoop = procedure; cdecl;
+
+Var
+  cvStopLoop: TcvStopLoop;
+{$ELSE}
 procedure cvStopLoop; cdecl;
+{$ENDIF}
 
 Type
   (* typedef  void (CV_CDECL *CvButtonCallback)(int state, void* userdata); *)
@@ -126,16 +201,43 @@ const
   (*
     CVAPI(int) cvCreateButton( const char* button_name CV_DEFAULT(NULL),CvButtonCallback on_change CV_DEFAULT(NULL), void* userdata CV_DEFAULT(NULL) , int button_type CV_DEFAULT(CV_PUSH_BUTTON), int initial_button_state CV_DEFAULT(0));
   *)
+{$IFDEF SAFELOADLIB}
+
+type
+  TcvCreateButton = function(const button_name: pCvChar = nil; on_change: TCvButtonCallback = nil; userdata: Pointer = nil;
+    button_type: Integer = CV_PUSH_BUTTON; initial_button_state: Integer = 0): Integer; cdecl;
+
+var
+  cvCreateButton: TcvCreateButton;
+{$ELSE}
 function cvCreateButton(const button_name: pCvChar = nil; on_change: TCvButtonCallback = nil; userdata: Pointer = nil;
   button_type: Integer = CV_PUSH_BUTTON; initial_button_state: Integer = 0): Integer; cdecl;
+{$ENDIF}
 
-// ----------------------
-// * this function is used to set some external parameters in case of X Window */
-// CVAPI(int) cvInitSystem( int argc, char** argv );
+(*
+  this function is used to set some external parameters in case of X Window */
+  CVAPI(int) cvInitSystem( int argc, char** argv );
+*)
+type
+  TcvInitSystem = function(argc: Integer; argv: ppCVChar): Integer; cdecl;
+{$IFDEF SAFELOADLIB}
+
+var
+  cvInitSystem: TcvInitSystem;
+{$ELSE}
 function cvInitSystem(argc: Integer; argv: ppCVChar): Integer; cdecl;
-
+{$ENDIF}
 // CVAPI(int) cvStartWindowThread( void );
+{$IFDEF SAFELOADLIB}
+
+type
+  TcvStartWindowThread = function: Integer; cdecl;
+
+var
+  cvStartWindowThread: TcvStartWindowThread;
+{$ELSE}
 function cvStartWindowThread: Integer; cdecl;
+{$ENDIF}
 
 // ---------  YV ---------
 // These 3 flags are used by cvSet/GetWindowProperty;
@@ -159,47 +261,141 @@ const
   CV_WINDOW_KEEPRATIO = $00000000; // the ration image is respected.;
 
   (* create window *)
+type
+  TcvNamedWindow = function(const name: pCvChar; flags: Integer = CV_WINDOW_AUTOSIZE): Integer; cdecl;
+{$IFDEF SAFELOADLIB}
+
+var
+  cvNamedWindow: TcvNamedWindow;
+{$ELSE}
 function cvNamedWindow(const name: pCvChar; flags: Integer = CV_WINDOW_AUTOSIZE): Integer; cdecl;
-
+{$ENDIF}
 // Set and Get Property of the window
-procedure cvSetWindowProperty(name: pCvChar; prop_id: Integer; prop_value: Double); cdecl;
-function cvGetWindowProperty(name: pCvChar; prop_id: Integer): Double; cdecl;
+{$IFDEF SAFELOADLIB}
 
-{
-  //display image within window (highgui windows remember their content)
+type
+  TcvSetWindowProperty = procedure(name: pCvChar; prop_id: Integer; prop_value: Double); cdecl;
+
+var
+  cvSetWindowProperty: TcvSetWindowProperty;
+{$ELSE}
+procedure cvSetWindowProperty(name: pCvChar; prop_id: Integer; prop_value: Double); cdecl;
+{$ENDIF}
+{$IFDEF SAFELOADLIB}
+
+type
+  TcvGetWindowProperty = function(name: pCvChar; prop_id: Integer): Double; cdecl;
+
+var
+  cvGetWindowProperty: TcvGetWindowProperty;
+{$ELSE}
+function cvGetWindowProperty(name: pCvChar; prop_id: Integer): Double; cdecl;
+{$ENDIF}
+
+(*
+  display image within window (highgui windows remember their content)
   CVAPI(void) cvShowImage( const char* name, const CvArr* image );
-}
+*)
+type
+  TcvShowImage = procedure(const name: pCvChar; const image: pCvArr); cdecl;
+{$IFDEF SAFELOADLIB}
+
+var
+  cvShowImage: TcvShowImage;
+{$ELSE}
 procedure cvShowImage(const name: pCvChar; const image: pCvArr); cdecl;
+{$ENDIF}
 // procedure cvShowImage(const name: pCVChar; const image: pIplImage); cdecl; overload;
 // procedure cvShowImage(const name: pCVChar; const image: pCvMat); cdecl; overload;
 
 (* resize/move window *)
+type
+  TcvResizeWindow = procedure(name: pCvChar; width: Integer; height: Integer); cdecl;
+{$IFDEF SAFELOADLIB}
+
+var
+  cvResizeWindow: TcvResizeWindow;
+{$ELSE}
 procedure cvResizeWindow(name: pCvChar; width: Integer; height: Integer); cdecl;
+{$ENDIF}
 // CVAPI(void) cvMoveWindow( const char* name, int x, int y );
+{$IFDEF SAFELOADLIB}
+
+type
+  TcvMoveWindow = procedure(const name: pCvChar; x: Integer; y: Integer); cdecl;
+
+Var
+  cvMoveWindow: TcvMoveWindow;
+{$ELSE}
 procedure cvMoveWindow(const name: pCvChar; x: Integer; y: Integer); cdecl;
+{$ENDIF}
 
 (* destroy window and all the trackers associated with it *)
+type
+  TcvDestroyWindow = procedure(const name: pCvChar); cdecl;
+{$IFDEF SAFELOADLIB}
+
+var
+  cvDestroyWindow: TcvDestroyWindow;
+{$ELSE}
 procedure cvDestroyWindow(const name: pCvChar); cdecl;
+{$ENDIF}
+{$IFDEF SAFELOADLIB}
+
+type
+  TcvDestroyAllWindows = procedure; cdecl;
+
+var
+  cvDestroyAllWindows: TcvDestroyAllWindows;
+{$ELSE}
 procedure cvDestroyAllWindows; cdecl;
+{$ENDIF}
 (*
   get native window handle (HWND in case of Win32 and Widget in case of X Window)
 
   CVAPI(void* ) cvGetWindowHandle( const char* name );
 *)
+{$IFDEF SAFELOADLIB}
+
+type
+  TcvGetWindowHandle = function(const name: pCvChar): Pointer; cdecl;
+
+var
+  cvGetWindowHandle: TcvGetWindowHandle;
+{$ELSE}
 function cvGetWindowHandle(const name: pCvChar): Pointer; cdecl;
+{$ENDIF}
 (*
   get name of highgui window given its native handle
 
   CVAPI(const char* ) cvGetWindowName( void* window_handle );
 *)
+{$IFDEF SAFELOADLIB}
+
+type
+  TcvGetWindowName = function(window_handle: Pointer): pCvChar; cdecl;
+
+var
+  cvGetWindowName: TcvGetWindowName;
+{$ELSE}
 function cvGetWindowName(window_handle: Pointer): pCvChar; cdecl;
+{$ENDIF}
 
 type
   TCvTrackbarCallback = procedure(pos: Integer); cdecl;
 
   (* create trackbar and display it on top of given window, set callback *)
+type
+  TcvCreateTrackbar = function(const trackbar_name: pCvChar; const window_name: pCvChar; value: PInteger; count: Integer;
+    on_change: TCvTrackbarCallback): Integer; cdecl;
+{$IFDEF SAFELOADLIB}
+
+var
+  cvCreateTrackbar: TcvCreateTrackbar;
+{$ELSE}
 function cvCreateTrackbar(const trackbar_name: pCvChar; const window_name: pCvChar; value: PInteger; count: Integer; on_change: TCvTrackbarCallback)
   : Integer; cdecl;
+{$ENDIF}
 
 type
   TCvTrackbarCallback2 = procedure(pos: Integer; userdata: Pointer); cdecl;
@@ -207,14 +403,41 @@ type
   // CVAPI(int) cvCreateTrackbar2( const char* trackbar_name, const char* window_name,
   // int* value, int count, CvTrackbarCallback2 on_change,
   // void* userdata CV_DEFAULT(0));
+{$IFDEF SAFELOADLIB}
+
+type
+  TcvCreateTrackbar2 = function(const trackbar_name: pCvChar; const window_name: pCvChar; value: PInteger; count: Integer;
+    on_change: TCvTrackbarCallback2; userdata: Pointer = nil): Integer; cdecl;
+
+var
+  cvCreateTrackbar2: TcvCreateTrackbar2;
+{$ELSE}
 function cvCreateTrackbar2(const trackbar_name: pCvChar; const window_name: pCvChar; value: PInteger; count: Integer; on_change: TCvTrackbarCallback2;
   userdata: Pointer = nil): Integer; cdecl;
-
+{$ENDIF}
 // * retrieve or set trackbar position */
 // CVAPI(int) cvGetTrackbarPos( const char* trackbar_name, const char* window_name );
+{$IFDEF SAFELOADLIB}
+
+type
+  TcvGetTrackbarPos = function(const trackbar_name: pCvChar; const window_name: pCvChar): Integer; cdecl;
+
+var
+  cvGetTrackbarPos: TcvGetTrackbarPos;
+{$ELSE}
 function cvGetTrackbarPos(const trackbar_name: pCvChar; const window_name: pCvChar): Integer; cdecl;
+{$ENDIF}
 // CVAPI(void) cvSetTrackbarPos( const char* trackbar_name, const char* window_name, int pos );
+{$IFDEF SAFELOADLIB}
+
+type
+  TcvSetTrackbarPos = procedure(const trackbar_name: pCvChar; const window_name: pCvChar; pos: Integer); cdecl;
+
+var
+  cvSetTrackbarPos: TcvSetTrackbarPos;
+{$ELSE}
 procedure cvSetTrackbarPos(const trackbar_name: pCvChar; const window_name: pCvChar; pos: Integer); cdecl;
+{$ENDIF}
 
 const
   CV_EVENT_MOUSEMOVE = 0;
@@ -234,8 +457,8 @@ const
   CV_EVENT_FLAG_SHIFTKEY = 16;
   CV_EVENT_FLAG_ALTKEY = 32;
 
-type
-  CvMouseCallback = procedure(event: Integer; x: Integer; y: Integer; flags: Integer; param: Pointer); cdecl;
+  // type
+  // CvMouseCallback = procedure(event: Integer; x: Integer; y: Integer; flags: Integer; param: Pointer); cdecl;
 
   (* assign callback for mouse events *)
   // CVAPI(procedure)cvSetMouseCallback(var 8 bit = 0; color or not * )
@@ -248,7 +471,16 @@ Type
   // typedef void (CV_CDECL *CvMouseCallback )(int event, int x, int y, int flags, void* param);
   TCvMouseCallback = procedure(event: Integer; x, y, flags: Integer; param: Pointer); cdecl;
 
+{$IFDEF SAFELOADLIB}
+
+type
+  TcvSetMouseCallback = procedure(const window_name: pCvChar; on_mouse: TCvMouseCallback; param: Pointer = nil); cdecl;
+
+var
+  cvSetMouseCallback: TcvSetMouseCallback;
+{$ELSE}
 procedure cvSetMouseCallback(const window_name: pCvChar; on_mouse: TCvMouseCallback; param: Pointer = nil); cdecl;
+{$ENDIF}
 
 const
   CV_LOAD_IMAGE_UNCHANGED = -1;
@@ -264,14 +496,32 @@ const
   (* load image from file  iscolor can be a combination of above flags where
     CV_LOAD_IMAGE_UNCHANGED  overrides the other flags
     using CV_LOAD_IMAGE_ANYCOLOR alone is equivalent to CV_LOAD_IMAGE_UNCHANGED
-    unless CV_LOAD_IMAGE_ANYDEPTH is specified images are converted to 8bit *)
-  // CVAPI(IplImage*) cvLoadImage(const char* filename,int iscolor CV_DEFAULT(CV_LOAD_IMAGE_COLOR));
-function cvLoadImage(const filename: pCvChar; iscolor: Integer = CV_LOAD_IMAGE_UNCHANGED): pIplImage; cdecl;
+    unless CV_LOAD_IMAGE_ANYDEPTH is specified images are converted to 8bit
 
+    CVAPI(IplImage* ) cvLoadImage(const char* filename,int iscolor CV_DEFAULT(CV_LOAD_IMAGE_COLOR));
+  *)
+type
+  TcvLoadImage = function(const filename: pCvChar; iscolor: Integer = CV_LOAD_IMAGE_UNCHANGED): pIplImage; cdecl;
+{$IFDEF SAFELOADLIB}
+
+var
+  cvLoadImage: TcvLoadImage;
+{$ELSE}
+function cvLoadImage(const filename: pCvChar; iscolor: Integer = CV_LOAD_IMAGE_UNCHANGED): pIplImage; cdecl;
+{$ENDIF}
 (*
   CVAPI(CvMat* ) cvLoadImageM( const char* filename, int iscolor CV_DEFAULT(CV_LOAD_IMAGE_COLOR));
 *)
+{$IFDEF SAFELOADLIB}
+
+type
+  TcvLoadImageM = function(const filename: pCvChar; iscolor: Integer = CV_LOAD_IMAGE_COLOR): pCvMat; cdecl;
+
+var
+  cvLoadImageM: TcvLoadImageM;
+{$ELSE}
 function cvLoadImageM(const filename: pCvChar; iscolor: Integer = CV_LOAD_IMAGE_COLOR): pCvMat; cdecl;
+{$ENDIF}
 
 const
   CV_IMWRITE_JPEG_QUALITY = 1;
@@ -292,25 +542,59 @@ const
   }
 
   // function cvSaveImage(const filename: pCVChar; const image: pIplImage; const params: PInteger = nil): Integer; cdecl;
-function cvSaveImage(const filename: pCvChar; const image: Pointer; const params: PInteger = nil): Integer; cdecl;
+type
+  TcvSaveImage = function(const filename: pCvChar; const image: Pointer; const params: PInteger = nil): Integer; cdecl;
+{$IFDEF SAFELOADLIB}
 
+var
+  cvSaveImage: TcvSaveImage;
+{$ELSE}
+function cvSaveImage(const filename: pCvChar; const image: Pointer; const params: PInteger = nil): Integer; cdecl;
+{$ENDIF}
 (*
   decode image stored in the buffer
 
   CVAPI(IplImage* ) cvDecodeImage( const CvMat* buf, int iscolor CV_DEFAULT(CV_LOAD_IMAGE_COLOR));
 *)
+{$IFDEF SAFELOADLIB}
+
+type
+  TcvDecodeImage = function(const buf: pCvMat; iscolor: Integer = CV_LOAD_IMAGE_COLOR): pIplImage; cdecl;
+
+var
+  cvDecodeImage: TcvDecodeImage;
+{$ELSE}
 function cvDecodeImage(const buf: pCvMat; iscolor: Integer = CV_LOAD_IMAGE_COLOR): pIplImage; cdecl;
+{$ENDIF}
 (*
   CVAPI(CvMat* ) cvDecodeImageM( const CvMat* buf, int iscolor CV_DEFAULT(CV_LOAD_IMAGE_COLOR));
 *)
+{$IFDEF SAFELOADLIB}
+
+type
+  TcvDecodeImageM = function(const buf: pCvMat; iscolor: Integer = CV_LOAD_IMAGE_COLOR): pCvMat; cdecl;
+
+var
+  cvDecodeImageM: TcvDecodeImageM;
+{$ELSE}
 function cvDecodeImageM(const buf: pCvMat; iscolor: Integer = CV_LOAD_IMAGE_COLOR): pCvMat; cdecl;
+{$ENDIF}
 (*
   encode image and store the result as a byte vector (single-row 8uC1 matrix)
 
   CVAPI(CvMat* cvEncodeImage( const char* ext, const CvArr* image,
   const int* params CV_DEFAULT(0) );
 *)
+{$IFDEF SAFELOADLIB}
+
+type
+  TcvEncodeImage = function(const ext: pCvChar; const image: pCvArr; const params: PInteger = nil): pCvMat; cdecl;
+
+var
+  cvEncodeImage: TcvEncodeImage;
+{$ELSE}
 function cvEncodeImage(const ext: pCvChar; const image: pCvArr; const params: PInteger = nil): pCvMat; cdecl;
+{$ENDIF}
 
 const
   (* enum
@@ -320,32 +604,82 @@ const
     }; *)
   CV_CVTIMG_FLIP = 1;
   CV_CVTIMG_SWAP_RB = 2;
+
   (*
     utility function: convert one image to another with optional vertical flip
   *)
   (*
     CVAPI(void) cvConvertImage( const CvArr* src, CvArr* dst, int flags CV_DEFAULT(0));
   *)
+type
+  TcvConvertImage = procedure(const src: pCvArr; dst: pCvArr; flags: Integer = 0); cdecl;
+{$IFDEF SAFELOADLIB}
+
+var
+  cvConvertImage: TcvConvertImage;
+{$ELSE}
 procedure cvConvertImage(const src: pCvArr; dst: pCvArr; flags: Integer = 0); cdecl; overload;
+{$ENDIF}
 
-{
-  /* utility function: convert one image to another with optional vertical flip */
-  CVAPI(void) cvConvertImage( const CvArr* src, CvArr* dst, int flags CV_DEFAULT(0));
-}
-procedure cvConvertImage(const src: pIplImage; dst: pIplImage; flags: Integer = 0); cdecl; overload;
-
+// {
+// /* utility function: convert one image to another with optional vertical flip */
+// CVAPI(void) cvConvertImage( const CvArr* src, CvArr* dst, int flags CV_DEFAULT(0));
+// }
+// {$IFDEF SAFELOADLIB}
+// {$ELSE}
+// procedure cvConvertImage(const src: pIplImage; dst: pIplImage; flags: Integer = 0); cdecl; overload;
+// {$ENDIF}
 (* wait for key event infinitely (delay<=0) or for "delay" milliseconds *)
-function cvWaitKey(delay: Integer = 0): Integer; cdecl;
+type
+  TcvWaitKey = function(delay: Integer = 0): Integer; cdecl;
+{$IFDEF SAFELOADLIB}
 
+var
+  cvWaitKey: TcvWaitKey;
+{$ELSE}
+function cvWaitKey(delay: Integer = 0): Integer; cdecl;
+{$ENDIF}
 // OpenGL support
 
-// type
-// CvOpenGlDrawCallback = procedure(v1:var userdata); cdecl;
-// CVAPI( procedure)cvSetOpenGlDrawCallback(v1: 0));
+(*
+  typedef void (CV_CDECL *CvOpenGlDrawCallback)(void* userdata);
+  CVAPI(void) cvSetOpenGlDrawCallback(const char* window_name, CvOpenGlDrawCallback callback, void* userdata CV_DEFAULT(NULL));
+*)
+Type
+  TCvOpenGlDrawCallback = procedure(userdata: Pointer); cdecl;
 
+{$IFDEF SAFELOADLIB}
+
+type
+  TcvSetOpenGlDrawCallback = procedure(const window_name: pCvChar; callback: TCvOpenGlDrawCallback; userdata: Pointer = nil);
+
+var
+  cvSetOpenGlDrawCallback: TcvSetOpenGlDrawCallback;
+{$ELSE}
+procedure cvSetOpenGlDrawCallback(const window_name: pCvChar; callback: TCvOpenGlDrawCallback; userdata: Pointer = nil);
+{$ENDIF}
 // CVAPI( procedure)cvSetOpenGlContext(window_name: PCVChar);
-// CVAPI(procedure)cvUpdateWindow(window_name: PCVChar);
+{$IFDEF SAFELOADLIB}
 
+type
+  TcvSetOpenGlContext = procedure(window_name: pCvChar); cdecl;
+
+var
+  cvSetOpenGlContext: TcvSetOpenGlContext;
+{$ELSE}
+procedure cvSetOpenGlContext(window_name: pCvChar); cdecl;
+{$ENDIF}
+// CVAPI(procedure)cvUpdateWindow(window_name: PCVChar);
+{$IFDEF SAFELOADLIB}
+
+type
+  TcvUpdateWindow = procedure(window_name: pCvChar); cdecl;
+
+var
+  cvUpdateWindow: TcvUpdateWindow;
+{$ELSE}
+procedure cvUpdateWindow(window_name: pCvChar); cdecl;
+{$ENDIF}
 (* ***************************************************************************************\
   *                         Working with Video Files and Cameras                           *
   *************************************************************************************** *)
@@ -359,7 +693,17 @@ type
 
   (* start capturing frames from video file *)
   // CVAPI(CvCapture*) cvCreateFileCapture( const char* filename );
+
+type
+  TcvCreateFileCapture = function(const filename: pCvChar): pCvCapture; cdecl;
+
+{$IFDEF SAFELOADLIB}
+
+var
+  cvCreateFileCapture: TcvCreateFileCapture;
+{$ELSE}
 function cvCreateFileCapture(const filename: pCvChar): pCvCapture; cdecl;
+{$ENDIF}
 
 const
   CV_CAP_ANY = 0; // autodetect
@@ -397,16 +741,31 @@ const
 
   (* start capturing frames from camera: index = camera_index + domain_offset (CV_CAP_ *)
   // CVAPI(CvCapture)cvCreateCameraCapture(Integer index);
-function cvCreateCameraCapture(index: Longint): pCvCapture; cdecl;
+type
+  TcvCreateCameraCapture = function(index: Longint): pCvCapture; cdecl;
+{$IFDEF SAFELOADLIB}
 
+var
+  cvCreateCameraCapture: TcvCreateCameraCapture;
+{$ELSE}
+function cvCreateCameraCapture(index: Longint): pCvCapture; cdecl;
+{$ENDIF}
 (*
   grab a frame, return 1 on success, 0 on fail.
   this function is thought to be fast
 
   CVAPI(int) cvGrabFrame( CvCapture* capture );
 *)
-function cvGrabFrame(capture: pCvCapture): Integer; cdecl;
+{$IFDEF SAFELOADLIB}
 
+type
+  TcvGrabFrame = function(capture: pCvCapture): Integer; cdecl;
+
+var
+  cvGrabFrame: TcvGrabFrame;
+{$ELSE}
+function cvGrabFrame(capture: pCvCapture): Integer; cdecl;
+{$ENDIF}
 (*
   get the frame grabbed with cvGrabFrame(..)
   This function may apply some frame processing like
@@ -415,16 +774,41 @@ function cvGrabFrame(capture: pCvCapture): Integer; cdecl;
 
   CVAPI(IplImage* ) cvRetrieveFrame( CvCapture* capture, int streamIdx CV_DEFAULT(0) );
 *)
-function cvRetrieveFrame(capture: pCvCapture; streamIdx: Integer = 0): pIplImage; cdecl;
+{$IFDEF SAFELOADLIB}
 
+type
+  TcvRetrieveFrame = function(capture: pCvCapture; streamIdx: Integer = 0): pIplImage; cdecl;
+
+var
+  cvRetrieveFrame: TcvRetrieveFrame;
+{$ELSE}
+function cvRetrieveFrame(capture: pCvCapture; streamIdx: Integer = 0): pIplImage; cdecl;
+{$ENDIF}
 (* Just a combination of cvGrabFrame and cvRetrieveFrame
   not  not  not DO NOT RELEASE or MODIFY the retrieved frame not  not  not *)
 // CVAPI(IplImage*) cvQueryFrame( CvCapture* capture );
-function cvQueryFrame(capture: pCvCapture): pIplImage; cdecl;
+{$IFDEF SAFELOADLIB}
 
+type
+  TcvQueryFrame = function(capture: pCvCapture): pIplImage; cdecl;
+
+var
+  cvQueryFrame: TcvQueryFrame;
+{$ELSE}
+function cvQueryFrame(capture: pCvCapture): pIplImage; cdecl;
+{$ENDIF}
 (* stop capturing/reading and free resources *)
 // CVAPI(void) cvReleaseCapture( CvCapture** capture );
+{$IFDEF SAFELOADLIB}
+
+type
+  TcvReleaseCapture = procedure(Var capture: pCvCapture); cdecl;
+
+var
+  cvReleaseCapture: TcvReleaseCapture;
+{$ELSE}
 procedure cvReleaseCapture(Var capture: pCvCapture); cdecl;
+{$ENDIF}
 
 // modes of the controlling registers (can be: auto; manual; auto single push; absolute Latter allowed with any other mode)
 // every feature can have only one mode turned on at a time;
@@ -597,14 +981,40 @@ const
   CV_CAP_ANDROID_ANTIBANDING_OFF = 2;
 
   (* retrieve or set capture properties *)
-function cvGetCaptureProperty(capture: pCvCapture; property_id: Integer): Double; cdecl;
-function cvSetCaptureProperty(capture: pCvCapture; property_id: Integer; value: Double): Integer; cdecl;
+{$IFDEF SAFELOADLIB}
 
+type
+  TcvGetCaptureProperty = function(capture: pCvCapture; property_id: Integer): Double; cdecl;
+
+var
+  cvGetCaptureProperty: TcvGetCaptureProperty;
+{$ELSE}
+function cvGetCaptureProperty(capture: pCvCapture; property_id: Integer): Double; cdecl;
+{$ENDIF}
+{$IFDEF SAFELOADLIB}
+
+type
+  TcvSetCaptureProperty = function(capture: pCvCapture; property_id: Integer; value: Double): Integer; cdecl;
+
+var
+  cvSetCaptureProperty: TcvSetCaptureProperty;
+{$ELSE}
+function cvSetCaptureProperty(capture: pCvCapture; property_id: Integer; value: Double): Integer; cdecl;
+{$ENDIF}
 // Return the type of the capturer (eg, CV_CAP_V4W, CV_CAP_UNICAP), which is unknown if created with CV_CAP_ANY
 (*
   CVAPI(int)    cvGetCaptureDomain( CvCapture* capture);
 *)
+{$IFDEF SAFELOADLIB}
+
+type
+  TcvGetCaptureDomain = function(capture: pCvCapture): Integer; cdecl;
+
+var
+  cvGetCaptureDomain: TcvGetCaptureDomain;
+{$ELSE}
 function cvGetCaptureDomain(capture: pCvCapture): Integer; cdecl;
+{$ENDIF}
 
 type
   (* "black box" video file writer structure *)
@@ -634,89 +1044,217 @@ const
     double fps, CvSize frame_size,
     int is_color CV_DEFAULT(1));
   }
+type
+  TcvCreateVideoWriter = function(const filename: pCvChar; fourcc: Integer; fps: Double; frame_size: TCvSize; is_color: Integer = 1)
+    : pCvVideoWriter; cdecl;
+{$IFDEF SAFELOADLIB}
+
+var
+  cvCreateVideoWriter: TcvCreateVideoWriter;
+{$ELSE}
 function cvCreateVideoWriter(const filename: pCvChar; fourcc: Integer; fps: Double; frame_size: TCvSize; is_color: Integer = 1)
   : pCvVideoWriter; cdecl;
-
+{$ENDIF}
 function CV_FOURCC(const c1, c2, c3, c4: CVChar): Integer; {$IFDEF USE_INLINE}inline; {$ENDIF}
 // CVAPI(CvVideoWriter*) cvCreateImageSequenceWriter( const char* filename,
 // int is_color CV_DEFAULT(1));
 
 (* write frame to video file *)
 // CVAPI(Integer)cvWriteFrame(CvVideoWriter * writer, IplImage * image);
-function cvWriteFrame(writer: pCvVideoWriter; image: pIplImage): Integer; cdecl;
+type
+  TcvWriteFrame = function(writer: pCvVideoWriter; image: pIplImage): Integer; cdecl;
+{$IFDEF SAFELOADLIB}
 
+var
+  cvWriteFrame: TcvWriteFrame;
+{$ELSE}
+function cvWriteFrame(writer: pCvVideoWriter; image: pIplImage): Integer; cdecl;
+{$ENDIF}
 (* close video file writer *)
 // CVAPI(procedure)cvReleaseVideoWriter(writer: array of CvVideoWriter);
+{$IFDEF SAFELOADLIB}
+
+type
+  TcvReleaseVideoWriter = procedure(Var writer: pCvVideoWriter); cdecl;
+
+var
+  cvReleaseVideoWriter: TcvReleaseVideoWriter;
+{$ELSE}
 procedure cvReleaseVideoWriter(Var writer: pCvVideoWriter); cdecl;
+{$ENDIF}
 
 (* ***************************************************************************************\
   *                              Obsolete functions/synonyms                               *
   *************************************************************************************** *)
+Var
+  cvCaptureFromFile: TcvCreateFileCapture {$IFNDEF SAFELOADLIB} = cvCreateFileCapture{$ENDIF};
+{$EXTERNALSYM cvCaptureFromFile}
+  cvCaptureFromCAM: TcvCreateCameraCapture {$IFNDEF SAFELOADLIB} = cvCreateCameraCapture{$ENDIF};
+{$EXTERNALSYM cvCaptureFromCAM}
+  cvCaptureFromAVI: TcvCreateFileCapture {$IFNDEF SAFELOADLIB} = cvCreateFileCapture{$ENDIF};
+{$EXTERNALSYM cvCaptureFromAVI}
+  cvCreateAVIWriter: TcvCreateVideoWriter {$IFNDEF SAFELOADLIB} = cvCreateVideoWriter{$ENDIF};
+{$EXTERNALSYM cvCreateAVIWriter}
+  cvWriteToAVI: TcvWriteFrame {$IFNDEF SAFELOADLIB} = cvWriteFrame{$ENDIF};
+{$EXTERNALSYM cvWriteToAVI}
+  // {$DEFINE cvAddSearchPath(path)}
+  cvvInitSystem: TcvInitSystem {$IFNDEF SAFELOADLIB} = cvInitSystem{$ENDIF};
+{$EXTERNALSYM cvvInitSystem}
+  cvvNamedWindow: TcvNamedWindow {$IFNDEF SAFELOADLIB} = cvNamedWindow{$ENDIF};
+{$EXTERNALSYM cvvNamedWindow}
+  cvvShowImage: TcvShowImage {$IFNDEF SAFELOADLIB} = cvShowImage{$ENDIF};
+{$EXTERNALSYM cvvShowImage}
+  cvvResizeWindow: TcvResizeWindow {$IFNDEF SAFELOADLIB} = cvResizeWindow{$ENDIF};
+{$EXTERNALSYM cvvResizeWindow}
+  cvvDestroyWindow: TcvDestroyWindow {$IFNDEF SAFELOADLIB} = cvDestroyWindow{$ENDIF};
+{$EXTERNALSYM cvvDestroyWindow}
+  cvvCreateTrackbar: TcvCreateTrackbar {$IFNDEF SAFELOADLIB} = cvCreateTrackbar{$ENDIF};
+{$EXTERNALSYM cvvCreateTrackbar}
+  /// / >> Following declaration is a macro definition!
+  cvvLoadImage: TcvLoadImage {$IFNDEF SAFELOADLIB} = cvLoadImage{$ENDIF};
+  cvvSaveImage: TcvSaveImage {$IFNDEF SAFELOADLIB} = cvSaveImage{$ENDIF};
+{$EXTERNALSYM cvvSaveImage}
+  // cvvAddSearchPath: TcvAddSearchPath{$IFNDEF SAFELOADLIB} = cvAddSearchPath{$ENDIF};
+  // {$EXTERNALSYM cvvAddSearchPath}
+  /// / >> Following declaration is a macro definition!
+  cvvWaitKey: TcvWaitKey{$IFNDEF SAFELOADLIB} = cvWaitKey{$ENDIF};
+  /// / >> Following declaration is a macro definition!
+  // const cvvWaitKeyEx(name, delay)cvWaitKey(delay);
+  //
+  cvvConvertImage: TcvConvertImage {$IFNDEF SAFELOADLIB} = cvConvertImage{$ENDIF};
+{$EXTERNALSYM cvvConvertImage}
 
-// const cvCaptureFromFile = cvCreateFileCapture;
-// {$EXTERNALSYM cvCaptureFromFile}
-// const cvCaptureFromCAM = cvCreateCameraCapture;
-// {$EXTERNALSYM cvCaptureFromCAM}
-// const cvCaptureFromAVI = cvCaptureFromFile;
-// {$EXTERNALSYM cvCaptureFromAVI}
-// const cvCreateAVIWriter = cvCreateVideoWriter;
-// {$EXTERNALSYM cvCreateAVIWriter}
-// const cvWriteToAVI = cvWriteFrame;
-// {$EXTERNALSYM cvWriteToAVI}
-// {$DEFINE cvAddSearchPath(path)}
-// const cvvInitSystem = cvInitSystem;
-// {$EXTERNALSYM cvvInitSystem}
-// const cvvNamedWindow = cvNamedWindow;
-// {$EXTERNALSYM cvvNamedWindow}
-// const cvvShowImage = cvShowImage;
-// {$EXTERNALSYM cvvShowImage}
-// const cvvResizeWindow = cvResizeWindow;
-// {$EXTERNALSYM cvvResizeWindow}
-// const cvvDestroyWindow = cvDestroyWindow;
-// {$EXTERNALSYM cvvDestroyWindow}
-// const cvvCreateTrackbar = cvCreateTrackbar;
-// {$EXTERNALSYM cvvCreateTrackbar}
-/// / >> Following declaration is a macro definition!
-// const cvvLoadImage(name)cvLoadImage((name), 1);
-//
-// const cvvSaveImage = cvSaveImage;
-// {$EXTERNALSYM cvvSaveImage}
-// const cvvAddSearchPath = cvAddSearchPath;
-// {$EXTERNALSYM cvvAddSearchPath}
-/// / >> Following declaration is a macro definition!
-// const cvvWaitKey(name)cvWaitKey(0);
-//
-/// / >> Following declaration is a macro definition!
-// const cvvWaitKeyEx(name, delay)cvWaitKey(delay);
-//
-// const cvvConvertImage = cvConvertImage;
-// {$EXTERNALSYM cvvConvertImage}
-// const HG_AUTOSIZE = CV_WINDOW_AUTOSIZE;
-// {$EXTERNALSYM HG_AUTOSIZE}
-// const set_preprocess_func = cvSetPreprocessFuncWin32;
-// {$EXTERNALSYM set_preprocess_func}
-// const set_postprocess_func = cvSetPostprocessFuncWin32;
-// {$EXTERNALSYM set_postprocess_func}
-// {$IFNDEF  WIN32 || defined _WIN32}
-// CVAPI(
-// procedure)cvSetPreprocessFuncWin32_(callback: Pointer); CVAPI(
-// procedure)cvSetPostprocessFuncWin32_(callback: Pointer);
-//
-/// / >> Following declaration is a macro definition!
-// const cvSetPreprocessFuncWin32(callback)cvSetPreprocessFuncWin32_
-// ((# define cvSetPreprocessFuncWin32(callback)cvSetPreprocessFuncWin32_((
-// procedure((callback): ();
+const
+  HG_AUTOSIZE = CV_WINDOW_AUTOSIZE;
 
-// {$ENDIF}
-// {$IFDEF __cplusplus}
-// end;
+  // CVAPI(void) cvSetPreprocessFuncWin32_(const void* callback);
+Type
+  TcvSetPreprocessFuncWin32_ = procedure(const callback: Pointer); cdecl;
+{$IFDEF SAFELOADLIB}
 
-// {$ENDIF}
-// {$ENDIF}
+var
+  cvSetPreprocessFuncWin32_: TcvSetPreprocessFuncWin32_;
+{$ELSE}
+procedure cvSetPreprocessFuncWin32_(const callback: Pointer); cdecl;
+{$ENDIF}
+
+// CVAPI(void) cvSetPostprocessFuncWin32_(const void* callback);
+type
+  TcvSetPostprocessFuncWin32_ = procedure(const callback: Pointer); cdecl;
+{$IFDEF SAFELOADLIB}
+
+var
+  cvSetPostprocessFuncWin32_: TcvSetPostprocessFuncWin32_;
+{$ELSE}
+procedure cvSetPostprocessFuncWin32_(const callback: Pointer); cdecl;
+{$ENDIF}
+
+var
+  cvSetPreprocessFuncWin32: TcvSetPreprocessFuncWin32_ {$IFNDEF SAFELOADLIB} = cvSetPreprocessFuncWin32_{$ENDIF};
+  cvSetPostprocessFuncWin32: TcvSetPostprocessFuncWin32_ {$IFNDEF SAFELOADLIB} = cvSetPostprocessFuncWin32_{$ENDIF};
+{$EXTERNALSYM HG_AUTOSIZE}
+  set_preprocess_func: TcvSetPreprocessFuncWin32_ {$IFNDEF SAFELOADLIB} = cvSetPreprocessFuncWin32_{$ENDIF};
+{$EXTERNALSYM set_preprocess_func}
+  set_postprocess_func: TcvSetPostprocessFuncWin32_ {$IFNDEF SAFELOADLIB} = cvSetPostprocessFuncWin32_{$ENDIF};
+
 implementation
 
 uses ocv.lib;
 
+function CV_FOURCC(const c1, c2, c3, c4: CVChar): Integer; {$IFDEF USE_INLINE}inline; {$ENDIF}
+begin
+  Result := Integer(c1) + (Integer(c2) shl 8) + (Integer(c3) shl 16) + (Integer(c4) shl 24);
+end;
+
+{$IFDEF SAFELOADLIB}
+
+Var
+  highguiDLL: Cardinal;
+
+procedure Init_highgui_c_lib;
+begin
+  highguiDLL := ocvLoadLibrary(highgui_lib);
+  Assert(highguiDLL <> 0, 'Can not init ' + highgui_lib);
+
+  cvNamedWindow := ocvGetProcAddress('cvNamedWindow', highguiDLL);
+  cvShowImage := ocvGetProcAddress('cvShowImage', highguiDLL);
+  cvWaitKey := ocvGetProcAddress('cvWaitKey', highguiDLL);
+  cvDestroyWindow := ocvGetProcAddress('cvDestroyWindow', highguiDLL);
+  cvDestroyAllWindows := ocvGetProcAddress('cvDestroyAllWindows', highguiDLL);
+  cvLoadImage := ocvGetProcAddress('cvLoadImage', highguiDLL);
+  cvCreateFileCapture := ocvGetProcAddress('cvCreateFileCapture', highguiDLL);
+  cvQueryFrame := ocvGetProcAddress('cvQueryFrame', highguiDLL);
+  cvReleaseCapture := ocvGetProcAddress('cvReleaseCapture', highguiDLL);
+  cvSetCaptureProperty := ocvGetProcAddress('cvSetCaptureProperty', highguiDLL);
+  cvGetCaptureProperty := ocvGetProcAddress('cvGetCaptureProperty', highguiDLL);
+  cvCreateTrackbar := ocvGetProcAddress('cvCreateTrackbar', highguiDLL);
+  cvCreateCameraCapture := ocvGetProcAddress('cvCreateCameraCapture', highguiDLL);
+  cvSaveImage := ocvGetProcAddress('cvSaveImage', highguiDLL);
+  cvCreateVideoWriter := ocvGetProcAddress('cvCreateVideoWriter', highguiDLL);
+  cvWriteFrame := ocvGetProcAddress('cvWriteFrame', highguiDLL);
+  cvReleaseVideoWriter := ocvGetProcAddress('cvReleaseVideoWriter', highguiDLL);
+  cvSetMouseCallback := ocvGetProcAddress('cvSetMouseCallback', highguiDLL);
+  cvConvertImage := ocvGetProcAddress('cvConvertImage', highguiDLL);
+  cvMoveWindow := ocvGetProcAddress('cvMoveWindow', highguiDLL);
+  cvResizeWindow := ocvGetProcAddress('cvResizeWindow', highguiDLL);
+  cvSetWindowProperty := ocvGetProcAddress('cvSetWindowProperty', highguiDLL);
+  cvGetWindowProperty := ocvGetProcAddress('cvGetWindowProperty', highguiDLL);
+  cvInitSystem := ocvGetProcAddress('cvInitSystem', highguiDLL);
+  cvStartWindowThread := ocvGetProcAddress('cvStartWindowThread', highguiDLL);
+  cvCreateTrackbar2 := ocvGetProcAddress('cvCreateTrackbar2', highguiDLL);
+  cvGetTrackbarPos := ocvGetProcAddress('cvGetTrackbarPos', highguiDLL);
+  cvSetTrackbarPos := ocvGetProcAddress('cvSetTrackbarPos', highguiDLL);
+  cvFontQt := ocvGetProcAddress('cvFontQt', highguiDLL);
+  cvAddText := ocvGetProcAddress('cvAddText', highguiDLL);
+  cvDisplayOverlay := ocvGetProcAddress('cvDisplayOverlay', highguiDLL);
+  cvDisplayStatusBar := ocvGetProcAddress('cvDisplayStatusBar', highguiDLL);
+  cvSaveWindowParameters := ocvGetProcAddress('cvSaveWindowParameters', highguiDLL);
+  cvLoadWindowParameters := ocvGetProcAddress('cvLoadWindowParameters', highguiDLL);
+  cvStartLoop := ocvGetProcAddress('cvStartLoop', highguiDLL);
+  cvStopLoop := ocvGetProcAddress('cvStopLoop', highguiDLL);
+  cvCreateButton := ocvGetProcAddress('cvCreateButton', highguiDLL);
+  cvGetWindowHandle := ocvGetProcAddress('cvGetWindowHandle', highguiDLL);
+  cvGetWindowName := ocvGetProcAddress('cvGetWindowName', highguiDLL);
+  cvLoadImageM := ocvGetProcAddress('cvLoadImageM', highguiDLL);
+  cvDecodeImage := ocvGetProcAddress('cvDecodeImage', highguiDLL);
+  cvDecodeImageM := ocvGetProcAddress('cvDecodeImageM', highguiDLL);
+  cvEncodeImage := ocvGetProcAddress('cvEncodeImage', highguiDLL);
+  cvSetOpenGlDrawCallback := ocvGetProcAddress('cvSetOpenGlDrawCallback', highguiDLL);
+  cvSetOpenGlContext := ocvGetProcAddress('cvSetOpenGlContext', highguiDLL);
+  cvUpdateWindow := ocvGetProcAddress('cvUpdateWindow', highguiDLL);
+  cvGrabFrame := ocvGetProcAddress('cvGrabFrame', highguiDLL);
+  cvRetrieveFrame := ocvGetProcAddress('cvRetrieveFrame', highguiDLL);
+  cvGetCaptureDomain := ocvGetProcAddress('cvGetCaptureDomain', highguiDLL);
+  cvSetPreprocessFuncWin32_ := ocvGetProcAddress('cvSetPreprocessFuncWin32_', highguiDLL);
+  cvSetPostprocessFuncWin32_ := ocvGetProcAddress('cvSetPostprocessFuncWin32_', highguiDLL);
+
+  cvCaptureFromFile:=cvCreateFileCapture;
+  cvCaptureFromCAM:= cvCreateCameraCapture;
+  cvCaptureFromAVI:= cvCreateFileCapture;
+  cvCreateAVIWriter:= cvCreateVideoWriter;
+  cvWriteToAVI:= cvWriteFrame;
+  cvvInitSystem:= cvInitSystem;
+  cvvNamedWindow:= cvNamedWindow;
+  cvvShowImage:= cvShowImage;
+  cvvResizeWindow:= cvResizeWindow;
+  cvvDestroyWindow:= cvDestroyWindow;
+  cvvCreateTrackbar:= cvCreateTrackbar;
+  cvvLoadImage:= cvLoadImage;
+  cvvSaveImage:= cvSaveImage;
+  cvvWaitKey:= cvWaitKey;
+  cvvConvertImage:= cvConvertImage;
+
+  cvSetPreprocessFuncWin32 := cvSetPreprocessFuncWin32_;
+  cvSetPostprocessFuncWin32 := cvSetPostprocessFuncWin32_;
+  set_preprocess_func := cvSetPreprocessFuncWin32_;
+  set_postprocess_func := cvSetPostprocessFuncWin32_;
+end;
+
+initialization
+
+Init_highgui_c_lib;
+
+{$ELSE}
 function cvNamedWindow; external highgui_lib;
 procedure cvShowImage; external highgui_lib;
 function cvWaitKey; external highgui_lib;
@@ -735,25 +1273,16 @@ function cvCreateVideoWriter; external highgui_lib;
 function cvWriteFrame; external highgui_lib;
 procedure cvReleaseVideoWriter; external highgui_lib;
 procedure cvSetMouseCallback; external highgui_lib;
-procedure cvConvertImage(const src: pCvArr; dst: pCvArr; flags: Integer = 0); cdecl; overload; external highgui_lib;
-procedure cvConvertImage(const src: pIplImage; dst: pIplImage; flags: Integer = 0); cdecl; overload; external highgui_lib;
+procedure cvConvertImage; cdecl; external highgui_lib;
 procedure cvMoveWindow; external highgui_lib;
-
-function CV_FOURCC(const c1, c2, c3, c4: CVChar): Integer; {$IFDEF USE_INLINE}inline; {$ENDIF}
-begin
-  Result := Integer(c1) + (Integer(c2) shl 8) + (Integer(c3) shl 16) + (Integer(c4) shl 24);
-end;
-
 procedure cvResizeWindow; external highgui_lib;
 procedure cvSetWindowProperty; external highgui_lib;
 function cvGetWindowProperty; external highgui_lib;
 function cvInitSystem; external highgui_lib;
 function cvStartWindowThread; external highgui_lib;
 function cvCreateTrackbar2; external highgui_lib;
-
 function cvGetTrackbarPos; external highgui_lib;
 procedure cvSetTrackbarPos; external highgui_lib;
-
 function cvFontQt; external highgui_lib;
 procedure cvAddText; external highgui_lib;
 procedure cvDisplayOverlay; external highgui_lib;
@@ -777,6 +1306,6 @@ function cvRetrieveFrame; external highgui_lib;
 function cvGetCaptureDomain; external highgui_lib;
 procedure cvSetPreprocessFuncWin32_; external highgui_lib;
 procedure cvSetPostprocessFuncWin32_; external highgui_lib;
+{$ENDIF}
 
 end.
-

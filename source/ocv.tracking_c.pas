@@ -384,40 +384,28 @@ procedure cvReleaseKalman(var kalman: pCvKalman); cdecl;
 {$ENDIF}
 (*
   Updates Kalman filter by time (predicts future state of the system)
-
   CVAPI(const CvMat*  cvKalmanPredict( CvKalman* kalman,
   const CvMat* control CV_DEFAULT(NULL));
+
+  Updates Kalman filter by measurement
+  (corrects state of the system and internal matrices)
+  CVAPI(const CvMat* )  cvKalmanCorrect( CvKalman* kalman, const CvMat* measurement );
 *)
-{$IFDEF SAFELOADLIB}
 
 type
   TcvKalmanPredict = function(var kalman: TCvKalman; const control: pCvMat = nil): pCvMat; cdecl;
+  TcvKalmanCorrect = function(var kalman: TCvKalman; const measurement: pCvMat): pCvMat; cdecl;
+
+{$IFDEF SAFELOADLIB}
 
 var
   cvKalmanPredict: TcvKalmanPredict;
+  cvKalmanCorrect: TcvKalmanCorrect;
 {$ELSE}
 {$EXTERNALSYM cvKalmanPredict}
 function cvKalmanPredict(var kalman: TCvKalman; const control: pCvMat = nil): pCvMat; cdecl;
-{$ENDIF}
-(* Updates Kalman filter by measurement
-  (corrects state of the system and internal matrices)
-
-  CVAPI(const CvMat* )  cvKalmanCorrect( CvKalman* kalman, const CvMat* measurement );
-*)
-{$IFDEF SAFELOADLIB}
-
-type
-  TcvKalmanCorrect = function(var kalman: TCvKalman; const measurement: pCvMat): pCvMat; cdecl;
-
-var
-  cvKalmanCorrect: TcvKalmanCorrect;
-{$ELSE}
 {$EXTERNALSYM cvKalmanCorrect}
 function cvKalmanCorrect(var kalman: TCvKalman; const measurement: pCvMat): pCvMat; cdecl;
-
-Type
-  TcvKalmanPredict = function(var kalman: TCvKalman; const control: pCvMat = nil): pCvMat; cdecl;
-  TcvKalmanCorrect = function(var kalman: TCvKalman; const measurement: pCvMat): pCvMat; cdecl;
 {$ENDIF}
 
 Var
@@ -438,7 +426,7 @@ Var
 
 procedure Init_opencv_Tracking_lib;
 begin
-  TrackingDLL := ocvLoadLibrary(opencv_photo_lib);
+  TrackingDLL := ocvLoadLibrary(tracking_lib);
   Assert(TrackingDLL <> 0, 'Can not init ' + tracking_lib);
 
   cvCalcOpticalFlowPyrLK := ocvGetProcAddress('cvCalcOpticalFlowPyrLK', TrackingDLL);
@@ -455,18 +443,13 @@ begin
   cvReleaseKalman := ocvGetProcAddress('cvReleaseKalman', TrackingDLL);
   cvKalmanPredict := ocvGetProcAddress('cvKalmanPredict', TrackingDLL);
   cvKalmanCorrect := ocvGetProcAddress('cvKalmanCorrect', TrackingDLL);
-
   cvKalmanUpdateByTime := cvKalmanPredict;
   cvKalmanUpdateByMeasurement := cvKalmanCorrect;
 end;
 
 initialization
 
-{$IFDEF SAFELOADLIB}
-  Init_opencv_Tracking_lib;
-{$ENDIF}
-
-finalization
+Init_opencv_Tracking_lib;
 
 {$ELSE}
 function cvCamShift; external tracking_lib;

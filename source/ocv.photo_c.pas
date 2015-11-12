@@ -91,24 +91,15 @@ procedure Init_opencv_photo_lib;
 begin
   PhotoDLL := ocvLoadLibrary(opencv_photo_lib);
   Assert(PhotoDLL <> 0, 'Can not init ' + opencv_photo_lib);
-
   cvInpaint := ocvGetProcAddress('cvInpaint', PhotoDLL);
-
 end;
-
-{$ELSE}
-procedure cvInpaint; external opencv_photo_lib;
-{$ENDIF}
 
 initialization
 
-{$IFDEF SAFELOADLIB}
-  Init_opencv_photo_lib;
-{$ENDIF}
+Init_opencv_photo_lib;
 
-finalization
-
-{$IFDEF SAFELOADLIB}
+{$ELSE}
+procedure cvInpaint; external opencv_photo_lib;
 {$ENDIF}
 
 end.

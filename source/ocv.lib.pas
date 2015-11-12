@@ -36,7 +36,6 @@
 *)
 
 {$I OpenCV.inc}
-
 unit ocv.lib;
 
 interface
@@ -259,7 +258,7 @@ opencv_photo_lib = {$IFDEF MSWINDOWS}
 function ocvLoadLibrary(const Name: String): Cardinal;
 function ocvFreeLibrary(const LibHandle: Cardinal; const Remove: Boolean = true): Boolean;
 function ocvGetProcAddress(const ProcName: String; const LibHandle: Cardinal = 0; const Check: Boolean = true): Pointer;
-
+procedure ocvErrorMessage(const ErrorText: String);
 {$ENDIF}
 
 implementation
@@ -270,6 +269,24 @@ Uses
   Winapi.Windows,
   System.Generics.Collections,
   ocv.utils;
+
+procedure ocvErrorMessage(const ErrorText: String);
+begin
+  if IsConsole then
+  begin
+    Writeln(ErrorText);
+    Writeln('Press ENTER for exit');
+    Readln;
+  end
+  else
+    MessageBox(0, LPCWSTR(ErrorText), 'Error', MB_OK);
+  Halt(1);
+end;
+
+procedure STUB_PROC;
+begin
+  ocvErrorMessage('STUB: Call missing functions');
+end;
 
 Type
   TOCVLibHandles = TDictionary<String, Cardinal>;
@@ -282,6 +299,8 @@ begin
   if not OCVLibHandles.TryGetValue(Name, Result) then
   begin
     Result := LoadLibrary(LPCWSTR(Name));
+    if Result = 0 then
+      ocvErrorMessage('Can not load DLL: ' + Name);
     OCVLibHandles.Add(Name, Result);
   end;
 end;
@@ -310,11 +329,13 @@ begin
   if LibHandle = 0 then
     Result := nil
   else
-  begin
-    Result := GetProcAddress(LibHandle, LPCSTR(ProcName));
-  end;
-
-  Assert(Assigned(Result), 'Can not load proc ' + ProcName);
+    Result := GetProcAddress(LibHandle, c_str(ProcName));
+  if not Assigned(Result) then
+{$IFDEF USE_STUB_FOR_MISS_FUNC}
+    Result := @STUB_PROC;
+{$ELSE}
+    ocvErrorMessage('Can not load procedure or function: ' + ProcName);
+{$ENDIF}
 end;
 
 procedure ocvFreeLibraries;

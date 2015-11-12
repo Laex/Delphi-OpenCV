@@ -43,31 +43,16 @@
   **************************************************************************************************
   Original file:
   opencv\modules\legacy\include\opencv2\legacy.hpp
-  ************************************************************************************************* *)
+  *************************************************************************************************
+*)
 
-//
 {$I OpenCV.inc}
-//
-{$IFDEF DEBUG}
-{$A8,B-,C+,D+,E-,F-,G+,H+,I+,J-,K-,L+,M-,N+,O-,P+,Q+,R+,S-,T-,U-,V+,W+,X+,Y+,Z1}
-{$ELSE}
-{$A8,B-,C-,D-,E-,F-,G+,H+,I+,J-,K-,L-,M-,N+,O+,P+,Q-,R-,S-,T-,U-,V+,W-,X+,Y-,Z1}
-{$ENDIF}
-{$WARN SYMBOL_DEPRECATED OFF}
-{$WARN SYMBOL_PLATFORM OFF}
-{$WARN UNIT_PLATFORM OFF}
-{$WARN UNSAFE_TYPE OFF}
-{$WARN UNSAFE_CODE OFF}
-{$WARN UNSAFE_CAST OFF}
-{$IFDEF DELPHI2009_UP}
-{$POINTERMATH ON}
-{$ENDIF}
 unit ocv.legacy;
 
 interface
 
 uses
-//  Windows,
+  // Windows,
   ocv.core.types_c,
   ocv.imgproc.types_c,
   ocv.compat;
@@ -80,8 +65,8 @@ uses
 *)
 
 {$EXTERNALSYM cvSegmentImage}
-function cvSegmentImage(const srcarr: pCvArr; dstarr: pCvArr; canny_threshold: double; ffill_threshold: double;
-  storage: pCvMemStorage): pCvSeq; cdecl;
+function cvSegmentImage(const srcarr: pCvArr; dstarr: pCvArr; canny_threshold: double; ffill_threshold: double; storage: pCvMemStorage)
+  : pCvSeq; cdecl;
 
 { ****************************************************************************************
   *                                  Eigen objects                                       *
@@ -108,10 +93,10 @@ Type
   end;
 
 const
-  CV_EIGOBJ_NO_CALLBACK     = 0;
-  CV_EIGOBJ_INPUT_CALLBACK  = 1;
+  CV_EIGOBJ_NO_CALLBACK = 0;
+  CV_EIGOBJ_INPUT_CALLBACK = 1;
   CV_EIGOBJ_OUTPUT_CALLBACK = 2;
-  CV_EIGOBJ_BOTH_CALLBACK   = 3;
+  CV_EIGOBJ_BOTH_CALLBACK = 3;
 
   (* Calculates covariation matrix of a set of arrays
 
@@ -120,8 +105,8 @@ const
     IplImage* avg, float* covarMatrix );
   *)
 {$EXTERNALSYM cvCalcCovarMatrixEx}
-procedure cvCalcCovarMatrixEx(nObjects: Integer; input: pointer; ioFlags: Integer; ioBufSize: Integer; buffer: pByte;
-  userData: pointer; avg: pIplImage; var covarMatrix: Single); cdecl;
+procedure cvCalcCovarMatrixEx(nObjects: Integer; input: pointer; ioFlags: Integer; ioBufSize: Integer; buffer: pByte; userData: pointer;
+  avg: pIplImage; var covarMatrix: Single); cdecl;
 
 (* Calculates eigen values and vectors of covariation matrix of a set of arrays
 
@@ -131,8 +116,8 @@ procedure cvCalcCovarMatrixEx(nObjects: Integer; input: pointer; ioFlags: Intege
   float* eigVals );
 *)
 {$EXTERNALSYM cvCalcEigenObjects}
-procedure cvCalcEigenObjects(nObjects: Integer; input: pointer; output: pointer; ioFlags: Integer; ioBufSize: Integer;
-  userData: pointer; calcLimit: pCvTermCriteria; avg: pIplImage; eigVals: pFloat); cdecl;
+procedure cvCalcEigenObjects(nObjects: Integer; input: pointer; output: pointer; ioFlags: Integer; ioBufSize: Integer; userData: pointer;
+  calcLimit: pCvTermCriteria; avg: pIplImage; eigVals: pFloat); cdecl;
 
 (* Calculates dot product (obj - avg) * eigObj (i.e. projects image to eigen vector)
 
@@ -148,8 +133,8 @@ function cvCalcDecompCoeff(obj: pIplImage; eigObj: pIplImage; avg: pIplImage): d
   float* coeffs );
 *)
 {$EXTERNALSYM cvEigenDecomposite}
-procedure cvEigenDecomposite(obj: pIplImage; nEigObjs: Integer; eigInput: pointer; ioFlags: Integer; userData: pointer;
-  avg: pIplImage; coeffs: pFloat); cdecl;
+procedure cvEigenDecomposite(obj: pIplImage; nEigObjs: Integer; eigInput: pointer; ioFlags: Integer; userData: pointer; avg: pIplImage;
+  coeffs: pFloat); cdecl;
 
 (* Projects original objects used to calculate eigen space basis to that space
 
@@ -158,8 +143,8 @@ procedure cvEigenDecomposite(obj: pIplImage; nEigObjs: Integer; eigInput: pointe
   IplImage* proj );
 *)
 {$EXTERNALSYM cvEigenProjection}
-procedure cvEigenProjection(eigInput: pointer; nEigObjs: Integer; ioFlags: Integer; userData: pointer; coeffs: PSingle;
-  avg: pIplImage; proj: pIplImage); cdecl;
+procedure cvEigenProjection(eigInput: pointer; nEigObjs: Integer; ioFlags: Integer; userData: pointer; coeffs: PSingle; avg: pIplImage;
+  proj: pIplImage); cdecl;
 //
 { ****************************************************************************************
   *                                       1D/2D HMM                                      *
@@ -252,8 +237,7 @@ Type
   (* CVAPI(int)  icvCreate1DHMM( CvEHMM** this_hmm, int state_number, int* num_mix, int obs_size ); *)
 {$EXTERNALSYM icvCreate1DHMM}
 
-function icvCreate1DHMM(var this_hmm: pCvEHMM; state_number: Integer; Var num_mix: Integer; obs_size: Integer)
-  : Integer; cdecl;
+function icvCreate1DHMM(var this_hmm: pCvEHMM; state_number: Integer; Var num_mix: Integer; obs_size: Integer): Integer; cdecl;
 
 (* CVAPI(int)  icvRelease1DHMM( CvEHMM** phmm ); *)
 {$EXTERNALSYM icvRelease1DHMM}
@@ -269,8 +253,7 @@ function icvInit1DMixSegm(var obs_info_array: pCv1DObsInfo; num_img: Integer; va
 
 (* CVAPI(int)  icvEstimate1DHMMStateParams( CvImgObsInfo** obs_info_array, int num_img, CvEHMM* hmm); *)
 {$EXTERNALSYM icvEstimate1DHMMStateParams}
-function icvEstimate1DHMMStateParams(var obs_info_array: pCvImgObsInfo; num_img: Integer; var hmm: TCvEHMM)
-  : Integer; cdecl;
+function icvEstimate1DHMMStateParams(var obs_info_array: pCvImgObsInfo; num_img: Integer; var hmm: TCvEHMM): Integer; cdecl;
 
 (* CVAPI(int)  icvEstimate1DObsProb( CvImgObsInfo* obs_info, CvEHMM* hmm ); *)
 {$EXTERNALSYM icvEstimate1DObsProb}
@@ -408,8 +391,8 @@ procedure cvCreateHandMask(var hand_points: TCvSeq; var img_mask: TIplImage; var
   CvMemStorage* storage, CvSeq **numbers);
 *)
 {$EXTERNALSYM cvFindHandRegion}
-procedure cvFindHandRegion(var points: TCvPoint3D32f; count: Integer; var indexs: TCvSeq; var line: Single;
-  size: TCvSize2D32f; flag: Integer; var center: TCvPoint3D32f; var storage: TCvMemStorage; var numbers: pCvSeq); cdecl;
+procedure cvFindHandRegion(var points: TCvPoint3D32f; count: Integer; var indexs: TCvSeq; var line: Single; size: TCvSize2D32f; flag: Integer;
+  var center: TCvPoint3D32f; var storage: TCvMemStorage; var numbers: pCvSeq); cdecl;
 
 (* Finds hand region in range image data (advanced version)
 
@@ -420,8 +403,8 @@ procedure cvFindHandRegion(var points: TCvPoint3D32f; count: Integer; var indexs
   CvMemStorage* storage, CvSeq **numbers);
 *)
 {$EXTERNALSYM cvFindHandRegionA}
-procedure cvFindHandRegionA(var points: TCvPoint3D32f; count: Integer; var indexs: TCvSeq; var line: Single;
-  size: TCvSize2D32f; jc: Integer; var center: TCvPoint3D32f; var storage: TCvMemStorage; var numbers: pCvSeq); cdecl;
+procedure cvFindHandRegionA(var points: TCvPoint3D32f; count: Integer; var indexs: TCvSeq; var line: Single; size: TCvSize2D32f; jc: Integer;
+  var center: TCvPoint3D32f; var storage: TCvMemStorage; var numbers: pCvSeq); cdecl;
 
 (* Calculates the cooficients of the homography matrix
 
@@ -429,8 +412,7 @@ procedure cvFindHandRegionA(var points: TCvPoint3D32f; count: Integer; var index
   float* intrinsic, float* homography );
 *)
 {$EXTERNALSYM cvCalcImageHomography}
-procedure cvCalcImageHomography(var line: Single; var center: TCvPoint3D32f; var intrinsic: Single;
-  var homography: Single); cdecl;
+procedure cvCalcImageHomography(var line: Single; var center: TCvPoint3D32f; var intrinsic: Single; var homography: Single); cdecl;
 
 { ***************************************************************************************
   *                           More operations on sequences                              *
@@ -485,8 +467,8 @@ const
     double parameter4 CV_DEFAULT(0));
   *)
 
-function cvFindDominantPoints(contour: pCvSeq; storage: pCvMemStorage; method: Integer = CV_DOMINANT_IPAN;
-  parameter1: double = 0; parameter2: double = 0; parameter3: double = 0; parameter4: double = 0): pCvSeq; cdecl;
+function cvFindDominantPoints(contour: pCvSeq; storage: pCvMemStorage; method: Integer = CV_DOMINANT_IPAN; parameter1: double = 0;
+  parameter2: double = 0; parameter3: double = 0; parameter4: double = 0): pCvSeq; cdecl;
 
 (* *************************************************************************************** *)
 //
@@ -1067,33 +1049,33 @@ const
     int coeff_usage, CvSize  win,
     CvTermCriteria criteria, int calc_gradient CV_DEFAULT(1));
   }
-procedure cvSnakeImage(const image: pIplImage; points: pCvPointArray; length: Integer; alpha: PSingle; beta: PSingle;
-  gamma: PSingle; coeff_usage: Integer; win: TCvSize; criteria: TCvTermCriteria; calc_gradient: Integer = 1); cdecl;
+procedure cvSnakeImage(const image: pIplImage; points: pCvPointArray; length: Integer; alpha: PSingle; beta: PSingle; gamma: PSingle;
+  coeff_usage: Integer; win: TCvSize; criteria: TCvTermCriteria; calc_gradient: Integer = 1); cdecl;
 
 (* ***************************************************************************************\
   // *                                    Texture Descriptors                                 *
   // \*************************************************************************************** *)
 const
-  CV_GLCM_OPTIMIZATION_NONE      = -2;
-  CV_GLCM_OPTIMIZATION_LUT       = -1;
+  CV_GLCM_OPTIMIZATION_NONE = -2;
+  CV_GLCM_OPTIMIZATION_LUT = -1;
   CV_GLCM_OPTIMIZATION_HISTOGRAM = 0;
 
   CV_GLCMDESC_OPTIMIZATION_ALLOWDOUBLENEST = 10;
   CV_GLCMDESC_OPTIMIZATION_ALLOWTRIPLENEST = 11;
-  CV_GLCMDESC_OPTIMIZATION_HISTOGRAM       = 4;
+  CV_GLCMDESC_OPTIMIZATION_HISTOGRAM = 4;
 
-  CV_GLCMDESC_ENTROPY            = 0;
-  CV_GLCMDESC_ENERGY             = 1;
-  CV_GLCMDESC_HOMOGENITY         = 2;
-  CV_GLCMDESC_CONTRAST           = 3;
-  CV_GLCMDESC_CLUSTERTENDENCY    = 4;
-  CV_GLCMDESC_CLUSTERSHADE       = 5;
-  CV_GLCMDESC_CORRELATION        = 6;
-  CV_GLCMDESC_CORRELATIONINFO1   = 7;
-  CV_GLCMDESC_CORRELATIONINFO2   = 8;
+  CV_GLCMDESC_ENTROPY = 0;
+  CV_GLCMDESC_ENERGY = 1;
+  CV_GLCMDESC_HOMOGENITY = 2;
+  CV_GLCMDESC_CONTRAST = 3;
+  CV_GLCMDESC_CLUSTERTENDENCY = 4;
+  CV_GLCMDESC_CLUSTERSHADE = 5;
+  CV_GLCMDESC_CORRELATION = 6;
+  CV_GLCMDESC_CORRELATIONINFO1 = 7;
+  CV_GLCMDESC_CORRELATIONINFO2 = 8;
   CV_GLCMDESC_MAXIMUMPROBABILITY = 9;
 
-  CV_GLCM_ALL  = 0;
+  CV_GLCM_ALL = 0;
   CV_GLCM_GLCM = 1;
   CV_GLCM_DESC = 2;
 
@@ -3246,24 +3228,24 @@ Type
 
 const
   { CvSubdiv2DPointLocation enum }
-  CV_PTLOC_ERROR        = -2;
+  CV_PTLOC_ERROR = -2;
   CV_PTLOC_OUTSIDE_RECT = -1;
-  CV_PTLOC_INSIDE       = 0;
-  CV_PTLOC_VERTEX       = 1;
-  CV_PTLOC_ON_EDGE      = 2;
+  CV_PTLOC_INSIDE = 0;
+  CV_PTLOC_VERTEX = 1;
+  CV_PTLOC_ON_EDGE = 2;
 
 Type
   TCvNextEdgeType = Integer;
 
 const
   { CvNextEdgeType enum }
-  CV_NEXT_AROUND_ORG   = $00;
-  CV_NEXT_AROUND_DST   = $22;
-  CV_PREV_AROUND_ORG   = $11;
-  CV_PREV_AROUND_DST   = $33;
-  CV_NEXT_AROUND_LEFT  = $13;
+  CV_NEXT_AROUND_ORG = $00;
+  CV_NEXT_AROUND_DST = $22;
+  CV_PREV_AROUND_ORG = $11;
+  CV_PREV_AROUND_DST = $33;
+  CV_NEXT_AROUND_LEFT = $13;
   CV_NEXT_AROUND_RIGHT = $31;
-  CV_PREV_AROUND_LEFT  = $20;
+  CV_PREV_AROUND_LEFT = $20;
   CV_PREV_AROUND_RIGHT = $02;
 
   (* get the next edge with the same origin point (counterwise) *)
@@ -3277,8 +3259,8 @@ procedure cvInitSubdivDelaunay2D(subdiv: pCvSubdiv2D; rect: TCvRect); cdecl;
 // CVAPI(CvSubdiv2D*)  cvCreateSubdiv2D( int subdiv_type, int header_size,
 // int vtx_size, int quadedge_size,
 // CvMemStorage* storage );
-function cvCreateSubdiv2D(subdiv_type: Integer; header_size: Integer; vtx_size: Integer; quadedge_size: Integer;
-  storage: pCvMemStorage): pCvSubdiv2D; cdecl;
+function cvCreateSubdiv2D(subdiv_type: Integer; header_size: Integer; vtx_size: Integer; quadedge_size: Integer; storage: pCvMemStorage)
+  : pCvSubdiv2D; cdecl;
 
 (* ************************ high-level subdivision functions ************************** *)
 //
@@ -3485,8 +3467,7 @@ procedure cvReleaseStereoGCState(
 
 procedure cvFindStereoCorrespondenceGC(const left: pIplImage;
 
-  const right: pIplImage; disparityLeft: pCvMat; disparityRight: pCvMat; state: pCvStereoGCState;
-  useDisparityGuess: Integer = 0); cdecl;
+  const right: pIplImage; disparityLeft: pCvMat; disparityRight: pCvMat; state: pCvStereoGCState; useDisparityGuess: Integer = 0); cdecl;
 
 (* Calculates optical flow for 2 images using classical Lucas & Kanade algorithm *)
 // CVAPI(void)  cvCalcOpticalFlowLK( const CvArr* prev, const CvArr* curr,
@@ -3538,22 +3519,21 @@ procedure cvFindStereoCorrespondenceGC(const left: pIplImage;
   // *)
 //
 const
-  CV_BG_MODEL_FGD        = 0;
-  CV_BG_MODEL_MOG        = 1; // * "Mixture of Gaussians".	*)
+  CV_BG_MODEL_FGD = 0;
+  CV_BG_MODEL_MOG = 1; // * "Mixture of Gaussians".	*)
   CV_BG_MODEL_FGD_SIMPLE = 2;
 
 Type
 
   ppCvBGStatModel = ^pCvBGStatModel;
-  pCvBGStatModel  = ^TCvBGStatModel;
+  pCvBGStatModel = ^TCvBGStatModel;
 
   // typedef void (CV_CDECL * CvReleaseBGStatModel)( struct CvBGStatModel** bg_model );
   TCvReleaseBGStatModel = procedure(
 
     Var bg_model: pCvBGStatModel); cdecl;
   // typedef int (CV_CDECL * CvUpdateBGStatModel)( IplImage* curr_frame, struct CvBGStatModel* bg_model, double learningRate );
-  TCvUpdateBGStatModel = function(curr_frame: pIplImage; bg_model: pCvBGStatModel; learningRate: double)
-    : Integer; cdecl;
+  TCvUpdateBGStatModel = function(curr_frame: pIplImage; bg_model: pCvBGStatModel; learningRate: double): Integer; cdecl;
 
   TCvBGStatModel = record
     _type: Integer; // *type of BG model
@@ -3586,8 +3566,7 @@ procedure cvReleaseBGStatModel(Var bg_model: pCvBGStatModel); cdecl;
 // Updates statistical model and returns number of found foreground regions
 // CVAPI(int) cvUpdateBGStatModel( IplImage* current_frame, CvBGStatModel*  bg_model,
 // double learningRate CV_DEFAULT(-1));
-function cvUpdateBGStatModel(current_frame: pIplImage; bg_model: pCvBGStatModel; learningRate: double = -1)
-  : Integer; cdecl;
+function cvUpdateBGStatModel(current_frame: pIplImage; bg_model: pCvBGStatModel; learningRate: double = -1): Integer; cdecl;
 
 /// / Performs FG post-processing using segmentation
 /// / (all pixels of a region will be classified as foreground if majority of pixels of the region are FG).
@@ -3607,11 +3586,11 @@ function cvUpdateBGStatModel(current_frame: pIplImage; bg_model: pCvBGStatModel;
 
 const
   // Default parameters of foreground detection algorithm:
-  CV_BGFG_FGD_LC  = 128;
+  CV_BGFG_FGD_LC = 128;
   CV_BGFG_FGD_N1C = 15;
   CV_BGFG_FGD_N2C = 25;
 
-  CV_BGFG_FGD_LCC  = 64;
+  CV_BGFG_FGD_LCC = 64;
   CV_BGFG_FGD_N1CC = 25;
   CV_BGFG_FGD_N2CC = 40;
   // Background reference image update parameter: *)
@@ -3623,10 +3602,10 @@ const
   CV_BGFG_FGD_ALPHA_2 = 0.005;
 
   // * start value for alpha parameter (to fast initiate statistic model) *)
-  CV_BGFG_FGD_ALPHA_3         = 0.1;
-  CV_BGFG_FGD_DELTA           = 2;
-  CV_BGFG_FGD_T               = 0.9;
-  CV_BGFG_FGD_MINAREA         = 15;
+  CV_BGFG_FGD_ALPHA_3 = 0.1;
+  CV_BGFG_FGD_DELTA = 2;
+  CV_BGFG_FGD_T = 0.9;
+  CV_BGFG_FGD_MINAREA = 15;
   CV_BGFG_FGD_BG_UPDATE_TRESH = 0.5;
 
   (* See the above-referenced Li/Huang/Gu/Tian paper
@@ -3732,11 +3711,11 @@ const
   CV_BGFG_MOG_BACKGROUND_THRESHOLD = 0.7;
   // * threshold sum of weights for background test *)
   CV_BGFG_MOG_STD_THRESHOLD = 2.5; // * lambda=2.5 is 99% *)
-  CV_BGFG_MOG_WINDOW_SIZE   = 200; // * Learning rate; alpha = 1/CV_GBG_WINDOW_SIZE *)
-  CV_BGFG_MOG_NGAUSSIANS    = 5; // * = K = number of Gaussians in mixture *)
-  CV_BGFG_MOG_WEIGHT_INIT   = 0.05;
-  CV_BGFG_MOG_SIGMA_INIT    = 30;
-  CV_BGFG_MOG_MINAREA       = 15;
+  CV_BGFG_MOG_WINDOW_SIZE = 200; // * Learning rate; alpha = 1/CV_GBG_WINDOW_SIZE *)
+  CV_BGFG_MOG_NGAUSSIANS = 5; // * = K = number of Gaussians in mixture *)
+  CV_BGFG_MOG_WEIGHT_INIT = 0.05;
+  CV_BGFG_MOG_SIGMA_INIT = 30;
+  CV_BGFG_MOG_MINAREA = 15;
 
   CV_BGFG_MOG_NCOLORS = 3;
 
@@ -3786,8 +3765,7 @@ type
 
   // * Creates Gaussian mixture background model *)
   // CVAPI(CvBGStatModel*) cvCreateGaussianBGModel( IplImage* first_frame, CvGaussBGStatModelParams* parameters CV_DEFAULT(NULL));
-function cvCreateGaussianBGModel(first_frame: pIplImage; parameters: pCvGaussBGStatModelParams = nil)
-  : pCvBGStatModel; cdecl;
+function cvCreateGaussianBGModel(first_frame: pIplImage; parameters: pCvGaussBGStatModelParams = nil): pCvBGStatModel; cdecl;
 
 type
   pCvBGCodeBookElem = ^TCvBGCodeBookElem;
@@ -3836,17 +3814,17 @@ procedure cvBGCodeBookClearStale(model: pCvBGCodeBookModel; staleThresh: Integer
 
   const mask: pCvArr = nil); cdecl;
 // CVAPI(CvSeq*) cvSegmentFGMask( CvArr *fgmask, int poly1Hull0 CV_DEFAULT(1), float perimScale CV_DEFAULT(4.f), CvMemStorage* storage CV_DEFAULT(0), CvPoint offset CV_DEFAULT(cvPoint(0,0)));
-function cvSegmentFGMask(fgmask: pCvArr; poly1Hull0: Integer { =1 }; perimScale: Single { = 4 };
-  storage: pCvMemStorage { =nil }; offset: TCvPoint { =cvPoint(0,0) } ): pCvSeq; cdecl;
+function cvSegmentFGMask(fgmask: pCvArr; poly1Hull0: Integer { =1 }; perimScale: Single { = 4 }; storage: pCvMemStorage { =nil };
+  offset: TCvPoint { =cvPoint(0,0) } ): pCvSeq; cdecl;
 
 const
-  CV_UNDEF_SC_PARAM        = 12345; // default value of parameters
+  CV_UNDEF_SC_PARAM = 12345; // default value of parameters
   CV_IDP_BIRCHFIELD_PARAM1 = 25;
   CV_IDP_BIRCHFIELD_PARAM2 = 5;
   CV_IDP_BIRCHFIELD_PARAM3 = 12;
   CV_IDP_BIRCHFIELD_PARAM4 = 15;
   CV_IDP_BIRCHFIELD_PARAM5 = 25;
-  CV_DISPARITY_BIRCHFIELD  = 0;
+  CV_DISPARITY_BIRCHFIELD = 0;
   (*
     F///////////////////////////////////////////////////////////////////////////
     //
@@ -3879,9 +3857,9 @@ const
     double  param4 CV_DEFAULT(CV_UNDEF_SC_PARAM),
     double  param5 CV_DEFAULT(CV_UNDEF_SC_PARAM) );
   *)
-procedure cvFindStereoCorrespondence(const leftImage: pCvArr; const rightImage: pCvArr; mode: Integer;
-  dispImage: pCvArr; maxDisparity: Integer; param1: double = CV_UNDEF_SC_PARAM; param2: double = CV_UNDEF_SC_PARAM;
-  param3: double = CV_UNDEF_SC_PARAM; param4: double = CV_UNDEF_SC_PARAM; param5: double = CV_UNDEF_SC_PARAM); cdecl;
+procedure cvFindStereoCorrespondence(const leftImage: pCvArr; const rightImage: pCvArr; mode: Integer; dispImage: pCvArr; maxDisparity: Integer;
+  param1: double = CV_UNDEF_SC_PARAM; param2: double = CV_UNDEF_SC_PARAM; param3: double = CV_UNDEF_SC_PARAM; param4: double = CV_UNDEF_SC_PARAM;
+  param5: double = CV_UNDEF_SC_PARAM); cdecl;
 
 (*
   ***************************************************************************************
@@ -3950,16 +3928,15 @@ Type
     CvPoint2D32f* warpPoint,
     int direction);
   *)
-function icvConvertWarpCoordinates(coeffs: TicvConvertWarpCoordinatesCoeff; cameraPoint: pCvPoint2D32f;
-  warpPoint: pCvPoint2D32f; direction: Integer): Integer; cdecl;
+function icvConvertWarpCoordinates(coeffs: TicvConvertWarpCoordinatesCoeff; cameraPoint: pCvPoint2D32f; warpPoint: pCvPoint2D32f; direction: Integer)
+  : Integer; cdecl;
 (*
   CVAPI(int) icvGetSymPoint3D(  CvPoint3D64f pointCorner,
   CvPoint3D64f point1,
   CvPoint3D64f point2,
   CvPoint3D64f *pointSym2);
 *)
-function icvGetSymPoint3D(pointCorner: TCvPoint3D64f; point1: TCvPoint3D64f; point2: TCvPoint3D64f;
-  pointSym2: pCvPoint3D64f): Integer; cdecl;
+function icvGetSymPoint3D(pointCorner: TCvPoint3D64f; point1: TCvPoint3D64f; point2: TCvPoint3D64f; pointSym2: pCvPoint3D64f): Integer; cdecl;
 (*
   CVAPI(void) icvGetPieceLength3D(CvPoint3D64f point1,CvPoint3D64f point2,double* dist);
 *)
@@ -3969,8 +3946,7 @@ procedure icvGetPieceLength3D(point1: TCvPoint3D64f; point2: TCvPoint3D64f; dist
   CvStereoLineCoeff* coeffs,
   CvPoint3D64f* point);
 *)
-function icvCompute3DPoint(alpha: double; betta: double; coeffs: pCvStereoLineCoeff; point: pCvPoint3D64f)
-  : Integer; cdecl;
+function icvCompute3DPoint(alpha: double; betta: double; coeffs: pCvStereoLineCoeff; point: pCvPoint3D64f): Integer; cdecl;
 (*
   CVAPI(int) icvCreateConvertMatrVect( double*     rotMatr1,
   double*     transVect1,
@@ -3979,8 +3955,8 @@ function icvCompute3DPoint(alpha: double; betta: double; coeffs: pCvStereoLineCo
   double*     convRotMatr,
   double*     convTransVect);
 *)
-function icvCreateConvertMatrVect(rotMatr1: pdouble; transVect1: pdouble; rotMatr2: pdouble; transVect2: pdouble;
-  convRotMatr: pdouble; convTransVect: pdouble): Integer; cdecl;
+function icvCreateConvertMatrVect(rotMatr1: pdouble; transVect1: pdouble; rotMatr2: pdouble; transVect2: pdouble; convRotMatr: pdouble;
+  convTransVect: pdouble): Integer; cdecl;
 (*
   CVAPI(int) icvConvertPointSystem(CvPoint3D64f  M2,
   CvPoint3D64f* M1,
@@ -3988,8 +3964,7 @@ function icvCreateConvertMatrVect(rotMatr1: pdouble; transVect1: pdouble; rotMat
   double*     transVect
   );
 *)
-function icvConvertPointSystem(M2: TCvPoint3D64f; M1: pCvPoint3D64f; rotMatr: pdouble; transVect: pdouble)
-  : Integer; cdecl;
+function icvConvertPointSystem(M2: TCvPoint3D64f; M1: pCvPoint3D64f; rotMatr: pdouble; transVect: pdouble): Integer; cdecl;
 (*
   CVAPI(int) icvComputeCoeffForStereo(  CvStereoCamera* stereoCamera);
 *)
@@ -3997,13 +3972,12 @@ function icvComputeCoeffForStereo(stereoCamera: pCvStereoCamera): Integer; cdecl
 (*
   CVAPI(int) icvGetCrossPieceVector(CvPoint2D32f p1_start,CvPoint2D32f p1_end,CvPoint2D32f v2_start,CvPoint2D32f v2_end,CvPoint2D32f *cross);
 *)
-function icvGetCrossPieceVector(p1_start: TCvPoint2D32f; p1_end: TCvPoint2D32f; v2_start: TCvPoint2D32f;
-  v2_end: TCvPoint2D32f; cross: pCvPoint2D32f): Integer; cdecl;
+function icvGetCrossPieceVector(p1_start: TCvPoint2D32f; p1_end: TCvPoint2D32f; v2_start: TCvPoint2D32f; v2_end: TCvPoint2D32f; cross: pCvPoint2D32f)
+  : Integer; cdecl;
 (*
   CVAPI(int) icvGetCrossLineDirect(CvPoint2D32f p1,CvPoint2D32f p2,float a,float b,float c,CvPoint2D32f* cross);
 *)
-function icvGetCrossLineDirect(p1: TCvPoint2D32f; p2: TCvPoint2D32f; a: float; b: float; c: float; cross: pCvPoint2D32f)
-  : Integer; cdecl;
+function icvGetCrossLineDirect(p1: TCvPoint2D32f; p2: TCvPoint2D32f; a: float; b: float; c: float; cross: pCvPoint2D32f): Integer; cdecl;
 (*
   CVAPI(float) icvDefinePointPosition(CvPoint2D32f point1,CvPoint2D32f point2,CvPoint2D32f point);
 *)
@@ -4018,8 +3992,8 @@ function icvDefinePointPosition(point1: TCvPoint2D32f; point2: TCvPoint2D32f; po
   CvStereoCamera* stereoparams
   );
 *)
-function icvStereoCalibration(numImages: Integer; nums: PInteger; imageSize: TCvSize; imagePoints1: pCvPoint2D32f;
-  imagePoints2: pCvPoint2D32f; objectPoints: pCvPoint3D32f; stereoparams: pCvStereoCamera): Integer; cdecl;
+function icvStereoCalibration(numImages: Integer; nums: PInteger; imageSize: TCvSize; imagePoints1: pCvPoint2D32f; imagePoints2: pCvPoint2D32f;
+  objectPoints: pCvPoint3D32f; stereoparams: pCvStereoCamera): Integer; cdecl;
 (*
   CVAPI(int) icvComputeRestStereoParams(CvStereoCamera *stereoparams);
 *)
@@ -4027,8 +4001,7 @@ function icvComputeRestStereoParams(stereoparams: pCvStereoCamera): Integer; cde
 (*
   CVAPI(void) cvComputePerspectiveMap( const double coeffs[3][3], CvArr* rectMapX, CvArr* rectMapY );
 *)
-procedure cvComputePerspectiveMap(const coeffs: TicvConvertWarpCoordinatesCoeff; rectMapX: pCvArr;
-  rectMapY: pCvArr); cdecl;
+procedure cvComputePerspectiveMap(const coeffs: TicvConvertWarpCoordinatesCoeff; rectMapX: pCvArr; rectMapY: pCvArr); cdecl;
 (*
   CVAPI(int) icvComCoeffForLine(   CvPoint2D64f point1,
   CvPoint2D64f point2,
@@ -4043,9 +4016,9 @@ procedure cvComputePerspectiveMap(const coeffs: TicvConvertWarpCoordinatesCoeff;
   CvStereoLineCoeff*    coeffs,
   int* needSwapCameras);
 *)
-function icvComCoeffForLine(point1: TCvPoint2D64f; point2: TCvPoint2D64f; point3: TCvPoint2D64f; point4: TCvPoint2D64f;
-  camMatr1: pdouble; rotMatr1: pdouble; transVect1: pdouble; camMatr2: pdouble; rotMatr2: pdouble; transVect2: pdouble;
-  coeffs: pCvStereoLineCoeff; needSwapCameras: PInteger): Integer; cdecl;
+function icvComCoeffForLine(point1: TCvPoint2D64f; point2: TCvPoint2D64f; point3: TCvPoint2D64f; point4: TCvPoint2D64f; camMatr1: pdouble;
+  rotMatr1: pdouble; transVect1: pdouble; camMatr2: pdouble; rotMatr2: pdouble; transVect2: pdouble; coeffs: pCvStereoLineCoeff;
+  needSwapCameras: PInteger): Integer; cdecl;
 (*
   CVAPI(int) icvGetDirectionForPoint(  CvPoint2D64f point,
   double* camMatr,
@@ -4057,8 +4030,8 @@ function icvGetDirectionForPoint(point: TCvPoint2D64f; camMatr: pdouble; direct:
   CvPoint3D64f point21,CvPoint3D64f point22,
   CvPoint3D64f* midPoint);
 *)
-function icvGetCrossLines(point11: TCvPoint3D64f; point12: TCvPoint3D64f; point21: TCvPoint3D64f;
-  point22: TCvPoint3D64f; midPoint: pCvPoint3D64f): Integer; cdecl;
+function icvGetCrossLines(point11: TCvPoint3D64f; point12: TCvPoint3D64f; point21: TCvPoint3D64f; point22: TCvPoint3D64f; midPoint: pCvPoint3D64f)
+  : Integer; cdecl;
 (*
   CVAPI(int) icvComputeStereoLineCoeffs(   CvPoint3D64f pointA,
   CvPoint3D64f pointB,
@@ -4066,8 +4039,8 @@ function icvGetCrossLines(point11: TCvPoint3D64f; point12: TCvPoint3D64f; point2
   double gamma,
   CvStereoLineCoeff*    coeffs);
 *)
-function icvComputeStereoLineCoeffs(pointA: TCvPoint3D64f; pointB: TCvPoint3D64f; pointCam1: TCvPoint3D64f;
-  gamma: double; coeffs: pCvStereoLineCoeff): Integer; cdecl;
+function icvComputeStereoLineCoeffs(pointA: TCvPoint3D64f; pointB: TCvPoint3D64f; pointCam1: TCvPoint3D64f; gamma: double; coeffs: pCvStereoLineCoeff)
+  : Integer; cdecl;
 (*
   CVAPI(int) icvComputeFundMatrEpipoles ( double* camMatr1,
   double*     rotMatr1,
@@ -4082,15 +4055,13 @@ function icvComputeStereoLineCoeffs(pointA: TCvPoint3D64f; pointB: TCvPoint3D64f
 (*
   CVAPI(int) icvGetAngleLine( CvPoint2D64f startPoint, CvSize imageSize,CvPoint2D64f *point1,CvPoint2D64f *point2);
 *)
-function icvGetAngleLine(startPoint: TCvPoint2D64f; imageSize: TCvSize; point1: pCvPoint2D64f; point2: pCvPoint2D64f)
-  : Integer; cdecl;
+function icvGetAngleLine(startPoint: TCvPoint2D64f; imageSize: TCvSize; point1: pCvPoint2D64f; point2: pCvPoint2D64f): Integer; cdecl;
 (*
   CVAPI(void) icvGetCoefForPiece(   CvPoint2D64f p_start,CvPoint2D64f p_end,
   double *a,double *b,double *c,
   int* result);
 *)
-procedure icvGetCoefForPiece(p_start: TCvPoint2D64f; p_end: TCvPoint2D64f; a: pdouble; b: pdouble; c: pdouble;
-  result: PInteger); cdecl;
+procedure icvGetCoefForPiece(p_start: TCvPoint2D64f; p_end: TCvPoint2D64f; a: pdouble; b: pdouble; c: pdouble; result: PInteger); cdecl;
 (*
   CVAPI(void) icvGetCommonArea( CvSize imageSize,
   CvPoint2D64f epipole1,CvPoint2D64f epipole2,
@@ -4106,8 +4077,7 @@ procedure icvGetCoefForPiece(p_start: TCvPoint2D64f; p_end: TCvPoint2D64f; a: pd
   CvPoint2D32f point1,
   CvPoint2D32f *point2);
 *)
-procedure icvComputeeInfiniteProject1(rotMatr: pdouble; camMatr1: pdouble; camMatr2: pdouble; point1: TCvPoint2D32f;
-  point2: pCvPoint2D32f); cdecl;
+procedure icvComputeeInfiniteProject1(rotMatr: pdouble; camMatr1: pdouble; camMatr2: pdouble; point1: TCvPoint2D32f; point2: pCvPoint2D32f); cdecl;
 (*
   CVAPI(void) icvComputeeInfiniteProject2(double*    rotMatr,
   double*    camMatr1,
@@ -4115,8 +4085,7 @@ procedure icvComputeeInfiniteProject1(rotMatr: pdouble; camMatr1: pdouble; camMa
   CvPoint2D32f* point1,
   CvPoint2D32f point2);
 *)
-procedure icvComputeeInfiniteProject2(rotMatr: pdouble; camMatr1: pdouble; camMatr2: pdouble; point1: pCvPoint2D32f;
-  point2: TCvPoint2D32f); cdecl;
+procedure icvComputeeInfiniteProject2(rotMatr: pdouble; camMatr1: pdouble; camMatr2: pdouble; point1: pCvPoint2D32f; point2: TCvPoint2D32f); cdecl;
 (*
   CVAPI(void) icvGetCrossDirectDirect(  double* direct1,double* direct2,
   CvPoint2D64f *cross,int* result);
@@ -4127,16 +4096,16 @@ procedure icvGetCrossDirectDirect(direct1: pdouble; direct2: pdouble; cross: pCv
   double a,double b,double c,
   CvPoint2D64f *cross,int* result);
 *)
-procedure icvGetCrossPieceDirect(p_start: TCvPoint2D64f; p_end: TCvPoint2D64f; a: double; b: double; c: double;
-  cross: pCvPoint2D64f; result: PInteger); cdecl;
+procedure icvGetCrossPieceDirect(p_start: TCvPoint2D64f; p_end: TCvPoint2D64f; a: double; b: double; c: double; cross: pCvPoint2D64f;
+  result: PInteger); cdecl;
 (*
   CVAPI(void) icvGetCrossPiecePiece( CvPoint2D64f p1_start,CvPoint2D64f p1_end,
   CvPoint2D64f p2_start,CvPoint2D64f p2_end,
   CvPoint2D64f* cross,
   int* result);
 *)
-procedure icvGetCrossPiecePiece(p1_start: TCvPoint2D64f; p1_end: TCvPoint2D64f; p2_start: TCvPoint2D64f;
-  p2_end: TCvPoint2D64f; cross: pCvPoint2D64f; result: PInteger); cdecl;
+procedure icvGetCrossPiecePiece(p1_start: TCvPoint2D64f; p1_end: TCvPoint2D64f; p2_start: TCvPoint2D64f; p2_end: TCvPoint2D64f; cross: pCvPoint2D64f;
+  result: PInteger); cdecl;
 (*
   CVAPI(void) icvGetPieceLength(CvPoint2D64f point1,CvPoint2D64f point2,double* dist);
 *)
@@ -4147,15 +4116,14 @@ procedure icvGetPieceLength(point1: TCvPoint2D64f; point2: TCvPoint2D64f; dist: 
   CvPoint2D64f *start,CvPoint2D64f *end,
   int* result);
 *)
-procedure icvGetCrossRectDirect(imageSize: TCvSize; a: double; b: double; c: double; start: pCvPoint2D64f;
-  end_: pCvPoint2D64f; result: PInteger); cdecl;
+procedure icvGetCrossRectDirect(imageSize: TCvSize; a: double; b: double; c: double; start: pCvPoint2D64f; end_: pCvPoint2D64f;
+  result: PInteger); cdecl;
 (*
   CVAPI(void) icvProjectPointToImage(   CvPoint3D64f point,
   double* camMatr,double* rotMatr,double* transVect,
   CvPoint2D64f* projPoint);
 *)
-procedure icvProjectPointToImage(point: TCvPoint3D64f; camMatr: pdouble; rotMatr: pdouble; transVect: pdouble;
-  projPoint: pCvPoint2D64f); cdecl;
+procedure icvProjectPointToImage(point: TCvPoint3D64f; camMatr: pdouble; rotMatr: pdouble; transVect: pdouble; projPoint: pCvPoint2D64f); cdecl;
 (*
   CVAPI(void) icvGetQuadsTransform( CvSize        imageSize,
   double*     camMatr1,
@@ -4176,9 +4144,9 @@ procedure icvProjectPointToImage(point: TCvPoint3D64f; camMatr: pdouble; rotMatr
 Type
   TicvGetQuadsTransformQuad = array [0 .. 3, 0 .. 1] of double;
 
-procedure icvGetQuadsTransform(imageSize: TCvSize; camMatr1: pdouble; rotMatr1: pdouble; transVect1: pdouble;
-  camMatr2: pdouble; rotMatr2: pdouble; transVect2: pdouble; warpSize: pCvSize; quad1: TicvGetQuadsTransformQuad;
-  quad2: TicvGetQuadsTransformQuad; fundMatr: pdouble; epipole1: pCvPoint3D64f; epipole2: pCvPoint3D64f); cdecl;
+procedure icvGetQuadsTransform(imageSize: TCvSize; camMatr1: pdouble; rotMatr1: pdouble; transVect1: pdouble; camMatr2: pdouble; rotMatr2: pdouble;
+  transVect2: pdouble; warpSize: pCvSize; quad1: TicvGetQuadsTransformQuad; quad2: TicvGetQuadsTransformQuad; fundMatr: pdouble;
+  epipole1: pCvPoint3D64f; epipole2: pCvPoint3D64f); cdecl;
 (*
   CVAPI(void) icvGetQuadsTransformStruct(  CvStereoCamera* stereoCamera);
 *)
@@ -4195,16 +4163,14 @@ procedure icvComputeStereoParamsForCameras(stereoCamera: pCvStereoCamera); cdecl
   CvPoint2D64f* point21,CvPoint2D64f* point22,
   int* result);
 *)
-procedure icvGetCutPiece(areaLineCoef1: pdouble; areaLineCoef2: pdouble; epipole: TCvPoint2D64f; imageSize: TCvSize;
-  point11: pCvPoint2D64f; point12: pCvPoint2D64f; point21: pCvPoint2D64f; point22: pCvPoint2D64f;
-  result: PInteger); cdecl;
+procedure icvGetCutPiece(areaLineCoef1: pdouble; areaLineCoef2: pdouble; epipole: TCvPoint2D64f; imageSize: TCvSize; point11: pCvPoint2D64f;
+  point12: pCvPoint2D64f; point21: pCvPoint2D64f; point22: pCvPoint2D64f; result: PInteger); cdecl;
 (*
   CVAPI(void) icvGetMiddleAnglePoint(   CvPoint2D64f basePoint,
   CvPoint2D64f point1,CvPoint2D64f point2,
   CvPoint2D64f* midPoint);
 *)
-procedure icvGetMiddleAnglePoint(basePoint: TCvPoint2D64f; point1: TCvPoint2D64f; point2: TCvPoint2D64f;
-  midPoint: pCvPoint2D64f); cdecl;
+procedure icvGetMiddleAnglePoint(basePoint: TCvPoint2D64f; point1: TCvPoint2D64f; point2: TCvPoint2D64f; midPoint: pCvPoint2D64f); cdecl;
 (*
   CVAPI(void) icvGetNormalDirect(double* direct,CvPoint2D64f point,double* normDirect);
 *)
@@ -4226,8 +4192,7 @@ procedure icvGetDistanceFromPointToDirect(point: TCvPoint2D64f; lineCoef: pdoubl
 (*
   CVAPI(IplImage * )icvCreateIsometricImage(IplImage * src, IplImage * dst, int desired_depth, int desired_num_channels);
 *)
-function icvCreateIsometricImage(src: pIplImage; dst: pIplImage; desired_depth: Integer; desired_num_channels: Integer)
-  : pIplImage; cdecl;
+function icvCreateIsometricImage(src: pIplImage; dst: pIplImage; desired_depth: Integer; desired_num_channels: Integer): pIplImage; cdecl;
 (*
   CVAPI(void) cvDeInterlace( const CvArr* frame, CvArr* fieldEven, CvArr* fieldOdd );
 *)
@@ -4284,8 +4249,7 @@ function cvCreateContourTree(const contour: pCvSeq; storage: pCvMemStorage; thre
 (*
   CVAPI(CvSeq * ) cvContourFromContourTree(const CvContourTree * tree, CvMemStorage * storage, CvTermCriteria criteria);
 *)
-function cvContourFromContourTree(const tree: pCvContourTree; storage: pCvMemStorage; criteria: TCvTermCriteria)
-  : pCvSeq; cdecl;
+function cvContourFromContourTree(const tree: pCvContourTree; storage: pCvMemStorage; criteria: TCvTermCriteria): pCvSeq; cdecl;
 
 const
   (*
@@ -4298,8 +4262,7 @@ const
     const CvContourTree* tree2,
     int method, double threshold );
   *)
-function cvMatchContourTrees(const tree1: pCvContourTree; const tree2: pCvContourTree; method: Integer;
-  threshold: double): double; cdecl;
+function cvMatchContourTrees(const tree1: pCvContourTree; const tree2: pCvContourTree; method: Integer; threshold: double): double; cdecl;
 (*
   ***************************************************************************************\
   *                                   Contour Morphing                                     *
@@ -4322,8 +4285,7 @@ function cvMatchContourTrees(const tree1: pCvContourTree; const tree2: pCvContou
   const CvSeq* contour2,
   CvMemStorage* storage);
 *)
-function cvCalcContoursCorrespondence(const contour1: pCvSeq; const contour2: pCvSeq; storage: pCvMemStorage)
-  : pCvSeq; cdecl;
+function cvCalcContoursCorrespondence(const contour1: pCvSeq; const contour2: pCvSeq; storage: pCvMemStorage): pCvSeq; cdecl;
 (*
   morphs contours using the pre-calculated correspondence:
   alpha=0 ~ contour1, alpha=1 ~ contour2
@@ -4333,8 +4295,7 @@ function cvCalcContoursCorrespondence(const contour1: pCvSeq; const contour2: pC
   CvSeq* corr, double alpha,
   CvMemStorage* storage );
 *)
-function cvMorphContours(const contour1: pCvSeq; const contour2: pCvSeq; corr: pCvSeq; alpha: double;
-  storage: pCvMemStorage): pCvSeq; cdecl;
+function cvMorphContours(const contour1: pCvSeq; const contour2: pCvSeq; corr: pCvSeq; alpha: double; storage: pCvMemStorage): pCvSeq; cdecl;
 
 (*
   ***************************************************************************************\
@@ -4368,8 +4329,8 @@ function cvMorphContours(const contour1: pCvSeq; const contour2: pCvSeq; corr: p
   int numStepDirections CV_DEFAULT(0),
   int optimizationType CV_DEFAULT(CV_GLCM_OPTIMIZATION_NONE));
 *)
-function cvCreateGLCM(const srcImage: pIplImage; stepMagnitude: Integer; const stepDirections: PInteger = nil;
-  numStepDirections: Integer = 0; optimizationType: Integer = CV_GLCM_OPTIMIZATION_NONE): pCvGLCM; cdecl;
+function cvCreateGLCM(const srcImage: pIplImage; stepMagnitude: Integer; const stepDirections: PInteger = nil; numStepDirections: Integer = 0;
+  optimizationType: Integer = CV_GLCM_OPTIMIZATION_NONE): pCvGLCM; cdecl;
 (*
   CVAPI(void) cvReleaseGLCM( CvGLCM** GLCM, int flag CV_DEFAULT(CV_GLCM_ALL));
 *)
@@ -4379,8 +4340,7 @@ procedure cvReleaseGLCM(var GLCM: pCvGLCM; flag: Integer = CV_GLCM_ALL); cdecl;
   int descriptorOptimizationType
   CV_DEFAULT(CV_GLCMDESC_OPTIMIZATION_ALLOWDOUBLENEST));
 *)
-procedure cvCreateGLCMDescriptors(destGLCM: pCvGLCM;
-  descriptorOptimizationType: Integer = CV_GLCMDESC_OPTIMIZATION_ALLOWDOUBLENEST); cdecl;
+procedure cvCreateGLCMDescriptors(destGLCM: pCvGLCM; descriptorOptimizationType: Integer = CV_GLCMDESC_OPTIMIZATION_ALLOWDOUBLENEST); cdecl;
 (*
   CVAPI(double) cvGetGLCMDescriptor( CvGLCM* GLCM, int step, int descriptor );
 *)
@@ -4389,8 +4349,7 @@ function cvGetGLCMDescriptor(GLCM: pCvGLCM; step: Integer; descriptor: Integer):
   CVAPI(void) cvGetGLCMDescriptorStatistics( CvGLCM* GLCM, int descriptor,
   double* average, double* standardDeviation );
 *)
-procedure cvGetGLCMDescriptorStatistics(GLCM: pCvGLCM; descriptor: Integer; average: pdouble;
-  standardDeviation: pdouble); cdecl;
+procedure cvGetGLCMDescriptorStatistics(GLCM: pCvGLCM; descriptor: Integer; average: pdouble; standardDeviation: pdouble); cdecl;
 (*
   CVAPI(IplImage* ) cvCreateGLCMImage( CvGLCM* GLCM, int step );
 *)
@@ -4420,15 +4379,14 @@ type
     CVAPI(CvFaceTracker* ) cvInitFaceTracker(CvFaceTracker* pFaceTracking, const IplImage* imgGray,
     CvRect* pRects, int nRects);
   *)
-function cvInitFaceTracker(pFaceTracking: pCvFaceTracker; const imgGray: pIplImage; pRects: pCvRect; nRects: Integer)
-  : pCvFaceTracker; cdecl;
+function cvInitFaceTracker(pFaceTracking: pCvFaceTracker; const imgGray: pIplImage; pRects: pCvRect; nRects: Integer): pCvFaceTracker; cdecl;
 (*
   CVAPI(int) cvTrackFace( CvFaceTracker* pFaceTracker, IplImage* imgGray,
   CvRect* pRects, int nRects,
   CvPoint* ptRotate, double* dbAngleRotate);
 *)
-function cvTrackFace(pFaceTracker: pCvFaceTracker; imgGray: pIplImage; pRects: pCvRect; nRects: Integer;
-  ptRotate: pCvPoint; dbAngleRotate: pdouble): Integer; cdecl;
+function cvTrackFace(pFaceTracker: pCvFaceTracker; imgGray: pIplImage; pRects: pCvRect; nRects: Integer; ptRotate: pCvPoint; dbAngleRotate: pdouble)
+  : Integer; cdecl;
 (*
   CVAPI(void) cvReleaseFaceTracker(CvFaceTracker** ppFaceTracker);
 *)
@@ -4537,9 +4495,8 @@ Type
 
 {$EXTERNALSYM cv3dTrackerCalibrateCameras}
 
-function cv3dTrackerCalibrateCameras(num_cameras: Integer; camera_intrinsics: pCv3dTrackerCameraIntrinsics;
-  etalon_size: TCvSize; square_size: Single; var samples: pIplImage; camera_info: pCv3dTrackerCameraInfo)
-  : TCvBool; cdecl;
+function cv3dTrackerCalibrateCameras(num_cameras: Integer; camera_intrinsics: pCv3dTrackerCameraIntrinsics; etalon_size: TCvSize; square_size: Single;
+  var samples: pIplImage; camera_info: pCv3dTrackerCameraInfo): TCvBool; cdecl;
 
 (*
   CVAPI(int)  cv3dTrackerLocateObjects(int num_cameras, int num_objects,
@@ -4576,8 +4533,7 @@ type
     CV_LEE_ZOOM = 1,
     CV_LEE_NON = 2
     } CvLeeParameters; *)
-  TCvLeeParameters = (CV_LEE_INT = 0, CV_LEE_FLOAT = 1, CV_LEE_DOUBLE = 2, CV_LEE_AUTO = -1, CV_LEE_ERODE = 0,
-    CV_LEE_ZOOM = 1, CV_LEE_NON = 2);
+  TCvLeeParameters = (CV_LEE_INT = 0, CV_LEE_FLOAT = 1, CV_LEE_DOUBLE = 2, CV_LEE_AUTO = -1, CV_LEE_ERODE = 0, CV_LEE_ZOOM = 1, CV_LEE_NON = 2);
 
   // #define CV_NEXT_VORONOISITE2D( SITE ) ((SITE)->edge[0]->site[((SITE)->edge[0]->site[0] == (SITE))])
   // #define CV_PREV_VORONOISITE2D( SITE ) ((SITE)->edge[1]->site[((SITE)->edge[1]->site[0] == (SITE))])
@@ -4681,9 +4637,8 @@ type
     int contour_orientation CV_DEFAULT(-1),
     int attempt_number CV_DEFAULT(10));
   *)
-function cvVoronoiDiagramFromContour(ContourSeq: pCvSeq; var VoronoiDiagram: pCvVoronoiDiagram2D;
-  VoronoiStorage: pCvMemStorage; contour_type: TCvLeeParameters = CV_LEE_INT; contour_orientation: Integer = -1;
-  attempt_number: Integer = 10): Integer; cdecl;
+function cvVoronoiDiagramFromContour(ContourSeq: pCvSeq; var VoronoiDiagram: pCvVoronoiDiagram2D; VoronoiStorage: pCvMemStorage;
+  contour_type: TCvLeeParameters = CV_LEE_INT; contour_orientation: Integer = -1; attempt_number: Integer = 10): Integer; cdecl;
 (*
   Computes Voronoi Diagram for domains in given image
 *)
@@ -4695,9 +4650,8 @@ function cvVoronoiDiagramFromContour(ContourSeq: pCvSeq; var VoronoiDiagram: pCv
   CvLeeParameters regularization_method CV_DEFAULT(CV_LEE_NON),
   float approx_precision CV_DEFAULT(CV_LEE_AUTO));
 *)
-function cvVoronoiDiagramFromImage(pImage: pIplImage; var ContourSeq: pCvSeq; var VoronoiDiagram: pCvVoronoiDiagram2D;
-  VoronoiStorage: pCvMemStorage; regularization_method: TCvLeeParameters = CV_LEE_NON;
-  approx_precision: float = -1 { CV_LEE_AUTO } ): Integer; cdecl;
+function cvVoronoiDiagramFromImage(pImage: pIplImage; var ContourSeq: pCvSeq; var VoronoiDiagram: pCvVoronoiDiagram2D; VoronoiStorage: pCvMemStorage;
+  regularization_method: TCvLeeParameters = CV_LEE_NON; approx_precision: float = -1 { CV_LEE_AUTO } ): Integer; cdecl;
 (*
   Deallocates the storage
 *)
@@ -4751,8 +4705,8 @@ Type
   TcvInitPerspectiveTransformVertex = array [0 .. 3] of TCvPoint2D32f;
   TcvInitPerspectiveTransformMatrix = array [0 .. 2, 0 .. 2] of double;
 
-procedure cvInitPerspectiveTransform(size: TCvSize; const vertex: TcvInitPerspectiveTransformVertex;
-  matrix: TcvInitPerspectiveTransformMatrix; rectMap: pCvArr); cdecl;
+procedure cvInitPerspectiveTransform(size: TCvSize; const vertex: TcvInitPerspectiveTransformVertex; matrix: TcvInitPerspectiveTransformMatrix;
+  rectMap: pCvArr); cdecl;
 
 (*
   CVAPI(void) cvInitStereoRectification( CvStereoCamera* params,
@@ -4786,8 +4740,8 @@ Type
     int*  lengths1, int*  lengths2,
     int*  line_count );
   *)
-procedure cvMakeScanlines(const matrix: pCvMatrix3; img_size: TCvSize; scanlines1: PInteger; scanlines2: PInteger;
-  lengths1: PInteger; lengths2: PInteger; line_count: PInteger); cdecl;
+procedure cvMakeScanlines(const matrix: pCvMatrix3; img_size: TCvSize; scanlines1: PInteger; scanlines2: PInteger; lengths1: PInteger;
+  lengths2: PInteger; line_count: PInteger); cdecl;
 (*
   Grab pixel values from scanlines and stores them sequentially
   (some sort of perspective image transform)
@@ -4799,8 +4753,7 @@ procedure cvMakeScanlines(const matrix: pCvMatrix3; img_size: TCvSize; scanlines
   int*      dst_nums,
   int*      scanlines);
 *)
-procedure cvPreWarpImage(line_count: Integer; img: pIplImage; dst: puchar; dst_nums: PInteger;
-  scanlines: PInteger); cdecl;
+procedure cvPreWarpImage(line_count: Integer; img: pIplImage; dst: puchar; dst_nums: PInteger; scanlines: PInteger); cdecl;
 (*
   Approximate each grabbed scanline by a sequence of runs
   (lossy run-length compression)
@@ -4816,8 +4769,8 @@ procedure cvPreWarpImage(line_count: Integer; img: pIplImage; dst: puchar; dst_n
   int*   num_runs1,
   int*   num_runs2);
 *)
-procedure cvFindRuns(line_count: Integer; prewarp1: puchar; prewarp2: puchar; line_lengths1: PInteger;
-  line_lengths2: PInteger; runs1: PInteger; runs2: PInteger; num_runs1: PInteger; num_runs2: PInteger); cdecl;
+procedure cvFindRuns(line_count: Integer; prewarp1: puchar; prewarp2: puchar; line_lengths1: PInteger; line_lengths2: PInteger; runs1: PInteger;
+  runs2: PInteger; num_runs1: PInteger; num_runs2: PInteger); cdecl;
 (*
   Compares two sets of compressed scanlines
 *)
@@ -4830,8 +4783,8 @@ procedure cvFindRuns(line_count: Integer; prewarp1: puchar; prewarp2: puchar; li
   int* first_corr,
   int* second_corr);
 *)
-procedure cvDynamicCorrespondMulti(line_count: Integer; first: PInteger; first_runs: PInteger; second: PInteger;
-  second_runs: PInteger; first_corr: PInteger; second_corr: PInteger); cdecl;
+procedure cvDynamicCorrespondMulti(line_count: Integer; first: PInteger; first_runs: PInteger; second: PInteger; second_runs: PInteger;
+  first_corr: PInteger; second_corr: PInteger); cdecl;
 (*
   Finds scanline ending coordinates for some intermediate "virtual" camera position
 *)
@@ -4843,8 +4796,8 @@ procedure cvDynamicCorrespondMulti(line_count: Integer; first: PInteger; first_r
   int   line_count,
   float alpha);
 *)
-procedure cvMakeAlphaScanlines(scanlines1: PInteger; scanlines2: PInteger; scanlinesA: PInteger; lengths: PInteger;
-  line_count: Integer; alpha: float); cdecl;
+procedure cvMakeAlphaScanlines(scanlines1: PInteger; scanlines2: PInteger; scanlinesA: PInteger; lengths: PInteger; line_count: Integer;
+  alpha: float); cdecl;
 (*
   Blends data of the left and right image scanlines to get
   pixel values of "virtual" image scanlines
@@ -4865,9 +4818,9 @@ procedure cvMakeAlphaScanlines(scanlines1: PInteger; scanlines2: PInteger; scanl
   int*   first_corr,
   int*   second_corr);
 *)
-procedure cvMorphEpilinesMulti(line_count: Integer; first_pix: puchar; first_num: PInteger; second_pix: puchar;
-  second_num: PInteger; dst_pix: puchar; dst_num: PInteger; alpha: float; first: PInteger; first_runs: PInteger;
-  second: PInteger; second_runs: PInteger; first_corr: PInteger; second_corr: PInteger); cdecl;
+procedure cvMorphEpilinesMulti(line_count: Integer; first_pix: puchar; first_num: PInteger; second_pix: puchar; second_num: PInteger; dst_pix: puchar;
+  dst_num: PInteger; alpha: float; first: PInteger; first_runs: PInteger; second: PInteger; second_runs: PInteger; first_corr: PInteger;
+  second_corr: PInteger); cdecl;
 (*
   Does reverse warping of the morphing result to make
   it fill the destination image rectangle
@@ -4879,8 +4832,7 @@ procedure cvMorphEpilinesMulti(line_count: Integer; first_pix: puchar; first_num
   IplImage* img,
   int*      scanlines);
 *)
-procedure cvPostWarpImage(line_count: Integer; src: puchar; src_nums: PInteger; img: pIplImage;
-  scanlines: PInteger); cdecl;
+procedure cvPostWarpImage(line_count: Integer; src: puchar; src_nums: PInteger; img: pIplImage; scanlines: PInteger); cdecl;
 (*
   Deletes Moire (missed pixels that appear due to discretization)
 *)
@@ -4930,8 +4882,7 @@ Type
     int measure_params,
     int sample_count );
   *)
-function cvCreateConDensation(dynam_params: Integer; measure_params: Integer; sample_count: Integer)
-  : pCvConDensation; cdecl;
+function cvCreateConDensation(dynam_params: Integer; measure_params: Integer; sample_count: Integer): pCvConDensation; cdecl;
 (*
   Releases ConDensation filter state
 *)
@@ -5069,8 +5020,8 @@ function cvCreateKDTree(desc: pCvMat): pCvFeatureTree; cdecl;
   const double rho CV_DEFAULT(.7),
   const double tau CV_DEFAULT(.1) );
 *)
-function cvCreateSpillTree(const raw_data: pCvMat; const naive: Integer = 50; const rho: double = 0.7;
-  const tau: double = 0.1): pCvFeatureTree; cdecl;
+function cvCreateSpillTree(const raw_data: pCvMat; const naive: Integer = 50; const rho: double = 0.7; const tau: double = 0.1)
+  : pCvFeatureTree; cdecl;
 (*
   Release feature tree
 *)
@@ -5086,8 +5037,7 @@ procedure cvReleaseFeatureTree(tr: pCvFeatureTree); cdecl;
   CVAPI(void) cvFindFeatures(struct CvFeatureTree* tr, const CvMat* query_points,
   CvMat* indices, CvMat* dist, int k, int emax CV_DEFAULT(20));
 *)
-procedure cvFindFeatures(tr: pCvFeatureTree; const query_points: pCvMat; indices: pCvMat; dist: pCvMat; K: Integer;
-  emax: Integer = 20); cdecl;
+procedure cvFindFeatures(tr: pCvFeatureTree; const query_points: pCvMat; indices: pCvMat; dist: pCvMat; K: Integer; emax: Integer = 20); cdecl;
 (*
   Search feature tree for all points that are inlier to given rect region.
   Only implemented for kd trees
@@ -5097,8 +5047,7 @@ procedure cvFindFeatures(tr: pCvFeatureTree; const query_points: pCvMat; indices
   CvMat* bounds_min, CvMat* bounds_max,
   CvMat* out_indices);
 *)
-function cvFindFeaturesBoxed(tr: pCvFeatureTree; bounds_min: pCvMat; bounds_max: pCvMat; out_indices: pCvMat)
-  : Integer; cdecl;
+function cvFindFeaturesBoxed(tr: pCvFeatureTree; bounds_min: pCvMat; bounds_max: pCvMat; out_indices: pCvMat): Integer; cdecl;
 (*
   Construct a Locality Sensitive Hash (LSH) table, for indexing d-dimensional vectors of
   given type. Vectors will be hashed L times with k-dimensional p-stable (p=2) functions.
@@ -5109,8 +5058,8 @@ function cvFindFeaturesBoxed(tr: pCvFeatureTree; bounds_min: pCvMat; bounds_max:
   int type CV_DEFAULT(CV_64FC1), double r CV_DEFAULT(4),
   int64 seed CV_DEFAULT(-1));
 *)
-function cvCreateLSH(ops: pCvLSHOperations; d: Integer; L: Integer { =10 }; K: Integer { =10 };
-  type_: Integer { =CV_64FC1 }; r: double { =4 }; seed: int64 { =-1 } ): pCvLSH; cdecl;
+function cvCreateLSH(ops: pCvLSHOperations; d: Integer; L: Integer { =10 }; K: Integer { =10 }; type_: Integer { =CV_64FC1 }; r: double { =4 };
+  seed: int64 { =-1 } ): pCvLSH; cdecl;
 (*
   Construct in-memory LSH table, with n bins.
 *)
@@ -5119,8 +5068,8 @@ function cvCreateLSH(ops: pCvLSHOperations; d: Integer; L: Integer { =10 }; K: I
   int type CV_DEFAULT(CV_64FC1), double r CV_DEFAULT(4),
   int64 seed CV_DEFAULT(-1));
 *)
-function cvCreateMemoryLSH(d: Integer; n: Integer; L: Integer { =10 }; K: Integer { =10 }; type_: Integer { =CV_64FC1 };
-  r: double { =4 }; seed: int64 { =-1 } ): pCvLSH; cdecl;
+function cvCreateMemoryLSH(d: Integer; n: Integer; L: Integer { =10 }; K: Integer { =10 }; type_: Integer { =CV_64FC1 }; r: double { =4 };
+  seed: int64 { =-1 } ): pCvLSH; cdecl;
 (*
   Free the given LSH structure.
 *)
@@ -5157,8 +5106,7 @@ procedure cvLSHRemove(lsh: pCvLSH; const indices: pCvMat); cdecl;
   CVAPI(void) cvLSHQuery(struct CvLSH* lsh, const CvMat* query_points,
   CvMat* indices, CvMat* dist, int k, int emax);
 *)
-procedure cvLSHQuery(lsh: pCvLSH; const query_points: pCvMat; indices: pCvMat; dist: pCvMat; K: Integer;
-  emax: Integer); cdecl;
+procedure cvLSHQuery(lsh: pCvLSH; const query_points: pCvMat; indices: pCvMat; dist: pCvMat; K: Integer; emax: Integer); cdecl;
 (*
   Kolmogorov-Zabin stereo-correspondence algorithm (a.k.a. KZ1)
 *)
@@ -5190,8 +5138,7 @@ procedure cvLSHQuery(lsh: pCvLSH; const query_points: pCvMat; indices: pCvMat; d
   CVAPI(void)  cvCalcOpticalFlowLK( const CvArr* prev, const CvArr* curr,
   CvSize win_size, CvArr* velx, CvArr* vely );
 *)
-procedure cvCalcOpticalFlowLK(const prev: pCvArr; const curr: pCvArr; win_size: TCvSize; velx: pCvArr;
-  vely: pCvArr); cdecl;
+procedure cvCalcOpticalFlowLK(const prev: pCvArr; const curr: pCvArr; win_size: TCvSize; velx: pCvArr; vely: pCvArr); cdecl;
 (*
   Calculates optical flow for 2 images using block matching algorithm
 *)
@@ -5201,8 +5148,8 @@ procedure cvCalcOpticalFlowLK(const prev: pCvArr; const curr: pCvArr; win_size: 
   CvSize max_range, int use_previous,
   CvArr* velx, CvArr* vely );
 *)
-procedure cvCalcOpticalFlowBM(const prev: pCvArr; const curr: pCvArr; block_size: TCvSize; shift_size: TCvSize;
-  max_range: TCvSize; use_previous: Integer; velx: pCvArr; vely: pCvArr); cdecl;
+procedure cvCalcOpticalFlowBM(const prev: pCvArr; const curr: pCvArr; block_size: TCvSize; shift_size: TCvSize; max_range: TCvSize;
+  use_previous: Integer; velx: pCvArr; vely: pCvArr); cdecl;
 (*
   Calculates Optical flow for 2 images using Horn & Schunck algorithm
 *)
@@ -5211,8 +5158,8 @@ procedure cvCalcOpticalFlowBM(const prev: pCvArr; const curr: pCvArr; block_size
   int use_previous, CvArr* velx, CvArr* vely,
   double lambda, CvTermCriteria criteria );
 *)
-procedure cvCalcOpticalFlowHS(const prev: pCvArr; const curr: pCvArr; use_previous: Integer; velx: pCvArr; vely: pCvArr;
-  lambda: double; criteria: TCvTermCriteria); cdecl;
+procedure cvCalcOpticalFlowHS(const prev: pCvArr; const curr: pCvArr; use_previous: Integer; velx: pCvArr; vely: pCvArr; lambda: double;
+  criteria: TCvTermCriteria); cdecl;
 (*
   ***************************************************************************************\
   *                           Background/foreground segmentation                           *
@@ -5288,38 +5235,7 @@ procedure cvRefineForegroundMaskBySegm(segments: pCvSeq; bg_model: pCvBGStatMode
   IplImage*  change_mask );
 *)
 function cvChangeDetection(prev_frame: pIplImage; curr_frame: pIplImage; change_mask: pIplImage): Integer; cdecl;
-(*
 
-  Interface of ACM MM2003 algorithm
-
-*)
-(*
-  Default parameters of foreground detection algorithm:
-*)
-// #define  CV_BGFG_FGD_LC              128
-// #define  CV_BGFG_FGD_N1C             15
-// #define  CV_BGFG_FGD_N2C             25
-// #define  CV_BGFG_FGD_LCC             64
-// #define  CV_BGFG_FGD_N1CC            25
-// #define  CV_BGFG_FGD_N2CC            40
-(*
-  Background reference image update parameter:
-*)
-// #define  CV_BGFG_FGD_ALPHA_1         0.1f
-(*
-  stat model update parameter
-  * 0.002f ~ 1K frame(~45sec), 0.005 ~ 18sec (if 25fps and absolutely static BG)
-
-*)
-// #define  CV_BGFG_FGD_ALPHA_2         0.005f
-(*
-  start value for alpha parameter (to fast initiate statistic model)
-*)
-// #define  CV_BGFG_FGD_ALPHA_3         0.1f
-// #define  CV_BGFG_FGD_DELTA           2
-// #define  CV_BGFG_FGD_T               0.9f
-// #define  CV_BGFG_FGD_MINAREA         15.f
-// #define  CV_BGFG_FGD_BG_UPDATE_TRESH 0.5f
 (*
   See the above-referenced Li/Huang/Gu/Tian paper
   * for a full description of these background-model
@@ -5466,13 +5382,6 @@ implementation
 
 uses ocv.lib;
 
-function cvCreateStereoGCState; external legacy_lib;
-procedure cvFindStereoCorrespondenceGC; external legacy_lib;
-procedure cvReleaseStereoGCState; external legacy_lib;
-procedure cvSnakeImage; external legacy_lib;
-function cvCreateSubdiv2D; external legacy_lib;
-procedure cvInitSubdivDelaunay2D; external legacy_lib;
-
 function cvSubdiv2DEdgeOrg(edge: TCvSubdiv2DEdge): pCvSubdiv2DPoint; inline;
 Var
   e: pCvQuadEdge2D;
@@ -5482,7 +5391,6 @@ begin
   // return (CvSubdiv2DPoint*)e->pt[edge & 3];
   result := pCvSubdiv2DPoint(e^.pt[edge and 3]);
 end;
-
 function cvSubdiv2DEdgeDst(edge: TCvSubdiv2DEdge): pCvSubdiv2DPoint;
 Var
   e: pCvQuadEdge2D;
@@ -5492,8 +5400,6 @@ begin
   // return (CvSubdiv2DPoint*)e->pt[(edge + 2) & 3];
   result := pCvSubdiv2DPoint(e^.pt[(edge + 2) and 3]);
 end;
-
-function cvSubdiv2DLocate; external legacy_lib;
 
 function cvSubdiv2DGetEdge(edge: TCvSubdiv2DEdge; _type: TCvNextEdgeType): TCvSubdiv2DEdge;
 Var
@@ -5513,6 +5419,13 @@ begin
   result := (edge and (not 3)) + ((edge + rotate) and 3);
 end;
 
+function cvCreateStereoGCState; external legacy_lib;
+procedure cvFindStereoCorrespondenceGC; external legacy_lib;
+procedure cvReleaseStereoGCState; external legacy_lib;
+procedure cvSnakeImage; external legacy_lib;
+function cvCreateSubdiv2D; external legacy_lib;
+procedure cvInitSubdivDelaunay2D; external legacy_lib;
+function cvSubdiv2DLocate; external legacy_lib;
 procedure cvCalcSubdivVoronoi2D; external legacy_lib;
 function cvSubdivDelaunay2DInsert; external legacy_lib;
 function cvCreateGaussianBGModel; external legacy_lib;
