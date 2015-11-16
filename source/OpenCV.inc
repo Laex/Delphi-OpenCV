@@ -1,8 +1,8 @@
 {$IFNDEF OPENCV_INC}
 {$DEFINE OPENCV_INC}
 
-{.$DEFINE DelphiOCVVersion_29}
-{$DEFINE DelphiOCVVersion_30}
+{$DEFINE DelphiOCVVersion_29}
+{.$DEFINE DelphiOCVVersion_30}
 
 {$IF DEFINED(DelphiOCVVersion_29) and DEFINED(DelphiOCVVersion_30)}
         Error!!

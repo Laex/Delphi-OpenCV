@@ -696,7 +696,7 @@ BEGIN
     A := ORD (Source [I]);
     IF A < $80 THEN BEGIN                                               // Range $0000..$007F
       INC (Len);
-      Result [Len] := Source [I];
+      Result [Len] := AnsiChar(Source [I]);
       INC (I);
       END
     ELSE BEGIN                                                          // Determine U, Inc I
@@ -726,7 +726,7 @@ BEGIN
           BREAK;
           END;
       INC (Len);
-      Result [Len] := Ch;
+      Result [Len] := AnsiChar(Ch);
       END;
     END;
   SetLength (Result, Len);

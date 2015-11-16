@@ -42,7 +42,6 @@ uses
 {$ENDIF}
   ocv.core.types_c,
   ocv.highgui_c,
-  ocv.Classes,
   ocv.comp.Types;
 
 type

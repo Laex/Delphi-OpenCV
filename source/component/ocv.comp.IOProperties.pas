@@ -21,8 +21,9 @@
 // rights and limitations under the License.
 // *******************************************************************
 
-{$IFNDEF CLR}
 {$I OpenCV.inc}
+
+{$IFNDEF CLR}
 unit ocv.comp.IOProperties;
 {$ENDIF}
 
