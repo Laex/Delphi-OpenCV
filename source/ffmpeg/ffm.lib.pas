@@ -5,11 +5,11 @@ unit ffm.lib;
 interface
 
 const
-  avformat_dll = 'avformat-56.dll';
-  avcodec_dll = 'avcodec-56.dll';
-  avutil_dll = 'avutil-54.dll';
-  swscale_dll = 'swscale-3.dll';
-  avfilter_dll = 'avfilter-5.dll';
+  avformat_dll = 'avformat-57.dll';
+  avcodec_dll = 'avcodec-57.dll';
+  avutil_dll = 'avutil-55.dll';
+  swscale_dll = 'swscale-4.dll';
+  avfilter_dll = 'avfilter-6.dll';
   avio_dll = avformat_dll;
   samplefmt_dll = avutil_dll;
   channel_layout_dll=avutil_dll;
