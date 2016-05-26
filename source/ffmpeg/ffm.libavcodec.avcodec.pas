@@ -58,34 +58,34 @@ Const
 {$ENDIF}
   FF_RC_STRATEGY_XVID = 1;
 
-  FF_PRED_LEFT = 0;
-  FF_PRED_PLANE = 1;
+  FF_PRED_LEFT   = 0;
+  FF_PRED_PLANE  = 1;
   FF_PRED_MEDIAN = 2;
 
-  FF_CMP_SAD = 0;
-  FF_CMP_SSE = 1;
-  FF_CMP_SATD = 2;
-  FF_CMP_DCT = 3;
-  FF_CMP_PSNR = 4;
-  FF_CMP_BIT = 5;
-  FF_CMP_RD = 6;
-  FF_CMP_ZERO = 7;
-  FF_CMP_VSAD = 8;
-  FF_CMP_VSSE = 9;
-  FF_CMP_NSSE = 10;
-  FF_CMP_W53 = 11;
-  FF_CMP_W97 = 12;
+  FF_CMP_SAD    = 0;
+  FF_CMP_SSE    = 1;
+  FF_CMP_SATD   = 2;
+  FF_CMP_DCT    = 3;
+  FF_CMP_PSNR   = 4;
+  FF_CMP_BIT    = 5;
+  FF_CMP_RD     = 6;
+  FF_CMP_ZERO   = 7;
+  FF_CMP_VSAD   = 8;
+  FF_CMP_VSSE   = 9;
+  FF_CMP_NSSE   = 10;
+  FF_CMP_W53    = 11;
+  FF_CMP_W97    = 12;
   FF_CMP_DCTMAX = 13;
   FF_CMP_DCT264 = 14;
   FF_CMP_CHROMA = 256;
 
-  FF_DTG_AFD_SAME = 8;
-  FF_DTG_AFD_4_3 = 9;
-  FF_DTG_AFD_16_9 = 10;
-  FF_DTG_AFD_14_9 = 11;
-  FF_DTG_AFD_4_3_SP_14_9 = 13;
+  FF_DTG_AFD_SAME         = 8;
+  FF_DTG_AFD_4_3          = 9;
+  FF_DTG_AFD_16_9         = 10;
+  FF_DTG_AFD_14_9         = 11;
+  FF_DTG_AFD_4_3_SP_14_9  = 13;
   FF_DTG_AFD_16_9_SP_14_9 = 14;
-  FF_DTG_AFD_SP_4_3 = 15;
+  FF_DTG_AFD_SP_4_3       = 15;
 
   FF_DEFAULT_QUANT_BIAS = 999999;
 
@@ -103,10 +103,10 @@ Const
   FF_MB_DECISION_RD = 2;
   /// < rate distortion
 
-  FF_CODER_TYPE_VLC = 0;
-  FF_CODER_TYPE_AC = 1;
-  FF_CODER_TYPE_RAW = 2;
-  FF_CODER_TYPE_RLE = 3;
+  FF_CODER_TYPE_VLC     = 0;
+  FF_CODER_TYPE_AC      = 1;
+  FF_CODER_TYPE_RAW     = 2;
+  FF_CODER_TYPE_RLE     = 3;
   FF_CODER_TYPE_DEFLATE = 4;
 
   FF_BUG_AUTODETECT = 1;
@@ -115,21 +115,21 @@ Const
   FF_BUG_OLD_MSMPEG4 = 2;
 {$ENDIF}
   FF_BUG_XVID_ILACE = 4;
-  FF_BUG_UMP4 = 8;
+  FF_BUG_UMP4       = 8;
   FF_BUG_NO_PADDING = 16;
-  FF_BUG_AMV = 32;
+  FF_BUG_AMV        = 32;
 {$IFDEF FF_API_AC_VLC}
   F_BUG_AC_VLC = 0;
   /// < Will be removed, libavcodec can now handle these non-compliant files by default.
 {$ENDIF}
-  FF_BUG_QPEL_CHROMA = 64;
-  FF_BUG_STD_QPEL = 128;
-  FF_BUG_QPEL_CHROMA2 = 256;
+  FF_BUG_QPEL_CHROMA      = 64;
+  FF_BUG_STD_QPEL         = 128;
+  FF_BUG_QPEL_CHROMA2     = 256;
   FF_BUG_DIRECT_BLOCKSIZE = 512;
-  FF_BUG_EDGE = 1024;
-  FF_BUG_HPEL_CHROMA = 2048;
-  FF_BUG_DC_CLIP = 4096;
-  FF_BUG_MS = 8192;
+  FF_BUG_EDGE             = 1024;
+  FF_BUG_HPEL_CHROMA      = 2048;
+  FF_BUG_DC_CLIP          = 4096;
+  FF_BUG_MS               = 8192;
   /// < Work around various bugs in Microsoft's broken decoders.
   FF_BUG_TRUNCATED = 16384;
 
@@ -137,20 +137,20 @@ Const
   /// < Strictly conform to an older more strict version of the spec or reference software.
   FF_COMPLIANCE_STRICT = 1;
   /// < Strictly conform to all the things in the spec no matter what consequences.
-  FF_COMPLIANCE_NORMAL = 0;
+  FF_COMPLIANCE_NORMAL     = 0;
   FF_COMPLIANCE_UNOFFICIAL = -1;
   /// < Allow unofficial extensions
   FF_COMPLIANCE_EXPERIMENTAL = -2;
   /// < Allow nonstandardized experimental things.
 
   FF_EC_GUESS_MVS = 1;
-  FF_EC_DEBLOCK = 2;
+  FF_EC_DEBLOCK   = 2;
 
   FF_DEBUG_PICT_INFO = 1;
-  FF_DEBUG_RC = 2;
+  FF_DEBUG_RC        = 2;
   FF_DEBUG_BITSTREAM = 4;
-  FF_DEBUG_MB_TYPE = 8;
-  FF_DEBUG_QP = 16;
+  FF_DEBUG_MB_TYPE   = 8;
+  FF_DEBUG_QP        = 16;
 {$IFDEF FF_API_DEBUG_MV}
   (*
     * @deprecated this option does nothing
@@ -158,12 +158,12 @@ Const
   FF_DEBUG_MV = 32;
 {$ENDIF}
   FF_DEBUG_DCT_COEFF = $00000040;
-  FF_DEBUG_SKIP = $00000080;
+  FF_DEBUG_SKIP      = $00000080;
   FF_DEBUG_STARTCODE = $00000100;
-  FF_DEBUG_PTS = $00000200;
-  FF_DEBUG_ER = $00000400;
-  FF_DEBUG_MMCO = $00000800;
-  FF_DEBUG_BUGS = $00001000;
+  FF_DEBUG_PTS       = $00000200;
+  FF_DEBUG_ER        = $00000400;
+  FF_DEBUG_MMCO      = $00000800;
+  FF_DEBUG_BUGS      = $00001000;
 {$IFDEF FF_API_DEBUG_MV}
   FF_DEBUG_VIS_QP = $00002000;
   /// < only access through AVOptions from outside libavcodec
@@ -174,11 +174,11 @@ Const
   FF_DEBUG_THREADS = $00010000;
 
 {$IFDEF FF_API_DEBUG_MV}
-  FF_DEBUG_VIS_MV_P_FOR = $00000001; // visualize forward predicted MVs of P frames
-  FF_DEBUG_VIS_MV_B_FOR = $00000002; // visualize forward predicted MVs of B frames
+  FF_DEBUG_VIS_MV_P_FOR  = $00000001; // visualize forward predicted MVs of P frames
+  FF_DEBUG_VIS_MV_B_FOR  = $00000002; // visualize forward predicted MVs of B frames
   FF_DEBUG_VIS_MV_B_BACK = $00000004; // visualize backward predicted MVs of B frames
 {$ENDIF}
-  AV_EF_CRCCHECK = (1 shl 0);
+  AV_EF_CRCCHECK  = (1 shl 0);
   AV_EF_BITSTREAM = (1 shl 1);
   /// < detect bitstream specification deviations
   AV_EF_BUFFER = (1 shl 2);
@@ -193,28 +193,28 @@ Const
   AV_EF_AGGRESSIVE = (1 shl 18);
   /// < consider things that a sane encoder should not do as an error
 
-  FF_DCT_AUTO = 0;
+  FF_DCT_AUTO    = 0;
   FF_DCT_FASTINT = 1;
-  FF_DCT_INT = 2;
-  FF_DCT_MMX = 3;
+  FF_DCT_INT     = 2;
+  FF_DCT_MMX     = 3;
   FF_DCT_ALTIVEC = 5;
-  FF_DCT_FAAN = 6;
+  FF_DCT_FAAN    = 6;
 
-  FF_IDCT_AUTO = 0;
-  FF_IDCT_INT = 1;
-  FF_IDCT_SIMPLE = 2;
-  FF_IDCT_SIMPLEMMX = 3;
-  FF_IDCT_ARM = 7;
-  FF_IDCT_ALTIVEC = 8;
-  FF_IDCT_SH4 = 9;
-  FF_IDCT_SIMPLEARM = 10;
-  FF_IDCT_IPP = 13;
-  FF_IDCT_XVIDMMX = 14;
+  FF_IDCT_AUTO          = 0;
+  FF_IDCT_INT           = 1;
+  FF_IDCT_SIMPLE        = 2;
+  FF_IDCT_SIMPLEMMX     = 3;
+  FF_IDCT_ARM           = 7;
+  FF_IDCT_ALTIVEC       = 8;
+  FF_IDCT_SH4           = 9;
+  FF_IDCT_SIMPLEARM     = 10;
+  FF_IDCT_IPP           = 13;
+  FF_IDCT_XVIDMMX       = 14;
   FF_IDCT_SIMPLEARMV5TE = 16;
-  FF_IDCT_SIMPLEARMV6 = 17;
-  FF_IDCT_SIMPLEVIS = 18;
-  FF_IDCT_FAAN = 20;
-  FF_IDCT_SIMPLENEON = 22;
+  FF_IDCT_SIMPLEARMV6   = 17;
+  FF_IDCT_SIMPLEVIS     = 18;
+  FF_IDCT_FAAN          = 20;
+  FF_IDCT_SIMPLENEON    = 22;
 {$IFDEF FF_API_ARCH_ALPHA}
   FF_IDCT_SIMPLEALPHA = 23;
 {$ENDIF}
@@ -223,77 +223,77 @@ Const
   FF_THREAD_SLICE = 2;
   /// < Decode more than one part of a single frame at once
 
-  FF_PROFILE_UNKNOWN = -99;
+  FF_PROFILE_UNKNOWN  = -99;
   FF_PROFILE_RESERVED = -100;
   //
-  FF_PROFILE_AAC_MAIN = 0;
-  FF_PROFILE_AAC_LOW = 1;
-  FF_PROFILE_AAC_SSR = 2;
-  FF_PROFILE_AAC_LTP = 3;
-  FF_PROFILE_AAC_HE = 4;
-  FF_PROFILE_AAC_HE_V2 = 28;
-  FF_PROFILE_AAC_LD = 22;
-  FF_PROFILE_AAC_ELD = 38;
+  FF_PROFILE_AAC_MAIN      = 0;
+  FF_PROFILE_AAC_LOW       = 1;
+  FF_PROFILE_AAC_SSR       = 2;
+  FF_PROFILE_AAC_LTP       = 3;
+  FF_PROFILE_AAC_HE        = 4;
+  FF_PROFILE_AAC_HE_V2     = 28;
+  FF_PROFILE_AAC_LD        = 22;
+  FF_PROFILE_AAC_ELD       = 38;
   FF_PROFILE_MPEG2_AAC_LOW = 128;
-  FF_PROFILE_MPEG2_AAC_HE = 131;
+  FF_PROFILE_MPEG2_AAC_HE  = 131;
   //
-  FF_PROFILE_DTS = 20;
-  FF_PROFILE_DTS_ES = 30;
-  FF_PROFILE_DTS_96_24 = 40;
+  FF_PROFILE_DTS        = 20;
+  FF_PROFILE_DTS_ES     = 30;
+  FF_PROFILE_DTS_96_24  = 40;
   FF_PROFILE_DTS_HD_HRA = 50;
-  FF_PROFILE_DTS_HD_MA = 60;
+  FF_PROFILE_DTS_HD_MA  = 60;
   //
-  FF_PROFILE_MPEG2_422 = 0;
-  FF_PROFILE_MPEG2_HIGH = 1;
-  FF_PROFILE_MPEG2_SS = 2;
+  FF_PROFILE_MPEG2_422          = 0;
+  FF_PROFILE_MPEG2_HIGH         = 1;
+  FF_PROFILE_MPEG2_SS           = 2;
   FF_PROFILE_MPEG2_SNR_SCALABLE = 3;
-  FF_PROFILE_MPEG2_MAIN = 4;
-  FF_PROFILE_MPEG2_SIMPLE = 5;
+  FF_PROFILE_MPEG2_MAIN         = 4;
+  FF_PROFILE_MPEG2_SIMPLE       = 5;
   //
   FF_PROFILE_H264_CONSTRAINED = (1 shl 9); // 8+1; constraint_set1_flag
-  FF_PROFILE_H264_INTRA = (1 shl 11); // 8+3; constraint_set3_flag
+  FF_PROFILE_H264_INTRA       = (1 shl 11); // 8+3; constraint_set3_flag
   //
-  FF_PROFILE_H264_BASELINE = 66;
+  FF_PROFILE_H264_BASELINE             = 66;
   FF_PROFILE_H264_CONSTRAINED_BASELINE = (66 or FF_PROFILE_H264_CONSTRAINED);
-  FF_PROFILE_H264_MAIN = 77;
-  FF_PROFILE_H264_EXTENDED = 88;
-  FF_PROFILE_H264_HIGH = 100;
-  FF_PROFILE_H264_HIGH_10 = 110;
-  FF_PROFILE_H264_HIGH_10_INTRA = (110 or FF_PROFILE_H264_INTRA);
-  FF_PROFILE_H264_HIGH_422 = 122;
-  FF_PROFILE_H264_HIGH_422_INTRA = (122 or FF_PROFILE_H264_INTRA);
-  FF_PROFILE_H264_HIGH_444 = 144;
-  FF_PROFILE_H264_HIGH_444_PREDICTIVE = 244;
-  FF_PROFILE_H264_HIGH_444_INTRA = (244 or FF_PROFILE_H264_INTRA);
-  FF_PROFILE_H264_CAVLC_444 = 44;
+  FF_PROFILE_H264_MAIN                 = 77;
+  FF_PROFILE_H264_EXTENDED             = 88;
+  FF_PROFILE_H264_HIGH                 = 100;
+  FF_PROFILE_H264_HIGH_10              = 110;
+  FF_PROFILE_H264_HIGH_10_INTRA        = (110 or FF_PROFILE_H264_INTRA);
+  FF_PROFILE_H264_HIGH_422             = 122;
+  FF_PROFILE_H264_HIGH_422_INTRA       = (122 or FF_PROFILE_H264_INTRA);
+  FF_PROFILE_H264_HIGH_444             = 144;
+  FF_PROFILE_H264_HIGH_444_PREDICTIVE  = 244;
+  FF_PROFILE_H264_HIGH_444_INTRA       = (244 or FF_PROFILE_H264_INTRA);
+  FF_PROFILE_H264_CAVLC_444            = 44;
   //
-  FF_PROFILE_VC1_SIMPLE = 0;
-  FF_PROFILE_VC1_MAIN = 1;
-  FF_PROFILE_VC1_COMPLEX = 2;
+  FF_PROFILE_VC1_SIMPLE   = 0;
+  FF_PROFILE_VC1_MAIN     = 1;
+  FF_PROFILE_VC1_COMPLEX  = 2;
   FF_PROFILE_VC1_ADVANCED = 3;
   //
-  FF_PROFILE_MPEG4_SIMPLE = 0;
-  FF_PROFILE_MPEG4_SIMPLE_SCALABLE = 1;
-  FF_PROFILE_MPEG4_CORE = 2;
-  FF_PROFILE_MPEG4_MAIN = 3;
-  FF_PROFILE_MPEG4_N_BIT = 4;
-  FF_PROFILE_MPEG4_SCALABLE_TEXTURE = 5;
-  FF_PROFILE_MPEG4_SIMPLE_FACE_ANIMATION = 6;
-  FF_PROFILE_MPEG4_BASIC_ANIMATED_TEXTURE = 7;
-  FF_PROFILE_MPEG4_HYBRID = 8;
-  FF_PROFILE_MPEG4_ADVANCED_REAL_TIME = 9;
-  FF_PROFILE_MPEG4_CORE_SCALABLE = 10;
-  FF_PROFILE_MPEG4_ADVANCED_CODING = 11;
-  FF_PROFILE_MPEG4_ADVANCED_CORE = 12;
+  FF_PROFILE_MPEG4_SIMPLE                    = 0;
+  FF_PROFILE_MPEG4_SIMPLE_SCALABLE           = 1;
+  FF_PROFILE_MPEG4_CORE                      = 2;
+  FF_PROFILE_MPEG4_MAIN                      = 3;
+  FF_PROFILE_MPEG4_N_BIT                     = 4;
+  FF_PROFILE_MPEG4_SCALABLE_TEXTURE          = 5;
+  FF_PROFILE_MPEG4_SIMPLE_FACE_ANIMATION     = 6;
+  FF_PROFILE_MPEG4_BASIC_ANIMATED_TEXTURE    = 7;
+  FF_PROFILE_MPEG4_HYBRID                    = 8;
+  FF_PROFILE_MPEG4_ADVANCED_REAL_TIME        = 9;
+  FF_PROFILE_MPEG4_CORE_SCALABLE             = 10;
+  FF_PROFILE_MPEG4_ADVANCED_CODING           = 11;
+  FF_PROFILE_MPEG4_ADVANCED_CORE             = 12;
   FF_PROFILE_MPEG4_ADVANCED_SCALABLE_TEXTURE = 13;
-  FF_PROFILE_MPEG4_SIMPLE_STUDIO = 14;
-  FF_PROFILE_MPEG4_ADVANCED_SIMPLE = 15;
+  FF_PROFILE_MPEG4_SIMPLE_STUDIO             = 14;
+  FF_PROFILE_MPEG4_ADVANCED_SIMPLE           = 15;
   //
-  FF_PROFILE_JPEG2000_CSTREAM_RESTRICTION_0 = 0;
-  FF_PROFILE_JPEG2000_CSTREAM_RESTRICTION_1 = 1;
+  FF_PROFILE_JPEG2000_CSTREAM_RESTRICTION_0  = 0;
+  FF_PROFILE_JPEG2000_CSTREAM_RESTRICTION_1  = 1;
   FF_PROFILE_JPEG2000_CSTREAM_NO_RESTRICTION = 2;
-  FF_PROFILE_JPEG2000_DCINEMA_2K = 3;
-  FF_PROFILE_JPEG2000_DCINEMA_4K = 4;
+  FF_PROFILE_JPEG2000_DCINEMA_2K             = 3;
+  FF_PROFILE_JPEG2000_DCINEMA_4K             = 4;
 
   FF_LEVEL_UNKNOWN = -99;
 
@@ -305,18 +305,18 @@ Const
   /// < the AVPacket data needs to be recoded to UTF-8 before being fed to the decoder, requires iconv
 
 {$IFNDEF FF_API_DEBUG_MV}
-  FF_DEBUG_VIS_MV_P_FOR = $00000001; // visualize forward predicted MVs of P frames
-  FF_DEBUG_VIS_MV_B_FOR = $00000002; // visualize forward predicted MVs of B frames
+  FF_DEBUG_VIS_MV_P_FOR  = $00000001; // visualize forward predicted MVs of P frames
+  FF_DEBUG_VIS_MV_B_FOR  = $00000002; // visualize forward predicted MVs of B frames
   FF_DEBUG_VIS_MV_B_BACK = $00000004; // visualize backward predicted MVs of B frames
 {$ENDIF}
   //
 
-  AV_PARSER_PTS_NB = 4;
+  AV_PARSER_PTS_NB            = 4;
   PARSER_FLAG_COMPLETE_FRAMES = $0001;
-  PARSER_FLAG_ONCE = $0002;
+  PARSER_FLAG_ONCE            = $0002;
   // Set if the parser has a valid file offset
   PARSER_FLAG_FETCHED_OFFSET = $0004;
-  PARSER_FLAG_USE_CODEC_TS = $1000;
+  PARSER_FLAG_USE_CODEC_TS   = $1000;
 
 Type
 
@@ -1036,7 +1036,7 @@ const
     * to CPU requirements (e.g. due to cropping).
   *)
   CODEC_FLAG_UNALIGNED = $0001;
-  CODEC_FLAG_QSCALE = $0002;
+  CODEC_FLAG_QSCALE    = $0002;
   /// < Use fixed qscale.
   CODEC_FLAG_4MV = $0004;
   /// < 4 MV per MB allowed / advanced prediction for H.263.
@@ -1054,7 +1054,7 @@ const
     // * this is not set the input will be copied.
   *)
   CODEC_FLAG_INPUT_PRESERVED = $0100;
-  CODEC_FLAG_PASS1 = $0200;
+  CODEC_FLAG_PASS1           = $0200;
   /// < Use internal 2pass ratecontrol in first pass mode.
   CODEC_FLAG_PASS2 = $0400;
   /// < Use internal 2pass ratecontrol in second pass mode.
@@ -1084,7 +1084,7 @@ const
   CODEC_FLAG_INTERLACED_ME = $20000000;
   /// < interlaced motion estimation
   CODEC_FLAG_CLOSED_GOP = $80000000;
-  CODEC_FLAG2_FAST = $00000001;
+  CODEC_FLAG2_FAST      = $00000001;
   /// < Allow non spec compliant speedup tricks.
   CODEC_FLAG2_NO_OUTPUT = $00000004;
   /// < Skip bitstream encoding.
@@ -1114,7 +1114,7 @@ const
     * If not set, it might not use get_buffer() at all or use operations that
     * assume the buffer was allocated by avcodec_default_get_buffer.
   *)
-  CODEC_CAP_DR1 = $0002;
+  CODEC_CAP_DR1       = $0002;
   CODEC_CAP_TRUNCATED = $0008;
   // #if FF_API_XVMC
   (* Codec can export data for HW decoding (XvMC). *)
@@ -1524,17 +1524,16 @@ Type
     // * applications.
     // * sizeof(AVCodecContext) must not be used outside libav*.
   *)
-  pAVCodecContext = ^TAVCodecContext;
+  pAVCodecContext  = ^TAVCodecContext;
   ppAVCodecContext = ^pAVCodecContext;
 
   // int (*execute)(struct AVCodecContext *c, int (*func)(struct AVCodecContext *c2, void *arg), void *arg2, int *ret, int count, int size);
   TExecuteFunc = function(c2: pAVCodecContext; arg: pointer): Integer; cdecl;
-  TExecute = function(c: pAVCodecContext; ExecuteFunc: TExecuteFunc; arg2: pointer; ret: PInteger; count: Integer; size: Integer)
-    : Integer; cdecl;
+  TExecute = function(c: pAVCodecContext; ExecuteFunc: TExecuteFunc; arg2: pointer; ret: PInteger; count: Integer; size: Integer): Integer; cdecl;
 
   // int (*execute2)(struct AVCodecContext *c, int (*func)(struct AVCodecContext *c2, void *arg, int jobnr, int threadnr), void *arg2, int *ret, int count);
   TExecuteFunc2 = function(c2: pAVCodecContext; arg: pointer; jobnr: Integer; threadnr: Integer): Integer; cdecl;
-  TExecute2 = function(c: pAVCodecContext; ExecuteFunc2: TExecuteFunc2; arg2: pointer; ret: PInteger; count: Integer): Integer; cdecl;
+  TExecute2     = function(c: pAVCodecContext; ExecuteFunc2: TExecuteFunc2; arg2: pointer; ret: PInteger; count: Integer): Integer; cdecl;
 
   pAVCodec = ^TAVCodec;
 
@@ -1552,7 +1551,7 @@ Type
     log_level_offset: Integer;
     codec_type: TAVMediaType; // * see AVMEDIA_TYPE_xxx *)
     codec: pAVCodec;
-    codec_name: array [0 .. 31] of AnsiChar;
+    codec_name: array [0 .. 31] of AnsiChar; // attribute_deprecated
     codec_id: TAVCodecID; // * see AV_CODEC_ID_xxx *)
     (*
       * fourcc (LSB first, so "ABCD" -> ('D'<<24) + ('C'<<16) + ('B'<<8) + 'A').
@@ -1574,7 +1573,7 @@ Type
       * - encoding: unused
       * - decoding: Set by user, will be converted to uppercase by libavcodec during init.
     *)
-    stream_codec_tag: cuint;
+    stream_codec_tag: cuint; // attribute_deprecated
     priv_data: pointer;
     (*
       * Private context used for internal data.
@@ -1594,7 +1593,7 @@ Type
       * - encoding: Set by user; unused for constant quantizer encoding.
       * - decoding: Set by libavcodec. 0 or some bitrate if this info is available in the stream.
     *)
-    bit_rate: Integer;
+    bit_rate: int64_t;
 
     (*
       * number of bits the bitstream is allowed to diverge from the reference.
@@ -1730,7 +1729,7 @@ Type
       * - encoding: MUST be set by user.
       * - decoding: unused
     *)
-    me_method: cint;
+    me_method: cint; // attribute_deprecated
     (*
       * If non NULL, 'draw_horiz_band' is called by the libavcodec
       * decoder to draw a horizontal band. It improves cache usage. Not
@@ -1785,9 +1784,9 @@ Type
     *)
     b_quant_factor: cfloat;
     (* obsolete FIXME remove *)
-    rc_strategy: cint;
+    rc_strategy: cint; // attribute_deprecated
     // #define FF_RC_STRATEGY_XVID 1
-    b_frame_strategy: cint;
+    b_frame_strategy: cint; // attribute_deprecated
     (*
       * qscale offset between IP and B-frames
       * - encoding: Set by user.
@@ -1806,7 +1805,7 @@ Type
       * - encoding: Set by user.
       * - decoding: unused
     *)
-    mpeg_quant: cint;
+    mpeg_quant: cint; // attribute_deprecated
     (*
       * qscale factor between P and I-frames
       * If > 0 then the last p frame quantizer will be used (q= lastp_q*factor+offset).
@@ -1862,7 +1861,7 @@ Type
       * - encoding: Set by user.
       * - decoding: unused
     *)
-    prediction_method: cint;
+    prediction_method: cint; // attribute_deprecated
     (*
       * slice offsets in the frame in bytes
       * - encoding: Set/allocated by libavcodec.
@@ -1918,7 +1917,7 @@ Type
       * - encoding: Set by user.
       * - decoding: unused
     *)
-    pre_me: cint;
+    pre_me: cint; // attribute_deprecated
     (*
       * motion estimation prepass comparison function
       * - encoding: Set by user.
@@ -1959,7 +1958,7 @@ Type
       * - encoding: Set by user.
       * - decoding: unused
     *)
-    intra_quant_bias: cint;
+    intra_quant_bias: cint; // attribute_deprecated
     // #define FF_DEFAULT_QUANT_BIAS 999999
     (*
       * inter quantizer bias
@@ -1980,8 +1979,8 @@ Type
       * - decoding: set by decoder
       * @deprecated XvMC support is slated for removal.
     *)
-    // attribute_deprecated
-    xvmc_acceleration: cint;
+
+    xvmc_acceleration: cint; // attribute_deprecated
 {$ENDIF} // * FF_API_XVMC * /
 
     (*
@@ -2008,13 +2007,13 @@ Type
       * - encoding: Set by user.
       * - decoding: unused
       * }
-    scenechange_threshold: cint;
+    scenechange_threshold: cint; // attribute_deprecated
     (*
       * noise reduction strength
       * - encoding: Set by user.
       * - decoding: unused
     *)
-    noise_reduction: cint;
+    noise_reduction: cint; // attribute_deprecated
     (*
       * Motion estimation threshold below which no motion estimation is
       * performed, but instead the user specified motion vectors are used.
@@ -2022,7 +2021,7 @@ Type
       * - encoding: Set by user.
       * - decoding: unused
     *)
-    me_threshold: cint;
+    me_threshold: cint; // attribute_deprecated
     (*
       * Macroblock threshold below which the user specified macroblock types will be used.
       * - encoding: Set by user.
@@ -2053,7 +2052,7 @@ Type
       * - encoding: Set by user.
       * - decoding: unused
     *)
-    border_masking: cfloat;
+    border_masking: cfloat; // attribute_deprecated
     (*
       * minimum MB lagrange multipler
       * - encoding: Set by user.
@@ -2071,7 +2070,7 @@ Type
       * - encoding: Set by user.
       * - decoding: unused
     *)
-    me_penalty_compensation: cint;
+    me_penalty_compensation: cint; // attribute_deprecated
     (*
       *
       * - encoding: Set by user.
@@ -2083,7 +2082,7 @@ Type
       * - encoding: Set by user.
       * - decoding: unused
     *)
-    brd_scale: cint;
+    brd_scale: cint; // attribute_deprecated
     (*
       * minimum GOP size
       * - encoding: Set by user.
@@ -2101,13 +2100,13 @@ Type
       * - encoding: Set by user.
       * - decoding: unused
     *)
-    chromaoffset: cint;
+    chromaoffset: cint; // attribute_deprecated
     (*
       * Multiplied by qscale for each frame and added to scene_change_score.
       * - encoding: Set by user.
       * - decoding: unused
     *)
-    scenechange_factor: cint;
+    scenechange_factor: cint; // attribute_deprecated
     (*
       *
       * Note: Value depends upon the compare function used for fullpel ME.
@@ -2120,7 +2119,7 @@ Type
       * - encoding: Set by user.
       * - decoding: unused
     *)
-    b_sensitivity: cint;
+    b_sensitivity: cint; // attribute_deprecated
     (*
       * Chromaticity coordinates of the source primaries.
       * - encoding: Set by user
@@ -2215,8 +2214,7 @@ Type
       * - decoding: Set by user.
       * @deprecated Deprecated in favor of request_channel_layout.
     *)
-    // attribute_deprecated
-    request_channels: cint;
+    request_channels: cint; // attribute_deprecated
 {$ENDIF}
     (*
       * Audio channel layout.
@@ -2307,8 +2305,7 @@ Type
       *
       * @deprecated use get_buffer2()
     *)
-    // attribute_deprecated
-    // int (*get_buffer)(struct AVCodecContext *c, AVFrame *pic);
+    // int (*get_buffer)(struct AVCodecContext *c, AVFrame *pic); //     attribute_deprecated
     get_buffer: function(c: pAVCodecContext; pic: pAVFrame): cint; cdecl;
     (*
       * Called to release buffers which were allocated with get_buffer.
@@ -2321,9 +2318,8 @@ Type
       *
       * @deprecated custom freeing callbacks should be set from get_buffer2()
     *)
-    // attribute_deprecated
     // void (*release_buffer)(struct AVCodecContext *c, AVFrame *pic);
-    release_buffer: procedure(c: pAVCodecContext; pic: pAVFrame); cdecl; { deprecated; }
+    release_buffer: procedure(c: pAVCodecContext; pic: pAVFrame); cdecl; // attribute_deprecated
 
     (*
       * Called at the beginning of a frame to get cr buffer for it.
@@ -2337,9 +2333,8 @@ Type
       * - encoding: unused
       * - decoding: Set by libavcodec, user can override.
     *)
-    // attribute_deprecated
     // int (*reget_buffer)(struct AVCodecContext *c, AVFrame *pic);
-    reget_buffer: function(c: pAVCodecContext; pic: pAVFrame): cint; cdecl; { deprecated; }
+    reget_buffer: function(c: pAVCodecContext; pic: pAVFrame): cint; cdecl; // attribute_deprecated
 {$ENDIF}
     (*
       * This callback is called at the beginning of each frame to get data
@@ -3479,7 +3474,7 @@ function avcodec_get_context_defaults3(s: pAVCodecContext; const codec: pAVCodec
   // * @see avcodec_get_frame_defaults
 *)
 // AVFrame *avcodec_alloc_frame(void);
-function avcodec_alloc_frame: pAVFrame; cdecl;
+// function avcodec_alloc_frame: pAVFrame; cdecl;
 //
 (*
   // * Set the fields of the given AVFrame to default values.
@@ -3487,7 +3482,7 @@ function avcodec_alloc_frame: pAVFrame; cdecl;
   // * @param frame The AVFrame of which the fields should be set to default values.
 *)
 // void avcodec_get_frame_defaults(AVFrame *frame);
-procedure avcodec_get_frame_defaults(frame: pAVFrame); cdecl;
+// procedure avcodec_get_frame_defaults(frame: pAVFrame); cdecl;
 //
 (*
   // * Free the frame and any dynamically allocated objects in it,
@@ -4193,8 +4188,8 @@ Type
     // AVCodecContext *avctx,
     // const uint8_t **poutbuf, int *poutbuf_size,
     // const uint8_t *buf, int buf_size);
-    parser_parse: function(s: pAVCodecParserContext; avctx: pAVCodecContext; const poutbuf: ppByte; poutbuf_size: PInteger;
-      const buf: pByte; buf_size: Integer): Integer; cdecl;
+    parser_parse: function(s: pAVCodecParserContext; avctx: pAVCodecContext; const poutbuf: ppByte; poutbuf_size: PInteger; const buf: pByte;
+      buf_size: Integer): Integer; cdecl;
     // void (*parser_close)(AVCodecParserContext *s);
     parser_close: procedure(s: pAVCodecParserContext); cdecl;
     // int (*split)(AVCodecContext *avctx, const uint8_t *buf, int buf_size);
@@ -4339,8 +4334,7 @@ function avcodec_find_encoder(id: TAVCodecID): pAVCodec; cdecl;
 *)
 // int avcodec_encode_audio2(AVCodecContext *avctx, AVPacket *avpkt,
 // const AVFrame *frame, int *got_packet_ptr);
-function avcodec_encode_audio2(avctx: pAVCodecContext; avpkt: pAVPacket; const frame: pAVFrame; Var got_packet_ptr: Integer)
-  : Integer; cdecl;
+function avcodec_encode_audio2(avctx: pAVCodecContext; avpkt: pAVPacket; const frame: pAVFrame; Var got_packet_ptr: Integer): Integer; cdecl;
 
 // #if FF_API_OLD_ENCODE_VIDEO
 (*
@@ -4398,8 +4392,7 @@ function avcodec_encode_audio2(avctx: pAVCodecContext; avpkt: pAVPacket; const f
 *)
 // int avcodec_encode_video2(AVCodecContext *avctx, AVPacket *avpkt,
 // const AVFrame *frame, int *got_packet_ptr);
-function avcodec_encode_video2(avctx: pAVCodecContext; avpkt: pAVPacket; const frame: pAVFrame; Var got_packet_ptr: Integer)
-  : Integer; cdecl;
+function avcodec_encode_video2(avctx: pAVCodecContext; avpkt: pAVPacket; const frame: pAVFrame; Var got_packet_ptr: Integer): Integer; cdecl;
 
 // int avcodec_encode_subtitle(AVCodecContext *avctx, uint8_t *buf, int buf_size,
 // const AVSubtitle *sub);
@@ -5040,7 +5033,7 @@ Type
     *           lockmgr callback may also be invoked.
   *)
 
-  PPointer = ^pointer;
+  PPointer         = ^pointer;
   Tav_lockmgr_proc = function(mutex: PPointer; op: TAVLockOp): Integer; cdecl;
 
   // int av_lockmgr_register(int (*cb)(void **mutex, enum AVLockOp op))
@@ -5100,13 +5093,13 @@ uses ffm.lib;
 function avpicture_get_size; external avcodec_dll;
 function avcodec_open2; external avcodec_dll;
 procedure avcodec_register_all; external avcodec_dll;
-procedure avcodec_get_frame_defaults; external avcodec_dll;
+// procedure avcodec_get_frame_defaults; external avcodec_dll;
 procedure avcodec_free_frame; external avcodec_dll;
 function avcodec_decode_video2; external avcodec_dll;
 procedure av_free_packet; external avcodec_dll;
 function avcodec_close; external avcodec_dll;
 function av_codec_next; external avcodec_dll;
-function avcodec_alloc_frame; external avcodec_dll;
+// function avcodec_alloc_frame; external avcodec_dll;
 function avpicture_fill; external avcodec_dll;
 function avcodec_find_decoder; external avcodec_dll;
 {$IFDEF FF_API_DESTRUCT_PACKET}

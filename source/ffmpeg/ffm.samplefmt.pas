@@ -267,8 +267,8 @@ implementation
 
 uses ffm.lib;
 
-function av_get_bytes_per_sample; external samplefmt_dll;
-function av_get_sample_fmt_name; external samplefmt_dll;
-function av_samples_get_buffer_size; external samplefmt_dll;
+function av_get_bytes_per_sample; external avutil_dll;
+function av_get_sample_fmt_name; external avutil_dll;
+function av_samples_get_buffer_size; external avutil_dll;
 
 end.

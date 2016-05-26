@@ -254,6 +254,16 @@ function sws_scale( //
   dst: PPCuint8Array; // uint8_t *const dst[]
   const dstStride: PCintArray // const int dstStride[]
   ): integer; cdecl;
+{
+int sws_scale(
+    struct SwsContext *c,
+    const uint8_t *const srcSlice[],
+    const int srcStride[],
+    int srcSliceY,
+    int srcSliceH,
+    uint8_t *const dst[],
+    const int dstStride[]);
+}
 
 (*
   * @param dstRange flag indicating the while-black range of the output (1=jpeg / 0=mpeg)

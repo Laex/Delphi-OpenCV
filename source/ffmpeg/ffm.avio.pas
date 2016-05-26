@@ -500,7 +500,7 @@ implementation
 
 uses ffm.lib;
 
-function avio_open; external avio_dll;
-function avio_close; external avio_dll;
+function avio_open; external avformat_dll;
+function avio_close; external avformat_dll;
 
 end.

@@ -143,7 +143,7 @@ begin
   begin
     pAudioFrame := nil;
 
-    pAudioFrame := avcodec_alloc_frame();
+    pAudioFrame := av_frame_alloc();//avcodec_alloc_frame();
 
     // Audio frame should be equal or smaller pCodecCxt^.frame_size.
     pAudioFrame^.nb_samples := min(pCodecCxt^.frame_size div av_get_bytes_per_sample(AV_SAMPLE_FMT_S16), nCountSamples);
@@ -438,7 +438,7 @@ Var
   size: Integer;
 begin
   // picture_buf := nil;
-  Result := avcodec_alloc_frame();
+  Result := av_frame_alloc();//avcodec_alloc_frame();
   if not Assigned(Result) then
   begin
     // printf("Cannot create frame\n");
