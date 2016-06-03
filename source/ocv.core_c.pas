@@ -738,6 +738,15 @@ function cvDotProduct(const src1, src2: pCvArr): double; cdecl;
 }
 procedure cvAnd(const src1: pIplImage; const src2: pIplImage; dst: pIplImage; masl: pIplImage = nil); cdecl;
 
+(* dst(idx) = src(idx) & value *)
+{
+CVAPI(void) cvAndS( const CvArr* src, CvScalar value,
+                   CvArr* dst, const CvArr* mask CV_DEFAULT(NULL));
+}
+
+procedure cvAndS( const src:pCvArr; value:TCvScalar;
+                   dst:pCvArr; const mask :pCvArr = nil); cdecl;
+
 // dst(x,y,c) = abs(src1(x,y,c) - src2(x,y,c))
 // CVAPI(void) cvAbsDiff( const pCvArr* src1, const pCvArr* src2, pCvArr* dst );
 procedure cvAbsDiff(const src1: pCvArr; const src2: pCvArr; dst: pCvArr); cdecl;

@@ -853,16 +853,25 @@ procedure cvCalcBackProject(var image: pIplImage; dst: pIplImage; const hist: pC
 
 procedure cvEqualizeHist(const src, dst: pIplImage); cdecl;
 
-//
-//
-// (* Applies distance transform to binary image *)
-// CVAPI(procedure)  cvDistTransform(
-// 3: v1:);
-// mask CV_DEFAULT(0): unction;
-// labels CV_DEFAULT(0): function;
-// labelType CV_DEFAULT(CV_DIST_LABEL_CCOMP): Integer): Integer;
-//
-//
+
+(* Applies distance transform to binary image *)
+{
+CVAPI(void)  cvDistTransform( const CvArr* src, CvArr* dst,
+                              int distance_type CV_DEFAULT(CV_DIST_L2),
+                              int mask_size CV_DEFAULT(3),
+                              const float* mask CV_DEFAULT(NULL),
+                              CvArr* labels CV_DEFAULT(NULL),
+                              int labelType CV_DEFAULT(CV_DIST_LABEL_CCOMP));
+}
+
+procedure  cvDistTransform( const src:pCvArr; dst:pCvArr;
+                              distance_type :Integer = CV_DIST_L2;
+                              mask_size :Integer = 3;
+                              const mask :pFloat = nil;
+                              labels :pCvArr = nil;
+                              labelType :Integer = CV_DIST_LABEL_CCOMP); cdecl;
+
+
 // (* Applies fixed-level threshold to grayscale image.
 // This is a basic operation applied before retrieving contours *)
 // CVAPI(double)  cvThreshold( const CvArr*  src, CvArr*  dst, double  threshold, double  max_value, int threshold_type );
