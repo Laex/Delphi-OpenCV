@@ -613,22 +613,16 @@ const
   *)
 type
   TcvConvertImage = procedure(const src: pCvArr; dst: pCvArr; flags: Integer = 0); cdecl;
+
 {$IFDEF SAFELOADLIB}
 
 var
   cvConvertImage: TcvConvertImage;
 {$ELSE}
-procedure cvConvertImage(const src: pCvArr; dst: pCvArr; flags: Integer = 0); cdecl; overload;
+procedure cvConvertImage(const src: pCvArr; dst: pCvArr; flags: Integer = 0); cdecl;
 {$ENDIF}
 
-// {
-// /* utility function: convert one image to another with optional vertical flip */
-// CVAPI(void) cvConvertImage( const CvArr* src, CvArr* dst, int flags CV_DEFAULT(0));
-// }
-// {$IFDEF SAFELOADLIB}
-// {$ELSE}
-// procedure cvConvertImage(const src: pIplImage; dst: pIplImage; flags: Integer = 0); cdecl; overload;
-// {$ENDIF}
+
 (* wait for key event infinitely (delay<=0) or for "delay" milliseconds *)
 type
   TcvWaitKey = function(delay: Integer = 0): Integer; cdecl;

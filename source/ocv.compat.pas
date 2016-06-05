@@ -49,7 +49,7 @@
 unit ocv.compat;
 
 {$I OpenCV.inc}
-{$POINTERMATH ON}
+
 
 interface
 
