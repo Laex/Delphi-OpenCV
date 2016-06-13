@@ -63,7 +63,7 @@ type
   cslong                 = longint;            pcslong                = ^cslong;
   culong                 = cardinal;           pculong                = ^culong;
   int64_t                = Int64;              pint64_t               = ^int64_t;
-{$ifend}
+{$endif}
 
   cfloat                 = single;             pcfloat                = ^cfloat;
   cdouble                = double;             pcdouble               = ^cdouble;

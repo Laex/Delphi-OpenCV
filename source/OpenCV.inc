@@ -360,7 +360,7 @@
       {$IF Declared(RTLVersion) and (RTLVersion >= 14.2)}
         // code for Delphi 6.02 or higher, Kylix 2 or higher, C++Builder 6 or higher
         ...
-      {$IFEND}
+      {$ENDIF}
     {$ENDIF}
 
   Directive     Description
@@ -1653,7 +1653,7 @@
   {$DEFINE HAS_FMX}
 {$ELSE}
   {$DEFINE HAS_VCL}
-{$IFEND}
+{$ENDIF}
 
 {$IFDEF NEXTGEN}
   {$ZEROBASEDSTRINGS OFF}
