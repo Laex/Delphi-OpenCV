@@ -1,6 +1,6 @@
 #Delphi-OpenCV
-* OpenCV version - 2.4.11<br>
-* Development environment - Delphi 2010-XE8<br>
+* OpenCV version - 2.4.13<br>
+* Development environment - Delphi 2010-10.1<br>
 
 <b>Contributors:</b>
 ```
@@ -21,7 +21,7 @@ Files: avcodec-57.dll, avdevice-57.dll, avfilter-6.dll, avformat-57.dll, etc.
 (4) FFmpeg 64-bit Shared
 ```
 * Dynamic library OpenCV need to download [here][4]<br>
-Files: _2411.dll and _2411d.dll
+Files: _2413.dll and _2413d.dll
 ```
 After installing OpenCV:
 (5) 32-bit in the C:\OpenCV\build\x86\vc12\bin\
