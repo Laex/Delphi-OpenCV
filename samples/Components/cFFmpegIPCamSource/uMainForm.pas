@@ -45,21 +45,15 @@ const
   // Данные взяты с сайта http://myttk.ru/media/webcam/ с помощью Wireshark
   // Проверены с помощью rtmpdump - http://all-streaming-media.com/record-video-stream/rtmpdump-freeware-console-RTMP-downloading-application.htm
   // protocol: 0 - http, 1 - https, 2 - rtsp
-  SampleCameraList: Array [0 .. 5] of String = (
-    'alias=Ekaterinburg - Area 1905|' + 'ip=80.78.116.125|' + 'port=1935|' + 'protocol=2|' + 'uri=/rtplive/5goda_hd.stream|' +
+  SampleCameraList: Array [0 .. 3] of String = (
+    'alias=Ekaterinburg, Area 1905|' + 'ip=80.78.116.125|' + 'port=1935|' + 'protocol=2|' + 'uri=/rtplive/5goda_hd.stream|' +
     'reconnectdelay=1500|' + 'username=|' + 'password=',
 
-    'alias=Ekaterinburg - Plotinka|' + 'ip=80.78.116.125|' + 'port=1935|' + 'protocol=2|' + 'uri=/rtplive/plot_hd.stream|' +
+    'alias=Ekaterinburg, Plotinka|' + 'ip=80.78.116.125|' + 'port=1935|' + 'protocol=2|' + 'uri=/rtplive/plot_hd.stream|' +
     'reconnectdelay=1500|' + 'username=|' + 'password=',
 
-    'alias=Zoo - Elephant Dasha|' + 'ip=80.78.116.125|' + 'port=1935|' + 'protocol=2|' + 'uri=/rtplive/zoo_ek_sd.stream|' +
+    'alias=Ekaterinburg, Zoo, Elephant Dasha|' + 'ip=80.78.116.125|' + 'port=1935|' + 'protocol=2|' + 'uri=/rtplive/zoo_ek_sd.stream|' +
     'reconnectdelay=1500|' + 'username=|' + 'password=',
-
-    'alias=Lake Baikal, Listvyanka|' + 'ip=stream.baikal-online.ru|' + 'port=1935|' + 'protocol=2|' + 'uri=/live/list.stream|' +
-    'reconnectdelay=3500|' + 'username=|' + 'password=',
-
-    'alias=Chita, Square Love and Faithfulness|' + 'ip=188.168.81.103|' + 'port=1935|' + 'protocol=2|' + 'uri=/rtplive/Skver-Love.stream|' +
-    'reconnectdelay=3500|' + 'username=|' + 'password=',
 
     'alias=Solikamsk, Cathedral Square|' + 'ip=80.78.116.125|' + 'port=1935|' + 'protocol=2|' + 'uri=/rtplive/solikamsk_hd.stream|' +
     'reconnectdelay=2500|' + 'username=|' + 'password=');
