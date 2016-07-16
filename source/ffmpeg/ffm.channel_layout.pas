@@ -229,6 +229,6 @@ implementation
 
 uses ffm.lib;
 
-function av_get_channel_layout_nb_channels; external channel_layout_dll;
+function av_get_channel_layout_nb_channels; external avutil_dll;
 
 end.

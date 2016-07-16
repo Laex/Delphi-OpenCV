@@ -75,9 +75,9 @@ procedure TestCameraCapture;
   end;
 
 const
-  windowName = 'Test VideoCapture'; // Name shown in the GUI window.
-  VK_ESCAPE = 27;
-  DESIRED_CAMERA_WIDTH: Integer = 800;
+  windowName                     = 'Test VideoCapture'; // Name shown in the GUI window.
+  VK_ESCAPE                      = 27;
+  DESIRED_CAMERA_WIDTH: Integer  = 800;
   DESIRED_CAMERA_HEIGHT: Integer = 600;
 
 Var
@@ -87,11 +87,15 @@ begin
   V := TVideoCapture.Create;
   if V.Open(CAP_ANY) then
   begin
-    WriteLn('CAP_PROP_FRAME_WIDTH=', DESIRED_CAMERA_WIDTH, ' -> ', V.PropSet(CAP_PROP_FRAME_WIDTH, DESIRED_CAMERA_WIDTH));
+    WriteLn('CAP_PROP_FRAME_WIDTH=', DESIRED_CAMERA_WIDTH, ' -> ',
+      V.PropSet(CAP_PROP_FRAME_WIDTH, DESIRED_CAMERA_WIDTH));
     // V.Prop[CAP_PROP_FRAME_WIDTH] := DESIRED_CAMERA_WIDTH;
-    WriteLn('CAP_PROP_FRAME_HEIGHT=', DESIRED_CAMERA_HEIGHT, ' -> ', V.PropSet(CAP_PROP_FRAME_HEIGHT, DESIRED_CAMERA_HEIGHT));
+    WriteLn('CAP_PROP_FRAME_HEIGHT=', DESIRED_CAMERA_HEIGHT, ' -> ',
+      V.PropSet(CAP_PROP_FRAME_HEIGHT, DESIRED_CAMERA_HEIGHT));
     // V.Prop[CAP_PROP_FRAME_HEIGHT] := DESIRED_CAMERA_HEIGHT;
     namedWindow(windowName);
+    WriteLn('Press <ESC> to exit');
+    WriteLn('Press <Space> to info');
     while true do
     begin
       // Grab the next camera frame. Note that you can't modify camera frames.
@@ -118,8 +122,8 @@ end;
 
 procedure TestCameraCaptureFileName;
 const
-  windowName = 'Test VideoCapture'; // Name shown in the GUI window.
-  VK_ESCAPE = 27;
+  windowName      = 'Test VideoCapture'; // Name shown in the GUI window.
+  VK_ESCAPE       = 27;
   VIDEO_FILE_NAME = cResourceMedia + '768x576.avi';
 
 Var
@@ -144,7 +148,7 @@ begin
       end;
       // IMPORTANT: Wait for atleast 20 milliseconds, so that the image can be displayed on the screen!
       if (waitKey(20) = VK_ESCAPE) then // Escape Key
-        break; // Quit the program!
+        break;                          // Quit the program!
     end;
     destroyAllWindows;
   end;
@@ -153,6 +157,7 @@ end;
 begin
   try
     TestCameraCapture;
+    // TestCameraCaptureFileName
   except
     on E: Exception do
       WriteLn(E.ClassName, ': ', E.Message);
