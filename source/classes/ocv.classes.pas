@@ -1,6 +1,6 @@
 (*
   *****************************************************************
-  Delphi-OpenCV Demo
+  Delphi-OpenCV
   Copyright (C) 2013 Project Delphi-OpenCV
   ****************************************************************
   Contributor:
@@ -32,23 +32,11 @@ interface
 Uses
   Winapi.Windows,
   System.Generics.Collections,
+  ocv.cls.types,
   ocv.core.types_c,
   ocv.highgui_c;
 
 Type
-  cbool        = bytebool;
-  TOpenCVClass = Pointer;
-
-  IOCVCommon = interface
-    function _InternalData: TOpenCVClass;
-  end;
-
-  TOCVCommon = class(TInterfacedObject, IOCVCommon)
-  private
-    FData: TOpenCVClass;
-  public
-    function _InternalData: TOpenCVClass;
-  end;
 
   IMat = interface(IOCVCommon)
     ['{2CFB1B8E-4D18-4C1D-839F-0AFE4213F57D}']
@@ -466,7 +454,7 @@ Type
     function isOldFormatCascade(): cbool;
     function getOriginalWindowSize(): ISize;
     function getFeatureType(): integer;
-    function convert(const oldcascade: String; const newcascade: String): cbool;
+//    function convert(const oldcascade: String; const newcascade: String): cbool;
   end;
 
   TCascadeClassifier = class(TOCVCommon, ICascadeClassifier)
@@ -550,7 +538,7 @@ Type
     function isOldFormatCascade(): cbool;
     function getOriginalWindowSize(): ISize;
     function getFeatureType(): integer;
-    function convert(const oldcascade: String; const newcascade: String): cbool;
+//    function convert(const oldcascade: String; const newcascade: String): cbool;
   end;
 
 Type
@@ -558,10 +546,7 @@ Type
     function InitFromMat(const Mat: IMat): TIplImage;
   end;
 
-  TStringAnsiHelper = record helper for
-    String
-    function AsPAnsiChar: PAnsiChar;
-  end;
+
 
 implementation
 
@@ -609,8 +594,8 @@ function _CascadeClassifier_getOriginalWindowSize(CascadeClassifier: TOpenCVClas
   external opencv_classes_lib name '_CascadeClassifier_getOriginalWindowSize@4';
 function _CascadeClassifier_getFeatureType(CascadeClassifier: TOpenCVClass): integer; stdcall;
   external opencv_classes_lib name '_CascadeClassifier_getFeatureType@4';
-function _CascadeClassifier_convert(CascadeClassifier: TOpenCVClass; oldcascade, newcascade: PAnsiChar): cbool; stdcall;
-  external opencv_classes_lib name '_CascadeClassifier_convert@12';
+//function _CascadeClassifier_convert(CascadeClassifier: TOpenCVClass; oldcascade, newcascade: PAnsiChar): cbool; stdcall;
+//  external opencv_classes_lib name '_CascadeClassifier_convert@12';
 
 procedure namedWindow(const winname: String; const flags: integer = WINDOW_AUTOSIZE);
 begin
@@ -842,19 +827,13 @@ begin
   cvSetData(@Self, Mat.data, Mat.step1);
 end;
 
-{ ------------------------------ TStringAnsiHelper ------------------------------ }
-
-function TStringAnsiHelper.AsPAnsiChar: PAnsiChar;
-begin
-  Result := c_str(Self);
-end;
 
 { ------------------------------ TCascadeClassifier ------------------------------ }
 
-function TCascadeClassifier.convert(const oldcascade, newcascade: String): cbool;
-begin
-  Result := _CascadeClassifier_convert(FData, oldcascade.AsPAnsiChar, newcascade.AsPAnsiChar);
-end;
+//function TCascadeClassifier.convert(const oldcascade, newcascade: String): cbool;
+//begin
+//  Result := _CascadeClassifier_convert(FData, oldcascade.AsPAnsiChar, newcascade.AsPAnsiChar);
+//end;
 
 constructor TCascadeClassifier.Create;
 begin
@@ -916,13 +895,6 @@ end;
 function TCascadeClassifier.load(const FileName: String): cbool;
 begin
   Result := _get_CascadeClassifier_load(FData, FileName.AsPAnsiChar);
-end;
-
-{ TOCVCommon }
-
-function TOCVCommon._InternalData: TOpenCVClass;
-begin
-  Result := FData;
 end;
 
 { TSize }

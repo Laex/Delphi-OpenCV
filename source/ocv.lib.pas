@@ -42,21 +42,21 @@ interface
 
 const
 {$IFDEF DelphiOCVVersion_29}
-  CV_VERSION_EPOCH = '2';
-  CV_VERSION_MAJOR = '4';
-  CV_VERSION_MINOR = '13';
+  CV_VERSION_EPOCH    = '2';
+  CV_VERSION_MAJOR    = '4';
+  CV_VERSION_MINOR    = '13';
   CV_VERSION_REVISION = '0';
 {$ELSEIF DEFINED(DelphiOCVVersion_30)}
-  CV_VERSION_EPOCH = '3';
-  CV_VERSION_MAJOR = '0';
-  CV_VERSION_MINOR = '0';
+  CV_VERSION_EPOCH    = '3';
+  CV_VERSION_MAJOR    = '0';
+  CV_VERSION_MINOR    = '0';
   CV_VERSION_REVISION = '0';
 {$ENDIF}
   CV_VERSION = CV_VERSION_EPOCH + '.' + CV_VERSION_MAJOR + '.' + CV_VERSION_MINOR + '.' + CV_VERSION_REVISION;
 
   // * old  style version constants*/
-  CV_MAJOR_VERSION = CV_VERSION_EPOCH;
-  CV_MINOR_VERSION = CV_VERSION_MAJOR;
+  CV_MAJOR_VERSION    = CV_VERSION_EPOCH;
+  CV_MINOR_VERSION    = CV_VERSION_MAJOR;
   CV_SUBMINOR_VERSION = CV_VERSION_MINOR;
 
   CV_VERSION_DLL = CV_VERSION_EPOCH + CV_VERSION_MAJOR + CV_VERSION_MINOR;
@@ -69,6 +69,7 @@ const
 {$ENDIF}
 {$ELSE}
 {$ENDIF}
+  // -------------------------------
   core_lib =
 {$IFDEF MSWINDOWS}
     CV_DLL_DIR + 'opencv_' +
@@ -89,6 +90,7 @@ const
 {$ENDIF}
 {$ENDIF}
 {$ENDIF}
+// -------------------------------
 highgui_lib = {$IFDEF MSWINDOWS}
   CV_DLL_DIR + 'opencv_' +
 {$IFDEF DelphiOCVVersion_29}
@@ -108,6 +110,7 @@ highgui_lib = {$IFDEF MSWINDOWS}
 {$ENDIF}
 {$ENDIF}
 {$ENDIF}
+// -------------------------------
 imgproc_lib = {$IFDEF MSWINDOWS}
   CV_DLL_DIR + 'opencv_' +
 {$IFDEF DelphiOCVVersion_29}
@@ -127,6 +130,7 @@ imgproc_lib = {$IFDEF MSWINDOWS}
 {$ENDIF}
 {$ENDIF}
 {$ENDIF}
+// -------------------------------
 objdetect_lib = {$IFDEF MSWINDOWS}
   CV_DLL_DIR + 'opencv_' +
 {$IFDEF DelphiOCVVersion_29}
@@ -146,6 +150,7 @@ objdetect_lib = {$IFDEF MSWINDOWS}
 {$ENDIF}
 {$ENDIF}
 {$ENDIF}
+// -------------------------------
 legacy_lib = {$IFDEF MSWINDOWS}
   CV_DLL_DIR + 'opencv_' +
 {$IFDEF DelphiOCVVersion_29}
@@ -165,6 +170,7 @@ legacy_lib = {$IFDEF MSWINDOWS}
 {$ENDIF}
 {$ENDIF}
 {$ENDIF}
+// -------------------------------
 calib3d_lib = {$IFDEF MSWINDOWS}
   CV_DLL_DIR + 'opencv_' +
 {$IFDEF DelphiOCVVersion_29}
@@ -184,6 +190,7 @@ calib3d_lib = {$IFDEF MSWINDOWS}
 {$ENDIF}
 {$ENDIF}
 {$ENDIF}
+// -------------------------------
 tracking_lib = {$IFDEF MSWINDOWS}
   CV_DLL_DIR + 'opencv_' +
 {$IFDEF DelphiOCVVersion_29}
@@ -203,6 +210,7 @@ tracking_lib = {$IFDEF MSWINDOWS}
 {$ENDIF}
 {$ENDIF}
 {$ENDIF}
+// -------------------------------
 nonfree_lib = {$IFDEF MSWINDOWS}
   CV_DLL_DIR + 'opencv_' +
 {$IFDEF DelphiOCVVersion_29}
@@ -222,6 +230,7 @@ nonfree_lib = {$IFDEF MSWINDOWS}
 {$ENDIF}
 {$ENDIF}
 {$ENDIF}
+// -------------------------------
 opencv_classes_lib = {$IFDEF MSWINDOWS}
   CV_DLL_DIR + 'opencv_classes' + CV_VERSION_DLL {$IFDEF DEBUG} + 'd'{$ENDIF} + '.dll';
 {$ELSE}
@@ -235,6 +244,7 @@ opencv_classes_lib = {$IFDEF MSWINDOWS}
 {$ENDIF}
 {$ENDIF}
 {$ENDIF}
+// -------------------------------
 opencv_photo_lib = {$IFDEF MSWINDOWS}
   CV_DLL_DIR + 'opencv_' +
 {$IFDEF DelphiOCVVersion_29}
@@ -254,6 +264,31 @@ opencv_photo_lib = {$IFDEF MSWINDOWS}
 {$ENDIF}
 {$ENDIF}
 {$ENDIF}
+// -------------------------------
+opencv_contrib_lib = {$IFDEF MSWINDOWS}
+  CV_DLL_DIR + 'opencv_' +
+{$IFDEF DelphiOCVVersion_29}
+  'contrib' +
+{$ELSEIF DEFINED( DelphiOCVVersion_30)}
+  'world' +
+{$ENDIF}
+  CV_VERSION_DLL {$IFDEF DEBUG} + 'd'{$ENDIF} + '.dll';
+{$ELSE}
+{$IFDEF MACOS}
+  'opencv_contrib.dylib';
+{$ELSE}
+{$IFDEF ANDROID}
+  'libopencv_contrib.so';
+{$ELSE}
+  'libopencv_contrib.so';
+{$ENDIF}
+{$ENDIF}
+{$ENDIF}
+// -------------------------------
+//
+//
+// -------------------------------
+//
 {$IFDEF SAFELOADLIB}
 function ocvLoadLibrary(const Name: String): Cardinal;
 function ocvFreeLibrary(const LibHandle: Cardinal; const Remove: Boolean = true): Boolean;

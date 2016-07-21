@@ -6,6 +6,7 @@ interface
 
 Const
   cResourceMedia = '..\..\resource\media\';
+  cResourceFaces = '..\..\resource\faces\';
   cResourceFaceDetect = '..\..\resource\facedetectxml\';
   cResourceResultDefault = '..\..\resource\result\';
 

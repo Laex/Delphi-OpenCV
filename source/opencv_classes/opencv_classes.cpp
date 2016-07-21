@@ -2,13 +2,6 @@
 //
 
 #include "stdafx.h"
-#include "opencv2/core/mat.hpp"
-#include "opencv2/videoio.hpp"
-#include "opencv2/objdetect.hpp"
-
-
-#define ICLASS_API extern "C" __declspec(dllexport) 
-//__stdcall
 
 namespace cv
 {
@@ -150,9 +143,9 @@ namespace cv
 		return e->getFeatureType();
 	}	
 
-	ICLASS_API bool __stdcall CascadeClassifier_convert(CascadeClassifier* e, char* oldcascade, char* newcascade)
-	{
-		return e->convert(oldcascade, newcascade);
-	}	
+	//ICLASS_API bool __stdcall CascadeClassifier_convert(CascadeClassifier* e, char* oldcascade, char* newcascade)
+	//{
+//		return e->convert(oldcascade, newcascade);
+//	}	
 
 }

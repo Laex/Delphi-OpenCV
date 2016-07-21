@@ -8,8 +8,8 @@ lib
 /resource/result/*.*
 *.exe
 *.dll
-!opencv_classes249.dll
-!opencv_classes249d.dll
+!opencv_classes2413d.dll
+!opencv_classes2413.dll
 #Files
 *.ini
 *.bsc
