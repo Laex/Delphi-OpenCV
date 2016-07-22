@@ -31,8 +31,9 @@ program ClassTest;
 uses
   WinApi.Windows,
   System.SysUtils,
-  ocv.classes,
+  ocv.cls.core,
   ocv.highgui_c,
+  ocv.cls.highgui,
   uResourcePaths;
 
 procedure TestCameraCapture;

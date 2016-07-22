@@ -34,18 +34,18 @@ Uses
   ocv.cls.types;
 
 Type
-  TInputArrayOfArrays = array of pIplImage; // InputArrayOfArrays
-  TInputArray         = array of Integer;   // InputArray
+  TInputArrayOfIplImage = TArray<pIplImage>; // InputArrayOfArrays
+  TInputArrayOfInteger  = TArray<Integer>;   // InputArray
 
   IFaceRecognizer = interface(IOCVCommon)
     ['{199DE478-2C78-4347-B553-C062290C78D2}']
     // Trains a FaceRecognizer.
     // CV_WRAP virtual void train(InputArrayOfArrays src, InputArray labels) = 0;
-    procedure train(src: TInputArrayOfArrays; labels: TInputArray);
+    procedure train(src: TInputArrayOfIplImage; labels: TInputArrayOfInteger);
 
     // Updates a FaceRecognizer.
     // CV_WRAP void update(InputArrayOfArrays src, InputArray labels);
-    procedure update(src: TInputArrayOfArrays; labels: TInputArray);
+    procedure update(src: TInputArrayOfIplImage; labels: TInputArrayOfInteger);
 
     // Gets a prediction from a FaceRecognizer.
     // virtual int predict(InputArray src) const = 0;
@@ -89,8 +89,8 @@ Type
     constructor createLBPHFaceRecognizer(radius: Integer = 1; neighbors: Integer = 8; grid_x: Integer = 8;
       grid_y: Integer = 8; threshold: double = DBL_MAX);
     destructor Destroy; override;
-    procedure train(src: TInputArrayOfArrays; labels: TInputArray);
-    procedure update(src: TInputArrayOfArrays; labels: TInputArray);
+    procedure train(src: TInputArrayOfIplImage; labels: TInputArrayOfInteger);
+    procedure update(src: TInputArrayOfIplImage; labels: TInputArrayOfInteger);
     function predict(src: pIplImage): Integer; overload;
     procedure predict(src: pIplImage; Var lab: Integer; var confidence: double); overload;
     procedure save(const filename: string);
@@ -170,16 +170,19 @@ procedure _DestroyFaceRecognizer(const E: TOpenCVClass); stdcall;
 
 constructor TFaceRecognizer.createEigenFaceRecognizer(num_components: Integer; threshold: double);
 begin
+  inherited Create;
   FData := Create_EigenFaceRecognizer(num_components, threshold);
 end;
 
 constructor TFaceRecognizer.createFisherFaceRecognizer(num_components: Integer; threshold: double);
 begin
+  inherited Create;
   FData := Create_FisherFaceRecognizer(num_components, threshold);
 end;
 
 constructor TFaceRecognizer.createLBPHFaceRecognizer(radius, neighbors, grid_x, grid_y: Integer; threshold: double);
 begin
+  inherited Create;
   FData := Create_LBPHFaceRecognizer(radius, neighbors, grid_x, grid_y, threshold);
 end;
 
@@ -215,12 +218,12 @@ begin
   FaceRecognizerSave(FData, filename.AsPAnsiChar);
 end;
 
-procedure TFaceRecognizer.train(src: TInputArrayOfArrays; labels: TInputArray);
+procedure TFaceRecognizer.train(src: TInputArrayOfIplImage; labels: TInputArrayOfInteger);
 begin
   FaceRecognizerTrain(FData, Length(src), @src[0], @labels[0]);
 end;
 
-procedure TFaceRecognizer.update(src: TInputArrayOfArrays; labels: TInputArray);
+procedure TFaceRecognizer.update(src: TInputArrayOfIplImage; labels: TInputArrayOfInteger);
 begin
   FaceRecognizerUpdate(FData, Length(src), @src[0], @labels[0]);
 end;

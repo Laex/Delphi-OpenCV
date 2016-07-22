@@ -1,4 +1,4 @@
-(*
+﻿(*
  *****************************************************************
  Delphi-OpenCV Demo
  Copyright (C) 2013 Project Delphi-OpenCV

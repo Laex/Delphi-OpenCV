@@ -12,12 +12,15 @@ uses
   ocv.lib in '..\..\..\source\ocv.lib.pas',
   uResourcePaths in '..\..\..\source\utils\uResourcePaths.pas',
   ocv.cls.contrib in '..\..\..\source\Classes\ocv.cls.contrib.pas',
+  ocv.cls.core in '..\..\..\source\classes\ocv.cls.core.pas',
+  ocv.cls.highgui in '..\..\..\source\classes\ocv.cls.highgui.pas',
+  ocv.cls.objdetect in '..\..\..\source\classes\ocv.cls.objdetect.pas',
   ocv.cls.types in '..\..\..\source\Classes\ocv.cls.types.pas';
 
 Var
   P         : IFaceRecognizer;
-  f         : TInputArrayOfArrays;
-  l         : TInputArray;
+  f         : TInputArrayOfIplImage;
+  l         : TInputArrayOfInteger;
   i         : pIplImage;
   lab       : Integer;
   confidence: double;

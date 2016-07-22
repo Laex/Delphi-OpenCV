@@ -23,93 +23,18 @@
   *******************************************************************
 *)
 
-unit ocv.classes;
+unit ocv.cls.highgui;
 
 {$I OpenCV.inc}
 
 interface
 
 Uses
-  Winapi.Windows,
-  System.Generics.Collections,
-  ocv.cls.types,
-  ocv.core.types_c,
-  ocv.highgui_c;
-
-Type
-
-  IMat = interface(IOCVCommon)
-    ['{2CFB1B8E-4D18-4C1D-839F-0AFE4213F57D}']
-    function elemSize(): size_t;            // 0
-    function elemSize1(): size_t;           // 1
-    function _type(): integer;              // 2
-    function depth(): integer;              // 3
-    function channels(): integer;           // 4
-    function step1(i: integer = 0): size_t; // 5
-    function empty(): cbool;
-    function total(): size_t;  // 6
-    function flags(): integer; // 7
-    function dims(): integer;  // 8
-    function rows(): integer;  // 9
-    function cols(): integer;  // 10
-    function data(): Pointer;  // 11
-  end;
-
-  TMat = class(TOCVCommon, IMat)
-  private
-    FNeedDestroy: boolean;
-  public
-    constructor Create(const _M: TOpenCVClass = nil; const NeedDestroy: boolean = True); overload;
-    constructor Create(const Image: pIplImage); overload;
-    destructor Destroy; override;
-    function elemSize(): size_t;            // 0
-    function elemSize1(): size_t;           // 1
-    function _type(): integer;              // 2
-    function depth(): integer;              // 3
-    function channels(): integer;           // 4
-    function step1(i: integer = 0): size_t; // 5
-    function empty(): cbool;
-    function total(): size_t;  // 6
-    function flags(): integer; // 7
-    function dims(): integer;  // 8
-    function rows(): integer;  // 9
-    function cols(): integer;  // 10
-    function data(): Pointer;  // 11
-  end;
-
-  // ---------------------------- VideoCapture --------------------------
-  IVideoCapture = interface(IOCVCommon)
-    ['{86599C0A-D6CF-4F53-8AE3-336B0ED948D3}']
-    function Open(const CamNumber: integer = CV_CAP_ANY): cbool;
-    function isOpened: cbool;
-    function Read(Var Mat: IMat): cbool;
-
-    function getProp(const propId: integer): double;
-    procedure setProp(const propId: integer; const Value: double);
-
-    function PropSet(const propId: integer; const Value: double): cbool;
-    property Prop[const propId: integer]: double read getProp write setProp;
-  end;
-
-  TOpenCVVideoCaptureClass = Pointer;
-
-  TVideoCapture = class(TOCVCommon, IVideoCapture)
-  private
-    function getProp(const propId: integer): double;
-    procedure setProp(const propId: integer; const Value: double);
-  public
-    constructor Create; overload;
-    constructor Create(const CamNumber: integer); overload;
-    constructor Create(const FileName: String); overload;
-    destructor Destroy; override;
-
-    function Open(const CamNumber: integer = CV_CAP_ANY): cbool; overload;
-    function Open(const FileName: String): cbool; overload;
-    function isOpened: cbool;
-    function Read(Var Mat: IMat): cbool;
-    function PropSet(const propId: integer; const Value: double): cbool;
-    property Prop[const propId: integer]: double read getProp write setProp;
-  end;
+    ocv.cls.types,
+    ocv.core.types_c,
+    ocv.highgui_c,
+    ocv.cls.core,
+    ocv.cls.mat;
 
 const
   // Camera API
@@ -356,7 +281,6 @@ const
   CAP_PROP_VIEWFINDER               = 17010; // Enter liveview mode.
 
   // Flags for namedWindow
-const
   WINDOW_NORMAL = CV_WINDOW_NORMAL;
   // the user can resize the window (no constraint) / also use to switch a fullscreen window to a normal size
   WINDOW_AUTOSIZE = CV_WINDOW_AUTOSIZE;
@@ -366,6 +290,42 @@ const
   WINDOW_FULLSCREEN = CV_WINDOW_FULLSCREEN; // change the window to fullscreen
   WINDOW_FREERATIO  = CV_WINDOW_FREERATIO;  // the image expends as much as it can (no ratio constraint)
   WINDOW_KEEPRATIO  = CV_WINDOW_KEEPRATIO;  // the ratio of the image is respected
+
+Type
+
+  // ---------------------------- VideoCapture --------------------------
+  IVideoCapture = interface(IOCVCommon)
+    ['{86599C0A-D6CF-4F53-8AE3-336B0ED948D3}']
+    function Open(const CamNumber: integer = CAP_ANY): cbool;
+    function isOpened: cbool;
+    function Read(Var Mat: IMat): cbool;
+
+    function getProp(const propId: integer): double;
+    procedure setProp(const propId: integer; const Value: double);
+
+    function PropSet(const propId: integer; const Value: double): cbool;
+    property Prop[const propId: integer]: double read getProp write setProp;
+  end;
+
+  TOpenCVVideoCaptureClass = Pointer;
+
+  TVideoCapture = class(TOCVCommon, IVideoCapture)
+  private
+    function getProp(const propId: integer): double;
+    procedure setProp(const propId: integer; const Value: double);
+  public
+    constructor Create; overload;
+    constructor Create(const CamNumber: integer); overload;
+    constructor Create(const FileName: String); overload;
+    destructor Destroy; override;
+
+    function Open(const CamNumber: integer = CAP_ANY): cbool; overload;
+    function Open(const FileName: String): cbool; overload;
+    function isOpened: cbool;
+    function Read(Var Mat: IMat): cbool;
+    function PropSet(const propId: integer; const Value: double): cbool;
+    property Prop[const propId: integer]: double read getProp write setProp;
+  end;
 
   // CV_EXPORTS_W void namedWindow(const String& winname, int flags = WINDOW_AUTOSIZE);
 procedure namedWindow(const winname: String; const flags: integer = WINDOW_AUTOSIZE);
@@ -398,169 +358,11 @@ function imread(const FileName: string; flag: integer = 1): IMat;
 // CV_EXPORTS_W cboolean imwrite( const string& filename, InputArray img, const vector<int>& params=vector<int>());
 // function imwrite(const filename: String; const img: TccvMat): cboolean;
 
-Type
-  IMaskGenerator = interface(IOCVCommon)
-    ['{DABEB77F-A919-49EB-999F-C1876812A330}']
-  end;
-
-  TMaskGenerator = class(TOCVCommon, IMaskGenerator)
-
-  end;
-
-  // IFileNode = interface(IOCVCommon)
-  // ['{8BB056BF-08AE-4512-9861-4906D770C2A0}']
-  // end;
-  // TFileNode = class(TOCVCommon, IFileNode)
-  // end;
-
-  ISize = interface(IOCVCommon)
-    ['{33DA805D-9B45-4EF9-A657-C53DB60CDE9A}']
-  end;
-
-  TSize = class(TOCVCommon, ISize)
-  public
-    constructor Create(const OpenCVClass: TOpenCVClass);
-    destructor Destroy; override;
-  end;
-
-  IRect2i = interface(IOCVCommon)
-    ['{417FF1CA-D2A6-46BC-8FBA-84EF5642CE63}']
-  end;
-
-  TRect2i = class(TOCVCommon, IRect2i)
-
-  end;
-
-  IRect         = IRect2i;
-  TVectorRect   = TArray<IRect>;
-  TVectorInt    = TArray<integer>;
-  TVectorDouble = TArray<double>;
-
-  ICascadeClassifier = interface(IOCVCommon)
-    ['{700C3DEC-F156-4014-9676-5BD9ECC3B01B}']
-    function empty(): cbool;
-    function load(const FileName: String): cbool;
-    // function Read(const node: IFileNode): cbool;
-    procedure detectMultiScale(Image: IMat; Var objects: TVectorRect; scaleFactor: double { = 1.1 };
-      minNeighbors: integer { = 3 }; flags: integer { = 0 }; minSize: ISize { = Size() };
-      maxSize: ISize { = Size() } ); overload;
-    procedure detectMultiScale(Image: IMat; Var objects: TVectorRect; var numDetections: TVectorInt;
-      scaleFactor: double { = 1.1 }; minNeighbors: integer { = 3 }; flags: integer { = 0 }; minSize: ISize { = Size() };
-      maxSize: ISize { = Size() } ); overload;
-    procedure detectMultiScale(Image: IMat; Var objects: TVectorRect; var rejectLevels: TVectorInt;
-      Var levelWeights: TVectorDouble; scaleFactor: double { = 1.1 }; minNeighbors: integer { = 3 };
-      flags: integer { = 0 }; minSize: ISize { = Size() }; maxSize: ISize { = Size() };
-      outputRejectLevels: cbool = false); overload;
-    function isOldFormatCascade(): cbool;
-    function getOriginalWindowSize(): ISize;
-    function getFeatureType(): integer;
-//    function convert(const oldcascade: String; const newcascade: String): cbool;
-  end;
-
-  TCascadeClassifier = class(TOCVCommon, ICascadeClassifier)
-  private
-  public
-    constructor Create; overload;
-    (* * @brief Loads a classifier from a file.
-
-      @param filename Name of the file from which the classifier is loaded.
-    *)
-    constructor Create(const FileName: String); overload;
-    destructor Destroy; override;
-    (* * @brief Checks whether the classifier has been loaded.
-    *)
-    function empty(): cbool;
-    (* * @brief Loads a classifier from a file.
-
-      @param filename Name of the file from which the classifier is loaded. The file may contain an old
-      HAAR classifier trained by the haartraining application or a new cascade classifier trained by the
-      traincascade application.
-    *)
-    function load(const FileName: String): cbool;
-    (* * @brief Reads a classifier from a FileStorage node.
-
-      @note The file may contain a new cascade classifier (trained traincascade application) only.
-    *)
-    // function Read(const node: IFileNode): cbool;
-
-    (* * @brief Detects objects of different sizes in the input image. The detected objects are returned as a list
-      of rectangles.
-
-      @param image Matrix of the type CV_8U containing an image where objects are detected.
-      @param objects Vector of rectangles where each rectangle contains the detected object, the
-      rectangles may be partially outside the original image.
-      @param scaleFactor Parameter specifying how much the image size is reduced at each image scale.
-      @param minNeighbors Parameter specifying how many neighbors each candidate rectangle should have
-      to retain it.
-      @param flags Parameter with the same meaning for an old cascade as in the function
-      cvHaarDetectObjects. It is not used for a new cascade.
-      @param minSize Minimum possible object size. Objects smaller than that are ignored.
-      @param maxSize Maximum possible object size. Objects larger than that are ignored.
-
-      The function is parallelized with the TBB library.
-
-      @note
-      -   (Python) A face detection example using cascade classifiers can be found at
-      opencv_source_code/samples/python2/facedetect.py
-    *)
-    procedure detectMultiScale(Image: IMat; Var objects: TVectorRect; scaleFactor: double { = 1.1 };
-      minNeighbors: integer { = 3 }; flags: integer { = 0 }; minSize: ISize { = Size() };
-      maxSize: ISize { = Size() } ); overload;
-
-    (* * @overload
-      @param image Matrix of the type CV_8U containing an image where objects are detected.
-      @param objects Vector of rectangles where each rectangle contains the detected object, the
-      rectangles may be partially outside the original image.
-      @param numDetections Vector of detection numbers for the corresponding objects. An object's number
-      of detections is the number of neighboring positively classified rectangles that were joined
-      together to form the object.
-      @param scaleFactor Parameter specifying how much the image size is reduced at each image scale.
-      @param minNeighbors Parameter specifying how many neighbors each candidate rectangle should have
-      to retain it.
-      @param flags Parameter with the same meaning for an old cascade as in the function
-      cvHaarDetectObjects. It is not used for a new cascade.
-      @param minSize Minimum possible object size. Objects smaller than that are ignored.
-      @param maxSize Maximum possible object size. Objects larger than that are ignored.
-    *)
-    procedure detectMultiScale(Image: IMat; Var objects: TVectorRect; var numDetections: TVectorInt;
-      scaleFactor: double { = 1.1 }; minNeighbors: integer { = 3 }; flags: integer { = 0 }; minSize: ISize { = Size() };
-      maxSize: ISize { = Size() } ); overload;
-
-    (* * @overload
-      if `outputRejectLevels` is `true` returns `rejectLevels` and `levelWeights`
-    *)
-
-    procedure detectMultiScale(Image: IMat; Var objects: TVectorRect; var rejectLevels: TVectorInt;
-      Var levelWeights: TVectorDouble; scaleFactor: double { = 1.1 }; minNeighbors: integer { = 3 };
-      flags: integer { = 0 }; minSize: ISize { = Size() }; maxSize: ISize { = Size() };
-      outputRejectLevels: cbool = false); overload;
-
-    function isOldFormatCascade(): cbool;
-    function getOriginalWindowSize(): ISize;
-    function getFeatureType(): integer;
-//    function convert(const oldcascade: String; const newcascade: String): cbool;
-  end;
-
-Type
-  TIplImageRecordHelper = record helper for TIplImage
-    function InitFromMat(const Mat: IMat): TIplImage;
-  end;
-
-
 
 implementation
 
 Uses
-  ocv.core_c, ocv.utils, ocv.lib;
-
-// ------------------------------ Mat ------------------------------
-function _CreateMat: TOpenCVClass; stdcall; external opencv_classes_lib name '_CreateMat@0';
-function _GetMatData(const e: TOpenCVClass; index: integer; param: integer = 0): integer; stdcall;
-  external opencv_classes_lib name '_GetMatData@12';
-function _MatEmpty(const e: TOpenCVClass): cbool; stdcall; external opencv_classes_lib name '_MatEmpty@4';
-function _CreateMatFromImage(const Image: pIplImage): TOpenCVClass; stdcall;
-  external opencv_classes_lib name '_CreateMatFromImage@4';
-procedure _DestroyMat(const M: TOpenCVClass); stdcall; external opencv_classes_lib name '_DestroyMat@4';
+  ocv.lib;
 
 // ------------------------------ VideoCapture ------------------------------
 function _CreateVideoCapture: TOpenCVVideoCaptureClass; stdcall;
@@ -579,175 +381,6 @@ function _VideoCaptureGet(const e: TOpenCVVideoCaptureClass; propId: integer): d
   external opencv_classes_lib name '_VideoCaptureGet@8';
 procedure _DestroyVideoCapture(const e: TOpenCVVideoCaptureClass); stdcall;
   external opencv_classes_lib name '_DestroyVideoCapture@4';
-
-// ------------------------------ CascadeClassifier ------------------------------
-function _CreateCascadeClassifier: TOpenCVClass; stdcall; external opencv_classes_lib name '_CreateCascadeClassifier@0';
-procedure _DestroyCascadeClassifier(const CascadeClassifier: TOpenCVClass); stdcall;
-  external opencv_classes_lib name '_DestroyCascadeClassifier@4';
-function _get_CascadeClassifier_empty(CascadeClassifier: TOpenCVClass): cbool; stdcall;
-  external opencv_classes_lib name '_get_CascadeClassifier_empty@4';
-function _get_CascadeClassifier_load(CascadeClassifier: TOpenCVClass; FileName: PAnsiChar): cbool; stdcall;
-  external opencv_classes_lib name '_get_CascadeClassifier_load@8';
-function _CascadeClassifier_isOldFormatCascade(CascadeClassifier: TOpenCVClass): cbool; stdcall;
-  external opencv_classes_lib name '_CascadeClassifier_isOldFormatCascade@4';
-function _CascadeClassifier_getOriginalWindowSize(CascadeClassifier: TOpenCVClass): TOpenCVClass; stdcall;
-  external opencv_classes_lib name '_CascadeClassifier_getOriginalWindowSize@4';
-function _CascadeClassifier_getFeatureType(CascadeClassifier: TOpenCVClass): integer; stdcall;
-  external opencv_classes_lib name '_CascadeClassifier_getFeatureType@4';
-//function _CascadeClassifier_convert(CascadeClassifier: TOpenCVClass; oldcascade, newcascade: PAnsiChar): cbool; stdcall;
-//  external opencv_classes_lib name '_CascadeClassifier_convert@12';
-
-procedure namedWindow(const winname: String; const flags: integer = WINDOW_AUTOSIZE);
-begin
-  cvNamedWindow(winname.AsPAnsiChar, flags);
-end;
-
-procedure destroyWindow(const winname: String);
-begin
-  cvDestroyWindow(winname.AsPAnsiChar);
-end;
-
-procedure destroyAllWindows();
-begin
-  cvDestroyAllWindows();
-end;
-
-function startWindowThread(): integer;
-begin
-  Result := cvStartWindowThread();
-end;
-
-function waitKey(const delay: integer = 0): integer;
-begin
-  Result := cvWaitKey(delay);
-end;
-
-procedure imshow(const winname: String; const Mat: IMat);
-Var
-  IplImage: TIplImage;
-begin
-  IplImage.InitFromMat(Mat);
-  cvShowImage(winname.AsPAnsiChar, @IplImage);
-end;
-
-procedure resizeWindow(const winname: String; const width, height: integer);
-begin
-  cvResizeWindow(winname.AsPAnsiChar, width, height);
-end;
-
-procedure moveWindow(const winname: String; const x, y: integer);
-begin
-  cvMoveWindow(winname.AsPAnsiChar, x, y);
-end;
-
-procedure setWindowProperty(const winname: String; const prop_id: integer; const prop_value: double);
-begin
-  cvSetWindowProperty(winname.AsPAnsiChar, prop_id, prop_value);
-end;
-
-function getWindowProperty(const winname: String; const prop_id: integer): double;
-begin
-  Result := cvGetWindowProperty(winname.AsPAnsiChar, prop_id);
-end;
-
-function createTrackbar(const trackbarname: String; const winname: String; Value: PInteger; count: integer;
-  onChange: TCvTrackbarCallback2 = nil; userdata: Pointer = nil): integer;
-begin
-  Result := cvCreateTrackbar2(trackbarname.AsPAnsiChar, winname.AsPAnsiChar, Value, count, onChange, userdata);
-end;
-
-function imread(const FileName: string; flag: integer): IMat;
-begin
-  Result := TMat.Create(cvLoadImage(FileName.AsPAnsiChar, flag));
-end;
-
-{ ------------------------------ TMat ------------------------------ }
-
-function TMat.channels: integer;
-begin
-  Result := _GetMatData(FData, 4);
-end;
-
-function TMat.cols: integer;
-begin
-  Result := _GetMatData(FData, 10);
-end;
-
-constructor TMat.Create(const Image: pIplImage);
-begin
-  FData := _CreateMatFromImage(Image);
-end;
-
-constructor TMat.Create(const _M: TOpenCVClass; const NeedDestroy: boolean);
-begin
-  FNeedDestroy := NeedDestroy;
-  if Assigned(_M) then
-    FData := _M
-  else
-    FData := _CreateMat;
-end;
-
-function TMat.data: Pointer;
-begin
-  Result := Pointer(_GetMatData(FData, 11));
-end;
-
-function TMat.depth: integer;
-begin
-  Result := _GetMatData(FData, 3);
-end;
-
-destructor TMat.Destroy;
-begin
-  if Assigned(FData) and FNeedDestroy then
-    _DestroyMat(FData);
-  inherited;
-end;
-
-function TMat.dims: integer;
-begin
-  Result := _GetMatData(FData, 8);
-end;
-
-function TMat.elemSize: size_t;
-begin
-  Result := _GetMatData(FData, 0);
-end;
-
-function TMat.elemSize1: size_t;
-begin
-  Result := _GetMatData(FData, 1);
-end;
-
-function TMat.empty: cbool;
-begin
-  Result := _MatEmpty(FData);
-end;
-
-function TMat.flags: integer;
-begin
-  Result := _GetMatData(FData, 7);
-end;
-
-function TMat.rows: integer;
-begin
-  Result := _GetMatData(FData, 9);
-end;
-
-function TMat.step1(i: integer): size_t;
-begin
-  Result := _GetMatData(FData, 5, i);
-end;
-
-function TMat.total: size_t;
-begin
-  Result := _GetMatData(FData, 6);
-end;
-
-function TMat._type: integer;
-begin
-  Result := _GetMatData(FData, 2);
-end;
 
 { ------------------------------ TVideoCapture ------------------------------ }
 
@@ -818,96 +451,68 @@ begin
   _VideoCaptureSet(FData, propId, Value);
 end;
 
-{ ------------------------------ TIplImageRecordHelper ------------------------------ }
-
-function TIplImageRecordHelper.InitFromMat(const Mat: IMat): TIplImage;
+procedure namedWindow(const winname: String; const flags: integer = WINDOW_AUTOSIZE);
 begin
-  Assert(Mat.dims <= 2);
-  cvInitImageHeader(@Self, CvSize(Mat.cols, Mat.rows), cvIplDepth(Mat.flags), Mat.channels);
-  cvSetData(@Self, Mat.data, Mat.step1);
+  cvNamedWindow(winname.AsPAnsiChar, flags);
 end;
 
-
-{ ------------------------------ TCascadeClassifier ------------------------------ }
-
-//function TCascadeClassifier.convert(const oldcascade, newcascade: String): cbool;
-//begin
-//  Result := _CascadeClassifier_convert(FData, oldcascade.AsPAnsiChar, newcascade.AsPAnsiChar);
-//end;
-
-constructor TCascadeClassifier.Create;
+procedure destroyWindow(const winname: String);
 begin
-  FData := _CreateCascadeClassifier;
+  cvDestroyWindow(winname.AsPAnsiChar);
 end;
 
-constructor TCascadeClassifier.Create(const FileName: String);
+procedure destroyAllWindows();
 begin
-  FData := _CreateCascadeClassifier;
-  load(FileName);
+  cvDestroyAllWindows();
 end;
 
-destructor TCascadeClassifier.Destroy;
+function startWindowThread(): integer;
 begin
-  if Assigned(FData) then
-    _DestroyCascadeClassifier(FData);
-  inherited;
+  Result := cvStartWindowThread();
 end;
 
-procedure TCascadeClassifier.detectMultiScale(Image: IMat; var objects: TVectorRect; var numDetections: TVectorInt;
-  scaleFactor: double; minNeighbors, flags: integer; minSize, maxSize: ISize);
+function waitKey(const delay: integer = 0): integer;
 begin
-
+  Result := cvWaitKey(delay);
 end;
 
-procedure TCascadeClassifier.detectMultiScale(Image: IMat; var objects: TVectorRect; var rejectLevels: TVectorInt;
-  var levelWeights: TVectorDouble; scaleFactor: double; minNeighbors, flags: integer; minSize, maxSize: ISize;
-  outputRejectLevels: cbool);
+procedure imshow(const winname: String; const Mat: IMat);
+Var
+  IplImage: TIplImage;
 begin
-
+  IplImage.InitFromMat(Mat);
+  cvShowImage(winname.AsPAnsiChar, @IplImage);
 end;
 
-procedure TCascadeClassifier.detectMultiScale(Image: IMat; var objects: TVectorRect; scaleFactor: double;
-  minNeighbors, flags: integer; minSize, maxSize: ISize);
+procedure resizeWindow(const winname: String; const width, height: integer);
 begin
-
+  cvResizeWindow(winname.AsPAnsiChar, width, height);
 end;
 
-function TCascadeClassifier.empty: cbool;
+procedure moveWindow(const winname: String; const x, y: integer);
 begin
-  Result := _get_CascadeClassifier_empty(FData);
+  cvMoveWindow(winname.AsPAnsiChar, x, y);
 end;
 
-function TCascadeClassifier.getFeatureType: integer;
+procedure setWindowProperty(const winname: String; const prop_id: integer; const prop_value: double);
 begin
-  Result := _CascadeClassifier_getFeatureType(FData);
+  cvSetWindowProperty(winname.AsPAnsiChar, prop_id, prop_value);
 end;
 
-function TCascadeClassifier.getOriginalWindowSize: ISize;
+function getWindowProperty(const winname: String; const prop_id: integer): double;
 begin
-  Result := TSize.Create(_CascadeClassifier_getOriginalWindowSize(FData));
+  Result := cvGetWindowProperty(winname.AsPAnsiChar, prop_id);
 end;
 
-function TCascadeClassifier.isOldFormatCascade: cbool;
+function createTrackbar(const trackbarname: String; const winname: String; Value: PInteger; count: integer;
+  onChange: TCvTrackbarCallback2 = nil; userdata: Pointer = nil): integer;
 begin
-  Result := _CascadeClassifier_isOldFormatCascade(FData);
+  Result := cvCreateTrackbar2(trackbarname.AsPAnsiChar, winname.AsPAnsiChar, Value, count, onChange, userdata);
 end;
 
-function TCascadeClassifier.load(const FileName: String): cbool;
+function imread(const FileName: string; flag: integer): IMat;
 begin
-  Result := _get_CascadeClassifier_load(FData, FileName.AsPAnsiChar);
-end;
-
-{ TSize }
-
-constructor TSize.Create(const OpenCVClass: TOpenCVClass);
-begin
-  FData := OpenCVClass;
-end;
-
-destructor TSize.Destroy;
-begin
-
-  inherited;
+  Result := TMat.Create(cvLoadImage(FileName.AsPAnsiChar, flag));
 end;
 
 end.

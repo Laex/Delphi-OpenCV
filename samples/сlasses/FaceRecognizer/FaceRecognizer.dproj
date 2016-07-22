@@ -248,6 +248,9 @@
         <DCCReference Include="..\..\..\source\ocv.lib.pas"/>
         <DCCReference Include="..\..\..\source\utils\uResourcePaths.pas"/>
         <DCCReference Include="..\..\..\source\Classes\ocv.cls.contrib.pas"/>
+        <DCCReference Include="..\..\..\source\classes\ocv.cls.core.pas"/>
+        <DCCReference Include="..\..\..\source\classes\ocv.cls.highgui.pas"/>
+        <DCCReference Include="..\..\..\source\classes\ocv.cls.objdetect.pas"/>
         <DCCReference Include="..\..\..\source\Classes\ocv.cls.types.pas"/>
         <None Include="..\..\..\source\OpenCV.inc"/>
         <BuildConfiguration Include="Debug">
@@ -291,7 +294,7 @@
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile LocalName="..\bin\win32\FaceRecognizer.exe" Configuration="Debug" Class="ProjectOutput">
+                <DeployFile LocalName="..\..\..\bin\win32\FaceRecognizer.exe" Configuration="Debug" Class="ProjectOutput">
                     <Platform Name="Win32">
                         <RemoteName>FaceRecognizer.exe</RemoteName>
                         <Overwrite>true</Overwrite>
