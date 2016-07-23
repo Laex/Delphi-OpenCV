@@ -6,11 +6,12 @@ Release
 ipch
 lib
 /resource/result/*.*
+
+#Files
 *.exe
 *.dll
 !opencv_classes2413d.dll
 !opencv_classes2413.dll
-#Files
 *.ini
 *.bsc
 *.sdf

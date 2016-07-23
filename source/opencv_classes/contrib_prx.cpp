@@ -58,6 +58,18 @@ namespace cv
 		e->train(images, labels);
 	};
 
+	ICLASS_API void __stdcall FaceRecognizerTrainMat(FaceRecognizer* e, int n, Mat** scr, int* lab)
+	{
+		vector<Mat> images;
+		vector<int> labels;
+		for (int i = 0; i < n; i++)
+		{
+			images.push_back(*scr[i]);
+			labels.push_back(lab[i]);
+		}
+		e->train(images, labels);
+	};
+
 	ICLASS_API void __stdcall FaceRecognizerUpdate(FaceRecognizer* e, int n, IplImage** scr, int* lab)
 	{
 		vector<Mat> images;

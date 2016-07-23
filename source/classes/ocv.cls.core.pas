@@ -40,8 +40,6 @@ Type
 
   TSize = class(TOCVCommon, ISize)
   public
-    constructor Create(const OpenCVClass: TOpenCVClass);
-    destructor Destroy; override;
   end;
 
   IRect2i = interface(IOCVCommon)
@@ -64,7 +62,17 @@ Type
     \return the previous state
   *)
   // CV_EXPORTS bool setBreakOnError(bool flag);
+
+{$IFDEF SAFELOADLIB}
+
+type
+  TsetBreakOnError = function(flag: cbool): cbool; cdecl;
+
+var
+  setBreakOnError: TsetBreakOnError;
+{$ELSE}
 function setBreakOnError(flag: cbool): cbool; cdecl;
+{$ENDIF}
 
 (*
   typedef int (CV_CDECL *ErrorCallback)( int status, const char* func_name,
@@ -86,18 +94,54 @@ type
     \return the previous error handler
   *)
   // CV_EXPORTS ErrorCallback redirectError( ErrorCallback errCallback, void* userdata=0, void** prevUserdata=0);
+
+{$IFDEF SAFELOADLIB}
+
+type
+  TredirectError = function(errCallback: TErrorCallback; userdata: pointer = nil; prevUserdata: PPointer = nil)
+    : TErrorCallback; cdecl;
+
+var
+  redirectError: TredirectError;
+{$ELSE}
 function redirectError(errCallback: TErrorCallback; userdata: pointer = nil; prevUserdata: PPointer = nil)
   : TErrorCallback; cdecl;
-
+{$ENDIF}
 // CV_EXPORTS void glob(String pattern, std::vector<String>& result, bool recursive = false);
 
 // CV_EXPORTS_W void setNumThreads(int nthreads);
-procedure setNumThreads(nthreads: integer); cdecl;
-// CV_EXPORTS_W int getNumThreads();
-function getNumThreads(): integer; cdecl;
-// CV_EXPORTS_W int getThreadNum();
-function getThreadNum(): integer; cdecl;
+{$IFDEF SAFELOADLIB}
 
+type
+  TsetNumThreads = procedure(nthreads: integer); cdecl;
+
+var
+  setNumThreads: TsetNumThreads;
+{$ELSE}
+procedure setNumThreads(nthreads: integer); cdecl;
+{$ENDIF}
+// CV_EXPORTS_W int getNumThreads();
+{$IFDEF SAFELOADLIB}
+
+type
+  TgetNumThreads = function(): integer; cdecl;
+
+var
+  getNumThreads: TgetNumThreads;
+{$ELSE}
+function getNumThreads(): integer; cdecl;
+{$ENDIF}
+// CV_EXPORTS_W int getThreadNum();
+{$IFDEF SAFELOADLIB}
+
+type
+  TgetThreadNum = function: integer; cdecl;
+
+var
+  getThreadNum: TgetThreadNum;
+{$ELSE}
+function getThreadNum(): integer; cdecl;
+{$ENDIF}
 // CV_EXPORTS_W const string& getBuildInformation();
 
 // ! Returns the number of ticks.
@@ -109,8 +153,16 @@ function getThreadNum(): integer; cdecl;
   cv::getTickFrequency() to convert ticks to seconds.
 *)
 // CV_EXPORTS_W int64 getTickCount();
-function getTickCount(): int64; cdecl;
+{$IFDEF SAFELOADLIB}
 
+type
+  TgetTickCount = function: int64; cdecl;
+
+var
+  getTickCount: TgetTickCount;
+{$ELSE}
+function getTickCount(): int64; cdecl;
+{$ENDIF}
 (* !
   Returns the number of ticks per seconds.
 
@@ -124,8 +176,16 @@ function getTickCount(): int64; cdecl;
   \endcode
 *)
 // CV_EXPORTS_W double getTickFrequency();
-function getTickFrequency(): double; cdecl;
+{$IFDEF SAFELOADLIB}
 
+type
+  TgetTickFrequency = function: double; cdecl;
+
+var
+  getTickFrequency: TgetTickFrequency;
+{$ELSE}
+function getTickFrequency(): double; cdecl;
+{$ENDIF}
 (* !
   Returns the number of CPU ticks.
 
@@ -135,8 +195,16 @@ function getTickFrequency(): double; cdecl;
   for which cv::getTickCount() granularity is not enough.
 *)
 // CV_EXPORTS_W int64 getCPUTickCount();
-function getCPUTickCount(): int64; cdecl;
+{$IFDEF SAFELOADLIB}
 
+type
+  TgetCPUTickCount = function: int64; cdecl;
+
+var
+  getCPUTickCount: TgetCPUTickCount;
+{$ELSE}
+function getCPUTickCount(): int64; cdecl;
+{$ENDIF}
 (* !
   Returns SSE etc. support status
 
@@ -158,12 +226,28 @@ function getCPUTickCount(): int64; cdecl;
   until you call cv::useOptimized(true)}
 *)
 // CV_EXPORTS_W bool checkHardwareSupport(int feature);
-function checkHardwareSupport(feature: integer): cbool; cdecl;
+{$IFDEF SAFELOADLIB}
 
+type
+  TcheckHardwareSupport = function(feature: integer): cbool; cdecl;
+
+var
+  checkHardwareSupport: TcheckHardwareSupport;
+{$ELSE}
+function checkHardwareSupport(feature: integer): cbool; cdecl;
+{$ENDIF}
 // ! returns the number of CPUs (including hyper-threading)
 // CV_EXPORTS_W int getNumberOfCPUs();
-function getNumberOfCPUs(): integer; cdecl;
+{$IFDEF SAFELOADLIB}
 
+type
+  TgetNumberOfCPUs = function: integer; cdecl;
+
+var
+  getNumberOfCPUs: TgetNumberOfCPUs;
+{$ELSE}
+function getNumberOfCPUs(): integer; cdecl;
+{$ENDIF}
 (* !
   Allocates memory buffer
 
@@ -175,8 +259,16 @@ function getNumberOfCPUs(): integer; cdecl;
   \return the allocated memory buffer.
 *)
 // CV_EXPORTS void*  fastMalloc(size_t bufSize);
-function fastMalloc(bufSize: size_t): pointer; cdecl;
+{$IFDEF SAFELOADLIB}
 
+type
+  TfastMalloc = function(bufSize: size_t): pointer; cdecl;
+
+var
+  fastMalloc: TfastMalloc;
+{$ELSE}
+function fastMalloc(bufSize: size_t): pointer; cdecl;
+{$ENDIF}
 (* !
   Frees the memory allocated with cv::fastMalloc
 
@@ -184,8 +276,16 @@ function fastMalloc(bufSize: size_t): pointer; cdecl;
   When ptr==NULL, the function has no effect.
 *)
 // CV_EXPORTS void fastFree(void * ptr);
-procedure fastFree(ptr: pointer); cdecl;
+{$IFDEF SAFELOADLIB}
 
+type
+  TfastFree = procedure(ptr: pointer); cdecl;
+
+var
+  fastFree: TfastFree;
+{$ELSE}
+procedure fastFree(ptr: pointer); cdecl;
+{$ENDIF}
 (* !
   Turns on/off available optimization
 
@@ -196,15 +296,32 @@ procedure fastFree(ptr: pointer); cdecl;
   to call this function anywhere in the code. Instead, call it somewhere at the top level.}
 *)
 // CV_EXPORTS_W void setUseOptimized(bool onoff);
-procedure setUseOptimized(onoff: cbool); cdecl;
+{$IFDEF SAFELOADLIB}
 
+type
+  TsetUseOptimized = procedure(onoff: cbool); cdecl;
+
+var
+  setUseOptimized: TsetUseOptimized;
+{$ELSE}
+procedure setUseOptimized(onoff: cbool); cdecl;
+{$ENDIF}
 (* !
   Returns the current optimization status
 
   The function returns the current optimization status, which is controlled by cv::setUseOptimized().
 *)
 // CV_EXPORTS_W bool useOptimized();
+{$IFDEF SAFELOADLIB}
+
+type
+  TuseOptimized = function: cbool; cdecl;
+
+var
+  useOptimized: TuseOptimized;
+{$ELSE}
 function useOptimized(): cbool; cdecl;
+{$ENDIF}
 
 Type
 
@@ -256,21 +373,6 @@ implementation
 Uses
   ocv.core_c,
   ocv.lib;
-
-function setBreakOnError; external core_lib;
-function redirectError; external core_lib;
-procedure setNumThreads; external core_lib;
-function getNumThreads; external core_lib;
-function getThreadNum; external core_lib;
-function getTickCount; external core_lib;
-function getTickFrequency; external core_lib;
-function getCPUTickCount; external core_lib;
-function checkHardwareSupport; external core_lib;
-function getNumberOfCPUs; external core_lib;
-function fastMalloc; external core_lib;
-procedure fastFree; external core_lib;
-procedure setUseOptimized; external core_lib;
-function useOptimized; external core_lib;
 
 // ------------------------------ Mat ------------------------------
 function _CreateMat: TOpenCVClass; stdcall; external opencv_classes_lib name '_CreateMat@0';
@@ -378,17 +480,51 @@ begin
   cvSetData(@Self, Mat.data, Mat.step1);
 end;
 
-{ TSize }
+{$IFDEF SAFELOADLIB}
 
-constructor TSize.Create(const OpenCVClass: TOpenCVClass);
+Var
+  coreDLL: Cardinal;
+
+procedure Init_opencv_contrib;
 begin
-  FData := OpenCVClass;
+  coreDLL := ocvLoadLibrary(core_lib);
+  Assert(coreDLL <> 0, 'Can not init ' + core_lib);
+
+  setBreakOnError      := ocvGetProcAddress('?setBreakOnError@cv@@YA_N_N@Z', coreDLL);
+  redirectError        := ocvGetProcAddress('?redirectError@cv@@YAP6AHHPBD00HPAX@ZP6AHH000H1@Z1PAPAX@Z', coreDLL);
+  setNumThreads        := ocvGetProcAddress('?setNumThreads@cv@@YAXH@Z', coreDLL);
+  getNumThreads        := ocvGetProcAddress('?getNumThreads@cv@@YAHXZ', coreDLL);
+  getThreadNum         := ocvGetProcAddress('?getThreadNum@cv@@YAHXZ', coreDLL);
+  getTickCount         := ocvGetProcAddress('?getTickCount@cv@@YA_JXZ', coreDLL);
+  getTickFrequency     := ocvGetProcAddress('?getTickFrequency@cv@@YANXZ', coreDLL);
+  getCPUTickCount      := ocvGetProcAddress('?getCPUTickCount@cv@@YA_JXZ', coreDLL);
+  checkHardwareSupport := ocvGetProcAddress('?checkHardwareSupport@cv@@YA_NH@Z', coreDLL);
+  getNumberOfCPUs      := ocvGetProcAddress('?getNumberOfCPUs@cv@@YAHXZ', coreDLL);
+  fastMalloc           := ocvGetProcAddress('?fastMalloc@cv@@YAPAXI@Z', coreDLL);
+  fastFree             := ocvGetProcAddress('?fastFree@cv@@YAXPAX@Z', coreDLL);
+  setUseOptimized      := ocvGetProcAddress('?setUseOptimized@cv@@YAX_N@Z', coreDLL);
+  useOptimized         := ocvGetProcAddress('?useOptimized@cv@@YA_NXZ', coreDLL);
 end;
 
-destructor TSize.Destroy;
-begin
+initialization
 
-  inherited;
-end;
+Init_opencv_contrib;
+
+{$ELSE}
+function setBreakOnError; external core_lib name '?setBreakOnError@cv@@YA_N_N@Z';
+function redirectError; external core_lib name '?redirectError@cv@@YAP6AHHPBD00HPAX@ZP6AHH000H1@Z1PAPAX@Z';
+procedure setNumThreads; external core_lib name '?setNumThreads@cv@@YAXH@Z';
+function getNumThreads; external core_lib name '?getNumThreads@cv@@YAHXZ';
+function getThreadNum; external core_lib name '?getThreadNum@cv@@YAHXZ';
+function getTickCount; external core_lib name '?getTickCount@cv@@YA_JXZ';
+function getTickFrequency; external core_lib name '?getTickFrequency@cv@@YANXZ';
+function getCPUTickCount; external core_lib name '?getCPUTickCount@cv@@YA_JXZ';
+function checkHardwareSupport; external core_lib name '?checkHardwareSupport@cv@@YA_NH@Z';
+function getNumberOfCPUs; external core_lib name '?getNumberOfCPUs@cv@@YAHXZ';
+function fastMalloc; external core_lib name '?fastMalloc@cv@@YAPAXI@Z';
+procedure fastFree; external core_lib name '?fastFree@cv@@YAXPAX@Z';
+procedure setUseOptimized; external core_lib name '?setUseOptimized@cv@@YAX_N@Z';
+function useOptimized; external core_lib name '?useOptimized@cv@@YA_NXZ';
+{$ENDIF}
 
 end.

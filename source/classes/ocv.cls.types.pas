@@ -40,6 +40,7 @@ Type
   protected
     FData: TOpenCVClass;
   public
+    constructor Create(const OpenCVClass: TOpenCVClass);
     function _InternalData: TOpenCVClass;
   end;
 
@@ -53,6 +54,11 @@ implementation
 Uses ocv.utils;
 
 { TOCVCommon }
+
+constructor TOCVCommon.Create(const OpenCVClass: TOpenCVClass);
+begin
+  FData := OpenCVClass;
+end;
 
 function TOCVCommon._InternalData: TOpenCVClass;
 begin

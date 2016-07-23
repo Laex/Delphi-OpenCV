@@ -31,30 +31,11 @@ interface
 
 Uses
   Winapi.Windows,
-  System.Generics.Collections,
   ocv.cls.types,
   ocv.core.types_c,
-  ocv.highgui_c,
-  ocv.cls.core,
-  ocv.cls.mat;
+  ocv.cls.core;
 
 Type
-  IMaskGenerator = interface(IOCVCommon)
-    ['{DABEB77F-A919-49EB-999F-C1876812A330}']
-  end;
-
-  TMaskGenerator = class(TOCVCommon, IMaskGenerator)
-
-  end;
-
-  // IFileNode = interface(IOCVCommon)
-  // ['{8BB056BF-08AE-4512-9861-4906D770C2A0}']
-  // end;
-  // TFileNode = class(TOCVCommon, IFileNode)
-  // end;
-
-
-
   ICascadeClassifier = interface(IOCVCommon)
     ['{700C3DEC-F156-4014-9676-5BD9ECC3B01B}']
     function empty(): cbool;
@@ -73,7 +54,8 @@ Type
     function isOldFormatCascade(): cbool;
     function getOriginalWindowSize(): ISize;
     function getFeatureType(): integer;
-//    function convert(const oldcascade: String; const newcascade: String): cbool;
+    function setImage(Image: IMat): cbool;
+    // function convert(const oldcascade: String; const newcascade: String): cbool;
   end;
 
   TCascadeClassifier = class(TOCVCommon, ICascadeClassifier)
@@ -157,9 +139,9 @@ Type
     function isOldFormatCascade(): cbool;
     function getOriginalWindowSize(): ISize;
     function getFeatureType(): integer;
-//    function convert(const oldcascade: String; const newcascade: String): cbool;
+    function setImage(Image: IMat): cbool;
+    // function convert(const oldcascade: String; const newcascade: String): cbool;
   end;
-
 
 implementation
 
@@ -180,16 +162,17 @@ function _CascadeClassifier_getOriginalWindowSize(CascadeClassifier: TOpenCVClas
   external opencv_classes_lib name '_CascadeClassifier_getOriginalWindowSize@4';
 function _CascadeClassifier_getFeatureType(CascadeClassifier: TOpenCVClass): integer; stdcall;
   external opencv_classes_lib name '_CascadeClassifier_getFeatureType@4';
-//function _CascadeClassifier_convert(CascadeClassifier: TOpenCVClass; oldcascade, newcascade: PAnsiChar): cbool; stdcall;
-//  external opencv_classes_lib name '_CascadeClassifier_convert@12';
-
+function _CascadeClassifier_setImage(CascadeClassifier: TOpenCVClass; m: TOpenCVClass): cbool; stdcall;
+  external opencv_classes_lib name '_CascadeClassifier_setImage@8';
+// function _CascadeClassifier_convert(CascadeClassifier: TOpenCVClass; oldcascade, newcascade: PAnsiChar): cbool; stdcall;
+// external opencv_classes_lib name '_CascadeClassifier_convert@12';
 
 { ------------------------------ TCascadeClassifier ------------------------------ }
 
-//function TCascadeClassifier.convert(const oldcascade, newcascade: String): cbool;
-//begin
-//  Result := _CascadeClassifier_convert(FData, oldcascade.AsPAnsiChar, newcascade.AsPAnsiChar);
-//end;
+// function TCascadeClassifier.convert(const oldcascade, newcascade: String): cbool;
+// begin
+// Result := _CascadeClassifier_convert(FData, oldcascade.AsPAnsiChar, newcascade.AsPAnsiChar);
+// end;
 
 constructor TCascadeClassifier.Create;
 begin
@@ -251,6 +234,11 @@ end;
 function TCascadeClassifier.load(const FileName: String): cbool;
 begin
   Result := _get_CascadeClassifier_load(FData, FileName.AsPAnsiChar);
+end;
+
+function TCascadeClassifier.setImage(Image: IMat): cbool;
+begin
+  Result := _CascadeClassifier_setImage(FData, Image._InternalData);
 end;
 
 end.
