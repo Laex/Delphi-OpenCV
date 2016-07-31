@@ -38,41 +38,40 @@ uses
   ocv.imgproc_c,
   ocv.imgproc.types_c;
 
-// {$DEFINE RECT}
 // {$DEFINE RECT} //- using cvBoundingRect - work correctly
-{ DEFINE RECT } // - not defined RECT - using cvMinAreaRect2
+                  // - not defined RECT - using cvMinAreaRect2
 
 var
-  storage: pCvMemStorage = nil;
-  capture: pCvCapture = nil;
-  frame: pIplImage = nil;
-  frame_grey: pIplImage = nil;
-  difference_img: pIplImage = nil;
-  oldframe_grey: pIplImage = nil;
-  contours: pCvSeq = nil;
-  c: pCvSeq = nil;
+  storage       : pCvMemStorage = nil;
+  capture       : pCvCapture    = nil;
+  frame         : pIplImage     = nil;
+  frame_grey    : pIplImage     = nil;
+  difference_img: pIplImage     = nil;
+  oldframe_grey : pIplImage     = nil;
+  contours      : pCvSeq        = nil;
+  c             : pCvSeq        = nil;
 {$IFDEF RECT}
   rect: TCvRect;
 {$ELSE}
   rect2d: TCvBox2D;
 {$ENDIF}
-  key: integer;
+  key  : integer;
   first: boolean = true;
 
   // Удаление мелких контуров
 function remove_small_objects(img_in: pIplImage; size: integer): pIplImage;
 var
-  img_out: pIplImage;
-  s_storage: pCvMemStorage;
-  s_contours: pCvSeq;
+  img_out     : pIplImage;
+  s_storage   : pCvMemStorage;
+  s_contours  : pCvSeq;
   black, white: TCvScalar;
-  area: double;
+  area        : double;
 begin
-  img_out := cvCloneImage(img_in); // Клонируем изображение
-  s_storage := cvCreateMemStorage(0); // Создаем хранилище
+  img_out    := cvCloneImage(img_in);  // Клонируем изображение
+  s_storage  := cvCreateMemStorage(0); // Создаем хранилище
   s_contours := nil;
-  black := CV_RGB(0, 0, 0); // Черный цвет
-  white := CV_RGB(255, 255, 255); // Белый цвет
+  black      := CV_RGB(0, 0, 0);       // Черный цвет
+  white      := CV_RGB(255, 255, 255); // Белый цвет
   s_contours := AllocMem(SizeOf(TCvSeq));
   // Ищем контуры на изображении
   cvClearMemStorage(s_storage);
@@ -95,9 +94,9 @@ end;
 
 begin
   try
-    capture := cvCreateCameraCapture(0);
-    storage := cvCreateMemStorage(0);
-    frame := cvQueryFrame(capture);
+    capture    := cvCreateCameraCapture(0);
+    storage    := cvCreateMemStorage(0);
+    frame      := cvQueryFrame(capture);
     frame_grey := cvCreateImage(cvSize(frame^.width, frame^.height), IPL_DEPTH_8U, 1);
 
     while true do
@@ -109,7 +108,7 @@ begin
       if first then
       begin
         difference_img := cvCloneImage(frame_grey);
-        oldframe_grey := cvCloneImage(frame_grey);
+        oldframe_grey  := cvCloneImage(frame_grey);
         cvConvertScale(frame_grey, oldframe_grey, 1.0, 0.0);
         first := false;
       end;
@@ -143,7 +142,7 @@ begin
       cvConvertScale(frame_grey, oldframe_grey, 1.0, 0.0);
       cvClearMemStorage(storage);
       contours := nil;
-      c := nil;
+      c        := nil;
       FreeMem(contours, SizeOf(TCvSeq));
       key := cvWaitKey(33);
       if (key = 27) then

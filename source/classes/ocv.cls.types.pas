@@ -44,10 +44,7 @@ Type
     function _InternalData: TOpenCVClass;
   end;
 
-  TStringAnsiHelper = record helper for
-    String
-    function AsPAnsiChar: PAnsiChar;
-  end;
+
 
 implementation
 
@@ -63,13 +60,6 @@ end;
 function TOCVCommon._InternalData: TOpenCVClass;
 begin
   Result := FData;
-end;
-
-{ TStringAnsiHelper }
-
-function TStringAnsiHelper.AsPAnsiChar: PAnsiChar;
-begin
-  Result := c_str(Self);
 end;
 
 end.

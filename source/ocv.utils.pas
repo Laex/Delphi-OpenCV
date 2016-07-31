@@ -88,6 +88,12 @@ function CropIplImage(const src: PIplImage; const roi: TCvRect): PIplImage;
 procedure ocvRGBToHSV(const R, G, B: byte; out _H, _S, _V: byte);
 procedure ocvHSVToRGB(const _H, _S, _V: byte; out _R, _G, _B: byte);
 
+Type
+  TStringAnsiHelper = record helper for
+    String
+    function AsPAnsiChar: PAnsiChar;
+  end;
+
 implementation
 
 uses
@@ -97,6 +103,13 @@ uses
   SysUtils,
 {$ENDIF}
   ocv.core_c, System.Math;
+
+{ TStringAnsiHelper }
+
+function TStringAnsiHelper.AsPAnsiChar: PAnsiChar;
+begin
+  Result := c_str(Self);
+end;
 
 function BitmapToIplImage(const bitmap:
 {$IFDEF DELPHIXE2_UP}Vcl.Graphics.TBitmap{$ELSE}Graphics.TBitmap{$ENDIF}): PIplImage;
@@ -204,10 +217,8 @@ begin
         for j := 0 to _Grab^.Width - 1 do
         begin
           App[_Grab^.Width * 3 * (_Grab^.Height - i - 1) + j * 3] := PByte(_Grab^.ImageData)[_Grab^.Width * (i) + j];
-          App[_Grab^.Width * 3 * (_Grab^.Height - i - 1) + j * 3 + 1] := PByte(_Grab^.ImageData)
-            [_Grab^.Width * (i) + j];
-          App[_Grab^.Width * 3 * (_Grab^.Height - i - 1) + j * 3 + 2] := PByte(_Grab^.ImageData)
-            [_Grab^.Width * (i) + j];
+          App[_Grab^.Width * 3 * (_Grab^.Height - i - 1) + j * 3 + 1] := PByte(_Grab^.ImageData)[_Grab^.Width * (i) + j];
+          App[_Grab^.Width * 3 * (_Grab^.Height - i - 1) + j * 3 + 2] := PByte(_Grab^.ImageData)[_Grab^.Width * (i) + j];
         end;
       end;
 
@@ -217,8 +228,7 @@ begin
     begin
       for i := 0 to _Grab^.Height - 1 do
       begin
-        CopyMemory(App + _Grab^.Width * 3 * (_Grab^.Height - i - 1), PByte(_Grab^.ImageData) + _Grab^.Width * 3 * i,
-          _Grab^.Width * 3);
+        CopyMemory(App + _Grab^.Width * 3 * (_Grab^.Height - i - 1), PByte(_Grab^.ImageData) + _Grab^.Width * 3 * i, _Grab^.Width * 3);
         // Копируем память
       end;
 
@@ -389,8 +399,7 @@ begin
   if (not Assigned(img)) or (not Assigned(img^.ImageData)) then
     Exit(false);
 
-  isrgb := ('R' = upcase(img^.colorModel[0])) and ('G' = upcase(img^.colorModel[1])) and
-    ('B' = upcase(img^.colorModel[2]));
+  isrgb := ('R' = upcase(img^.colorModel[0])) and ('G' = upcase(img^.colorModel[1])) and ('B' = upcase(img^.colorModel[2]));
   isgray := 'G' = upcase(img^.colorModel[0]);
 
   if (not isgray) and (not isrgb) then
@@ -429,15 +438,14 @@ begin
     // Stretch the image to fit the rectangle
     iResult := StretchDIBits(dc, rect.left, rect.top,
 {$IFDEF DELPHIXE2_UP}rect.Width{$ELSE}rect.Right - rect.left{$ENDIF},
-{$IFDEF DELPHIXE2_UP}rect.Height{$ELSE}rect.Bottom - rect.top{$ENDIF}, 0, 0, img^.Width, img^.Height, img^.ImageData,
-      _dibhdr, DIB_RGB_COLORS, SRCCOPY);
+{$IFDEF DELPHIXE2_UP}rect.Height{$ELSE}rect.Bottom - rect.top{$ENDIF}, 0, 0, img^.Width, img^.Height, img^.ImageData, _dibhdr,
+      DIB_RGB_COLORS, SRCCOPY);
     Result := (iResult > 0); // and (iResult <> GDI_ERROR);
   end
   else
   begin
     // Draw without scaling
-    iResult := SetDIBitsToDevice(dc, rect.left, rect.top, img^.Width, img^.Height, 0, 0, 0, img^.Height, img^.ImageData,
-      _dibhdr, DIB_RGB_COLORS);
+    iResult := SetDIBitsToDevice(dc, rect.left, rect.top, img^.Width, img^.Height, 0, 0, 0, img^.Height, img^.ImageData, _dibhdr, DIB_RGB_COLORS);
     Result := (iResult > 0); // and (iResult <> GDI_ERROR);
   end;
 end;
@@ -575,7 +583,8 @@ begin
         H := 2 + (B - R) / Range;
       2:
         H := 4 + (R - G) / Range;
-        else H:=0;
+    else
+      H := 0;
     end;
     S := Range / rgb[MaxIndex];
     V := rgb[MaxIndex];
