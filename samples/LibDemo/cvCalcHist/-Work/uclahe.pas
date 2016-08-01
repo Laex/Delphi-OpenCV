@@ -437,7 +437,7 @@ begin
     ulNrExcess := 0; pulBinPointer := pulHistogram;
     for i := 0 to uiNrGreylevels-1 do
     begin (* calculate total number of excess pixels *)
-        lBinExcess :=  pulBinPointer[i] - ulClipLimit;
+        lBinExcess :=  Integer(Int64(pulBinPointer[i]) - Int64(ulClipLimit));
         if (lBinExcess > 0) then ulNrExcess :=ulNrExcess+lBinExcess; (* excess in current bin *)
     end;;
 
