@@ -35,8 +35,9 @@
 
 *)
 
-{$I OpenCV.inc}
 unit ocv.lib;
+
+{$I OpenCV.inc}
 
 interface
 
@@ -318,10 +319,12 @@ begin
   Halt(1);
 end;
 
+{$IFDEF USE_STUB_FOR_MISS_FUNC}
 procedure STUB_PROC;
 begin
   ocvErrorMessage('STUB: Call missing functions');
 end;
+{$ENDIF}
 
 Type
   TOCVLibHandles = TDictionary<String, Cardinal>;

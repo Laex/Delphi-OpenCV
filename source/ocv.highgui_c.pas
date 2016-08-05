@@ -80,20 +80,18 @@ const
 
 Type
   TcvFontQt = function(const nameFont: pCvChar; pointSize: Integer { = -1 }; color: TCvScalar { = CV_DEFAULT(cvScalarAll(0)) };
-    weight: Integer { = CV_DEFAULT(CV_FONT_NORMAL) }; style: Integer { = CV_DEFAULT(CV_STYLE_NORMAL) }; spacing: Integer { = CV_DEFAULT(0) } )
-    : TCvFont; cdecl;
+    weight: Integer = CV_FONT_NORMAL; style: Integer = CV_STYLE_NORMAL; spacing: Integer = 0): TCvFont; cdecl;
 
 var
   cvFontQt: TcvFontQt;
 
 {$ELSE}
-function cvFontQt(const nameFont: pCvChar; pointSize: Integer { = -1 }; color: TCvScalar { = CV_DEFAULT(cvScalarAll(0)) };
-  weight: Integer { = CV_DEFAULT(CV_FONT_NORMAL) }; style: Integer { = CV_DEFAULT(CV_STYLE_NORMAL) }; spacing: Integer { = CV_DEFAULT(0) } )
-  : TCvFont; cdecl;
+  // function cvFontQt(const nameFont: pCvChar; pointSize: Integer { = -1 }; color: TCvScalar { = CV_DEFAULT(cvScalarAll(0)) };
+  // weight: Integer = CV_FONT_NORMAL; style: Integer = CV_STYLE_NORMAL; spacing: Integer = 0): TCvFont; cdecl;
 {$ENDIF}
-(*
-  CVAPI(void) cvAddText(const CvArr* img, const char* text, CvPoint org, CvFont *arg2);
-*)
+  (*
+    CVAPI(void) cvAddText(const CvArr* img, const char* text, CvPoint org, CvFont *arg2);
+  *)
 {$IFDEF SAFELOADLIB}
 
 Type
@@ -102,11 +100,11 @@ Type
 var
   cvAddText: TcvAddText;
 {$ELSE}
-procedure cvAddText(const img: pCvArr; const text: pCvChar; org: TCvPoint; arg2: pCvFont); cdecl;
+  // procedure cvAddText(const img: pCvArr; const text: pCvChar; org: TCvPoint; arg2: pCvFont); cdecl;
 {$ENDIF}
-(*
-  CVAPI(void) cvDisplayOverlay(const char* name, const char* text, int delayms CV_DEFAULT(0));
-*)
+  (*
+    CVAPI(void) cvDisplayOverlay(const char* name, const char* text, int delayms CV_DEFAULT(0));
+  *)
 {$IFDEF SAFELOADLIB}
 
 type
@@ -115,11 +113,11 @@ type
 var
   cvDisplayOverlay: TcvDisplayOverlay;
 {$ELSE}
-procedure cvDisplayOverlay(const name: pCvChar; const text: pCvChar; delayms: Integer = 0); cdecl;
+  // procedure cvDisplayOverlay(const name: pCvChar; const text: pCvChar; delayms: Integer = 0); cdecl;
 {$ENDIF}
-(*
-  CVAPI(void) cvDisplayStatusBar(const char* name, const char* text, int delayms CV_DEFAULT(0));
-*)
+  (*
+    CVAPI(void) cvDisplayStatusBar(const char* name, const char* text, int delayms CV_DEFAULT(0));
+  *)
 {$IFDEF SAFELOADLIB}
 
 type
@@ -128,11 +126,11 @@ type
 var
   cvDisplayStatusBar: TcvDisplayStatusBar;
 {$ELSE}
-procedure cvDisplayStatusBar(const name: pCvChar; const text: pCvChar; delayms: Integer = 0); cdecl;
+  // procedure cvDisplayStatusBar(const name: pCvChar; const text: pCvChar; delayms: Integer = 0); cdecl;
 {$ENDIF}
-(*
-  CVAPI(void) cvSaveWindowParameters(const char* name);
-*)
+  (*
+    CVAPI(void) cvSaveWindowParameters(const char* name);
+  *)
 {$IFDEF SAFELOADLIB}
 
 type
@@ -141,11 +139,11 @@ type
 var
   cvSaveWindowParameters: TcvSaveWindowParameters;
 {$ELSE}
-procedure cvSaveWindowParameters(const name: pCvChar); cdecl;
+  // procedure cvSaveWindowParameters(const name: pCvChar); cdecl;
 {$ENDIF}
-(*
-  CVAPI(void) cvLoadWindowParameters(const char* name);
-*)
+  (*
+    CVAPI(void) cvLoadWindowParameters(const char* name);
+  *)
 {$IFDEF SAFELOADLIB}
 
 type
@@ -154,7 +152,7 @@ type
 Var
   cvLoadWindowParameters: TcvLoadWindowParameters;
 {$ELSE}
-procedure cvLoadWindowParameters(const name: pCvChar); cdecl;
+  // procedure cvLoadWindowParameters(const name: pCvChar); cdecl;
 {$ENDIF}
 
 Type
@@ -173,11 +171,11 @@ type
 var
   cvStartLoop: TcvStartLoop;
 {$ELSE}
-function cvStartLoop(pt2Func: Tpt2Func): Integer; cdecl;
+  // function cvStartLoop(pt2Func: Tpt2Func): Integer; cdecl;
 {$ENDIF}
-(*
-  CVAPI(void) cvStopLoop( void );
-*)
+  (*
+    CVAPI(void) cvStopLoop( void );
+  *)
 {$IFDEF SAFELOADLIB}
 
 type
@@ -186,7 +184,7 @@ type
 Var
   cvStopLoop: TcvStopLoop;
 {$ELSE}
-procedure cvStopLoop; cdecl;
+  // procedure cvStopLoop; cdecl;
 {$ENDIF}
 
 Type
@@ -210,14 +208,14 @@ type
 var
   cvCreateButton: TcvCreateButton;
 {$ELSE}
-function cvCreateButton(const button_name: pCvChar = nil; on_change: TCvButtonCallback = nil; userdata: Pointer = nil;
-  button_type: Integer = CV_PUSH_BUTTON; initial_button_state: Integer = 0): Integer; cdecl;
+  // function cvCreateButton(const button_name: pCvChar = nil; on_change: TCvButtonCallback = nil; userdata: Pointer = nil;
+  // button_type: Integer = CV_PUSH_BUTTON; initial_button_state: Integer = 0): Integer; cdecl;
 {$ENDIF}
 
-(*
-  this function is used to set some external parameters in case of X Window */
-  CVAPI(int) cvInitSystem( int argc, char** argv );
-*)
+  (*
+    this function is used to set some external parameters in case of X Window */
+    CVAPI(int) cvInitSystem( int argc, char** argv );
+  *)
 type
   TcvInitSystem = function(argc: Integer; argv: ppCVChar): Integer; cdecl;
 {$IFDEF SAFELOADLIB}
@@ -621,7 +619,6 @@ var
 {$ELSE}
 procedure cvConvertImage(const src: pCvArr; dst: pCvArr; flags: Integer = 0); cdecl;
 {$ENDIF}
-
 
 (* wait for key event infinitely (delay<=0) or for "delay" milliseconds *)
 type
@@ -1151,6 +1148,10 @@ var
 {$EXTERNALSYM set_preprocess_func}
   set_postprocess_func: TcvSetPostprocessFuncWin32_ {$IFNDEF SAFELOADLIB} = cvSetPostprocessFuncWin32_{$ENDIF};
 
+{$IF DEFINED(SAFELOADLIB) AND DEFINED(DEBUG)}
+procedure Init_highgui_c_lib;
+{$ENDIF}
+
 implementation
 
 uses ocv.lib;
@@ -1198,15 +1199,15 @@ begin
   cvCreateTrackbar2 := ocvGetProcAddress('cvCreateTrackbar2', highguiDLL);
   cvGetTrackbarPos := ocvGetProcAddress('cvGetTrackbarPos', highguiDLL);
   cvSetTrackbarPos := ocvGetProcAddress('cvSetTrackbarPos', highguiDLL);
-  cvFontQt := ocvGetProcAddress('cvFontQt', highguiDLL);
-  cvAddText := ocvGetProcAddress('cvAddText', highguiDLL);
-  cvDisplayOverlay := ocvGetProcAddress('cvDisplayOverlay', highguiDLL);
-  cvDisplayStatusBar := ocvGetProcAddress('cvDisplayStatusBar', highguiDLL);
-  cvSaveWindowParameters := ocvGetProcAddress('cvSaveWindowParameters', highguiDLL);
-  cvLoadWindowParameters := ocvGetProcAddress('cvLoadWindowParameters', highguiDLL);
-  cvStartLoop := ocvGetProcAddress('cvStartLoop', highguiDLL);
-  cvStopLoop := ocvGetProcAddress('cvStopLoop', highguiDLL);
-  cvCreateButton := ocvGetProcAddress('cvCreateButton', highguiDLL);
+  // cvFontQt := ocvGetProcAddress('cvFontQt', highguiDLL);
+  // cvAddText := ocvGetProcAddress('cvAddText', highguiDLL);
+  // cvDisplayOverlay := ocvGetProcAddress('cvDisplayOverlay', highguiDLL);
+  // cvDisplayStatusBar := ocvGetProcAddress('cvDisplayStatusBar', highguiDLL);
+  // cvSaveWindowParameters := ocvGetProcAddress('cvSaveWindowParameters', highguiDLL);
+  // cvLoadWindowParameters := ocvGetProcAddress('cvLoadWindowParameters', highguiDLL);
+  // cvStartLoop := ocvGetProcAddress('cvStartLoop', highguiDLL);
+  // cvStopLoop := ocvGetProcAddress('cvStopLoop', highguiDLL);
+  // cvCreateButton := ocvGetProcAddress('cvCreateButton', highguiDLL);
   cvGetWindowHandle := ocvGetProcAddress('cvGetWindowHandle', highguiDLL);
   cvGetWindowName := ocvGetProcAddress('cvGetWindowName', highguiDLL);
   cvLoadImageM := ocvGetProcAddress('cvLoadImageM', highguiDLL);
@@ -1222,21 +1223,21 @@ begin
   cvSetPreprocessFuncWin32_ := ocvGetProcAddress('cvSetPreprocessFuncWin32_', highguiDLL);
   cvSetPostprocessFuncWin32_ := ocvGetProcAddress('cvSetPostprocessFuncWin32_', highguiDLL);
 
-  cvCaptureFromFile:=cvCreateFileCapture;
-  cvCaptureFromCAM:= cvCreateCameraCapture;
-  cvCaptureFromAVI:= cvCreateFileCapture;
-  cvCreateAVIWriter:= cvCreateVideoWriter;
-  cvWriteToAVI:= cvWriteFrame;
-  cvvInitSystem:= cvInitSystem;
-  cvvNamedWindow:= cvNamedWindow;
-  cvvShowImage:= cvShowImage;
-  cvvResizeWindow:= cvResizeWindow;
-  cvvDestroyWindow:= cvDestroyWindow;
-  cvvCreateTrackbar:= cvCreateTrackbar;
-  cvvLoadImage:= cvLoadImage;
-  cvvSaveImage:= cvSaveImage;
-  cvvWaitKey:= cvWaitKey;
-  cvvConvertImage:= cvConvertImage;
+  cvCaptureFromFile := cvCreateFileCapture;
+  cvCaptureFromCAM := cvCreateCameraCapture;
+  cvCaptureFromAVI := cvCreateFileCapture;
+  cvCreateAVIWriter := cvCreateVideoWriter;
+  cvWriteToAVI := cvWriteFrame;
+  cvvInitSystem := cvInitSystem;
+  cvvNamedWindow := cvNamedWindow;
+  cvvShowImage := cvShowImage;
+  cvvResizeWindow := cvResizeWindow;
+  cvvDestroyWindow := cvDestroyWindow;
+  cvvCreateTrackbar := cvCreateTrackbar;
+  cvvLoadImage := cvLoadImage;
+  cvvSaveImage := cvSaveImage;
+  cvvWaitKey := cvWaitKey;
+  cvvConvertImage := cvConvertImage;
 
   cvSetPreprocessFuncWin32 := cvSetPreprocessFuncWin32_;
   cvSetPostprocessFuncWin32 := cvSetPostprocessFuncWin32_;
@@ -1277,15 +1278,15 @@ function cvStartWindowThread; external highgui_lib;
 function cvCreateTrackbar2; external highgui_lib;
 function cvGetTrackbarPos; external highgui_lib;
 procedure cvSetTrackbarPos; external highgui_lib;
-function cvFontQt; external highgui_lib;
-procedure cvAddText; external highgui_lib;
-procedure cvDisplayOverlay; external highgui_lib;
-procedure cvDisplayStatusBar; external highgui_lib;
-procedure cvSaveWindowParameters; external highgui_lib;
-procedure cvLoadWindowParameters; external highgui_lib;
-function cvStartLoop; external highgui_lib;
-procedure cvStopLoop; external highgui_lib;
-function cvCreateButton; external highgui_lib;
+// function cvFontQt; external highgui_lib;
+// procedure cvAddText; external highgui_lib;
+// procedure cvDisplayOverlay; external highgui_lib;
+// procedure cvDisplayStatusBar; external highgui_lib;
+// procedure cvSaveWindowParameters; external highgui_lib;
+// procedure cvLoadWindowParameters; external highgui_lib;
+// function cvStartLoop; external highgui_lib;
+// procedure cvStopLoop; external highgui_lib;
+// function cvCreateButton; external highgui_lib;
 function cvGetWindowHandle; external highgui_lib;
 function cvGetWindowName; external highgui_lib;
 function cvLoadImageM; external highgui_lib;

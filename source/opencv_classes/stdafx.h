@@ -19,6 +19,7 @@
 #include "opencv2/highgui/highgui.hpp"
 #include "opencv2/objdetect.hpp"
 #include "opencv2/contrib/contrib.hpp"
+#include "opencv2/imgproc/imgproc.hpp"
 
 
 // TODO: Установите здесь ссылки на дополнительные заголовки, требующиеся для программы

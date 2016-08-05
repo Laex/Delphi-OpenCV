@@ -892,6 +892,11 @@ procedure cvReprojectImageTo3D(
   { } const Q: pCvMat;
   { } handleMissingValues: Integer = 0); cdecl;
 {$ENDIF}
+// ------------------------------------
+
+{$IF DEFINED(SAFELOADLIB) AND DEFINED(DEBUG)}
+procedure Init_opencv_calib3d_lib;
+{$ENDIF}
 
 implementation
 

@@ -78,6 +78,10 @@ Var
 procedure cvInpaint(const src: pCvArr; const inpaint_mask: pCvArr; dst: pCvArr; inpaintRange: double; flags: Integer); cdecl;
 {$ENDIF}
 
+{$IF DEFINED(SAFELOADLIB) AND DEFINED(DEBUG)}
+procedure Init_opencv_photo_lib;
+{$ENDIF}
+
 implementation
 
 uses ocv.lib;

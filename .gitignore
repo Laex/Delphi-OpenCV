@@ -43,3 +43,6 @@ lib
 *.identcache 
 *.cmd
 *.stat
+*.iobj
+*.ipdb
+*.db

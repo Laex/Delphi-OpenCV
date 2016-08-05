@@ -3484,7 +3484,7 @@ begin
       eopNone:
         begin
           Destanation := Source;
-          Exit;
+          Exit(True);
         end;
       eopSature:
         Sature(Step, Source.IpImage, iImage);
@@ -3539,7 +3539,7 @@ GetRegisteredImageOperations.RegisterIOClass(TocvCvtColorOperation, 'ColorOperat
 GetRegisteredImageOperations.RegisterIOClass(TocvResizeOperation, 'Resize');
 GetRegisteredImageOperations.RegisterIOClass(TocvLogicOperation, 'Logic');
 GetRegisteredImageOperations.RegisterIOClass(TocvLogicSOperation, 'LogicS');
-GetRegisteredImageOperations.RegisterIOClass(TocvEditor,'Editor');
+GetRegisteredImageOperations.RegisterIOClass(TocvEditor, 'Editor');
 
 finalization
 

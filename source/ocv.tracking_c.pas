@@ -415,6 +415,10 @@ Var
 {$EXTERNALSYM cvKalmanUpdateByMeasurement}
   cvKalmanUpdateByMeasurement: TcvKalmanCorrect{$IFNDEF SAFELOADLIB} = cvKalmanCorrect{$ENDIF};
 
+{$IF DEFINED(SAFELOADLIB) AND DEFINED(DEBUG)}
+procedure Init_opencv_Tracking_lib;
+{$ENDIF}
+
 implementation
 
 uses
