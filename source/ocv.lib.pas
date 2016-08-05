@@ -42,21 +42,21 @@ interface
 
 const
 {$IFDEF DelphiOCVVersion_29}
-  CV_VERSION_EPOCH    = '2';
-  CV_VERSION_MAJOR    = '4';
-  CV_VERSION_MINOR    = '13';
+  CV_VERSION_EPOCH = '2';
+  CV_VERSION_MAJOR = '4';
+  CV_VERSION_MINOR = '13';
   CV_VERSION_REVISION = '0';
 {$ELSEIF DEFINED(DelphiOCVVersion_30)}
-  CV_VERSION_EPOCH    = '3';
-  CV_VERSION_MAJOR    = '0';
-  CV_VERSION_MINOR    = '0';
+  CV_VERSION_EPOCH = '3';
+  CV_VERSION_MAJOR = '0';
+  CV_VERSION_MINOR = '0';
   CV_VERSION_REVISION = '0';
 {$ENDIF}
   CV_VERSION = CV_VERSION_EPOCH + '.' + CV_VERSION_MAJOR + '.' + CV_VERSION_MINOR + '.' + CV_VERSION_REVISION;
 
   // * old  style version constants*/
-  CV_MAJOR_VERSION    = CV_VERSION_EPOCH;
-  CV_MINOR_VERSION    = CV_VERSION_MAJOR;
+  CV_MAJOR_VERSION = CV_VERSION_EPOCH;
+  CV_MINOR_VERSION = CV_VERSION_MAJOR;
   CV_SUBMINOR_VERSION = CV_VERSION_MINOR;
 
   CV_VERSION_DLL = CV_VERSION_EPOCH + CV_VERSION_MAJOR + CV_VERSION_MINOR;
@@ -333,7 +333,9 @@ function ocvLoadLibrary(const Name: String): Cardinal;
 begin
   if not OCVLibHandles.TryGetValue(Name, Result) then
   begin
-    Result := LoadLibrary(LPCWSTR(Name));
+{$R-}
+    Result := LoadLibrary(LPCWSTR(@Name[1]));
+{$R+}
     if Result = 0 then
       ocvErrorMessage('Can not load DLL: ' + Name);
     OCVLibHandles.Add(Name, Result);

@@ -33,8 +33,7 @@ Uses
     ocv.cls.types,
     ocv.core.types_c,
     ocv.highgui_c,
-    ocv.cls.core,
-    ocv.cls.mat;
+    ocv.cls.core;
 
 const
   // Camera API
@@ -362,6 +361,7 @@ function imread(const FileName: string; flag: integer = 1): IMat;
 implementation
 
 Uses
+  ocv.utils,
   ocv.lib;
 
 // ------------------------------ VideoCapture ------------------------------

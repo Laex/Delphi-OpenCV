@@ -36,8 +36,8 @@ Uses
 
 Type
   TInputArrayOfIplImage = TArray<pIplImage>; // InputArrayOfArrays
-  TInputArrayOfMat      = TArray<IMat>;      // InputArrayOfArrays
-  TInputArrayOfInteger  = TArray<Integer>;   // InputArray
+  TInputArrayOfMat = TArray<IMat>; // InputArrayOfArrays
+  TInputArrayOfInteger = TArray<Integer>; // InputArray
 
   IFaceRecognizer = interface(IOCVCommon)
     ['{199DE478-2C78-4347-B553-C062290C78D2}']
@@ -89,8 +89,8 @@ Type
     // CV_EXPORTS_W Ptr<FaceRecognizer> createFisherFaceRecognizer(int num_components = 0, double threshold = DBL_MAX);
     constructor createFisherFaceRecognizer(num_components: Integer = 0; threshold: double = DBL_MAX);
     // CV_EXPORTS_W Ptr<FaceRecognizer> createLBPHFaceRecognizer(int radius=1, int neighbors=8,int grid_x=8, int grid_y=8, double threshold = DBL_MAX);
-    constructor createLBPHFaceRecognizer(radius: Integer = 1; neighbors: Integer = 8; grid_x: Integer = 8;
-      grid_y: Integer = 8; threshold: double = DBL_MAX);
+    constructor createLBPHFaceRecognizer(radius: Integer = 1; neighbors: Integer = 8; grid_x: Integer = 8; grid_y: Integer = 8;
+      threshold: double = DBL_MAX);
     destructor Destroy; override;
     procedure train(src: TInputArrayOfIplImage; labels: TInputArrayOfInteger); overload;
     procedure train(src: TInputArrayOfMat; labels: TInputArrayOfInteger); overload;
@@ -107,7 +107,7 @@ Type
 {$IFDEF SAFELOADLIB}
 
 type
-  TInitModule_contrib = function():cbool; cdecl;
+  TInitModule_contrib = function(): cbool; cdecl;
 
 var
   InitModule_contrib: TInitModule_contrib;
@@ -117,7 +117,9 @@ function InitModule_contrib(): cbool; cdecl;
 
 implementation
 
-uses ocv.lib;
+uses
+  ocv.utils,
+  ocv.lib;
 
 // CV_EXPORTS_W Ptr<FaceRecognizer> createEigenFaceRecognizer(int num_components = 0, double threshold = DBL_MAX);
 function Create_EigenFaceRecognizer(num_components: Integer = 0; threshold: double = DBL_MAX): TOpenCVClass; stdcall;
@@ -126,21 +128,17 @@ function Create_EigenFaceRecognizer(num_components: Integer = 0; threshold: doub
 function Create_FisherFaceRecognizer(num_components: Integer = 0; threshold: double = DBL_MAX): TOpenCVClass; stdcall;
   external opencv_classes_lib name '_Create_FisherFaceRecognizer@12';
 // CV_EXPORTS_W Ptr<FaceRecognizer> createLBPHFaceRecognizer(int radius=1, int neighbors=8,int grid_x=8, int grid_y=8, double threshold = DBL_MAX);
-function Create_LBPHFaceRecognizer(radius: Integer = 1; neighbors: Integer = 8; grid_x: Integer = 8;
-  grid_y: Integer = 8; threshold: double = DBL_MAX): TOpenCVClass; stdcall;
-  external opencv_classes_lib name '_Create_LBPHFaceRecognizer@24';
+function Create_LBPHFaceRecognizer(radius: Integer = 1; neighbors: Integer = 8; grid_x: Integer = 8; grid_y: Integer = 8; threshold: double = DBL_MAX)
+  : TOpenCVClass; stdcall; external opencv_classes_lib name '_Create_LBPHFaceRecognizer@24';
 
-procedure DestroyFaceRecognizer(const M: TOpenCVClass); stdcall;
-  external opencv_classes_lib name '_DestroyFaceRecognizer@4';
-procedure FaceRecognizerLoad(const M: TOpenCVClass; filename: PAnsiChar); stdcall;
-  external opencv_classes_lib name '_FaceRecognizerLoad@8';
-procedure FaceRecognizerSave(const M: TOpenCVClass; filename: PAnsiChar); stdcall;
-  external opencv_classes_lib name '_FaceRecognizerSave@8';
+procedure DestroyFaceRecognizer(const M: TOpenCVClass); stdcall; external opencv_classes_lib name '_DestroyFaceRecognizer@4';
+procedure FaceRecognizerLoad(const M: TOpenCVClass; filename: PAnsiChar); stdcall; external opencv_classes_lib name '_FaceRecognizerLoad@8';
+procedure FaceRecognizerSave(const M: TOpenCVClass; filename: PAnsiChar); stdcall; external opencv_classes_lib name '_FaceRecognizerSave@8';
 
 function FaceRecognizerPredict(const M: TOpenCVClass; scr: pIplImage): Integer; stdcall;
   external opencv_classes_lib name '_FaceRecognizerPredict1@8'; overload;
-procedure FaceRecognizerPredict(const M: TOpenCVClass; scr: pIplImage; var _label: Integer; var confidence: double);
-  stdcall; external opencv_classes_lib name '_FaceRecognizerPredict2@16'; overload;
+procedure FaceRecognizerPredict(const M: TOpenCVClass; scr: pIplImage; var _label: Integer; var confidence: double); stdcall;
+  external opencv_classes_lib name '_FaceRecognizerPredict2@16'; overload;
 
 procedure FaceRecognizerTrain(const M: TOpenCVClass; const n: Integer; scr: Pointer; labels: Pointer); stdcall;
   external opencv_classes_lib name '_FaceRecognizerTrain@16'; overload;
@@ -149,10 +147,9 @@ procedure FaceRecognizerTrainMat(const M: TOpenCVClass; const n: Integer; scr: P
 procedure FaceRecognizerUpdate(const M: TOpenCVClass; const n: Integer; scr: Pointer; labels: Pointer); stdcall;
   external opencv_classes_lib name '_FaceRecognizerUpdate@16';
 
-procedure _DestroyFaceRecognizer(const E: TOpenCVClass); stdcall;
-  external opencv_classes_lib name '_DestroyFaceRecognizer@4';
+procedure _DestroyFaceRecognizer(const E: TOpenCVClass); stdcall; external opencv_classes_lib name '_DestroyFaceRecognizer@4';
 
-  { TFaceRecognizer }
+{ TFaceRecognizer }
 
 constructor TFaceRecognizer.createEigenFaceRecognizer(num_components: Integer; threshold: double);
 begin
@@ -204,10 +201,10 @@ end;
 procedure TFaceRecognizer.train(src: TInputArrayOfMat; labels: TInputArrayOfInteger);
 Var
   src_mat: TArray<TOpenCVClass>;
-  i      : Integer;
+  i: Integer;
 begin
   SetLength(src_mat, Length(src));
-  for i        := 0 to High(src_mat) do
+  for i := 0 to High(src_mat) do
     src_mat[i] := src[i]._InternalData;
   FaceRecognizerTrainMat(FData, Length(src), @src_mat[0], @labels[0]);
 end;
