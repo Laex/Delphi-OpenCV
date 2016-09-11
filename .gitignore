@@ -46,3 +46,6 @@ lib
 *.iobj
 *.ipdb
 *.db
+*.user
+*.filters
+*.user

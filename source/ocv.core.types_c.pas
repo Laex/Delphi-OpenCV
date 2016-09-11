@@ -319,6 +319,7 @@ type
 
   pIplImage       = ^TIplImage;
   TpIplImageArray = array [0 .. 1] of pIplImage;
+  TArrayOfpIplImage = TArray<pIplImage>;
   ppIplImage      = ^TpIplImageArray;
   pIplROI         = ^TIplROI;
   pIplTileInfo    = ^TIplTileInfo;

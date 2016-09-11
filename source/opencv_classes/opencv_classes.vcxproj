@@ -178,6 +178,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
       </PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="features2d_prx.cpp" />
     <ClCompile Include="objdetect_prx.cpp" />
     <ClCompile Include="highgui_prx.cpp" />
     <ClCompile Include="imgproc_prx.cpp" />

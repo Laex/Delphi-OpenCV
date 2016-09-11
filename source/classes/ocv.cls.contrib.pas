@@ -35,8 +35,8 @@ Uses
   ocv.cls.types;
 
 Type
-  TInputArrayOfIplImage = TArray<pIplImage>; // InputArrayOfArrays
-  TInputArrayOfMat = TArray<IMat>; // InputArrayOfArrays
+  TInputArrayOfIplImage = TArrayOfpIplImage; // InputArrayOfArrays
+  TInputArrayOfMat = TArrayOfIMat; // InputArrayOfArrays
   TInputArrayOfInteger = TArray<Integer>; // InputArray
 
   IFaceRecognizer = interface(IOCVCommon)

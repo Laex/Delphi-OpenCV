@@ -98,11 +98,11 @@ type
 {$IFDEF SAFELOADLIB}
 
 type
-  TredirectError = function(errCallback: TErrorCallback; userdata: pointer = nil; prevUserdata: PPointer = nil)
+  TRedirectError = function(errCallback: TErrorCallback; userdata: pointer = nil; prevUserdata: PPointer = nil)
     : TErrorCallback; cdecl;
 
 var
-  redirectError: TredirectError;
+  redirectError: TRedirectError;
 {$ELSE}
 function redirectError(errCallback: TErrorCallback; userdata: pointer = nil; prevUserdata: PPointer = nil)
   : TErrorCallback; cdecl;
@@ -363,6 +363,9 @@ Type
     function cols(): integer;  // 10
     function data(): pointer;  // 11
   end;
+
+  TArrayOfTMat = TArray<TMat>;
+  TArrayOfIMat = TArray<IMat>;
 
   TIplImageRecordHelper = record helper for TIplImage
     function InitFromMat(const Mat: IMat): TIplImage;
