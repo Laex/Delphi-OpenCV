@@ -29,7 +29,7 @@ namespace cv
 	std::vector<KeyPoint>* kp = new std::vector<KeyPoint>();
 
 	ICLASS_API void __stdcall detect_FeatureDetector(const FeatureDetector* r, IplImage* image, 
-						CV_OUT int &keypointcount, CV_OUT _KeyPoint* &keypoints, IplImage* mask)
+						CV_OUT size_t &keypointcount, CV_OUT _KeyPoint* &keypoints, IplImage* mask)
 	{		
 		//std::vector<KeyPoint>* kp = new std::vector<KeyPoint>();
 		//kp.clear();

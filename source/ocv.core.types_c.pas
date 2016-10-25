@@ -756,6 +756,7 @@ type
 
   TcvPoint2f = TCvPoint2D32f;
   pcvPoint2f = pCvPoint2D32f;
+  TArrayOfcvPoint2f = TArray<TcvPoint2f>;
 
   pCvPoint3D32f = ^TCvPoint3D32f;
 
@@ -2919,3 +2920,4 @@ CV_SEQ_CHAIN          := (CV_SEQ_KIND_CURVE or CV_SEQ_ELTYPE_CODE);
 CV_SEQ_CHAIN_CONTOUR  := (CV_SEQ_FLAG_CLOSED or CV_SEQ_CHAIN);
 
 end.
+

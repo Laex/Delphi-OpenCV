@@ -178,7 +178,7 @@ end;
 
 procedure TFaceRecognizer.load(const filename: string);
 begin
-  FaceRecognizerLoad(FData, filename.AsPAnsiChar);
+  FaceRecognizerLoad(FData, c_str(filename));
 end;
 
 procedure TFaceRecognizer.predict(src: pIplImage; var lab: Integer; var confidence: double);
@@ -195,7 +195,7 @@ end;
 
 procedure TFaceRecognizer.save(const filename: string);
 begin
-  FaceRecognizerSave(FData, filename.AsPAnsiChar);
+  FaceRecognizerSave(FData, c_str(filename));
 end;
 
 procedure TFaceRecognizer.train(src: TInputArrayOfMat; labels: TInputArrayOfInteger);

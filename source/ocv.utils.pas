@@ -88,11 +88,12 @@ function CropIplImage(const src: PIplImage; const roi: TCvRect): PIplImage;
 procedure ocvRGBToHSV(const R, G, B: byte; out _H, _S, _V: byte);
 procedure ocvHSVToRGB(const _H, _S, _V: byte; out _R, _G, _B: byte);
 
+{$IFDEF DELPHIXE3_UP}
 Type
-  TStringAnsiHelper = record helper for
-    String
+  TStringAnsiHelper = record helper for String
     function AsPAnsiChar: PAnsiChar;
   end;
+{$ENDIF}
 
 implementation
 
@@ -104,12 +105,14 @@ uses
 {$ENDIF}
   ocv.core_c, System.Math;
 
+{$IFDEF DELPHIXE3_UP}
 { TStringAnsiHelper }
 
 function TStringAnsiHelper.AsPAnsiChar: PAnsiChar;
 begin
   Result := c_str(Self);
 end;
+{$ENDIF}
 
 function BitmapToIplImage(const bitmap:
 {$IFDEF DELPHIXE2_UP}Vcl.Graphics.TBitmap{$ELSE}Graphics.TBitmap{$ENDIF}): PIplImage;

@@ -233,7 +233,7 @@ end;
 
 function TCascadeClassifier.load(const FileName: String): cbool;
 begin
-  Result := _get_CascadeClassifier_load(FData, FileName.AsPAnsiChar);
+  Result := _get_CascadeClassifier_load(FData, c_str(FileName));
 end;
 
 function TCascadeClassifier.setImage(Image: IMat): cbool;

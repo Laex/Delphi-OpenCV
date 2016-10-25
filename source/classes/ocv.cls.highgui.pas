@@ -395,7 +395,7 @@ constructor TVideoCapture.Create(const FileName: String);
 begin
   Create;
   if Assigned(FData) then
-    _VideoCaptureOpenFileName(FData, FileName.AsPAnsiChar);
+    _VideoCaptureOpenFileName(FData, c_str(filename));
 end;
 
 constructor TVideoCapture.Create;
@@ -423,7 +423,7 @@ end;
 function TVideoCapture.Open(const FileName: String): cbool;
 begin
   if Assigned(FData) then
-    Result := _VideoCaptureOpenFileName(FData, FileName.AsPAnsiChar)
+    Result := _VideoCaptureOpenFileName(FData, c_str(filename))
   else
     Result := false;
 end;
@@ -453,12 +453,12 @@ end;
 
 procedure namedWindow(const winname: String; const flags: integer = WINDOW_AUTOSIZE);
 begin
-  cvNamedWindow(winname.AsPAnsiChar, flags);
+  cvNamedWindow(c_str(winname), flags);
 end;
 
 procedure destroyWindow(const winname: String);
 begin
-  cvDestroyWindow(winname.AsPAnsiChar);
+  cvDestroyWindow(c_str(winname));
 end;
 
 procedure destroyAllWindows();
@@ -481,38 +481,38 @@ Var
   IplImage: TIplImage;
 begin
   IplImage.InitFromMat(Mat);
-  cvShowImage(winname.AsPAnsiChar, @IplImage);
+  cvShowImage(c_str(winname), @IplImage);
 end;
 
 procedure resizeWindow(const winname: String; const width, height: integer);
 begin
-  cvResizeWindow(winname.AsPAnsiChar, width, height);
+  cvResizeWindow(c_str(winname), width, height);
 end;
 
 procedure moveWindow(const winname: String; const x, y: integer);
 begin
-  cvMoveWindow(winname.AsPAnsiChar, x, y);
+  cvMoveWindow(c_str(winname), x, y);
 end;
 
 procedure setWindowProperty(const winname: String; const prop_id: integer; const prop_value: double);
 begin
-  cvSetWindowProperty(winname.AsPAnsiChar, prop_id, prop_value);
+  cvSetWindowProperty(c_str(winname), prop_id, prop_value);
 end;
 
 function getWindowProperty(const winname: String; const prop_id: integer): double;
 begin
-  Result := cvGetWindowProperty(winname.AsPAnsiChar, prop_id);
+  Result := cvGetWindowProperty(c_str(winname), prop_id);
 end;
 
 function createTrackbar(const trackbarname: String; const winname: String; Value: PInteger; count: integer;
   onChange: TCvTrackbarCallback2 = nil; userdata: Pointer = nil): integer;
 begin
-  Result := cvCreateTrackbar2(trackbarname.AsPAnsiChar, winname.AsPAnsiChar, Value, count, onChange, userdata);
+  Result := cvCreateTrackbar2(c_str(trackbarname), c_str(winname), Value, count, onChange, userdata);
 end;
 
 function imread(const FileName: string; flag: integer): IMat;
 begin
-  Result := TMat.Create(cvLoadImage(FileName.AsPAnsiChar, flag));
+  Result := TMat.Create(cvLoadImage(c_str(FileName), flag));
 end;
 
 end.

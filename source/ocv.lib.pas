@@ -112,6 +112,26 @@ highgui_lib = {$IFDEF MSWINDOWS}
 {$ENDIF}
 {$ENDIF}
 // -------------------------------
+features2d_lib = {$IFDEF MSWINDOWS}
+  CV_DLL_DIR + 'opencv_' +
+{$IFDEF DelphiOCVVersion_29}
+  'features2d' +
+{$ELSEIF DEFINED( DelphiOCVVersion_30)}
+  'world' +
+{$ENDIF}
+  CV_VERSION_DLL {$IFDEF DEBUG} + 'd'{$ENDIF} + '.dll';
+{$ELSE}
+{$IFDEF MACOS}
+  'opencv_features2d.dylib';
+{$ELSE}
+{$IFDEF ANDROID}
+  'libopencv_features2d.so';
+{$ELSE}
+  'libopencv_features2d.so';
+{$ENDIF}
+{$ENDIF}
+{$ENDIF}
+// -------------------------------
 imgproc_lib = {$IFDEF MSWINDOWS}
   CV_DLL_DIR + 'opencv_' +
 {$IFDEF DelphiOCVVersion_29}

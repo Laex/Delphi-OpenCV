@@ -35,22 +35,43 @@ Uses
   ocv.core_c,
   ocv.core.types_c;
 
+// CV_EXPORTS bool initModule_features2d();
+function initModule_features2d: cbool; cdecl;
+
 type
-  TKeyPoint = record
-    pt: TcvPoint2f; // !< coordinates of the keypoints
-    size: Single; // !< diameter of the meaningful keypoint neighborhood
-    angle: Single; // !< computed orientation of the keypoint (-1 if not applicable);
-    // !< it's in [0,360) degrees and measured relative to
-    // !< image coordinate system, ie in clockwise.
-    response: Single; // !< the response by which the most strong keypoints have been selected. Can be used for the further sorting or subsampling
-    octave: Integer; // !< octave (pyramid layer) from which the keypoint has been extracted
-    class_id: Integer; // !< object class (if the keypoints need to be clustered by an object they belong to)
-  end;
+
+  // ---------------------------- KeyPoint --------------------------
 
   pKeyPoint = ^TKeyPoint;
-
   TKeyPointArray = TArray<TKeyPoint>;
   TKeyPointArrayOfArray = TArray<TKeyPointArray>;
+
+  TKeyPoint = record
+    pt: TcvPoint2f; // !< coordinates of the keypoints
+    size: Float; // !< diameter of the meaningful keypoint neighborhood
+    angle: Float; // !< computed orientation of the keypoint (-1 if not applicable);
+    // !< it's in [0,360) degrees and measured relative to
+    // !< image coordinate system, ie in clockwise.
+    response: Float; // !< the response by which the most strong keypoints have been selected. Can be used for the further sorting or subsampling
+    octave: Integer; // !< octave (pyramid layer) from which the keypoint has been extracted
+    class_id: Integer; // !< object class (if the keypoints need to be clustered by an object they belong to)
+    procedure KeyPoint(_pt: TcvPoint2f; _size: Float; _angle: Float = -1; _response: Float = 0; _octave: Integer = 0;
+      _class_id: Integer = -1); overload;
+    procedure KeyPoint(x: Float; y: Float; _size: Float; _angle: Float = -1; _response: Float = 0; _octave: Integer = 0;
+      _class_id: Integer = -1); overload;
+    function hash: size_t;
+    procedure convert(const keypoints: TKeyPointArray; Var points2f: TArrayOfcvPoint2f); overload;
+    procedure convert(const points2f: TArrayOfcvPoint2f; Var keypoints: TKeyPointArray); overload;
+    function overlap(const kp1, kp2: TKeyPoint): Float;
+  end;
+
+  // ! writes vector of keypoints to the file storage
+  // CV_EXPORTS void write(FileStorage& fs, const string& name, const vector<KeyPoint>& keypoints);
+  // ! reads vector of keypoints from the specified file storage node
+  // CV_EXPORTS void read(const FileNode& node, CV_OUT vector<KeyPoint>& keypoints);
+
+  // ---------------------------- KeyPointsFilter --------------------------
+  // class CV_EXPORTS KeyPointsFilter
 
   // ---------------------------- FeatureDetector --------------------------
 
@@ -185,6 +206,8 @@ uses
   ocv.utils,
   ocv.lib;
 
+function initModule_features2d; external features2d_lib name '?initModule_features2d@cv@@YA_NXZ';
+
 { TFeatureDetector }
 
 function Create_FeatureDetector(const detectorType: pAnsiChar): TOpenCVClass; stdcall; external opencv_classes_lib name '_Create_FeatureDetector@4';
@@ -278,5 +301,46 @@ function TDescriptorExtractor.empty: cbool;
 begin
   Result := Empty_DescriptorExtractor(FData);
 end;
+
+{ TKeyPoint }
+
+procedure TKeyPoint.KeyPoint(_pt: TcvPoint2f; _size, _angle, _response: Float; _octave, _class_id: Integer);
+begin
+  pt := _pt;
+  size := _size;
+  angle := _angle;
+  response := _response;
+  octave := _octave;
+  class_id := _class_id;
+end;
+
+procedure TKeyPoint.convert(const keypoints: TKeyPointArray; var points2f: TArrayOfcvPoint2f);
+begin
+
+end;
+
+procedure TKeyPoint.convert(const points2f: TArrayOfcvPoint2f; var keypoints: TKeyPointArray);
+begin
+
+end;
+
+function TKeyPoint.hash: size_t;
+begin
+
+end;
+
+procedure TKeyPoint.KeyPoint(x, y, _size, _angle, _response: Float; _octave, _class_id: Integer);
+begin
+  KeyPoint(CvPoint2f(x, y), _size, _angle, _response, _octave, _class_id);
+end;
+
+function TKeyPoint.overlap(const kp1, kp2: TKeyPoint): Float;
+begin
+
+end;
+
+initialization
+
+initModule_features2d;
 
 end.
