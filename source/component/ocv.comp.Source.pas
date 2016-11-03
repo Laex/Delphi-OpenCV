@@ -280,6 +280,7 @@ Var
 {$ELSE}
   frame: pIplImage;
 {$ENDIF}
+  Image: IocvImage;
 begin
   while not Terminated do
     if Assigned(FCapture) then
@@ -301,21 +302,35 @@ begin
           if Assigned(frame) then
           begin
             if Assigned(OnNotifyData) then
-              Synchronize(
-                procedure
-                Var
-                  Image: IocvImage;
-                begin
+            begin
+              // if IsLibrary then
+              // begin
 {$IFDEF DelphiOCVVersion_30}
-                  I.InitFromMat(frame);
-                  Image := TocvImage.CreateClone(@I);
+              I.InitFromMat(frame);
+              Image := TocvImage.CreateClone(@I);
 {$ELSE}
-                  Image := TocvImage.CreateClone(frame);
+              Image := TocvImage.CreateClone(frame);
 {$ENDIF}
-                  OnNotifyData(Self, Image);
-                  Image := nil;
-                end);
-            Sleep(FThreadDelay);
+              OnNotifyData(Self, Image);
+              Image := nil;
+              // end
+              // else
+              // Synchronize(
+              // procedure
+              // Var
+              // Image: IocvImage;
+              // begin
+              // {$IFDEF DelphiOCVVersion_30}
+              // I.InitFromMat(frame);
+              // Image := TocvImage.CreateClone(@I);
+              // {$ELSE}
+              // Image := TocvImage.CreateClone(frame);
+              // {$ENDIF}
+              // OnNotifyData(Self, Image);
+              // Image := nil;
+              // end);
+              Sleep(FThreadDelay);
+            end;
           end
           else if Assigned(OnNoData) then
             OnNoData(Self);
