@@ -1,17 +1,16 @@
 #Directories
 buildtest
-__history
-Debug
-Release
-ipch
-lib
+__history/
+__recovery/
+Debug/
+Release/
+ipch/
+lib/
 /resource/result/*.*
 
 #Files
 *.exe
 *.dll
-!opencv_classes2413d.dll
-!opencv_classes2413.dll
 *.ini
 *.bsc
 *.sdf
@@ -49,3 +48,5 @@ lib
 *.user
 *.filters
 *.user
+!opencv_classes2413d.dll
+!opencv_classes2413.dll

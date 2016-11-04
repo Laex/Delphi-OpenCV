@@ -5,7 +5,7 @@ object MainForm: TMainForm
   BorderStyle = bsSingle
   Caption = 'OpenCV - Component demo'
   ClientHeight = 669
-  ClientWidth = 624
+  ClientWidth = 613
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -30,7 +30,7 @@ object MainForm: TMainForm
     Width = 145
     Height = 21
     Style = csDropDownList
-    TabOrder = 4
+    TabOrder = 2
     OnChange = cbb1Change
     Items.Strings = (
       'None'
@@ -54,47 +54,6 @@ object MainForm: TMainForm
     TabOrder = 0
     OnClick = chk1Click
   end
-  object ocvw1: TocvView
-    Left = 8
-    Top = 28
-    Width = 300
-    Height = 300
-    VideoSource = ocvcmrsrc1
-    Frames = <
-      item
-        VideoSource = ocvflsrc1
-        DrawRect.Left = 0
-        DrawRect.Top = 0
-        DrawRect.Right = 100
-        DrawRect.Bottom = 100
-        Enabled = True
-      end>
-  end
-  object ocvw2: TocvView
-    Left = 8
-    Top = 361
-    Width = 300
-    Height = 300
-    VideoSource = ocvmgprtn1
-    Center = True
-    Frames = <>
-  end
-  object ocvw3: TocvView
-    Left = 316
-    Top = 358
-    Width = 300
-    Height = 300
-    VideoSource = ocvflsrc1
-    Frames = <>
-  end
-  object ocvw4: TocvView
-    Left = 316
-    Top = 28
-    Width = 300
-    Height = 300
-    VideoSource = ocvpcmsrc1
-    Frames = <>
-  end
   object chk2: TCheckBox
     Left = 314
     Top = 5
@@ -110,45 +69,73 @@ object MainForm: TMainForm
     Width = 187
     Height = 17
     Caption = 'File source'
-    TabOrder = 5
+    TabOrder = 3
     OnClick = chk3Click
   end
-  object ocvmgprtn1: TocvImageOperation
+  object ocvView1: TocvView
+    Left = 8
+    Top = 28
+    Width = 285
+    Height = 297
     VideoSource = ocvcmrsrc1
-    OperationClassName = 'TocvRotateOperation'
-    Operation.Angle = 90
-    Operation.RotateAroundCenter = True
-    Operation.Scale = 1.000000000000000000
-    Operations = <
+    Frames = <
       item
-        OperationClassName = 'TocvNoneOperation'
-      end
-      item
-        OperationClassName = 'TocvNoneOperation'
+        VideoSource = ocvflsrc1
+        DrawRect.Left = 0
+        DrawRect.Top = 0
+        DrawRect.Right = 100
+        DrawRect.Bottom = 100
+        Enabled = True
       end>
-    OperationsEnabled = False
-    OnAfterEachOperation = ocvmgprtn1AfterEachOperation
-    Left = 36
-    Top = 392
+  end
+  object ocvView2: TocvView
+    Left = 314
+    Top = 28
+    Width = 285
+    Height = 297
+    VideoSource = ocvpcmsrc1
+    Frames = <>
+  end
+  object ocvView3: TocvView
+    Left = 8
+    Top = 362
+    Width = 285
+    Height = 297
+    VideoSource = ocvmgprtn1
+    Frames = <>
+  end
+  object ocvView4: TocvView
+    Left = 314
+    Top = 361
+    Width = 285
+    Height = 297
+    VideoSource = ocvflsrc1
+    Frames = <>
   end
   object ocvflsrc1: TocvFileSource
     Enabled = True
-    Delay = 120
     FileName = '..\..\resource\media\768x576.avi'
-    Left = 340
-    Top = 380
+    Left = 420
+    Top = 428
   end
-  object ocvcmrsrc1: TocvCameraSource
-    Enabled = True
-    Resolution = r1280x720
-    Left = 32
-    Top = 40
+  object ocvmgprtn1: TocvImageOperation
+    VideoSource = ocvcmrsrc1
+    OperationClassName = 'TocvNoneOperation'
+    Operations = <>
+    Left = 108
+    Top = 448
   end
   object ocvpcmsrc1: TocvIPCamSource
     IP = '80.78.116.125'
     URI = '/rtplive/plot_hd.stream'
     Port = 1935
-    Left = 336
-    Top = 44
+    Left = 428
+    Top = 116
+  end
+  object ocvcmrsrc1: TocvCameraSource
+    Enabled = True
+    Resolution = r1280x720
+    Left = 124
+    Top = 140
   end
 end
