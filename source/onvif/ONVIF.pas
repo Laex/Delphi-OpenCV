@@ -22,6 +22,7 @@ Type
     XAddrs: String;
     XAddrsV6: string;
     MetadataVersion: Integer;
+    XML: AnsiString;
   end;
 
   TProbeMatchArray = TArray<TProbeMatch>;
@@ -99,6 +100,51 @@ function XMLDeviceInformationToDeviceInformation(const XMLDeviceInformation: Ans
 function PrepareGetDeviceInformationRequest(const UserName, Password: AnsiString): AnsiString;
 
 Type
+
+  TSimpleItem = record
+    Name: String;
+    Value: String;
+  end;
+
+  TPoint = record
+    x: Real;
+    y: Real;
+  end;
+
+  TElementItemXY = TPoint;
+
+  TElementItemLayout = record
+    Columns: Integer;
+    Rows: Integer;
+    Translate: TElementItemXY;
+    Scale: TElementItemXY;
+  end;
+
+  TPolygon = TPoint;
+
+  TElementItemField = TArray<TPolygon>;
+
+  TElementItemTransform = record
+    Translate: TElementItemXY;
+    Scale: TElementItemXY;
+  end;
+
+  TElementItem = record
+    Name: String;
+    Layout: TElementItemLayout;
+    Field: TElementItemField;
+    Transform: TElementItemTransform;
+  end;
+
+  TAnalyticsModule = record
+    Type_: String;
+    Name: String;
+    SimpleItem: TArray<TSimpleItem>;
+    ElementItem: TArray<TElementItem>;
+  end;
+
+  TRule = TAnalyticsModule;
+
   TProfile = record
     fixed: Boolean;
     token: string;
@@ -184,72 +230,13 @@ Type
 {$ENDREGION}
     end;
 
-    (*
-      <tt:VideoAnalyticsConfiguration token="000">
-      <tt:Name>VideoAnalyticsConfig_000</tt:Name>
-      <tt:UseCount>2</tt:UseCount>
-      <tt:AnalyticsEngineConfiguration>
-      <tt:AnalyticsModule Type="tt:CellMotionEngine" Name="tt:CellMotionEngine">
-      <tt:Parameters>
-      <tt:SimpleItem Value="48" Name="Sensitivity"/>
-      <tt:ElementItem Name="Layout">
-      <tt:CellLayout Columns="22" Rows="18">
-      <tt:Transformation>
-      <tt:Translate x="-1.0" y="-1.0"/>
-      <tt:Scale x="0.00625" y="0.00834"/>
-      </tt:Transformation>
-      </tt:CellLayout>
-      </tt:ElementItem>
-      </tt:Parameters>
-      </tt:AnalyticsModule>
-      <tt:AnalyticsModule Type="tt:TamperEngine" Name="tt:TamperEngine">
-      <tt:Parameters>
-      <tt:SimpleItem Value="48" Name="Sensitivity"/>
-      <tt:ElementItem Name="Field">
-      <ns1:PolygonConfiguration>
-      <ns1:Polygon>
-      <Point x="0" y="0"/>
-      <Point x="0" y="0"/>
-      <Point x="0" y="0"/>
-      <Point x="0" y="0"/>
-      </ns1:Polygon>
-      </ns1:PolygonConfiguration>
-      </tt:ElementItem>
-      <tt:ElementItem Name="Transform">
-      <tt:Transformation>
-      <tt:Translate x="-1.0" y="-1.0"/>
-      <tt:Scale x="0.001250" y="0.001667"/>
-      </tt:Transformation>
-      </tt:ElementItem>
-      </tt:Parameters>
-      </tt:AnalyticsModule>
-      </tt:AnalyticsEngineConfiguration>
-      <tt:RuleEngineConfiguration>
-      <tt:Rule Type="tt:CellMotionDetector" Name="tt:CellMotionDetector">
-      <tt:Parameters>
-      <tt:SimpleItem Value="zwA=" Name="ActiveCells"/>
-      <tt:SimpleItem Value="1000" Name="AlarmOffDelay"/>
-      <tt:SimpleItem Value="1000" Name="AlarmOnDelay"/>
-      <tt:SimpleItem Value="4" Name="MinCount"/>
-      </tt:Parameters>
-      </tt:Rule>
-      <tt:Rule Type="tt:TamperDetector" Name="tt:TamperDetector">
-      <tt:Parameters>
-      <tt:ElementItem Name="Field">
-      <ns1:PolygonConfiguration>
-      <ns1:Polygon>
-      <Point x="0" y="0"/>
-      <Point x="0" y="0"/>
-      <Point x="0" y="0"/>
-      <Point x="0" y="0"/>
-      </ns1:Polygon>
-      </ns1:PolygonConfiguration>
-      </tt:ElementItem>
-      </tt:Parameters>
-      </tt:Rule>
-      </tt:RuleEngineConfiguration>
-      </tt:VideoAnalyticsConfiguration>
-    *)
+    VideoAnalyticsConfiguration: record
+      token: String;
+      Name: string;
+      UseCount: Integer;
+      AnalyticsEngineConfiguration: TArray<TAnalyticsModule>;
+      RuleEngineConfiguration: TArray<TRule>;
+    end;
 
     PTZConfiguration: record
       token: String;
@@ -300,9 +287,28 @@ function ONVIFGetStreamUri(const Addr, UserName, Password, Stream, Protocol, Pro
 function XMLStreamUriToStreamUri(const XMLStreamUri: AnsiString; Var StreamUri: TStreamUri): Boolean;
 function PrepareGetStreamUriRequest(const UserName, Password, Stream, Protocol, ProfileToken: AnsiString): AnsiString;
 
+type
+
+  TSnapshotUri = record
+    Uri: String;
+    InvalidAfterConnect: Boolean;
+    InvalidAfterReboot: Boolean;
+    Timeout: String;
+  end;
+
+  // Addr -> http://<host>/onvif/Media
+function ONVIFGetSnapshotUri(const Addr, UserName, Password, ProfileToken: AnsiString): AnsiString;
+function XMLSnapshotUriToSnapshotUri(const XMLSnapshotUri: AnsiString; Var SnapshotUri: TSnapshotUri): Boolean;
+function PrepareGetSnapshotUriRequest(const UserName, Password, ProfileToken: AnsiString): AnsiString;
+function GetSnapshot(const SnapshotUri: String; const Stream: TStream): Boolean;
+//
+// ------------------------
+//
 procedure ONVIFRequest(const Addr: AnsiString; const InStream, OutStream: TStringStream); overload;
 procedure ONVIFRequest(const Addr, Request: AnsiString; Var Answer: AnsiString); overload;
-
+//
+// ------------------------
+//
 procedure GetONVIFPasswordDigest(const UserName, Password: AnsiString; Var PasswordDigest, Nonce, Created: AnsiString);
 function GetONVIFDateTime(const DateTime: TDateTime): AnsiString;
 function BytesToAnsiString(Data: TBytes): AnsiString; inline;
@@ -317,14 +323,7 @@ procedure Register;
 
 implementation
 
-Uses
-  System.Generics.Defaults,
-  System.Generics.Collections,
-  System.NetEncoding,
-  IdHashSHA,
-  IdHTTP,
-  IdURI,
-  uNativeXML;
+Uses System.Generics.Defaults, System.Generics.Collections, System.NetEncoding, IdHashSHA, IdHTTP, IdURI, uNativeXML;
 
 procedure Register;
 begin
@@ -415,6 +414,7 @@ begin
       Post(Addr, InStream, OutStream);
     end;
   finally
+    Uri.Free;
     idhtp1.Free;
   end;
 end;
@@ -430,15 +430,15 @@ function XMLDeviceInformationToDeviceInformation(const XMLDeviceInformation: Ans
 var
   SS: TStringStream;
   XmlNode, Node: TXmlNode;
-  Xml: TNativeXML;
+  XML: TNativeXML;
 begin
-  Xml := TNativeXML.Create;
+  XML := TNativeXML.Create;
   SS := TStringStream.Create(XMLDeviceInformation);
   DeviceInformation := default (TDeviceInformation);
   Result := False;
   try
-    Xml.LoadFromStream(SS);
-    XmlNode := Xml.Root.NodeByName('Body');
+    XML.LoadFromStream(SS);
+    XmlNode := XML.Root.NodeByName('Body');
     if Assigned(XmlNode) then
     begin
       XmlNode := XmlNode.NodeByName('GetDeviceInformationResponse');
@@ -482,20 +482,21 @@ begin
       end;
     end;
   finally
-    Xml.Free;
+    XML.Free;
     SS.Free;
   end;
 end;
 
 function PrepareGetDeviceInformationRequest(const UserName, Password: AnsiString): AnsiString;
 const
-  GetDeviceInformationFmt: AnsiString = // PasswordDigest,Nonce,Created // http://<host>/onvif/device_service
+  GetDeviceInformationFmt: AnsiString =
+  // PasswordDigest,Nonce,Created // http://<host>/onvif/device_service
     '<?xml version="1.0"?> ' + //
     '<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:wsdl="http://www.onvif.org/ver10/device/wsdl"> ' + //
     '<soap:Header>' + //
     '<Security xmlns="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd" s:mustUnderstand="1"> ' + //
     '<UsernameToken> ' + //
-    '<Username>admin</Username> ' + //
+    '<Username>%s</Username> ' + //
     '<Password Type="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordDigest">%s</Password> ' +
     '<Nonce EncodingType="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-soap-message-security-1.0#Base64Binary">%s</Nonce> ' +
     '<Created xmlns="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd">%s</Created> ' + //
@@ -510,7 +511,7 @@ Var
   PasswordDigest, Nonce, Created: AnsiString;
 begin
   GetONVIFPasswordDigest(UserName, Password, PasswordDigest, Nonce, Created);
-  Result := Format(GetDeviceInformationFmt, [PasswordDigest, Nonce, Created]);
+  Result := Format(GetDeviceInformationFmt, [UserName, PasswordDigest, Nonce, Created]);
 end;
 
 function ONVIFGetProfiles(const Addr, UserName, Password: AnsiString): AnsiString;
@@ -523,16 +524,17 @@ function XMLProfilesToProfiles(const XMLProfiles: AnsiString; Var Profiles: TPro
 var
   SS: TStringStream;
   XmlNode, Node, N, M, K: TXmlNode;
-  Xml: TNativeXML;
-  i: Integer;
+  XML: TNativeXML;
+  i, j: Integer;
   Profile: TProfile;
+  A: TAnalyticsModule;
 begin
-  Xml := TNativeXML.Create;
+  XML := TNativeXML.Create;
   SS := TStringStream.Create(XMLProfiles);
   Result := False;
   try
-    Xml.LoadFromStream(SS);
-    XmlNode := Xml.Root.NodeByName('Body');
+    XML.LoadFromStream(SS);
+    XmlNode := XML.Root.NodeByName('Body');
     if Assigned(XmlNode) then
     begin
       XmlNode := XmlNode.NodeByName('GetProfilesResponse');
@@ -628,6 +630,32 @@ begin
             if Assigned(M) then
               Profile.VideoEncoderConfiguration.SessionTimeout := M.ValueUnicode;
           end;
+
+          N := Node.NodeByName('VideoAnalyticsConfiguration');
+          if Assigned(N) then
+          begin
+            Profile.VideoAnalyticsConfiguration.token := string(N.AttributeValueByName['token']);
+            M := N.NodeByName('Name');
+            if Assigned(M) then
+              Profile.VideoAnalyticsConfiguration.Name := M.ValueUnicode;
+            M := N.NodeByName('UseCount');
+            if Assigned(M) then
+              Profile.VideoAnalyticsConfiguration.UseCount := M.ValueUnicode.ToInteger;
+
+            M := N.NodeByName('AnalyticsEngineConfiguration');
+            if Assigned(M) then
+            begin
+              for j := 0 to M.ContainerCount - 1 do
+              begin
+                K := M.Containers[j];
+                A.Type_ := string(K.AttributeValueByName['Type']);
+                A.Name := string(K.AttributeValueByName['Name']);
+                /// /////////////
+              end;
+            end;
+
+          end;
+
           N := Node.NodeByName('AudioEncoderConfiguration');
           if Assigned(N) then
           begin
@@ -665,6 +693,9 @@ begin
                 Profile.AudioEncoderConfiguration.Multicast.AutoStart := K.ValueUnicode.ToBoolean;
             end;
             M := N.NodeByName('Multicast');
+            if Assigned(M) then
+              Profile.AudioEncoderConfiguration.SessionTimeout := M.ValueUnicode;
+            M := N.NodeByName('SessionTimeout');
             if Assigned(M) then
               Profile.AudioEncoderConfiguration.SessionTimeout := M.ValueUnicode;
           end;
@@ -736,14 +767,15 @@ begin
       end;
     end;
   finally
-    Xml.Free;
+    XML.Free;
     SS.Free;
   end;
 end;
 
 function PrepareGetProfilesRequest(const UserName, Password: AnsiString): AnsiString;
 const
-  GetProfilesFmt: AnsiString = // PasswordDigest,Nonce,Created // http://<host>/onvif/Media
+  GetProfilesFmt: AnsiString =
+  // PasswordDigest,Nonce,Created // http://<host>/onvif/Media
     '<?xml version="1.0"?> ' + //
     '<soap:Envelope ' + //
     'xmlns:soap="http://www.w3.org/2003/05/soap-envelope" ' + //
@@ -751,7 +783,7 @@ const
     '<soap:Header>' + //
     '<Security xmlns="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd" s:mustUnderstand="1"> ' + //
     '<UsernameToken> ' + //
-    '<Username>admin</Username> ' + //
+    '<Username>%s</Username> ' + //
     '<Password Type="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordDigest">%s</Password> ' +
     '<Nonce EncodingType="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-soap-message-security-1.0#Base64Binary">%s</Nonce> ' +
     '<Created xmlns="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd">%s</Created> ' + //
@@ -767,22 +799,22 @@ Var
   PasswordDigest, Nonce, Created: AnsiString;
 begin
   GetONVIFPasswordDigest(UserName, Password, PasswordDigest, Nonce, Created);
-  Result := Format(GetProfilesFmt, [PasswordDigest, Nonce, Created]);
+  Result := Format(GetProfilesFmt, [UserName, PasswordDigest, Nonce, Created]);
 end;
 
 function XMLStreamUriToStreamUri(const XMLStreamUri: AnsiString; Var StreamUri: TStreamUri): Boolean;
 var
   SS: TStringStream;
   XmlNode, Node: TXmlNode;
-  Xml: TNativeXML;
+  XML: TNativeXML;
 begin
-  Xml := TNativeXML.Create;
+  XML := TNativeXML.Create;
   SS := TStringStream.Create(XMLStreamUri);
   StreamUri := default (TStreamUri);
   Result := False;
   try
-    Xml.LoadFromStream(SS);
-    XmlNode := Xml.Root.NodeByName('Body');
+    XML.LoadFromStream(SS);
+    XmlNode := XML.Root.NodeByName('Body');
     if Assigned(XmlNode) then
     begin
       XmlNode := XmlNode.NodeByName('GetStreamUriResponse');
@@ -823,9 +855,132 @@ begin
       end;
     end;
   finally
-    Xml.Free;
+    XML.Free;
     SS.Free;
   end;
+end;
+
+function GetSnapshot(const SnapshotUri: String; const Stream: TStream): Boolean;
+Var
+  idhtp1: TIdHTTP;
+  Uri: TIdURI;
+begin
+  idhtp1 := TIdHTTP.Create;
+  Uri := TIdURI.Create(SnapshotUri);
+  try
+    With idhtp1 do
+    begin
+      AllowCookies := True;
+      HandleRedirects := True;
+      Request.Accept := 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8';
+      Request.UserAgent := 'Mozilla/3.0 (compatible; Indy Library)';
+      Request.Host := '';
+      Request.Connection := '';
+      Request.Accept := '';
+      Request.UserAgent := '';
+      Request.CustomHeaders.Clear;
+      Request.ContentType := 'text/xml;charset=utf-8';
+      Request.CustomHeaders.Add('Host: ' + Uri.Host);
+      ProtocolVersion := pv1_1;
+      HTTPOptions := [hoNoProtocolErrorException, hoWantProtocolErrorContent];
+      Get(SnapshotUri, Stream);
+    end;
+  finally
+    Uri.Free;
+    idhtp1.Free;
+  end;
+end;
+
+function ONVIFGetSnapshotUri(const Addr, UserName, Password, ProfileToken: AnsiString): AnsiString;
+begin
+  // Addr -> http://<host>/onvif/Media
+  ONVIFRequest(Addr, PrepareGetSnapshotUriRequest(UserName, Password, ProfileToken), Result);
+end;
+
+function XMLSnapshotUriToSnapshotUri(const XMLSnapshotUri: AnsiString; Var SnapshotUri: TSnapshotUri): Boolean;
+var
+  SS: TStringStream;
+  XmlNode, Node: TXmlNode;
+  XML: TNativeXML;
+begin
+  XML := TNativeXML.Create;
+  SS := TStringStream.Create(XMLSnapshotUri);
+  SnapshotUri := default (TSnapshotUri);
+  Result := False;
+  try
+    XML.LoadFromStream(SS);
+    XmlNode := XML.Root.NodeByName('Body');
+    if Assigned(XmlNode) then
+    begin
+      XmlNode := XmlNode.NodeByName('GetSnapshotUriResponse');
+      if Assigned(XmlNode) then
+      begin
+        XmlNode := XmlNode.NodeByName('MediaUri');
+        if Assigned(XmlNode) then
+        begin
+          Node := XmlNode.NodeByName('Uri');
+          if Assigned(Node) then
+          begin
+            SnapshotUri.Uri := String(Node.Value);
+            Result := True;
+          end;
+
+          Node := XmlNode.NodeByName('InvalidAfterConnect');
+          if Assigned(Node) then
+          begin
+            SnapshotUri.InvalidAfterConnect := string(Node.Value).ToBoolean;
+            Result := True;
+          end;
+
+          Node := XmlNode.NodeByName('InvalidAfterReboot');
+          if Assigned(Node) then
+          begin
+            SnapshotUri.InvalidAfterReboot := string(Node.Value).ToBoolean;
+            Result := True;
+          end;
+
+          Node := XmlNode.NodeByName('Timeout');
+          if Assigned(Node) then
+          begin
+            SnapshotUri.Timeout := Node.ValueUnicode;
+            Result := True;
+          end;
+
+        end;
+      end;
+    end;
+  finally
+    XML.Free;
+    SS.Free;
+  end;
+end;
+
+function PrepareGetSnapshotUriRequest(const UserName, Password, ProfileToken: AnsiString): AnsiString;
+const
+  GetSnapshotUriFmt: AnsiString = // PasswordDigest,Nonce,Created, ProfileToken
+    '<?xml version="1.0"?> ' + //
+    '<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:wsdl="http://www.onvif.org/ver10/media/wsdl"> ' + //
+    '<soap:Header>' + //
+    '<Security xmlns="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd" s:mustUnderstand="1"> ' + //
+    '<UsernameToken> ' + //
+    '<Username>%s</Username> ' + //
+    '<Password Type="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordDigest">%s</Password> ' +
+    '<Nonce EncodingType="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-soap-message-security-1.0#Base64Binary">%s</Nonce> ' +
+    '<Created xmlns="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd">%s</Created> ' + //
+    '</UsernameToken> ' + //
+    '</Security> ' + //
+    '</soap:Header>' + //
+    '<soap:Body> ' + //
+    '<wsdl:GetSnapshotUri> ' + //
+    '<wsdl:ProfileToken>%s</wsdl:ProfileToken> ' + //
+    '</wsdl:GetSnapshotUri> ' + //
+    '</soap:Body> ' + //
+    '</soap:Envelope>';
+Var
+  PasswordDigest, Nonce, Created: AnsiString;
+begin
+  GetONVIFPasswordDigest(UserName, Password, PasswordDigest, Nonce, Created);
+  Result := Format(GetSnapshotUriFmt, [UserName, PasswordDigest, Nonce, Created, ProfileToken]);
 end;
 
 function ONVIFGetStreamUri(const Addr, UserName, Password, Stream, Protocol, ProfileToken: AnsiString): AnsiString;
@@ -843,7 +998,7 @@ const
     '<soap:Header>' + //
     '<Security xmlns="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd" s:mustUnderstand="1"> ' + //
     '<UsernameToken> ' + //
-    '<Username>admin</Username> ' + //
+    '<Username>%s</Username> ' + //
     '<Password Type="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordDigest">%s</Password> ' +
     '<Nonce EncodingType="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-soap-message-security-1.0#Base64Binary">%s</Nonce> ' +
     '<Created xmlns="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd">%s</Created> ' + //
@@ -870,7 +1025,7 @@ Var
   PasswordDigest, Nonce, Created: AnsiString;
 begin
   GetONVIFPasswordDigest(UserName, Password, PasswordDigest, Nonce, Created);
-  Result := Format(GetStreamUriFmt, [PasswordDigest, Nonce, Created, Stream, Protocol, ProfileToken]);
+  Result := Format(GetStreamUriFmt, [UserName, PasswordDigest, Nonce, Created, Stream, Protocol, ProfileToken]);
 end;
 
 function SHA1(const Data: TBytes): TBytes;
@@ -921,7 +1076,9 @@ begin
   Result := formattedDate + 'T' + formattedTime + 'Z';
 end;
 
-function UniqueProbeMatch(const ProbeMatch: TProbeMatchArray): TProbeMatchArray;
+function UniqueProbeMatch(
+
+  const ProbeMatch: TProbeMatchArray): TProbeMatchArray;
 Var
   ProbeMatchDic: TDictionary<string, TProbeMatch>;
   PM: TProbeMatch;
@@ -949,16 +1106,16 @@ var
   SS: TStringStream;
   XmlNode, Node: TXmlNode;
   S: string;
-  Xml: TNativeXML;
+  XML: TNativeXML;
   i: Integer;
 begin
-  Xml := TNativeXML.Create;
+  XML := TNativeXML.Create;
   SS := TStringStream.Create(ProbeMatchXML);
   ProbeMatch := default (TProbeMatch);
   Result := False;
   try
-    Xml.LoadFromStream(SS);
-    XmlNode := Xml.Root.NodeByName('Body');
+    XML.LoadFromStream(SS);
+    XmlNode := XML.Root.NodeByName('Body');
     if Assigned(XmlNode) then
     begin
       XmlNode := XmlNode.NodeByName('ProbeMatches');
@@ -1000,6 +1157,8 @@ begin
               end;
             end;
 
+            ProbeMatch.XML := ProbeMatchXML;
+
             Result := True;
           end;
 
@@ -1028,7 +1187,7 @@ begin
       end;
     end;
   finally
-    Xml.Free;
+    XML.Free;
     SS.Free;
   end;
 end;

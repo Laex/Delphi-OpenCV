@@ -73,11 +73,12 @@ end;
 
 procedure TForm1.tv1DblClick(Sender: TObject);
 Var
-  T: TTreeNode;
+  T, T1, T2, T3, T4: TTreeNode;
   UserName, Password: string;
   XML: AnsiString;
   DeviceInformation: TDeviceInformation;
   Profiles: TProfiles;
+  i: Integer;
 begin
   if Assigned(tv1.Selected) then
   begin
@@ -89,13 +90,60 @@ begin
       XML := ONVIFGetDeviceInformation(F[T.Index].XAddrs, UserName, Password);
       if XMLDeviceInformationToDeviceInformation(XML, DeviceInformation) then
       begin
-        Application.MessageBox(PChar(F[T.Index].XAddrs + #13#10#13#10 + 'Manufacturer: ' + DeviceInformation.Manufacturer + #13#10 +
-          'Model: ' + DeviceInformation.Model + #13#10 + 'FirmwareVersion: ' + DeviceInformation.FirmwareVersion + #13#10 + 'SerialNumber: '
-          + DeviceInformation.SerialNumber + #13#10 + 'HardwareId: ' + DeviceInformation.HardwareId), 'IP camera device info', MB_OK);
+        T1 := T.GetLastChild;
+        if (Pos('DeviceInformation', T1.Text) = 0) and (Pos('Profiles', T1.Text) = 0) then
+        begin
+          T1 := tv1.Items.AddChild(T, 'DeviceInformation');
+          tv1.Items.AddChild(T1, 'Manufacturer: ' + DeviceInformation.Manufacturer);
+          tv1.Items.AddChild(T1, 'Model: ' + DeviceInformation.Model);
+          tv1.Items.AddChild(T1, 'FirmwareVersion: ' + DeviceInformation.FirmwareVersion);
+          tv1.Items.AddChild(T1, 'SerialNumber: ' + DeviceInformation.SerialNumber);
+          tv1.Items.AddChild(T1, 'HardwareId: ' + DeviceInformation.HardwareId);
+        end;
       end;
+      T1 := T.GetLastChild;
+      if Pos('Profiles', T1.Text) = 0 then
+      begin
+        T1 := tv1.Items.AddChild(T, 'Profiles');
+        XMLProfilesToProfiles(ONVIFGetProfiles(GetONVIFAddr(F[T.Index].XAddrs, atMedia), UserName, Password), Profiles);
+        for i := 0 to High(Profiles) do
+        begin
+          T2 := tv1.Items.AddChild(T1, 'Name: ' + Profiles[i].Name);
+          tv1.Items.AddChild(T2, 'fixed: ' + Profiles[i].fixed.ToString(True));
+          tv1.Items.AddChild(T2, 'token: ' + Profiles[i].token);
+          T3 := tv1.Items.AddChild(T2, 'VideoSourceConfiguration');
+          tv1.Items.AddChild(T3, 'Name: ' + Profiles[i].VideoSourceConfiguration.Name);
+          tv1.Items.AddChild(T3, 'token: ' + Profiles[i].VideoSourceConfiguration.token);
+          tv1.Items.AddChild(T3, 'UseCount: ' + Profiles[i].VideoSourceConfiguration.UseCount.ToString);
+          tv1.Items.AddChild(T3, 'SourceToken: ' + Profiles[i].VideoSourceConfiguration.SourceToken);
+          tv1.Items.AddChild(T3, 'Bounds: ' + Format('(x:%d, y:%d, width:%d, height:%d)', [Profiles[i].VideoSourceConfiguration.Bounds.x,
+            Profiles[i].VideoSourceConfiguration.Bounds.y, Profiles[i].VideoSourceConfiguration.Bounds.width,
+            Profiles[i].VideoSourceConfiguration.Bounds.Height]));
+          T3 := tv1.Items.AddChild(T2, 'VideoEncoderConfiguration');
+          tv1.Items.AddChild(T3, 'Name: ' + Profiles[i].VideoEncoderConfiguration.Name);
+          tv1.Items.AddChild(T3, 'token: ' + Profiles[i].VideoEncoderConfiguration.token);
+          tv1.Items.AddChild(T3, 'UseCount: ' + Profiles[i].VideoEncoderConfiguration.UseCount.ToString);
+          tv1.Items.AddChild(T3, 'Encoding: ' + Profiles[i].VideoEncoderConfiguration.Encoding);
+          tv1.Items.AddChild(T3, 'Resolution: ' + Format('(width:%d, height:%d)', [Profiles[i].VideoEncoderConfiguration.Resolution.width,
+            Profiles[i].VideoEncoderConfiguration.Resolution.Height]));
+          tv1.Items.AddChild(T3, 'Quality: ' + Profiles[i].VideoEncoderConfiguration.Quality.ToString);
+          T4 := tv1.Items.AddChild(T3, 'RateControl');
+          tv1.Items.AddChild(T4, 'FrameRateLimit: ' + Profiles[i].VideoEncoderConfiguration.RateControl.FrameRateLimit.ToString);
+          tv1.Items.AddChild(T4, 'EncodingInterval: ' + Profiles[i].VideoEncoderConfiguration.RateControl.EncodingInterval.ToString);
+          tv1.Items.AddChild(T4, 'BitrateLimit: ' + Profiles[i].VideoEncoderConfiguration.RateControl.BitrateLimit.ToString);
+          T4 := tv1.Items.AddChild(T3, 'H264');
+          tv1.Items.AddChild(T4, 'GovLength: ' + Profiles[i].VideoEncoderConfiguration.H264.GovLength.ToString);
+          tv1.Items.AddChild(T4, 'GovLength: ' + Profiles[i].VideoEncoderConfiguration.H264.H264Profile);
+          T4 := tv1.Items.AddChild(T3, 'Multicast');
+          tv1.Items.AddChild(T4, 'Address type: ' + Profiles[i].VideoEncoderConfiguration.Multicast.Address.Type_);
+          tv1.Items.AddChild(T4, 'Address IPv4Address: ' + Profiles[i].VideoEncoderConfiguration.Multicast.Address.IPv4Address);
+          tv1.Items.AddChild(T4, 'Port: ' + Profiles[i].VideoEncoderConfiguration.Multicast.Port.ToString);
+          tv1.Items.AddChild(T4, 'TTL: ' + Profiles[i].VideoEncoderConfiguration.Multicast.TTL.ToString);
+          tv1.Items.AddChild(T4, 'AutoStart: ' + Profiles[i].VideoEncoderConfiguration.Multicast.AutoStart.ToString(True));
 
-      // get profiles
-      XMLProfilesToProfiles(ONVIFGetProfiles(GetONVIFAddr(F[T.Index].XAddrs, atMedia), UserName, Password), Profiles);
+          tv1.Items.AddChild(T3, 'SessionTimeout: ' + Profiles[i].VideoEncoderConfiguration.SessionTimeout);
+        end;
+      end;
 
     end;
   end;

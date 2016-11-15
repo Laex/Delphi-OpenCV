@@ -271,6 +271,7 @@ Var
   frame_finished: Integer;
   linesize: array [0 .. 3] of Integer;
   RDelay: Cardinal;
+  Image: IocvImage;
 begin
   av_register_all();
   avformat_network_init();
@@ -381,26 +382,18 @@ begin
       begin
         if (packet.stream_index = videoStream) then
         begin
-          Synchronize(
-            procedure
-            begin
-              FOwner.DoNotifyPacket(packet, (packet.flags and AV_PKT_FLAG_KEY) <> 0);
-            end);
+          FOwner.DoNotifyPacket(packet, (packet.flags and AV_PKT_FLAG_KEY) <> 0);
           // Video stream packet
           avcodec_decode_video2(pCodecCtx, frame, frame_finished, @packet);
           if (frame_finished <> 0) then
           begin
             sws_scale(img_convert_context, @frame^.data, @frame^.linesize, 0, pCodecCtx^.Height, @iplframe^.imageData, @linesize);
             if Assigned(OnNotifyData) then
-              Synchronize(
-                procedure
-                Var
-                  Image: IocvImage;
-                begin
-                  Image := TocvImage.CreateClone(iplframe);
-                  OnNotifyData(FOwner, Image);
-                  Image := nil;
-                end);
+            begin
+              Image := TocvImage.CreateClone(iplframe);
+              OnNotifyData(FOwner, Image);
+              Image := nil;
+            end;
           end;
         end
         else

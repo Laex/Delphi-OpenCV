@@ -31,10 +31,12 @@ package ONVIF;
 requires
   rtl,
   IndySystem,
-  IndyCore;
+  IndyCore,
+  IndyProtocols;
 
 contains
   ONVIF in 'ONVIF.pas',
   uNativeXml in 'uNativeXml.pas';
 
 end.
+
