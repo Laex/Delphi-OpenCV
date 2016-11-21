@@ -362,10 +362,34 @@ Type
   end;
 
   // Haar cascade types
-  TocvHaarCascadeType = (hcEye, hcEyeTreeEyeGlasses, hcFrontalFaceAlt, hcFrontalFaceAlt2, hcFrontalFaceAltTree,
-    hcFrontalFaceDefaut, hcFullBody, hcLeftEye2Splits, hcLowerBody, hcMcsEyePairBig, hcMcsEyePairSmall, hcMcsLeftEar,
-    hcMcsLeftEye, hcMcsMouth, hcMcsNose, hcMcsRightEar, hcMcsRightEye, hcMcsUpperBody, hcProfileFace, hcRightEye2Splits,
-    hcSmile, hcUpperBody, hcPlateNumberRus);
+  TocvHaarCascadeType =
+  ( hcEye,
+    hcEyeTreeEyeGlasses,
+    hcFrontalCatFace,
+    hcFrontalCatFaceExtended,
+    hcFrontalFaceAlt,
+    hcFrontalFaceAlt2,
+    hcFrontalFaceAltTree,
+    hcFrontalFaceDefaut,
+    hcFullBody,
+    hcLeftEye2Splits,
+    hcLowerBody,
+    hcMcsEyePairBig,
+    hcMcsEyePairSmall,
+    hcMcsLeftEar,
+    hcMcsLeftEye,
+    hcMcsMouth,
+    hcMcsNose,
+    hcMcsRightEar,
+    hcMcsRightEye,
+    hcMcsUpperBody,
+    hcProfileFace,
+    hcRightEye2Splits,
+    hcSmile,
+    hcUpperBody,
+    hcPlateNumberRus,
+    hcLicencePlateRus16stages
+    );
   TocvHaarCascadeFlag = (HAAR_DO_CANNY_PRUNING, HAAR_SCALE_IMAGE, HAAR_FIND_BIGGEST_OBJECT, HAAR_DO_ROUGH_SEARCH);
   TocvHaarCascadeFlagSet = set of TocvHaarCascadeFlag;
 
@@ -383,12 +407,21 @@ function ocvPixel(const R, G, B: byte): TocvPixel;
 const
   cLineType: array [TocvLineType] of Integer = (CV_FILLED, 8, CV_AA);
 
+///
+// Run utils\CompressHaar\uCompressHaar.dpr
+// Add to serarch path \Delphi-OpenCV\resource\facedetectxml\
+///
+{$I haarcascade.inc}
+{$R haarcascade.rc haarcascade.res}
+{$R haarcascade.res}
+
 implementation
 
 uses
   ocv.imgproc_c,
   ocv.imgproc.types_c,
   ocv.highgui_c, ocv.utils;
+
 
 function ocvPixel(const R, G, B: byte): TocvPixel;
 begin

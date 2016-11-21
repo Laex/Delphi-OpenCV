@@ -1,9 +1,18 @@
 // Created uCompressHaar.exe
+
+Type
+  TocvHaarCascadeRecord = record
+    Name: String;
+    FileName: String;
+  end;
+
 const
-FrontalFaceXML: array [TocvHaarCascadeType] of TocvHaarCascadeRecord =
+CascadeRecourse: array [TocvHaarCascadeType] of TocvHaarCascadeRecord =
 (
 (Name: 'HEYE'; FileName: 'haarcascade_eye.xml'),
 (Name: 'HEYETREEEYEGLASSES'; FileName: 'haarcascade_eye_tree_eyeglasses.xml'),
+(Name: 'HCFRONTALCATFACE'; FileName: 'haarcascade_frontalcatface.xml'),
+(Name: 'HCFRONTALCATFACEEXTENDED'; FileName: 'haarcascade_frontalcatface_extended.xml'),
 (Name: 'HFFALT'; FileName: 'haarcascade_frontalface_alt.xml'),
 (Name: 'HFFALT2'; FileName: 'haarcascade_frontalface_alt2.xml'),
 (Name: 'HFFALTTREE'; FileName: 'haarcascade_frontalface_alt_tree.xml'),
@@ -24,5 +33,6 @@ FrontalFaceXML: array [TocvHaarCascadeType] of TocvHaarCascadeRecord =
 (Name: 'HREYE2SPLITS'; FileName: 'haarcascade_righteye_2splits.xml'),
 (Name: 'HSMILE'; FileName: 'haarcascade_smile.xml'),
 (Name: 'HUPPERBODY'; FileName: 'haarcascade_upperbody.xml'),
-(Name: 'HRUSSIANPLATENUMBER'; FileName: 'haarcascade_russian_plate_number.xml')
+(Name: 'HRUSSIANPLATENUMBER'; FileName: 'haarcascade_russian_plate_number.xml'),
+(Name: 'HCLICENCEPLATERUS16STAGES'; FileName: 'haarcascade_licence_plate_rus_16stages.xml')
 );

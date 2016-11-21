@@ -437,7 +437,7 @@ end;
 
 procedure Clarity(const step: Integer; const InputImage: pIplImage; Var OutputImage: pIplImage);
 var
-  matr: array [0 .. 9] of single;
+//  matr: array [0 .. 9] of single;
   kernel_matrix: pCvMat;
 begin
   OutputImage := cvCreateImage(cvGetSize(InputImage), InputImage^.depth, InputImage^.nChannels);

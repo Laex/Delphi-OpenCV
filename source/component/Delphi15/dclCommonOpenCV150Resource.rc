@@ -1,6 +1,0 @@
-TocvIPCamSource BITMAP "..\\Resource\\ipcamera.bmp"
-TocvCameraSource BITMAP "..\\Resource\\webcamera.bmp"
-TocvFFMpegIPCamSource BITMAP "..\\Resource\\ipcameraffmpeg.bmp"
-TocvImageOperation BITMAP "..\\Resource\\imagetransform.bmp"
-TocvFileSource BITMAP "..\\Resource\\filesource.bmp"
-TocvVideoWriter BITMAP "..\\Resource\\wideowriter.bmp"

@@ -1,6 +1,8 @@
 // Created uCompressHaar.exe
 HEYE RCDATA "haarcascade_eye.xml.z"
 HEYETREEEYEGLASSES RCDATA "haarcascade_eye_tree_eyeglasses.xml.z"
+HCFRONTALCATFACE RCDATA "haarcascade_frontalcatface.xml.z"
+HCFRONTALCATFACEEXTENDED RCDATA "haarcascade_frontalcatface_extended.xml.z"
 HFFALT RCDATA "haarcascade_frontalface_alt.xml.z"
 HFFALT2 RCDATA "haarcascade_frontalface_alt2.xml.z"
 HFFALTTREE RCDATA "haarcascade_frontalface_alt_tree.xml.z"
@@ -22,3 +24,4 @@ HREYE2SPLITS RCDATA "haarcascade_righteye_2splits.xml.z"
 HSMILE RCDATA "haarcascade_smile.xml.z"
 HUPPERBODY RCDATA "haarcascade_upperbody.xml.z"
 HRUSSIANPLATENUMBER RCDATA "haarcascade_russian_plate_number.xml.z"
+HCLICENCEPLATERUS16STAGES RCDATA "haarcascade_licence_plate_rus_16stages.xml.z"

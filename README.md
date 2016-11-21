@@ -14,7 +14,7 @@ Files: msvcp120.dll, msvcr120.dll, msvcp120d.dll, msvcr120d.dll
 (1) 32-bit in the "Delphi-OpenCV\redist\VC2013x86\"
 (2) 64-bit in the "Delphi-OpenCV\redist\VC2013x64\"
 ```
-* Shared library FFMPEG 3.1.4 for Windows can be downloaded from [here][5]<br>
+* Shared library FFMPEG 3.2 for Windows can be downloaded from [here][5]<br>
 ```
 (3) FFmpeg 32-bit Shared
 (4) FFmpeg 64-bit Shared

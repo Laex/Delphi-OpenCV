@@ -35,7 +35,7 @@ procedure Register;
 
 implementation
 
-{$R OpenCV.dcr}
+//{$R OpenCV.dcr}
 
 uses
   Windows,

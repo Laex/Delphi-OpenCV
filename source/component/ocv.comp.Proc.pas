@@ -45,17 +45,6 @@ Uses
 
 {$I Opencv.inc}
 
-Type
-  TocvHaarCascadeRecord = record
-    Name: String;
-    FileName: String;
-  end;
-  ///
-  // Run utils\CompressHaar\uCompressHaar.dpr
-  // Add to serarch path \Delphi-OpenCV\resource\facedetectxml\
-  ///
-{$R haarcascade.res}
-{$I haarcascade.inc}
 
 function ocvLoadHaarCascade(const HaarCascadeType: TocvHaarCascadeType): pCvHaarClassifierCascade;
 
@@ -76,10 +65,10 @@ Var
   FS: TFileStream;
 begin
   Result := nil;
-  FullFileName := TempPath + FrontalFaceXML[HaarCascadeType].FileName;
+  FullFileName := TempPath + CascadeRecourse[HaarCascadeType].FileName;
   if not FileExists(FullFileName) then
   begin
-    RS := TResourceStream.Create(hInstance, FrontalFaceXML[HaarCascadeType].Name, RT_RCDATA);
+    RS := TResourceStream.Create(hInstance, CascadeRecourse[HaarCascadeType].Name, RT_RCDATA);
     DC := TZDecompressionStream.Create(RS);
     FS := TFileStream.Create(FullFileName, fmCreate);
     try

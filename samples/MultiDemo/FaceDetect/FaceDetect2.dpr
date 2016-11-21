@@ -44,7 +44,9 @@ var
   // Create a new Haar classifier
   cascade: pCvHaarClassifierCascade = nil;
   // Create a string that contains the cascade name
-  cascade_name: AnsiString = cResourceFaceDetect + 'haarcascade_frontalface_alt.xml'; // "haarcascade_profileface.xml";
+  cascade_name: AnsiString = cResourceFaceDetect + 'haarcascade_licence_plate_rus_16stages.xml';//'haarcascade_russian_plate_number.xml';//'haarcascade_frontalface_alt.xml'; // "haarcascade_profileface.xml";
+  // Input file name for avi or image file.
+  input_name: AnsiString = '0';
 
   // Function prototype for detecting and drawing an object from an image
 procedure detect_and_draw(image: pIplImage);
@@ -99,8 +101,6 @@ Var
   // Images to capture the frame from video or camera or from file
   frame: pIplImage = nil;
   frame_copy: pIplImage = nil;
-  // Input file name for avi or image file.
-  input_name: AnsiString;
 
 const
   opt = '--cascade=';
@@ -114,6 +114,7 @@ begin
       input_name := ParamStr(2);
     end
     else
+    if not FileExists(cascade_name) then
     begin
       Writeln('Usage: facedetect --cascade=<cascade_path> [filename|camera_index]');
       Halt(1);

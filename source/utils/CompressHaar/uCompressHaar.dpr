@@ -24,8 +24,6 @@ Var
   S: TSearchRec;
   ZC: TZCompressionStream;
   Fs, Fd: TFileStream;
-  // S_rc: TStringList;
-  // S_inc: TStringList;
   iFileName, oFileName: string;
   rName: String;
 
@@ -37,13 +35,6 @@ Var
 
 begin
   try
-    // S_rc := TStringList.Create;
-    // S_rc.Add('// Created uCompressHaar.exe');
-    // S_inc := TStringList.Create;
-    // S_inc.Add('// Created uCompressHaar.exe');
-    // S_inc.Add('const');
-    // S_inc.Add('FrontalFaceXML: array [TocvHaarCascadeType] of TocvHaarCascadeRecord =');
-    // S_inc.Add('(');
     if FindFirst('*.xml', faAnyFile, S) = 0 then
       repeat
         iFileName := S.Name;
@@ -55,8 +46,6 @@ begin
           WriteLn(S.Size:8, ' ', S.Name);
           ZC.CopyFrom(Fs, S.Size);
           rName := CreateResourceName(S.Name);
-          // S_rc.Add(rName + ' RCDATA "' + S.Name + '.z"');
-          // S_inc.Add(Format('(Name: ''%s''; FileName: ''%s''),', [rName, S.Name]));
         finally
           ZC.Free;
           Fs.Free;
@@ -64,14 +53,6 @@ begin
         end;
       until FindNext(S) <> 0;
     FindClose(S);
-    // S_rc.SaveToFile('haarcascade.rc');
-    // rName := S_inc[S_inc.Count - 1];
-    // Delete(rName, Length(rName), 1);
-    // S_inc[S_inc.Count - 1] := rName;
-    // S_inc.Add(');');
-    // S_inc.SaveToFile('haarcascade.inc');
-    // S_rc.Free;
-    // S_inc.Free;
   except
     on E: Exception do
       WriteLn(E.ClassName, ': ', E.Message);

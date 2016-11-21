@@ -59,7 +59,6 @@ begin
     { } TocvCameraSource,
     { } TocvFileSource,
     { } TocvIPCamSource,
-    // { } TocvFFMpegIPCamSource,
     { } TocvVideoWriter]);
   RegisterClasses([
     { } TocvNoneOperation,
