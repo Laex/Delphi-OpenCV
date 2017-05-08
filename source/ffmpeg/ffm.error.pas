@@ -122,6 +122,36 @@ function av_make_error_string(errbuf: pAnsiChar; errbuf_size: integer; errnum: i
 // av_make_error_string((char[AV_ERROR_MAX_STRING_SIZE]){0}, AV_ERROR_MAX_STRING_SIZE, errnum)
 function av_err2str(errnum: integer): pAnsiChar; inline;
 
+{
+DumpErrorCodes - Error Code : AVERROR_BSF_NOT_FOUND = -1179861752
+DumpErrorCodes - Error Code : AVERROR_BUG = -558323010
+DumpErrorCodes - Error Code : AVERROR_BUFFER_TOO_SMALL = -1397118274
+DumpErrorCodes - Error Code : AVERROR_DECODER_NOT_FOUND = -1128613112
+DumpErrorCodes - Error Code : AVERROR_DEMUXER_NOT_FOUND = -1296385272
+DumpErrorCodes - Error Code : AVERROR_ENCODER_NOT_FOUND = -1129203192
+DumpErrorCodes - Error Code : AVERROR_EOF = -541478725
+DumpErrorCodes - Error Code : AVERROR_EXIT = -1414092869
+DumpErrorCodes - Error Code : AVERROR_EXTERNAL = -542398533
+DumpErrorCodes - Error Code : AVERROR_FILTER_NOT_FOUND = -1279870712
+DumpErrorCodes - Error Code : AVERROR_INVALIDDATA = -1094995529
+DumpErrorCodes - Error Code : AVERROR_MUXER_NOT_FOUND = -1481985528
+DumpErrorCodes - Error Code : AVERROR_OPTION_NOT_FOUND = -1414549496
+DumpErrorCodes - Error Code : AVERROR_PATCHWELCOME = -1163346256
+DumpErrorCodes - Error Code : AVERROR_PROTOCOL_NOT_FOUND = -1330794744
+DumpErrorCodes - Error Code : AVERROR_STREAM_NOT_FOUND = -1381258232
+DumpErrorCodes - Error Code : AVERROR_BUG2 = -541545794
+DumpErrorCodes - Error Code : AVERROR_UNKNOWN = -1313558101
+DumpErrorCodes - Error Code : AVERROR_EXPERIMENTAL = -733130664
+DumpErrorCodes - Error Code : AVERROR_INPUT_CHANGED = -1668179713
+DumpErrorCodes - Error Code : AVERROR_OUTPUT_CHANGED = -1668179714
+DumpErrorCodes - Error Code : AVERROR_HTTP_BAD_REQUEST = -808465656
+DumpErrorCodes - Error Code : AVERROR_HTTP_UNAUTHORIZED = -825242872
+DumpErrorCodes - Error Code : AVERROR_HTTP_FORBIDDEN = -858797304
+DumpErrorCodes - Error Code : AVERROR_HTTP_NOT_FOUND = -875574520
+DumpErrorCodes - Error Code : AVERROR_HTTP_OTHER_4XX = -1482175736
+DumpErrorCodes - Error Code : AVERROR_HTTP_SERVER_ERROR = -1482175992
+}
+
 implementation
 
 uses ffm.lib;

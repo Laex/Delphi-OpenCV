@@ -44,7 +44,7 @@ var
   // Create a new Haar classifier
   cascade: pCvHaarClassifierCascade = nil;
   // Create a string that contains the cascade name
-  cascade_name: AnsiString = cResourceFaceDetect + 'haarcascade_licence_plate_rus_16stages.xml';//'haarcascade_russian_plate_number.xml';//'haarcascade_frontalface_alt.xml'; // "haarcascade_profileface.xml";
+  cascade_name: AnsiString = cResourceFaceDetect + 'haarcascade_eye.xml';
   // Input file name for avi or image file.
   input_name: AnsiString = '0';
 
