@@ -3,7 +3,7 @@
 // Copyright (C) 2013 Project Delphi-OpenCV
 // ****************************************************************
 // Contributor:
-  // Laentir Valetov
+// Laentir Valetov
 // email:laex@bk.ru
 // ****************************************************************
 // You may retrieve the latest version of this file at the GitHub,
@@ -180,16 +180,14 @@ begin
         // run the haar cascade detection
         // with parameters scale:=1.2, neighbours := 4 and with Canny pruning
         // turned on with minimum detection scale 30x30 pixels
-        detected_objects := cvHaarDetectObjects(gray, cascade, storage, 1.2, 4, CV_HAAR_DO_CANNY_PRUNING, cvSize(30, 30),
-          cvSize(0, 0));
+        detected_objects := cvHaarDetectObjects(gray, cascade, storage, 1.2, 4, CV_HAAR_DO_CANNY_PRUNING, cvSize(30, 30), cvSize(0, 0));
 
         // draw a red rectangle around any detected objects
         i := 0;
         While i < ifthen(Assigned(detected_objects), detected_objects^.total, 0) do
         begin
           r := pCvRect(cvGetSeqElem(detected_objects, i));
-          cvRectangle(imgcopy, cvPoint(r^.x, r^.y), cvPoint((r^.x) + (r^.width), (r^.y) + (r^.height)),
-            CV_RGB(255, 0, 0), 2, 8, 0);
+          cvRectangle(imgcopy, cvPoint(r^.x, r^.y), cvPoint((r^.x) + (r^.width), (r^.y) + (r^.height)), CV_RGB(255, 0, 0), 2, 8, 0);
           Inc(i);
         end;
         // if Assigned(detected_objects) then

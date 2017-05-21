@@ -45,7 +45,6 @@ Uses
 
 {$I Opencv.inc}
 
-
 function ocvLoadHaarCascade(const HaarCascadeType: TocvHaarCascadeType): pCvHaarClassifierCascade;
 
   function TempPath: string;
@@ -58,6 +57,18 @@ function ocvLoadHaarCascade(const HaarCascadeType: TocvHaarCascadeType): pCvHaar
     Result := Trim(Result);
   end;
 
+  function FileSize(const aFilename: String): Int64;
+  var
+    info: TWin32FileAttributeData;
+  begin
+    Result := -1;
+
+    if NOT GetFileAttributesEx(PWideChar(aFilename), GetFileExInfoStandard, @info) then
+      EXIT;
+
+    Result := Int64(info.nFileSizeLow) or Int64(info.nFileSizeHigh shl 32);
+  end;
+
 Var
   FullFileName: String;
   RS: TResourceStream;
@@ -66,7 +77,7 @@ Var
 begin
   Result := nil;
   FullFileName := TempPath + CascadeRecourse[HaarCascadeType].FileName;
-  if not FileExists(FullFileName) then
+  if (not FileExists(FullFileName)) or (FileSize(FullFileName) = 0) then
   begin
     RS := TResourceStream.Create(hInstance, CascadeRecourse[HaarCascadeType].Name, RT_RCDATA);
     DC := TZDecompressionStream.Create(RS);
@@ -79,7 +90,7 @@ begin
       RS.Free;
     end;
   end;
-  if FileExists(FullFileName) then
+  if FileExists(FullFileName) and (FileSize(FullFileName) > 0) then
     Result := cvLoad(c_str(FullFileName), nil, nil, nil);
 end;
 

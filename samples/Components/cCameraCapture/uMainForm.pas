@@ -34,24 +34,9 @@ uses
 
 type
   TMainForm = class(TForm)
-    lbl1: TLabel;
-    cbb1: TComboBox;
-    chk1: TCheckBox;
-    chk2: TCheckBox;
-    chk3: TCheckBox;
-    ocvView1: TocvView;
-    ocvView2: TocvView;
     ocvView3: TocvView;
-    ocvView4: TocvView;
-    ocvflsrc1: TocvFileSource;
     ocvmgprtn1: TocvImageOperation;
-    ocvpcmsrc1: TocvIPCamSource;
     ocvcmrsrc1: TocvCameraSource;
-    procedure FormCreate(Sender: TObject);
-    procedure cbb1Change(Sender: TObject);
-    procedure chk1Click(Sender: TObject);
-    procedure chk2Click(Sender: TObject);
-    procedure chk3Click(Sender: TObject);
     procedure ocvmgprtn1AfterEachOperation(PrevOperation, Operation, NextOperation: TObject; const IplImage: IocvImage;
       var ContinueTransform: Boolean);
     procedure ocvmgprtn1OperationBeforeTransform(Sender: TObject; const IplImage: IocvImage; var ContinueTransform: Boolean);
@@ -65,35 +50,6 @@ var
 implementation
 
 {$R *.dfm}
-
-procedure TMainForm.cbb1Change(Sender: TObject);
-begin
-  ocvmgprtn1.OperationClass := TocvImageOperationClass(cbb1.Items.Objects[cbb1.ItemIndex]);
-end;
-
-procedure TMainForm.chk1Click(Sender: TObject);
-begin
-  ocvcmrsrc1.Enabled := chk1.Checked;
-end;
-
-procedure TMainForm.chk2Click(Sender: TObject);
-begin
-  ocvpcmsrc1.Enabled := chk2.Checked;
-end;
-
-procedure TMainForm.chk3Click(Sender: TObject);
-begin
-  ocvflsrc1.Enabled := chk3.Checked;
-end;
-
-procedure TMainForm.FormCreate(Sender: TObject);
-begin
-  cbb1.Items.Assign(GetRegisteredImageOperations);
-  cbb1.ItemIndex := cbb1.Items.IndexOf(GetRegisteredImageOperations.GetNameByClass(ocvmgprtn1.OperationClass));
-  chk3.Checked := ocvflsrc1.Enabled;
-  chk2.Checked := ocvpcmsrc1.Enabled;
-  chk1.Checked := ocvcmrsrc1.Enabled;
-end;
 
 procedure TMainForm.ocvmgprtn1AfterEachOperation(PrevOperation, Operation, NextOperation: TObject; const IplImage: IocvImage;
   var ContinueTransform: Boolean);
