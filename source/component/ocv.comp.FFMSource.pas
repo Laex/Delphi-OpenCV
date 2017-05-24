@@ -361,6 +361,13 @@ begin
       Continue;
     end;
 
+    if pCodecCtx^.pix_fmt = AV_PIX_FMT_NONE then
+    begin
+      DoNotyfy(ffocvErrorGetStream);
+      FisReconnect := True;
+      Continue;
+    end;
+
     img_convert_context := sws_getCachedContext(nil, pCodecCtx^.Width, pCodecCtx^.Height, pCodecCtx^.pix_fmt, pCodecCtx^.Width,
       pCodecCtx^.Height, AV_PIX_FMT_BGR24, SWS_BILINEAR, nil, nil, nil);
     if (img_convert_context = nil) then

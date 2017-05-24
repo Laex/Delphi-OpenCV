@@ -178,11 +178,6 @@ begin
 end;
 
 procedure TocvViewFMX.Paint;
-//var
-//  M: TBitmapData;
-//  i: Integer;
-//  SrcData, DestData: pByte;
-//  nC: Integer;
 begin
   if (csDesigning in ComponentState) then
   begin

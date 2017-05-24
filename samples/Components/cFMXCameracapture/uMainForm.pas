@@ -70,10 +70,10 @@ end;
 
 procedure TMainForm.FormActivate(Sender: TObject);
 begin
-  ocvcmrsrc1.Enabled := True;
-  ocvpcmsrc1.Enabled := True;
-  ocvflsrc1.Enabled := True;
-  ocvfmpgpcmsrc1.Enabled := True;
+  ocvcmrsrc1.Enabled := chk1.IsChecked;
+  ocvpcmsrc1.Enabled := chk2.IsChecked;
+  ocvflsrc1.Enabled := chk3.IsChecked;
+  ocvfmpgpcmsrc1.Enabled := chk4.IsChecked;
 end;
 
 end.

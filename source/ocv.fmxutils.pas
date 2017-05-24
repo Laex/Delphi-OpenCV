@@ -6,39 +6,53 @@ Uses
   ocv.core.types_c,
   FMX.Graphics;
 
-procedure IPLImageToFMXBitmap(const IpImage: pIplImage; const FMXBitmap: TBitmap);
+procedure IPLImageToFMXBitmap(const IpImage: pIplImage; const FMXBitmap: TBitmap); inline;
 
 implementation
 
 Uses FMX.Types;
 
-procedure IPLImageToFMXBitmap(const IpImage: pIplImage; const FMXBitmap: TBitmap);
+procedure IPLImageToFMXBitmap(const IpImage: pIplImage; const FMXBitmap: TBitmap); inline;
 Var
-  M: TBitmapData;
+  BitmapData: TBitmapData;
   i: Integer;
   SrcData, DestData: pByte;
   nC: Integer;
+  pf: Integer;
 begin
   Assert(Assigned(IpImage) and Assigned(FMXBitmap));
-  FMXBitmap.Canvas.BeginScene;
-  if (FMXBitmap.Width <> IpImage^.Width) or (FMXBitmap.Height <> IpImage^.Height) then
-    FMXBitmap.SetSize(IpImage^.Width, IpImage^.Height);
-  if FMXBitmap.Map(TMapAccess.Write, M) then
+  if (IpImage^.Width > 0) and (IpImage^.Height > 0) and Assigned(IpImage^.imageData) then
     try
-      SrcData := pByte(IpImage^.imageData);
-      DestData := pByte(M.Data);
       nC := IpImage^.nChannels;
-      for i := 0 to M.Width * M.Height - 1 do
+      With IpImage^ do
       begin
-        DestData[i * PixelFormatBytes[FMXBitmap.PixelFormat] + 0] := SrcData[i * nC + 0];
-        DestData[i * PixelFormatBytes[FMXBitmap.PixelFormat] + 1] := SrcData[i * nC + 1];
-        DestData[i * PixelFormatBytes[FMXBitmap.PixelFormat] + 2] := SrcData[i * nC + 2];
-        DestData[i * PixelFormatBytes[FMXBitmap.PixelFormat] + 3] := $FF;
+        SrcData := AllocMem(Width * Height * nC);
+        Move(imageData^, SrcData^, Width * Height * nC);
       end;
+      // FMXBitmap.Canvas.BeginScene;
+      // try
+      if (FMXBitmap.Width <> IpImage^.Width) or (FMXBitmap.Height <> IpImage^.Height) then
+        FMXBitmap.SetSize(IpImage^.Width, IpImage^.Height);
+      if FMXBitmap.Map(TMapAccess.Write, BitmapData) then
+        try
+          DestData := pByte(BitmapData.Data);
+          pf := PixelFormatBytes[FMXBitmap.PixelFormat];
+          for i := 0 to BitmapData.Width * BitmapData.Height - 1 do
+          begin
+            DestData[i * pf + 0] := SrcData[i * nC + 0];
+            DestData[i * pf + 1] := SrcData[i * nC + 1];
+            DestData[i * pf + 2] := SrcData[i * nC + 2];
+            DestData[i * pf + 3] := $FF;
+          end;
+        finally
+          FMXBitmap.Unmap(BitmapData);
+        end;
+      // finally
+      // FMXBitmap.Canvas.EndScene;
+      // end;
     finally
-      FMXBitmap.Unmap(M);
+      FreeMem(SrcData);
     end;
-  FMXBitmap.Canvas.EndScene;
 end;
 
 end.

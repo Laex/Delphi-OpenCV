@@ -80,7 +80,6 @@ object MainForm: TMainForm
     OnChange = chk3Change
   end
   object chk4: TCheckBox
-    IsChecked = True
     Position.X = 8.000000000000000000
     Position.Y = 308.000000000000000000
     Size.Width = 185.000000000000000000
@@ -99,7 +98,7 @@ object MainForm: TMainForm
     OnChange = chk5Change
   end
   object ocvcmrsrc1: TocvCameraSource
-    Resolution = r640x360
+    Resolution = r960x544
     Left = 60
     Top = 152
   end
