@@ -10,7 +10,7 @@ lib/
 
 #Files
 *.exe
-*.dll
+#*.dll
 *.ini
 *.bsc
 *.sdf

@@ -1,5 +1,5 @@
 #Delphi-OpenCV
-* OpenCV version - 2.4.13(.2)<br>
+* OpenCV version - 2.4.13.2<br>
 * Development environment - Delphi 2010-10.2<br>
 
 <b>Contributors:</b>
@@ -8,11 +8,11 @@
  Mikhail Grigorev (email: sleuthhound@gmail.com)
 ```
 ##Requirements:
-* Visual C++ redistributable for Visual Studio 2013<br>
-Files: msvcp120.dll, msvcr120.dll, msvcp120d.dll, msvcr120d.dll
+* Visual C++ Redistributable for Visual Studio 2015<br>
+Files: msvcp140.dll, msvcp140d.dll in "Delphi-OpenCV\redist\" or [here][2]
 ```
-(1) 32-bit in the "Delphi-OpenCV\redist\VC2013x86\"
-(2) 64-bit in the "Delphi-OpenCV\redist\VC2013x64\"
+(1) 32-bit in the "Delphi-OpenCV\redist\VC14x86\"
+(2) 64-bit in the "Delphi-OpenCV\redist\VC14x64\"
 ```
 * Shared library FFMPEG 3.3.1 for Windows can be downloaded from [here][5]<br>
 ```
@@ -20,11 +20,11 @@ Files: msvcp120.dll, msvcr120.dll, msvcp120d.dll, msvcr120d.dll
 (4) FFmpeg 64-bit Shared
 ```
 * Dynamic library OpenCV need to download [here][4]<br>
-Files: _2413.dll and _2413d.dll
+Files: *2413.dll and *2413d.dll
 ```
 After installing OpenCV:
-(5) 32-bit in the C:\OpenCV\build\x86\vc12\bin\
-(6) 64-bit in the C:\OpenCV\build\x64\vc12\bin\
+(5) 32-bit in the C:\OpenCV\build\x86\vc14\bin\*.dll
+(6) 64-bit in the C:\OpenCV\build\x64\vc14\bin\*.dll
 ```
 * Some examples (FFMPEG) required [SDL 2.0 and SDL 1.2][3]<br>
 ```
@@ -99,7 +99,7 @@ Examples of use of components
 <br>Yandex Money: 410012802258318
 
 [1]: https://github.com/Laex/Delphi-OpenCV/archive/master.zip
-[2]: http://www.microsoft.com/ru-ru/download/details.aspx?id=40784
+[2]: https://www.microsoft.com/en-us/download/details.aspx?id=48145
 [3]: https://www.libsdl.org/index.php
-[4]: http://opencv.org/downloads.html
+[4]: https://github.com/opencv/opencv/releases/tag/2.4.13.2
 [5]: http://ffmpeg.zeranoe.com/builds/
