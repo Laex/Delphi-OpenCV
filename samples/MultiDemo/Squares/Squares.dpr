@@ -68,6 +68,8 @@ var
   result_: PCvSeq;
   rr: integer;
 
+  contourstorage: PCvMemStorage;
+
   yy: pointer;
   a: AnsiString;
 begin
@@ -91,6 +93,8 @@ begin
   // with the width and height divisible by 2
   // cvSetImageROI(timg, cvRect(0, 0, sz.width, sz.height));
   cvResetImageROI(timg);
+
+  contourstorage := cvCreateMemStorage(0);
 
   // down-scale and upscale the image to filter out the noise
   cvPyrDown(timg, pyr, 7);
@@ -131,8 +135,8 @@ begin
 
       // try
       // find contours and store them all as a list
-      cvClearMemStorage(storage);
-      rr := cvFindContours(gray, storage, @contours, sizeof(TCvContour), CV_RETR_LIST, CV_CHAIN_APPROX_SIMPLE,
+      cvClearMemStorage(contourstorage);
+      rr := cvFindContours(gray, contourstorage, @contours, sizeof(TCvContour), CV_RETR_LIST, CV_CHAIN_APPROX_SIMPLE,
         CvPoint(0, 0));
 
       // test each contour
@@ -186,7 +190,7 @@ begin
   cvReleaseImage(pyr);
   cvReleaseImage(tgray);
   cvReleaseImage(timg);
-
+  cvReleaseMemStorage(contourstorage);
   result := Squares;
 end;
 
