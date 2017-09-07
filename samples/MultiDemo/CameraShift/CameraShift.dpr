@@ -1,25 +1,25 @@
-//*****************************************************************
-  //                       Delphi-OpenCV Demo
-  //               Copyright (C) 2013 Project Delphi-OpenCV
-  // ****************************************************************
-  // Contributor:
-    // Laentir Valetov
-  // email:laex@bk.ru
-  // ****************************************************************
-  // You may retrieve the latest version of this file at the GitHub,
-  // located at git://github.com/Laex/Delphi-OpenCV.git
-  // ****************************************************************
-  // The contents of this file are used with permission, subject to
-  // the Mozilla Public License Version 1.1 (the "License"); you may
-  // not use this file except in compliance with the License. You may
-  // obtain a copy of the License at
-  // http://www.mozilla.org/MPL/MPL-1_1Final.html
-  //
-  // Software distributed under the License is distributed on an
-  // "AS IS" basis, WITHOUT WARRANTY OF ANY KIND, either express or
-  // implied. See the License for the specific language governing
-  // rights and limitations under the License.
-  //*******************************************************************
+(* ****************************************************************
+  Delphi-OpenCV Demo
+  Copyright (C) 2013 Project Delphi-OpenCV
+  ****************************************************************
+  Contributor:
+  Laentir Valetov
+  email:laex@bk.ru
+  ****************************************************************
+  You may retrieve the latest version of this file at the GitHub,
+  located at git://github.com/Laex/Delphi-OpenCV.git
+  ****************************************************************
+  The contents of this file are used with permission, subject to
+  the Mozilla Public License Version 1.1 (the "License"); you may
+  not use this file except in compliance with the License. You may
+  obtain a copy of the License at
+  http://www.mozilla.org/MPL/MPL-1_1Final.html
+
+  Software distributed under the License is distributed on an
+  "AS IS" basis, WITHOUT WARRANTY OF ANY KIND, either express or
+  implied. See the License for the specific language governing
+  rights and limitations under the License.
+  ****************************************************************** *)
 
 program CameraShift;
 
@@ -164,8 +164,7 @@ begin
       begin
         val := cvRound(cvGetReal1D(hist^.bins, i) * histimg^.height / 255);
         color := hsv2rgb(i * 180.0 / hdims);
-        cvRectangle(histimg, cvPoint(i * bin_w, histimg^.height), cvPoint((i + 1) * bin_w, histimg^.height - val), color,
-          -1, 8, 0);
+        cvRectangle(histimg, cvPoint(i * bin_w, histimg^.height), cvPoint((i + 1) * bin_w, histimg^.height - val), color, -1, 8, 0);
       end;
     end;
 
@@ -180,11 +179,11 @@ begin
       cvCvtColor(backproject, image, CV_GRAY2BGR);
     if (image.origin <> IPL_ORIGIN_TL) then
       track_box.angle := -track_box.angle;
-    {draw an ellipse around the tracked object}
+    { draw an ellipse around the tracked object }
     cvEllipseBox(image, track_box, CV_RGB(255, 0, 0), 3, CV_AA, 0);
   end;
 
-  {draw a rectangle on the area selected with mouse}
+  { draw a rectangle on the area selected with mouse }
   if (select_object > 0) and (selection.width > 0) and (selection.height > 0) then
   begin
     cvSetImageROI(image, selection);
@@ -192,7 +191,7 @@ begin
     cvResetImageROI(image);
   end;
 
-  {visualize the camera image in the window}
+  { visualize the camera image in the window }
   cvShowImage('Capture', image);
   cvShowImage('Histogram', histimg);
 end;

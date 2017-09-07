@@ -20,6 +20,7 @@ Var
   nC: Integer;
   pf: Integer;
 begin
+  SrcData := nil;
   Assert(Assigned(IpImage) and Assigned(FMXBitmap));
   if (IpImage^.Width > 0) and (IpImage^.Height > 0) and Assigned(IpImage^.imageData) then
     try
@@ -51,7 +52,8 @@ begin
       // FMXBitmap.Canvas.EndScene;
       // end;
     finally
-      FreeMem(SrcData);
+      if Assigned(SrcData) then
+        FreeMem(SrcData);
     end;
 end;
 
