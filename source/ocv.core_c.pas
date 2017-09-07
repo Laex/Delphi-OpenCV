@@ -1113,7 +1113,7 @@ function cvSum(const arr: pCvArr): TCvScalar; cdecl;
 }
 function cvCountNonZero(arr: pIplImage): Integer; cdecl;
 
-// * Calculates mean and standard deviation of pixel values */
+(** Calculates mean and standard deviation of pixel values *)
 procedure cvAvgSdv(const arr: pCvArr; mean: pCvScalar; std_dev: pCvScalar; const mask: pCvArr = nil); cdecl;
 
 { Finds global minimum, maximum and their positions
