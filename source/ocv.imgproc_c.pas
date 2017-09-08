@@ -99,8 +99,8 @@ procedure cvRunningAvg(const image: PCvArr; acc: PCvArr; alpha: Double; const ma
   CvScalar value CV_DEFAULT(cvScalarAll(0)));
 }
 procedure cvCopyMakeBorder(
-  { } const src: pIplImage;
-  { } dst: pIplImage;
+  { } const src: PCvArr;
+  { } dst: PCvArr;
   { } offset: TCvPoint;
   { } bordertype: Integer;
   { } value: TCvScalar { * cvScalarAll(0) * } ); cdecl;
@@ -117,8 +117,8 @@ procedure cvCopyMakeBorder(
   double sigma2 CV_DEFAULT(0));
 }
 procedure cvSmooth(
-  { } const src: pIplImage;
-  { } dst: pIplImage;
+  { } const src: PCvArr;
+  { } dst: PCvArr;
   { } smoothtype: Integer = CV_GAUSSIAN;
   { } size1: Integer = 3;
   { } size2: Integer = 0;
@@ -145,10 +145,10 @@ procedure cvFilter2D(const src: PCvArr; dst: PCvArr; const kernel: pCvMat); over
   CvArr* tilted_sum CV_DEFAULT(NULL));
 }
 procedure cvIntegral(
-  { } const image: pIplImage;
-  { } sum: pIplImage;
-  { } sqsum: pIplImage = NIL;
-  { } tilted_sum: pIplImage = NIL); cdecl;
+  { } const image: PCvArr;
+  { } sum: PCvArr;
+  { } sqsum: PCvArr = NIL;
+  { } tilted_sum: PCvArr = NIL); cdecl;
 
 (*
   Smoothes the input image with gaussian kernel and then down-samples it.
@@ -158,7 +158,7 @@ procedure cvIntegral(
   CVAPI(void)  cvPyrDown( const CvArr* src, CvArr* dst,
   int filter CV_DEFAULT(CV_GAUSSIAN_5x5) );
 *)
-procedure cvPyrDown(const src: pIplImage; dst: pIplImage; filter: Integer = CV_GAUSSIAN_5x5); cdecl;
+procedure cvPyrDown(const src: PCvArr; dst: PCvArr; filter: Integer = CV_GAUSSIAN_5x5); cdecl;
 
 (*
 
@@ -169,7 +169,7 @@ procedure cvPyrDown(const src: pIplImage; dst: pIplImage; filter: Integer = CV_G
   CVAPI(void)  cvPyrUp( const CvArr* src, CvArr* dst,
   int filter CV_DEFAULT(CV_GAUSSIAN_5x5) );
 *)
-procedure cvPyrUp(const src: pIplImage; dst: pIplImage; filter: Integer = CV_GAUSSIAN_5x5); cdecl;
+procedure cvPyrUp(const src: PCvArr; dst: PCvArr; filter: Integer = CV_GAUSSIAN_5x5); cdecl;
 
 (*
   Builds pyramid for an image
@@ -218,7 +218,7 @@ procedure cvWatershed(const image: PCvArr; markers: PCvArr); cdecl;
   int yorder,
   int aperture_size CV_DEFAULT(3));
 }
-procedure cvSobel(const src: pIplImage; dst: pIplImage; xorder: Integer; yorder: Integer; aperture_size: Integer = 3); cdecl;
+procedure cvSobel(const src: PCvArr; dst: PCvArr; xorder: Integer; yorder: Integer; aperture_size: Integer = 3); cdecl;
 
 {
   /* Calculates the image Laplacian: (d2/dx + d2/dy)I */
@@ -227,13 +227,13 @@ procedure cvSobel(const src: pIplImage; dst: pIplImage; xorder: Integer; yorder:
   CvArr* dst,
   int aperture_size CV_DEFAULT(3) );
 }
-procedure cvLaplace(const src: pIplImage; dst: pIplImage; aperture_size: Integer = 3); cdecl;
+procedure cvLaplace(const src: PCvArr; dst: PCvArr; aperture_size: Integer = 3); cdecl;
 
 (* Converts input array pixels from one color space to another *)
 // CVAPI(void)  cvCvtColor( const CvArr* src, CvArr* dst, int code );
-procedure cvCvtColor(const src: pIplImage; dst: pIplImage; code: Integer); cdecl; overload;
+procedure cvCvtColor(const src: PCvArr; dst: PCvArr; code: Integer); cdecl; overload;
 procedure cvCvtColor(const src: pCvMat; dst: pCvMat; code: Integer); cdecl; overload;
-procedure cvCvtColor(const src: pIplImage; dst: pCvMat; code: Integer); cdecl; overload;
+//procedure cvCvtColor(const src: PCvArr; dst: pCvMat; code: Integer); cdecl; overload;
 
 // (* Resizes image (input array is resized to fit the destination array) *)
 // CVAPI(procedure)cvResize(var Warps image with affine transform * )
@@ -241,7 +241,7 @@ procedure cvCvtColor(const src: pIplImage; dst: pCvMat; code: Integer); cdecl; o
   CVAPI(void)  cvResize( const CvArr* src, CvArr* dst,
   int interpolation CV_DEFAULT( CV_INTER_LINEAR ));
 }
-procedure cvResize(const src: pIplImage; dst: pIplImage; interpolation: Integer = CV_INTER_LINEAR); cdecl;
+procedure cvResize(const src: PCvArr; dst: PCvArr; interpolation: Integer = CV_INTER_LINEAR); cdecl;
 
 {
   /* Warps image with affine transform */
@@ -249,7 +249,7 @@ procedure cvResize(const src: pIplImage; dst: pIplImage; interpolation: Integer 
   int flags CV_DEFAULT(CV_INTER_LINEAR+CV_WARP_FILL_OUTLIERS),
   CvScalar fillval CV_DEFAULT(cvScalarAll(0)) );
 }
-procedure cvWarpAffine(const src: pIplImage; dst: pIplImage; const map_matrix: pCvMat; flags: Integer { = CV_INTER_LINEAR+CV_WARP_FILL_OUTLIERS };
+procedure cvWarpAffine(const src: PCvArr; dst: PCvArr; const map_matrix: pCvMat; flags: Integer { = CV_INTER_LINEAR+CV_WARP_FILL_OUTLIERS };
   fillval: TCvScalar { = cvScalarAll(0) } ); cdecl;
 
 // * Computes affine transform matrix for mapping src[i] to dst[i] (i=0,1,2) */
@@ -270,7 +270,7 @@ function cv2DRotationMatrix(center: TCvPoint2D32f; angle: Double; scale: Double;
   int flags CV_DEFAULT(CV_INTER_LINEAR+CV_WARP_FILL_OUTLIERS),
   CvScalar fillval CV_DEFAULT(cvScalarAll(0)) );
 }
-procedure cvWarpPerspective(const src: pIplImage; dst: pIplImage; const map_matrix: pCvMat; flags: Integer { =CV_INTER_LINEAR+CV_WARP_FILL_OUTLIERS };
+procedure cvWarpPerspective(const src: PCvArr; dst: PCvArr; const map_matrix: pCvMat; flags: Integer { =CV_INTER_LINEAR+CV_WARP_FILL_OUTLIERS };
   fillval: TCvScalar { =cvScalarAll(0) } ); cdecl;
 {
   /* Computes perspective transform matrix for mapping src[i] to dst[i] (i=0,1,2,3) */
@@ -395,7 +395,7 @@ procedure cvDilate(const src: PCvArr; dst: PCvArr; element: pIplConvKernel = nil
   CvArr* temp, IplConvKernel* element,
   int operation, int iterations CV_DEFAULT(1) );
 *)
-procedure cvMorphologyEx(const src: pIplImage; dst: pIplImage; temp: pIplImage; element: pIplConvKernel; operation: Integer;
+procedure cvMorphologyEx(const src: PCvArr; dst: PCvArr; temp: PCvArr; element: pIplConvKernel; operation: Integer;
   iterations: Integer = 1); cdecl;
 
 (*
@@ -562,7 +562,7 @@ type
   }
 
 function cvFindContours(
-  { } image: pIplImage;
+  { } image: PCvArr;
   { } storage: pCvMemStorage;
   { } first_contour: pCvSeq;
   { } header_size: Integer { = SizeOf(TCvContour) };
@@ -837,7 +837,7 @@ procedure cvCalcBayesianProb(Var src: pCvHistogram; number: Integer; Var dst: pC
   int accumulate CV_DEFAULT(0),
   const CvArr* mask CV_DEFAULT(NULL) );
 *)
-procedure cvCalcArrHist(var arr: pIplImage; hist: pCvHistogram; accumulate: Integer = 0; const mask: pIplImage = nil); cdecl;
+procedure cvCalcArrHist(var arr: PCvArr; hist: pCvHistogram; accumulate: Integer = 0; const mask: PCvArr = nil); cdecl;
 
 // CV_INLINE  void  cvCalcHist(
 // IplImage** image,
@@ -848,7 +848,7 @@ procedure cvCalcArrHist(var arr: pIplImage; hist: pCvHistogram; accumulate: Inte
 // cvCalcArrHist( (CvArr**)image, hist, accumulate, mask );
 // }
 
-procedure cvCalcHist(var image: pIplImage; hist: pCvHistogram; accumulate: Integer = 0; const mask: pIplImage = nil);
+procedure cvCalcHist(var image: PCvArr; hist: pCvHistogram; accumulate: Integer = 0; const mask: PCvArr = nil);
 {$IFDEF USE_INLINE}inline; {$ENDIF}
 {
   /* Calculates back project */
@@ -862,7 +862,7 @@ procedure cvCalcArrBackProject(var image: PCvArr; dst: PCvArr; const hist: pCvHi
   /* Does some sort of template matching but compares histograms of
   template and each window location */
 *)
-procedure cvCalcBackProject(var image: pIplImage; dst: pIplImage; const hist: pCvHistogram); cdecl;
+procedure cvCalcBackProject(var image: PCvArr; dst: PCvArr; const hist: pCvHistogram); cdecl;
 
 (*
   /* calculates probabilistic density (divides one histogram by another) */
@@ -875,7 +875,7 @@ procedure cvCalcProbDensity(const hist1: pCvHistogram; const hist2: pCvHistogram
   /* equalizes histogram of 8-bit single-channel image */
   CVAPI(void)  cvEqualizeHist( const CvArr* src, CvArr* dst );
 *)
-procedure cvEqualizeHist(const src, dst: pIplImage); cdecl;
+procedure cvEqualizeHist(const src, dst: PCvArr); cdecl;
 
 (* Applies distance transform to binary image *)
 {
@@ -893,7 +893,7 @@ procedure cvDistTransform(const src: PCvArr; dst: PCvArr; distance_type: Integer
 // (* Applies fixed-level threshold to grayscale image.
 // This is a basic operation applied before retrieving contours *)
 // CVAPI(double)  cvThreshold( const CvArr*  src, CvArr*  dst, double  threshold, double  max_value, int threshold_type );
-function cvThreshold(const src, dst: pIplImage; threshold, max_value: Double; threshold_type: Integer): Double; cdecl;
+function cvThreshold(const src, dst: PCvArr; threshold, max_value: Double; threshold_type: Integer): Double; cdecl;
 {
   /* Applies adaptive threshold to grayscale image.
   The two parameters for methods CV_ADAPTIVE_THRESH_MEAN_C and
@@ -910,8 +910,8 @@ function cvThreshold(const src, dst: pIplImage; threshold, max_value: Double; th
   double param1 CV_DEFAULT(5));
 }
 procedure cvAdaptiveThreshold(
-  { } const src: pIplImage;
-  { } dst: pIplImage;
+  { } const src: PCvArr;
+  { } dst: PCvArr;
   { } max_value: Double;
   { } adaptive_method: Integer = CV_ADAPTIVE_THRESH_MEAN_C;
   { } threshold_type: Integer = CV_THRESH_BINARY;
@@ -931,7 +931,7 @@ procedure cvAdaptiveThreshold(
   CvArr* mask CV_DEFAULT(NULL));
 }
 procedure cvFloodFill(
-  { } image: pIplImage;
+  { } image: PCvArr;
   { } seed_point: TCvPoint;
   { } new_val: TCvScalar;
   { } lo_diff: TCvScalar { * cvScalarAll(0) * };
@@ -952,7 +952,7 @@ procedure cvFloodFill(
   double threshold2,
   int  aperture_size CV_DEFAULT(3) );
 }
-procedure cvCanny(const image: pIplImage; edges: pIplImage; threshold1: Double; threshold2: Double; aperture_size: Integer = 3); cdecl;
+procedure cvCanny(const image: PCvArr; edges: PCvArr; threshold1: Double; threshold2: Double; aperture_size: Integer = 3); cdecl;
 
 (*
   /* Calculates constraint image for corner detection
@@ -997,7 +997,7 @@ procedure cvCornerHarris(const image: PCvArr; harris_response: PCvArr; block_siz
   CvSize zero_zone,
   CvTermCriteria  criteria );
 }
-procedure cvFindCornerSubPix(const image: pIplImage; corners: pCvPoint2D32f; count: Integer; win: TCvSize; zero_zone: TCvSize;
+procedure cvFindCornerSubPix(const image: PCvArr; corners: pCvPoint2D32f; count: Integer; win: TCvSize; zero_zone: TCvSize;
   criteria: TCvTermCriteria); cdecl;
 
 {
@@ -1012,8 +1012,8 @@ procedure cvFindCornerSubPix(const image: pIplImage; corners: pCvPoint2D32f; cou
   int use_harris CV_DEFAULT(0),
   double k CV_DEFAULT(0.04) );
 }
-procedure cvGoodFeaturesToTrack(const image: pIplImage; eig_image: pIplImage; temp_image: pIplImage; corners: pCvPoint2D32f; corner_count: PInteger;
-  quality_level: Double; min_distance: Double; const mask: pIplImage = nil; block_size: Integer = 3; use_harris: Integer = 0;
+procedure cvGoodFeaturesToTrack(const image: PCvArr; eig_image: PCvArr; temp_image: PCvArr; corners: pCvPoint2D32f; corner_count: PInteger;
+  quality_level: Double; min_distance: Double; const mask: PCvArr = nil; block_size: Integer = 3; use_harris: Integer = 0;
   k: Double = 0.04); cdecl;
 
 {
@@ -1037,7 +1037,7 @@ procedure cvGoodFeaturesToTrack(const image: pIplImage; eig_image: pIplImage; te
 }
 
 function cvHoughLines2(
-  { } image: pIplImage;
+  { } image: PCvArr;
   { } line_storage: Pointer;
   { } method: Integer;
   { } rho: Double;
@@ -1061,7 +1061,7 @@ function cvHoughLines2(
 }
 
 function cvHoughCircles(
-  { } image: pIplImage;
+  { } image: PCvArr;
   { } circle_storage: Pointer;
   { } method: Integer;
   { } dp: Double;
@@ -1083,9 +1083,9 @@ implementation
 uses ocv.lib;
 
 // procedure cvCvtColor(const src: pIplImage; dst: pIplImage; code: Integer); external imgproc_lib;
-procedure cvCvtColor(const src: pIplImage; dst: pIplImage; code: Integer); external imgproc_lib name 'cvCvtColor';
+procedure cvCvtColor(const src: PCvArr; dst: PCvArr; code: Integer); external imgproc_lib name 'cvCvtColor';
 procedure cvCvtColor(const src: pCvMat; dst: pCvMat; code: Integer); external imgproc_lib name 'cvCvtColor';
-procedure cvCvtColor(const src: pIplImage; dst: pCvMat; code: Integer); external imgproc_lib name 'cvCvtColor';
+//procedure cvCvtColor(const src: PCvArr; dst: pCvMat; code: Integer); external imgproc_lib name 'cvCvtColor';
 
 function cvThreshold; external imgproc_lib;
 procedure cvSmooth; external imgproc_lib;

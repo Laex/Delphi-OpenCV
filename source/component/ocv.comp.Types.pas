@@ -682,7 +682,7 @@ Var
 begin
   CropIplImage := cvCreateImage(cvSize(roi.Width, roi.Height), FImage^.depth, FImage^.nChannels);
   cvSetImageROI(FImage, roi);
-  cvCopyImage(FImage, CropIplImage);
+  cvCopy(FImage, CropIplImage);
   cvResetImageROI(FImage);
   Result := TocvImage.Create(CropIplImage);
 end;

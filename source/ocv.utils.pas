@@ -152,7 +152,7 @@ begin
   // Say what the source region is
   cvSetImageROI(src, roi);
   // Do the copy
-  cvCopyImage(src, Result);
+  cvCopy(src, Result);
   cvResetImageROI(src);
 end;
 

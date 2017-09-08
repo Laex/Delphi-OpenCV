@@ -55,30 +55,30 @@ interface
 const
   // Ќаименьшее число дл€ которого выполн€етс€ условие 1.0+DBL_EPSILON <> 1.0
   DBL_EPSILON = 2.2204460492503131E-016;
-  DBL_MAX     = 1.7976931348623157E+308;
+  DBL_MAX = 1.7976931348623157E+308;
   FLT_EPSILON = 1.19209290E-07;
-  FLT_MAX     = 1E+37;
+  FLT_MAX = 1E+37;
 
 type
-  cbool    = bytebool;
-  Float    = Single;
-  uint     = NativeUInt;
-  size_t   = NativeUInt;
-  pFloat   = ^Float;
-  ppFloat  = ^pFloat;
+  cbool = bytebool;
+  Float = Single;
+  uint = NativeUInt;
+  size_t = NativeUInt;
+  pFloat = ^Float;
+  ppFloat = ^pFloat;
   pPointer = ^Pointer;
-  ppvoid   = pPointer;
+  ppvoid = pPointer;
 
   TSingleArray1D = array [0 .. 1] of Single;
   pSingleArray1D = ^TSingleArray1D;
   TSingleArray2D = array [0 .. 1] of pSingleArray1D;
   pSingleArray2D = ^TSingleArray2D;
 
-  TCVChar       = AnsiChar;
-  pCVChar       = pAnsiChar;
+  TCVChar = AnsiChar;
+  pCVChar = pAnsiChar;
   TpCVCharArray = array [0 .. 0] of pCVChar;
-  ppCVChar      = ^TpCVCharArray;
-  CVChar        = AnsiChar;
+  ppCVChar = ^TpCVCharArray;
+  CVChar = AnsiChar;
   // {$IFNDEF WIN64}
   // size_t = UInt32;
   // {$ELSE}
@@ -87,18 +87,18 @@ type
 {$IFNDEF DELPHIXE2_UP}
 {$IFDEF CLR}
 {$IFDEF DELPHI2007}
-  NativeInt  = size_t;
+  NativeInt = size_t;
   NativeUInt = size_t;
 {$ELSE}
-  NativeInt  = Integer;
+  NativeInt = Integer;
   NativeUInt = Cardinal;
 {$ENDIF}
 {$ELSE}
 {$IFDEF FPC}
-  NativeInt  = SizeInt;
+  NativeInt = SizeInt;
   NativeUInt = SizeUInt;
 {$ELSE}
-  NativeInt  = Integer;
+  NativeInt = Integer;
   NativeUInt = Cardinal;
 {$ENDIF}
 {$ENDIF}
@@ -136,7 +136,7 @@ type
   TVoid = record
   end;
 
-  pCvArr      = Pointer;
+  pCvArr = Pointer;
   TCvArrArray = array [0 .. 0] of pCvArr;
   pCvArrArray = ^TCvArrArray;
 
@@ -164,57 +164,57 @@ type
 {$EXTERNALSYM CVStatus}
 
 const
-  CV_StsOk                     = 0;    (* everithing is ok *)
-  CV_StsBackTrace              = -1;   (* pseudo error for back trace *)
-  CV_StsError                  = -2;   (* unknown /unspecified error *)
-  CV_StsInternal               = -3;   (* internal error (bad state) *)
-  CV_StsNoMem                  = -4;   (* insufficient memory *)
-  CV_StsBadArg                 = -5;   (* function arg/param is bad *)
-  CV_StsBadFunc                = -6;   (* unsupported function *)
-  CV_StsNoConv                 = -7;   (* iter. didn't converge *)
-  CV_StsAutoTrace              = -8;   (* tracing *)
-  CV_HeaderIsNull              = -9;   (* image header is 0 *)
-  CV_BadImageSize              = -10;  (* image size is invalid *)
-  CV_BadOffset                 = -11;  (* offset is invalid *)
-  CV_BadDataPtr                = -12;  (* *)
-  CV_BadStep                   = -13;  (* *)
-  CV_BadModelOrChSeq           = -14;  (* *)
-  CV_BadNumChannels            = -15;  (* *)
-  CV_BadNumChannel1U           = -16;  (* *)
-  CV_BadDepth                  = -17;  (* *)
-  CV_BadAlphaChannel           = -18;  (* *)
-  CV_BadOrder                  = -19;  (* *)
-  CV_BadOrigin                 = -20;  (* *)
-  CV_BadAlign                  = -21;  (* *)
-  CV_BadCallBack               = -22;  (* *)
-  CV_BadTileSize               = -23;  (* *)
-  CV_BadCOI                    = -24;  (* *)
-  CV_BadROISize                = -25;  (* *)
-  CV_MaskIsTiled               = -26;  (* *)
-  CV_StsNullPtr                = -27;  (* null pointer *)
-  CV_StsVecLengthErr           = -28;  (* incorrect vector length *)
-  CV_StsFilterStructContentErr = -29;  (* incorr. filter structure content *)
-  CV_StsKernelStructContentErr = -30;  (* incorr. transform kernel content *)
-  CV_StsFilterOffsetErr        = -31;  (* incorrect filter ofset value *)
-  CV_StsBadSize                = -201; (* the input/output structure size is incorrect *)
-  CV_StsDivByZero              = -202; (* division by zero *)
-  CV_StsInplaceNotSupported    = -203; (* in-place operation is not supported *)
-  CV_StsObjectNotFound         = -204; (* request can't be completed *)
-  CV_StsUnmatchedFormats       = -205; (* formats of input/output arrays differ *)
-  CV_StsBadFlag                = -206; (* flag is wrong or not supported *)
-  CV_StsBadPoint               = -207; (* bad CvPoint *)
-  CV_StsBadMask                = -208; (* bad format of mask (neither 8uC1 nor 8sC1) *)
-  CV_StsUnmatchedSizes         = -209; (* sizes of input/output structures do not match *)
-  CV_StsUnsupportedFormat      = -210; (* the data format/type is not supported by the function *)
-  CV_StsOutOfRange             = -211; (* some of parameters are out of range *)
-  CV_StsParseError             = -212; (* invalid syntax/structure of the parsed file *)
-  CV_StsNotImplemented         = -213; (* the requested function/feature is not implemented *)
-  CV_StsBadMemBlock            = -214; (* an allocated block has been corrupted *)
-  CV_StsAssert                 = -215; (* assertion failed *)
-  CV_GpuNotSupported           = -216;
-  CV_GpuApiCallError           = -217;
-  CV_OpenGlNotSupported        = -218;
-  CV_OpenGlApiCallError        = -219;
+  CV_StsOk = 0; (* everithing is ok *)
+  CV_StsBackTrace = -1; (* pseudo error for back trace *)
+  CV_StsError = -2; (* unknown /unspecified error *)
+  CV_StsInternal = -3; (* internal error (bad state) *)
+  CV_StsNoMem = -4; (* insufficient memory *)
+  CV_StsBadArg = -5; (* function arg/param is bad *)
+  CV_StsBadFunc = -6; (* unsupported function *)
+  CV_StsNoConv = -7; (* iter. didn't converge *)
+  CV_StsAutoTrace = -8; (* tracing *)
+  CV_HeaderIsNull = -9; (* image header is 0 *)
+  CV_BadImageSize = -10; (* image size is invalid *)
+  CV_BadOffset = -11; (* offset is invalid *)
+  CV_BadDataPtr = -12; (* *)
+  CV_BadStep = -13; (* *)
+  CV_BadModelOrChSeq = -14; (* *)
+  CV_BadNumChannels = -15; (* *)
+  CV_BadNumChannel1U = -16; (* *)
+  CV_BadDepth = -17; (* *)
+  CV_BadAlphaChannel = -18; (* *)
+  CV_BadOrder = -19; (* *)
+  CV_BadOrigin = -20; (* *)
+  CV_BadAlign = -21; (* *)
+  CV_BadCallBack = -22; (* *)
+  CV_BadTileSize = -23; (* *)
+  CV_BadCOI = -24; (* *)
+  CV_BadROISize = -25; (* *)
+  CV_MaskIsTiled = -26; (* *)
+  CV_StsNullPtr = -27; (* null pointer *)
+  CV_StsVecLengthErr = -28; (* incorrect vector length *)
+  CV_StsFilterStructContentErr = -29; (* incorr. filter structure content *)
+  CV_StsKernelStructContentErr = -30; (* incorr. transform kernel content *)
+  CV_StsFilterOffsetErr = -31; (* incorrect filter ofset value *)
+  CV_StsBadSize = -201; (* the input/output structure size is incorrect *)
+  CV_StsDivByZero = -202; (* division by zero *)
+  CV_StsInplaceNotSupported = -203; (* in-place operation is not supported *)
+  CV_StsObjectNotFound = -204; (* request can't be completed *)
+  CV_StsUnmatchedFormats = -205; (* formats of input/output arrays differ *)
+  CV_StsBadFlag = -206; (* flag is wrong or not supported *)
+  CV_StsBadPoint = -207; (* bad CvPoint *)
+  CV_StsBadMask = -208; (* bad format of mask (neither 8uC1 nor 8sC1) *)
+  CV_StsUnmatchedSizes = -209; (* sizes of input/output structures do not match *)
+  CV_StsUnsupportedFormat = -210; (* the data format/type is not supported by the function *)
+  CV_StsOutOfRange = -211; (* some of parameters are out of range *)
+  CV_StsParseError = -212; (* invalid syntax/structure of the parsed file *)
+  CV_StsNotImplemented = -213; (* the requested function/feature is not implemented *)
+  CV_StsBadMemBlock = -214; (* an allocated block has been corrupted *)
+  CV_StsAssert = -215; (* assertion failed *)
+  CV_GpuNotSupported = -216;
+  CV_GpuApiCallError = -217;
+  CV_OpenGlNotSupported = -218;
+  CV_OpenGlApiCallError = -219;
 
   (* ***************************************************************************************\
     *                             Common macros and  functions                         *
@@ -309,20 +309,20 @@ const
 {$EXTERNALSYM IPL_BORDER_WRAP}
   // * Sub-pixel interpolation methods */
 
-  CV_INTER_NN       = 0;
-  CV_INTER_LINEAR   = 1;
-  CV_INTER_CUBIC    = 2;
-  CV_INTER_AREA     = 3;
+  CV_INTER_NN = 0;
+  CV_INTER_LINEAR = 1;
+  CV_INTER_CUBIC = 2;
+  CV_INTER_AREA = 3;
   CV_INTER_LANCZOS4 = 4;
 
 type
 
-  pIplImage       = ^TIplImage;
+  pIplImage = ^TIplImage;
   TpIplImageArray = array [0 .. 1] of pIplImage;
   TArrayOfpIplImage = TArray<pIplImage>;
-  ppIplImage      = ^TpIplImageArray;
-  pIplROI         = ^TIplROI;
-  pIplTileInfo    = ^TIplTileInfo;
+  ppIplImage = ^TpIplImageArray;
+  pIplROI = ^TIplROI;
+  pIplTileInfo = ^TIplTileInfo;
 
   TIplROI = record
     coi: Integer; (* 0 - no COI (all channels are selected), 1 - 0th channel is selected ... *)
@@ -345,29 +345,29 @@ type
   TA4CVChar = array [0 .. 3] of CVChar;
 
   TIplImage = record
-    nSize: Integer;        (* sizeof(IplImage) *)
-    id: Integer;           (* version (=0) *)
-    nChannels: Integer;    (* Most of OpenCV functions support 1,2,3 or 4 channels *)
+    nSize: Integer; (* sizeof(IplImage) *)
+    id: Integer; (* version (=0) *)
+    nChannels: Integer; (* Most of OpenCV functions support 1,2,3 or 4 channels *)
     alphaChannel: Integer; (* Ignored by OpenCV *)
     depth: Integer; (* Pixel depth in bits: Pixel depth in bits: IPL_DEPTH_8U, IPL_DEPTH_8S, IPL_DEPTH_16S,
       IPL_DEPTH_32S, IPL_DEPTH_32F and IPL_DEPTH_64F are supported. *)
-    colorModel: TA4CVChar;                  (* Ignored by OpenCV *)
-    channelSeq: TA4CVChar;                  (* ditto *)
-    dataOrder: Integer;                     (* 0 - interleaved color channels, 1 - separate color channels. *)
-    origin: Integer;                        (* 0 - top-left origin, *)
-    align: Integer;                         (* Alignment of image rows (4 or 8). *)
-    width: Integer;                         (* Image width in pixels. *)
-    height: Integer;                        (* Image height in pixels. *)
-    roi: pIplROI;                           (* Image ROI. If NULL, the whole image is selected. *)
-    maskROI: pIplImage;                     (* Must be NULL. *)
-    imageId: Pointer;                       (* "           " *)
-    tileInfo: pIplTileInfo;                 (* "           " *)
-    imageSize: Integer;                     (* Image data size in bytes *)
-    imageData: PByte;                       (* Pointer to aligned image data. *)
-    widthStep: Integer;                     (* Size of aligned image row in bytes. *)
-    BorderMode: array [0 .. 3] of Integer;  (* Ignored by ocv. *)
+    colorModel: TA4CVChar; (* Ignored by OpenCV *)
+    channelSeq: TA4CVChar; (* ditto *)
+    dataOrder: Integer; (* 0 - interleaved color channels, 1 - separate color channels. *)
+    origin: Integer; (* 0 - top-left origin, *)
+    align: Integer; (* Alignment of image rows (4 or 8). *)
+    width: Integer; (* Image width in pixels. *)
+    height: Integer; (* Image height in pixels. *)
+    roi: pIplROI; (* Image ROI. If NULL, the whole image is selected. *)
+    maskROI: pIplImage; (* Must be NULL. *)
+    imageId: Pointer; (* "           " *)
+    tileInfo: pIplTileInfo; (* "           " *)
+    imageSize: Integer; (* Image data size in bytes *)
+    imageData: PByte; (* Pointer to aligned image data. *)
+    widthStep: Integer; (* Size of aligned image row in bytes. *)
+    BorderMode: array [0 .. 3] of Integer; (* Ignored by ocv. *)
     BorderConst: array [0 .. 3] of Integer; (* Ditto. *)
-    imageDataOrigin: PByte;                 (* Pointer to very origin of image data *)
+    imageDataOrigin: PByte; (* Pointer to very origin of image data *)
   end;
 
   TcvImage = TIplImage;
@@ -573,18 +573,32 @@ const
 
 type
 
-  pCvMat  = ^TCvMat;
+  pCvMat = ^TCvMat;
   ppCvMat = ^pCvMat;
+
+  TCvMatDataUnion = record
+    case Byte of
+      0:
+        (ptr: PByte);
+      1:
+        (s: PSmallInt);
+      2:
+        (i: PInteger);
+      3:
+        (fl: pSingle);
+      4:
+        (db: pDouble);
+  end;
 
   TCvMat = record
   public
     _type: Integer;
-    step : Integer;
+    step: Integer;
 
-    refcount    : PInteger;
+    refcount: PInteger;
     hdr_refcount: Integer;
 
-    data: Pointer;
+    data: TCvMatDataUnion;
 
     rows: Integer;
     cols: Integer;
@@ -598,10 +612,10 @@ type
     procedure SetMatInteger(const row, col, Value: Integer); inline;
     procedure SetMatSingle(const row, col: Integer; const Value: Single); inline;
   public
-    function AsDouble: PDouble; inline;
+    function AsDouble: pDouble; inline;
     function AsInteger: PInteger; inline;
     function AsByte: PByte; inline;
-    function AsSingle: PSingle; inline;
+    function AsSingle: pSingle; inline;
     property MatDouble[const row, col: Integer]: Double Read GetMatDouble write SetMatDouble;
     property MatSingle[const row, col: Integer]: Single Read GetMatSingle write SetMatSingle;
     property MatInteger[const row, col: Integer]: Integer Read GetMatInteger write SetMatInteger;
@@ -630,13 +644,7 @@ type
     step: Integer;
   end;
 
-  TCvMatNDdata = record
-    ptr: PByte;
-    fl: PSingle;
-    db: PDouble;
-    i: PInteger;
-    s: pSmallInt;
-  end;
+  TCvMatNDdata = TCvMatDataUnion;
 
   pCvMatND = ^TCvMatND;
 
@@ -649,15 +657,17 @@ type
     dim: array [0 .. CV_MAX_DIM - 1] of TCvMatNDdim;
   end;
 
-  // #define CV_IS_MATND_HDR(mat) \
-  // ((mat) != NULL && (((const CvMatND*) (mat)) - > type & CV_MAGIC_MASK) = = CV_MATND_MAGIC_VAL)
+function CV_IS_MATND_HDR(const mat: Pointer): Boolean; inline;
+// #define CV_IS_MATND_HDR(mat) \
+// ((mat) != NULL && (((const CvMatND*) (mat)) - > type & CV_MAGIC_MASK) = = CV_MATND_MAGIC_VAL)
 
-  // #define CV_IS_MATND(mat) \
-  // (CV_IS_MATND_HDR(mat) && ((const CvMatND*)(mat))->data.ptr != NULL)
+function CV_IS_MATND(const mat: Pointer): Boolean; inline;
+// #define CV_IS_MATND(mat) \
+// (CV_IS_MATND_HDR(mat) && ((const CvMatND*)(mat))->data.ptr != NULL)
 
-  // ***************************************************************************************
-  // *                                         Histogram                                   *
-  // ***************************************************************************************
+// ***************************************************************************************
+// *                                         Histogram                                   *
+// ***************************************************************************************
 
 type
   TCvHistType = Integer;
@@ -690,8 +700,8 @@ type
     bins: pIplImage;
     thresh: array [0 .. CV_MAX_DIM - 1, 0 .. 1] of Single;
     (* For uniform histograms. *)
-    thresh2: PSingle; (* For non-uniform histograms. *)
-    mat: TCvMatND;    (* Embedded matrix header for array histograms. *)
+    thresh2: pSingle; (* For non-uniform histograms. *)
+    mat: TCvMatND; (* Embedded matrix header for array histograms. *)
   end;
 
   (* ***************************************************************************************\
@@ -812,17 +822,17 @@ Type
 
   TCvBox2D = record
     center: TCvPoint2D32f; (* Center of the box. *)
-    size: TCvSize2D32f;    (* Box width and length. *)
-    angle: Single;         (* Angle between the horizontal axis *)
+    size: TCvSize2D32f; (* Box width and length. *)
+    angle: Single; (* Angle between the horizontal axis *)
   end;
 
   pCvNArrayIterator = ^TCvNArrayIterator;
 
   TCvNArrayIterator = record
-    count: Integer;                                // number of arrays
-    dims: Integer;                                 // number of dimensions to iterate
-    size: TCvSize;                                 // maximal common linear size: { width = size, height = 1 }
-    ptr: Array [0 .. CV_MAX_ARR - 1] of ^uchar;    // pointers to the array slices
+    count: Integer; // number of arrays
+    dims: Integer; // number of dimensions to iterate
+    size: TCvSize; // maximal common linear size: { width = size, height = 1 }
+    ptr: Array [0 .. CV_MAX_ARR - 1] of ^uchar; // pointers to the array slices
     stack: Array [0 .. CV_MAX_DIM - 1] of Integer; // for internal use
     hdr: Array [0 .. CV_MAX_ARR - 1] of ^TCvMatND; // pointers to the headers of the
   end;
@@ -859,8 +869,8 @@ type
 
   TCvScalar = record
     val: array [0 .. 3] of Double;
-    class operator LessThan(a, b: TCvScalar): boolean;
-    class operator GreaterThan(a, b: TCvScalar): boolean;
+    class operator LessThan(a, b: TCvScalar): Boolean;
+    class operator GreaterThan(a, b: TCvScalar): Boolean;
   end;
 
   (* ************************************************************************************** *)
@@ -888,8 +898,8 @@ type
     top: pCvMemBlock; (* First allocated block. *)
     parent: pCvMemStorage;
     (* Current memory block - top of the stack. *)    (* We get new blocks from parent as needed. *)
-    block_size: Integer;                              (* Block size. *)
-    free_space: Integer;                              (* Remaining free space in current block. *)
+    block_size: Integer; (* Block size. *)
+    free_space: Integer; (* Remaining free space in current block. *)
   end;
 
 type
@@ -905,42 +915,42 @@ type
   pCvSeqBlock = ^TCvSeqBlock;
 
   TCvSeqBlock = record
-    prev: pCvSeqBlock;    (* Previous sequence block. *)
-    next: pCvSeqBlock;    (* Next sequence block. *)
+    prev: pCvSeqBlock; (* Previous sequence block. *)
+    next: pCvSeqBlock; (* Next sequence block. *)
     start_index: Integer; (* Index of the first element in the block + *)
-    count: Integer;       (* Number of elements in the block. *)
-    data: Pointer;        (* Pointer to the first element of the block. *)
+    count: Integer; (* Number of elements in the block. *)
+    data: Pointer; (* Pointer to the first element of the block. *)
   end;
 
   TCvSeqBlockArray = array [0 .. 0] of TCvSeqBlock;
   pCvSeqBlockArray = ^TCvSeqBlockArray;
 
   TCV_TREE_NODE_FIELDS<node_type> = record
-    flags: Integer;       (* Miscellaneous flags. *)
+    flags: Integer; (* Miscellaneous flags. *)
     header_size: Integer; (* Size of sequence header. *)
-    h_prev: ^node_type;   (* Previous sequence. *)
-    h_next: ^node_type;   (* Next sequence. *)
-    v_prev: ^node_type;   (* 2nd previous sequence. *)
-    v_next: ^node_type;   (* 2nd next sequence. *)
+    h_prev: ^node_type; (* Previous sequence. *)
+    h_next: ^node_type; (* Next sequence. *)
+    v_prev: ^node_type; (* 2nd previous sequence. *)
+    v_next: ^node_type; (* 2nd next sequence. *)
   end;
 
   pCvSeq = ^TCvSeq;
 
   TCvSeq = record
-    flags: Integer;           (* Miscellaneous flags. *)
-    header_size: Integer;     (* Size of sequence header. *)
-    h_prev: pCvSeq;           (* Previous sequence. *)
-    h_next: pCvSeq;           (* Next sequence. *)
-    v_prev: pCvSeq;           (* 2nd previous sequence. *)
-    v_next: pCvSeq;           (* 2nd next sequence. *)
-    total: Integer;           (* Total number of elements. *)
-    elem_size: Integer;       (* Size of sequence element in bytes. *)
-    block_max: Pointer;       (* Maximal bound of the last block. *)
-    ptr: pschar;              (* Current write pointer. *)
-    delta_elems: Integer;     (* Grow seq this many at a time. *)
-    storage: pCvMemStorage;   (* Where the seq is stored. *)
+    flags: Integer; (* Miscellaneous flags. *)
+    header_size: Integer; (* Size of sequence header. *)
+    h_prev: pCvSeq; (* Previous sequence. *)
+    h_next: pCvSeq; (* Next sequence. *)
+    v_prev: pCvSeq; (* 2nd previous sequence. *)
+    v_next: pCvSeq; (* 2nd next sequence. *)
+    total: Integer; (* Total number of elements. *)
+    elem_size: Integer; (* Size of sequence element in bytes. *)
+    block_max: Pointer; (* Maximal bound of the last block. *)
+    ptr: pschar; (* Current write pointer. *)
+    delta_elems: Integer; (* Grow seq this many at a time. *)
+    storage: pCvMemStorage; (* Where the seq is stored. *)
     free_blocks: pCvSeqBlock; (* Free blocks list. *)
-    first: pCvSeqBlock;       (* Pointer to the first sequence block. *)
+    first: pCvSeqBlock; (* Pointer to the first sequence block. *)
   end;
 
   (*
@@ -949,18 +959,18 @@ type
   *)
   TCV_SEQUENCE_FIELDS = record
     CV_TREE_NODE_FIELDS: TCV_TREE_NODE_FIELDS<TCvSeq>;
-    total: Integer;           (* Total number of elements. *)
-    elem_size: Integer;       (* Size of sequence element in bytes. *)
-    block_max: pschar;        (* Maximal bound of the last block. *)
-    ptr: pschar;              (* Current write pointer. *)
-    delta_elems: Integer;     (* Grow seq this many at a time. *)
-    storage: pCvMemStorage;   (* Where the seq is stored. *)
+    total: Integer; (* Total number of elements. *)
+    elem_size: Integer; (* Size of sequence element in bytes. *)
+    block_max: pschar; (* Maximal bound of the last block. *)
+    ptr: pschar; (* Current write pointer. *)
+    delta_elems: Integer; (* Grow seq this many at a time. *)
+    storage: pCvMemStorage; (* Where the seq is stored. *)
     free_blocks: pCvSeqBlock; (* Free blocks list. *)
-    first: pCvSeqBlock;       (* Pointer to the first sequence block. *)
+    first: pCvSeqBlock; (* Pointer to the first sequence block. *)
   end;
 
   pCvSeqArray = array [0 .. 1] of pCvSeq;
-  ppCvSeq     = ^pCvSeqArray;
+  ppCvSeq = ^pCvSeqArray;
 
 const
   CV_TYPE_NAME_SEQ = 'opencv-sequence';
@@ -975,20 +985,20 @@ type
   pCvContour = ^TCvContour;
 
   TCvContour = record
-    flags: Integer;           // micsellaneous flags
-    header_size: Integer;     // size of sequence header
-    h_prev: pCvArr;           // previous sequence
-    h_next: pCvArr;           // next sequence
-    v_prev: pCvArr;           // 2nd previous sequence
-    v_next: pCvArr;           // 2nd next sequence
-    total: Integer;           // total number of elements
-    elem_size: Integer;       // size of sequence element in bytes
-    block_max: pAnsiChar;     // maximal bound of the last block
-    ptr: pAnsiChar;           // current write pointer
-    delta_elems: Integer;     // how many elements allocated when the seq grows
-    storage: pCvMemStorage;   // where the seq is stored
+    flags: Integer; // micsellaneous flags
+    header_size: Integer; // size of sequence header
+    h_prev: pCvArr; // previous sequence
+    h_next: pCvArr; // next sequence
+    v_prev: pCvArr; // 2nd previous sequence
+    v_next: pCvArr; // 2nd next sequence
+    total: Integer; // total number of elements
+    elem_size: Integer; // size of sequence element in bytes
+    block_max: pAnsiChar; // maximal bound of the last block
+    ptr: pAnsiChar; // current write pointer
+    delta_elems: Integer; // how many elements allocated when the seq grows
+    storage: pCvMemStorage; // where the seq is stored
     free_blocks: pCvSeqBlock; // free blocks list
-    first: pCvSeqBlock;       // pointer to the first sequence block
+    first: pCvSeqBlock; // pointer to the first sequence block
     rect: TCvRect;
     color: Integer;
     reserved: array [0 .. 2] of Integer;
@@ -1026,20 +1036,20 @@ type
   pCvSet = ^TCvSet;
 
   TCvSet = record
-    flags: Integer;           (* Miscellaneous flags. *)
-    header_size: Integer;     (* Size of sequence header. *)
-    h_prev: pCvSeq;           (* Previous sequence. *)
-    h_next: pCvSeq;           (* Next sequence. *)
-    v_prev: pCvSeq;           (* 2nd previous sequence. *)
-    v_next: pCvSeq;           (* 2nd next sequence. *)
-    total: Integer;           (* Total number of elements. *)
-    elem_size: Integer;       (* Size of sequence element in bytes. *)
-    block_max: Pointer;       (* Maximal bound of the last block. *)
-    ptr: Pointer;             (* Current write pointer. *)
-    delta_elems: Integer;     (* Grow seq this many at a time. *)
-    storage: pCvMemStorage;   (* Where the seq is stored. *)
+    flags: Integer; (* Miscellaneous flags. *)
+    header_size: Integer; (* Size of sequence header. *)
+    h_prev: pCvSeq; (* Previous sequence. *)
+    h_next: pCvSeq; (* Next sequence. *)
+    v_prev: pCvSeq; (* 2nd previous sequence. *)
+    v_next: pCvSeq; (* 2nd next sequence. *)
+    total: Integer; (* Total number of elements. *)
+    elem_size: Integer; (* Size of sequence element in bytes. *)
+    block_max: Pointer; (* Maximal bound of the last block. *)
+    ptr: Pointer; (* Current write pointer. *)
+    delta_elems: Integer; (* Grow seq this many at a time. *)
+    storage: pCvMemStorage; (* Where the seq is stored. *)
     free_blocks: pCvSeqBlock; (* Free blocks list. *)
-    first: pCvSeqBlock;       (* Pointer to the first sequence block. *)
+    first: pCvSeqBlock; (* Pointer to the first sequence block. *)
     free_elems: pCvSetElem;
     active_count: Integer;
   end;
@@ -1053,7 +1063,7 @@ const
     Checks whether the element pointed by ptr belongs to a set or not
     #define CV_IS_SET_ELEM( ptr )  (((CvSetElem* )(ptr))->flags >= 0)
   *)
-function CV_IS_SET_ELEM(ptr: Pointer): boolean; {$IFDEF USE_INLINE}inline; {$ENDIF}
+function CV_IS_SET_ELEM(ptr: Pointer): Boolean; {$IFDEF USE_INLINE}inline; {$ENDIF}
 { ***************************************************************************************
   *                      Multi-dimensional sparse cArray (CvSparseMat)                  *
   *************************************************************************************** }
@@ -1129,7 +1139,7 @@ type
 Type
 
   pCvGraphEdge = ^TCvGraphEdge;
-  pCvGraphVtx  = ^TCvGraphVtx;
+  pCvGraphVtx = ^TCvGraphVtx;
 
   TCV_GRAPH_EDGE_FIELDS = record
     flags: Integer;
@@ -1349,14 +1359,14 @@ const
   /// / >> Following declaration is a macro definition!
 
   // CV_IS_SEQ_CLOSED(seq)(((seq)^.flags and CV_SEQ_FLAG_CLOSED) <> 0);
-function CV_IS_SEQ_CLOSED(const Seq: pCvSeq): boolean; {$IFDEF USE_INLINE}inline; {$ENDIF}
+function CV_IS_SEQ_CLOSED(const Seq: pCvSeq): Boolean; {$IFDEF USE_INLINE}inline; {$ENDIF}
 /// / >> Following declaration is a macro definition!
 // const
 // CV_IS_SEQ_CONVEX(seq)0;
 
 // Following declaration is a macro definition!
 // CV_IS_SEQ_HOLE(seq)(((seq)^.flags and CV_SEQ_FLAG_HOLE) <> 0);
-function CV_IS_SEQ_HOLE(const Seq: pCvSeq): boolean; {$IFDEF USE_INLINE}inline; {$ENDIF}
+function CV_IS_SEQ_HOLE(const Seq: pCvSeq): Boolean; {$IFDEF USE_INLINE}inline; {$ENDIF}
 /// / >> Following declaration is a macro definition!
 // const
 // CV_IS_SEQ_SIMPLE(seq)1;
@@ -1406,9 +1416,9 @@ type
 
   TCvSeqWriter = record
     header_size: Integer;
-    Seq: pCvSeq;        // * the sequence written */
+    Seq: pCvSeq; // * the sequence written */
     block: pCvSeqBlock; // * current block */
-    ptr: Pointer;       // * pointer to free space */
+    ptr: Pointer; // * pointer to free space */
     block_min: Pointer; // * pointer to the beginning of block*/
     block_max: Pointer; // * pointer to the end of block */
   end;
@@ -1417,13 +1427,13 @@ type
 
   TCvSeqReader = record
     header_size: Integer;
-    Seq: pCvSeq;          // * sequence, beign read */
-    block: pCvSeqBlock;   // * current block */
-    ptr: Pointer;         // * pointer to element be read next */
-    block_min: Pointer;   // * pointer to the beginning of block */
-    block_max: Pointer;   // * pointer to the end of block */
+    Seq: pCvSeq; // * sequence, beign read */
+    block: pCvSeqBlock; // * current block */
+    ptr: Pointer; // * pointer to element be read next */
+    block_min: Pointer; // * pointer to the beginning of block */
+    block_max: Pointer; // * pointer to the end of block */
     delta_index: Integer; // * = seq->first->start_index   */
-    prev_elem: Pointer;   // * pointer to previous element */
+    prev_elem: Pointer; // * pointer to previous element */
   end;
 
   { ****************************************************************************************
@@ -1637,8 +1647,7 @@ Type
   // typedef void* (CV_CDECL *CvReadFunc)( CvFileStorage* storage, CvFileNode* node );
   TCvReadFunc = function(storage: pCvFileStorage; node: pCvFileNode): Pointer; cdecl;
   // typedef void (CV_CDECL *CvWriteFunc)( CvFileStorage* storage, const char* name,const void* struct_ptr, CvAttrList attributes );
-  TCvWriteFunc = procedure(storage: pCvFileStorage; const name: pCVChar; const struct_ptr: pPointer;
-    attributes: TCvAttrList); cdecl;
+  TCvWriteFunc = procedure(storage: pCvFileStorage; const name: pCVChar; const struct_ptr: pPointer; attributes: TCvAttrList); cdecl;
   // typedef void* (CV_CDECL *CvCloneFunc)( const void* struct_ptr );
   TCvCloneFunc = function(const struct_ptr: pPointer): Pointer; cdecl;
 
@@ -1693,12 +1702,12 @@ const
   CV_NODE_NAMED = 64;
 {$EXTERNALSYM CV_NODE_NAMED}
   // CV_NODE_IS_INT(flags)        (CV_NODE_TYPE(flags) == CV_NODE_INT)
-function CV_NODE_IS_INT(const flags: Integer): boolean; {$IFDEF USE_INLINE}inline; {$ENDIF}
+function CV_NODE_IS_INT(const flags: Integer): Boolean; {$IFDEF USE_INLINE}inline; {$ENDIF}
 // CV_NODE_IS_REAL(flags)       (CV_NODE_TYPE(flags) == CV_NODE_REAL)
-function CV_NODE_IS_REAL(const flags: Integer): boolean; {$IFDEF USE_INLINE}inline; {$ENDIF}
+function CV_NODE_IS_REAL(const flags: Integer): Boolean; {$IFDEF USE_INLINE}inline; {$ENDIF}
 // const CV_NODE_IS_INT(flags)(CV_NODE_TYPE(flags) = CV_NODE_INT)
 // const CV_NODE_IS_REAL(flags) (CV_NODE_TYPE(flags) = CV_NODE_REAL)
-function CV_NODE_IS_STRING(const flags: Integer): boolean; {$IFDEF USE_INLINE}inline; {$ENDIF}
+function CV_NODE_IS_STRING(const flags: Integer): Boolean; {$IFDEF USE_INLINE}inline; {$ENDIF}
 // (CV_NODE_TYPE(flags) = CV_NODE_STRING)
 // const CV_NODE_IS_SEQ(flags) (CV_NODE_TYPE(flags) = CV_NODE_SEQ)
 // const CV_NODE_IS_MAP(flags) (CV_NODE_TYPE(flags) = CV_NODE_MAP)
@@ -2023,19 +2032,23 @@ procedure CV_SWAP(var a, b: Pointer); {$IFDEF USE_INLINE}inline; {$ENDIF} overlo
 //
 // // >> Following declaration is a macro definition!
 // const CV_IS_SUBMAT(flags)((flags) and CV_MAT_SUBMAT_FLAG);
-//
-// const CV_IS_MAT_HDR(mat)((mat) <> 0 and (((CvMat(mat))^.cType and CV_MAGIC_MASK)
-// = CV_MAT_MAGIC_VAL and ((CvMat(mat))^.cols > 0 and ((CvMat(mat))^.rows > 0)
-//
+
+// #define CV_IS_MAT_HDR(mat) \
+// ((mat) != NULL && \
+// (((const CvMat*)(mat))->type & CV_MAGIC_MASK) == CV_MAT_MAGIC_VAL && \
+// ((const CvMat*)(mat))->cols > 0 && ((const CvMat*)(mat))->rows > 0)
+function CV_IS_MAT_HDR(const mat: Pointer): Boolean; inline;
+
 // const CV_IS_MAT_HDR_Z(mat)((mat) <> 0 and (((CvMat(mat))^.cType and CV_MAGIC_MASK)
 // = CV_MAT_MAGIC_VAL and ((CvMat(mat))^.cols >= 0 and ((CvMat(mat))^.rows >= 0)
-//
-// // >> Following declaration is a macro definition!
-// const CV_IS_MAT(mat)(CV_IS_MAT_HDR(mat) and ((CvMat(mat))^.data.ptr <> 0);
-//
+
+// #define CV_IS_MAT(mat) \
+// (CV_IS_MAT_HDR(mat) && ((const CvMat*)(mat))->data.ptr != NULL)
+function CV_IS_MAT(const mat: Pointer): Boolean; inline;
+
 // const CV_IS_MASK_ARR(mat)(((mat)^.cType and (CV_MAT_TYPE_MASK and ~ CV_8SC1)) = 0)
 
-function CV_ARE_TYPES_EQ(const mat1, mat2: pCvMat): boolean; {$IFDEF USE_INLINE}inline; {$ENDIF}
+function CV_ARE_TYPES_EQ(const mat1, mat2: pCvMat): Boolean; {$IFDEF USE_INLINE}inline; {$ENDIF}
 // const CV_ARE_CNS_EQ(mat1, mat2)((((mat1)^.cType xor (mat2)^.cType) and CV_MAT_CN_MASK) = 0)
 //
 // const CV_ARE_DEPTHS_EQ(mat1, mat2)((((mat1)^.cType xor (mat2)^.cType) and CV_MAT_DEPTH_MASK) = 0)
@@ -2271,8 +2284,7 @@ function cvScalarAll(val0123: Double): TCvScalar; {$IFDEF USE_INLINE}inline; {$E
 function cvPoint(const x: Integer = 0; const y: Integer = 0): TCvPoint; {$IFDEF USE_INLINE}inline; {$ENDIF}
 function CvPoint2f(const x: Single = 0; const y: Single = 0): TcvPoint2f; {$IFDEF USE_INLINE}inline; {$ENDIF}
 function CvSize(const width, height: Integer): TCvSize; {$IFDEF USE_INLINE}inline; {$ENDIF}
-function CvScalar(const val0: Double; const val1: Double = 0; const val2: Double = 0; const val3: Double = 0)
-  : TCvScalar;
+function CvScalar(const val0: Double; const val1: Double = 0; const val2: Double = 0; const val3: Double = 0): TCvScalar;
 {$IFDEF USE_INLINE}inline; {$ENDIF}
 function cvRandInt(Var rng: TCvRNG): Cardinal; {$IFDEF USE_INLINE}inline; {$ENDIF}
 function CvRect(Const x, y, width, height: Integer): TCvRect; {$IFDEF USE_INLINE}inline; {$ENDIF}
@@ -2331,9 +2343,9 @@ function CV_MAT_ELEM(const mat: TCvMat; const elemsize: Integer; const row, col:
 *)
 function CV_MAT_ELEM_PTR_FAST(const mat: TCvMat; const row, col, pix_size: Integer): Pointer; {$IFDEF USE_INLINE}inline;
 {$ENDIF}
-function iif(const Conditional: boolean; const ifTrue, ifFalse: Variant): Variant; {$IFDEF USE_INLINE}inline;
+function iif(const Conditional: Boolean; const ifTrue, ifFalse: Variant): Variant; {$IFDEF USE_INLINE}inline;
 {$ENDIF} overload;
-function iif(const Conditional: boolean; const ifTrue, ifFalse: Pointer): Pointer; {$IFDEF USE_INLINE}inline;
+function iif(const Conditional: Boolean; const ifTrue, ifFalse: Pointer): Pointer; {$IFDEF USE_INLINE}inline;
 {$ENDIF} overload;
 
 function CvBox2D(const cX, cY, width, height, angle: Single): TCvBox2D;
@@ -2365,7 +2377,7 @@ procedure strcpy(var str1: pCVChar; const str2: pCVChar);
 Var
   n: Integer;
 begin
-  n    := Length(str2) * SizeOf(CVChar);
+  n := Length(str2) * SizeOf(CVChar);
   str1 := AllocMem(n);
   Move(str2^, str1^, n);
   // CopyMemory(str1, str2, n);
@@ -2424,8 +2436,7 @@ end;
 
 function CV_ELEM_SIZE;
 begin
-  Result := (CV_MAT_CN(_type) shl ((((SizeOf(NativeInt) div 4 + 1) * (16384 or $3A50)) shr CV_MAT_DEPTH(_type) *
-    2) and 3));
+  Result := (CV_MAT_CN(_type) shl ((((SizeOf(NativeInt) div 4 + 1) * (16384 or $3A50)) shr CV_MAT_DEPTH(_type) * 2) and 3));
 end;
 
 function CV_32SC1: Integer;
@@ -2447,13 +2458,13 @@ function cvMat;
 begin
   if not(CV_MAT_DEPTH(etype) <= CV_64F) then
     exit;
-  etype               := CV_MAT_TYPE(etype);
-  Result._type        := CV_MAT_MAGIC_VAL or CV_MAT_CONT_FLAG or etype;
-  Result.cols         := cols;
-  Result.rows         := rows;
-  Result.step         := Result.cols * CV_ELEM_SIZE(etype);
-  Result.data         := data;
-  Result.refcount     := nil;
+  etype := CV_MAT_TYPE(etype);
+  Result._type := CV_MAT_MAGIC_VAL or CV_MAT_CONT_FLAG or etype;
+  Result.cols := cols;
+  Result.rows := rows;
+  Result.step := Result.cols * CV_ELEM_SIZE(etype);
+  Result.data.ptr := data;
+  Result.refcount := nil;
   Result.hdr_refcount := 0;
 end;
 
@@ -2487,15 +2498,15 @@ end;
 
 function CvSize;
 begin
-  Result.width  := width;
+  Result.width := width;
   Result.height := height;
 end;
 
 function CvRect;
 begin
-  Result.x      := x;
-  Result.y      := y;
-  Result.width  := width;
+  Result.x := x;
+  Result.y := y;
+  Result.width := width;
   Result.height := height;
 end;
 
@@ -2512,7 +2523,7 @@ begin
   Result := Round(Value);
 end;
 
-function iif(const Conditional: boolean; const ifTrue, ifFalse: Variant): Variant; {$IFDEF USE_INLINE}inline;
+function iif(const Conditional: Boolean; const ifTrue, ifFalse: Variant): Variant; {$IFDEF USE_INLINE}inline;
 {$ENDIF} overload;
 begin
   if Conditional then
@@ -2521,7 +2532,7 @@ begin
     Result := ifFalse;
 end;
 
-function iif(const Conditional: boolean; const ifTrue, ifFalse: Pointer): Pointer; {$IFDEF USE_INLINE}inline;
+function iif(const Conditional: Boolean; const ifTrue, ifFalse: Pointer): Pointer; {$IFDEF USE_INLINE}inline;
 {$ENDIF} overload;
 begin
   if Conditional then
@@ -2548,7 +2559,7 @@ begin
   Result := CV_NODE_TYPE(flags) = CV_NODE_REAL;
 end;
 
-function CV_NODE_IS_STRING(const flags: Integer): boolean; {$IFDEF USE_INLINE}inline; {$ENDIF}
+function CV_NODE_IS_STRING(const flags: Integer): Boolean; {$IFDEF USE_INLINE}inline; {$ENDIF}
 begin
   Result := CV_NODE_TYPE(flags) = CV_NODE_STRING
 end;
@@ -2570,7 +2581,7 @@ Var
 begin
   // if( ((reader).ptr += (elem_size)) >= (reader).block_max )
   // cvChangeSeqBlock( &(reader), 1 );
-  ptr  := @Reader.ptr;
+  ptr := @Reader.ptr;
   ptr^ := ptr^ + elem_size;
   if Integer(Reader.ptr) >= Integer(Reader.block_max) then
     cvChangeSeqBlock(@Reader, 1);
@@ -2579,9 +2590,9 @@ end;
 function cvFloor;
 Var
   diff: TCv32suf;
-  i   : Integer;
+  i: Integer;
 begin
-  i      := cvRound(Value);
+  i := cvRound(Value);
   diff.f := (Value - i);
   if diff.i < 0 then
     Dec(i);
@@ -2596,9 +2607,9 @@ end;
 
 function CvTermCriteria;
 begin
-  Result.cType    := _type;
+  Result.cType := _type;
   Result.max_iter := max_iter;
-  Result.epsilon  := epsilon;
+  Result.epsilon := epsilon;
 end;
 
 function cvPointTo32f;
@@ -2736,7 +2747,7 @@ begin
   Result := CV_MAKETYPE(CV_8U, 3);
 end;
 
-function CV_IS_SET_ELEM(ptr: Pointer): boolean;
+function CV_IS_SET_ELEM(ptr: Pointer): Boolean;
 begin
   // #define CV_IS_SET_ELEM( ptr )  (((CvSetElem*)(ptr))->flags >= 0)
   Result := Assigned(ptr) and (pCvSetElem(ptr)^.flags >= 0);
@@ -2745,8 +2756,8 @@ end;
 function CV_IMAGE_ELEM(image: pIplImage; size_elemtype, row, col: Integer): Pointer; {$IFDEF USE_INLINE}inline; {$ENDIF}
 begin
   // (((elemtype*)((image)->imageData + (image)->widthStep*(row)))[(col)])
-  Result := {$IFDEF DELPHI7}Pointer({$ENDIF DELPHI7}{$IFDEF DELPHI2005_UP}PByte{$ELSE}Integer{$ENDIF}(image^.imageData)
-    + image^.widthStep * row + col * size_elemtype{$IFDEF DELPHI7}){$ENDIF DELPHI7};
+  Result := {$IFDEF DELPHI7}Pointer({$ENDIF DELPHI7}{$IFDEF DELPHI2005_UP}PByte{$ELSE}Integer{$ENDIF}(image^.imageData) + image^.widthStep *
+    row + col * size_elemtype{$IFDEF DELPHI7}){$ENDIF DELPHI7};
 end;
 
 function cvRealScalar(val0: Double): TCvScalar; {$IFDEF USE_INLINE}inline; {$ENDIF}
@@ -2777,23 +2788,23 @@ Var
   depth: Integer;
 begin
   // return CV_ELEM_SIZE1(depth)*8 | (depth == CV_8S || depth == CV_16S || depth == CV_32S ? IPL_DEPTH_SIGN : 0);
-  depth  := CV_MAT_DEPTH(_type);
+  depth := CV_MAT_DEPTH(_type);
   Result := CV_ELEM_SIZE1(depth) * 8;
   if (depth = CV_8S) or (depth = CV_16S) or (depth = CV_32S) then
     Result := Result or Integer(IPL_DEPTH_SIGN);
 end;
 
-function CV_ARE_TYPES_EQ(const mat1, mat2: pCvMat): boolean; {$IFDEF USE_INLINE}inline; {$ENDIF}
+function CV_ARE_TYPES_EQ(const mat1, mat2: pCvMat): Boolean; {$IFDEF USE_INLINE}inline; {$ENDIF}
 begin
   Result := ((((mat1)^._type xor (mat2)^._type) and CV_MAT_TYPE_MASK) = 0);
 end;
 
-function CV_IS_SEQ_CLOSED(const Seq: pCvSeq): boolean; {$IFDEF USE_INLINE}inline; {$ENDIF}
+function CV_IS_SEQ_CLOSED(const Seq: pCvSeq): Boolean; {$IFDEF USE_INLINE}inline; {$ENDIF}
 begin
   Result := (Seq^.flags and CV_SEQ_FLAG_CLOSED) <> 0;
 end;
 
-function CV_IS_SEQ_HOLE(const Seq: pCvSeq): boolean; {$IFDEF USE_INLINE}inline; {$ENDIF}
+function CV_IS_SEQ_HOLE(const Seq: pCvSeq): Boolean; {$IFDEF USE_INLINE}inline; {$ENDIF}
 begin
   Result := (Seq^.flags and CV_SEQ_FLAG_HOLE) <> 0;
 end;
@@ -2801,13 +2812,13 @@ end;
 function CvBox2D(const cX, cY, width, height, angle: Single): TCvBox2D;
 begin
   Result.center := CvPoint2D32f(cX, cY);
-  Result.size   := CvSize2D32f(width, height);
-  Result.angle  := angle;
+  Result.size := CvSize2D32f(width, height);
+  Result.angle := angle;
 end;
 
 function CvSize2D32f(const width, height: Single): TCvSize2D32f;
 begin
-  Result.width  := width;
+  Result.width := width;
   Result.height := height;
 end;
 
@@ -2833,12 +2844,12 @@ end;
 {$ENDIF}
 { TCvScalar }
 
-class operator TCvScalar.GreaterThan(a, b: TCvScalar): boolean;
+class operator TCvScalar.GreaterThan(a, b: TCvScalar): Boolean;
 begin
   Result := (a.val[0] > b.val[0]) and (a.val[1] > b.val[1]) and (a.val[2] > b.val[2]) and (a.val[3] >= b.val[3]);
 end;
 
-class operator TCvScalar.LessThan(a, b: TCvScalar): boolean;
+class operator TCvScalar.LessThan(a, b: TCvScalar): Boolean;
 begin
   Result := (a.val[0] < b.val[0]) and (a.val[1] < b.val[1]) and (a.val[2] < b.val[2]) and (a.val[3] <= b.val[3]);
 end;
@@ -2847,22 +2858,22 @@ end;
 
 function TCvMat.AsByte: PByte;
 begin
-  Result := data;
+  Result := data.ptr;
 end;
 
-function TCvMat.AsDouble: PDouble;
+function TCvMat.AsDouble: pDouble;
 begin
-  Result := data;
+  Result := data.db;
 end;
 
 function TCvMat.AsInteger: PInteger;
 begin
-  Result := data;
+  Result := data.i;
 end;
 
-function TCvMat.AsSingle: PSingle;
+function TCvMat.AsSingle: pSingle;
 begin
-  Result := data;
+  Result := data.fl;
 end;
 
 function TCvMat.GetMatByte(const row, col: Integer): Byte;
@@ -2872,7 +2883,7 @@ end;
 
 function TCvMat.GetMatDouble(const row, col: Integer): Double;
 begin
-  Result := PDouble(CV_MAT_ELEM(Self, SizeOf(Double), row, col))^;
+  Result := pDouble(CV_MAT_ELEM(Self, SizeOf(Double), row, col))^;
 end;
 
 function TCvMat.GetMatInteger(const row, col: Integer): Integer;
@@ -2882,7 +2893,7 @@ end;
 
 function TCvMat.GetMatSingle(const row, col: Integer): Single;
 begin
-  Result := PSingle(CV_MAT_ELEM(Self, SizeOf(Single), row, col))^;
+  Result := pSingle(CV_MAT_ELEM(Self, SizeOf(Single), row, col))^;
 end;
 
 procedure TCvMat.SetMatByte(const row, col: Integer; const Value: Byte);
@@ -2892,7 +2903,7 @@ end;
 
 procedure TCvMat.SetMatDouble(const row, col: Integer; const Value: Double);
 begin
-  PDouble(CV_MAT_ELEM(Self, SizeOf(Double), row, col))^ := Value;
+  pDouble(CV_MAT_ELEM(Self, SizeOf(Double), row, col))^ := Value;
 end;
 
 procedure TCvMat.SetMatInteger(const row, col, Value: Integer);
@@ -2902,22 +2913,54 @@ end;
 
 procedure TCvMat.SetMatSingle(const row, col: Integer; const Value: Single);
 begin
-  PSingle(CV_MAT_ELEM(Self, SizeOf(Single), row, col))^ := Value;
+  pSingle(CV_MAT_ELEM(Self, SizeOf(Single), row, col))^ := Value;
+end;
+
+function CV_IS_MATND_HDR(const mat: Pointer): Boolean; inline;
+begin
+  // #define CV_IS_MATND_HDR(mat) \
+  // ((mat) != NULL && (((const CvMatND*) (mat)) - > type & CV_MAGIC_MASK) = = CV_MATND_MAGIC_VAL)
+  Result := Assigned(mat) and ((pCvMatND(mat)^._type and CV_MAGIC_MASK) = CV_MATND_MAGIC_VAL);
+end;
+
+function CV_IS_MATND(const mat: Pointer): Boolean; inline;
+begin
+  // #define CV_IS_MATND(mat) \
+  // (CV_IS_MATND_HDR(mat) && ((const CvMatND*)(mat))->data.ptr != NULL)
+  Result := CV_IS_MATND_HDR(mat) and Assigned(pCvMatND(mat).data.ptr);
+end;
+
+function CV_IS_MAT(const mat: Pointer): Boolean; inline;
+begin
+  // #define CV_IS_MAT(mat) \
+  // (CV_IS_MAT_HDR(mat) && ((const CvMat*)(mat))->data.ptr != NULL)
+  Result := CV_IS_MAT_HDR(mat) and Assigned(pCvMat(mat)^.data.ptr);
+end;
+
+function CV_IS_MAT_HDR(const mat: Pointer): Boolean; inline;
+begin
+  // #define CV_IS_MAT_HDR(mat) \
+  // ((mat) != NULL && \
+  // (((const CvMat*)(mat))->type & CV_MAGIC_MASK) == CV_MAT_MAGIC_VAL && \
+  // ((const CvMat*)(mat))->cols > 0 && ((const CvMat*)(mat))->rows > 0)
+  Result := Assigned(mat) and //
+    ((pCvMat(mat)^._type and CV_MAGIC_MASK) = CV_MAT_MAGIC_VAL) and //
+    (pCvMat(mat)^.cols > 0) and //
+    (pCvMat(mat)^.rows > 0);
 end;
 
 initialization
 
-CV_SEQ_ELTYPE_POINT   := CV_32SC2;
-CV_SEQ_ELTYPE_CODE    := CV_8UC1;
+CV_SEQ_ELTYPE_POINT := CV_32SC2;
+CV_SEQ_ELTYPE_CODE := CV_8UC1;
 CV_SEQ_ELTYPE_POINT3D := CV_32FC3;
-CV_SEQ_POINT_SET      := (CV_SEQ_KIND_GENERIC or CV_SEQ_ELTYPE_POINT);
-CV_SEQ_POINT3D_SET    := (CV_SEQ_KIND_GENERIC or CV_SEQ_ELTYPE_POINT3D);
-CV_SEQ_POLYLINE       := (CV_SEQ_KIND_CURVE or CV_SEQ_ELTYPE_POINT);
-CV_SEQ_POLYGON        := (CV_SEQ_FLAG_CLOSED or CV_SEQ_POLYLINE);
-CV_SEQ_CONTOUR        := CV_SEQ_POLYGON;
+CV_SEQ_POINT_SET := (CV_SEQ_KIND_GENERIC or CV_SEQ_ELTYPE_POINT);
+CV_SEQ_POINT3D_SET := (CV_SEQ_KIND_GENERIC or CV_SEQ_ELTYPE_POINT3D);
+CV_SEQ_POLYLINE := (CV_SEQ_KIND_CURVE or CV_SEQ_ELTYPE_POINT);
+CV_SEQ_POLYGON := (CV_SEQ_FLAG_CLOSED or CV_SEQ_POLYLINE);
+CV_SEQ_CONTOUR := CV_SEQ_POLYGON;
 CV_SEQ_SIMPLE_POLYGON := (CV_SEQ_FLAG_SIMPLE or CV_SEQ_POLYGON);
-CV_SEQ_CHAIN          := (CV_SEQ_KIND_CURVE or CV_SEQ_ELTYPE_CODE);
-CV_SEQ_CHAIN_CONTOUR  := (CV_SEQ_FLAG_CLOSED or CV_SEQ_CHAIN);
+CV_SEQ_CHAIN := (CV_SEQ_KIND_CURVE or CV_SEQ_ELTYPE_CODE);
+CV_SEQ_CHAIN_CONTOUR := (CV_SEQ_FLAG_CLOSED or CV_SEQ_CHAIN);
 
 end.
-
