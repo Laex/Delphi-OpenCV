@@ -3,7 +3,7 @@
 // Copyright (C) 2013 Project Delphi-OpenCV
 // ****************************************************************
 // Contributor:
-  // Laentir Valetov
+// Laentir Valetov
 // email:laex@bk.ru
 // ****************************************************************
 // You may retrieve the latest version of this file at the GitHub,
@@ -44,55 +44,36 @@ const
   filename = cResourceMedia + 'cat2.jpg';
 
 var
-  img     : pIplImage;
+  img: pIplImage;
   channels: array [0 .. 2] of pIplImage;
-  BGRSum  : Array [0 .. 2] of TCvScalar;
+  BGRSum: Array [0 .. 2] of TCvScalar;
   i, total: Integer;
 
 begin
   try
 
-    img := cvLoadImage(
-      filename,
-      1);
+    img := cvLoadImage(filename, 1);
 
-    for i         := 0 to 2 do
-      channels[i] := cvCreateImage(
-        cvGetSize(img),
-        8,
-        1);
+    for i := 0 to 2 do
+      channels[i] := cvCreateImage(cvGetSize(img), 8, 1);
 
-    cvSplit(
-      img,
-      channels[0],
-      channels[1],
-      channels[2],
-      0);
+    cvSplit(img, channels[0], channels[1], channels[2]);
 
-    for i       := 0 to 2 do
+    for i := 0 to 2 do
       BGRSum[i] := cvSum(channels[i]);
 
     total := img^.width * img^.height * 255;
 
     WriteLn('Color percentage of RGB(ex red 50%, green 25% and blue %25) in an image is');
 
-    writeln(
-      'red:   ',
-      BGRSum[2].val[0] / total * 100:2:2);
-    writeln(
-      'green: ',
-      BGRSum[1].val[0] / total * 100:2:2);
-    writeln(
-      'blue:  ',
-      BGRSum[0].val[0] / total * 100:2:2);
+    WriteLn('red:   ', BGRSum[2].val[0] / total * 100:2:2);
+    WriteLn('green: ', BGRSum[1].val[0] / total * 100:2:2);
+    WriteLn('blue:  ', BGRSum[0].val[0] / total * 100:2:2);
 
     readln;
   except
     on E: Exception do
-      writeln(
-        E.ClassName,
-        ': ',
-        E.Message);
+      WriteLn(E.ClassName, ': ', E.Message);
   end;
 
 end.

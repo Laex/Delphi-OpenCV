@@ -1,0 +1,120 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{B8FFAD51-22D7-426C-B047-EC116C5C089E}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="ch7_ex7_3_expanded.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="ch8_ex8_3.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="ch9_watershed.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="ch10_ex10_1.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="ch10_ex10_1b_Horn_Schunck.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="ch10_ex10_2.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="ch10_motempl.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="ch13_ex13_1.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="ch7_ex7_3_expanded">
+        <MSBuild Projects="ch7_ex7_3_expanded.dproj"/>
+    </Target>
+    <Target Name="ch7_ex7_3_expanded:Clean">
+        <MSBuild Projects="ch7_ex7_3_expanded.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="ch7_ex7_3_expanded:Make">
+        <MSBuild Projects="ch7_ex7_3_expanded.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="ch8_ex8_3">
+        <MSBuild Projects="ch8_ex8_3.dproj"/>
+    </Target>
+    <Target Name="ch8_ex8_3:Clean">
+        <MSBuild Projects="ch8_ex8_3.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="ch8_ex8_3:Make">
+        <MSBuild Projects="ch8_ex8_3.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="ch9_watershed">
+        <MSBuild Projects="ch9_watershed.dproj"/>
+    </Target>
+    <Target Name="ch9_watershed:Clean">
+        <MSBuild Projects="ch9_watershed.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="ch9_watershed:Make">
+        <MSBuild Projects="ch9_watershed.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="ch10_ex10_1">
+        <MSBuild Projects="ch10_ex10_1.dproj"/>
+    </Target>
+    <Target Name="ch10_ex10_1:Clean">
+        <MSBuild Projects="ch10_ex10_1.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="ch10_ex10_1:Make">
+        <MSBuild Projects="ch10_ex10_1.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="ch10_ex10_1b_Horn_Schunck">
+        <MSBuild Projects="ch10_ex10_1b_Horn_Schunck.dproj"/>
+    </Target>
+    <Target Name="ch10_ex10_1b_Horn_Schunck:Clean">
+        <MSBuild Projects="ch10_ex10_1b_Horn_Schunck.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="ch10_ex10_1b_Horn_Schunck:Make">
+        <MSBuild Projects="ch10_ex10_1b_Horn_Schunck.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="ch10_ex10_2">
+        <MSBuild Projects="ch10_ex10_2.dproj"/>
+    </Target>
+    <Target Name="ch10_ex10_2:Clean">
+        <MSBuild Projects="ch10_ex10_2.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="ch10_ex10_2:Make">
+        <MSBuild Projects="ch10_ex10_2.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="ch10_motempl">
+        <MSBuild Projects="ch10_motempl.dproj"/>
+    </Target>
+    <Target Name="ch10_motempl:Clean">
+        <MSBuild Projects="ch10_motempl.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="ch10_motempl:Make">
+        <MSBuild Projects="ch10_motempl.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="ch13_ex13_1">
+        <MSBuild Projects="ch13_ex13_1.dproj"/>
+    </Target>
+    <Target Name="ch13_ex13_1:Clean">
+        <MSBuild Projects="ch13_ex13_1.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="ch13_ex13_1:Make">
+        <MSBuild Projects="ch13_ex13_1.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="ch7_ex7_3_expanded;ch8_ex8_3;ch9_watershed;ch10_ex10_1;ch10_ex10_1b_Horn_Schunck;ch10_ex10_2;ch10_motempl;ch13_ex13_1"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="ch7_ex7_3_expanded:Clean;ch8_ex8_3:Clean;ch9_watershed:Clean;ch10_ex10_1:Clean;ch10_ex10_1b_Horn_Schunck:Clean;ch10_ex10_2:Clean;ch10_motempl:Clean;ch13_ex13_1:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="ch7_ex7_3_expanded:Make;ch8_ex8_3:Make;ch9_watershed:Make;ch10_ex10_1:Make;ch10_ex10_1b_Horn_Schunck:Make;ch10_ex10_2:Make;ch10_motempl:Make;ch13_ex13_1:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>

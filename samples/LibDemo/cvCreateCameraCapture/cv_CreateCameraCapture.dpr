@@ -68,7 +68,8 @@ begin
       begin
         if not Assigned(capframe) then
           capframe := cvCreateImage(cvGetSize(frame), frame^.depth, frame^.nChannels);
-        cvCopyImage(frame, capframe);
+        //cvCopyImage(frame, capframe);
+        cvCopy(frame, capframe);
       end;
       // показываем
       if Assigned(capframe) then

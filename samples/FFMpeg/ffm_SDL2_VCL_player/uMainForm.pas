@@ -104,9 +104,9 @@ begin
     codec_context^.width, codec_context^.height, codec_context^.pix_fmt, SWS_BICUBIC, nil, nil, nil);
   Assert(Assigned(img_convert_context));
 
-  pFrame := avcodec_alloc_frame();
+  pFrame := av_frame_alloc();//avcodec_alloc_frame();
 
-  frame := avcodec_alloc_frame();
+  frame := av_frame_alloc();;//avcodec_alloc_frame();
   ImgBufferSize := avpicture_get_size(codec_context^.pix_fmt, codec_context^.width, codec_context^.height);
   ImgBuffer := AllocMem(ImgBufferSize);
   avpicture_fill(pAVPicture(frame), ImgBuffer, codec_context^.pix_fmt, codec_context^.width, codec_context^.height);
@@ -162,7 +162,7 @@ begin
           SDL_RenderPresent(renderer);
 
           av_frame_unref(pFrame);
-          avcodec_get_frame_defaults(pFrame);
+//          avcodec_get_frame_defaults(pFrame);
         end;
       end;
       av_free_packet(packet);

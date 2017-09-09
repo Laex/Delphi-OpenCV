@@ -161,7 +161,7 @@ begin
 
         // Check the origin of image. If top left, copy the image frame to frame_copy.
         if (frame^.origin = IPL_ORIGIN_TL) then
-          cvCopyImage(frame, frame_copy, 0)
+          cvCopy(frame, frame_copy)
           // Else flip and copy the image
         else
           cvFlip(frame, frame_copy, 0);

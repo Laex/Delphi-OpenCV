@@ -2405,7 +2405,7 @@ end;
 function CV_MAT_ELEM_PTR_FAST(const mat: TCvMat; const row, col, pix_size: Integer): Pointer;
 begin
   Assert((row < mat.rows) and (col < mat.cols) and (row >= 0) and (col >= 0));
-  Result := Pointer(Integer(mat.data) + mat.step * row + pix_size * col);
+  Result := Pointer(Integer(mat.data.ptr) + mat.step * row + pix_size * col);
 end;
 
 function CV_MAT_ELEM(const mat: TCvMat; const elemsize: Integer; const row, col: Integer): Pointer;

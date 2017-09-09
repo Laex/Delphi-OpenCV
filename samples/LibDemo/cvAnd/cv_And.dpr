@@ -129,7 +129,8 @@ begin
     b_range := cvCreateImage(cvGetSize(image), IPL_DEPTH_8U, 1);
     rgb_and := cvCreateImage(cvGetSize(image), IPL_DEPTH_8U, 1);
     // копируем
-    cvCopyImage(image, rgb);
+//    cvCopyImage(image, rgb);
+    cvCopy(image, rgb);
     // разбиваем на отельные каналы
     cvSplit(rgb, b_plane, g_plane, r_plane, nil);
 

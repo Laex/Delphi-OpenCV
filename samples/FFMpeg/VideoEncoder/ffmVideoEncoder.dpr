@@ -92,7 +92,7 @@ begin
     begin
       w := W_VIDEO;
       h := H_VIDEO;
-      frame := avcodec_alloc_frame();
+      frame := av_frame_alloc();//avcodec_alloc_frame();
       nSampleSize := 2 * 44100 div 25; // 1 / 25 sec * FORMAT SIZE(S16)
       sample := AllocMem(nSampleSize);
       // Create frame

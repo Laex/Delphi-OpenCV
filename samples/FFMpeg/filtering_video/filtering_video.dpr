@@ -245,7 +245,7 @@ begin
 
         if (packet.stream_index = video_stream_index) then
         begin
-          avcodec_get_frame_defaults(vframe);
+//          avcodec_get_frame_defaults(vframe);
           got_frame := 0;
           ret := avcodec_decode_video2(dec_ctx, vframe, got_frame, @packet);
           if (ret < 0) then

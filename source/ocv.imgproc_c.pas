@@ -132,7 +132,8 @@ procedure cvSmooth(
   CvPoint anchor CV_DEFAULT(cvPoint(-1,-1)));
 *)
 
-procedure cvFilter2D(const src: PCvArr; dst: PCvArr; const kernel: pCvMat; anchor: TCvPoint { =CV_DEFAULT(cvPoint(-1,-1)) } ); cdecl; overload;
+procedure cvFilter2D(const src: PCvArr; dst: PCvArr; const kernel: pCvMat; anchor: TCvPoint { =CV_DEFAULT(cvPoint(-1,-1)) } );
+  cdecl; overload;
 procedure cvFilter2D(const src: PCvArr; dst: PCvArr; const kernel: pCvMat); overload;
 
 {
@@ -233,7 +234,7 @@ procedure cvLaplace(const src: PCvArr; dst: PCvArr; aperture_size: Integer = 3);
 // CVAPI(void)  cvCvtColor( const CvArr* src, CvArr* dst, int code );
 procedure cvCvtColor(const src: PCvArr; dst: PCvArr; code: Integer); cdecl; overload;
 procedure cvCvtColor(const src: pCvMat; dst: pCvMat; code: Integer); cdecl; overload;
-//procedure cvCvtColor(const src: PCvArr; dst: pCvMat; code: Integer); cdecl; overload;
+// procedure cvCvtColor(const src: PCvArr; dst: pCvMat; code: Integer); cdecl; overload;
 
 // (* Resizes image (input array is resized to fit the destination array) *)
 // CVAPI(procedure)cvResize(var Warps image with affine transform * )
@@ -270,8 +271,8 @@ function cv2DRotationMatrix(center: TCvPoint2D32f; angle: Double; scale: Double;
   int flags CV_DEFAULT(CV_INTER_LINEAR+CV_WARP_FILL_OUTLIERS),
   CvScalar fillval CV_DEFAULT(cvScalarAll(0)) );
 }
-procedure cvWarpPerspective(const src: PCvArr; dst: PCvArr; const map_matrix: pCvMat; flags: Integer { =CV_INTER_LINEAR+CV_WARP_FILL_OUTLIERS };
-  fillval: TCvScalar { =cvScalarAll(0) } ); cdecl;
+procedure cvWarpPerspective(const src: PCvArr; dst: PCvArr; const map_matrix: pCvMat;
+  flags: Integer { =CV_INTER_LINEAR+CV_WARP_FILL_OUTLIERS }; fillval: TCvScalar { =cvScalarAll(0) } ); cdecl;
 {
   /* Computes perspective transform matrix for mapping src[i] to dst[i] (i=0,1,2,3) */
   CVAPI(CvMat*) cvGetPerspectiveTransform( const CvPoint2D32f* src,
@@ -290,8 +291,8 @@ function cvGetPerspectiveTransform(const src: pCvPoint2D32f; const dst: pCvPoint
   int flags CV_DEFAULT(CV_INTER_LINEAR+CV_WARP_FILL_OUTLIERS),
   CvScalar fillval CV_DEFAULT(cvScalarAll(0)) );
 }
-procedure cvRemap(const src: PCvArr; dst: PCvArr; const mapx: PCvArr; const mapy: PCvArr; flags: Integer { =CV_INTER_LINEAR+CV_WARP_FILL_OUTLIERS };
-  fillval: TCvScalar { =cvScalarAll(0) }
+procedure cvRemap(const src: PCvArr; dst: PCvArr; const mapx: PCvArr; const mapy: PCvArr;
+  flags: Integer { =CV_INTER_LINEAR+CV_WARP_FILL_OUTLIERS }; fillval: TCvScalar { =cvScalarAll(0) }
   ); cdecl;
 
 (*
@@ -343,8 +344,8 @@ procedure cvInitUndistortMap(const camera_matrix: pCvMat; const distortion_coeff
   CvArr* mapx, CvArr* mapy );
 *)
 
-procedure cvInitUndistortRectifyMap(const camera_matrix: pCvMat; const dist_coeffs: pCvMat; const R: pCvMat; const new_camera_matrix: pCvMat;
-  mapx: PCvArr; mapy: PCvArr); cdecl;
+procedure cvInitUndistortRectifyMap(const camera_matrix: pCvMat; const dist_coeffs: pCvMat; const R: pCvMat;
+  const new_camera_matrix: pCvMat; mapx: PCvArr; mapy: PCvArr); cdecl;
 
 (*
   /* Computes the original (undistorted) feature coordinates
@@ -363,8 +364,8 @@ procedure cvUndistortPoints(const src: pCvMat; dst: pCvMat; const camera_matrix:
 // CVAPI(IplConvKernel*)  cvCreateStructuringElementEx(
 // int cols, int  rows, int  anchor_x, int  anchor_y,
 // int shape, int* values CV_DEFAULT(NULL) );
-function cvCreateStructuringElementEx(cols: Integer; rows: Integer; anchor_x: Integer; anchor_y: Integer; shape: Integer; values: PInteger = nil)
-  : pIplConvKernel; cdecl;
+function cvCreateStructuringElementEx(cols: Integer; rows: Integer; anchor_x: Integer; anchor_y: Integer; shape: Integer;
+  values: PInteger = nil): pIplConvKernel; cdecl;
 
 // (* releases structuring element *)
 // CVAPI(procedure)  cvReleaseStructuringElement( element: array of IplConvKernel);
@@ -580,8 +581,9 @@ function cvFindContours(
 // int mode CV_DEFAULT(CV_RETR_LIST),
 // int method CV_DEFAULT(CV_CHAIN_APPROX_SIMPLE),
 // CvPoint offset CV_DEFAULT(cvPoint(0,0)));
-function cvStartFindContours(image: PCvArr; storage: pCvMemStorage; header_size: Integer { =sizeof(TCvContour)) }; mode: Integer { =  CV_RETR_LIST };
-  method: Integer { =CV_CHAIN_APPROX_SIMPLE }; offset: TCvPoint { =cvPoint(0,0) } ): pCvContourScanner; cdecl;
+function cvStartFindContours(image: PCvArr; storage: pCvMemStorage; header_size: Integer { =sizeof(TCvContour)) };
+  mode: Integer { =  CV_RETR_LIST }; method: Integer { =CV_CHAIN_APPROX_SIMPLE }; offset: TCvPoint { =cvPoint(0,0) } )
+  : pCvContourScanner; cdecl;
 
 // * Retrieves next contour */
 // CVAPI(CvSeq*)  cvFindNextContour( CvContourScanner scanner );
@@ -775,8 +777,8 @@ procedure cvSetHistBinRanges(hist: pCvHistogram; ranges: pSingle; uniform: Integ
   float* data, float** ranges CV_DEFAULT(NULL),
   int uniform CV_DEFAULT(1));
 *)
-function cvMakeHistHeaderForArray(dims: Integer; sizes: PInteger; hist: pCvHistogram; data: pfloat; ranges: ppfloat = nil; uniform: Integer = 1)
-  : pCvHistogram; cdecl;
+function cvMakeHistHeaderForArray(dims: Integer; sizes: PInteger; hist: pCvHistogram; data: pfloat; ranges: ppfloat = nil;
+  uniform: Integer = 1): pCvHistogram; cdecl;
 
 // * Releases histogram */
 // CVAPI(void)  cvReleaseHist( CvHistogram** hist );
@@ -837,7 +839,8 @@ procedure cvCalcBayesianProb(Var src: pCvHistogram; number: Integer; Var dst: pC
   int accumulate CV_DEFAULT(0),
   const CvArr* mask CV_DEFAULT(NULL) );
 *)
-procedure cvCalcArrHist(var arr: PCvArr; hist: pCvHistogram; accumulate: Integer = 0; const mask: PCvArr = nil); cdecl;
+procedure cvCalcArrHist(var arr: PCvArr; hist: pCvHistogram; accumulate: Integer = 0; const mask: PCvArr = nil); cdecl; overload;
+procedure cvCalcArrHist(var arr: pIplImage; hist: pCvHistogram; accumulate: Integer = 0; const mask: pIplImage = nil); cdecl; overload;
 
 // CV_INLINE  void  cvCalcHist(
 // IplImage** image,
@@ -849,7 +852,9 @@ procedure cvCalcArrHist(var arr: PCvArr; hist: pCvHistogram; accumulate: Integer
 // }
 
 procedure cvCalcHist(var image: PCvArr; hist: pCvHistogram; accumulate: Integer = 0; const mask: PCvArr = nil);
-{$IFDEF USE_INLINE}inline; {$ENDIF}
+{$IFDEF USE_INLINE}inline; {$ENDIF} overload;
+procedure cvCalcHist(var image: pIplImage; hist: pCvHistogram; accumulate: Integer = 0; const mask: PCvArr = nil);
+{$IFDEF USE_INLINE}inline; {$ENDIF} overload;
 {
   /* Calculates back project */
   CVAPI(void)  cvCalcArrBackProject( CvArr** image, CvArr* dst,
@@ -862,7 +867,8 @@ procedure cvCalcArrBackProject(var image: PCvArr; dst: PCvArr; const hist: pCvHi
   /* Does some sort of template matching but compares histograms of
   template and each window location */
 *)
-procedure cvCalcBackProject(var image: PCvArr; dst: PCvArr; const hist: pCvHistogram); cdecl;
+procedure cvCalcBackProject(var image: pIplImage; dst: PCvArr; const hist: pCvHistogram); cdecl; overload;
+procedure cvCalcBackProject(var image: PCvArr; dst: PCvArr; const hist: pCvHistogram); cdecl; overload;
 
 (*
   /* calculates probabilistic density (divides one histogram by another) */
@@ -887,8 +893,8 @@ procedure cvEqualizeHist(const src, dst: PCvArr); cdecl;
   int labelType CV_DEFAULT(CV_DIST_LABEL_CCOMP));
 }
 
-procedure cvDistTransform(const src: PCvArr; dst: PCvArr; distance_type: Integer = CV_DIST_L2; mask_size: Integer = 3; const mask: pfloat = nil;
-  labels: PCvArr = nil; labelType: Integer = CV_DIST_LABEL_CCOMP); cdecl;
+procedure cvDistTransform(const src: PCvArr; dst: PCvArr; distance_type: Integer = CV_DIST_L2; mask_size: Integer = 3;
+  const mask: pfloat = nil; labels: PCvArr = nil; labelType: Integer = CV_DIST_LABEL_CCOMP); cdecl;
 
 // (* Applies fixed-level threshold to grayscale image.
 // This is a basic operation applied before retrieving contours *)
@@ -985,7 +991,8 @@ procedure cvCornerMinEigenVal(const image: PCvArr; eigenval: PCvArr; block_size:
   int block_size, int aperture_size CV_DEFAULT(3),
   double k CV_DEFAULT(0.04) );
 *)
-procedure cvCornerHarris(const image: PCvArr; harris_response: PCvArr; block_size: Integer; aperture_size: Integer = 3; k: Double = 0.04); cdecl;
+procedure cvCornerHarris(const image: PCvArr; harris_response: PCvArr; block_size: Integer; aperture_size: Integer = 3;
+  k: Double = 0.04); cdecl;
 
 {
   /* Adjust corner position using some sort of gradient search */
@@ -1085,7 +1092,7 @@ uses ocv.lib;
 // procedure cvCvtColor(const src: pIplImage; dst: pIplImage; code: Integer); external imgproc_lib;
 procedure cvCvtColor(const src: PCvArr; dst: PCvArr; code: Integer); external imgproc_lib name 'cvCvtColor';
 procedure cvCvtColor(const src: pCvMat; dst: pCvMat; code: Integer); external imgproc_lib name 'cvCvtColor';
-//procedure cvCvtColor(const src: PCvArr; dst: pCvMat; code: Integer); external imgproc_lib name 'cvCvtColor';
+// procedure cvCvtColor(const src: PCvArr; dst: pCvMat; code: Integer); external imgproc_lib name 'cvCvtColor';
 
 function cvThreshold; external imgproc_lib;
 procedure cvSmooth; external imgproc_lib;
@@ -1131,15 +1138,32 @@ procedure cvPyrUp; external imgproc_lib;
 function cvCheckContourConvexity; external imgproc_lib;
 function cvCreateHist; external imgproc_lib;
 
-procedure cvCalcHist;
+procedure cvCalcHist(var image: PCvArr; hist: pCvHistogram; accumulate: Integer = 0; const mask: PCvArr = nil);
+{$IFDEF USE_INLINE}inline; {$ENDIF} overload;
 begin
   cvCalcArrHist(image, hist, accumulate, mask);
 end;
 
+procedure cvCalcHist(var image: pIplImage; hist: pCvHistogram; accumulate: Integer = 0; const mask: PCvArr = nil);
+{$IFDEF USE_INLINE}inline; {$ENDIF} overload;
+begin
+  cvCalcArrHist(image, hist, accumulate, mask);
+end;
+// procedure cvCalcHist;
+// begin
+// cvCalcArrHist(image, hist, accumulate, mask);
+// end;
+
 procedure cvGetMinMaxHistValue; external imgproc_lib;
-procedure cvCalcArrHist; external imgproc_lib;
+// procedure cvCalcArrHist; external imgproc_lib;
+procedure cvCalcArrHist(var arr: PCvArr; hist: pCvHistogram; accumulate: Integer = 0; const mask: PCvArr = nil); cdecl;
+  external imgproc_lib; overload;
+procedure cvCalcArrHist(var arr: pIplImage; hist: pCvHistogram; accumulate: Integer = 0; const mask: pIplImage = nil); cdecl;
+  external imgproc_lib; overload;
 procedure cvCalcArrBackProject; external imgproc_lib;
-procedure cvCalcBackProject; external imgproc_lib name 'cvCalcArrBackProject';
+//procedure cvCalcBackProject; external imgproc_lib name 'cvCalcArrBackProject';
+procedure cvCalcBackProject(var image: pIplImage; dst: PCvArr; const hist: pCvHistogram); cdecl; external imgproc_lib name 'cvCalcArrBackProject'; overload;
+procedure cvCalcBackProject(var image: PCvArr; dst: PCvArr; const hist: pCvHistogram); cdecl; external imgproc_lib name 'cvCalcArrBackProject'; overload;
 procedure cvGoodFeaturesToTrack; external imgproc_lib;
 function cvMinAreaRect2; external imgproc_lib;
 function cvMinEnclosingCircle; external imgproc_lib;

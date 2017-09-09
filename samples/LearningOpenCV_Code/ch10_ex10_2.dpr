@@ -146,7 +146,7 @@ begin
     F[1] := 1;
     F[2] := 0;
     F[3] := 1;
-    Move(F, kalman^.transition_matrix^.data^, sizeof(F));
+    Move(F, kalman^.transition_matrix^.data.ptr^, sizeof(F));
     // Initialize other Kalman filter parameters.
     //
     cvSetIdentity(kalman^.measurement_matrix, cvRealScalar(1));

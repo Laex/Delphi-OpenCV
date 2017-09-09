@@ -130,7 +130,7 @@ begin
       Halt(1);
     end;
 
-    frame := avcodec_alloc_frame();
+    frame := av_frame_alloc();//avcodec_alloc_frame();
     while (av_read_frame(format_context, packet) >= 0) do
     begin
       if (packet.stream_index = video_stream) then

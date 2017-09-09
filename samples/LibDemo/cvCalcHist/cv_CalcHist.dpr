@@ -60,7 +60,7 @@ Begin
   dst_img[3] := NIL;
   hist_size := 256;
   ch_width := 260;
-  sch := 0;
+//  sch := 0;
   CS.Height := src_img.Height;
   CS.Width := src_img.Width;
   sch := src_img.NChannels;
@@ -74,11 +74,11 @@ Begin
     cvCopy(src_img, dst_img[0], NIL)
   else
     cvSplit(src_img, dst_img[0], dst_img[1], dst_img[2], dst_img[3]);
-  cvSet(hist_img, cvScalarAll(255), 0);
+  cvSet(hist_img, cvScalarAll(255), nil);
   for i := 0 to sch - 1 do
   begin
     cvCalcHist(dst_img[i], Hist, 0, NIL);
-    cvGetMinMaxHistValue(Hist, 0, @max_value, 0, 0);
+    cvGetMinMaxHistValue(Hist, nil, @max_value, nil, nil);
     cvConvertScale(Hist.bins, Hist.bins, (hist_img.Height / max_value), 0);
     bin_w := cvRound(ch_width / hist_size);
     for j := 0 to hist_size - 1 do

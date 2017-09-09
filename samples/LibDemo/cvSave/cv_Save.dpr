@@ -44,7 +44,7 @@ const
 var
   kernel: array [0 .. 8] of Single;
   kernel_matrix: TCvMat;
-  i: Integer;
+  i: NativeInt;
   j: Integer;
   matrix: pCvMat;
   ptr: pSingle;
@@ -96,7 +96,7 @@ begin
     // 3 вариант: прямой доcтуп к элементам
     for i := 0 to matrix^.rows - 1 do
     begin
-      ptr := pSingle((Integer(matrix^.data) + i * matrix^.step));
+      ptr := pSingle((NativeInt(matrix^.data.ptr) + i * matrix^.step));
       for j := 0 to matrix^.cols - 1 do
         Write(Format('%.0f ', [ptr[j]]));
       Writeln;
