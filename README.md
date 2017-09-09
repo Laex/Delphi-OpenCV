@@ -1,5 +1,5 @@
 #Delphi-OpenCV
-* OpenCV version - 2.4.13.2<br>
+* OpenCV version - 2.4.13.3<br>
 * Development environment - Delphi 2010-10.2<br>
 
 <b>Contributors:</b>
@@ -14,7 +14,7 @@ Files: msvcp140.dll, msvcp140d.dll in "Delphi-OpenCV\redist\" or [here][2]
 (1) 32-bit in the "Delphi-OpenCV\redist\VC14x86\"
 (2) 64-bit in the "Delphi-OpenCV\redist\VC14x64\"
 ```
-* Shared library FFMPEG 3.3.1 for Windows can be downloaded from [here][5]<br>
+* Shared library FFMPEG 3.3.3 for Windows can be downloaded from [here][5]<br>
 ```
 (3) FFmpeg 32-bit Shared
 (4) FFmpeg 64-bit Shared

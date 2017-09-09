@@ -826,17 +826,6 @@ Type
     angle: Single; (* Angle between the horizontal axis *)
   end;
 
-  pCvNArrayIterator = ^TCvNArrayIterator;
-
-  TCvNArrayIterator = record
-    count: Integer; // number of arrays
-    dims: Integer; // number of dimensions to iterate
-    size: TCvSize; // maximal common linear size: { width = size, height = 1 }
-    ptr: Array [0 .. CV_MAX_ARR - 1] of ^uchar; // pointers to the array slices
-    stack: Array [0 .. CV_MAX_DIM - 1] of Integer; // for internal use
-    hdr: Array [0 .. CV_MAX_ARR - 1] of ^TCvMatND; // pointers to the headers of the
-  end;
-
   (* Line iterator state: *)
 type
   pCvLineIterator = ^TCvLineIterator;

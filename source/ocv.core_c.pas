@@ -222,6 +222,8 @@ procedure cvDecRefData(arr: pCvArr); inline;
 // return refcount;
 // }
 
+function cvIncRefData(arr: pCvArr): Integer; inline;
+
 { Creates an exact copy of the input matrix (except, may be, step value)
   CVAPI(CvMat*) cvCloneMat( const CvMat* mat );
 }
@@ -352,6 +354,18 @@ function cvGetNextSparseNode(mat_iterator: pCvSparseMatIterator): pCvSparseNode;
 {$ENDIF}
 // **************** matrix iterator: used for n-ary operations on dense arrays *********
 
+Type
+  pCvNArrayIterator = ^TCvNArrayIterator;
+
+  TCvNArrayIterator = record
+    count: Integer; // number of arrays
+    dims: Integer; // number of dimensions to iterate
+    size: TCvSize; // maximal common linear size: { width = size, height = 1 }
+    ptr: Array [0 .. CV_MAX_ARR - 1] of ^uchar; // pointers to the array slices
+    stack: Array [0 .. CV_MAX_DIM - 1] of Integer; // for internal use
+    hdr: Array [0 .. CV_MAX_ARR - 1] of ^TCvMatND; // pointers to the headers of the
+  end;
+
 const
   CV_NO_DEPTH_CHECK = 1;
 {$EXTERNALSYM CV_NO_DEPTH_CHECK}
@@ -448,10 +462,10 @@ function cvGetND(const arr: pCvArr; idx: pInteger): TCvScalar; cdecl;
   CVAPI(double) cvGetRealND( const pCvArr* arr, const int* idx );
 }
 {$EXTERNALSYM cvGetReal1D}
-//function cvGetReal1D(const arr: pIplImage; idx0: Integer): double; cdecl; overload;
+// function cvGetReal1D(const arr: pIplImage; idx0: Integer): double; cdecl; overload;
 function cvGetReal1D(const arr: pCvArr; idx0: Integer): double; cdecl; overload;
 {$EXTERNALSYM cvGetReal2D}
-//function cvGetReal2D(const arr: pCvMat; idx0, idx1: Integer): double; cdecl; overload;
+// function cvGetReal2D(const arr: pCvMat; idx0, idx1: Integer): double; cdecl; overload;
 function cvGetReal2D(const arr: pCvArr; idx0, idx1: Integer): double; cdecl; overload;
 {$EXTERNALSYM cvGetReal3D}
 function cvGetReal3D(const arr: pCvArr; idx0, idx1, idx2: Integer): double; cdecl;
@@ -587,7 +601,7 @@ function cvGetSize(const arr: pCvArr): TCvSize; {$IF DEFINED(DelphiOCVVersion_30
 }
 
 procedure cvCopy(const src: pCvArr; dst: pCvArr; const mask: pCvArr = nil); cdecl; overload;
-//procedure cvCopy(const src: pIplImage; dst: pIplImage; const mask: pIplImage = nil); cdecl; overload;
+// procedure cvCopy(const src: pIplImage; dst: pIplImage; const mask: pIplImage = nil); cdecl; overload;
 
 { Sets all or "masked" elements of input array
   to the same value
@@ -611,7 +625,7 @@ procedure cvZero(arr: pCvArr); cdecl;
   CVAPI(void)  cvSplit( const pCvArr* src, pCvArr* dst0, pCvArr* dst1,
   pCvArr* dst2, pCvArr* dst3 );
 }
-procedure cvSplit(const src: pCvArr; dst0: pCvArr; dst1: pCvArr; dst2: pCvArr=nil; dst3: pCvArr=nil); cdecl;
+procedure cvSplit(const src: pCvArr; dst0: pCvArr; dst1: pCvArr; dst2: pCvArr = nil; dst3: pCvArr = nil); cdecl;
 
 { Merges a set of single-channel arrays into the single multi-channel array
   or inserts one particular [color] plane to the array */
@@ -619,8 +633,8 @@ procedure cvSplit(const src: pCvArr; dst0: pCvArr; dst1: pCvArr; dst2: pCvArr=ni
   const pCvArr* src2, const pCvArr* src3,
   pCvArr* dst );
 }
-//procedure cvMerge(const src0: pIplImage; const src1: pIplImage; const src2: pIplImage; const src3: pIplImage; dst: pIplImage);
-//  cdecl; overload;
+// procedure cvMerge(const src0: pIplImage; const src1: pIplImage; const src2: pIplImage; const src3: pIplImage; dst: pIplImage);
+// cdecl; overload;
 procedure cvMerge(const src0: pCvArr; const src1: pCvArr; const src2: pCvArr; const src3: pCvArr; dst: pCvArr); cdecl; overload;
 
 { Copies several channels from input arrays to
@@ -682,7 +696,7 @@ function cvCheckTermCriteria(criteria: TCvTermCriteria; default_eps: double; def
   CVAPI(void)  cvAdd( const pCvArr* src1, const pCvArr* src2, pCvArr* dst,
   const pCvArr* mask CV_DEFAULT(NULL));
 }
-//procedure cvAdd(const src1, src2: pIplImage; dst: pIplImage; const mask: pIplImage = nil); cdecl; overload;
+// procedure cvAdd(const src1, src2: pIplImage; dst: pIplImage; const mask: pIplImage = nil); cdecl; overload;
 procedure cvAdd(const src1, src2: pCvArr; dst: pCvArr; const mask: pCvArr = nil); cdecl; overload;
 
 {
@@ -690,7 +704,7 @@ procedure cvAdd(const src1, src2: pCvArr; dst: pCvArr; const mask: pCvArr = nil)
   CVAPI(void)  cvAddS( const pCvArr* src, CvScalar value, pCvArr* dst,
   const pCvArr* mask CV_DEFAULT(NULL));
 }
-//procedure cvAddS(const src: pIplImage; value: TCvScalar; dst: pIplImage; const mask: pIplImage = nil); cdecl; overload;
+// procedure cvAddS(const src: pIplImage; value: TCvScalar; dst: pIplImage; const mask: pIplImage = nil); cdecl; overload;
 procedure cvAddS(const src: pCvArr; value: TCvScalar; dst: pCvArr; const mask: pCvArr = nil); cdecl; overload;
 
 {
@@ -698,7 +712,7 @@ procedure cvAddS(const src: pCvArr; value: TCvScalar; dst: pCvArr; const mask: p
   CVAPI(void)  cvSub( const pCvArr* src1, const pCvArr* src2, pCvArr* dst,
   const pCvArr* mask CV_DEFAULT(NULL));
 }
-//procedure cvSub(const src1, src2: pIplImage; dst: pIplImage; const mask: pIplImage = nil); cdecl; overload;
+// procedure cvSub(const src1, src2: pIplImage; dst: pIplImage; const mask: pIplImage = nil); cdecl; overload;
 procedure cvSub(const src1, src2: pCvArr; dst: pCvArr; const mask: pCvArr = nil); cdecl; overload;
 
 // dst(mask) = src(mask) - value = src(mask) + (-value)
@@ -708,8 +722,8 @@ procedure cvSub(const src1, src2: pCvArr; dst: pCvArr; const mask: pCvArr = nil)
 // cvAddS( src, cvScalar( -value.val[0], -value.val[1], -value.val[2], -value.val[3]),
 // dst, mask );
 // }
-//procedure cvSubS(const src: pIplImage; value: TCvScalar; dst: pIplImage; const mask: pIplImage = nil);
-//{$IFDEF USE_INLINE} inline; {$ENDIF} overload;
+// procedure cvSubS(const src: pIplImage; value: TCvScalar; dst: pIplImage; const mask: pIplImage = nil);
+// {$IFDEF USE_INLINE} inline; {$ENDIF} overload;
 procedure cvSubS(const src: pCvArr; value: TCvScalar; dst: pCvArr; const mask: pCvArr = nil);
 {$IFDEF USE_INLINE} inline; {$ENDIF} overload;
 { dst(mask) = value - src(mask)
@@ -717,7 +731,7 @@ procedure cvSubS(const src: pCvArr; value: TCvScalar; dst: pCvArr; const mask: p
   const pCvArr* mask CV_DEFAULT(NULL));
 }
 
-//procedure cvSubRS(const src: pIplImage; value: TCvScalar; dst: pIplImage; const mask: pIplImage = nil); cdecl; overload;
+// procedure cvSubRS(const src: pIplImage; value: TCvScalar; dst: pIplImage; const mask: pIplImage = nil); cdecl; overload;
 procedure cvSubRS(const src: pCvArr; value: TCvScalar; dst: pCvArr; const mask: pCvArr = nil); cdecl; overload;
 
 { dst(idx) = src1(idx) * src2(idx) * scale
@@ -725,7 +739,7 @@ procedure cvSubRS(const src: pCvArr; value: TCvScalar; dst: pCvArr; const mask: 
   CVAPI(void)  cvMul( const pCvArr* src1, const pCvArr* src2,
   pCvArr* dst, double scale CV_DEFAULT(1) );
 }
-//procedure cvMul(const src1, src2: pIplImage; dst: pIplImage; scale: double = 1); cdecl; overload;
+// procedure cvMul(const src1, src2: pIplImage; dst: pIplImage; scale: double = 1); cdecl; overload;
 procedure cvMul(const src1, src2: pCvArr; dst: pCvArr; scale: double = 1); cdecl; overload;
 
 { element-wise division/inversion with scaling:
@@ -734,7 +748,7 @@ procedure cvMul(const src1, src2: pCvArr; dst: pCvArr; scale: double = 1); cdecl
   CVAPI(void)  cvDiv( const pCvArr* src1, const pCvArr* src2,
   pCvArr* dst, double scale CV_DEFAULT(1));
 }
-//procedure cvDiv(const src1, src2: pIplImage; dst: pIplImage; scale: double = 1); cdecl; overload;
+// procedure cvDiv(const src1, src2: pIplImage; dst: pIplImage; scale: double = 1); cdecl; overload;
 procedure cvDiv(const src1, src2: pCvArr; dst: pCvArr; scale: double = 1); cdecl; overload;
 
 { dst = src1 * scale + src2
@@ -742,7 +756,7 @@ procedure cvDiv(const src1, src2: pCvArr; dst: pCvArr; scale: double = 1); cdecl
   const pCvArr* src2, pCvArr* dst );
   #define cvAXPY( A, real_scalar, B, C ) cvScaleAdd(A, cvRealScalar(real_scalar), B, C)
 }
-//procedure cvScaleAdd(const src1: pIplImage; scale: TCvScalar; const src2: pIplImage; dst: pIplImage); cdecl; overload;
+// procedure cvScaleAdd(const src1: pIplImage; scale: TCvScalar; const src2: pIplImage; dst: pIplImage); cdecl; overload;
 procedure cvScaleAdd(const src1: pCvArr; scale: TCvScalar; const src2: pCvArr; dst: pCvArr); cdecl; overload;
 
 procedure cvAXPY(A: pIplImage; real_scalar: double; B, C: pIplImage); {$IFDEF USE_INLINE} inline; {$ENDIF} overload;
@@ -753,8 +767,8 @@ procedure cvAXPY(A: pCvArr; real_scalar: double; B, C: pCvArr); {$IFDEF USE_INLI
   double gamma, pCvArr* dst );
 }
 
-//procedure cvAddWeighted(const src1: pIplImage; alpha: double; const src2: pIplImage; beta: double; gamma: double; dst: pIplImage);
-//  cdecl; overload;
+// procedure cvAddWeighted(const src1: pIplImage; alpha: double; const src2: pIplImage; beta: double; gamma: double; dst: pIplImage);
+// cdecl; overload;
 procedure cvAddWeighted(const src1: pCvArr; alpha: double; const src2: pCvArr; beta: double; gamma: double; dst: pCvArr); cdecl; overload;
 
 { result = sum_i(src1(i) * src2(i)) (results for all channels are accumulated together)
@@ -766,7 +780,7 @@ function cvDotProduct(const src1, src2: pCvArr): double; cdecl;
   CVAPI(void) cvAnd( const pCvArr* src1, const pCvArr* src2,
   pCvArr* dst, const pCvArr* mask CV_DEFAULT(NULL));
 }
-//procedure cvAnd(const src1: pIplImage; const src2: pIplImage; dst: pIplImage; masl: pIplImage = nil); cdecl; overload;
+// procedure cvAnd(const src1: pIplImage; const src2: pIplImage; dst: pIplImage; masl: pIplImage = nil); cdecl; overload;
 procedure cvAnd(const src1: pCvArr; const src2: pCvArr; dst: pCvArr; masl: pCvArr = nil); cdecl; overload;
 
 (* dst(idx) = src(idx) & value *)
@@ -805,7 +819,7 @@ procedure cvXor(const src1, src2: pCvArr; dst: pCvArr; const mask: pCvArr = nil)
 { dst(idx) = src(idx) ^ value
   CVAPI(void) cvXorS( const pCvArr* src, CvScalar value, pCvArr* dst, const pCvArr* mask CV_DEFAULT(NULL));
 }
-//procedure cvXorS(const src: pIplImage; value: TCvScalar; dst: pIplImage; const mask: pCvArr = nil); cdecl; overload;
+// procedure cvXorS(const src: pIplImage; value: TCvScalar; dst: pIplImage; const mask: pCvArr = nil); cdecl; overload;
 procedure cvXorS(const src: pCvArr; value: TCvScalar; dst: pCvArr; const mask: pCvArr = nil); cdecl; overload;
 
 { dst(idx) = ~src(idx) */
@@ -816,13 +830,13 @@ procedure cvNot(const src: pCvArr; dst: pCvArr); cdecl;
 { dst(idx) = lower(idx) <= src(idx) < upper(idx)
   CVAPI(void) cvInRange( const pCvArr* src, const pCvArr* lower, const pCvArr* upper, pCvArr* dst );
 }
-//procedure cvInRange(const src: pIplImage; const lower: pIplImage; const upper: pIplImage; dst: pIplImage); cdecl; overload;
+// procedure cvInRange(const src: pIplImage; const lower: pIplImage; const upper: pIplImage; dst: pIplImage); cdecl; overload;
 procedure cvInRange(const src: pCvArr; const lower: pCvArr; const upper: pCvArr; dst: pCvArr); cdecl; overload;
 
 { dst(idx) = lower <= src(idx) < upper
   CVAPI(void) cvInRangeS( const pCvArr* src, CvScalar lower, CvScalar upper, pCvArr* dst );
 }
-//procedure cvInRangeS(const src: pIplImage; lower: TCvScalar; upper: TCvScalar; dst: pIplImage); cdecl; overload;
+// procedure cvInRangeS(const src: pIplImage; lower: TCvScalar; upper: TCvScalar; dst: pIplImage); cdecl; overload;
 procedure cvInRangeS(const src: pCvArr; lower: TCvScalar; upper: TCvScalar; dst: pCvArr); cdecl; overload;
 
 const
@@ -981,9 +995,9 @@ const
   // int tABC CV_DEFAULT(0));
 procedure cvGEMM(const src1: pCvArr; const src2: pCvArr; alpha: double; const src3: pCvArr; beta: double; dst: pCvArr;
   tABC: Integer = 0); cdecl;
-
-
 // #define cvMatMulAddEx cvGEMM
+procedure cvMatMulAddEx(const src1: pCvArr; const src2: pCvArr; alpha: double; const src3: pCvArr; beta: double; dst: pCvArr;
+  tABC: Integer = 0); cdecl;
 
 const
   CV_LU = 0;
@@ -1009,22 +1023,19 @@ function cvSolve(const src1: pCvArr; const src2: pCvArr; dst: pCvArr; method: In
 
 (*
   Calculates determinant of input matrix
-
   CVAPI(double) cvDet( const CvArr* mat );
 *)
 function cvDet(const mat: pCvArr): double; cdecl;
 
 (*
   Calculates trace of the matrix (sum of elements on the main diagonal)
-
   CVAPI(CvScalar) cvTrace( const CvArr* mat );
 *)
 function cvTrace(const mat: pCvArr): TCvScalar; cdecl;
 
 (*
   Finds eigen values and vectors of a symmetric matrix
-*)
-(*
+
   CVAPI(void)  cvEigenVV( CvArr* mat, CvArr* evects, CvArr* evals,
   double eps CV_DEFAULT(0),
   int lowindex CV_DEFAULT(-1),
@@ -1036,8 +1047,7 @@ procedure cvEigenVV(mat: pCvArr; evects: pCvArr; evals: pCvArr; eps: double = 0;
 // int lowindex, int highindex );
 (*
   Makes an identity matrix (mat_ij = i == j)
-*)
-(*
+
   CVAPI(void)  cvSetIdentity( CvArr* mat, CvScalar value CV_DEFAULT(cvRealScalar(1)) );
 *)
 
@@ -1058,40 +1068,27 @@ function cvRange(mat: pCvArr; start: double; end_: double): pCvArr; cdecl;
 
 const
   CV_COVAR_SCRAMBLED = 0;
-  (*
-    [v1-avg, v2-avg,...] * transpose([v1-avg,v2-avg,...])
-  *)
-  CV_COVAR_NORMAL = 1;
-  (*
-    do not calc average (i.e. mean vector) - use the input vector instead
-    (useful for calculating covariance matrix by parts)
-  *)
-  CV_COVAR_USE_AVG = 2;
-  (*
-    scale the covariance matrix coefficients by number of the vectors
-  *)
-  CV_COVAR_SCALE = 4;
-  (*
-    all the input vectors are stored in a single matrix, as its rows
-  *)
-  CV_COVAR_ROWS = 8;
-  (*
-    all the input vectors are stored in a single matrix, as its columns
-  *)
-  CV_COVAR_COLS = 16;
+  CV_COVAR_NORMAL = 1; // [v1-avg, v2-avg,...] * transpose([v1-avg,v2-avg,...])
+  CV_COVAR_USE_AVG = 2; // do not calc average (i.e. mean vector) - use the input vector instead
+  /// //////////////////// (useful for calculating covariance matrix by parts)
+  CV_COVAR_SCALE = 4; // scale the covariance matrix coefficients by number of the vectors
+  CV_COVAR_ROWS = 8; // all the input vectors are stored in a single matrix, as its rows
+  CV_COVAR_COLS = 16; // all the input vectors are stored in a single matrix, as its columns
+
   (*
     CVAPI(void)  cvCalcCovarMatrix( const CvArr** vects, int count,
     CvArr* cov_mat, CvArr* avg, int flags );
   *)
-
 procedure cvCalcCovarMatrix(const vects: pCvArrArray; count: Integer; cov_mat: pCvArr; avg: pCvArr; flags: Integer); cdecl;
-// #define CV_PCA_DATA_AS_ROW 0
-// #define CV_PCA_DATA_AS_COL 1
-// #define CV_PCA_USE_AVG 2
-(*
-  CVAPI(void)  cvCalcPCA( const CvArr* data, CvArr* mean,
-  CvArr* eigenvals, CvArr* eigenvects, int flags );
-*)
+
+const
+  CV_PCA_DATA_AS_ROW = 0; // #define CV_PCA_DATA_AS_ROW 0
+  CV_PCA_DATA_AS_COL = 1; // #define CV_PCA_DATA_AS_COL 1
+  CV_PCA_USE_AVG = 2; // #define CV_PCA_USE_AVG 2
+  (*
+    CVAPI(void)  cvCalcPCA( const CvArr* data, CvArr* mean,
+    CvArr* eigenvals, CvArr* eigenvects, int flags );
+  *)
 
 procedure cvCalcPCA(const data: pCvArr; mean: pCvArr; eigenvals: pCvArr; eigenvects: pCvArr; flags: Integer); cdecl;
 (*
@@ -1133,7 +1130,7 @@ function cvSum(const arr: pCvArr): TCvScalar; cdecl;
 { Calculates number of non-zero pixels
   CVAPI(Integer)cvCountNonZero(pCvArr * arr);
 }
-//function cvCountNonZero(arr: pIplImage): Integer; cdecl; overload;
+// function cvCountNonZero(arr: pIplImage): Integer; cdecl; overload;
 function cvCountNonZero(arr: pCvArr): Integer; cdecl; overload;
 
 // * Calculates mean and standard deviation of pixel values */
@@ -1142,8 +1139,8 @@ procedure cvAvgSdv(const arr: pCvArr; mean: pCvScalar; std_dev: pCvScalar; const
 { Finds global minimum, maximum and their positions
   CVAPI(void)  cvMinMaxLoc(const pCvArr* arr, double* min_val, double* max_val, CvPoint* min_loc CV_DEFAULT(NULL), CvPoint* max_loc CV_DEFAULT(NULL), const pCvArr* mask CV_DEFAULT(NULL) );
 }
-//procedure cvMinMaxLoc(const arr: pIplImage; min_val: pDouble; max_val: pDouble; min_loc: pCVPoint = nil; max_loc: pCVPoint = nil;
-//  const mask: pIplImage = nil); cdecl; overload;
+// procedure cvMinMaxLoc(const arr: pIplImage; min_val: pDouble; max_val: pDouble; min_loc: pCVPoint = nil; max_loc: pCVPoint = nil;
+// const mask: pIplImage = nil); cdecl; overload;
 procedure cvMinMaxLoc(const arr: pCvArr; min_val: pDouble; max_val: pDouble; min_loc: pCVPoint = nil; max_loc: pCVPoint = nil;
   const mask: pCvArr = nil); cdecl; overload;
 
@@ -1178,7 +1175,6 @@ const
   // CVAPI(void)  cvDFT( const CvArr* src, CvArr* dst, int flags, int nonzero_rows CV_DEFAULT(0) );
 
 procedure cvDFT(const src: pCvArr; dst: pCvArr; flags: Integer; nonzero_rows: Integer = 0); cdecl;
-
 procedure cvFFT(const src: pCvArr; dst: pCvArr; flags: Integer; nonzero_rows: Integer = 0); cdecl;
 
 // #define cvFFT cvDFT
@@ -2303,11 +2299,13 @@ procedure cvReleaseMat; external core_lib;
 function cvCloneMat; external core_lib;
 function cvGetSubRect; external core_lib;
 procedure cvGetSubArr; external core_lib name 'cvGetSubRect';
+
 function cvGetRow(const arr: pCvArr; submat: pCvMat; row: Integer): pCvMat;
 begin
   result := cvGetRows(arr, submat, row, row + 1, 1);
 end;
 function cvGetCols; external core_lib;
+
 function cvGetCol(const arr: pCvArr; submat: pCvMat; col: Integer): pCvMat;
 begin
   result := cvGetCols(arr, submat, col, col + 1);
@@ -2412,10 +2410,10 @@ function cvGet3D; external core_lib;
 
 function cvGetND; external core_lib;
 
-//function cvGetReal1D(const arr: pIplImage; idx0: Integer): double; cdecl; external core_lib; overload;
+// function cvGetReal1D(const arr: pIplImage; idx0: Integer): double; cdecl; external core_lib; overload;
 function cvGetReal1D(const arr: pCvArr; idx0: Integer): double; cdecl; external core_lib; overload;
 
-//function cvGetReal2D(const arr: pCvMat; idx0, idx1: Integer): double; cdecl; external core_lib; overload;
+// function cvGetReal2D(const arr: pCvMat; idx0, idx1: Integer): double; cdecl; external core_lib; overload;
 function cvGetReal2D(const arr: pCvArr; idx0, idx1: Integer): double; cdecl; external core_lib; overload;
 
 function cvGetReal3D; external core_lib;
@@ -2503,7 +2501,7 @@ function cvGetSize(const arr: pCvArr): TCvSize; external core_lib;
 {$ENDIF}
 // procedure cvCopy; external core_lib;
 procedure cvCopy(const src: pCvArr; dst: pCvArr; const mask: pCvArr = nil); cdecl; external core_lib; overload;
-//procedure cvCopy(const src: pIplImage; dst: pIplImage; const mask: pIplImage = nil); cdecl; external core_lib; overload;
+// procedure cvCopy(const src: pIplImage; dst: pIplImage; const mask: pIplImage = nil); cdecl; external core_lib; overload;
 
 procedure cvSet(arr: pCvArr; value: TCvScalar; const mask: pCvArr = Nil); external core_lib;
 
@@ -2527,8 +2525,8 @@ procedure cvZero; external core_lib name 'cvSetZero';
 
 procedure cvSplit; external core_lib;
 
-//procedure cvMerge(const src0: pIplImage; const src1: pIplImage; const src2: pIplImage; const src3: pIplImage; dst: pIplImage); cdecl;
-//  external core_lib; overload;
+// procedure cvMerge(const src0: pIplImage; const src1: pIplImage; const src2: pIplImage; const src3: pIplImage; dst: pIplImage); cdecl;
+// external core_lib; overload;
 procedure cvMerge(const src0: pCvArr; const src1: pCvArr; const src2: pCvArr; const src3: pCvArr; dst: pCvArr); cdecl;
   external core_lib; overload;
 
@@ -2552,15 +2550,15 @@ procedure cvCvtScaleAbs; external core_lib name 'cvConvertScaleAbs';
 function cvCheckTermCriteria; external core_lib;
 
 // procedure cvAdd; external core_lib;
-//procedure cvAdd(const src1, src2: pIplImage; dst: pIplImage; const mask: pIplImage = nil); cdecl; external core_lib; overload;
+// procedure cvAdd(const src1, src2: pIplImage; dst: pIplImage; const mask: pIplImage = nil); cdecl; external core_lib; overload;
 procedure cvAdd(const src1, src2: pCvArr; dst: pCvArr; const mask: pCvArr = nil); cdecl; external core_lib; overload;
 
 // procedure cvAddS; external core_lib;
-//procedure cvAddS(const src: pIplImage; value: TCvScalar; dst: pIplImage; const mask: pIplImage = nil); cdecl; external core_lib; overload;
+// procedure cvAddS(const src: pIplImage; value: TCvScalar; dst: pIplImage; const mask: pIplImage = nil); cdecl; external core_lib; overload;
 procedure cvAddS(const src: pCvArr; value: TCvScalar; dst: pCvArr; const mask: pCvArr = nil); cdecl; external core_lib; overload;
 
 // procedure cvSub; external core_lib;
-//procedure cvSub(const src1, src2: pIplImage; dst: pIplImage; const mask: pIplImage = nil); cdecl; external core_lib; overload;
+// procedure cvSub(const src1, src2: pIplImage; dst: pIplImage; const mask: pIplImage = nil); cdecl; external core_lib; overload;
 procedure cvSub(const src1, src2: pCvArr; dst: pCvArr; const mask: pCvArr = nil); cdecl; external core_lib; overload;
 
 procedure cvSubS(const src: pCvArr; value: TCvScalar; dst: pCvArr; const mask: pCvArr); overload;
@@ -2574,19 +2572,19 @@ begin
 end;
 
 // procedure cvSubRS; external core_lib;
-//procedure cvSubRS(const src: pIplImage; value: TCvScalar; dst: pIplImage; const mask: pIplImage = nil); cdecl; external core_lib; overload;
+// procedure cvSubRS(const src: pIplImage; value: TCvScalar; dst: pIplImage; const mask: pIplImage = nil); cdecl; external core_lib; overload;
 procedure cvSubRS(const src: pCvArr; value: TCvScalar; dst: pCvArr; const mask: pCvArr = nil); cdecl; external core_lib; overload;
 
 // procedure cvMul; external core_lib;
-//procedure cvMul(const src1, src2: pIplImage; dst: pIplImage; scale: double = 1); cdecl; external core_lib; overload;
+// procedure cvMul(const src1, src2: pIplImage; dst: pIplImage; scale: double = 1); cdecl; external core_lib; overload;
 procedure cvMul(const src1, src2: pCvArr; dst: pCvArr; scale: double = 1); cdecl; external core_lib; overload;
 
 // procedure cvDiv; external core_lib;
-//procedure cvDiv(const src1, src2: pIplImage; dst: pIplImage; scale: double = 1); cdecl; external core_lib; overload;
+// procedure cvDiv(const src1, src2: pIplImage; dst: pIplImage; scale: double = 1); cdecl; external core_lib; overload;
 procedure cvDiv(const src1, src2: pCvArr; dst: pCvArr; scale: double = 1); cdecl; external core_lib; overload;
 
 // procedure cvScaleAdd; external core_lib;
-//procedure cvScaleAdd(const src1: pIplImage; scale: TCvScalar; const src2: pIplImage; dst: pIplImage); cdecl; external core_lib; overload;
+// procedure cvScaleAdd(const src1: pIplImage; scale: TCvScalar; const src2: pIplImage; dst: pIplImage); cdecl; external core_lib; overload;
 procedure cvScaleAdd(const src1: pCvArr; scale: TCvScalar; const src2: pCvArr; dst: pCvArr); cdecl; external core_lib; overload;
 
 // define cvAXPY( A, real_scalar, B, C ) cvScaleAdd(A, cvRealScalar(real_scalar), B, C)
@@ -2601,8 +2599,8 @@ begin
 end;
 
 // procedure cvAddWeighted; external core_lib;
-//procedure cvAddWeighted(const src1: pIplImage; alpha: double; const src2: pIplImage; beta: double; gamma: double; dst: pIplImage); cdecl;
-//  external core_lib; overload;
+// procedure cvAddWeighted(const src1: pIplImage; alpha: double; const src2: pIplImage; beta: double; gamma: double; dst: pIplImage); cdecl;
+// external core_lib; overload;
 procedure cvAddWeighted(const src1: pCvArr; alpha: double; const src2: pCvArr; beta: double; gamma: double; dst: pCvArr); cdecl;
   external core_lib; overload;
 
@@ -2646,22 +2644,22 @@ end;
 function cvLoad; external core_lib;
 
 // procedure cvInRange; external core_lib;
-//procedure cvInRange(const src: pIplImage; const lower: pIplImage; const upper: pIplImage; dst: pIplImage); cdecl;
-//  external core_lib; overload;
+// procedure cvInRange(const src: pIplImage; const lower: pIplImage; const upper: pIplImage; dst: pIplImage); cdecl;
+// external core_lib; overload;
 procedure cvInRange(const src: pCvArr; const lower: pCvArr; const upper: pCvArr; dst: pCvArr); cdecl; external core_lib; overload;
 
 // procedure cvInRangeS; external core_lib;
-//procedure cvInRangeS(const src: pIplImage; lower: TCvScalar; upper: TCvScalar; dst: pIplImage); cdecl; external core_lib; overload;
+// procedure cvInRangeS(const src: pIplImage; lower: TCvScalar; upper: TCvScalar; dst: pIplImage); cdecl; external core_lib; overload;
 procedure cvInRangeS(const src: pCvArr; lower: TCvScalar; upper: TCvScalar; dst: pCvArr); cdecl; external core_lib; overload;
 
 // procedure cvMinMaxLoc; external core_lib;
-//procedure cvMinMaxLoc(const arr: pIplImage; min_val: pDouble; max_val: pDouble; min_loc: pCVPoint = nil; max_loc: pCVPoint = nil;
-//  const mask: pIplImage = nil); cdecl; external core_lib; overload;
+// procedure cvMinMaxLoc(const arr: pIplImage; min_val: pDouble; max_val: pDouble; min_loc: pCVPoint = nil; max_loc: pCVPoint = nil;
+// const mask: pIplImage = nil); cdecl; external core_lib; overload;
 procedure cvMinMaxLoc(const arr: pCvArr; min_val: pDouble; max_val: pDouble; min_loc: pCVPoint = nil; max_loc: pCVPoint = nil;
   const mask: pCvArr = nil); cdecl; external core_lib; overload;
 
 // procedure cvAnd; external core_lib;
-//procedure cvAnd(const src1: pIplImage; const src2: pIplImage; dst: pIplImage; masl: pIplImage = nil); cdecl; external core_lib; overload;
+// procedure cvAnd(const src1: pIplImage; const src2: pIplImage; dst: pIplImage; masl: pIplImage = nil); cdecl; external core_lib; overload;
 procedure cvAnd(const src1: pCvArr; const src2: pCvArr; dst: pCvArr; masl: pCvArr = nil); cdecl; external core_lib; overload;
 
 procedure cvCvtPixToPlane; external core_lib name 'cvSplit';
@@ -2741,7 +2739,7 @@ procedure cvOr; external core_lib;
 procedure cvXor; external core_lib;
 
 // procedure cvXorS; external core_lib;
-//procedure cvXorS(const src: pIplImage; value: TCvScalar; dst: pIplImage; const mask: pCvArr = nil); cdecl; external core_lib; overload;
+// procedure cvXorS(const src: pIplImage; value: TCvScalar; dst: pIplImage; const mask: pCvArr = nil); cdecl; external core_lib; overload;
 procedure cvXorS(const src: pCvArr; value: TCvScalar; dst: pCvArr; const mask: pCvArr = nil); cdecl; external core_lib; overload;
 
 procedure cvNot; external core_lib;
@@ -2755,7 +2753,7 @@ begin
   Pointer(ptr) := nil;
 end;
 
-//function cvCountNonZero(arr: pIplImage): Integer; cdecl; external core_lib; overload;
+// function cvCountNonZero(arr: pIplImage): Integer; cdecl; external core_lib; overload;
 function cvCountNonZero(arr: pCvArr): Integer; cdecl; external core_lib; overload;
 
 function cvGet(const mat: pCvMat; i, j: Integer): Single; {$IFDEF USE_INLINE} inline; {$ENDIF}
@@ -2898,6 +2896,7 @@ begin
 end;
 
 procedure cvGEMM; external core_lib;
+procedure cvMatMulAddEx; external core_lib name 'cvGEMM';
 
 function cvInvert; external core_lib;
 
@@ -3200,6 +3199,39 @@ begin
       end;
     end;
   end;
+end;
+
+function cvIncRefData(arr: pCvArr): Integer; inline;
+Var
+  mat: pCvMat;
+  matND: pCvMatND;
+begin
+  if CV_IS_MAT(arr) then
+  begin
+    // CvMat* mat = (CvMat*)arr;
+    mat := arr;
+    // if( mat->refcount != NULL )
+    // refcount = ++*mat->refcount;
+    if Assigned(mat^.refcount) then
+    begin
+      Inc(mat^.refcount^);
+      result := mat^.refcount^;
+    end;
+  end
+  else if CV_IS_MATND(arr) then
+  begin
+    // CvMatND* mat = (CvMatND*)arr;
+    matND := arr;
+    // if( mat->refcount != NULL )
+    // refcount = ++*mat->refcount;
+    if Assigned(matND^.refcount) then
+    begin
+      Inc(matND^.refcount^);
+      result := matND^.refcount^;
+    end;
+  end
+  else
+    result := 0;
 end;
 
 end.
