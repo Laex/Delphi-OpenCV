@@ -9,6 +9,7 @@ Uses
 {$IFDEF HAS_UNITSCOPE}
   System.SysUtils,
   System.Classes,
+  System.AnsiStrings,
 {$ELSE}
   SysUtils,
   Classes,
@@ -35,8 +36,8 @@ Type
   end;
 
   TocvOnGetVideoFileName = procedure(Sender: TObject; Var AFileName: string) of object;
-  TocvOnGetVideoParams = procedure(Sender: TObject; Var FrameWidth, FrameHeight: Integer; Var VideoFPS: Double;
-    Var CodecFourCC: AnsiString) of object;
+  TocvOnGetVideoParams = procedure(Sender: TObject; Var FrameWidth, FrameHeight: Integer; Var VideoFPS: Double; Var CodecFourCC: AnsiString)
+    of object;
 
   TocvVideoWriter = class(TocvDataReceiver)
   private
@@ -72,7 +73,7 @@ Type
 
 implementation
 
-{TocvVideoWriter}
+{ TocvVideoWriter }
 
 procedure TocvVideoWriter.CloseWriter;
 begin
@@ -147,8 +148,8 @@ begin
 
     try
       if (Length(Trim(FFourCC)) > 3) and (Length(Trim(FileName)) > 0) then
-        FWriter := cvCreateVideoWriter(PAnsiChar(AnsiString(FileName)), CV_FOURCC(FFourCC[1], FFourCC[2], FFourCC[3], FFourCC[4]),
-          FFps, FrameSize.cvFrameSize)
+        FWriter := cvCreateVideoWriter(PAnsiChar(AnsiString(FileName)), CV_FOURCC(FFourCC[1], FFourCC[2], FFourCC[3], FFourCC[4]), FFps,
+          FrameSize.cvFrameSize)
       else
         FWriter := nil;
 
@@ -196,7 +197,7 @@ begin
   end;
 end;
 
-{TocvFrameSize}
+{ TocvFrameSize }
 
 procedure TocvFrameSize.AssignTo(Dest: TPersistent);
 begin

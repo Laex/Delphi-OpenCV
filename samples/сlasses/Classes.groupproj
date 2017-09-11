@@ -9,6 +9,9 @@
         <Projects Include="FaceRecognizer\FaceRecognizer.dproj">
             <Dependencies/>
         </Projects>
+        <Projects Include="Hardware\Hardware.dproj">
+            <Dependencies/>
+        </Projects>
     </ItemGroup>
     <ProjectExtensions>
         <Borland.Personality>Default.Personality.12</Borland.Personality>
@@ -35,14 +38,23 @@
     <Target Name="FaceRecognizer:Make">
         <MSBuild Projects="FaceRecognizer\FaceRecognizer.dproj" Targets="Make"/>
     </Target>
+    <Target Name="Hardware">
+        <MSBuild Projects="Hardware\Hardware.dproj"/>
+    </Target>
+    <Target Name="Hardware:Clean">
+        <MSBuild Projects="Hardware\Hardware.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="Hardware:Make">
+        <MSBuild Projects="Hardware\Hardware.dproj" Targets="Make"/>
+    </Target>
     <Target Name="Build">
-        <CallTarget Targets="ClassTest;FaceRecognizer"/>
+        <CallTarget Targets="ClassTest;FaceRecognizer;Hardware"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="ClassTest:Clean;FaceRecognizer:Clean"/>
+        <CallTarget Targets="ClassTest:Clean;FaceRecognizer:Clean;Hardware:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="ClassTest:Make;FaceRecognizer:Make"/>
+        <CallTarget Targets="ClassTest:Make;FaceRecognizer:Make;Hardware:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>

@@ -98,7 +98,7 @@ type
     procedure LogError( ErrorMessage : string; Location : string );
     procedure LogWarning( WarningMessage : string; Location : string );
     procedure LogStatus( StatusMessage : string; Location : string );
-  published
+//  published
     property ApplicationName : string read GetApplicationName;
     property ApplicationPath : string read GetApplicationPath;
   end;

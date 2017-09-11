@@ -2177,6 +2177,7 @@ const
   CV_CPU_SSE4_2 = 7;
   CV_CPU_POPCNT = 8;
   CV_CPU_AVX = 10;
+  CV_CPU_AVX2 = 11;
   CV_HARDWARE_MAX_FEATURE = 255;
 
   // ********************************** Error Handling **************************************/
@@ -3206,6 +3207,7 @@ Var
   mat: pCvMat;
   matND: pCvMatND;
 begin
+  result := 0;
   if CV_IS_MAT(arr) then
   begin
     // CvMat* mat = (CvMat*)arr;
@@ -3229,9 +3231,7 @@ begin
       Inc(matND^.refcount^);
       result := matND^.refcount^;
     end;
-  end
-  else
-    result := 0;
+  end;
 end;
 
 end.

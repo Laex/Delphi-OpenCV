@@ -7,6 +7,7 @@ Release/
 ipch/
 lib/
 /resource/result/*.*
+CVAutoInstaller/
 
 #Files
 *.exe
@@ -48,5 +49,9 @@ lib/
 *.user
 *.filters
 *.user
-!opencv_classes2413d.dll
-!opencv_classes2413.dll
+!opencv_classes*.dll
+!opencv_classes*.dll
+
+#ResourceFiles
+/resource/stereosample/Aloe/*.png
+/resource/stereosample/Aloe/dmin.txt

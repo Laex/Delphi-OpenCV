@@ -50,9 +50,9 @@ Type
 
   end;
 
-  IRect         = IRect2i;
-  TVectorRect   = TArray<IRect>;
-  TVectorInt    = TArray<integer>;
+  IRect = IRect2i;
+  TVectorRect = TArray<IRect>;
+  TVectorInt = TArray<integer>;
   TVectorDouble = TArray<double>;
 
   (* !
@@ -80,8 +80,8 @@ function setBreakOnError(flag: cbool): cbool; cdecl;
   int line, void* userdata );
 *)
 type
-  TErrorCallback = function(status: integer; const func_name: pAnsiChar; const err_msg: pAnsiChar;
-    const file_name: pAnsiChar; line: integer; userdata: pointer): integer; cdecl;
+  TErrorCallback = function(status: integer; const func_name: pAnsiChar; const err_msg: pAnsiChar; const file_name: pAnsiChar;
+    line: integer; userdata: pointer): integer; cdecl;
   // ! Sets the new error handler and the optional user data.
 
   (* !
@@ -98,14 +98,12 @@ type
 {$IFDEF SAFELOADLIB}
 
 type
-  TRedirectError = function(errCallback: TErrorCallback; userdata: pointer = nil; prevUserdata: PPointer = nil)
-    : TErrorCallback; cdecl;
+  TRedirectError = function(errCallback: TErrorCallback; userdata: pointer = nil; prevUserdata: PPointer = nil): TErrorCallback; cdecl;
 
 var
   redirectError: TRedirectError;
 {$ELSE}
-function redirectError(errCallback: TErrorCallback; userdata: pointer = nil; prevUserdata: PPointer = nil)
-  : TErrorCallback; cdecl;
+function redirectError(errCallback: TErrorCallback; userdata: pointer = nil; prevUserdata: PPointer = nil): TErrorCallback; cdecl;
 {$ENDIF}
 // CV_EXPORTS void glob(String pattern, std::vector<String>& result, bool recursive = false);
 
@@ -327,19 +325,19 @@ Type
 
   IMat = interface(IOCVCommon)
     ['{2CFB1B8E-4D18-4C1D-839F-0AFE4213F57D}']
-    function elemSize(): size_t;            // 0
-    function elemSize1(): size_t;           // 1
-    function _type(): integer;              // 2
-    function depth(): integer;              // 3
-    function channels(): integer;           // 4
+    function elemSize(): size_t; // 0
+    function elemSize1(): size_t; // 1
+    function _type(): integer; // 2
+    function depth(): integer; // 3
+    function channels(): integer; // 4
     function step1(i: integer = 0): size_t; // 5
     function empty(): cbool;
-    function total(): size_t;  // 6
+    function total(): size_t; // 6
     function flags(): integer; // 7
-    function dims(): integer;  // 8
-    function rows(): integer;  // 9
-    function cols(): integer;  // 10
-    function data(): pointer;  // 11
+    function dims(): integer; // 8
+    function rows(): integer; // 9
+    function cols(): integer; // 10
+    function data(): pointer; // 11
   end;
 
   TMat = class(TOCVCommon, IMat)
@@ -349,19 +347,19 @@ Type
     constructor Create(const _M: TOpenCVClass = nil; const NeedDestroy: boolean = True); overload;
     constructor Create(const Image: pIplImage); overload;
     destructor Destroy; override;
-    function elemSize(): size_t;            // 0
-    function elemSize1(): size_t;           // 1
-    function _type(): integer;              // 2
-    function depth(): integer;              // 3
-    function channels(): integer;           // 4
+    function elemSize(): size_t; // 0
+    function elemSize1(): size_t; // 1
+    function _type(): integer; // 2
+    function depth(): integer; // 3
+    function channels(): integer; // 4
     function step1(i: integer = 0): size_t; // 5
     function empty(): cbool;
-    function total(): size_t;  // 6
+    function total(): size_t; // 6
     function flags(): integer; // 7
-    function dims(): integer;  // 8
-    function rows(): integer;  // 9
-    function cols(): integer;  // 10
-    function data(): pointer;  // 11
+    function dims(): integer; // 8
+    function rows(): integer; // 9
+    function cols(): integer; // 10
+    function data(): pointer; // 11
   end;
 
   TArrayOfTMat = TArray<TMat>;
@@ -382,8 +380,7 @@ function _CreateMat: TOpenCVClass; stdcall; external opencv_classes_lib name '_C
 function _GetMatData(const e: TOpenCVClass; index: integer; param: integer = 0): integer; stdcall;
   external opencv_classes_lib name '_GetMatData@12';
 function _MatEmpty(const e: TOpenCVClass): cbool; stdcall; external opencv_classes_lib name '_MatEmpty@4';
-function _CreateMatFromImage(const Image: pIplImage): TOpenCVClass; stdcall;
-  external opencv_classes_lib name '_CreateMatFromImage@4';
+function _CreateMatFromImage(const Image: pIplImage): TOpenCVClass; stdcall; external opencv_classes_lib name '_CreateMatFromImage@4';
 procedure _DestroyMat(const M: TOpenCVClass); stdcall; external opencv_classes_lib name '_DestroyMat@4';
 
 { ------------------------------ TMat ------------------------------ }
@@ -401,6 +398,7 @@ end;
 constructor TMat.Create(const Image: pIplImage);
 begin
   FData := _CreateMatFromImage(Image);
+  FNeedDestroy := True;
 end;
 
 constructor TMat.Create(const _M: TOpenCVClass; const NeedDestroy: boolean);
@@ -488,30 +486,30 @@ end;
 Var
   coreDLL: Cardinal;
 
-procedure Init_opencv_contrib;
+procedure Init_opencv_cls_core;
 begin
   coreDLL := ocvLoadLibrary(core_lib);
   Assert(coreDLL <> 0, 'Can not init ' + core_lib);
 
-  setBreakOnError      := ocvGetProcAddress('?setBreakOnError@cv@@YA_N_N@Z', coreDLL);
-  redirectError        := ocvGetProcAddress('?redirectError@cv@@YAP6AHHPBD00HPAX@ZP6AHH000H1@Z1PAPAX@Z', coreDLL);
-  setNumThreads        := ocvGetProcAddress('?setNumThreads@cv@@YAXH@Z', coreDLL);
-  getNumThreads        := ocvGetProcAddress('?getNumThreads@cv@@YAHXZ', coreDLL);
-  getThreadNum         := ocvGetProcAddress('?getThreadNum@cv@@YAHXZ', coreDLL);
-  getTickCount         := ocvGetProcAddress('?getTickCount@cv@@YA_JXZ', coreDLL);
-  getTickFrequency     := ocvGetProcAddress('?getTickFrequency@cv@@YANXZ', coreDLL);
-  getCPUTickCount      := ocvGetProcAddress('?getCPUTickCount@cv@@YA_JXZ', coreDLL);
+  setBreakOnError := ocvGetProcAddress('?setBreakOnError@cv@@YA_N_N@Z', coreDLL);
+  redirectError := ocvGetProcAddress('?redirectError@cv@@YAP6AHHPBD00HPAX@ZP6AHH000H1@Z1PAPAX@Z', coreDLL);
+  setNumThreads := ocvGetProcAddress('?setNumThreads@cv@@YAXH@Z', coreDLL);
+  getNumThreads := ocvGetProcAddress('?getNumThreads@cv@@YAHXZ', coreDLL);
+  getThreadNum := ocvGetProcAddress('?getThreadNum@cv@@YAHXZ', coreDLL);
+  getTickCount := ocvGetProcAddress('?getTickCount@cv@@YA_JXZ', coreDLL);
+  getTickFrequency := ocvGetProcAddress('?getTickFrequency@cv@@YANXZ', coreDLL);
+  getCPUTickCount := ocvGetProcAddress('?getCPUTickCount@cv@@YA_JXZ', coreDLL);
   checkHardwareSupport := ocvGetProcAddress('?checkHardwareSupport@cv@@YA_NH@Z', coreDLL);
-  getNumberOfCPUs      := ocvGetProcAddress('?getNumberOfCPUs@cv@@YAHXZ', coreDLL);
-  fastMalloc           := ocvGetProcAddress('?fastMalloc@cv@@YAPAXI@Z', coreDLL);
-  fastFree             := ocvGetProcAddress('?fastFree@cv@@YAXPAX@Z', coreDLL);
-  setUseOptimized      := ocvGetProcAddress('?setUseOptimized@cv@@YAX_N@Z', coreDLL);
-  useOptimized         := ocvGetProcAddress('?useOptimized@cv@@YA_NXZ', coreDLL);
+  getNumberOfCPUs := ocvGetProcAddress('?getNumberOfCPUs@cv@@YAHXZ', coreDLL);
+  fastMalloc := ocvGetProcAddress('?fastMalloc@cv@@YAPAXI@Z', coreDLL);
+  fastFree := ocvGetProcAddress('?fastFree@cv@@YAXPAX@Z', coreDLL);
+  setUseOptimized := ocvGetProcAddress('?setUseOptimized@cv@@YAX_N@Z', coreDLL);
+  useOptimized := ocvGetProcAddress('?useOptimized@cv@@YA_NXZ', coreDLL);
 end;
 
 initialization
 
-Init_opencv_contrib;
+Init_opencv_cls_core;
 
 {$ELSE}
 function setBreakOnError; external core_lib name '?setBreakOnError@cv@@YA_N_N@Z';

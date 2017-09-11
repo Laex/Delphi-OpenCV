@@ -157,6 +157,7 @@ end;
 
 begin
   try
+    ReportMemoryLeaksOnShutdown:=True;
     TestCameraCapture;
     // TestCameraCaptureFileName
   except

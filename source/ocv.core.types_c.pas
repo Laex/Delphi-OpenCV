@@ -2345,10 +2345,13 @@ implementation
 uses
   ocv.core_c,
 {$IFDEF HAS_UNITSCOPE}
-  System.SysUtils;
+  System.SysUtils,
+  System.AnsiStrings
 {$ELSE}
-SysUtils;
+  SysUtils,
+  AnsiStrings
 {$ENDIF}
+    ;
 
 function strdup(const str: pCVChar): pCVChar;
 begin
@@ -2359,7 +2362,7 @@ end;
 
 function cv_stricmp(const str1, str2: pCVChar): Integer;
 begin
-  Result := AnsiStrComp(str1, str2);
+  Result := {$IFDEF HAS_UNITSCOPE}System.{$ENDIF}AnsiStrings.AnsiStrComp(str1, str2);
 end;
 
 procedure strcpy(var str1: pCVChar; const str2: pCVChar);
@@ -2538,13 +2541,13 @@ end;
 
 function CV_NODE_IS_INT;
 begin
-  // CV_NODE_IS_INT(flags)        (CV_NODE_TYPE(flags) == CV_NODE_INT)
+  // CV_NODE_IS_INT(flags) (CV_NODE_TYPE(flags) == CV_NODE_INT)
   Result := CV_NODE_TYPE(flags) = CV_NODE_INT;
 end;
 
 function CV_NODE_IS_REAL;
 begin
-  // CV_NODE_IS_REAL(flags)       (CV_NODE_TYPE(flags) == CV_NODE_REAL)
+  // CV_NODE_IS_REAL(flags) (CV_NODE_TYPE(flags) == CV_NODE_REAL)
   Result := CV_NODE_TYPE(flags) = CV_NODE_REAL;
 end;
 
