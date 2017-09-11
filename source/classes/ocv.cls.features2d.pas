@@ -41,18 +41,45 @@ function initModule_features2d: cbool; cdecl;
 type
 
   // ---------------------------- KeyPoint --------------------------
+  (*
+    pKeyPoint = ^TKeyPoint;
+    TKeyPointArray = TArray<TKeyPoint>;
+    TKeyPointArrayOfArray = TArray<TKeyPointArray>;
 
-  pKeyPoint = ^TKeyPoint;
-  TKeyPointArray = TArray<TKeyPoint>;
-  TKeyPointArrayOfArray = TArray<TKeyPointArray>;
-
-  TKeyPoint = record
+    TKeyPoint = record
     pt: TcvPoint2f; // !< coordinates of the keypoints
     size: Float; // !< diameter of the meaningful keypoint neighborhood
     angle: Float; // !< computed orientation of the keypoint (-1 if not applicable);
     // !< it's in [0,360) degrees and measured relative to
     // !< image coordinate system, ie in clockwise.
     response: Float; // !< the response by which the most strong keypoints have been selected. Can be used for the further sorting or subsampling
+    octave: Integer; // !< octave (pyramid layer) from which the keypoint has been extracted
+    class_id: Integer; // !< object class (if the keypoints need to be clustered by an object they belong to)
+    procedure KeyPoint(_pt: TcvPoint2f; _size: Float; _angle: Float = -1; _response: Float = 0; _octave: Integer = 0;
+    _class_id: Integer = -1); overload;
+    procedure KeyPoint(x: Float; y: Float; _size: Float; _angle: Float = -1; _response: Float = 0; _octave: Integer = 0;
+    _class_id: Integer = -1); overload;
+    function hash: size_t;
+    procedure convert(const keypoints: TKeyPointArray; Var points2f: TArrayOfcvPoint2f); overload;
+    procedure convert(const points2f: TArrayOfcvPoint2f; Var keypoints: TKeyPointArray); overload;
+    function overlap(const kp1, kp2: TKeyPoint): Float;
+    end;
+  *)
+  // by ertankucukoglu
+  pKeyPoint = ^TKeyPoint;
+
+  TKeyPoint = record
+  public type
+    TKeyPointArray = TArray<TKeyPoint>;
+    TKeyPointArrayOfArray = TArray<TKeyPointArray>;
+  public
+    pt: TcvPoint2f; // !< coordinates of the keypoints
+    size: Float; // !< diameter of the meaningful keypoint neighborhood
+    angle: Float; // !< computed orientation of the keypoint (-1 if not applicable);
+    // !< it's in [0,360) degrees and measured relative to
+    // !< image coordinate system, ie in clockwise.
+    response: Float;
+    // !< the response by which the most strong keypoints have been selected. Can be used for the further sorting or subsampling
     octave: Integer; // !< octave (pyramid layer) from which the keypoint has been extracted
     class_id: Integer; // !< object class (if the keypoints need to be clustered by an object they belong to)
     procedure KeyPoint(_pt: TcvPoint2f; _size: Float; _angle: Float = -1; _response: Float = 0; _octave: Integer = 0;
@@ -64,6 +91,9 @@ type
     procedure convert(const points2f: TArrayOfcvPoint2f; Var keypoints: TKeyPointArray); overload;
     function overlap(const kp1, kp2: TKeyPoint): Float;
   end;
+
+  TKeyPointArray = TKeyPoint.TKeyPointArray;
+  TKeyPointArrayOfArray = TKeyPoint.TKeyPointArrayOfArray;
 
   // ! writes vector of keypoints to the file storage
   // CV_EXPORTS void write(FileStorage& fs, const string& name, const vector<KeyPoint>& keypoints);
@@ -210,10 +240,11 @@ function initModule_features2d; external features2d_lib name '?initModule_featur
 
 { TFeatureDetector }
 
-function Create_FeatureDetector(const detectorType: pAnsiChar): TOpenCVClass; stdcall; external opencv_classes_lib name '_Create_FeatureDetector@4';
+function Create_FeatureDetector(const detectorType: pAnsiChar): TOpenCVClass; stdcall;
+  external opencv_classes_lib name '_Create_FeatureDetector@4';
 function Empty_FeatureDetector(const F: TOpenCVClass): cbool; stdcall; external opencv_classes_lib name '_Empty_FeatureDetector@4';
-procedure detect_FeatureDetector(const F: TOpenCVClass; image: PIplImage; Var keypointcount: Integer; Var keypoints: pKeyPoint; mask: PIplImage);
-  stdcall; external opencv_classes_lib name '_detect_FeatureDetector@20';
+procedure detect_FeatureDetector(const F: TOpenCVClass; image: PIplImage; Var keypointcount: Integer; Var keypoints: pKeyPoint;
+  mask: PIplImage); stdcall; external opencv_classes_lib name '_detect_FeatureDetector@20';
 
 constructor TFeatureDetector.Create(const detectorType: String);
 begin
@@ -253,8 +284,8 @@ end;
 function Create_DescriptorExtractor(const descriptorExtractorType: pAnsiChar): TOpenCVClass; stdcall;
   external opencv_classes_lib name '_Create_DescriptorExtractor@4';
 function Empty_DescriptorExtractor(const F: TOpenCVClass): cbool; stdcall; external opencv_classes_lib name '_Empty_DescriptorExtractor@4';
-procedure compute_DescriptorExtractor(const F: TOpenCVClass; image: PIplImage; keypointcount: Integer; keypoints: pKeyPoint; Var mask: TOpenCVClass);
-  stdcall; external opencv_classes_lib name '_compute_DescriptorExtractor@20';
+procedure compute_DescriptorExtractor(const F: TOpenCVClass; image: PIplImage; keypointcount: Integer; keypoints: pKeyPoint;
+  Var mask: TOpenCVClass); stdcall; external opencv_classes_lib name '_compute_DescriptorExtractor@20';
 function descriptorSize_DescriptorExtractor(const F: TOpenCVClass): Integer; stdcall;
   external opencv_classes_lib name '_descriptorSize_DescriptorExtractor@4';
 function descriptorType_DescriptorExtractor(const F: TOpenCVClass): Integer; stdcall;
