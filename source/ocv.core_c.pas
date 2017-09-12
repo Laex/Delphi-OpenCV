@@ -448,8 +448,8 @@ function cvPtrND(const arr: pCvArr; idx: pInteger; cType: pInteger = nil; create
 {$EXTERNALSYM cvGet1D}
 function cvGet1D(const arr: pCvArr; idx0: Integer): TCvScalar; cdecl;
 {$EXTERNALSYM cvGet2D}
-function cvGet2D(const arr: pCvMat; idx0, idx1: Integer): TCvScalar; cdecl;
-// function cvGet2D(const arr: pCvArr; idx0, idx1: Integer): TCvScalar; cdecl;
+// function cvGet2D(const arr: pCvMat; idx0, idx1: Integer): TCvScalar; cdecl;
+function cvGet2D(const arr: pCvArr; idx0, idx1: Integer): TCvScalar; cdecl;
 {$EXTERNALSYM cvGet3D}
 function cvGet3D(const arr: pCvArr; idx0, idx1, idx2: Integer): TCvScalar; cdecl;
 {$EXTERNALSYM cvGetND}
@@ -798,11 +798,6 @@ procedure cvAbsDiff(const src1: pCvArr; const src2: pCvArr; dst: pCvArr); cdecl;
 function cvGet(const mat: pCvMat; i, j: Integer): Single; {$IFDEF USE_INLINE} inline; {$ENDIF}
 // procedure cvCopyImage(const src: pIplImage; dst: pIplImage; const mask: pIplImage = nil); cdecl; overload;
 // procedure cvCopyImage(const src: pCvArr; dst: pCvArr; const mask: pCvArr = nil); cdecl; overload;
-
-procedure cvCvtPixToPlane(const src: pIplImage; dst0: pIplImage; dst1: pIplImage; dst2: pIplImage; dst3: pIplImage); cdecl;
-
-procedure cvCvtPlaneToPix(const src0: pIplImage; const src1: pIplImage; const src2: pIplImage; const src3: pIplImage;
-  dst: pIplImage); cdecl;
 
 { dst(idx) = src1(idx) | src2(idx) */
   CVAPI(void) cvOr( const CvArr* src1, const CvArr* src2,
@@ -1691,12 +1686,13 @@ procedure cvCircle(img: pCvArr; center: TCvPoint; radius: Integer; color: TCvSca
 { Draws ellipse outline, filled ellipse, elliptic arc or filled elliptic sector,
   depending on <thickness>, <start_angle> and <end_angle> parameters. The resultant figure
   is rotated by <angle>. All the angles are in degrees
+
   CVAPI(void)  cvEllipse( pCvArr* img, CvPoint center, CvSize axes,
   double angle, double start_angle, double end_angle,
   CvScalar color, int thickness CV_DEFAULT(1),
   int line_type CV_DEFAULT(8), int shift CV_DEFAULT(0));
 }
-procedure cvEllipse(img: pIplImage; center: TCvPoint; axes: TCvSize; angle: double; start_angle: double; nd_angle: double; color: TCvScalar;
+procedure cvEllipse(img: pCvArr; center: TCvPoint; axes: TCvSize; angle: double; start_angle: double; nd_angle: double; color: TCvScalar;
   thickness: Integer = 1; line_type: Integer = 8; shift: Integer = 0); cdecl;
 
 { CV_INLINE  void  cvEllipseBox( pCvArr* img, CvBox2D box, CvScalar color,
@@ -1709,14 +1705,14 @@ procedure cvEllipse(img: pIplImage; center: TCvPoint; axes: TCvSize; angle: doub
   cvEllipse( img, cvPointFrom32f( box.center ), axes, box.angle,
   0, 360, color, thickness, line_type, shift );
 }
-procedure cvEllipseBox(img: pIplImage; box: TCvBox2D; color: TCvScalar; thickness: Integer = 1; line_type: Integer = 8; shift: Integer = 0);
+procedure cvEllipseBox(img: pCvArr; box: TCvBox2D; color: TCvScalar; thickness: Integer = 1; line_type: Integer = 8; shift: Integer = 0);
 {$IFDEF USE_INLINE} inline; {$ENDIF}
 { Fills convex or monotonous polygon.
   CVAPI(void)  cvFillConvexPoly( pCvArr* img, const CvPoint* pts, int npts, CvScalar color,
   int line_type CV_DEFAULT(8), int shift CV_DEFAULT(0));
 }
 
-procedure cvFillConvexPoly(img: pIplImage; const pts: pCVPoint; npts: Integer; color: TCvScalar; line_type: Integer = 8;
+procedure cvFillConvexPoly(img: pCvArr; const pts: pCVPoint; npts: Integer; color: TCvScalar; line_type: Integer = 8;
   shift: Integer = 0); cdecl;
 
 { Draws one or more polygonal curves
@@ -1724,7 +1720,7 @@ procedure cvFillConvexPoly(img: pIplImage; const pts: pCVPoint; npts: Integer; c
   int is_closed, CvScalar color, int thickness CV_DEFAULT(1),
   int line_type CV_DEFAULT(8), int shift CV_DEFAULT(0) );
 }
-procedure cvPolyLine(img: pIplImage; pts: pCVPoint; const npts: pInteger; contours: Integer; is_closed: Integer; color: TCvScalar;
+procedure cvPolyLine(img: pCvArr; pts: pCVPoint; const npts: pInteger; contours: Integer; is_closed: Integer; color: TCvScalar;
   thickness: Integer = 1; line_type: Integer = 8; shift: Integer = 0); cdecl;
 
 (*
@@ -2277,6 +2273,10 @@ function cvStdErrReport(status: Integer; const func_name: pCvChar; const err_msg
 function cvGuiBoxReport(status: Integer; const func_name: pCvChar; const err_msg: pCvChar; const file_name: pCvChar; line: Integer;
   userdata: Pointer): Integer; cdecl;
 
+// defined in compat.hpp
+procedure cvCvtPixToPlane(const src: pCvArr; dst0: pCvArr; dst1: pCvArr; dst2: pCvArr; dst3: pCvArr); cdecl;
+procedure cvCvtPlaneToPix(const src0: pCvArr; const src1: pCvArr; const src2: pCvArr; const src3: pCvArr; dst: pCvArr); cdecl;
+
 implementation
 
 uses
@@ -2662,10 +2662,6 @@ procedure cvMinMaxLoc(const arr: pCvArr; min_val: pDouble; max_val: pDouble; min
 // procedure cvAnd; external core_lib;
 // procedure cvAnd(const src1: pIplImage; const src2: pIplImage; dst: pIplImage; masl: pIplImage = nil); cdecl; external core_lib; overload;
 procedure cvAnd(const src1: pCvArr; const src2: pCvArr; dst: pCvArr; masl: pCvArr = nil); cdecl; external core_lib; overload;
-
-procedure cvCvtPixToPlane; external core_lib name 'cvSplit';
-
-procedure cvCvtPlaneToPix; external core_lib name 'cvMerge';
 
 function cvCreateMemStorage; external core_lib;
 
@@ -3233,5 +3229,8 @@ begin
     end;
   end;
 end;
+
+procedure cvCvtPixToPlane; external core_lib name 'cvSplit';
+procedure cvCvtPlaneToPix; external core_lib name 'cvMerge';
 
 end.
