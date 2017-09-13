@@ -154,7 +154,7 @@ function cvGetImageROI(const image: pIplImage): TCvRect; cdecl;
   CVAPI(CvMat*)  cvCreateMatHeader( int rows, int cols, int type );
 }
 {$EXTERNALSYM cvCreateMatHeader}
-function cvCreateMatHeader(rows: Integer; cols: Integer; cType: Integer): TCvMat; cdecl;
+function cvCreateMatHeader(rows: Integer; cols: Integer; cType: Integer): pCvMat; cdecl;
 
 const
   CV_AUTOSTEP = $7FFFFFFF;
