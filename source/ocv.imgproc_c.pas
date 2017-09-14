@@ -841,6 +841,7 @@ procedure cvCalcBayesianProb(Var src: pCvHistogram; number: Integer; Var dst: pC
 *)
 procedure cvCalcArrHist(var arr: PCvArr; hist: pCvHistogram; accumulate: Integer = 0; const mask: PCvArr = nil); cdecl; overload;
 procedure cvCalcArrHist(var arr: pIplImage; hist: pCvHistogram; accumulate: Integer = 0; const mask: pIplImage = nil); cdecl; overload;
+procedure cvCalcArrHist(var arr: pCvMat; hist: pCvHistogram; accumulate: Integer = 0; const mask: pCvMat = nil); cdecl; overload;
 
 // CV_INLINE  void  cvCalcHist(
 // IplImage** image,
@@ -854,6 +855,8 @@ procedure cvCalcArrHist(var arr: pIplImage; hist: pCvHistogram; accumulate: Inte
 procedure cvCalcHist(var image: PCvArr; hist: pCvHistogram; accumulate: Integer = 0; const mask: PCvArr = nil);
 {$IFDEF USE_INLINE}inline; {$ENDIF} overload;
 procedure cvCalcHist(var image: pIplImage; hist: pCvHistogram; accumulate: Integer = 0; const mask: PCvArr = nil);
+{$IFDEF USE_INLINE}inline; {$ENDIF} overload;
+procedure cvCalcHist(var image: pCvMat; hist: pCvHistogram; accumulate: Integer = 0; const mask: PCvArr = nil);
 {$IFDEF USE_INLINE}inline; {$ENDIF} overload;
 {
   /* Calculates back project */
@@ -1149,6 +1152,13 @@ procedure cvCalcHist(var image: pIplImage; hist: pCvHistogram; accumulate: Integ
 begin
   cvCalcArrHist(image, hist, accumulate, mask);
 end;
+
+procedure cvCalcHist(var image: pCvMat; hist: pCvHistogram; accumulate: Integer = 0; const mask: PCvArr = nil);
+{$IFDEF USE_INLINE}inline; {$ENDIF} overload;
+begin
+  cvCalcArrHist(image, hist, accumulate, mask);
+end;
+
 // procedure cvCalcHist;
 // begin
 // cvCalcArrHist(image, hist, accumulate, mask);
@@ -1160,10 +1170,14 @@ procedure cvCalcArrHist(var arr: PCvArr; hist: pCvHistogram; accumulate: Integer
   external imgproc_lib; overload;
 procedure cvCalcArrHist(var arr: pIplImage; hist: pCvHistogram; accumulate: Integer = 0; const mask: pIplImage = nil); cdecl;
   external imgproc_lib; overload;
+procedure cvCalcArrHist(var arr: pCvMat; hist: pCvHistogram; accumulate: Integer = 0; const mask: pCvMat = nil); cdecl;
+  external imgproc_lib; overload;
 procedure cvCalcArrBackProject; external imgproc_lib;
-//procedure cvCalcBackProject; external imgproc_lib name 'cvCalcArrBackProject';
-procedure cvCalcBackProject(var image: pIplImage; dst: PCvArr; const hist: pCvHistogram); cdecl; external imgproc_lib name 'cvCalcArrBackProject'; overload;
-procedure cvCalcBackProject(var image: PCvArr; dst: PCvArr; const hist: pCvHistogram); cdecl; external imgproc_lib name 'cvCalcArrBackProject'; overload;
+// procedure cvCalcBackProject; external imgproc_lib name 'cvCalcArrBackProject';
+procedure cvCalcBackProject(var image: pIplImage; dst: PCvArr; const hist: pCvHistogram); cdecl;
+  external imgproc_lib name 'cvCalcArrBackProject'; overload;
+procedure cvCalcBackProject(var image: PCvArr; dst: PCvArr; const hist: pCvHistogram); cdecl;
+  external imgproc_lib name 'cvCalcArrBackProject'; overload;
 procedure cvGoodFeaturesToTrack; external imgproc_lib;
 function cvMinAreaRect2; external imgproc_lib;
 function cvMinEnclosingCircle; external imgproc_lib;
