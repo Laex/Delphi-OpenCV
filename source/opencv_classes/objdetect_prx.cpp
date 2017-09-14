@@ -51,4 +51,22 @@ namespace cv
 	//{
 	//		return e->convert(oldcascade, newcascade);
 	//	}	
+
+	ICLASS_API void __stdcall CascadeClassifier_detectMultiScale(CascadeClassifier* e, Mat* m,
+		vector<Rect>** rects, size_t* rectCount,
+		double scaleFactor = 1.1, int minNeighbors = 3, int flags = 0, Size* minSize = NULL, Size* maxSize = NULL)
+	{
+		*rects = new vector<Rect>;
+		e->detectMultiScale(*m, **rects, scaleFactor, minNeighbors, flags, *minSize, *maxSize);
+		*rectCount = (*rects)->size();
+	}
+
+	ICLASS_API void __stdcall CascadeClassifier_copyAndDestroyRects(vector<Rect>* rects, CvRect* objects)
+	{
+		for (int i = 0; i < rects->size(); i++)
+		{
+			objects[i] = (*rects)[i];
+		}
+		delete rects;
+	}
 }

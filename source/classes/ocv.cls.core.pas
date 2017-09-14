@@ -40,6 +40,9 @@ Type
 
   TSize = class(TOCVCommon, ISize)
   public
+    constructor Create; overload;
+    constructor Create(const sz: TCvSize); overload;
+    destructor Destroy; override;
   end;
 
   IRect2i = interface(IOCVCommon)
@@ -527,5 +530,28 @@ procedure fastFree; external core_lib name '?fastFree@cv@@YAXPAX@Z';
 procedure setUseOptimized; external core_lib name '?setUseOptimized@cv@@YAX_N@Z';
 function useOptimized; external core_lib name '?useOptimized@cv@@YA_NXZ';
 {$ENDIF}
+
+{ TSize }
+
+function _CreateSize: TOpenCVClass; stdcall; external opencv_classes_lib name '_CreateSize@0';
+procedure _DestroySize(const s: TOpenCVClass); stdcall; external opencv_classes_lib name '_DestroySize@4';
+function _CreateSizeFromCvSize(const sz: PCvSize): TOpenCVClass; stdcall; external opencv_classes_lib name '_CreateSizeFromCvSize@4';
+
+constructor TSize.Create;
+begin
+  inherited Create(_CreateSize);
+end;
+
+constructor TSize.Create(const sz: TCvSize);
+begin
+  inherited Create(_CreateSizeFromCvSize(@sz));
+end;
+
+destructor TSize.Destroy;
+begin
+  if Assigned(FData) then
+    _DestroySize(FData);
+  inherited;
+end;
 
 end.

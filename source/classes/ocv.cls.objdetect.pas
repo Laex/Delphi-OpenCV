@@ -41,7 +41,7 @@ Type
     function empty(): cbool;
     function load(const FileName: String): cbool;
     // function Read(const node: IFileNode): cbool;
-    procedure detectMultiScale(Image: IMat; Var objects: TVectorRect; scaleFactor: double { = 1.1 };
+    procedure detectMultiScale(Image: IMat; var objects: TArray<TCvRect>; scaleFactor: double { = 1.1 };
       minNeighbors: integer { = 3 }; flags: integer { = 0 }; minSize: ISize { = Size() };
       maxSize: ISize { = Size() } ); overload;
     procedure detectMultiScale(Image: IMat; Var objects: TVectorRect; var numDetections: TVectorInt;
@@ -104,7 +104,7 @@ Type
       -   (Python) A face detection example using cascade classifiers can be found at
       opencv_source_code/samples/python2/facedetect.py
     *)
-    procedure detectMultiScale(Image: IMat; Var objects: TVectorRect; scaleFactor: double { = 1.1 };
+    procedure detectMultiScale(Image: IMat; var objects: TArray<TCvRect>; scaleFactor: double { = 1.1 };
       minNeighbors: integer { = 3 }; flags: integer { = 0 }; minSize: ISize { = Size() };
       maxSize: ISize { = Size() } ); overload;
 
@@ -146,7 +146,7 @@ Type
 implementation
 
 Uses
-  ocv.core_c, ocv.utils, ocv.lib;
+  ocv.core_c, ocv.utils, ocv.lib, SysUtils;
 
 // ------------------------------ CascadeClassifier ------------------------------
 function _CreateCascadeClassifier: TOpenCVClass; stdcall; external opencv_classes_lib name '_CreateCascadeClassifier@0';
@@ -166,6 +166,12 @@ function _CascadeClassifier_setImage(CascadeClassifier: TOpenCVClass; m: TOpenCV
   external opencv_classes_lib name '_CascadeClassifier_setImage@8';
 // function _CascadeClassifier_convert(CascadeClassifier: TOpenCVClass; oldcascade, newcascade: PAnsiChar): cbool; stdcall;
 // external opencv_classes_lib name '_CascadeClassifier_convert@12';
+procedure _CascadeClassifier_detectMultiScale(CascadeClassifier: TOpenCVClass;
+  Image: TOpenCVClass; Var rects: TOpenCVClass; var rectCount: NativeUInt; scaleFactor: double;
+  minNeighbors: integer; flags: integer; minSize: TOpenCVClass; maxSize: TOpenCVClass); stdcall;
+  external opencv_classes_lib name '_CascadeClassifier_detectMultiScale@40';
+procedure _CascadeClassifier_copyAndDestroyRects(rects: TOpenCVClass; objects: Pointer); stdcall;
+  external opencv_classes_lib name '_CascadeClassifier_copyAndDestroyRects@8';
 
 { ------------------------------ TCascadeClassifier ------------------------------ }
 
@@ -176,12 +182,12 @@ function _CascadeClassifier_setImage(CascadeClassifier: TOpenCVClass; m: TOpenCV
 
 constructor TCascadeClassifier.Create;
 begin
-  FData := _CreateCascadeClassifier;
+  inherited Create(_CreateCascadeClassifier);
 end;
 
 constructor TCascadeClassifier.Create(const FileName: String);
 begin
-  FData := _CreateCascadeClassifier;
+  inherited Create(_CreateCascadeClassifier);
   load(FileName);
 end;
 
@@ -195,20 +201,25 @@ end;
 procedure TCascadeClassifier.detectMultiScale(Image: IMat; var objects: TVectorRect; var numDetections: TVectorInt;
   scaleFactor: double; minNeighbors, flags: integer; minSize, maxSize: ISize);
 begin
-
+  raise Exception.Create('Not implemented');
 end;
 
 procedure TCascadeClassifier.detectMultiScale(Image: IMat; var objects: TVectorRect; var rejectLevels: TVectorInt;
   var levelWeights: TVectorDouble; scaleFactor: double; minNeighbors, flags: integer; minSize, maxSize: ISize;
   outputRejectLevels: cbool);
 begin
-
+  raise Exception.Create('Not implemented');
 end;
 
-procedure TCascadeClassifier.detectMultiScale(Image: IMat; var objects: TVectorRect; scaleFactor: double;
+procedure TCascadeClassifier.detectMultiScale(Image: IMat; var objects: TArray<TCvRect>; scaleFactor: double;
   minNeighbors, flags: integer; minSize, maxSize: ISize);
+var rects: TOpenCVClass; rectCount: NativeUInt;
 begin
-
+  if Not Assigned(FData) then raise Exception.Create('TCascadeClassifier.detectMultiScale: FData is null');
+  _CascadeClassifier_detectMultiScale(FData, Image._InternalData, rects, rectCount,
+    scaleFactor, minNeighbors, flags, minSize._InternalData, maxSize._InternalData);
+	SetLength(objects, rectCount);
+  _CascadeClassifier_copyAndDestroyRects(rects, objects);
 end;
 
 function TCascadeClassifier.empty: cbool;

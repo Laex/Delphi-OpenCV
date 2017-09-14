@@ -59,4 +59,20 @@ namespace cv
 		delete e;
 	};
 
+	ICLASS_API Size* __stdcall CreateSize()
+	{
+		return new Size();
+	}
+
+	ICLASS_API void __stdcall DestroySize(Size* s)
+	{
+		delete s;
+	}
+
+	ICLASS_API Size* __stdcall CreateSizeFromCvSize(const CvSize *sz)
+	{
+		return new Size(*sz);
+	}
+
+
 }
