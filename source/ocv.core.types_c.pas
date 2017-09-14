@@ -2362,7 +2362,7 @@ end;
 
 function cv_stricmp(const str1, str2: pCVChar): Integer;
 begin
-  Result := {$IFDEF HAS_UNITSCOPE}System.{$ENDIF}AnsiStrings.AnsiStrComp(str1, str2);
+  Result := {$IFDEF HAS_UNITSCOPE}System.{$ENDIF}SysUtils.AnsiStrComp(str1, str2);
 end;
 
 procedure strcpy(var str1: pCVChar; const str2: pCVChar);
