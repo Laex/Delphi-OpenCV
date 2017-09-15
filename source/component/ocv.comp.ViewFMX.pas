@@ -193,7 +193,9 @@ begin
     if Assigned(OnBeforePaint) then
       OnBeforePaint(Self, FImage);
 
+{$IFDEF DELPHIXE5_UP}
     IPLImageToFMXBitmap(FImage.IpImage, BackBuffer);
+{$IFEND}
     Canvas.DrawBitmap(BackBuffer, RectF(0, 0, BackBuffer.Width, BackBuffer.Height), PaintRect, 1, True);
 
     if Assigned(OnAfterPaint) then

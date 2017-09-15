@@ -3,15 +3,21 @@ unit ocv.fmxutils;
 interface
 
 Uses
-  ocv.core.types_c,
-  FMX.Graphics;
+  ocv.core.types_c
+{$IFDEF DELPHIXE5_UP}
+  , FMX.Graphics
+{$IFEND}
+  ;
 
+{$IFDEF DELPHIXE5_UP}
 procedure IPLImageToFMXBitmap(const IpImage: pIplImage; const FMXBitmap: TBitmap); inline;
+{$IFEND}
 
 implementation
 
 Uses FMX.Types;
 
+{$IFDEF DELPHIXE5_UP}
 procedure IPLImageToFMXBitmap(const IpImage: pIplImage; const FMXBitmap: TBitmap); inline;
 Var
   BitmapData: TBitmapData;
@@ -56,5 +62,6 @@ begin
         FreeMem(SrcData);
     end;
 end;
+{$IFEND}
 
 end.
