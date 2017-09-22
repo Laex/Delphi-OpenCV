@@ -930,6 +930,8 @@ function cvCheckArr(const arr: pCvArr; flags: Integer = 0; min_val: double = 0; 
 // procedure cvFlip(v1: 0); var Performs Singular value Decomposition of A Matrix * )
 
 procedure cvFlip(const src: pCvArr; dst: pCvArr = nil; flip_mode: Integer = 0); cdecl;
+// #define cvMirror cvFlip
+procedure cvMirror(const src: pCvArr; dst: pCvArr = nil; flip_mode: Integer = 0); cdecl;
 
 const
   // * types of array norm */
@@ -993,6 +995,53 @@ procedure cvGEMM(const src1: pCvArr; const src2: pCvArr; alpha: double; const sr
 // #define cvMatMulAddEx cvGEMM
 procedure cvMatMulAddEx(const src1: pCvArr; const src2: pCvArr; alpha: double; const src3: pCvArr; beta: double; dst: pCvArr;
   tABC: Integer = 0); cdecl;
+
+/// * Transforms each element of source array and stores
+// resultant vectors in destination array */
+// CVAPI(void)  cvTransform( const CvArr* src, CvArr* dst,
+// const CvMat* transmat,
+// const CvMat* shiftvec CV_DEFAULT(NULL));
+procedure cvTransform(const src: pCvArr; dst: pCvArr; const transmat: pCvMat; const shiftvec: pCvMat = nil); cdecl;
+// #define cvMatMulAddS cvTransform
+procedure cvMatMulAddS(const src: pCvArr; dst: pCvArr; const transmat: pCvMat; const shiftvec: pCvMat = nil); cdecl;
+
+/// * Does perspective transform on every element of input array */
+// CVAPI(void)  cvPerspectiveTransform( const CvArr* src, CvArr* dst,
+// const CvMat* mat );
+procedure cvPerspectiveTransform(const src: pCvArr; dst: pCvArr; const mat: pCvMat); cdecl;
+
+/// * Calculates (A-delta)*(A-delta)^T (order=0) or (A-delta)^T*(A-delta) (order=1) */
+// CVAPI(void) cvMulTransposed( const CvArr* src, CvArr* dst, int order,
+// const CvArr* delta CV_DEFAULT(NULL),
+// double scale CV_DEFAULT(1.) );
+procedure cvMulTransposed(const src: pCvArr; dst: pCvArr; order: Integer; const delta: pCvArr = nil; scale: double = 1); cdecl;
+
+/// * Tranposes matrix. Square matrices can be transposed in-place */
+// CVAPI(void)  cvTranspose( const CvArr* src, CvArr* dst );
+procedure cvTranspose(const src: pCvArr; dst: pCvArr); cdecl;
+// #define cvT cvTranspose
+procedure cvT(const src: pCvArr; dst: pCvArr); cdecl;
+
+/// * Completes the symmetric matrix from the lower (LtoR=0) or from the upper (LtoR!=0) part */
+// CVAPI(void)  cvCompleteSymm( CvMat* matrix, int LtoR CV_DEFAULT(0) );
+procedure cvCompleteSymm(matrix: pCvMat; LtoR: Integer = 0); cdecl;
+
+const
+  CV_SVD_MODIFY_A = 1;
+  CV_SVD_U_T = 2;
+  CV_SVD_V_T = 4;
+
+  /// * Performs Singular Value Decomposition of a matrix */
+  // CVAPI(void)   cvSVD( CvArr* A, CvArr* W, CvArr* U CV_DEFAULT(NULL),
+  // CvArr* V CV_DEFAULT(NULL), int flags CV_DEFAULT(0));
+procedure cvSVD(A: pCvArr; W: pCvArr; U: pCvArr = nil; V: pCvArr = nil; flags: Integer = 0); cdecl;
+
+/// * Performs Singular Value Back Substitution (solves A*X = B):
+// flags must be the same as in cvSVD */
+// CVAPI(void)   cvSVBkSb( const CvArr* W, const CvArr* U,
+// const CvArr* V, const CvArr* B,
+// CvArr* X, int flags );
+procedure cvSVBkSb(const W: pCvArr; const U: pCvArr; const V: pCvArr; const B: pCvArr; x: pCvArr; flags: Integer); cdecl;
 
 const
   CV_LU = 0;
@@ -2674,7 +2723,6 @@ procedure cvRectangle; external core_lib;
 function cvGetRows; external core_lib;
 
 procedure cvFlip; external core_lib;
-
 procedure cvMirror; external core_lib name 'cvFlip';
 
 procedure cvClearMemStorage; external core_lib;
@@ -2944,12 +2992,14 @@ function cvSolveCubic; external core_lib;
 procedure cvSolvePoly; external core_lib;
 
 procedure cvTransform; external core_lib;
+procedure cvMatMulAddS; external core_lib name 'cvTransform';
 
 procedure cvPerspectiveTransform; external core_lib;
 
 procedure cvMulTransposed; external core_lib;
 
 procedure cvTranspose; external core_lib;
+procedure cvT; external core_lib name 'cvTranspose';
 
 procedure cvCompleteSymm; external core_lib;
 
