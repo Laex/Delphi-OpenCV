@@ -83,14 +83,17 @@ function ifthen(const Cond: Boolean; const ValueTrue, ValueFalse: TCvScalar): TC
 
 function BitmapToIplImage(const bitmap:
 {$IFDEF DELPHIXE2_UP}Vcl.Graphics.TBitmap{$ELSE}Graphics.TBitmap{$ENDIF}): PIplImage;
+
 function CropIplImage(const src: PIplImage; const roi: TCvRect): PIplImage;
 
 procedure ocvRGBToHSV(const R, G, B: byte; out _H, _S, _V: byte);
 procedure ocvHSVToRGB(const _H, _S, _V: byte; out _R, _G, _B: byte);
 
 {$IFDEF DELPHIXE3_UP}
+
 Type
-  TStringAnsiHelper = record helper for String
+  TStringAnsiHelper = record helper for
+    String
     function AsPAnsiChar: PAnsiChar;
   end;
 {$ENDIF}
@@ -118,8 +121,9 @@ function BitmapToIplImage(const bitmap:
 {$IFDEF DELPHIXE2_UP}Vcl.Graphics.TBitmap{$ELSE}Graphics.TBitmap{$ENDIF}): PIplImage;
 Var
   BMI: BITMAPINFO;
+  MemDC: HDC;
 begin
-  Assert(bitmap.PixelFormat = pf24bit); // Пока только такой формат
+  Assert(bitmap.PixelFormat = pf24bit); // only 24-bit
   ZeroMemory(@BMI, sizeof(BMI));
   BMI.bmiHeader.biSize := sizeof(BITMAPINFOHEADER);
   BMI.bmiHeader.biWidth := bitmap.Width;
@@ -128,7 +132,10 @@ begin
   BMI.bmiHeader.biBitCount := 24; // only 24-bit
   BMI.bmiHeader.biCompression := BI_RGB;
   Result := cvCreateImage(cvSize(bitmap.Width, bitmap.Height), IPL_DEPTH_8U, 3); // only 24-bit
-  GetDIBits(bitmap.Canvas.Handle, bitmap.Handle, 0, bitmap.Height, Result^.ImageData, BMI, DIB_RGB_COLORS);
+  MemDC := CreateCompatibleDC(0);
+  SelectObject(MemDC, bitmap.Handle);
+  GetDIBits(MemDC, bitmap.Handle, 0, bitmap.Height, Result^.ImageData, BMI, DIB_RGB_COLORS);
+  DeleteDC(MemDC);
 end;
 
 // function BitmapToIplImage(const bitmap: {$IFDEF DELPHIXE2_UP}Vcl.Graphics.TBitmap{$ELSE}Graphics.TBitmap{$ENDIF}): PIplImage;
@@ -448,7 +455,8 @@ begin
   else
   begin
     // Draw without scaling
-    iResult := SetDIBitsToDevice(dc, rect.left, rect.top, img^.Width, img^.Height, 0, 0, 0, img^.Height, img^.ImageData, _dibhdr, DIB_RGB_COLORS);
+    iResult := SetDIBitsToDevice(dc, rect.left, rect.top, img^.Width, img^.Height, 0, 0, 0, img^.Height, img^.ImageData, _dibhdr,
+      DIB_RGB_COLORS);
     Result := (iResult > 0); // and (iResult <> GDI_ERROR);
   end;
 end;
