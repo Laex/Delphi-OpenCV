@@ -1,7 +1,7 @@
 package dclFMXOpenCV250;
 
 {$R *.res}
-{$R dclFMXOpenCV.res}
+{$R 'dclFMXOpenCV.res'}
 {$IFDEF IMPLICITBUILDING This IFDEF should not be used by users}
 {$ALIGN 8}
 {$ASSERTIONS ON}
@@ -37,6 +37,7 @@ requires
 
 contains
   ocv.comp.RegisterFMX in '..\ocv.comp.RegisterFMX.pas',
-  ocv.comp.ViewFMX in '..\ocv.comp.ViewFMX.pas';
+  ocv.comp.ViewFMX in '..\ocv.comp.ViewFMX.pas',
+  ocv.fmxutils in '..\..\ocv.fmxutils.pas';
 
 end.

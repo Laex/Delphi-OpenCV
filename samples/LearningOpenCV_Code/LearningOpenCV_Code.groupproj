@@ -3,9 +3,6 @@
         <ProjectGuid>{B8FFAD51-22D7-426C-B047-EC116C5C089E}</ProjectGuid>
     </PropertyGroup>
     <ItemGroup>
-        <Projects Include="ch7_ex7_3_expanded.dproj">
-            <Dependencies/>
-        </Projects>
         <Projects Include="ch8_ex8_3.dproj">
             <Dependencies/>
         </Projects>
@@ -35,15 +32,6 @@
             <Default.Personality/>
         </BorlandProject>
     </ProjectExtensions>
-    <Target Name="ch7_ex7_3_expanded">
-        <MSBuild Projects="ch7_ex7_3_expanded.dproj"/>
-    </Target>
-    <Target Name="ch7_ex7_3_expanded:Clean">
-        <MSBuild Projects="ch7_ex7_3_expanded.dproj" Targets="Clean"/>
-    </Target>
-    <Target Name="ch7_ex7_3_expanded:Make">
-        <MSBuild Projects="ch7_ex7_3_expanded.dproj" Targets="Make"/>
-    </Target>
     <Target Name="ch8_ex8_3">
         <MSBuild Projects="ch8_ex8_3.dproj"/>
     </Target>
@@ -108,13 +96,13 @@
         <MSBuild Projects="ch13_ex13_1.dproj" Targets="Make"/>
     </Target>
     <Target Name="Build">
-        <CallTarget Targets="ch7_ex7_3_expanded;ch8_ex8_3;ch9_watershed;ch10_ex10_1;ch10_ex10_1b_Horn_Schunck;ch10_ex10_2;ch10_motempl;ch13_ex13_1"/>
+        <CallTarget Targets="ch8_ex8_3;ch9_watershed;ch10_ex10_1;ch10_ex10_1b_Horn_Schunck;ch10_ex10_2;ch10_motempl;ch13_ex13_1"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="ch7_ex7_3_expanded:Clean;ch8_ex8_3:Clean;ch9_watershed:Clean;ch10_ex10_1:Clean;ch10_ex10_1b_Horn_Schunck:Clean;ch10_ex10_2:Clean;ch10_motempl:Clean;ch13_ex13_1:Clean"/>
+        <CallTarget Targets="ch8_ex8_3:Clean;ch9_watershed:Clean;ch10_ex10_1:Clean;ch10_ex10_1b_Horn_Schunck:Clean;ch10_ex10_2:Clean;ch10_motempl:Clean;ch13_ex13_1:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="ch7_ex7_3_expanded:Make;ch8_ex8_3:Make;ch9_watershed:Make;ch10_ex10_1:Make;ch10_ex10_1b_Horn_Schunck:Make;ch10_ex10_2:Make;ch10_motempl:Make;ch13_ex13_1:Make"/>
+        <CallTarget Targets="ch8_ex8_3:Make;ch9_watershed:Make;ch10_ex10_1:Make;ch10_ex10_1b_Horn_Schunck:Make;ch10_ex10_2:Make;ch10_motempl:Make;ch13_ex13_1:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>

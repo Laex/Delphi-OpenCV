@@ -129,6 +129,7 @@ implementation
 
 uses
   System.UITypes,
+  ocv.core.types_c,
   ocv.fmxutils;
 
 {$IFNDEF DELPHIXE5_UP}

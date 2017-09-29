@@ -53,12 +53,13 @@ Unzip it to a convenient directory, thus get the following directory structure<b
 	<samples>
 	<source>
 ```
+Download the [FFmpeg Delphi/Pascal Headers][6] and extract to <PROJECT_ROOT>\source\ffmpeg<br>
 Add the search path for the modules of the project in Delphi IDE (Tools-Options-Delphi Options-Library-Library path)
 ```
 <PROJECT_ROOT>\source
 <PROJECT_ROOT>\source\classes
 <PROJECT_ROOT>\source\component
-<PROJECT_ROOT>\source\ffmpeg
+<PROJECT_ROOT>\source\ffmpeg\headers
 <PROJECT_ROOT>\source\opengl
 <PROJECT_ROOT>\source\sdl
 <PROJECT_ROOT>\source\sdl2
@@ -90,7 +91,7 @@ Examples of the use of video processing algorithms using VCL.Forms
 ```
 Examples of using FFMPEG library header files are in the
 ```
-<PROJECT_ROOT>\samples\FFMpeg\FFMPEG.groupproj
+<PROJECT_ROOT>\source\ffmpeg\examples
 ```
 Examples of use of components
 ```
@@ -108,3 +109,4 @@ Examples of use of components
 [3]: https://www.libsdl.org/index.php
 [4]: https://github.com/opencv/opencv/releases/tag/2.4.13.2
 [5]: http://ffmpeg.zeranoe.com/builds/
+[6]: http://www.delphiffmpeg.com/headers/

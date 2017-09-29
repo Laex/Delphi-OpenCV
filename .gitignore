@@ -8,6 +8,12 @@ ipch/
 lib/
 /resource/result/*.*
 CVAutoInstaller/
+/source/ffmpeg/examples
+/source/ffmpeg/headers
+
+#ResourceFiles
+/resource/stereosample/Aloe/*.png
+/resource/stereosample/Aloe/dmin.txt
 
 #Files
 *.exe
@@ -51,7 +57,3 @@ CVAutoInstaller/
 *.user
 !opencv_classes*.dll
 !opencv_classes*.dll
-
-#ResourceFiles
-/resource/stereosample/Aloe/*.png
-/resource/stereosample/Aloe/dmin.txt
