@@ -66,7 +66,7 @@ type
   size_t = NativeUInt;
   pFloat = ^Float;
   ppFloat = ^pFloat;
-  pPointer = ^Pointer;
+  pPointer = System.PPointer;//^Pointer;
   ppvoid = pPointer;
 
   TSingleArray1D = array [0 .. 1] of Single;

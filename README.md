@@ -107,6 +107,6 @@ Examples of use of components
 [1]: https://github.com/Laex/Delphi-OpenCV/archive/master.zip
 [2]: https://www.microsoft.com/en-us/download/details.aspx?id=48145
 [3]: https://www.libsdl.org/index.php
-[4]: https://github.com/opencv/opencv/releases/tag/2.4.13.2
+[4]: https://github.com/opencv/opencv/releases/tag/2.4.13.3
 [5]: http://ffmpeg.zeranoe.com/builds/
 [6]: http://www.delphiffmpeg.com/headers/
