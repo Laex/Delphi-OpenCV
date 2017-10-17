@@ -167,9 +167,10 @@ begin
   // ****************************************
   // Загрузка проверяемого лица
   // ****************************************
-  i := 3; // Номер индивида
+  i := Random(7) + 1; // Номер индивида
+  j := Random(9) + 2; //Номер лица
   // Загрузим его второе изображение (для тренировки использовалось первое)
-  facesfilename := '../../resource/faces/s' + IntToStr(i + 1) + '/2.pgm';
+  facesfilename := '../../resource/faces/s' + IntToStr(i) + '/'+j.ToString+'.pgm';
   img_load := cvLoadImage(c_str(facesfilename));
   test_img := cvCreateImage(size, IPL_DEPTH_8U, 1);
   cvSplit(img_load, test_img, nil, nil, nil);

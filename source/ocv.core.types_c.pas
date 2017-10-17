@@ -74,11 +74,11 @@ type
   TSingleArray2D = array [0 .. 1] of pSingleArray1D;
   pSingleArray2D = ^TSingleArray2D;
 
-  TCVChar = AnsiChar;
+  CVChar = AnsiChar;
+  TCVChar = CVChar;
   pCVChar = pAnsiChar;
   TpCVCharArray = array [0 .. 0] of pCVChar;
-  ppCVChar = ^TpCVCharArray;
-  CVChar = AnsiChar;
+  ppCVChar = ^TpCVCharArray;  
   // {$IFNDEF WIN64}
   // size_t = UInt32;
   // {$ELSE}
