@@ -59,7 +59,7 @@ Uses
   Winapi.Windows
 {$IF DEFINED(USE_CRITICALSECTION) OR DEFINED(USE_SIMLOCK)}
     , System.SyncObjs
-{$ENDIF}
+{$IFEND}
     ;
 
 Type

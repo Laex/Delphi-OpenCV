@@ -52,7 +52,7 @@ const
   CV_VERSION_MAJOR = '0';
   CV_VERSION_MINOR = '0';
   CV_VERSION_REVISION = '0';
-{$ENDIF}
+{$IFEND}
   CV_VERSION = CV_VERSION_EPOCH + '.' + CV_VERSION_MAJOR + '.' + CV_VERSION_MINOR + '.' + CV_VERSION_REVISION;
 
   // * old  style version constants*/
@@ -78,7 +78,7 @@ const
     'core' +
 {$ELSEIF DEFINED( DelphiOCVVersion_30)}
     'world' +
-{$ENDIF}
+{$IFEND}
     CV_VERSION_DLL {$IFDEF DEBUG} + 'd'{$ENDIF} + '.dll';
 {$ELSE}
 {$IFDEF MACOS}
@@ -98,7 +98,7 @@ highgui_lib = {$IFDEF MSWINDOWS}
   'highgui' +
 {$ELSEIF DEFINED( DelphiOCVVersion_30)}
   'world' +
-{$ENDIF}
+{$IFEND}
   CV_VERSION_DLL {$IFDEF DEBUG} + 'd'{$ENDIF} + '.dll';
 {$ELSE}
 {$IFDEF MACOS}
@@ -118,7 +118,7 @@ features2d_lib = {$IFDEF MSWINDOWS}
   'features2d' +
 {$ELSEIF DEFINED( DelphiOCVVersion_30)}
   'world' +
-{$ENDIF}
+{$IFEND}
   CV_VERSION_DLL {$IFDEF DEBUG} + 'd'{$ENDIF} + '.dll';
 {$ELSE}
 {$IFDEF MACOS}
@@ -138,7 +138,7 @@ imgproc_lib = {$IFDEF MSWINDOWS}
   'imgproc' +
 {$ELSEIF DEFINED( DelphiOCVVersion_30)}
   'world' +
-{$ENDIF}
+{$IFEND}
   CV_VERSION_DLL {$IFDEF DEBUG} + 'd'{$ENDIF} + '.dll';
 {$ELSE}
 {$IFDEF MACOS}
@@ -158,7 +158,7 @@ objdetect_lib = {$IFDEF MSWINDOWS}
   'objdetect' +
 {$ELSEIF DEFINED( DelphiOCVVersion_30)}
   'world' +
-{$ENDIF}
+{$IFEND}
   CV_VERSION_DLL {$IFDEF DEBUG} + 'd'{$ENDIF} + '.dll';
 {$ELSE}
 {$IFDEF MACOS}
@@ -178,7 +178,7 @@ legacy_lib = {$IFDEF MSWINDOWS}
   'legacy' +
 {$ELSEIF DEFINED( DelphiOCVVersion_30)}
   'world' +
-{$ENDIF}
+{$IFEND}
   CV_VERSION_DLL {$IFDEF DEBUG} + 'd'{$ENDIF} + '.dll';
 {$ELSE}
 {$IFDEF MACOS}
@@ -198,7 +198,7 @@ calib3d_lib = {$IFDEF MSWINDOWS}
   'calib3d' +
 {$ELSEIF DEFINED( DelphiOCVVersion_30)}
   'world' +
-{$ENDIF}
+{$IFEND}
   CV_VERSION_DLL {$IFDEF DEBUG} + 'd'{$ENDIF} + '.dll';
 {$ELSE}
 {$IFDEF MACOS}
@@ -218,7 +218,7 @@ tracking_lib = {$IFDEF MSWINDOWS}
   'video' +
 {$ELSEIF DEFINED( DelphiOCVVersion_30)}
   'world' +
-{$ENDIF}
+{$IFEND}
   CV_VERSION_DLL {$IFDEF DEBUG} + 'd'{$ENDIF} + '.dll';
 {$ELSE}
 {$IFDEF MACOS}
@@ -238,7 +238,7 @@ nonfree_lib = {$IFDEF MSWINDOWS}
   'nonfree' +
 {$ELSEIF DEFINED( DelphiOCVVersion_30)}
   'world' +
-{$ENDIF}
+{$IFEND}
   CV_VERSION_DLL {$IFDEF DEBUG} + 'd'{$ENDIF} + '.dll';
 {$ELSE}
 {$IFDEF MACOS}
@@ -272,7 +272,7 @@ opencv_photo_lib = {$IFDEF MSWINDOWS}
   'photo' +
 {$ELSEIF DEFINED( DelphiOCVVersion_30)}
   'world' +
-{$ENDIF}
+{$IFEND}
   CV_VERSION_DLL {$IFDEF DEBUG} + 'd'{$ENDIF} + '.dll';
 {$ELSE}
 {$IFDEF MACOS}
@@ -292,7 +292,7 @@ opencv_contrib_lib = {$IFDEF MSWINDOWS}
   'contrib' +
 {$ELSEIF DEFINED( DelphiOCVVersion_30)}
   'world' +
-{$ENDIF}
+{$IFEND}
   CV_VERSION_DLL {$IFDEF DEBUG} + 'd'{$ENDIF} + '.dll';
 {$ELSE}
 {$IFDEF MACOS}

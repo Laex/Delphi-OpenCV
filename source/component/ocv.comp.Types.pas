@@ -413,8 +413,8 @@ const
   // Add to search path \Delphi-OpenCV\resource\facedetectxml\
   ///
 {$I haarcascade.inc}
-{$R haarcascade.rc haarcascade.res}
-{$R haarcascade.res}
+{$R haarcascade.res haarcascade.rc}
+{.$R haarcascade.res}
 
 implementation
 

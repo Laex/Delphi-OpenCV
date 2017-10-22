@@ -592,7 +592,7 @@ procedure cvGetRawData(arr: pCvArr; data: pByte; step: pInteger = nil; roi_size:
 { Returns width and height of array in elements
   CVAPI(CvSize) cvGetSize( const pCvArr* arr );
 }
-function cvGetSize(const arr: pCvArr): TCvSize; {$IF DEFINED(DelphiOCVVersion_30)} cdecl; {$ENDIF}
+function cvGetSize(const arr: pCvArr): TCvSize; {$IFDEF DelphiOCVVersion_30} cdecl; {$ENDIF}
 // procedure _cvGetSize(const arr: pCvArr; Var size: TCvSize); cdecl;
 
 { Copies source array to destination array */
@@ -2548,7 +2548,7 @@ end;
 // -------------------
 {$ELSEIF DEFINED(DelphiOCVVersion_30)}
 function cvGetSize(const arr: pCvArr): TCvSize; external core_lib;
-{$ENDIF}
+{$IFEND}
 // procedure cvCopy; external core_lib;
 procedure cvCopy(const src: pCvArr; dst: pCvArr; const mask: pCvArr = nil); cdecl; external core_lib; overload;
 // procedure cvCopy(const src: pIplImage; dst: pIplImage; const mask: pIplImage = nil); cdecl; external core_lib; overload;

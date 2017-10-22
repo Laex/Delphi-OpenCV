@@ -33,7 +33,7 @@ uses
   System.Classes,
   System.Types,
   FMX.Types,
-{$IFDEF DELPHIXE6_UP} // Delphi XE6 and above
+{$IFDEF DELPHIXE2_UP} // Delphi XE6 and above
   FMX.Graphics,
 {$ELSE}
   FMX.PixelFormats,
@@ -118,7 +118,7 @@ type
     property Visible;
 {$IF CompilerVersion<21.0}
     property DesignVisible;
-{$ENDIF}
+{$IFEND}
     property Opacity;
     property Margins;
     property Padding;
@@ -196,7 +196,7 @@ begin
 
 {$IFDEF DELPHIXE5_UP}
     IPLImageToFMXBitmap(FImage.IpImage, BackBuffer);
-{$IFEND}
+{$ENDIF}
     Canvas.DrawBitmap(BackBuffer, RectF(0, 0, BackBuffer.Width, BackBuffer.Height), PaintRect, 1, True);
 
     if Assigned(OnAfterPaint) then

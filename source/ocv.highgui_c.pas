@@ -1150,7 +1150,7 @@ var
 
 {$IF DEFINED(SAFELOADLIB) AND DEFINED(DEBUG)}
 procedure Init_highgui_c_lib;
-{$ENDIF}
+{$IFEND}
 
 implementation
 

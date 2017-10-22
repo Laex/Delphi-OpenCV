@@ -413,7 +413,7 @@ type
 
 {$IF DEFINED(SAFELOADLIB) AND DEFINED(DEBUG)}
 procedure Init_opencv_objdetect_lib;
-{$ENDIF}
+{$IFEND}
 
 implementation
 
