@@ -2,7 +2,7 @@
     <PropertyGroup>
         <ProjectGuid>{3BC74F10-002A-41D7-B09F-6458FF2CE8F4}</ProjectGuid>
         <MainSource>dclFFMSource250.dpk</MainSource>
-        <ProjectVersion>18.2</ProjectVersion>
+        <ProjectVersion>18.3</ProjectVersion>
         <FrameworkType>None</FrameworkType>
         <Base>True</Base>
         <Config Condition="'$(Config)'==''">Debug</Config>

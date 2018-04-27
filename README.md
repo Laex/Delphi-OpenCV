@@ -9,7 +9,8 @@
 
 ## Requirements:
 * Visual C++ Redistributable for Visual Studio 2015<br>
-Files: msvcp140.dll, msvcp140d.dll in "Delphi-OpenCV\redist\" or [here][2]
+Files: msvcp140.dll, msvcp140d.dll in "Delphi-OpenCV\redist\" or [here][2]<br>
+or from the repository:
 ```
 (1) 32-bit in the "Delphi-OpenCV\redist\VC14\x86\"
 (2) 64-bit in the "Delphi-OpenCV\redist\VC14\x64\"
@@ -75,6 +76,25 @@ To install the components, open and install
 <PROJECT_ROOT>\source\component\DelphiXX\dclFMXOpenCVXXX.dpk
 <PROJECT_ROOT>\source\component\DelphiXX\dclVCLOpenCVXXX.dpk
 ```
+## Verify that the environment is configured correctly
+Run from the repository
+```
+ Delphi-OpenCV/CheckCVDep/CheckCVDep.exe
+```
+The program checks the availability of dynamic libraries
+```
+------- Verifying Microsoft DLL -------
+OK
+------- OpenCV DLL -------
+OK
+------- Delphi-OpenCV classes DLL -------
+OK
+------- FFMPEG DLL -------
+OK
+------- SDL DLL -------
+OK
+```
+To successfully install components and run most of the examples, the availability of FFMPEG DLL, Microsoft DLL and OpenCV DLL is sufficient
 ## Examples
 Open in Delphi IDE and compile:<br>
 Examples of the use of certain functions and procedures 
