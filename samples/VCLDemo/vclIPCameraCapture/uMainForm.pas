@@ -3,7 +3,7 @@
 // **************************************************************************************************
 // Contributor:
 // Laentir Valetov (laex@bk.ru)
-// Mikhail Grigorev (sleuthound@gmail.com)
+// Mikhail Grigorev (sleuthhound@gmail.com)
 // **************************************************************************************************
 // You may retrieve the latest version of this file at the GitHub,
 // located at git://github.com/Laex/Delphi-OpenCV.git

@@ -6,7 +6,7 @@
   Laentir Valetov
   email:laex@bk.ru
   Mikhail Grigorev
-  email:sleuthound@gmail.com
+  email:sleuthhound@gmail.com
   **************************************************************************************************
   You may retrieve the latest version of this file at the GitHub,
   located at git://github.com/Laex/Delphi-OpenCV.git
