@@ -6,10 +6,10 @@
         <Projects Include="dclCommonOpenCV250.dproj">
             <Dependencies/>
         </Projects>
-        <Projects Include="dclFFMSource250.dproj">
+        <Projects Include="dclFMXOpenCV250.dproj">
             <Dependencies/>
         </Projects>
-        <Projects Include="dclFMXOpenCV250.dproj">
+        <Projects Include="dclFFMSource250.dproj">
             <Dependencies/>
         </Projects>
         <Projects Include="dclVCLOpenCV250.dproj">
@@ -32,15 +32,6 @@
     <Target Name="dclCommonOpenCV250:Make">
         <MSBuild Projects="dclCommonOpenCV250.dproj" Targets="Make"/>
     </Target>
-    <Target Name="dclFFMSource250">
-        <MSBuild Projects="dclFFMSource250.dproj"/>
-    </Target>
-    <Target Name="dclFFMSource250:Clean">
-        <MSBuild Projects="dclFFMSource250.dproj" Targets="Clean"/>
-    </Target>
-    <Target Name="dclFFMSource250:Make">
-        <MSBuild Projects="dclFFMSource250.dproj" Targets="Make"/>
-    </Target>
     <Target Name="dclFMXOpenCV250">
         <MSBuild Projects="dclFMXOpenCV250.dproj"/>
     </Target>
@@ -49,6 +40,15 @@
     </Target>
     <Target Name="dclFMXOpenCV250:Make">
         <MSBuild Projects="dclFMXOpenCV250.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="dclFFMSource250">
+        <MSBuild Projects="dclFFMSource250.dproj"/>
+    </Target>
+    <Target Name="dclFFMSource250:Clean">
+        <MSBuild Projects="dclFFMSource250.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="dclFFMSource250:Make">
+        <MSBuild Projects="dclFFMSource250.dproj" Targets="Make"/>
     </Target>
     <Target Name="dclVCLOpenCV250">
         <MSBuild Projects="dclVCLOpenCV250.dproj"/>
@@ -60,13 +60,13 @@
         <MSBuild Projects="dclVCLOpenCV250.dproj" Targets="Make"/>
     </Target>
     <Target Name="Build">
-        <CallTarget Targets="dclCommonOpenCV250;dclFFMSource250;dclFMXOpenCV250;dclVCLOpenCV250"/>
+        <CallTarget Targets="dclCommonOpenCV250;dclFMXOpenCV250;dclFFMSource250;dclVCLOpenCV250"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="dclCommonOpenCV250:Clean;dclFFMSource250:Clean;dclFMXOpenCV250:Clean;dclVCLOpenCV250:Clean"/>
+        <CallTarget Targets="dclCommonOpenCV250:Clean;dclFMXOpenCV250:Clean;dclFFMSource250:Clean;dclVCLOpenCV250:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="dclCommonOpenCV250:Make;dclFFMSource250:Make;dclFMXOpenCV250:Make;dclVCLOpenCV250:Make"/>
+        <CallTarget Targets="dclCommonOpenCV250:Make;dclFMXOpenCV250:Make;dclFFMSource250:Make;dclVCLOpenCV250:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>

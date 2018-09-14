@@ -25,6 +25,7 @@ var
 implementation
 
 {$R *.dfm}
+{$I libversion.inc}
 
 const
 
@@ -37,8 +38,8 @@ const
 
   CVDLL_Classes: array of string = ['opencv_classes2413'];
 
-  FFMPEGDLL: array of string = ['avcodec-57', 'avdevice-57', 'avfilter-6', 'avformat-57', 'avutil-55', 'postproc-54', 'swresample-2',
-    'swscale-4'];
+  FFMPEGDLL: array of string = [ //
+    AVCODEC_LIBNAME, AVDEVICE_LIBNAME, AVFILTER_LIBNAME, AVFORMAT_LIBNAME, AVUTIL_LIBNAME, SWRESAMPLE_LIBNAME, SWSCALE_LIBNAME];
 
   SDLDLL: array of string = ['SDL', 'SDL2'];
 
@@ -153,9 +154,9 @@ begin
     R := True;
     for i := 0 to High(FFMPEGDLL) do
     begin
-      if not CheckLoadDLL(FFMPEGDLL[i] + '.dll', ErrorCode, ErrorString) then
+      if not CheckLoadDLL(FFMPEGDLL[i], ErrorCode, ErrorString) then
       begin
-        mmo1.Lines.Add('Verifying ' + FFMPEGDLL[i] + '.dll');
+        mmo1.Lines.Add('Verifying ' + FFMPEGDLL[i]);
         mmo1.Lines.Add('   Error code: ' + ErrorCode.ToString + ' - ' + ErrorString);
         R := False;
       end;

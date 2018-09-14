@@ -1,15 +1,15 @@
 FFmpeg Delphi/Pascal Headers and Examples
 
-Ported from FFmpeg 3.0.2
+Ported from FFmpeg 3.4.2
 
-Tested on Delphi 6 to Delphi 10.1 Berlin and FPC 2.6.4 (Win32 only)
+Tested on Delphi 6 to Delphi 10.2 Tokyo and FPC 3.0.2 (Win32 only)
 
 *********************************************************************
 
 FFmpeg Delphi/Pascal Headers and Examples License Agreement
 
 A modified part of FFVCL - Delphi FFmpeg VCL Components.
-Copyright (c) 2008-2016 DelphiFFmpeg.com
+Copyright (c) 2008-2018 DelphiFFmpeg.com
 All rights reserved.
 http://www.DelphiFFmpeg.com
 
