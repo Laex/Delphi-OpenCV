@@ -1,6 +1,6 @@
 # Delphi-OpenCV
-* OpenCV version - 2.4.13.3<br>
-* Development environment - Delphi 2010-10.2<br>
+* OpenCV version - 2.4.13<br>
+* Development environment - Delphi 2010-10.2.3<br>
 
 <b>Contributors:</b>
 
@@ -29,13 +29,14 @@ After installing OpenCV:
 ```
 * Some examples (FFMPEG) required [SDL 2.0 and SDL 1.2][3]<br>
 ```
-(7) SDL.dll and SDL2.dll
+(7) 32-bit - SDL.dll and SDL2.dll
+(8) 64-bit - SDL.dll and SDL2.dll
 ```
 
 #### Copy files
 <b>OS Windows 64-bit</b><br>
 ```
-Target platform 64-bit: (2),(4),(6) -> "C:\Windows\System32\"
+Target platform 64-bit: (2),(4),(6),(8) -> "C:\Windows\System32\"
 Target platform 32-bit: (1),(3),(5),(7) -> "C:\Windows\SysWOW64\"
 ```
 <b>OS Windows 32-bit</b><br>

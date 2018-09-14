@@ -22,7 +22,7 @@
     <ProjectGuid>{78DEF71B-AE48-44A1-9BEF-F517051EBF8F}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>opencv_classes</RootNamespace>
-    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -71,12 +71,12 @@
     <LinkIncremental>true</LinkIncremental>
     <TargetExt>2413d.dll</TargetExt>
     <OutDir>..\..\bin\Win32\</OutDir>
-    <IncludePath>D:\opencv\build\include\;$(IncludePath)</IncludePath>
-    <LibraryPath>D:\opencv\build\x86\vc14\lib\;$(LibraryPath)</LibraryPath>
+    <IncludePath>D:\opencv\2.4.13.6\build\include\;$(IncludePath)</IncludePath>
+    <LibraryPath>D:\opencv\2.4.13.6\build\x86\vc14\lib\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>D:\opencv\build\include\;$(IncludePath)</IncludePath>
-    <LibraryPath>D:\opencv\build\x64\vc14\lib\;$(LibraryPath)</LibraryPath>
+    <IncludePath>D:\opencv\2.4.13.6\build\include\;$(IncludePath)</IncludePath>
+    <LibraryPath>D:\opencv\2.4.13.6\build\x64\vc14\lib\;$(LibraryPath)</LibraryPath>
     <LinkIncremental>true</LinkIncremental>
     <TargetExt>2413d.dll</TargetExt>
     <OutDir>..\..\bin\win64\</OutDir>
@@ -86,13 +86,13 @@
     <LinkIncremental>false</LinkIncremental>
     <OutDir>..\..\bin\Win32\</OutDir>
     <TargetExt>2413.dll</TargetExt>
-    <IncludePath>D:\opencv\build\include\;$(IncludePath)</IncludePath>
-    <LibraryPath>D:\opencv\build\x86\vc14\lib\;$(LibraryPath)</LibraryPath>
+    <IncludePath>D:\opencv\2.4.13.6\build\include\;$(IncludePath)</IncludePath>
+    <LibraryPath>D:\opencv\2.4.13.6\build\x86\vc14\lib\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <TargetExt>2413.dll</TargetExt>
-    <IncludePath>D:\opencv\build\include\;$(IncludePath)</IncludePath>
-    <LibraryPath>D:\opencv\build\x64\vc14\lib\;$(LibraryPath)</LibraryPath>
+    <IncludePath>D:\opencv\2.4.13.6\build\include\;$(IncludePath)</IncludePath>
+    <LibraryPath>D:\opencv\2.4.13.6\build\x64\vc14\lib\;$(LibraryPath)</LibraryPath>
     <LinkIncremental>false</LinkIncremental>
     <OutDir>..\..\bin\win64\</OutDir>
     <IntDir>$(Configuration)\</IntDir>
