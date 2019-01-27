@@ -1,0 +1,72 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{342281EC-8E8F-40D6-ACC5-2652C3DDB7D4}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="dclCommonOpenCV260.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="dclFMXOpenCV260.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="dclFFMSource260.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="dclVCLOpenCV260.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="dclCommonOpenCV260">
+        <MSBuild Projects="dclCommonOpenCV260.dproj"/>
+    </Target>
+    <Target Name="dclCommonOpenCV260:Clean">
+        <MSBuild Projects="dclCommonOpenCV260.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="dclCommonOpenCV260:Make">
+        <MSBuild Projects="dclCommonOpenCV260.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="dclFMXOpenCV260">
+        <MSBuild Projects="dclFMXOpenCV260.dproj"/>
+    </Target>
+    <Target Name="dclFMXOpenCV260:Clean">
+        <MSBuild Projects="dclFMXOpenCV260.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="dclFMXOpenCV260:Make">
+        <MSBuild Projects="dclFMXOpenCV260.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="dclFFMSource260">
+        <MSBuild Projects="dclFFMSource260.dproj"/>
+    </Target>
+    <Target Name="dclFFMSource260:Clean">
+        <MSBuild Projects="dclFFMSource260.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="dclFFMSource260:Make">
+        <MSBuild Projects="dclFFMSource260.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="dclVCLOpenCV260">
+        <MSBuild Projects="dclVCLOpenCV260.dproj"/>
+    </Target>
+    <Target Name="dclVCLOpenCV260:Clean">
+        <MSBuild Projects="dclVCLOpenCV260.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="dclVCLOpenCV260:Make">
+        <MSBuild Projects="dclVCLOpenCV260.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="dclCommonOpenCV260;dclFMXOpenCV260;dclFFMSource260;dclVCLOpenCV260"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="dclCommonOpenCV260:Clean;dclFMXOpenCV260:Clean;dclFFMSource260:Clean;dclVCLOpenCV260:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="dclCommonOpenCV260:Make;dclFMXOpenCV260:Make;dclFFMSource260:Make;dclVCLOpenCV260:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>

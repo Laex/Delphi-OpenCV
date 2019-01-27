@@ -1,6 +1,6 @@
 # Delphi-OpenCV
 * OpenCV version - 2.4.13<br>
-* Development environment - Delphi 2010-10.2.3<br>
+* Development environment - Delphi 2010-10.3<br>
 
 <b>Contributors:</b>
 
@@ -15,7 +15,7 @@ or from the repository:
 (1) 32-bit in the "Delphi-OpenCV\redist\VC14\x86\"
 (2) 64-bit in the "Delphi-OpenCV\redist\VC14\x64\"
 ```
-* Shared library FFMPEG 3.4.2 for Windows can be downloaded from [here][5]<br>
+* Shared library FFMPEG 4.0.2 for Windows can be downloaded from [here][5]<br>
 ```
 (3) FFmpeg 32-bit Shared
 (4) FFmpeg 64-bit Shared
@@ -55,7 +55,7 @@ Unzip it to a convenient directory, thus get the following directory structure<b
 	<samples>
 	<source>
 ```
-Download the [FFmpeg Delphi/Pascal Headers][6] and extract to <PROJECT_ROOT>\source\ffmpeg<br>
+Download the [FFmpeg Delphi/Pascal Headers 4.0.2][6] and extract to <PROJECT_ROOT>\source\ffmpeg<br>
 Add the search path for the modules of the project in Delphi IDE (Tools-Options-Delphi Options-Library-Library path)
 ```
 <PROJECT_ROOT>\source

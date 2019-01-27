@@ -11,6 +11,7 @@ type
     mmo1: TMemo;
     btn1: TButton;
     pb1: TProgressBar;
+    chk1: TCheckBox;
     procedure btn1Click(Sender: TObject);
     procedure FormActivate(Sender: TObject);
   private
@@ -31,10 +32,9 @@ const
 
   MSDLL_Core: array of string = ['concrt140', 'msvcp140', 'ucrtbase', 'vcruntime140'];
 
-  CVDLL_Core: array of string = ['opencv_calib3d2413', 'opencv_contrib2413', 'opencv_core2413', 'opencv_features2d2413', 'opencv_flann2413',
-    'opencv_gpu2413', 'opencv_highgui2413', 'opencv_imgproc2413', 'opencv_legacy2413', 'opencv_ml2413', 'opencv_nonfree2413',
-    'opencv_objdetect2413', 'opencv_ocl2413', 'opencv_photo2413', 'opencv_stitching2413', 'opencv_superres2413', 'opencv_video2413',
-    'opencv_videostab2413', 'opencv_ffmpeg2413'];
+  CVDLL_Core: array of string = ['opencv_calib3d2413', 'opencv_contrib2413', 'opencv_core2413', 'opencv_features2d2413', 'opencv_flann2413', 'opencv_gpu2413', 'opencv_highgui2413',
+    'opencv_imgproc2413', 'opencv_legacy2413', 'opencv_ml2413', 'opencv_nonfree2413', 'opencv_objdetect2413', 'opencv_ocl2413', 'opencv_photo2413', 'opencv_stitching2413',
+    'opencv_superres2413', 'opencv_video2413', 'opencv_videostab2413', 'opencv_ffmpeg2413'];
 
   CVDLL_Classes: array of string = ['opencv_classes2413'];
 
@@ -93,13 +93,19 @@ begin
         mmo1.Lines.Add('Verifying ' + MSDLL_Core[i] + '.dll');
         mmo1.Lines.Add('   Error code: ' + ErrorCode.ToString + ' - ' + ErrorString);
         R := False;
-      end;
+      end
+      else if chk1.Checked then
+        mmo1.Lines.Add(MSDLL_Core[i] + '.dll - ok');
+
       if not CheckLoadDLL(MSDLL_Core[i] + 'd.dll', ErrorCode, ErrorString) then
       begin
         mmo1.Lines.Add('Verifying ' + MSDLL_Core[i] + 'd.dll');
         mmo1.Lines.Add('   Error code: ' + ErrorCode.ToString + ' - ' + ErrorString);
         R := False;
-      end;
+      end
+      else if chk1.Checked then
+        mmo1.Lines.Add(MSDLL_Core[i] + 'd.dll - ok');
+
       pb1.Position := pb1.Position + 1;
       Application.ProcessMessages;
     end;
@@ -115,13 +121,17 @@ begin
         mmo1.Lines.Add('Verifying ' + CVDLL_Core[i] + '.dll');
         mmo1.Lines.Add('   Error code: ' + ErrorCode.ToString + ' - ' + ErrorString);
         R := False;
-      end;
+      end
+      else if chk1.Checked then
+        mmo1.Lines.Add(CVDLL_Core[i] + '.dll - ok');
       if (i < High(CVDLL_Core)) and (not CheckLoadDLL(CVDLL_Core[i] + 'd.dll', ErrorCode, ErrorString)) then
       begin
         mmo1.Lines.Add('Verifying ' + CVDLL_Core[i] + 'd.dll');
         mmo1.Lines.Add('   Error code: ' + ErrorCode.ToString + ' - ' + ErrorString);
         R := False;
-      end;
+      end
+      else if chk1.Checked then
+        mmo1.Lines.Add(CVDLL_Core[i] + 'd.dll - ok');
       pb1.Position := pb1.Position + 1;
       Application.ProcessMessages;
     end;
@@ -137,13 +147,17 @@ begin
         mmo1.Lines.Add('Verifying ' + CVDLL_Classes[i] + '.dll');
         mmo1.Lines.Add('   Error code: ' + ErrorCode.ToString + ' - ' + ErrorString);
         R := False;
-      end;
+      end
+      else if chk1.Checked then
+        mmo1.Lines.Add(CVDLL_Classes[i] + '.dll - ok');
       if not CheckLoadDLL(CVDLL_Classes[i] + 'd.dll', ErrorCode, ErrorString) then
       begin
         mmo1.Lines.Add('Verifying ' + CVDLL_Classes[i] + 'd.dll');
         mmo1.Lines.Add('   Error code: ' + ErrorCode.ToString + ' - ' + ErrorString);
         R := False;
-      end;
+      end
+      else if chk1.Checked then
+        mmo1.Lines.Add(CVDLL_Classes[i] + 'd.dll - ok');
       pb1.Position := pb1.Position + 1;
       Application.ProcessMessages;
     end;
@@ -159,7 +173,9 @@ begin
         mmo1.Lines.Add('Verifying ' + FFMPEGDLL[i]);
         mmo1.Lines.Add('   Error code: ' + ErrorCode.ToString + ' - ' + ErrorString);
         R := False;
-      end;
+      end
+      else if chk1.Checked then
+        mmo1.Lines.Add(FFMPEGDLL[i] + '.dll - ok');
       pb1.Position := pb1.Position + 1;
       Application.ProcessMessages;
     end;
@@ -175,7 +191,9 @@ begin
         mmo1.Lines.Add('Verifying ' + SDLDLL[i] + '.dll');
         mmo1.Lines.Add('   Error code: ' + ErrorCode.ToString + ' - ' + ErrorString);
         R := False;
-      end;
+      end
+      else if chk1.Checked then
+        mmo1.Lines.Add(SDLDLL[i] + '.dll - ok');
       pb1.Position := pb1.Position + 1;
       Application.ProcessMessages;
     end;

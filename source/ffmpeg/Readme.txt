@@ -1,6 +1,6 @@
 FFmpeg Delphi/Pascal Headers and Examples
 
-Ported from FFmpeg 3.4.2
+Ported from FFmpeg 4.0.2
 
 Tested on Delphi 6 to Delphi 10.2 Tokyo and FPC 3.0.2 (Win32 only)
 

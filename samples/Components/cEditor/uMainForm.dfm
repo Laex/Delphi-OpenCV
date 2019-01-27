@@ -2,8 +2,8 @@ object Form1: TForm1
   Left = 0
   Top = 0
   Caption = 'Form1'
-  ClientHeight = 491
-  ClientWidth = 444
+  ClientHeight = 467
+  ClientWidth = 442
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -36,7 +36,9 @@ object Form1: TForm1
   end
   object ocvmgprtn1: TocvImageOperation
     VideoSource = ocvcmrsrc1
-    OperationClassName = 'TocvNoneOperation'
+    OperationClassName = 'TocvEditor'
+    Operation.Step = 10
+    Operation.EditorOperation = eopNone
     Operations = <>
     Left = 204
     Top = 120

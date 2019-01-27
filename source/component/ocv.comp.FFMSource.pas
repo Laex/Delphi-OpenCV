@@ -351,8 +351,8 @@ begin
       Continue;
     end;
 
-    if (pCodec^.capabilities and CODEC_CAP_TRUNCATED) = 0 then
-      pCodecCtx^.flags := pCodecCtx^.flags or CODEC_FLAG_TRUNCATED; (* we dont send complete frames *)
+    if (pCodec^.capabilities and AV_CODEC_CAP_TRUNCATED) = 0 then
+      pCodecCtx^.flags := pCodecCtx^.flags or AV_CODEC_FLAG_TRUNCATED; (* we dont send complete frames *)
     // Open codec
     if avcodec_open2(pCodecCtx, pCodec, nil) < 0 then
     begin

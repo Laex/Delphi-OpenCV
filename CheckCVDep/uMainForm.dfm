@@ -29,7 +29,7 @@ object MainForm: TMainForm
       'mmo1')
     ReadOnly = True
     ScrollBars = ssVertical
-    TabOrder = 0
+    TabOrder = 3
   end
   object btn1: TButton
     Left = 8
@@ -37,7 +37,7 @@ object MainForm: TMainForm
     Width = 189
     Height = 25
     Caption = 'Verifying OpenCV dependencies'
-    TabOrder = 1
+    TabOrder = 0
     OnClick = btn1Click
   end
   object pb1: TProgressBar
@@ -47,5 +47,15 @@ object MainForm: TMainForm
     Height = 13
     Anchors = [akLeft, akTop, akRight]
     TabOrder = 2
+  end
+  object chk1: TCheckBox
+    Left = 232
+    Top = 28
+    Width = 113
+    Height = 17
+    Caption = 'Show dll names'
+    Checked = True
+    State = cbChecked
+    TabOrder = 1
   end
 end
