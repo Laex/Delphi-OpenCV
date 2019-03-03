@@ -189,7 +189,8 @@ type
     FURI: string;
     FProtocol: TocvIPProtocol;
   protected
-    function GetIPCamTarget: AnsiString;
+    function GetIPCamTarget: AnsiString; overload;
+    function GetIPCamTarget(var URL: AnsiString): Boolean; overload;
     procedure SetEnabled(Value: Boolean); override;
   public
     constructor Create(AOwner: TComponent); override;
@@ -268,8 +269,9 @@ Type
   end;
 
 Const
-  CameraResolution: array [TocvResolution] of TCameraResolution = ((cWidth: 160; cHeight: 120), (cWidth: 320; cHeight: 240), (cWidth: 424;
-    cHeight: 240), (cWidth: 640; cHeight: 360), (cWidth: 800; cHeight: 448), (cWidth: 960; cHeight: 544), (cWidth: 1280; cHeight: 720));
+  CameraResolution: array [TocvResolution] of TCameraResolution = ((cWidth: 160; cHeight: 120), (cWidth: 320;
+    cHeight: 240), (cWidth: 424; cHeight: 240), (cWidth: 640; cHeight: 360), (cWidth: 800; cHeight: 448), (cWidth: 960;
+    cHeight: 544), (cWidth: 1280; cHeight: 720));
 
   { TOpenCVCameraThread }
 
@@ -455,7 +457,8 @@ begin
     FSourceThread.Terminate;
     if FSourceThread.Suspended then
       FSourceThread.Resume;
-    FSourceThread := Nil;
+    FSourceThread.WaitFor;
+    FreeAndNil(FSourceThread);
   end;
 end;
 
@@ -583,7 +586,24 @@ begin
   end;
 end;
 
+function TocvIPCamSource.GetIPCamTarget(var URL: AnsiString): Boolean;
+begin
+  URL := IPProtocolString[FProtocol];
+  if Length(Trim(UserName)) <> 0 then
+    URL := URL + AnsiString(Trim(UserName)) + ':' + AnsiString(Trim(Password)) + '@';
+  URL := URL + AnsiString(IP) + ':' + AnsiString(IntToStr(Port));
+  if Length(Trim(URI)) > 0 then
+  begin
+    if (URL[Length(URL)] <> '/') and (URI[1] <> '/') then
+      URL := URL + '/';
+    URL := URL + AnsiString(URI);
+  end;
+  Result := Length(IP) > 0;
+end;
+
 procedure TocvIPCamSource.SetEnabled(Value: Boolean);
+Var
+  IPCamURL: AnsiString;
 begin
   if FEnabled <> Value then
   begin
@@ -599,11 +619,14 @@ begin
       end;
       if Value then
       begin
+        if GetIPCamTarget(IPCamURL) and (not(csLoading in ComponentState)) then
+        begin
 {$IFDEF DelphiOCVVersion_30}
-        FCapture := TVideoCapture.Create(GetIPCamTarget);
+          FCapture := TVideoCapture.Create(IPCamURL);
 {$ELSE}
-        FCapture := cvCreateFileCapture(PAnsiChar(GetIPCamTarget));
+          FCapture := cvCreateFileCapture(PAnsiChar(IPCamURL));
 {$ENDIF}
+        end;
         if Assigned(FCapture) then
         begin
           (FSourceThread as TocvCaptureThread).Capture := FCapture;
@@ -625,7 +648,7 @@ begin
     FSourceThread := TocvCaptureThread.Create(True);
     FSourceThread.OnNotifyData := OnNotifyData;
     FSourceThread.FThreadDelay := FThreadDelay;
-    FSourceThread.FreeOnTerminate := True;
+    // FSourceThread.FreeOnTerminate := True;
   end;
 end;
 

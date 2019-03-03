@@ -129,7 +129,7 @@ begin
     FSourceThread := TocvFFMpegIPCamSourceThread.Create(Self);
     FSourceThread.OnNotifyData := OnNotifyData;
     FSourceThread.ThreadDelay := FThreadDelay;
-    FSourceThread.FreeOnTerminate := True;
+//    FSourceThread.FreeOnTerminate := True;
   end;
 end;
 
@@ -368,8 +368,8 @@ begin
       Continue;
     end;
 
-    img_convert_context := sws_getCachedContext(nil, pCodecCtx^.Width, pCodecCtx^.Height, Integer(pCodecCtx^.pix_fmt), pCodecCtx^.Width,
-      pCodecCtx^.Height, Integer(AV_PIX_FMT_BGR24), SWS_BILINEAR, nil, nil, nil);
+    img_convert_context := sws_getCachedContext(nil, pCodecCtx^.Width, pCodecCtx^.Height, Integer(pCodecCtx^.pix_fmt),
+      pCodecCtx^.Width, pCodecCtx^.Height, Integer(AV_PIX_FMT_BGR24), SWS_BILINEAR, nil, nil, nil);
     if (img_convert_context = nil) then
     begin
       DoNotyfy(ffocvErrorGetStream);
@@ -394,7 +394,8 @@ begin
           avcodec_decode_video2(pCodecCtx, frame, @frame_finished, @packet);
           if (frame_finished <> 0) then
           begin
-            sws_scale(img_convert_context, @frame^.data, @frame^.linesize, 0, pCodecCtx^.Height, @iplframe^.imageData, @linesize);
+            sws_scale(img_convert_context, @frame^.data, @frame^.linesize, 0, pCodecCtx^.Height, @iplframe^.imageData,
+              @linesize);
             if Assigned(OnNotifyData) then
             begin
               Image := TocvImage.CreateClone(iplframe);
