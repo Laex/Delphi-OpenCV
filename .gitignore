@@ -17,7 +17,7 @@ CVAutoInstaller/
 
 #Files
 *.exe
-!CheckCVDep.exe
+!/CheckCVDep/CheckCVDep.exe
 #*.dll
 *.ini
 *.bsc

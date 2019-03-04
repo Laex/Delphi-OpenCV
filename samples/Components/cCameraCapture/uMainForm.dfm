@@ -24,10 +24,6 @@ object MainForm: TMainForm
     VideoSource = ocvmgprtn1
     Frames = <>
     Align = alClient
-    ExplicitLeft = 52
-    ExplicitTop = 70
-    ExplicitWidth = 285
-    ExplicitHeight = 297
   end
   object ocvmgprtn1: TocvImageOperation
     VideoSource = ocvcmrsrc1

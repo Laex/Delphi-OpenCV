@@ -414,7 +414,7 @@ const
   ///
 {$I haarcascade.inc}
 {$R haarcascade.res haarcascade.rc}
-{.$R haarcascade.res}
+{$R haarcascade.res}
 
 implementation
 

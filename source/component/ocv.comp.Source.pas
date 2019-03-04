@@ -136,7 +136,7 @@ type
     constructor Create(AOwner: TComponent); override;
   end;
 
-  TocvResolution = (r160x120, r320x240, r424x240, r640x360, r800x448, r960x544, r1280x720);
+  TocvResolution = (r160x120, r320x240, r424x240, r640x360, r800x448, r960x544, r1280x720, rCustom);
 
   TocvCameraSource = class(TocvCaptureSource)
   protected
@@ -144,6 +144,8 @@ type
   private
     FCaptureSource: TocvCameraCaptureSource;
     FResolution: TocvResolution;
+    FCustomHeight: Cardinal;
+    FCustomWidth: Cardinal;
     procedure SetCameraSource(const Value: TocvCameraCaptureSource);
     procedure SetResolution(const Value: TocvResolution);
     procedure SetCameraResolution;
@@ -152,6 +154,8 @@ type
   published
     property Camera: TocvCameraCaptureSource read FCaptureSource write SetCameraSource default CAP_ANY;
     property Resolution: TocvResolution read FResolution write SetResolution default r160x120;
+    property CustomWidth: Cardinal read FCustomWidth write FCustomWidth default 0;
+    property CustomHeight: Cardinal read FCustomHeight write FCustomHeight default 0;
   end;
 
   TocvFileSource = class(TocvCaptureSource)
@@ -271,7 +275,7 @@ Type
 Const
   CameraResolution: array [TocvResolution] of TCameraResolution = ((cWidth: 160; cHeight: 120), (cWidth: 320;
     cHeight: 240), (cWidth: 424; cHeight: 240), (cWidth: 640; cHeight: 360), (cWidth: 800; cHeight: 448), (cWidth: 960;
-    cHeight: 544), (cWidth: 1280; cHeight: 720));
+    cHeight: 544), (cWidth: 1280; cHeight: 720), (cWidth: 0; cHeight: 0));
 
   { TOpenCVCameraThread }
 
@@ -389,13 +393,27 @@ begin
 end;
 
 procedure TocvCameraSource.SetCameraResolution;
+Var
+  cR: TCameraResolution;
 begin
+  if (FResolution = rCustom) then
+  begin
+    if (FCustomWidth > 0) and (FCustomHeight > 0) then
+    begin
+      cR.cWidth := FCustomWidth;
+      cR.cHeight := FCustomHeight;
+    end
+    else
+      cR := CameraResolution[r160x120];
+  end
+  else
+    cR := CameraResolution[FResolution];
 {$IFDEF DelphiOCVVersion_30}
-  FCapture.Prop[CV_CAP_PROP_FRAME_WIDTH] := CameraResolution[FResolution].cWidth;
-  FCapture.Prop[CV_CAP_PROP_FRAME_HEIGHT] := CameraResolution[FResolution].cHeight;
+  FCapture.Prop[CV_CAP_PROP_FRAME_WIDTH] := cR.cWidth;
+  FCapture.Prop[CV_CAP_PROP_FRAME_HEIGHT] := cR.cHeight;
 {$ELSE}
-  cvSetCaptureProperty(FCapture, CV_CAP_PROP_FRAME_WIDTH, CameraResolution[FResolution].cWidth);
-  cvSetCaptureProperty(FCapture, CV_CAP_PROP_FRAME_HEIGHT, CameraResolution[FResolution].cHeight);
+  cvSetCaptureProperty(FCapture, CV_CAP_PROP_FRAME_WIDTH, cR.cWidth);
+  cvSetCaptureProperty(FCapture, CV_CAP_PROP_FRAME_HEIGHT, cR.cHeight);
 {$ENDIF}
 end;
 

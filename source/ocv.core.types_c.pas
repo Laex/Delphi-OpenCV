@@ -52,6 +52,14 @@ unit ocv.core.types_c;
 
 interface
 
+Uses
+{$IFDEF HAS_UNITSCOPE}
+  Winapi.Windows
+{$ELSE}
+    Windows
+{$ENDIF}
+    ;
+
 const
   // Ќаименьшее число дл€ которого выполн€етс€ условие 1.0+DBL_EPSILON <> 1.0
   DBL_EPSILON = 2.2204460492503131E-016;
@@ -66,7 +74,7 @@ type
   size_t = NativeUInt;
   pFloat = ^Float;
   ppFloat = ^pFloat;
-  pPointer = System.PPointer;//^Pointer;
+  pPointer = System.pPointer; // ^Pointer;
   ppvoid = pPointer;
 
   TSingleArray1D = array [0 .. 1] of Single;
@@ -78,7 +86,7 @@ type
   TCVChar = CVChar;
   pCVChar = pAnsiChar;
   TpCVCharArray = array [0 .. 0] of pCVChar;
-  ppCVChar = ^TpCVCharArray;  
+  ppCVChar = ^TpCVCharArray;
   // {$IFNDEF WIN64}
   // size_t = UInt32;
   // {$ELSE}
@@ -1636,7 +1644,8 @@ Type
   // typedef void* (CV_CDECL *CvReadFunc)( CvFileStorage* storage, CvFileNode* node );
   TCvReadFunc = function(storage: pCvFileStorage; node: pCvFileNode): Pointer; cdecl;
   // typedef void (CV_CDECL *CvWriteFunc)( CvFileStorage* storage, const char* name,const void* struct_ptr, CvAttrList attributes );
-  TCvWriteFunc = procedure(storage: pCvFileStorage; const name: pCVChar; const struct_ptr: pPointer; attributes: TCvAttrList); cdecl;
+  TCvWriteFunc = procedure(storage: pCvFileStorage; const name: pCVChar; const struct_ptr: pPointer;
+    attributes: TCvAttrList); cdecl;
   // typedef void* (CV_CDECL *CvCloneFunc)( const void* struct_ptr );
   TCvCloneFunc = function(const struct_ptr: pPointer): Pointer; cdecl;
 
@@ -2273,7 +2282,8 @@ function cvScalarAll(val0123: Double): TCvScalar; {$IFDEF USE_INLINE}inline; {$E
 function cvPoint(const x: Integer = 0; const y: Integer = 0): TCvPoint; {$IFDEF USE_INLINE}inline; {$ENDIF}
 function CvPoint2f(const x: Single = 0; const y: Single = 0): TcvPoint2f; {$IFDEF USE_INLINE}inline; {$ENDIF}
 function CvSize(const width, height: Integer): TCvSize; {$IFDEF USE_INLINE}inline; {$ENDIF}
-function CvScalar(const val0: Double; const val1: Double = 0; const val2: Double = 0; const val3: Double = 0): TCvScalar;
+function CvScalar(const val0: Double; const val1: Double = 0; const val2: Double = 0; const val3: Double = 0)
+  : TCvScalar;
 {$IFDEF USE_INLINE}inline; {$ENDIF}
 function cvRandInt(Var rng: TCvRNG): Cardinal; {$IFDEF USE_INLINE}inline; {$ENDIF}
 function CvRect(Const x, y, width, height: Integer): TCvRect; {$IFDEF USE_INLINE}inline; {$ENDIF}
@@ -2428,7 +2438,8 @@ end;
 
 function CV_ELEM_SIZE;
 begin
-  Result := (CV_MAT_CN(_type) shl ((((SizeOf(NativeInt) div 4 + 1) * (16384 or $3A50)) shr CV_MAT_DEPTH(_type) * 2) and 3));
+  Result := (CV_MAT_CN(_type) shl ((((SizeOf(NativeInt) div 4 + 1) * (16384 or $3A50)) shr CV_MAT_DEPTH(_type) *
+    2) and 3));
 end;
 
 function CV_32SC1: Integer;
@@ -2748,8 +2759,8 @@ end;
 function CV_IMAGE_ELEM(image: pIplImage; size_elemtype, row, col: Integer): Pointer; {$IFDEF USE_INLINE}inline; {$ENDIF}
 begin
   // (((elemtype*)((image)->imageData + (image)->widthStep*(row)))[(col)])
-  Result := {$IFDEF DELPHI7}Pointer({$ENDIF DELPHI7}{$IFDEF DELPHI2005_UP}PByte{$ELSE}Integer{$ENDIF}(image^.imageData) + image^.widthStep *
-    row + col * size_elemtype{$IFDEF DELPHI7}){$ENDIF DELPHI7};
+  Result := {$IFDEF DELPHI7}Pointer({$ENDIF DELPHI7}{$IFDEF DELPHI2005_UP}PByte{$ELSE}Integer{$ENDIF}(image^.imageData)
+    + image^.widthStep * row + col * size_elemtype{$IFDEF DELPHI7}){$ENDIF DELPHI7};
 end;
 
 function cvRealScalar(val0: Double): TCvScalar; {$IFDEF USE_INLINE}inline; {$ENDIF}
