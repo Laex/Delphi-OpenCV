@@ -85,7 +85,7 @@ type
 
   TocvViewFrame = class(TCollectionItem, IocvDataReceiver)
   private
-    FocvVideoSource: IocvDataSource;
+    [weak] FocvVideoSource: IocvDataSource;
     FImage: IocvImage;
     FLock: TCriticalSection;
     FDrawRect: TocvPersistentRect;
@@ -113,7 +113,7 @@ type
 
   TocvView = class(TWinControl, IocvDataReceiver)
   private
-    FocvVideoSource: IocvDataSource;
+    [weak] FocvVideoSource: IocvDataSource;
     FImage: IocvImage;
     FOnAfterPaint: TOnOcvAfterViewPaint;
     FOnBeforePaint: TOnOcvNotify;
@@ -180,8 +180,9 @@ end;
 
 destructor TocvView.Destroy;
 begin
-  if Assigned(FocvVideoSource) then
-    FocvVideoSource.RemoveReceiver(Self);
+  // if Assigned(FocvVideoSource) then
+  // FocvVideoSource.RemoveReceiver(Self);
+  VideoSource := nil;
   FCanvas.Free;
   FFrames.Free;
   inherited;
@@ -191,10 +192,10 @@ procedure TocvView.SetOpenCVVideoSource(const Value: IocvDataSource);
 begin
   if FocvVideoSource <> Value then
   begin
-    if Assigned(FocvVideoSource) then
+    if Assigned(FocvVideoSource) and (not(csDesigning in ComponentState)) then
       FocvVideoSource.RemoveReceiver(Self);
     FocvVideoSource := Value;
-    if Assigned(FocvVideoSource) then
+    if Assigned(FocvVideoSource) and (not(csDesigning in ComponentState)) then
       FocvVideoSource.AddReceiver(Self);
   end;
 end;

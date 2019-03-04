@@ -334,7 +334,7 @@ Type
 
   TocvDataReceiver = class(TComponent, IocvDataReceiver)
   private
-    FocvVideoSource: IocvDataSource;
+    [weak] FocvVideoSource: IocvDataSource;
   protected
     procedure SetVideoSource(const Value: TObject); virtual;
     procedure SetOpenCVVideoSource(const Value: IocvDataSource); virtual;
@@ -348,7 +348,7 @@ Type
 
   TocvDataSourceAndReceiver = class(TocvDataSource, IocvDataReceiver)
   private
-    FocvVideoSource: IocvDataSource;
+    [weak] FocvVideoSource: IocvDataSource;
   protected
     procedure SetVideoSource(const Value: TObject); virtual;
     procedure SetOpenCVVideoSource(const Value: IocvDataSource); virtual;
