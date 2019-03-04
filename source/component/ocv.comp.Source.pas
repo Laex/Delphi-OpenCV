@@ -358,7 +358,9 @@ procedure TocvCameraSource.SetEnabled(Value: Boolean);
 begin
   if FEnabled <> Value then
   begin
-    if not(csDesigning in ComponentState) then
+    if csDesigning in ComponentState then
+      FEnabled := Value
+    else
     begin
       if Assigned(FCapture) and FEnabled then
       begin
@@ -367,6 +369,7 @@ begin
         cvReleaseCapture(FCapture);
 {$ENDIF}
         FCapture := Nil;
+        FEnabled := False;
       end;
       if Value then
       begin
@@ -385,10 +388,10 @@ begin
 {$ENDIF}
           (FSourceThread as TocvCaptureThread).Capture := FCapture;
           FSourceThread.Resume;
+          FEnabled := True;
         end;
       end;
     end;
-    FEnabled := Value;
   end;
 end;
 
