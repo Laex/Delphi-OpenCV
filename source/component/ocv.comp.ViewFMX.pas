@@ -44,21 +44,50 @@ uses
 
 // Delphi XE5 and below
 const
-  PixelFormatBytes: array [TPixelFormat] of Integer = ( { pfUnknown } 0, { pfA16B16G16R16 } 8, { pfA2R10G10B10 } 4,
+  PixelFormatBytes: array [TPixelFormat] of Integer = (
+    { pfUnknown } 0,
+    { pfA16B16G16R16 } 8,
+    { pfA2R10G10B10 } 4,
     { pfA2B10G10R10 } 4,
     { pfA8R8G8B8 } 4,
-    { pfX8R8G8B8 } 4, { pfA8B8G8R8 } 4, { pfX8B8G8R8 } 4, { pfR5G6B5 } 2, { pfA4R4G4B4 } 2, { pfA1R5G5B5 } 2,
+    { pfX8R8G8B8 } 4,
+    { pfA8B8G8R8 } 4,
+    { pfX8B8G8R8 } 4,
+    { pfR5G6B5 } 2,
+    { pfA4R4G4B4 } 2,
+    { pfA1R5G5B5 } 2,
     { pfX1R5G5B5 } 2,
     { pfG16R16 } 4,
-    { pfA8L8 } 2, { pfA4L4 } 1, { pfL16 } 2, { pfL8 } 1, { pfR16F } 2, { pfG16R16F } 4, { pfA16B16G16R16F } 8,
+    { pfA8L8 } 2,
+    { pfA4L4 } 1,
+    { pfL16 } 2,
+    { pfL8 } 1,
+    { pfR16F } 2,
+    { pfG16R16F } 4,
+    { pfA16B16G16R16F } 8,
     { pfR32F } 4,
-    { pfG32R32F } 8, { pfA32B32G32R32F } 16,
-    { pfA8 } 1, { pfV8U8 } 2, { pfL6V5U5 } 2, { pfX8L8V8U8 } 4, { pfQ8W8V8U8 } 4, { pfV16U16 } 4, { pfA2W10V10U10 } 4,
+    { pfG32R32F } 8,
+    { pfA32B32G32R32F } 16,
+    { pfA8 } 1,
+    { pfV8U8 } 2,
+    { pfL6V5U5 } 2,
+    { pfX8L8V8U8 } 4,
+    { pfQ8W8V8U8 } 4,
+    { pfV16U16 } 4,
+    { pfA2W10V10U10 } 4,
     { pfU8Y8_V8Y8 } 4,
-    { pfR8G8_B8G8 } 4, { pfY8U8_Y8V8 } 4,
-    { pfG8R8_G8B8 } 4, { pfQ16W16V16U16 } 8, { pfCxV8U8 } 2, { pfDXT1 } 8, { pfDXT2 } 16, { pfDXT3 } 16, { pfDXT4 } 16,
+    { pfR8G8_B8G8 } 4,
+    { pfY8U8_Y8V8 } 4,
+    { pfG8R8_G8B8 } 4,
+    { pfQ16W16V16U16 } 8,
+    { pfCxV8U8 } 2,
+    { pfDXT1 } 8,
+    { pfDXT2 } 16,
+    { pfDXT3 } 16,
+    { pfDXT4 } 16,
     { pfDXT5 } 16,
-    { pfA32B32G32R32 } 16, { pfB10G11R11F } 4);
+    { pfA32B32G32R32 } 16,
+    { pfB10G11R11F } 4);
 {$ENDIF}
 
 type
@@ -71,8 +100,9 @@ type
 
   TocvViewFMX = class(TControl, IocvDataReceiver)
   private
-    FStretch: Boolean;
+    [weak]
     FocvVideoSource: IocvDataSource;
+    FStretch: Boolean;
     FCenter: Boolean;
     FProportional: Boolean;
     FImage: IocvImage;
@@ -169,7 +199,12 @@ end;
 
 procedure TocvViewFMX.DrawImage(const IplImage: IocvImage);
 begin
-  FImage := IplImage;
+  Canvas.Lock;
+  try
+    FImage := IplImage;
+  finally
+    Canvas.Unlock;
+  end;
   Repaint;
 end;
 
@@ -194,10 +229,15 @@ begin
     if Assigned(OnBeforePaint) then
       OnBeforePaint(Self, FImage);
 
+    Canvas.Lock;
+    try
 {$IFDEF DELPHIXE5_UP}
-    IPLImageToFMXBitmap(FImage.IpImage, BackBuffer);
+      IPLImageToFMXBitmap(FImage.IpImage, BackBuffer);
 {$ENDIF}
-    Canvas.DrawBitmap(BackBuffer, RectF(0, 0, BackBuffer.Width, BackBuffer.Height), PaintRect, 1, True);
+      Canvas.DrawBitmap(BackBuffer, RectF(0, 0, BackBuffer.Width, BackBuffer.Height), PaintRect, 1, True);
+    finally
+      Canvas.Unlock;
+    end;
 
     if Assigned(OnAfterPaint) then
       OnAfterPaint(Self, FImage);

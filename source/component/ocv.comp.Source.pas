@@ -226,7 +226,6 @@ Type
     procedure SetCapture(const Value: TcsVideoCapture); virtual;
   protected
     FCapture: TcsVideoCapture;
-  protected
     procedure Execute; override;
   public
     property Capture: TcsVideoCapture read FCapture write SetCapture;
