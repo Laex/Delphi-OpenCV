@@ -21,7 +21,7 @@
   rights and limitations under the License.
   ****************************************************************** *)
 
-program cv_SetImageROI2;
+program cv_SetImageROI3;
 
 {$APPTYPE CONSOLE}
 {$R *.res}
@@ -37,12 +37,10 @@ uses
 
 const
   // имя картинки
-  filename = cResourceMedia + 'opencv_logo_with_text.png';
-  filename2 = cResourceMedia + 'cat2.jpg';
+  filename = cResourceMedia + 'cat2.jpg';
 
 var
   image: PIplImage = nil;
-  src: PIplImage = nil;
   x: Integer;
   y: Integer;
   width: Integer;
@@ -55,34 +53,26 @@ begin
     Writeln('[i] image: ', filename);
     if not Assigned(image) then
       Halt;
+
     cvNamedWindow('origianl', CV_WINDOW_AUTOSIZE);
     cvNamedWindow('ROI', CV_WINDOW_AUTOSIZE);
     // задаём ROI
-    x := 120;
-    y := 50;
-    // добавочное изображение
-    src := cvLoadImage(filename2, 1);
-    if not Assigned(src) then
-      Halt;
-    // размер ROI
-    width := src^.width;
-    height := src^.height;
+    x := 10;
+    y := 10;
+    width := image^.width div 2;
+    height := image^.height div 2;
+
     cvShowImage('origianl', image);
     // уcтанавливаем ROI
     cvSetImageROI(image, cvRect(x, y, width, height));
-    // обнулим изображение
-    cvZero(image);
-    // копируем изображение
-    cvCopy(src, image);
-    // cбрccываем ROI
-    cvResetImageROI(image);
     // показываем изображение
     cvShowImage('ROI', image);
+    // cбрccываем ROI
+    cvResetImageROI(image);
     // ждём нажатия клавиши
     cvWaitKey(0);
     // оcвобождаем реcурcы
     cvReleaseImage(image);
-    cvReleaseImage(src);
     cvDestroyAllWindows;
   except
     on E: Exception do
