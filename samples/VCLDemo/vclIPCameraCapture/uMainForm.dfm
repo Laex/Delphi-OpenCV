@@ -101,9 +101,7 @@ object MainForm: TMainForm
     Width = 294
     Height = 21
     TabOrder = 1
-    Text = 
-      'rtsp://admin:admin@192.168.0.202:554/cam/realmonitor?channel=1&s' +
-      'ubtype=0'
+    Text = 'rtsp://80.78.116.125:1500/rtplive/5goda_hd.stream'
   end
   object ButtonStartCapture: TButton
     Left = 378

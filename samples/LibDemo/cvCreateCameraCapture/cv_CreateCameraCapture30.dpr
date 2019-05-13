@@ -103,7 +103,7 @@ begin
           capframe := cvCreateImage(cvGetSize(frame), frame^.depth, frame^.nChannels);
         case op of
           0:
-            cvCopyImage(frame, capframe);
+            cvCopy(frame, capframe);
           1:
             Sature(opvalue, frame, capframe);
           2:
@@ -121,7 +121,7 @@ begin
           8:
             Clarity(opvalue, frame, capframe);
         else
-          cvCopyImage(frame, capframe);
+          cvCopy(frame, capframe);
         end;
       end;
       // показываем

@@ -32,6 +32,7 @@ interface
 uses
   System.Classes,
   System.Types,
+  System.SyncObjs,
   FMX.Types,
 {$IFDEF DELPHIXE2_UP} // Delphi XE6 and above
   FMX.Graphics,
@@ -108,6 +109,7 @@ type
     FImage: IocvImage;
     FOnAfterPaint: TOnOcvAfterViewPaint;
     FOnBeforePaint: TOnOcvNotify;
+    FCS: TCriticalSection;
     procedure SetOpenCVVideoSource(const Value: IocvDataSource);
     function isSourceEnabled: Boolean;
     function PaintRect: TRectF;
@@ -116,13 +118,17 @@ type
     procedure Paint; override;
     procedure TakeImage(const IplImage: IocvImage);
     procedure SetVideoSource(const Value: TObject);
+    procedure ImageLock;
+    procedure ImageUnLock;
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
     procedure DrawImage(const IplImage: IocvImage);
   published
-    property VideoSource: IocvDataSource Read FocvVideoSource write SetOpenCVVideoSource;
-    property Proportional: Boolean read FProportional write FProportional default false;
+    property VideoSource: IocvDataSource Read FocvVideoSource
+      write SetOpenCVVideoSource;
+    property Proportional: Boolean read FProportional write FProportional
+      default false;
     property Stretch: Boolean read FStretch write FStretch default True;
     property Center: Boolean read FCenter write FCenter default false;
     property Left;
@@ -130,8 +136,10 @@ type
     property Width Stored True;
     property Height Stored True;
     property Align;
-    property OnAfterPaint: TOnOcvAfterViewPaint read FOnAfterPaint write FOnAfterPaint;
-    property OnBeforePaint: TOnOcvNotify read FOnBeforePaint write FOnBeforePaint;
+    property OnAfterPaint: TOnOcvAfterViewPaint read FOnAfterPaint
+      write FOnAfterPaint;
+    property OnBeforePaint: TOnOcvNotify read FOnBeforePaint
+      write FOnBeforePaint;
     property OnEnter;
     property OnExit;
     property OnKeyDown;
@@ -175,7 +183,6 @@ end;
 constructor TocvViewFMX.Create(AOwner: TComponent);
 begin
   inherited;
-
 {$IFDEF DELPHIXE6_UP} // Delphi XE6 and above
   BackBuffer := TBitmap.Create;
 {$ENDIF}
@@ -186,6 +193,7 @@ begin
   BackBuffer := TBitmap.Create(0, 0);
   BackBuffer.SetPixelFormat(TPixelFormat.pfX8R8G8B8);
 {$ENDIF}
+  FCS := TCriticalSection.Create;
   Stretch := True;
   Proportional := false;
   Center := false;
@@ -193,24 +201,38 @@ end;
 
 destructor TocvViewFMX.Destroy;
 begin
+  FCS.Free;
   BackBuffer.Free;
   inherited;
 end;
 
 procedure TocvViewFMX.DrawImage(const IplImage: IocvImage);
 begin
-  Canvas.Lock;
+  ImageLock;
   try
     FImage := IplImage;
   finally
-    Canvas.Unlock;
+    ImageUnLock;
   end;
   Repaint;
 end;
 
+procedure TocvViewFMX.ImageLock;
+begin
+  // Canvas.Lock;
+  FCS.Enter;
+end;
+
+procedure TocvViewFMX.ImageUnLock;
+begin
+  FCS.Leave;
+  // Canvas.UnLock;
+end;
+
 function TocvViewFMX.isSourceEnabled: Boolean;
 begin
-  Result := (Assigned(VideoSource) and (VideoSource.Enabled)) or Assigned(FImage);
+  Result := (Assigned(VideoSource) and (VideoSource.Enabled)) or
+    Assigned(FImage);
 end;
 
 procedure TocvViewFMX.Paint;
@@ -228,15 +250,15 @@ begin
   begin
     if Assigned(OnBeforePaint) then
       OnBeforePaint(Self, FImage);
-
-    Canvas.Lock;
+    ImageLock;
     try
 {$IFDEF DELPHIXE5_UP}
       IPLImageToFMXBitmap(FImage.IpImage, BackBuffer);
 {$ENDIF}
-      Canvas.DrawBitmap(BackBuffer, RectF(0, 0, BackBuffer.Width, BackBuffer.Height), PaintRect, 1, True);
+      Canvas.DrawBitmap(BackBuffer, RectF(0, 0, BackBuffer.Width,
+        BackBuffer.Height), PaintRect, 1, True);
     finally
-      Canvas.Unlock;
+      ImageUnLock;
     end;
 
     if Assigned(OnAfterPaint) then
@@ -253,7 +275,8 @@ begin
   ViewHeight := FImage.IpImage^.Height;
   CliWidth := Trunc(Width);
   CliHeight := Trunc(Height);
-  if (Proportional and ((ViewWidth > CliWidth) or (ViewHeight > CliHeight))) or Stretch then
+  if (Proportional and ((ViewWidth > CliWidth) or (ViewHeight > CliHeight))) or Stretch
+  then
   begin
     if Proportional and (ViewWidth > 0) and (ViewHeight > 0) then
     begin
@@ -295,7 +318,8 @@ begin
   end;
 
   if Center then
-    OffsetRect(Result, (CliWidth - ViewWidth) div 2, (CliHeight - ViewHeight) div 2);
+    OffsetRect(Result, (CliWidth - ViewWidth) div 2,
+      (CliHeight - ViewHeight) div 2);
 end;
 
 procedure TocvViewFMX.SetOpenCVVideoSource(const Value: IocvDataSource);

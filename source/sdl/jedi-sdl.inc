@@ -434,6 +434,21 @@
    {$DEFINE HAS_TYPES}
 {$ENDIF VER320}
 
+{$IFDEF VER330} { Delphi 10.3 }
+   {$DEFINE Delphi}
+   {$DEFINE Delphi32}
+   {$DEFINE Delphi4UP}
+   {$DEFINE Delphi5UP}
+   {$DEFINE Delphi6UP}
+   {$DEFINE Delphi7UP}
+   {$DEFINE Delphi8UP}
+   {$DEFINE Delphi9UP}
+   {$DEFINE Delphi10UP}
+   {$WARN UNSAFE_TYPE OFF} {Disable warning for unsafe types in Delphi 7}
+   {$DEFINE Has_Int64}
+   {$DEFINE HAS_TYPES}
+{$ENDIF VER330}
+
 {$IFDEF UNIX}
   {$ifdef VER140}    // Kylix 1 & 2
     {$DEFINE KYLIX}
