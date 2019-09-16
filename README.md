@@ -15,7 +15,7 @@ or from the repository:
 (1) 32-bit in the "Delphi-OpenCV\redist\VC14\x86\"
 (2) 64-bit in the "Delphi-OpenCV\redist\VC14\x64\"
 ```
-* Shared library FFMPEG 4.0.2 for Windows can be downloaded from [here][5]<br>
+* Shared library FFMPEG 4.2 for Windows can be downloaded from [here][5]<br>
 ```
 (3) FFmpeg 32-bit Shared
 (4) FFmpeg 64-bit Shared
@@ -55,13 +55,13 @@ Unzip it to a convenient directory, thus get the following directory structure<b
 	<samples>
 	<source>
 ```
-Download the [FFmpeg Delphi/Pascal Headers 4.0.2][6] and extract to <PROJECT_ROOT>\source\ffmpeg<br>
+Download the [FFmpeg Delphi/Pascal Headers 4.0.2][6] and extract to <PROJECT_ROOT>\source\ffmpeg or use [DELPHI-FFMPEG][7] (as submodule)<br>
 Add the search path for the modules of the project in Delphi IDE (Tools-Options-Delphi Options-Library-Library path)
 ```
 <PROJECT_ROOT>\source
 <PROJECT_ROOT>\source\classes
 <PROJECT_ROOT>\source\component
-<PROJECT_ROOT>\source\ffmpeg\headers
+<PROJECT_ROOT>\source\ffmpeg\headers or <PROJECT_ROOT>\source\Delphi-FFMPEG\source
 <PROJECT_ROOT>\source\opengl
 <PROJECT_ROOT>\source\sdl
 <PROJECT_ROOT>\source\sdl2
@@ -131,3 +131,4 @@ Examples of use of components
 [4]: https://github.com/opencv/opencv/releases/tag/2.4.13.3
 [5]: http://ffmpeg.zeranoe.com/builds/
 [6]: http://www.delphiffmpeg.com/headers/
+[7]: https://github.com/Laex/Delphi-FFMPEG

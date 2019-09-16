@@ -44,7 +44,7 @@ Uses
   libavcodec;
 
 Type
-  TOnNotifyFFMpegPacket = procedure(Sender: TObject; const packet: TAVPacket; const isKeyFrame: Boolean) of object;
+  TOnNotifyFFMpegPacket = procedure(Sender: TObject; const packet: AVPacket; const isKeyFrame: Boolean) of object;
 
   TocvFFMpegIPCamEvent = (ffocvTryConnect, ffocvConnected, ffocvLostConnection, ffocvReconnect, ffocvErrorGetStream);
   TOnocvFFMpegIPCamEvent = procedure(Sender: TObject; const Event: TocvFFMpegIPCamEvent) of object;
@@ -66,7 +66,7 @@ Type
     function GetIPCamTarget: AnsiString;
     procedure SetEnabled(Value: Boolean); override;
     procedure Loaded; override;
-    procedure DoNotifyPacket(const packet: TAVPacket; const isKeyFrame: Boolean);
+    procedure DoNotifyPacket(const packet: AVPacket; const isKeyFrame: Boolean);
     procedure DoNotifyEvent(Event: TocvFFMpegIPCamEvent);
   public
     constructor Create(AOwner: TComponent); override;
@@ -89,11 +89,12 @@ Uses
   ocv.core.types_c,
   ocv.comp.Types,
   libavformat,
-  libavutil_dict,
+//  libavutil_dict,
   libavutil,
-  libavutil_frame,
-  libswscale,
-  libavutil_pixfmt;
+//  libavutil_frame,
+  libswscale
+//  ,libavutil_pixfmt
+  ;
 
 Type
   TocvFFMpegIPCamSourceThread = class(TocvCustomSourceThread)
@@ -139,7 +140,7 @@ begin
     OnIPCamEvent(Self, Event);
 end;
 
-procedure TocvFFMpegIPCamSource.DoNotifyPacket(const packet: TAVPacket; const isKeyFrame: Boolean);
+procedure TocvFFMpegIPCamSource.DoNotifyPacket(const packet: AVPacket; const isKeyFrame: Boolean);
 begin
   if Assigned(OnFFMpegPacket) then
     OnFFMpegPacket(Self, packet, isKeyFrame);
@@ -232,7 +233,7 @@ Var
   pFormatCtx: pAVFormatContext;
   pCodecCtx: pAVCodecContext;
   pCodec: pAVCodec;
-  packet: TAVPacket;
+  packet: AVPacket;
   img_convert_context: pSwsContext;
   frame: pAVFrame;
   iplframe: pIplImage;
@@ -246,7 +247,7 @@ Var
     end;
     if Assigned(pFormatCtx) then
     begin
-      avformat_close_input(@pFormatCtx);
+      avformat_close_input(pFormatCtx);
       pFormatCtx := nil;
     end;
     if Assigned(iplframe) then
@@ -256,12 +257,12 @@ Var
     end;
     if Assigned(frame) then
     begin
-      av_frame_free(@frame);
+      av_frame_free(frame);
       frame := nil;
     end;
     if Assigned(optionsDict) then
     begin
-      av_dict_free(@optionsDict);
+      av_dict_free(optionsDict);
       optionsDict := nil;
     end;
   end;
@@ -298,14 +299,14 @@ begin
 
     DoNotyfy(ffocvTryConnect);
 
-    av_dict_set(@optionsDict, 'rtsp_transport', 'tcp', 0);
-    av_dict_set(@optionsDict, 'rtsp_flags', 'prefer_tcp', 0);
-    av_dict_set(@optionsDict, 'allowed_media_types', 'video', 0);
-    av_dict_set(@optionsDict, 'reorder_queue_size', '10', 0);
-    av_dict_set(@optionsDict, 'max_delay', '500000', 0);
-    av_dict_set(@optionsDict, 'stimeout', '1000000', 0);
+    av_dict_set(optionsDict, 'rtsp_transport', 'tcp', 0);
+    av_dict_set(optionsDict, 'rtsp_flags', 'prefer_tcp', 0);
+    av_dict_set(optionsDict, 'allowed_media_types', 'video', 0);
+    av_dict_set(optionsDict, 'reorder_queue_size', '10', 0);
+    av_dict_set(optionsDict, 'max_delay', '500000', 0);
+    av_dict_set(optionsDict, 'stimeout', '1000000', 0);
 
-    ret := avformat_open_input(@pFormatCtx, PAnsiChar(FIPCamURL), nil, @optionsDict); // pFormatCtx
+    ret := avformat_open_input(pFormatCtx, PAnsiChar(FIPCamURL), nil, @optionsDict); // pFormatCtx
     if ret < 0 then
     begin
       DoNotyfy(ffocvErrorGetStream);
@@ -313,7 +314,7 @@ begin
       Continue;
     end;
 
-    av_dict_free(@optionsDict);
+    av_dict_free(optionsDict);
     optionsDict := nil;
     if avformat_find_stream_info(pFormatCtx, nil) < 0 then
     begin
@@ -368,8 +369,8 @@ begin
       Continue;
     end;
 
-    img_convert_context := sws_getCachedContext(nil, pCodecCtx^.Width, pCodecCtx^.Height, Integer(pCodecCtx^.pix_fmt),
-      pCodecCtx^.Width, pCodecCtx^.Height, Integer(AV_PIX_FMT_BGR24), SWS_BILINEAR, nil, nil, nil);
+    img_convert_context := sws_getCachedContext(nil, pCodecCtx^.Width, pCodecCtx^.Height, pCodecCtx^.pix_fmt,
+      pCodecCtx^.Width, pCodecCtx^.Height, AV_PIX_FMT_BGR24, SWS_BILINEAR, nil, nil, nil);
     if (img_convert_context = nil) then
     begin
       DoNotyfy(ffocvErrorGetStream);
@@ -391,7 +392,7 @@ begin
         begin
           FOwner.DoNotifyPacket(packet, (packet.flags and AV_PKT_FLAG_KEY) <> 0);
           // Video stream packet
-          avcodec_decode_video2(pCodecCtx, frame, @frame_finished, @packet);
+          avcodec_decode_video2(pCodecCtx, frame, frame_finished, @packet);
           if (frame_finished <> 0) then
           begin
             sws_scale(img_convert_context, @frame^.data, @frame^.linesize, 0, pCodecCtx^.Height, @iplframe^.imageData,
