@@ -914,10 +914,10 @@ procedure CV_INIT_PIXEL_POS(var pos: TCvPixelPosition32f; origin, _step: Integer
 (* right down *)
 // #define CV_MOVE_RD( pos, cs ) ( CV_MOVE_RIGHT(pos, cs), CV_MOVE_DOWN(pos, cs))
 
-(* Move by one pixel relatively to current position with wrapping when the position     */
-  (* achieves image boundary                                                              */
-  (*  pos    - position structure                                                         */
-  (*  cs     - number of the image channels                                               */
+(* Move by one pixel relatively to current position with wrapping when the position     *)
+  (* achieves image boundary                                                              *)
+  (*  pos    - position structure                                                         *)
+  (*  cs     - number of the image channels                                               *)
   //
   (* left *)
 // #define CV_MOVE_LEFT_WRAP( pos, cs ) \
@@ -1504,8 +1504,8 @@ implementation
 
 uses ocv.lib;
 
-const
-  compat_lib = legacy_lib;
+//const
+//  compat_lib = legacy_lib;
 
 procedure CV_INIT_PIXEL_POS(var pos: TCvPixelPosition8u; origin, _step: Integer; roi: TIplROI; _x, _y, orientation: Integer);
 begin
@@ -1647,62 +1647,94 @@ begin
 
 end;
 {$ELSE}
-function cvMatArray; external legacy_lib;
-function cvMean; external legacy_lib;
-function cvSumPixels; external legacy_lib;
-procedure cvMean_StdDev; external legacy_lib;
-procedure cvmPerspectiveProject; external legacy_lib;
-procedure cvFillImage; external legacy_lib;
-procedure cvRandSetRange; external legacy_lib;
-procedure cvRandInit; external legacy_lib;
-procedure cvRand; external legacy_lib;
-procedure cvbRand; external legacy_lib;
-procedure cvbCartToPolar; external legacy_lib;
-procedure cvbFastArctan; external legacy_lib;
-procedure cvbSqrt; external legacy_lib;
-procedure cvbInvSqrt; external legacy_lib;
-procedure cvbReciprocal; external legacy_lib;
-procedure cvbFastExp; external legacy_lib;
-procedure cvbFastLog; external legacy_lib;
-function cvContourBoundingRect; external legacy_lib;
-function cvPseudoInverse; external legacy_lib;
-procedure cvConvexHull; external legacy_lib;
-procedure cvMinAreaRect; external legacy_lib;
-procedure cvFitLine3D; external legacy_lib;
-procedure cvFitLine2D; external legacy_lib;
-procedure cvFitEllipse; external legacy_lib;
-procedure cvProject3D; external legacy_lib;
-function cvHoughLines; external legacy_lib;
-function cvHoughLinesP; external legacy_lib;
-function cvHoughLinesSDiv; external legacy_lib;
-function cvCalcEMD; external legacy_lib;
-procedure cvKMeans; external legacy_lib;
-procedure cvStartScanGraph; external legacy_lib;
-procedure cvEndScanGraph; external legacy_lib;
-procedure cvLineAA; external legacy_lib;
-procedure cvCircleAA; external legacy_lib;
-procedure cvEllipseAA; external legacy_lib;
-procedure cvPolyLineAA; external legacy_lib;
-procedure cvUnDistortOnce; external legacy_lib;
-procedure cvUnDistortInit; external legacy_lib;
-procedure cvUnDistort; external legacy_lib;
-procedure cvFindFundamentalMatrix; external legacy_lib;
-function cvFindChessBoardCornerGuesses; external legacy_lib;
-procedure cvCalibrateCamera; external legacy_lib;
-procedure cvCalibrateCamera_64d; external legacy_lib;
-procedure cvFindExtrinsicCameraParams; external legacy_lib;
-procedure cvFindExtrinsicCameraParams_64d; external legacy_lib;
-procedure cvRodrigues; external legacy_lib;
-procedure cvProjectPoints; external legacy_lib;
-procedure cvProjectPointsSimple; external legacy_lib;
-function cvSURFParams; external legacy_lib;
-procedure cvExtractSURF; external legacy_lib;
+function cvMatArray(rows: Integer; cols: Integer; type_: Integer; count: Integer; data: Pointer = nil): TCvMat; cdecl; external legacy_lib;
+function cvMean(const image: PCvArr; const mask: PCvArr = nil): Double; cdecl; external legacy_lib;
+function cvSumPixels(const image: PCvArr): Double; cdecl; external legacy_lib;
+procedure cvMean_StdDev(const image: PCvArr; mean: PDouble; sdv: PDouble; const mask: PCvArr = nil); cdecl; external legacy_lib;
+procedure cvmPerspectiveProject(const mat: PCvMat; const src: PCvArr; dst: PCvArr); cdecl; external legacy_lib;
+procedure cvFillImage(mat: PCvArr; color: Double); cdecl; external legacy_lib;
+procedure cvRandSetRange(state: pCvRandState; param1: Double; param2: Double; index: Integer = -1); cdecl; external legacy_lib;
+procedure cvRandInit(state: pCvRandState; param1: Double; param2: Double; seed: Integer; disttype: Integer = CV_RAND_UNI); cdecl; external legacy_lib;
+procedure cvRand(state: pCvRandState; arr: PCvArr); cdecl; external legacy_lib;
+procedure cvbRand(state: pCvRandState; dst: PSingle; len: Integer); cdecl; external legacy_lib;
+procedure cvbCartToPolar(const y: PSingle; const x: PSingle; Var magnitude: Single; Var angle: Single; len: Integer); cdecl; external legacy_lib;
+procedure cvbFastArctan(const y: PSingle; const x: PSingle; Var angle: Single; len: Integer); cdecl; external legacy_lib;
+procedure cvbSqrt(const x: PSingle; Var y: Single; len: Integer); cdecl; external legacy_lib;
+procedure cvbInvSqrt(const x: PSingle; Var y: Single; len: Integer); cdecl; external legacy_lib;
+procedure cvbReciprocal(const x: PSingle; var y: Single; len: Integer); cdecl; external legacy_lib;
+procedure cvbFastExp(const x: PSingle; Var y: Double; len: Integer); cdecl; external legacy_lib;
+procedure cvbFastLog(const x: PDouble; Var y: Single; len: Integer); cdecl; external legacy_lib;
+function cvContourBoundingRect(point_set: Pointer; update: Integer = 0): TCvRect; cdecl; external legacy_lib;
+function cvPseudoInverse(const src: PCvArr; dst: PCvArr): Double; cdecl; external legacy_lib;
+procedure cvConvexHull(points: PCvPoint; num_points: Integer; bound_rect: PCvRect; orientation: Integer; Var hull: Integer;
+  Var hullsize: Integer); cdecl; external legacy_lib;
+procedure cvMinAreaRect(points: PCvPoint; n: Integer; left: Integer; bottom: Integer; right: Integer; top: Integer; anchor: PCvPoint2D32f;
+  vect1: PCvPoint2D32f; vect2: PCvPoint2D32f); cdecl; external legacy_lib;
+procedure cvFitLine3D(points: PCvPoint3D32f; count: Integer; dist: Integer; param: Pointer; reps: Single; aeps: Single;
+  Var line: Single); cdecl; external legacy_lib;
+procedure cvFitLine2D(points: PCvPoint2D32f; count: Integer; dist: Integer; param: Pointer; reps: Single; aeps: Single;
+  Var line: Single); cdecl; external legacy_lib;
+procedure cvFitEllipse(const points: PCvPoint2D32f; count: Integer; Var box: TCvBox2D); cdecl; external legacy_lib;
+procedure cvProject3D(points3D: PCvPoint3D32f; count: Integer; points2D: PCvPoint2D32f; xIndx: Integer = 0; yIndx: Integer = 1); cdecl; external legacy_lib;
+function cvHoughLines(image: PCvArr; rho: Double; theta: Double; threshold: Integer; lines: pfloat; linesNumber: Integer): Integer; cdecl; external legacy_lib;
+function cvHoughLinesP(image: PCvArr; rho: Double; theta: Double; threshold: Integer; lineLength: Integer; lineGap: Integer;
+  lines: pInteger; linesNumber: Integer): Integer; cdecl; external legacy_lib;
+function cvHoughLinesSDiv(image: PCvArr; rho: Double; srn: Integer; theta: Double; stn: Integer; threshold: Integer; lines: pfloat;
+  linesNumber: Integer): Integer; cdecl; external legacy_lib;
+function cvCalcEMD(const signature1: pfloat; size1: Integer; const signature2: pfloat; size2: Integer; dims: Integer;
+  dist_type: Integer = CV_DIST_L2; dist_func: TCvDistanceFunction = nil; lower_bound: pfloat = nil; user_param: Pointer = nil)
+  : float; cdecl; external legacy_lib;
+procedure cvKMeans(num_clusters: Integer; Var samples: PSingle; num_samples: Integer; vec_size: Integer; termcrit: TCvTermCriteria;
+  Var cluster_idx: Integer); cdecl; external legacy_lib;
+procedure cvStartScanGraph(graph: PCvGraph; scanner: PCvGraphScanner; vtx: PCvGraphVtx = nil; mask: Integer = CV_GRAPH_ALL_ITEMS); cdecl; external legacy_lib;
+procedure cvEndScanGraph(scanner: PCvGraphScanner); cdecl; external legacy_lib;
+procedure cvLineAA(img: PCvArr; pt1: TCvPoint; pt2: TCvPoint; color: Double; scale: Integer = 0); cdecl; external legacy_lib;
+procedure cvCircleAA(img: PCvArr; center: TCvPoint; radius: Integer; color: Double; scale: Integer = 0); cdecl; external legacy_lib;
+procedure cvEllipseAA(img: PCvArr; center: TCvPoint; axes: TCvSize; angle: Double; start_angle: Double; end_angle: Double; color: Double;
+  scale: Integer = 0); cdecl; external legacy_lib;
+procedure cvPolyLineAA(img: PCvArr; Var pts: PCvPoint; Var npts: Integer; contours: Integer; is_closed: Integer; color: Double;
+  scale: Integer = 0); cdecl; external legacy_lib;
+procedure cvUnDistortOnce(const src: PCvArr; dst: PCvArr; const intrinsic_matrix: PSingle; const distortion_coeffs: PSingle;
+  interpolate: Integer); cdecl; external legacy_lib;
+procedure cvUnDistortInit(const src: PCvArr; undistortion_map: PCvArr; const A: PSingle; const k: PSingle; interpolate: Integer); cdecl; external legacy_lib;
+procedure cvUnDistort(const src: PCvArr; dst: PCvArr; const undistortion_map: PCvArr; interpolate: Integer); cdecl; external legacy_lib;
+procedure cvFindFundamentalMatrix(Var points1: Integer; Var points2: Integer; numpoints: Integer; method: Integer;
+  Var matrix: Single); cdecl; external legacy_lib;
+function cvFindChessBoardCornerGuesses(const arr: Pointer; thresharr: Pointer; storage: PCvMemStorage; pattern_size: TCvSize;
+  corners: PCvPoint2D32f; corner_count: pInteger): Integer; cdecl; external legacy_lib;
+procedure cvCalibrateCamera(image_count: Integer; Var _point_counts: Integer; image_size: TCvSize; _image_points: PCvPoint2D32f;
+  _object_points: PCvPoint3D32f; _distortion_coeffs: PSingle; _camera_matrix: PSingle; _translation_vectors: PSingle;
+  _rotation_matrices: PSingle; flags: Integer); cdecl; external legacy_lib;
+procedure cvCalibrateCamera_64d(image_count: Integer; Var _point_counts: Integer; image_size: TCvSize; _image_points: PCvPoint2D64f;
+  _object_points: PCvPoint3D64f; _distortion_coeffs: PDouble; _camera_matrix: PDouble; _translation_vectors: PDouble;
+  _rotation_matrices: PDouble; flags: Integer); cdecl; external legacy_lib;
+procedure cvFindExtrinsicCameraParams(point_count: Integer; image_size: TCvSize; _image_points: PCvPoint2D32f;
+  _object_points: PCvPoint3D32f; focal_length: PSingle; principal_point: TCvPoint2D32f; _distortion_coeffs: PSingle;
+  _rotation_vector: PSingle; _translation_vector: PSingle); cdecl; external legacy_lib;
+procedure cvFindExtrinsicCameraParams_64d(point_count: Integer; image_size: TCvSize; _image_points: PCvPoint2D64f;
+  _object_points: PCvPoint3D64f; focal_length: PDouble; principal_point: TCvPoint2D64f; _distortion_coeffs: PDouble;
+  _rotation_vector: PDouble; _translation_vector: PDouble); cdecl; external legacy_lib;
+procedure cvRodrigues(rotation_matrix: PCvMat; rotation_vector: PCvMat; jacobian: PCvMat; conv_type: Integer); cdecl; external legacy_lib;
+procedure cvProjectPoints(point_count: Integer; _object_points: PCvPoint3D64f; _rotation_vector: PDouble; _translation_vector: PDouble;
+  focal_length: PDouble; principal_point: TCvPoint2D64f; _distortion: PDouble; _image_points: PCvPoint2D64f;
+  _deriv_points_rotation_matrix: PDouble; _deriv_points_translation_vect: PDouble; _deriv_points_focal: PDouble;
+  _deriv_points_principal_point: PDouble; _deriv_points_distortion_coeffs: PDouble); cdecl; external legacy_lib;
+procedure cvProjectPointsSimple(point_count: Integer; _object_points: PCvPoint3D64f; _rotation_matrix: PDouble;
+  _translation_vector: PDouble; _camera_matrix: PDouble; _distortion: PDouble; _image_points: PCvPoint2D64f); cdecl; external legacy_lib;
+function cvSURFParams(hessianThreshold: Double; _extended: Integer = 0): TCvSURFParams; cdecl; external legacy_lib;
+procedure cvExtractSURF(const img: PCvArr; const mask: PCvArr; keypoints: ppCvSeq; descriptors: ppCvSeq; storage: PCvMemStorage;
+  params: TCvSURFParams; useProvidedKeyPts: Integer = 0); cdecl; external legacy_lib;
 // function cvMSERParams; external legacy_lib;
 // procedure cvExtractMSER; external legacy_lib;
-function cvGetStarKeypoints; external legacy_lib;
+function cvGetStarKeypoints(const img: PCvArr; storage: PCvMemStorage;
+  params: TCvStarDetectorParams { = CV_DEFAULT(cvStarDetectorParams()) } ): pCvSeq; cdecl; external legacy_lib;
 {$ENDIF}
 
 initialization
+
+{$IFDEF SAFELOADLIB}
+Init_opencv_legacy_lib;
+{$ENDIF}
 
 CV_MAT32F := CV_32FC1;
 CV_MAT3x1_32F := CV_32FC1;
@@ -1716,8 +1748,6 @@ CV_MAT4x1_64D := CV_64FC1;
 CV_MAT3x3_64D := CV_64FC1;
 CV_MAT4x4_64D := CV_64FC1;
 
-{$IFDEF SAFELOADLIB}
-Init_opencv_legacy_lib;
-{$ENDIF}
+
 
 end.

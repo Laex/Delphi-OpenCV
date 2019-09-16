@@ -54,9 +54,9 @@ Type
   end;
 
   IRect = IRect2i;
-  TVectorRect = TArray<IRect>;
-  TVectorInt = TArray<integer>;
-  TVectorDouble = TArray<double>;
+  TVectorRect = {$IFDEF FPC}specialize {$ENDIF}TArray<IRect>;
+  TVectorInt = {$IFDEF FPC}specialize {$ENDIF}TArray<integer>;
+  TVectorDouble = {$IFDEF FPC}specialize {$ENDIF}TArray<double>;
 
   (* !
     When the break-on-error mode is set, the default error handler
@@ -365,8 +365,8 @@ Type
     function data(): pointer; // 11
   end;
 
-  TArrayOfTMat = TArray<TMat>;
-  TArrayOfIMat = TArray<IMat>;
+  TArrayOfTMat ={$IFDEF FPC}specialize {$ENDIF}TArray<TMat>;
+  TArrayOfIMat ={$IFDEF FPC}specialize {$ENDIF}TArray<IMat>;
 
   TIplImageRecordHelper = record helper for TIplImage
     function InitFromMat(const Mat: IMat): TIplImage;
@@ -515,20 +515,20 @@ initialization
 Init_opencv_cls_core;
 
 {$ELSE}
-function setBreakOnError; external core_lib name '?setBreakOnError@cv@@YA_N_N@Z';
-function redirectError; external core_lib name '?redirectError@cv@@YAP6AHHPBD00HPAX@ZP6AHH000H1@Z1PAPAX@Z';
-procedure setNumThreads; external core_lib name '?setNumThreads@cv@@YAXH@Z';
-function getNumThreads; external core_lib name '?getNumThreads@cv@@YAHXZ';
-function getThreadNum; external core_lib name '?getThreadNum@cv@@YAHXZ';
-function getTickCount; external core_lib name '?getTickCount@cv@@YA_JXZ';
-function getTickFrequency; external core_lib name '?getTickFrequency@cv@@YANXZ';
-function getCPUTickCount; external core_lib name '?getCPUTickCount@cv@@YA_JXZ';
-function checkHardwareSupport; external core_lib name '?checkHardwareSupport@cv@@YA_NH@Z';
-function getNumberOfCPUs; external core_lib name '?getNumberOfCPUs@cv@@YAHXZ';
-function fastMalloc; external core_lib name '?fastMalloc@cv@@YAPAXI@Z';
-procedure fastFree; external core_lib name '?fastFree@cv@@YAXPAX@Z';
-procedure setUseOptimized; external core_lib name '?setUseOptimized@cv@@YAX_N@Z';
-function useOptimized; external core_lib name '?useOptimized@cv@@YA_NXZ';
+function setBreakOnError(flag: cbool): cbool; cdecl; external core_lib name '?setBreakOnError@cv@@YA_N_N@Z';
+function redirectError(errCallback: TErrorCallback; userdata: pointer = nil; prevUserdata: PPointer = nil): TErrorCallback; cdecl; external core_lib name '?redirectError@cv@@YAP6AHHPBD00HPAX@ZP6AHH000H1@Z1PAPAX@Z';
+procedure setNumThreads(nthreads: integer); cdecl; external core_lib name '?setNumThreads@cv@@YAXH@Z';
+function getNumThreads(): integer; cdecl; external core_lib name '?getNumThreads@cv@@YAHXZ';
+function getThreadNum(): integer; cdecl; external core_lib name '?getThreadNum@cv@@YAHXZ';
+function getTickCount(): int64; cdecl; external core_lib name '?getTickCount@cv@@YA_JXZ';
+function getTickFrequency(): double; cdecl; external core_lib name '?getTickFrequency@cv@@YANXZ';
+function getCPUTickCount(): int64; cdecl; external core_lib name '?getCPUTickCount@cv@@YA_JXZ';
+function checkHardwareSupport(feature: integer): cbool; cdecl; external core_lib name '?checkHardwareSupport@cv@@YA_NH@Z';
+function getNumberOfCPUs(): integer; cdecl; external core_lib name '?getNumberOfCPUs@cv@@YAHXZ';
+function fastMalloc(bufSize: size_t): pointer; cdecl; external core_lib name '?fastMalloc@cv@@YAPAXI@Z';
+procedure fastFree(ptr: pointer); cdecl; external core_lib name '?fastFree@cv@@YAXPAX@Z';
+procedure setUseOptimized(onoff: cbool); cdecl; external core_lib name '?setUseOptimized@cv@@YAX_N@Z';
+function useOptimized(): cbool; cdecl; external core_lib name '?useOptimized@cv@@YA_NXZ';
 {$ENDIF}
 
 { TSize }

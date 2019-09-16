@@ -103,7 +103,7 @@ initialization
 Init_opencv_photo_lib;
 
 {$ELSE}
-procedure cvInpaint; external opencv_photo_lib;
+procedure cvInpaint(const src: pCvArr; const inpaint_mask: pCvArr; dst: pCvArr; inpaintRange: double; flags: Integer); cdecl; external opencv_photo_lib;
 {$ENDIF}
 
 end.

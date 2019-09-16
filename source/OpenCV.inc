@@ -8,13 +8,15 @@
         Error!!
 {$IFEND}
 
+{$IFNDEF FPC}
 {$IFDEF DEBUG}
 {$A8,B-,C+,D+,E-,F-,G+,H+,I+,J+,K-,L+,M-,N+,O-,P+,Q+,R+,S-,T-,U-,V+,W+,X+,Y+,Z1}
 {$ELSE}
 {$A8,B-,C-,D-,E-,F-,G+,H+,I+,J+,K-,L-,M-,N+,O+,P+,Q-,R-,S-,T-,U-,V+,W-,X+,Y-,Z1}
 {$ENDIF}
-
 {$POINTERMATH ON}
+{$ENDIF}
+
 {.$DEFINE SAFELOADLIB}
 {$IFDEF SAFELOADLIB}
 {$IFDEF DEBUG}
@@ -22,12 +24,14 @@
 {$ENDIF}
 {$ENDIF}
 
-{$WARN SYMBOL_DEPRECATED OFF}
-{$WARN SYMBOL_PLATFORM OFF}
-{$WARN UNIT_PLATFORM OFF}
-{$WARN UNSAFE_TYPE OFF}
-{$WARN UNSAFE_CODE OFF}
-{$WARN UNSAFE_CAST OFF}
+{$IFNDEF FPC}
+ {$WARN SYMBOL_DEPRECATED OFF}
+ {$WARN SYMBOL_PLATFORM OFF}
+ {$WARN UNIT_PLATFORM OFF}
+ {$WARN UNSAFE_TYPE OFF}
+ {$WARN UNSAFE_CODE OFF}
+ {$WARN UNSAFE_CAST OFF}
+{$ENDIF}
 
 (*
 - Development environment directives
@@ -531,12 +535,11 @@
   EXTENDEDSYNTAX_ON      Compiling in the X+ state (Delphi extended syntax enabled)
 *)
 
-{$DEFINE BORLAND}
-
 { Set FreePascal to Delphi mode }
 {$IFDEF FPC}
-  {$MODE DELPHI}
-  {$UNDEF BORLAND}
+  {$mode objfpc}
+  {$H+}
+  {$modeswitch ADVANCEDRECORDS}
   {$DEFINE CPUASM}
    // FPC defines CPU32, CPU64 and Unix automatically
   {$IFDEF IPHONESIM}
@@ -545,8 +548,11 @@
   {$IFNDEF PUREPASCAL}
     {$ASMMODE INTEL}
   {$ENDIF}
-  {$MODE DELPHI}
   {$INTERFACES COM}
+  {$DEFINE DELPHIXE_UP}
+  {$DEFINE USE_INLINE}
+{$ELSE}
+  {$DEFINE BORLAND}
 {$ENDIF}
 
 {$IFDEF BORLAND}

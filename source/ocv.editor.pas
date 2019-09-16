@@ -23,9 +23,10 @@
   *******************************************************************
 *)
 
-{$I OpenCV.inc}
 
 unit ocv.editor;
+
+{$I OpenCV.inc}
 
 interface
 
@@ -99,7 +100,7 @@ procedure Clarity(const step: Integer; const InputImage: pIplImage; Var OutputIm
 implementation
 
 Uses
-  System.Math,
+  Math,
   ocv.core_c,
   ocv.imgproc_c,
   ocv.imgproc.types_c;

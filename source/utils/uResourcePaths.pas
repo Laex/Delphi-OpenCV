@@ -15,7 +15,7 @@ function cResourceResult: AnsiString;
 implementation
 
 uses
-  System.SysUtils;
+  SysUtils;
 
 function cResourceResult: AnsiString;
 begin

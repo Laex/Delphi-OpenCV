@@ -1,6 +1,6 @@
 # Delphi-OpenCV
 * OpenCV version - 2.4.13<br>
-* Development environment - Delphi 2010-10.3<br>
+* Development environment - Delphi 2010-10.3, FPC<br>
 
 <b>Contributors:</b>
 

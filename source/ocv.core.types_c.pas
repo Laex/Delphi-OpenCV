@@ -52,20 +52,21 @@ unit ocv.core.types_c;
 
 interface
 
-Uses
-{$IFDEF HAS_UNITSCOPE}
+(*
+  Uses
+  {$IFDEF HAS_UNITSCOPE}
   Winapi.Windows
-{$ELSE}
-    Windows
-{$ENDIF}
-    ;
-
+  {$ELSE}
+  Windows
+  {$ENDIF}
+  ;
+*)
 const
   // Ќаименьшее число дл€ которого выполн€етс€ условие 1.0+DBL_EPSILON <> 1.0
   DBL_EPSILON = 2.2204460492503131E-016;
-  DBL_MAX = 1.7976931348623157E+308;
+  DBL_MAX     = 1.7976931348623157E+308;
   FLT_EPSILON = 1.19209290E-07;
-  FLT_MAX = 1E+37;
+  FLT_MAX     = 1E+37;
 
 type
   cbool = bytebool;
@@ -172,57 +173,57 @@ type
 {$EXTERNALSYM CVStatus}
 
 const
-  CV_StsOk = 0; (* everithing is ok *)
-  CV_StsBackTrace = -1; (* pseudo error for back trace *)
-  CV_StsError = -2; (* unknown /unspecified error *)
-  CV_StsInternal = -3; (* internal error (bad state) *)
-  CV_StsNoMem = -4; (* insufficient memory *)
-  CV_StsBadArg = -5; (* function arg/param is bad *)
-  CV_StsBadFunc = -6; (* unsupported function *)
-  CV_StsNoConv = -7; (* iter. didn't converge *)
-  CV_StsAutoTrace = -8; (* tracing *)
-  CV_HeaderIsNull = -9; (* image header is 0 *)
-  CV_BadImageSize = -10; (* image size is invalid *)
-  CV_BadOffset = -11; (* offset is invalid *)
-  CV_BadDataPtr = -12; (* *)
-  CV_BadStep = -13; (* *)
-  CV_BadModelOrChSeq = -14; (* *)
-  CV_BadNumChannels = -15; (* *)
-  CV_BadNumChannel1U = -16; (* *)
-  CV_BadDepth = -17; (* *)
-  CV_BadAlphaChannel = -18; (* *)
-  CV_BadOrder = -19; (* *)
-  CV_BadOrigin = -20; (* *)
-  CV_BadAlign = -21; (* *)
-  CV_BadCallBack = -22; (* *)
-  CV_BadTileSize = -23; (* *)
-  CV_BadCOI = -24; (* *)
-  CV_BadROISize = -25; (* *)
-  CV_MaskIsTiled = -26; (* *)
-  CV_StsNullPtr = -27; (* null pointer *)
-  CV_StsVecLengthErr = -28; (* incorrect vector length *)
-  CV_StsFilterStructContentErr = -29; (* incorr. filter structure content *)
-  CV_StsKernelStructContentErr = -30; (* incorr. transform kernel content *)
-  CV_StsFilterOffsetErr = -31; (* incorrect filter ofset value *)
-  CV_StsBadSize = -201; (* the input/output structure size is incorrect *)
-  CV_StsDivByZero = -202; (* division by zero *)
-  CV_StsInplaceNotSupported = -203; (* in-place operation is not supported *)
-  CV_StsObjectNotFound = -204; (* request can't be completed *)
-  CV_StsUnmatchedFormats = -205; (* formats of input/output arrays differ *)
-  CV_StsBadFlag = -206; (* flag is wrong or not supported *)
-  CV_StsBadPoint = -207; (* bad CvPoint *)
-  CV_StsBadMask = -208; (* bad format of mask (neither 8uC1 nor 8sC1) *)
-  CV_StsUnmatchedSizes = -209; (* sizes of input/output structures do not match *)
-  CV_StsUnsupportedFormat = -210; (* the data format/type is not supported by the function *)
-  CV_StsOutOfRange = -211; (* some of parameters are out of range *)
-  CV_StsParseError = -212; (* invalid syntax/structure of the parsed file *)
-  CV_StsNotImplemented = -213; (* the requested function/feature is not implemented *)
-  CV_StsBadMemBlock = -214; (* an allocated block has been corrupted *)
-  CV_StsAssert = -215; (* assertion failed *)
-  CV_GpuNotSupported = -216;
-  CV_GpuApiCallError = -217;
-  CV_OpenGlNotSupported = -218;
-  CV_OpenGlApiCallError = -219;
+  CV_StsOk                     = 0;    (* everithing is ok *)
+  CV_StsBackTrace              = -1;   (* pseudo error for back trace *)
+  CV_StsError                  = -2;   (* unknown /unspecified error *)
+  CV_StsInternal               = -3;   (* internal error (bad state) *)
+  CV_StsNoMem                  = -4;   (* insufficient memory *)
+  CV_StsBadArg                 = -5;   (* function arg/param is bad *)
+  CV_StsBadFunc                = -6;   (* unsupported function *)
+  CV_StsNoConv                 = -7;   (* iter. didn't converge *)
+  CV_StsAutoTrace              = -8;   (* tracing *)
+  CV_HeaderIsNull              = -9;   (* image header is 0 *)
+  CV_BadImageSize              = -10;  (* image size is invalid *)
+  CV_BadOffset                 = -11;  (* offset is invalid *)
+  CV_BadDataPtr                = -12;  (* *)
+  CV_BadStep                   = -13;  (* *)
+  CV_BadModelOrChSeq           = -14;  (* *)
+  CV_BadNumChannels            = -15;  (* *)
+  CV_BadNumChannel1U           = -16;  (* *)
+  CV_BadDepth                  = -17;  (* *)
+  CV_BadAlphaChannel           = -18;  (* *)
+  CV_BadOrder                  = -19;  (* *)
+  CV_BadOrigin                 = -20;  (* *)
+  CV_BadAlign                  = -21;  (* *)
+  CV_BadCallBack               = -22;  (* *)
+  CV_BadTileSize               = -23;  (* *)
+  CV_BadCOI                    = -24;  (* *)
+  CV_BadROISize                = -25;  (* *)
+  CV_MaskIsTiled               = -26;  (* *)
+  CV_StsNullPtr                = -27;  (* null pointer *)
+  CV_StsVecLengthErr           = -28;  (* incorrect vector length *)
+  CV_StsFilterStructContentErr = -29;  (* incorr. filter structure content *)
+  CV_StsKernelStructContentErr = -30;  (* incorr. transform kernel content *)
+  CV_StsFilterOffsetErr        = -31;  (* incorrect filter ofset value *)
+  CV_StsBadSize                = -201; (* the input/output structure size is incorrect *)
+  CV_StsDivByZero              = -202; (* division by zero *)
+  CV_StsInplaceNotSupported    = -203; (* in-place operation is not supported *)
+  CV_StsObjectNotFound         = -204; (* request can't be completed *)
+  CV_StsUnmatchedFormats       = -205; (* formats of input/output arrays differ *)
+  CV_StsBadFlag                = -206; (* flag is wrong or not supported *)
+  CV_StsBadPoint               = -207; (* bad CvPoint *)
+  CV_StsBadMask                = -208; (* bad format of mask (neither 8uC1 nor 8sC1) *)
+  CV_StsUnmatchedSizes         = -209; (* sizes of input/output structures do not match *)
+  CV_StsUnsupportedFormat      = -210; (* the data format/type is not supported by the function *)
+  CV_StsOutOfRange             = -211; (* some of parameters are out of range *)
+  CV_StsParseError             = -212; (* invalid syntax/structure of the parsed file *)
+  CV_StsNotImplemented         = -213; (* the requested function/feature is not implemented *)
+  CV_StsBadMemBlock            = -214; (* an allocated block has been corrupted *)
+  CV_StsAssert                 = -215; (* assertion failed *)
+  CV_GpuNotSupported           = -216;
+  CV_GpuApiCallError           = -217;
+  CV_OpenGlNotSupported        = -218;
+  CV_OpenGlApiCallError        = -219;
 
   (* ***************************************************************************************\
     *                             Common macros and  functions                         *
@@ -317,17 +318,21 @@ const
 {$EXTERNALSYM IPL_BORDER_WRAP}
   // * Sub-pixel interpolation methods */
 
-  CV_INTER_NN = 0;
-  CV_INTER_LINEAR = 1;
-  CV_INTER_CUBIC = 2;
-  CV_INTER_AREA = 3;
+  CV_INTER_NN       = 0;
+  CV_INTER_LINEAR   = 1;
+  CV_INTER_CUBIC    = 2;
+  CV_INTER_AREA     = 3;
   CV_INTER_LANCZOS4 = 4;
 
 type
 
+{$IFDEF FPC}
+  generic TArray<T> = array of T;
+{$ENDIF}
+
   pIplImage = ^TIplImage;
   TpIplImageArray = array [0 .. 1] of pIplImage;
-  TArrayOfpIplImage = TArray<pIplImage>;
+  TArrayOfpIplImage = {$IFDEF FPC}specialize {$ENDIF} TArray<pIplImage>;
   ppIplImage = ^TpIplImageArray;
   pIplROI = ^TIplROI;
   pIplTileInfo = ^TIplTileInfo;
@@ -353,29 +358,29 @@ type
   TA4CVChar = array [0 .. 3] of CVChar;
 
   TIplImage = record
-    nSize: Integer; (* sizeof(IplImage) *)
-    id: Integer; (* version (=0) *)
-    nChannels: Integer; (* Most of OpenCV functions support 1,2,3 or 4 channels *)
+    nSize: Integer;        (* sizeof(IplImage) *)
+    id: Integer;           (* version (=0) *)
+    nChannels: Integer;    (* Most of OpenCV functions support 1,2,3 or 4 channels *)
     alphaChannel: Integer; (* Ignored by OpenCV *)
     depth: Integer; (* Pixel depth in bits: Pixel depth in bits: IPL_DEPTH_8U, IPL_DEPTH_8S, IPL_DEPTH_16S,
       IPL_DEPTH_32S, IPL_DEPTH_32F and IPL_DEPTH_64F are supported. *)
-    colorModel: TA4CVChar; (* Ignored by OpenCV *)
-    channelSeq: TA4CVChar; (* ditto *)
-    dataOrder: Integer; (* 0 - interleaved color channels, 1 - separate color channels. *)
-    origin: Integer; (* 0 - top-left origin, *)
-    align: Integer; (* Alignment of image rows (4 or 8). *)
-    width: Integer; (* Image width in pixels. *)
-    height: Integer; (* Image height in pixels. *)
-    roi: pIplROI; (* Image ROI. If NULL, the whole image is selected. *)
-    maskROI: pIplImage; (* Must be NULL. *)
-    imageId: Pointer; (* "           " *)
-    tileInfo: pIplTileInfo; (* "           " *)
-    imageSize: Integer; (* Image data size in bytes *)
-    imageData: PByte; (* Pointer to aligned image data. *)
-    widthStep: Integer; (* Size of aligned image row in bytes. *)
-    BorderMode: array [0 .. 3] of Integer; (* Ignored by ocv. *)
+    colorModel: TA4CVChar;                  (* Ignored by OpenCV *)
+    channelSeq: TA4CVChar;                  (* ditto *)
+    dataOrder: Integer;                     (* 0 - interleaved color channels, 1 - separate color channels. *)
+    origin: Integer;                        (* 0 - top-left origin, *)
+    align: Integer;                         (* Alignment of image rows (4 or 8). *)
+    width: Integer;                         (* Image width in pixels. *)
+    height: Integer;                        (* Image height in pixels. *)
+    roi: pIplROI;                           (* Image ROI. If NULL, the whole image is selected. *)
+    maskROI: pIplImage;                     (* Must be NULL. *)
+    imageId: Pointer;                       (* "           " *)
+    tileInfo: pIplTileInfo;                 (* "           " *)
+    imageSize: Integer;                     (* Image data size in bytes *)
+    imageData: PByte;                       (* Pointer to aligned image data. *)
+    widthStep: Integer;                     (* Size of aligned image row in bytes. *)
+    BorderMode: array [0 .. 3] of Integer;  (* Ignored by ocv. *)
     BorderConst: array [0 .. 3] of Integer; (* Ditto. *)
-    imageDataOrigin: PByte; (* Pointer to very origin of image data *)
+    imageDataOrigin: PByte;                 (* Pointer to very origin of image data *)
   end;
 
   TcvImage = TIplImage;
@@ -419,8 +424,9 @@ const
 {$EXTERNALSYM IPL_IMAGE_MAGIC_VAL}
   CV_TYPE_NAME_IMAGE = 'opencv-image';
 
-  (* ***************************************************************************************
-    *                                 Matrix cType (CvMat)                                *************************************************************************************** *)
+  // * ***************************************************************************************
+  // *                                 Matrix cType (CvMat)
+  // ***************************************************************************************
 
 const
   CV_CN_MAX = 512;
@@ -709,7 +715,7 @@ type
     thresh: array [0 .. CV_MAX_DIM - 1, 0 .. 1] of Single;
     (* For uniform histograms. *)
     thresh2: pSingle; (* For non-uniform histograms. *)
-    mat: TCvMatND; (* Embedded matrix header for array histograms. *)
+    mat: TCvMatND;    (* Embedded matrix header for array histograms. *)
   end;
 
   (* ***************************************************************************************\
@@ -774,7 +780,7 @@ type
 
   TcvPoint2f = TCvPoint2D32f;
   pcvPoint2f = pCvPoint2D32f;
-  TArrayOfcvPoint2f = TArray<TcvPoint2f>;
+  TArrayOfcvPoint2f = array of TcvPoint2f; // TArray<TcvPoint2f>;
 
   pCvPoint3D32f = ^TCvPoint3D32f;
 
@@ -830,8 +836,8 @@ Type
 
   TCvBox2D = record
     center: TCvPoint2D32f; (* Center of the box. *)
-    size: TCvSize2D32f; (* Box width and length. *)
-    angle: Single; (* Angle between the horizontal axis *)
+    size: TCvSize2D32f;    (* Box width and length. *)
+    angle: Single;         (* Angle between the horizontal axis *)
   end;
 
   (* Line iterator state: *)
@@ -864,16 +870,18 @@ const
 type
   pCvScalar = ^TCvScalar;
 
+  { TCvScalar }
+
   TCvScalar = record
     val: array [0 .. 3] of Double;
-    class operator LessThan(a, b: TCvScalar): Boolean;
-    class operator GreaterThan(a, b: TCvScalar): Boolean;
+    class operator {$IFDEF FPC}<{$ELSE}LessThan{$ENDIF}(a, b: TCvScalar): Boolean;
+    class operator {$IFDEF FPC}>{$ELSE}GreaterThan{$ENDIF}(a, b: TCvScalar): Boolean;
   end;
 
-  (* ************************************************************************************** *)
-  (* Dynamic Data structures *)
-  (* ************************************************************************************** *)
-  (* ******************************* Memory storage *************************************** *)
+(* ************************************************************************************** *)
+(* Dynamic Data structures *)
+(* ************************************************************************************** *)
+(* ******************************* Memory storage *************************************** *)
 type
   pCvMemBlock = ^TCvMemBlock;
 
@@ -895,11 +903,10 @@ type
     top: pCvMemBlock; (* First allocated block. *)
     parent: pCvMemStorage;
     (* Current memory block - top of the stack. *)    (* We get new blocks from parent as needed. *)
-    block_size: Integer; (* Block size. *)
-    free_space: Integer; (* Remaining free space in current block. *)
+    block_size: Integer;                              (* Block size. *)
+    free_space: Integer;                              (* Remaining free space in current block. *)
   end;
 
-type
   pCvMemStoragePos = ^TCvMemStoragePos;
 
   TCvMemStoragePos = record
@@ -912,58 +919,64 @@ type
   pCvSeqBlock = ^TCvSeqBlock;
 
   TCvSeqBlock = record
-    prev: pCvSeqBlock; (* Previous sequence block. *)
-    next: pCvSeqBlock; (* Next sequence block. *)
+    prev: pCvSeqBlock;    (* Previous sequence block. *)
+    next: pCvSeqBlock;    (* Next sequence block. *)
     start_index: Integer; (* Index of the first element in the block + *)
-    count: Integer; (* Number of elements in the block. *)
-    data: Pointer; (* Pointer to the first element of the block. *)
+    count: Integer;       (* Number of elements in the block. *)
+    data: Pointer;        (* Pointer to the first element of the block. *)
   end;
 
   TCvSeqBlockArray = array [0 .. 0] of TCvSeqBlock;
   pCvSeqBlockArray = ^TCvSeqBlockArray;
 
+{$IFDEF FPC}generic{$ENDIF}
   TCV_TREE_NODE_FIELDS<node_type> = record
-    flags: Integer; (* Miscellaneous flags. *)
-    header_size: Integer; (* Size of sequence header. *)
-    h_prev: ^node_type; (* Previous sequence. *)
-    h_next: ^node_type; (* Next sequence. *)
-    v_prev: ^node_type; (* 2nd previous sequence. *)
-    v_next: ^node_type; (* 2nd next sequence. *)
+{$IFDEF FPC}
+  type pnode_type = ^node_type;
+public
+{$ENDIF}
+    flags: Integer;                                        (* Miscellaneous flags. *)
+  header_size: Integer;                                    (* Size of sequence header. *)
+  h_prev: {$IFDEF FPC}pnode_type{$ELSE}^node_type{$ENDIF}; (* Previous sequence. *)
+  h_next: {$IFDEF FPC}pnode_type{$ELSE}^node_type{$ENDIF}; (* Next sequence. *)
+  v_prev: {$IFDEF FPC}pnode_type{$ELSE}^node_type{$ENDIF}; (* 2nd previous sequence. *)
+  v_next: {$IFDEF FPC}pnode_type{$ELSE}^node_type{$ENDIF}; (* 2nd next sequence. *)
   end;
 
   pCvSeq = ^TCvSeq;
 
-  TCvSeq = record
-    flags: Integer; (* Miscellaneous flags. *)
-    header_size: Integer; (* Size of sequence header. *)
-    h_prev: pCvSeq; (* Previous sequence. *)
-    h_next: pCvSeq; (* Next sequence. *)
-    v_prev: pCvSeq; (* 2nd previous sequence. *)
-    v_next: pCvSeq; (* 2nd next sequence. *)
-    total: Integer; (* Total number of elements. *)
-    elem_size: Integer; (* Size of sequence element in bytes. *)
-    block_max: Pointer; (* Maximal bound of the last block. *)
-    ptr: pschar; (* Current write pointer. *)
-    delta_elems: Integer; (* Grow seq this many at a time. *)
-    storage: pCvMemStorage; (* Where the seq is stored. *)
-    free_blocks: pCvSeqBlock; (* Free blocks list. *)
-    first: pCvSeqBlock; (* Pointer to the first sequence block. *)
+  TCvSeq = record flags: Integer; (* Miscellaneous flags. *)
+  header_size: Integer;           (* Size of sequence header. *)
+  h_prev: pCvSeq;                 (* Previous sequence. *)
+  h_next: pCvSeq;                 (* Next sequence. *)
+  v_prev: pCvSeq;                 (* 2nd previous sequence. *)
+  v_next: pCvSeq;                 (* 2nd next sequence. *)
+  total: Integer;                 (* Total number of elements. *)
+  elem_size: Integer;             (* Size of sequence element in bytes. *)
+  block_max: Pointer;             (* Maximal bound of the last block. *)
+  ptr: pschar;                    (* Current write pointer. *)
+  delta_elems: Integer;           (* Grow seq this many at a time. *)
+  storage: pCvMemStorage;         (* Where the seq is stored. *)
+  free_blocks: pCvSeqBlock;       (* Free blocks list. *)
+  first: pCvSeqBlock;             (* Pointer to the first sequence block. *)
   end;
+
+  TCV_TREE_NODE_FIELDS_TCvSeq = {$IFDEF FPC} specialize {$ENDIF} TCV_TREE_NODE_FIELDS<TCvSeq>;
 
   (*
     Read/Write sequence.
     Elements can be dynamically inserted to or deleted from the sequence.
   *)
-  TCV_SEQUENCE_FIELDS = record
-    CV_TREE_NODE_FIELDS: TCV_TREE_NODE_FIELDS<TCvSeq>;
-    total: Integer; (* Total number of elements. *)
-    elem_size: Integer; (* Size of sequence element in bytes. *)
-    block_max: pschar; (* Maximal bound of the last block. *)
-    ptr: pschar; (* Current write pointer. *)
-    delta_elems: Integer; (* Grow seq this many at a time. *)
-    storage: pCvMemStorage; (* Where the seq is stored. *)
-    free_blocks: pCvSeqBlock; (* Free blocks list. *)
-    first: pCvSeqBlock; (* Pointer to the first sequence block. *)
+  TCV_SEQUENCE_FIELDS = record //
+  CV_TREE_NODE_FIELDS: TCV_TREE_NODE_FIELDS_TCvSeq;
+  total: Integer;           (* Total number of elements. *)
+  elem_size: Integer;       (* Size of sequence element in bytes. *)
+  block_max: pschar;        (* Maximal bound of the last block. *)
+  ptr: pschar;              (* Current write pointer. *)
+  delta_elems: Integer;     (* Grow seq this many at a time. *)
+  storage: pCvMemStorage;   (* Where the seq is stored. *)
+  free_blocks: pCvSeqBlock; (* Free blocks list. *)
+  first: pCvSeqBlock;       (* Pointer to the first sequence block. *)
   end;
 
   pCvSeqArray = array [0 .. 1] of pCvSeq;
@@ -982,20 +995,20 @@ type
   pCvContour = ^TCvContour;
 
   TCvContour = record
-    flags: Integer; // micsellaneous flags
-    header_size: Integer; // size of sequence header
-    h_prev: pCvArr; // previous sequence
-    h_next: pCvArr; // next sequence
-    v_prev: pCvArr; // 2nd previous sequence
-    v_next: pCvArr; // 2nd next sequence
-    total: Integer; // total number of elements
-    elem_size: Integer; // size of sequence element in bytes
-    block_max: pAnsiChar; // maximal bound of the last block
-    ptr: pAnsiChar; // current write pointer
-    delta_elems: Integer; // how many elements allocated when the seq grows
-    storage: pCvMemStorage; // where the seq is stored
+    flags: Integer;           // micsellaneous flags
+    header_size: Integer;     // size of sequence header
+    h_prev: pCvArr;           // previous sequence
+    h_next: pCvArr;           // next sequence
+    v_prev: pCvArr;           // 2nd previous sequence
+    v_next: pCvArr;           // 2nd next sequence
+    total: Integer;           // total number of elements
+    elem_size: Integer;       // size of sequence element in bytes
+    block_max: pAnsiChar;     // maximal bound of the last block
+    ptr: pAnsiChar;           // current write pointer
+    delta_elems: Integer;     // how many elements allocated when the seq grows
+    storage: pCvMemStorage;   // where the seq is stored
     free_blocks: pCvSeqBlock; // free blocks list
-    first: pCvSeqBlock; // pointer to the first sequence block
+    first: pCvSeqBlock;       // pointer to the first sequence block
     rect: TCvRect;
     color: Integer;
     reserved: array [0 .. 2] of Integer;
@@ -1009,9 +1022,14 @@ type
     The MSB(most-significant or sign bit) of the first field (flags) is 0 iff the element exists.
   *)
 type
+  {$IFDEF FPC}generic{$ENDIF}
   TCV_SET_ELEM_FIELDS<elem_type> = record
+    {$IFDEF FPC}
+      type pelem_type = ^elem_type;
+    public
+    {$ENDIF}
     flags: Integer;
-    next_free: ^elem_type;
+    next_free: {$IFDEF FPC}pelem_type{$ELSE}^elem_type{$ENDIF};
   end;
 
   pCvSetElem = ^TCvSetElem;
@@ -1033,20 +1051,20 @@ type
   pCvSet = ^TCvSet;
 
   TCvSet = record
-    flags: Integer; (* Miscellaneous flags. *)
-    header_size: Integer; (* Size of sequence header. *)
-    h_prev: pCvSeq; (* Previous sequence. *)
-    h_next: pCvSeq; (* Next sequence. *)
-    v_prev: pCvSeq; (* 2nd previous sequence. *)
-    v_next: pCvSeq; (* 2nd next sequence. *)
-    total: Integer; (* Total number of elements. *)
-    elem_size: Integer; (* Size of sequence element in bytes. *)
-    block_max: Pointer; (* Maximal bound of the last block. *)
-    ptr: Pointer; (* Current write pointer. *)
-    delta_elems: Integer; (* Grow seq this many at a time. *)
-    storage: pCvMemStorage; (* Where the seq is stored. *)
+    flags: Integer;           (* Miscellaneous flags. *)
+    header_size: Integer;     (* Size of sequence header. *)
+    h_prev: pCvSeq;           (* Previous sequence. *)
+    h_next: pCvSeq;           (* Next sequence. *)
+    v_prev: pCvSeq;           (* 2nd previous sequence. *)
+    v_next: pCvSeq;           (* 2nd next sequence. *)
+    total: Integer;           (* Total number of elements. *)
+    elem_size: Integer;       (* Size of sequence element in bytes. *)
+    block_max: Pointer;       (* Maximal bound of the last block. *)
+    ptr: Pointer;             (* Current write pointer. *)
+    delta_elems: Integer;     (* Grow seq this many at a time. *)
+    storage: pCvMemStorage;   (* Where the seq is stored. *)
     free_blocks: pCvSeqBlock; (* Free blocks list. *)
-    first: pCvSeqBlock; (* Pointer to the first sequence block. *)
+    first: pCvSeqBlock;       (* Pointer to the first sequence block. *)
     free_elems: pCvSetElem;
     active_count: Integer;
   end;
@@ -1413,9 +1431,9 @@ type
 
   TCvSeqWriter = record
     header_size: Integer;
-    Seq: pCvSeq; // * the sequence written */
+    Seq: pCvSeq;        // * the sequence written */
     block: pCvSeqBlock; // * current block */
-    ptr: Pointer; // * pointer to free space */
+    ptr: Pointer;       // * pointer to free space */
     block_min: Pointer; // * pointer to the beginning of block*/
     block_max: Pointer; // * pointer to the end of block */
   end;
@@ -1424,13 +1442,13 @@ type
 
   TCvSeqReader = record
     header_size: Integer;
-    Seq: pCvSeq; // * sequence, beign read */
-    block: pCvSeqBlock; // * current block */
-    ptr: Pointer; // * pointer to element be read next */
-    block_min: Pointer; // * pointer to the beginning of block */
-    block_max: Pointer; // * pointer to the end of block */
+    Seq: pCvSeq;          // * sequence, beign read */
+    block: pCvSeqBlock;   // * current block */
+    ptr: Pointer;         // * pointer to element be read next */
+    block_min: Pointer;   // * pointer to the beginning of block */
+    block_max: Pointer;   // * pointer to the end of block */
     delta_index: Integer; // * = seq->first->start_index   */
-    prev_elem: Pointer; // * pointer to previous element */
+    prev_elem: Pointer;   // * pointer to previous element */
   end;
 
   { ****************************************************************************************
@@ -1467,7 +1485,7 @@ function CV_GET_SEQ_ELEM(const size_of_elem: Integer; Seq: pCvSeq; index: Intege
 // Assert((writer).ptr <= (writer).block_max - SizeOf(elem));
 // memcpy((writer).ptr, and (elem), SizeOf(elem)); (writer).ptr := mod +SizeOf(elem) then; end;
 
-function CV_CAST_8U(t: Integer): uchar; {$IFDEF USE_INLINE}inline; {$ENDIF}
+function CV_CAST_8U(T: Integer): uchar; {$IFDEF USE_INLINE}inline; {$ENDIF}
 (*
   /* Move reader position forward: */
   #define CV_NEXT_SEQ_ELEM( elem_size, reader )                 \
@@ -1644,8 +1662,7 @@ Type
   // typedef void* (CV_CDECL *CvReadFunc)( CvFileStorage* storage, CvFileNode* node );
   TCvReadFunc = function(storage: pCvFileStorage; node: pCvFileNode): Pointer; cdecl;
   // typedef void (CV_CDECL *CvWriteFunc)( CvFileStorage* storage, const char* name,const void* struct_ptr, CvAttrList attributes );
-  TCvWriteFunc = procedure(storage: pCvFileStorage; const name: pCVChar; const struct_ptr: pPointer;
-    attributes: TCvAttrList); cdecl;
+  TCvWriteFunc = procedure(storage: pCvFileStorage; const name: pCVChar; const struct_ptr: pPointer; attributes: TCvAttrList); cdecl;
   // typedef void* (CV_CDECL *CvCloneFunc)( const void* struct_ptr );
   TCvCloneFunc = function(const struct_ptr: pPointer): Pointer; cdecl;
 
@@ -1834,12 +1851,12 @@ Type
   end;
 
   // #define CV_SWAP(a,b,t) ((t) = (a), (a) = (b), (b) = (t))
-procedure CV_SWAP(var a, b, t: pIplImage); {$IFDEF USE_INLINE}inline; {$ENDIF} overload;
+procedure CV_SWAP(var a, b, T: pIplImage); {$IFDEF USE_INLINE}inline; {$ENDIF} overload;
 procedure CV_SWAP(var a, b: pIplImage); {$IFDEF USE_INLINE}inline; {$ENDIF} overload;
-procedure CV_SWAP(var a, b, t: pCvPoint2D32f); {$IFDEF USE_INLINE}inline; {$ENDIF} overload;
+procedure CV_SWAP(var a, b, T: pCvPoint2D32f); {$IFDEF USE_INLINE}inline; {$ENDIF} overload;
 procedure CV_SWAP(var a, b: pCvPoint2D32f); {$IFDEF USE_INLINE}inline; {$ENDIF} overload;
-procedure CV_SWAP(var a, b, t: pCvMat); {$IFDEF USE_INLINE}inline; {$ENDIF} overload;
-procedure CV_SWAP(var a, b, t: Pointer); {$IFDEF USE_INLINE}inline; {$ENDIF} overload;
+procedure CV_SWAP(var a, b, T: pCvMat); {$IFDEF USE_INLINE}inline; {$ENDIF} overload;
+procedure CV_SWAP(var a, b, T: Pointer); {$IFDEF USE_INLINE}inline; {$ENDIF} overload;
 procedure CV_SWAP(var a, b: Pointer); {$IFDEF USE_INLINE}inline; {$ENDIF} overload;
 
 // {$IFNDEF MIN}
@@ -2282,8 +2299,7 @@ function cvScalarAll(val0123: Double): TCvScalar; {$IFDEF USE_INLINE}inline; {$E
 function cvPoint(const x: Integer = 0; const y: Integer = 0): TCvPoint; {$IFDEF USE_INLINE}inline; {$ENDIF}
 function CvPoint2f(const x: Single = 0; const y: Single = 0): TcvPoint2f; {$IFDEF USE_INLINE}inline; {$ENDIF}
 function CvSize(const width, height: Integer): TCvSize; {$IFDEF USE_INLINE}inline; {$ENDIF}
-function CvScalar(const val0: Double; const val1: Double = 0; const val2: Double = 0; const val3: Double = 0)
-  : TCvScalar;
+function CvScalar(const val0: Double; const val1: Double = 0; const val2: Double = 0; const val3: Double = 0): TCvScalar;
 {$IFDEF USE_INLINE}inline; {$ENDIF}
 function cvRandInt(Var rng: TCvRNG): Cardinal; {$IFDEF USE_INLINE}inline; {$ENDIF}
 function CvRect(Const x, y, width, height: Integer): TCvRect; {$IFDEF USE_INLINE}inline; {$ENDIF}
@@ -2297,26 +2313,29 @@ const
     * (Use together with cvCreateData, or use cvCreateMat instead to
     * get a matrix with allocated data):
     *
-    CV_INLINE CvMat cvMat( int rows, int cols, int type, void* data CV_DEFAULT(NULL))
-    {
-    CvMat m;
-    assert( (unsigned)CV_MAT_DEPTH(type) <= CV_64F );
-    type = CV_MAT_TYPE(type);
-    m.type = CV_MAT_MAGIC_VAL | CV_MAT_CONT_FLAG | type;
-    m.cols = cols;
-    m.rows = rows;
-    m.step = m.cols*CV_ELEM_SIZE(type);
-    m.data.ptr = (uchar*)data;
-    m.refcount = NULL;
-    m.hdr_refcount = 0;
-
-    return m;
   }
+//    CV_INLINE CvMat cvMat( int rows, int cols, int type, void* data CV_DEFAULT(NULL))
+//    {
+//    CvMat m;
+//    assert( (unsigned)CV_MAT_DEPTH(type) <= CV_64F );
+//    type = CV_MAT_TYPE(type);
+//    m.type = CV_MAT_MAGIC_VAL | CV_MAT_CONT_FLAG | type;
+//    m.cols = cols;
+//    m.rows = rows;
+//    m.step = m.cols*CV_ELEM_SIZE(type);
+//    m.data.ptr = (uchar*)data;
+//    m.refcount = NULL;
+//    m.hdr_refcount = 0;
+//
+//    return m;
+//  }
+
 function cvMat(const rows, cols: Integer; etype: Integer; data: Pointer = nil): TCvMat;
 function CV_MAT_DEPTH(const flags: Integer): Integer;
 function CV_MAT_TYPE(const flags: Integer): Integer;
 
-(* Size of each channel item,
+(*
+Size of each channel item,
 
   0x124489 = 1000 0100 0100 0010 0010 0001 0001 ~ array of sizeof(arr_type_elem) */
   #define CV_ELEM_SIZE1(type) \
@@ -2328,10 +2347,9 @@ function CV_MAT_CN(const flags: Integer): Integer;
 function CV_32FC1: Integer; {$IFDEF USE_INLINE}inline; {$ENDIF}
 function CV_32SC1: Integer; {$IFDEF USE_INLINE}inline; {$ENDIF}
 function CV_MAKETYPE(depth, cn: Integer): Integer; {$IFDEF USE_INLINE}inline; {$ENDIF}
-(*
-  #define CV_MAT_ELEM( mat, elemtype, row, col )
-  (*(elemtype* )CV_MAT_ELEM_PTR_FAST( mat, row, col, sizeof(elemtype)))
-*)
+
+//  #define CV_MAT_ELEM( mat, elemtype, row, col )
+//  (*(elemtype* )CV_MAT_ELEM_PTR_FAST( mat, row, col, sizeof(elemtype)))
 function CV_MAT_ELEM(const mat: TCvMat; const elemsize: Integer; const row, col: Integer): Pointer;
 {$IFDEF USE_INLINE}inline; {$ENDIF}
 (*
@@ -2358,8 +2376,8 @@ uses
   System.SysUtils,
   System.AnsiStrings
 {$ELSE}
-  SysUtils,
-  AnsiStrings
+  SysUtils
+//  ,AnsiStrings
 {$ENDIF}
     ;
 
@@ -2421,25 +2439,24 @@ begin
   Result.next := next;
 end;
 
-function CV_MAT_DEPTH;
+function CV_MAT_DEPTH(const flags: Integer): Integer;
 begin
   Result := flags and CV_MAT_DEPTH_MASK;
 end;
 
-function CV_MAT_TYPE;
+function CV_MAT_TYPE(const flags: Integer): Integer;
 begin
   Result := flags and CV_MAT_TYPE_MASK;
 end;
 
-function CV_MAT_CN;
+function CV_MAT_CN(const flags: Integer): Integer;
 begin
   Result := ((((flags) and CV_MAT_CN_MASK) shr CV_CN_SHIFT) + 1);
 end;
 
-function CV_ELEM_SIZE;
+function CV_ELEM_SIZE(const _type: Integer): Integer;
 begin
-  Result := (CV_MAT_CN(_type) shl ((((SizeOf(NativeInt) div 4 + 1) * (16384 or $3A50)) shr CV_MAT_DEPTH(_type) *
-    2) and 3));
+  Result := (CV_MAT_CN(_type) shl ((((SizeOf(NativeInt) div 4 + 1) * (16384 or $3A50)) shr CV_MAT_DEPTH(_type) * 2) and 3));
 end;
 
 function CV_32SC1: Integer;
@@ -2457,7 +2474,7 @@ begin
   Result := (CV_MAT_DEPTH(depth) + (((cn) - 1) shl CV_CN_SHIFT));
 end;
 
-function cvMat;
+function cvMat(const rows, cols: Integer; etype: Integer; data: Pointer = nil): TCvMat;
 begin
   if not(CV_MAT_DEPTH(etype) <= CV_64F) then
     exit;
@@ -2471,7 +2488,7 @@ begin
   Result.hdr_refcount := 0;
 end;
 
-function cvScalarAll;
+function cvScalarAll(val0123: Double): TCvScalar; {$IFDEF USE_INLINE}inline; {$ENDIF}
 begin
   Result.val[0] := val0123;
   Result.val[1] := val0123;
@@ -2479,19 +2496,20 @@ begin
   Result.val[3] := val0123;
 end;
 
-function cvPoint;
+function cvPoint(const x: Integer = 0; const y: Integer = 0): TCvPoint; {$IFDEF USE_INLINE}inline; {$ENDIF}
 begin
   Result.x := x;
   Result.y := y;
 end;
 
-function CvPoint2f;
+function CvPoint2f(const x: Single = 0; const y: Single = 0): TcvPoint2f; {$IFDEF USE_INLINE}inline; {$ENDIF}
 begin
   Result.x := x;
   Result.y := y;
 end;
 
-function CvScalar;
+function CvScalar(const val0: Double; const val1: Double = 0; const val2: Double = 0; const val3: Double = 0): TCvScalar;
+{$IFDEF USE_INLINE}inline; {$ENDIF}
 begin
   Result.val[0] := val0;
   Result.val[1] := val1;
@@ -2499,13 +2517,13 @@ begin
   Result.val[3] := val3;
 end;
 
-function CvSize;
+function CvSize(const width, height: Integer): TCvSize; {$IFDEF USE_INLINE}inline; {$ENDIF}
 begin
   Result.width := width;
   Result.height := height;
 end;
 
-function CvRect;
+function CvRect(Const x, y, width, height: Integer): TCvRect; {$IFDEF USE_INLINE}inline; {$ENDIF}
 begin
   Result.x := x;
   Result.y := y;
@@ -2513,7 +2531,7 @@ begin
   Result.height := height;
 end;
 
-function cvRandInt;
+function cvRandInt(Var rng: TCvRNG): Cardinal; {$IFDEF USE_INLINE}inline; {$ENDIF}
 begin
 {$Q-}
   rng := TCvRNG(rng * CV_RNG_COEFF + (rng shr 32));
@@ -2521,7 +2539,7 @@ begin
   Result := Cardinal(rng);
 end;
 
-function cvRound;
+function cvRound(Value: Double): Integer;
 begin
   Result := Round(Value);
 end;
@@ -2544,19 +2562,19 @@ begin
     Result := ifFalse;
 end;
 
-function CV_NODE_TYPE;
+function CV_NODE_TYPE(const flags: Integer): Integer; {$IFDEF USE_INLINE}inline; {$ENDIF}
 begin
   // CV_NODE_TYPE(flags)((flags) and CV_NODE_TYPE_MASK);
   Result := flags and CV_NODE_TYPE_MASK;
 end;
 
-function CV_NODE_IS_INT;
+function CV_NODE_IS_INT(const flags: Integer): Boolean; {$IFDEF USE_INLINE}inline; {$ENDIF}
 begin
   // CV_NODE_IS_INT(flags) (CV_NODE_TYPE(flags) == CV_NODE_INT)
   Result := CV_NODE_TYPE(flags) = CV_NODE_INT;
 end;
 
-function CV_NODE_IS_REAL;
+function CV_NODE_IS_REAL(const flags: Integer): Boolean; {$IFDEF USE_INLINE}inline; {$ENDIF}
 begin
   // CV_NODE_IS_REAL(flags) (CV_NODE_TYPE(flags) == CV_NODE_REAL)
   Result := CV_NODE_TYPE(flags) = CV_NODE_REAL;
@@ -2590,7 +2608,7 @@ begin
     cvChangeSeqBlock(@Reader, 1);
 end;
 
-function cvFloor;
+function cvFloor(Value: Double): Integer; {$IFDEF USE_INLINE}inline; {$ENDIF}
 Var
   diff: TCv32suf;
   i: Integer;
@@ -2602,25 +2620,25 @@ begin
   Result := i;
 end;
 
-function cvPointFrom32f;
+function cvPointFrom32f(point: TCvPoint2D32f): TCvPoint; {$IFDEF USE_INLINE}inline; {$ENDIF}
 begin
   Result.x := cvRound(point.x);
   Result.y := cvRound(point.y);
 end;
 
-function CvTermCriteria;
+function CvTermCriteria(_type: Integer; max_iter: Integer; epsilon: Double): TCvTermCriteria; {$IFDEF USE_INLINE}inline;{$ENDIF}
 begin
   Result.cType := _type;
   Result.max_iter := max_iter;
   Result.epsilon := epsilon;
 end;
 
-function cvPointTo32f;
+function cvPointTo32f(point: TCvPoint): TCvPoint2D32f; {$IFDEF USE_INLINE}inline; {$ENDIF}
 begin
   Result := CvPoint2D32f(point.x, point.y);
 end;
 
-function CvPoint2D32f;
+function CvPoint2D32f(x, y: Single): TCvPoint2D32f; {$IFDEF USE_INLINE}inline; {$ENDIF}
 begin
   Result.x := x;
   Result.y := y;
@@ -2633,28 +2651,28 @@ begin
   Result.z := z;
 end;
 
-procedure CV_SWAP(var a, b, t: Pointer);
+procedure CV_SWAP(var a, b, T: Pointer);
 begin
-  t := a;
+  T := a;
   a := b;
-  b := t;
+  b := T;
 end;
 
 procedure CV_SWAP(var a, b: Pointer);
 Var
-  t: Pointer;
+  T: Pointer;
 begin
-  CV_SWAP(a, b, t);
+  CV_SWAP(a, b, T);
 end;
 
-procedure CV_SWAP(var a, b, t: pCvMat);
+procedure CV_SWAP(var a, b, T: pCvMat);
 begin
-  CV_SWAP(Pointer(a), Pointer(b), Pointer(t));
+  CV_SWAP(Pointer(a), Pointer(b), Pointer(T));
 end;
 
-procedure CV_SWAP(var a, b, t: pIplImage);
+procedure CV_SWAP(var a, b, T: pIplImage);
 begin
-  CV_SWAP(Pointer(a), Pointer(b), Pointer(t));
+  CV_SWAP(Pointer(a), Pointer(b), Pointer(T));
 end;
 
 procedure CV_SWAP(var a, b: pIplImage);
@@ -2662,9 +2680,9 @@ begin
   CV_SWAP(Pointer(a), Pointer(b));
 end;
 
-procedure CV_SWAP(var a, b, t: pCvPoint2D32f);
+procedure CV_SWAP(var a, b, T: pCvPoint2D32f);
 begin
-  CV_SWAP(Pointer(a), Pointer(b), Pointer(t));
+  CV_SWAP(Pointer(a), Pointer(b), Pointer(T));
 end;
 
 procedure CV_SWAP(var a, b: pCvPoint2D32f);
@@ -2672,16 +2690,16 @@ begin
   CV_SWAP(Pointer(a), Pointer(b));
 end;
 
-function CV_32SC2;
+function CV_32SC2: Integer; {$IFDEF USE_INLINE}inline; {$ENDIF}
 begin
   Result := CV_MAKETYPE(CV_32S, 2);
 end;
 
-function CV_CAST_8U(t: Integer): uchar;
+function CV_CAST_8U(T: Integer): uchar;
 begin
-  if (not(t and (not 255)) <> 0) then
-    Result := t
-  else if t > 0 then
+  if (not(T and (not 255)) <> 0) then
+    Result := T
+  else if T > 0 then
     Result := 255
   else
     Result := 0;
@@ -2689,14 +2707,14 @@ end;
 
 {$IFDEF DELPHIXE_UP}
 
-function CV_GET_SEQ_ELEM;
+function CV_GET_SEQ_ELEM(const size_of_elem: Integer; Seq: pCvSeq; index: Integer): Pointer; {$IFDEF USE_INLINE}inline;
+{$ENDIF}
 begin
   { #define CV_GET_SEQ_ELEM( elem_type, seq, index ) CV_SEQ_ELEM( (seq), elem_type, (index) ) }
   Result := CV_SEQ_ELEM(Seq, size_of_elem, index);
 end;
 
-function CV_SEQ_ELEM(Seq: pCvSeq; const size_of_elem: Integer; index: Integer): Pointer; {$IFDEF USE_INLINE}inline;
-{$ENDIF}
+function CV_SEQ_ELEM(Seq: pCvSeq; const size_of_elem: Integer; index: Integer): Pointer; {$IFDEF USE_INLINE}inline; {$ENDIF}
 begin
   // assert(sizeof((seq)->first[0]) == sizeof(CvSeqBlock) && (seq)->elem_size == sizeof(elem_type))
   Assert(Assigned(Seq^.first) and (SizeOf(Seq^.first[0]) = SizeOf(TCvSeqBlock)) and (Seq^.elem_size = size_of_elem));
@@ -2759,8 +2777,21 @@ end;
 function CV_IMAGE_ELEM(image: pIplImage; size_elemtype, row, col: Integer): Pointer; {$IFDEF USE_INLINE}inline; {$ENDIF}
 begin
   // (((elemtype*)((image)->imageData + (image)->widthStep*(row)))[(col)])
-  Result := {$IFDEF DELPHI7}Pointer({$ENDIF DELPHI7}{$IFDEF DELPHI2005_UP}PByte{$ELSE}Integer{$ENDIF}(image^.imageData)
-    + image^.widthStep * row + col * size_elemtype{$IFDEF DELPHI7}){$ENDIF DELPHI7};
+  Result :=
+  Pointer(Integer(image^.imageData) + image^.widthStep * row + col * size_elemtype);
+//  {$IFDEF DELPHI7}
+//  Pointer(
+//  ({$ENDIF DELPHI7} //
+//  {$IFDEF DELPHI2005_UP} //
+//  PByte //
+//  {$ELSE} //
+//  Integer //
+//  {$ENDIF}
+//  (image^.imageData) + image^.widthStep * row + //
+//  col * size_elemtype //
+//  {$IFDEF DELPHI7}
+//  ) //
+//  {$ENDIF DELPHI7};
 end;
 
 function cvRealScalar(val0: Double): TCvScalar; {$IFDEF USE_INLINE}inline; {$ENDIF}
@@ -2847,15 +2878,17 @@ end;
 {$ENDIF}
 { TCvScalar }
 
-class operator TCvScalar.GreaterThan(a, b: TCvScalar): Boolean;
+
+class operator TCvScalar.{$IFDEF FPC}<{$ELSE}LessThan{$ENDIF}(a, b: TCvScalar): Boolean;
+begin
+  Result := (a.val[0] < b.val[0]) and (a.val[1] < b.val[1]) and (a.val[2] < b.val[2]) and (a.val[3] <= b.val[3]);
+end;
+
+class operator TCvScalar.{$IFDEF FPC}>{$ELSE}GreaterThan{$ENDIF}(a, b: TCvScalar): Boolean;
 begin
   Result := (a.val[0] > b.val[0]) and (a.val[1] > b.val[1]) and (a.val[2] > b.val[2]) and (a.val[3] >= b.val[3]);
 end;
 
-class operator TCvScalar.LessThan(a, b: TCvScalar): Boolean;
-begin
-  Result := (a.val[0] < b.val[0]) and (a.val[1] < b.val[1]) and (a.val[2] < b.val[2]) and (a.val[3] <= b.val[3]);
-end;
 
 { TCvMat }
 
@@ -2930,7 +2963,7 @@ function CV_IS_MATND(const mat: Pointer): Boolean; inline;
 begin
   // #define CV_IS_MATND(mat) \
   // (CV_IS_MATND_HDR(mat) && ((const CvMatND*)(mat))->data.ptr != NULL)
-  Result := CV_IS_MATND_HDR(mat) and Assigned(pCvMatND(mat).data.ptr);
+  Result := CV_IS_MATND_HDR(mat) and Assigned(pCvMatND(mat)^.data.ptr);
 end;
 
 function CV_IS_MAT(const mat: Pointer): Boolean; inline;

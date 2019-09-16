@@ -91,9 +91,9 @@ const
 
 Type
 {$IFDEF DELPHIXE_UP}
-  TocvRects = TArray<TocvRect>;
-  TocvCircles = TArray<TocvCircle>;
-  TocvLines = TArray<TocvLine>;
+  TocvRects = {$IFDEF FPC}specialize {$ENDIF}TArray<TocvRect>;
+  TocvCircles = {$IFDEF FPC}specialize {$ENDIF}TArray<TocvCircle>;
+  TocvLines = {$IFDEF FPC}specialize {$ENDIF}TArray<TocvLine>;
 {$ELSE}
   TocvRects = Array of TocvRect;
   TocvCircles = Array of TocvCircle;

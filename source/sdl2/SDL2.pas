@@ -23,10 +23,18 @@
 interface
 
 uses
-    System.Classes
-    ,System.SysUtils
+   {$IFDEF FPC}
+   SysUtils,Classes
+   {$ELSE}
+   System.SysUtils,System.Classes
+   {$ENDIF}
     {$IFDEF MSWINDOWS}
-       ,Winapi.Windows;
+       ,
+       {$IFDEF FPC}
+       Windows;
+       {$ELSE}
+       Winapi.Windows;
+       {$ENDIF}
     {$ELSE}
        {$IFDEF LINUX}
           ,X

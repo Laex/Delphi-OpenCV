@@ -24,7 +24,11 @@ interface
 uses
 
 {$IFDEF MSWINDOWS}
+{$IFDEF FPC}
+  Windows,
+{$ELSE}
   Winapi.Windows,
+{$ENDIF}
 {$ENDIF}
   SDL2;
 

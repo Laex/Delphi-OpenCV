@@ -103,10 +103,12 @@ implementation
 uses
 {$IFDEF HAS_UNITSCOPE}
   System.SysUtils,
+  System.Math,
 {$ELSE}
   SysUtils,
+  Math,
 {$ENDIF}
-  ocv.core_c, System.Math;
+  ocv.core_c;
 
 {$IFDEF DELPHIXE3_UP}
 { TStringAnsiHelper }
@@ -310,25 +312,25 @@ BEGIN
   TRY
     // assert((iplImg.Depth = 8) and (iplImg.NChannels = 3),
     // 'IplImage2Bitmap: Not a 24 bit color iplImage!');
-    bitmap.Height := iplImg.Height;
-    bitmap.Width := iplImg.Width;
+    bitmap.Height := iplImg^.Height;
+    bitmap.Width := iplImg^.Width;
     FOR j := 0 TO bitmap.Height - 1 DO
     BEGIN
       // origin BL = Bottom-Left
-      if (iplImg.Origin = IPL_ORIGIN_BL) then
+      if (iplImg^.Origin = IPL_ORIGIN_BL) then
         RowIn := bitmap.Scanline[bitmap.Height - 1 - j]
       else
         RowIn := bitmap.Scanline[j];
 
-      offset := longint(iplImg.ImageData) + iplImg.WidthStep * j;
+      offset := longint(iplImg^.ImageData) + iplImg^.WidthStep * j;
       dataByte := PByteArray(offset);
 
-      if (iplImg.ChannelSeq = 'BGR') then
+      if (iplImg^.ChannelSeq = 'BGR') then
       begin
         { direct copy of the iplImage row bytes to bitmap row }
-        CopyMemory(RowIn, dataByte, iplImg.WidthStep);
+        CopyMemory(RowIn, dataByte, iplImg^.WidthStep);
       End
-      else if (iplImg.ChannelSeq = 'GRAY') then
+      else if (iplImg^.ChannelSeq = 'GRAY') then
         FOR i := 0 TO bitmap.Width - 1 DO
         begin
           RowIn[3 * i] := dataByte[i];

@@ -1,5 +1,6 @@
 #Directories
 buildtest
+backup/
 __history/
 __recovery/
 Debug/

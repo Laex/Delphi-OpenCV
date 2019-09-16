@@ -11,12 +11,21 @@ unit SDL2_Frame;
 interface
 
 uses
-  Winapi.Windows,
-  VCL.Dialogs,
+{$IFDEF FPC}
+  Windows,
+  Dialogs,
   SysUtils,
   Classes,
   Controls,
   ExtCtrls,
+{$ELSE}
+  Winapi.Windows,
+  System.SysUtils,
+  System.Classes,
+  VCL.Controls,
+  VCL.ExtCtrls,
+  VCL.Dialogs,
+{$ENDIF}
   SDL2;
 
 type

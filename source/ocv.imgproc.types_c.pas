@@ -57,100 +57,100 @@ type
   pCvConnectedComp = ^TCvConnectedComp;
 
   TCvConnectedComp = record
-    area: Double; (* area of the connected component *)
+    area: Double;     (* area of the connected component *)
     value: TCvScalar; (* average color of the connected component *)
-    rect: TCvRect; (* ROI of the component *)
+    rect: TCvRect;    (* ROI of the component *)
     contour: ^TCvSeq; (* optional component boundary *)
   end;
 
   (* Image smooth methods *)
 const
   CV_BLUR_NO_SCALE = 0;
-  CV_BLUR = 1;
-  CV_GAUSSIAN = 2;
-  CV_MEDIAN = 3;
-  CV_BILATERAL = 4;
+  CV_BLUR          = 1;
+  CV_GAUSSIAN      = 2;
+  CV_MEDIAN        = 3;
+  CV_BILATERAL     = 4;
 
   (* Filters used in pyramid decomposition *)
   CV_GAUSSIAN_5x5 = 7;
 
   (* Special filters *)
-  CV_SCHARR = -1;
+  CV_SCHARR          = -1;
   CV_MAX_SOBEL_KSIZE = 7;
 
   (* Constants for color conversion *)
-  CV_BGR2BGRA = 0;
-  CV_RGB2RGBA = CV_BGR2BGRA;
-  CV_BGRA2BGR = 1;
-  CV_RGBA2RGB = CV_BGRA2BGR;
-  CV_BGR2RGBA = 2;
-  CV_RGB2BGRA = CV_BGR2RGBA;
-  CV_RGBA2BGR = 3;
-  CV_BGRA2RGB = CV_RGBA2BGR;
-  CV_BGR2RGB = 4;
-  CV_RGB2BGR = CV_BGR2RGB;
-  CV_BGRA2RGBA = 5;
-  CV_RGBA2BGRA = CV_BGRA2RGBA;
-  CV_BGR2GRAY = 6;
-  CV_RGB2GRAY = 7;
-  CV_GRAY2BGR = 8;
-  CV_GRAY2RGB = CV_GRAY2BGR;
-  CV_GRAY2BGRA = 9;
-  CV_GRAY2RGBA = CV_GRAY2BGRA;
-  CV_BGRA2GRAY = 10;
-  CV_RGBA2GRAY = 11;
-  CV_BGR2BGR565 = 12;
-  CV_RGB2BGR565 = 13;
-  CV_BGR5652BGR = 14;
-  CV_BGR5652RGB = 15;
-  CV_BGRA2BGR565 = 16;
-  CV_RGBA2BGR565 = 17;
-  CV_BGR5652BGRA = 18;
-  CV_BGR5652RGBA = 19;
-  CV_GRAY2BGR565 = 20;
-  CV_BGR5652GRAY = 21;
-  CV_BGR2BGR555 = 22;
-  CV_RGB2BGR555 = 23;
-  CV_BGR5552BGR = 24;
-  CV_BGR5552RGB = 25;
-  CV_BGRA2BGR555 = 26;
-  CV_RGBA2BGR555 = 27;
-  CV_BGR5552BGRA = 28;
-  CV_BGR5552RGBA = 29;
-  CV_GRAY2BGR555 = 30;
-  CV_BGR5552GRAY = 31;
-  CV_BGR2XYZ = 32;
-  CV_RGB2XYZ = 33;
-  CV_XYZ2BGR = 34;
-  CV_XYZ2RGB = 35;
-  CV_BGR2YCrCb = 36;
-  CV_RGB2YCrCb = 37;
-  CV_YCrCb2BGR = 38;
-  CV_YCrCb2RGB = 39;
-  CV_BGR2HSV = 40;
-  CV_RGB2HSV = 41;
-  CV_BGR2Lab = 44;
-  CV_RGB2Lab = 45;
-  CV_BayerBG2BGR = 46;
-  CV_BayerGB2BGR = 47;
-  CV_BayerRG2BGR = 48;
-  CV_BayerGR2BGR = 49;
-  CV_BayerBG2RGB = CV_BayerRG2BGR;
-  CV_BayerGB2RGB = CV_BayerGR2BGR;
-  CV_BayerRG2RGB = CV_BayerBG2BGR;
-  CV_BayerGR2RGB = CV_BayerGB2BGR;
-  CV_BGR2Luv = 50;
-  CV_RGB2Luv = 51;
-  CV_BGR2HLS = 52;
-  CV_RGB2HLS = 53;
-  CV_HSV2BGR = 54;
-  CV_HSV2RGB = 55;
-  CV_Lab2BGR = 56;
-  CV_Lab2RGB = 57;
-  CV_Luv2BGR = 58;
-  CV_Luv2RGB = 59;
-  CV_HLS2BGR = 60;
-  CV_HLS2RGB = 61;
+  CV_BGR2BGRA        = 0;
+  CV_RGB2RGBA        = CV_BGR2BGRA;
+  CV_BGRA2BGR        = 1;
+  CV_RGBA2RGB        = CV_BGRA2BGR;
+  CV_BGR2RGBA        = 2;
+  CV_RGB2BGRA        = CV_BGR2RGBA;
+  CV_RGBA2BGR        = 3;
+  CV_BGRA2RGB        = CV_RGBA2BGR;
+  CV_BGR2RGB         = 4;
+  CV_RGB2BGR         = CV_BGR2RGB;
+  CV_BGRA2RGBA       = 5;
+  CV_RGBA2BGRA       = CV_BGRA2RGBA;
+  CV_BGR2GRAY        = 6;
+  CV_RGB2GRAY        = 7;
+  CV_GRAY2BGR        = 8;
+  CV_GRAY2RGB        = CV_GRAY2BGR;
+  CV_GRAY2BGRA       = 9;
+  CV_GRAY2RGBA       = CV_GRAY2BGRA;
+  CV_BGRA2GRAY       = 10;
+  CV_RGBA2GRAY       = 11;
+  CV_BGR2BGR565      = 12;
+  CV_RGB2BGR565      = 13;
+  CV_BGR5652BGR      = 14;
+  CV_BGR5652RGB      = 15;
+  CV_BGRA2BGR565     = 16;
+  CV_RGBA2BGR565     = 17;
+  CV_BGR5652BGRA     = 18;
+  CV_BGR5652RGBA     = 19;
+  CV_GRAY2BGR565     = 20;
+  CV_BGR5652GRAY     = 21;
+  CV_BGR2BGR555      = 22;
+  CV_RGB2BGR555      = 23;
+  CV_BGR5552BGR      = 24;
+  CV_BGR5552RGB      = 25;
+  CV_BGRA2BGR555     = 26;
+  CV_RGBA2BGR555     = 27;
+  CV_BGR5552BGRA     = 28;
+  CV_BGR5552RGBA     = 29;
+  CV_GRAY2BGR555     = 30;
+  CV_BGR5552GRAY     = 31;
+  CV_BGR2XYZ         = 32;
+  CV_RGB2XYZ         = 33;
+  CV_XYZ2BGR         = 34;
+  CV_XYZ2RGB         = 35;
+  CV_BGR2YCrCb       = 36;
+  CV_RGB2YCrCb       = 37;
+  CV_YCrCb2BGR       = 38;
+  CV_YCrCb2RGB       = 39;
+  CV_BGR2HSV         = 40;
+  CV_RGB2HSV         = 41;
+  CV_BGR2Lab         = 44;
+  CV_RGB2Lab         = 45;
+  CV_BayerBG2BGR     = 46;
+  CV_BayerGB2BGR     = 47;
+  CV_BayerRG2BGR     = 48;
+  CV_BayerGR2BGR     = 49;
+  CV_BayerBG2RGB     = CV_BayerRG2BGR;
+  CV_BayerGB2RGB     = CV_BayerGR2BGR;
+  CV_BayerRG2RGB     = CV_BayerBG2BGR;
+  CV_BayerGR2RGB     = CV_BayerGB2BGR;
+  CV_BGR2Luv         = 50;
+  CV_RGB2Luv         = 51;
+  CV_BGR2HLS         = 52;
+  CV_RGB2HLS         = 53;
+  CV_HSV2BGR         = 54;
+  CV_HSV2RGB         = 55;
+  CV_Lab2BGR         = 56;
+  CV_Lab2RGB         = 57;
+  CV_Luv2BGR         = 58;
+  CV_Luv2RGB         = 59;
+  CV_HLS2BGR         = 60;
+  CV_HLS2RGB         = 61;
   CV_BayerBG2BGR_VNG = 62;
   CV_BayerGB2BGR_VNG = 63;
   CV_BayerRG2BGR_VNG = 64;
@@ -159,76 +159,76 @@ const
   CV_BayerGB2RGB_VNG = CV_BayerGR2BGR_VNG;
   CV_BayerRG2RGB_VNG = CV_BayerBG2BGR_VNG;
   CV_BayerGR2RGB_VNG = CV_BayerGB2BGR_VNG;
-  CV_BGR2HSV_FULL = 66;
-  CV_RGB2HSV_FULL = 67;
-  CV_BGR2HLS_FULL = 68;
-  CV_RGB2HLS_FULL = 69;
-  CV_HSV2BGR_FULL = 70;
-  CV_HSV2RGB_FULL = 71;
-  CV_HLS2BGR_FULL = 72;
-  CV_HLS2RGB_FULL = 73;
-  CV_LBGR2Lab = 74;
-  CV_LRGB2Lab = 75;
-  CV_LBGR2Luv = 76;
-  CV_LRGB2Luv = 77;
-  CV_Lab2LBGR = 78;
-  CV_Lab2LRGB = 79;
-  CV_Luv2LBGR = 80;
-  CV_Luv2LRGB = 81;
-  CV_BGR2YUV = 82;
-  CV_RGB2YUV = 83;
-  CV_YUV2BGR = 84;
-  CV_YUV2RGB = 85;
-  CV_BayerBG2GRAY = 86;
-  CV_BayerGB2GRAY = 87;
-  CV_BayerRG2GRAY = 88;
-  CV_BayerGR2GRAY = 89;
+  CV_BGR2HSV_FULL    = 66;
+  CV_RGB2HSV_FULL    = 67;
+  CV_BGR2HLS_FULL    = 68;
+  CV_RGB2HLS_FULL    = 69;
+  CV_HSV2BGR_FULL    = 70;
+  CV_HSV2RGB_FULL    = 71;
+  CV_HLS2BGR_FULL    = 72;
+  CV_HLS2RGB_FULL    = 73;
+  CV_LBGR2Lab        = 74;
+  CV_LRGB2Lab        = 75;
+  CV_LBGR2Luv        = 76;
+  CV_LRGB2Luv        = 77;
+  CV_Lab2LBGR        = 78;
+  CV_Lab2LRGB        = 79;
+  CV_Luv2LBGR        = 80;
+  CV_Luv2LRGB        = 81;
+  CV_BGR2YUV         = 82;
+  CV_RGB2YUV         = 83;
+  CV_YUV2BGR         = 84;
+  CV_YUV2RGB         = 85;
+  CV_BayerBG2GRAY    = 86;
+  CV_BayerGB2GRAY    = 87;
+  CV_BayerRG2GRAY    = 88;
+  CV_BayerGR2GRAY    = 89;
   // YUV 4:2:0 formats family;
-  CV_YUV2RGB_NV12 = 90;
-  CV_YUV2BGR_NV12 = 91;
-  CV_YUV2RGB_NV21 = 92;
-  CV_YUV2BGR_NV21 = 93;
-  CV_YUV420sp2RGB = CV_YUV2RGB_NV21;
-  CV_YUV420sp2BGR = CV_YUV2BGR_NV21;
+  CV_YUV2RGB_NV12  = 90;
+  CV_YUV2BGR_NV12  = 91;
+  CV_YUV2RGB_NV21  = 92;
+  CV_YUV2BGR_NV21  = 93;
+  CV_YUV420sp2RGB  = CV_YUV2RGB_NV21;
+  CV_YUV420sp2BGR  = CV_YUV2BGR_NV21;
   CV_YUV2RGBA_NV12 = 94;
   CV_YUV2BGRA_NV12 = 95;
   CV_YUV2RGBA_NV21 = 96;
   CV_YUV2BGRA_NV21 = 97;
   CV_YUV420sp2RGBA = CV_YUV2RGBA_NV21;
   CV_YUV420sp2BGRA = CV_YUV2BGRA_NV21;
-  CV_YUV2RGB_YV12 = 98;
-  CV_YUV2BGR_YV12 = 99;
-  CV_YUV2RGB_IYUV = 100;
-  CV_YUV2BGR_IYUV = 101;
-  CV_YUV2RGB_I420 = CV_YUV2RGB_IYUV;
-  CV_YUV2BGR_I420 = CV_YUV2BGR_IYUV;
-  CV_YUV420p2RGB = CV_YUV2RGB_YV12;
-  CV_YUV420p2BGR = CV_YUV2BGR_YV12;
+  CV_YUV2RGB_YV12  = 98;
+  CV_YUV2BGR_YV12  = 99;
+  CV_YUV2RGB_IYUV  = 100;
+  CV_YUV2BGR_IYUV  = 101;
+  CV_YUV2RGB_I420  = CV_YUV2RGB_IYUV;
+  CV_YUV2BGR_I420  = CV_YUV2BGR_IYUV;
+  CV_YUV420p2RGB   = CV_YUV2RGB_YV12;
+  CV_YUV420p2BGR   = CV_YUV2BGR_YV12;
   CV_YUV2RGBA_YV12 = 102;
   CV_YUV2BGRA_YV12 = 103;
   CV_YUV2RGBA_IYUV = 104;
   CV_YUV2BGRA_IYUV = 105;
   CV_YUV2RGBA_I420 = CV_YUV2RGBA_IYUV;
   CV_YUV2BGRA_I420 = CV_YUV2BGRA_IYUV;
-  CV_YUV420p2RGBA = CV_YUV2RGBA_YV12;
-  CV_YUV420p2BGRA = CV_YUV2BGRA_YV12;
-  CV_YUV2GRAY_420 = 106;
+  CV_YUV420p2RGBA  = CV_YUV2RGBA_YV12;
+  CV_YUV420p2BGRA  = CV_YUV2BGRA_YV12;
+  CV_YUV2GRAY_420  = 106;
   CV_YUV2GRAY_NV21 = CV_YUV2GRAY_420;
   CV_YUV2GRAY_NV12 = CV_YUV2GRAY_420;
   CV_YUV2GRAY_YV12 = CV_YUV2GRAY_420;
   CV_YUV2GRAY_IYUV = CV_YUV2GRAY_420;
   CV_YUV2GRAY_I420 = CV_YUV2GRAY_420;
   CV_YUV420sp2GRAY = CV_YUV2GRAY_420;
-  CV_YUV420p2GRAY = CV_YUV2GRAY_420;
+  CV_YUV420p2GRAY  = CV_YUV2GRAY_420;
   // YUV 4:2:2 formats family;
   CV_YUV2RGB_UYVY = 107;
   CV_YUV2BGR_UYVY = 108;
   // CV_YUV2RGB_VYUY = 109;
   // CV_YUV2BGR_VYUY = 110;
-  CV_YUV2RGB_Y422 = CV_YUV2RGB_UYVY;
-  CV_YUV2BGR_Y422 = CV_YUV2BGR_UYVY;
-  CV_YUV2RGB_UYNV = CV_YUV2RGB_UYVY;
-  CV_YUV2BGR_UYNV = CV_YUV2BGR_UYVY;
+  CV_YUV2RGB_Y422  = CV_YUV2RGB_UYVY;
+  CV_YUV2BGR_Y422  = CV_YUV2BGR_UYVY;
+  CV_YUV2RGB_UYNV  = CV_YUV2RGB_UYVY;
+  CV_YUV2BGR_UYNV  = CV_YUV2BGR_UYVY;
   CV_YUV2RGBA_UYVY = 111;
   CV_YUV2BGRA_UYVY = 112;
   // CV_YUV2RGBA_VYUY = 113;
@@ -237,14 +237,14 @@ const
   CV_YUV2BGRA_Y422 = CV_YUV2BGRA_UYVY;
   CV_YUV2RGBA_UYNV = CV_YUV2RGBA_UYVY;
   CV_YUV2BGRA_UYNV = CV_YUV2BGRA_UYVY;
-  CV_YUV2RGB_YUY2 = 115;
-  CV_YUV2BGR_YUY2 = 116;
-  CV_YUV2RGB_YVYU = 117;
-  CV_YUV2BGR_YVYU = 118;
-  CV_YUV2RGB_YUYV = CV_YUV2RGB_YUY2;
-  CV_YUV2BGR_YUYV = CV_YUV2BGR_YUY2;
-  CV_YUV2RGB_YUNV = CV_YUV2RGB_YUY2;
-  CV_YUV2BGR_YUNV = CV_YUV2BGR_YUY2;
+  CV_YUV2RGB_YUY2  = 115;
+  CV_YUV2BGR_YUY2  = 116;
+  CV_YUV2RGB_YVYU  = 117;
+  CV_YUV2BGR_YVYU  = 118;
+  CV_YUV2RGB_YUYV  = CV_YUV2RGB_YUY2;
+  CV_YUV2BGR_YUYV  = CV_YUV2BGR_YUY2;
+  CV_YUV2RGB_YUNV  = CV_YUV2RGB_YUY2;
+  CV_YUV2BGR_YUNV  = CV_YUV2BGR_YUY2;
   CV_YUV2RGBA_YUY2 = 119;
   CV_YUV2BGRA_YUY2 = 120;
   CV_YUV2RGBA_YVYU = 121;
@@ -262,34 +262,34 @@ const
   CV_YUV2GRAY_YUYV = CV_YUV2GRAY_YUY2;
   CV_YUV2GRAY_YUNV = CV_YUV2GRAY_YUY2;
   // alpha premultiplication;
-  CV_RGBA2mRGBA = 125;
-  CV_mRGBA2RGBA = 126;
+  CV_RGBA2mRGBA   = 125;
+  CV_mRGBA2RGBA   = 126;
   CV_COLORCVT_MAX = 127;
 
   (* Sub-pixel interpolation methods *)
-  CV_INTER_NN = 0;
-  CV_INTER_LINEAR = 1;
-  CV_INTER_CUBIC = 2;
-  CV_INTER_AREA = 3;
+  CV_INTER_NN       = 0;
+  CV_INTER_LINEAR   = 1;
+  CV_INTER_CUBIC    = 2;
+  CV_INTER_AREA     = 3;
   CV_INTER_LANCZOS4 = 4;
 
   (* ... and other image warping flags *)
   CV_WARP_FILL_OUTLIERS = 8;
-  CV_WARP_INVERSE_MAP = 16;
+  CV_WARP_INVERSE_MAP   = 16;
 
   (* Shapes of a structuring element for morphological operations *)
-  CV_SHAPE_RECT = 0;
-  CV_SHAPE_CROSS = 1;
+  CV_SHAPE_RECT    = 0;
+  CV_SHAPE_CROSS   = 1;
   CV_SHAPE_ELLIPSE = 2;
-  CV_SHAPE_CUSTOM = 100;
+  CV_SHAPE_CUSTOM  = 100;
 
   (* Morphological operations *)
-  CV_MOP_ERODE = 0;
-  CV_MOP_DILATE = 1;
-  CV_MOP_OPEN = 2;
-  CV_MOP_CLOSE = 3;
+  CV_MOP_ERODE    = 0;
+  CV_MOP_DILATE   = 1;
+  CV_MOP_OPEN     = 2;
+  CV_MOP_CLOSE    = 3;
   CV_MOP_GRADIENT = 4;
-  CV_MOP_TOPHAT = 5;
+  CV_MOP_TOPHAT   = 5;
   CV_MOP_BLACKHAT = 6;
 
   (* Spatial and central moments *)
@@ -312,11 +312,11 @@ type
 
   (* Template matching methods *)
 const
-  CV_TM_SQDIFF = 0;
+  CV_TM_SQDIFF        = 0;
   CV_TM_SQDIFF_NORMED = 1;
-  CV_TM_CCORR = 2;
-  CV_TM_CCORR_NORMED = 3;
-  CV_TM_CCOEFF = 4;
+  CV_TM_CCORR         = 2;
+  CV_TM_CCORR_NORMED  = 3;
+  CV_TM_CCOEFF        = 4;
   CV_TM_CCOEFF_NORMED = 5;
 
 type
@@ -324,18 +324,18 @@ type
 
 const
   (* Contour retrieval modes *)
-  CV_RETR_EXTERNAL = 0;
-  CV_RETR_LIST = 1;
-  CV_RETR_CCOMP = 2;
-  CV_RETR_TREE = 3;
+  CV_RETR_EXTERNAL  = 0;
+  CV_RETR_LIST      = 1;
+  CV_RETR_CCOMP     = 2;
+  CV_RETR_TREE      = 3;
   CV_RETR_FLOODFILL = 4;
   (* Contour approximation methods *)
-  CV_CHAIN_CODE = 0;
-  CV_CHAIN_APPROX_NONE = 1;
-  CV_CHAIN_APPROX_SIMPLE = 2;
-  CV_CHAIN_APPROX_TC89_L1 = 3;
+  CV_CHAIN_CODE             = 0;
+  CV_CHAIN_APPROX_NONE      = 1;
+  CV_CHAIN_APPROX_SIMPLE    = 2;
+  CV_CHAIN_APPROX_TC89_L1   = 3;
   CV_CHAIN_APPROX_TC89_KCOS = 4;
-  CV_LINK_RUNS = 5;
+  CV_LINK_RUNS              = 5;
 
   (*
     Internal structure that is used for sequental retrieving contours from the image.
@@ -399,20 +399,20 @@ Type
     // --CV_SET_FIELDS()
     // --CV_SEQUENCE_FIELDS()
     // ---CV_TREE_NODE_FIELDS(CvSeq);
-    flags: Integer; // * Miscellaneous flags.
-    eader_size: Integer; // * Size of sequence header.
-    h_prev: pCvSeq; // * Previous sequence.
-    h_next: pCvSeq; // * Next sequence.
-    v_prev: pCvSeq; // * 2nd previous sequence.
-    v_next: pCvSeq; // * 2nd next sequence.
-    total: Integer; // * Total number of elements.
-    elem_size: Integer; // * Size of sequence element in bytes.
-    block_max: pShortInt; // * Maximal bound of the last block.
-    ptr: pShortInt; // * Current write pointer.
-    delta_elems: Integer; // * Grow seq this many at a time.
-    storage: pCvMemStorage; // * Where the seq is stored.
+    flags: Integer;           // * Miscellaneous flags.
+    eader_size: Integer;      // * Size of sequence header.
+    h_prev: pCvSeq;           // * Previous sequence.
+    h_next: pCvSeq;           // * Next sequence.
+    v_prev: pCvSeq;           // * 2nd previous sequence.
+    v_next: pCvSeq;           // * 2nd next sequence.
+    total: Integer;           // * Total number of elements.
+    elem_size: Integer;       // * Size of sequence element in bytes.
+    block_max: pShortInt;     // * Maximal bound of the last block.
+    ptr: pShortInt;           // * Current write pointer.
+    delta_elems: Integer;     // * Grow seq this many at a time.
+    storage: pCvMemStorage;   // * Where the seq is stored.
     free_blocks: pCvSeqBlock; // * Free blocks list.
-    first: pCvSeqBlock; // * Pointer to the first sequence block.
+    first: pCvSeqBlock;       // * Pointer to the first sequence block.
     free_elems: pCvSetElem;
     active_count: Integer;
     edges: pCvSet;
@@ -425,20 +425,20 @@ Type
 
 const
   // Type CvSubdiv2DPointLocation
-  CV_PTLOC_ERROR = -2;
+  CV_PTLOC_ERROR        = -2;
   CV_PTLOC_OUTSIDE_RECT = -1;
-  CV_PTLOC_INSIDE = 0;
-  CV_PTLOC_VERTEX = 1;
-  CV_PTLOC_ON_EDGE = 2;
+  CV_PTLOC_INSIDE       = 0;
+  CV_PTLOC_VERTEX       = 1;
+  CV_PTLOC_ON_EDGE      = 2;
 
   // Type  CvNextEdgeType
-  CV_NEXT_AROUND_ORG = $00;
-  CV_NEXT_AROUND_DST = $22;
-  CV_PREV_AROUND_ORG = $11;
-  CV_PREV_AROUND_DST = $33;
-  CV_NEXT_AROUND_LEFT = $13;
+  CV_NEXT_AROUND_ORG   = $00;
+  CV_NEXT_AROUND_DST   = $22;
+  CV_PREV_AROUND_ORG   = $11;
+  CV_PREV_AROUND_DST   = $33;
+  CV_NEXT_AROUND_LEFT  = $13;
   CV_NEXT_AROUND_RIGHT = $31;
-  CV_PREV_AROUND_LEFT = $20;
+  CV_PREV_AROUND_LEFT  = $20;
   CV_PREV_AROUND_RIGHT = $02;
 
   (* get the next edge with the same origin point (counterwise) *)
@@ -452,7 +452,7 @@ const
   CV_CONTOURS_MATCH_I2 = 2;
   CV_CONTOURS_MATCH_I3 = 3;
   (* Shape orientation *)
-  CV_CLOCKWISE = 1;
+  CV_CLOCKWISE         = 1;
   CV_COUNTER_CLOCKWISE = 2;
 
   (* Convexity defect *)
@@ -460,10 +460,10 @@ type
   pCvConvexityDefect = ^TCvConvexityDefect;
 
   TCvConvexityDefect = record
-    start: PCvPoint; (* point of the contour where the defect begins *)
-    _end: PCvPoint; (* point of the contour where the defect ends *)
+    start: PCvPoint;       (* point of the contour where the defect begins *)
+    _end: PCvPoint;        (* point of the contour where the defect ends *)
     depth_point: PCvPoint; (* the farthest from the convex hull point within the defect *)
-    depth: Single; (* distance between the farthest point and the convex hull *)
+    depth: Single;         (* distance between the farthest point and the convex hull *)
   end;
 
   (* Histogram comparison methods *)
@@ -526,11 +526,9 @@ const
 
   CV_THRESH_OTSU = 8;
   (* use Otsu algorithm to choose the optimal threshold value;
-    combine = the flag with one of the above CV_THRESH_* values;
-    {$EXTERNALSYM combine}
-
-
-    (* Adaptive threshold methods *)
+    combine = the flag with one of the above CV_THRESH_* values; *)
+//{$EXTERNALSYM combine}
+  (* Adaptive threshold methods *)
   CV_ADAPTIVE_THRESH_MEAN_C = 0;
 
   CV_ADAPTIVE_THRESH_GAUSSIAN_C = 1;

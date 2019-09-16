@@ -60,9 +60,9 @@ uses ocv.core.types_c, ocv.imgproc.types_c;
 
 // ************************************ optical flow ***************************************
 const
-  CV_LKFLOW_PYR_A_READY = 1;
-  CV_LKFLOW_PYR_B_READY = 2;
-  CV_LKFLOW_INITIAL_GUESSES = 4;
+  CV_LKFLOW_PYR_A_READY       = 1;
+  CV_LKFLOW_PYR_B_READY       = 2;
+  CV_LKFLOW_INITIAL_GUESSES   = 4;
   CV_LKFLOW_GET_MIN_EIGENVALS = 8;
 
   (*
@@ -89,16 +89,16 @@ const
 
 Type
   TcvCalcOpticalFlowPyrLK = procedure(const prev: pIplImage; const curr: pIplImage; prev_pyr: pIplImage; curr_pyr: pIplImage;
-    const prev_features: pCvPoint2D32f; curr_features: pCvPoint2D32f; count: Integer; win_size: TCvSize; level: Integer; status: pCVChar;
-    track_error: PSingle; criteria: TCvTermCriteria; flags: Integer); cdecl;
+    const prev_features: pCvPoint2D32f; curr_features: pCvPoint2D32f; count: Integer; win_size: TCvSize; level: Integer; status: pCVChar; track_error: PSingle;
+    criteria: TCvTermCriteria; flags: Integer); cdecl;
 
 Var
   cvCalcOpticalFlowPyrLK: TcvCalcOpticalFlowPyrLK;
 {$ELSE}
 {$EXTERNALSYM cvCalcOpticalFlowPyrLK}
-procedure cvCalcOpticalFlowPyrLK(const prev: pIplImage; const curr: pIplImage; prev_pyr: pIplImage; curr_pyr: pIplImage;
-  const prev_features: pCvPoint2D32f; curr_features: pCvPoint2D32f; count: Integer; win_size: TCvSize; level: Integer; status: pCVChar;
-  track_error: PSingle; criteria: TCvTermCriteria; flags: Integer); cdecl;
+procedure cvCalcOpticalFlowPyrLK(const prev: pIplImage; const curr: pIplImage; prev_pyr: pIplImage; curr_pyr: pIplImage; const prev_features: pCvPoint2D32f;
+  curr_features: pCvPoint2D32f; count: Integer; win_size: TCvSize; level: Integer; status: pCVChar; track_error: PSingle; criteria: TCvTermCriteria;
+  flags: Integer); cdecl;
 {$ENDIF}
 (* Modification of a previous sparse optical flow algorithm to calculate
   affine flow
@@ -116,8 +116,8 @@ procedure cvCalcOpticalFlowPyrLK(const prev: pIplImage; const curr: pIplImage; p
 
 Type
   TcvCalcAffineFlowPyrLK = procedure(const prev: pCvArr; const curr: pCvArr; prev_pyr: pCvArr; curr_pyr: pCvArr; const prev_features: pCvPoint2D32f;
-    var curr_features: TCvPoint2D32f; var matrices: Single; count: Integer; win_size: TCvSize; level: Integer; status: pCVChar;
-    var track_error: Single; criteria: TCvTermCriteria; flags: Integer); cdecl;
+    var curr_features: TCvPoint2D32f; var matrices: Single; count: Integer; win_size: TCvSize; level: Integer; status: pCVChar; var track_error: Single;
+    criteria: TCvTermCriteria; flags: Integer); cdecl;
 
 Var
   cvCalcAffineFlowPyrLK: TcvCalcAffineFlowPyrLK;
@@ -205,15 +205,13 @@ procedure cvUpdateMotionHistory(const silhouette: pCvArr; mhi: pCvArr; timestamp
 {$IFDEF SAFELOADLIB}
 
 Type
-  TcvCalcMotionGradient = procedure(const mhi: pCvArr; mask: pCvArr; orientation: pCvArr; delta1: double; delta2: double;
-    aperture_size: Integer = 3); cdecl;
+  TcvCalcMotionGradient = procedure(const mhi: pCvArr; mask: pCvArr; orientation: pCvArr; delta1: double; delta2: double; aperture_size: Integer = 3); cdecl;
 
 var
   cvCalcMotionGradient: TcvCalcMotionGradient;
 {$ELSE}
 {$EXTERNALSYM cvCalcMotionGradient}
-procedure cvCalcMotionGradient(const mhi: pCvArr; mask: pCvArr; orientation: pCvArr; delta1: double; delta2: double;
-  aperture_size: Integer = 3); cdecl;
+procedure cvCalcMotionGradient(const mhi: pCvArr; mask: pCvArr; orientation: pCvArr; delta1: double; delta2: double; aperture_size: Integer = 3); cdecl;
 {$ENDIF}
 (* Calculates average motion direction within a selected motion region
   (region can be selected by setting ROIs and/or by composing a valid gradient mask
@@ -226,15 +224,13 @@ procedure cvCalcMotionGradient(const mhi: pCvArr; mask: pCvArr; orientation: pCv
 {$IFDEF SAFELOADLIB}
 
 type
-  TcvCalcGlobalOrientation = function(const orientation: pCvArr; const mask: pCvArr; const mhi: pCvArr; timestamp: double; duration: double)
-    : double; cdecl;
+  TcvCalcGlobalOrientation = function(const orientation: pCvArr; const mask: pCvArr; const mhi: pCvArr; timestamp: double; duration: double): double; cdecl;
 
 var
   cvCalcGlobalOrientation: TcvCalcGlobalOrientation;
 {$ELSE}
 {$EXTERNALSYM cvCalcGlobalOrientation}
-function cvCalcGlobalOrientation(const orientation: pCvArr; const mask: pCvArr; const mhi: pCvArr; timestamp: double; duration: double)
-  : double; cdecl;
+function cvCalcGlobalOrientation(const orientation: pCvArr; const mask: pCvArr; const mhi: pCvArr; timestamp: double; duration: double): double; cdecl;
 {$ENDIF}
 (* Splits a motion history image into a few parts corresponding to separate independent motions
   (e.g. left hand, right hand)
@@ -269,15 +265,13 @@ function cvSegmentMotion(const mhi: pCvArr; seg_mask: pCvArr; storage: pCvMemSto
 {$IFDEF SAFELOADLIB}
 
 type
-  TcvCamShift = function(const prob_image: pIplImage; window: TCvRect; criteria: TCvTermCriteria; comp: pCvConnectedComp; box: pCvBox2D = nil)
-    : Integer; cdecl;
+  TcvCamShift = function(const prob_image: pIplImage; window: TCvRect; criteria: TCvTermCriteria; comp: pCvConnectedComp; box: pCvBox2D = nil): Integer; cdecl;
 
 var
   cvCamShift: TcvCamShift;
 {$ELSE}
 {$EXTERNALSYM cvCamShift}
-function cvCamShift(const prob_image: pIplImage; window: TCvRect; criteria: TCvTermCriteria; comp: pCvConnectedComp; box: pCvBox2D = nil)
-  : Integer; cdecl;
+function cvCamShift(const prob_image: pIplImage; window: TCvRect; criteria: TCvTermCriteria; comp: pCvConnectedComp; box: pCvBox2D = nil): Integer; cdecl;
 {$ENDIF}
 (* Implements MeanShift algorithm - determines object position
   from the object histogram back project
@@ -315,17 +309,17 @@ Type
 
     (* backward compatibility fields *)
     // {$IFDEF 1}
-    PosterState: PSingle; (* =state_pre->data.fl *)
-    PriorState: PSingle; (* =state_post->data.fl *)
-    DynamMatr: PSingle; (* =transition_matrix->data.fl *)
-    MeasurementMatr: PSingle; (* =measurement_matrix->data.fl *)
-    MNCovariance: PSingle; (* =measurement_noise_cov->data.fl *)
-    PNCovariance: PSingle; (* =process_noise_cov->data.fl *)
-    KalmGainMatr: PSingle; (* =gain->data.fl *)
-    PriorErrorCovariance: PSingle; (* =error_cov_pre->data.fl *)
+    PosterState: PSingle;           (* =state_pre->data.fl *)
+    PriorState: PSingle;            (* =state_post->data.fl *)
+    DynamMatr: PSingle;             (* =transition_matrix->data.fl *)
+    MeasurementMatr: PSingle;       (* =measurement_matrix->data.fl *)
+    MNCovariance: PSingle;          (* =measurement_noise_cov->data.fl *)
+    PNCovariance: PSingle;          (* =process_noise_cov->data.fl *)
+    KalmGainMatr: PSingle;          (* =gain->data.fl *)
+    PriorErrorCovariance: PSingle;  (* =error_cov_pre->data.fl *)
     PosterErrorCovariance: PSingle; (* =error_cov_post->data.fl *)
-    _Temp1: PSingle; (* temp1->data.fl *)
-    _Temp2: PSingle; (* temp2->data.fl *)
+    _Temp1: PSingle;                (* temp1->data.fl *)
+    _Temp2: PSingle;                (* temp2->data.fl *)
     // {$ENDIF}
     state_pre: pCvMat; (* predicted state (x'(k)):
       x(k)=A*x(k-1)+B*u(k) *)
@@ -334,8 +328,8 @@ Type
     transition_matrix: pCvMat; (* state transition matrix (A) *)
     control_matrix: pCvMat; (* control matrix (B)
       (it is not used if there is no control) *)
-    measurement_matrix: pCvMat; (* measurement matrix (H) *)
-    process_noise_cov: pCvMat; (* process noise covariance matrix (Q) *)
+    measurement_matrix: pCvMat;    (* measurement matrix (H) *)
+    process_noise_cov: pCvMat;     (* process noise covariance matrix (Q) *)
     measurement_noise_cov: pCvMat; (* measurement noise covariance matrix (R) *)
     error_cov_pre: pCvMat; (* priori error estimate covariance matrix (P'(k)):
       P'(k)=A*P(k-1)*At + Q) *)
@@ -411,9 +405,9 @@ function cvKalmanCorrect(var kalman: TCvKalman; const measurement: pCvMat): pCvM
 
 Var
 {$EXTERNALSYM cvKalmanUpdateByTime}
-  cvKalmanUpdateByTime: TcvKalmanPredict {$IFNDEF SAFELOADLIB} = cvKalmanPredict {$ENDIF};
+  cvKalmanUpdateByTime: TcvKalmanPredict;// {$IFNDEF SAFELOADLIB} = cvKalmanPredict {$ENDIF};
 {$EXTERNALSYM cvKalmanUpdateByMeasurement}
-  cvKalmanUpdateByMeasurement: TcvKalmanCorrect{$IFNDEF SAFELOADLIB} = cvKalmanCorrect{$ENDIF};
+  cvKalmanUpdateByMeasurement: TcvKalmanCorrect;//{$IFNDEF SAFELOADLIB} = cvKalmanCorrect{$ENDIF};
 
 {$IF DEFINED(SAFELOADLIB) AND DEFINED(DEBUG)}
 procedure Init_opencv_Tracking_lib;
@@ -448,30 +442,36 @@ begin
   cvReleaseKalman := ocvGetProcAddress('cvReleaseKalman', TrackingDLL);
   cvKalmanPredict := ocvGetProcAddress('cvKalmanPredict', TrackingDLL);
   cvKalmanCorrect := ocvGetProcAddress('cvKalmanCorrect', TrackingDLL);
-  cvKalmanUpdateByTime := cvKalmanPredict;
-  cvKalmanUpdateByMeasurement := cvKalmanCorrect;
 end;
+{$ELSE}
+function cvCamShift(const prob_image: pIplImage; window: TCvRect; criteria: TCvTermCriteria; comp: pCvConnectedComp; box: pCvBox2D = nil): Integer; cdecl; external tracking_lib;
+procedure cvCalcOpticalFlowPyrLK(const prev: pIplImage; const curr: pIplImage; prev_pyr: pIplImage; curr_pyr: pIplImage; const prev_features: pCvPoint2D32f;
+  curr_features: pCvPoint2D32f; count: Integer; win_size: TCvSize; level: Integer; status: pCVChar; track_error: PSingle; criteria: TCvTermCriteria;
+  flags: Integer); cdecl; external tracking_lib;
+procedure cvCalcOpticalFlowFarneback(const prev: pCvMat; const next: pCvMat; flow: pCvMat; pyr_scale: double; levels: Integer; winsize: Integer;
+  iterations: Integer; poly_n: Integer; poly_sigma: double; flags: Integer); cdecl; external tracking_lib;
+
+procedure cvUpdateMotionHistory(const silhouette: pCvArr; mhi: pCvArr; timestamp: double; duration: double); cdecl; external tracking_lib;
+procedure cvCalcMotionGradient(const mhi: pCvArr; mask: pCvArr; orientation: pCvArr; delta1: double; delta2: double; aperture_size: Integer = 3); cdecl; external tracking_lib;
+function cvSegmentMotion(const mhi: pCvArr; seg_mask: pCvArr; storage: pCvMemStorage; timestamp: double; seg_thresh: double): pCvSeq; cdecl; external tracking_lib;
+function cvCalcGlobalOrientation(const orientation: pCvArr; const mask: pCvArr; const mhi: pCvArr; timestamp: double; duration: double): double; cdecl; external tracking_lib;
+procedure cvCalcAffineFlowPyrLK(const prev: pCvArr; const curr: pCvArr; prev_pyr: pCvArr; curr_pyr: pCvArr; const prev_features: pCvPoint2D32f;
+  var curr_features: TCvPoint2D32f; var matrices: Single; count: Integer; win_size: TCvSize; level: Integer; status: pCVChar; var track_error: Single;
+  criteria: TCvTermCriteria; flags: Integer); cdecl; external tracking_lib;
+function cvEstimateRigidTransform(const A: pCvArr; const B: pCvArr; var M: TCvMat; full_affine: Integer): Integer; cdecl; external tracking_lib;
+function cvMeanShift(const prob_image: pCvArr; window: TCvRect; criteria: TCvTermCriteria; var comp: TCvConnectedComp): Integer; cdecl; external tracking_lib;
+function cvCreateKalman(dynam_params: Integer; measure_params: Integer; control_params: Integer = 0): pCvKalman; cdecl; external tracking_lib;
+function cvKalmanPredict(var kalman: TCvKalman; const control: pCvMat = nil): pCvMat; cdecl; external tracking_lib;
+function cvKalmanCorrect(var kalman: TCvKalman; const measurement: pCvMat): pCvMat; cdecl; external tracking_lib;
+procedure cvReleaseKalman(var kalman: pCvKalman); cdecl; external tracking_lib;
+{$ENDIF}
 
 initialization
 
-Init_opencv_Tracking_lib;
-
-{$ELSE}
-function cvCamShift; external tracking_lib;
-procedure cvCalcOpticalFlowPyrLK; external tracking_lib;
-procedure cvCalcOpticalFlowFarneback; external tracking_lib;
-
-procedure cvUpdateMotionHistory; external tracking_lib;
-procedure cvCalcMotionGradient; external tracking_lib;
-function cvSegmentMotion; external tracking_lib;
-function cvCalcGlobalOrientation; external tracking_lib;
-procedure cvCalcAffineFlowPyrLK; external tracking_lib;
-function cvEstimateRigidTransform; external tracking_lib;
-function cvMeanShift; external tracking_lib;
-function cvCreateKalman; external tracking_lib;
-function cvKalmanPredict; external tracking_lib;
-function cvKalmanCorrect; external tracking_lib;
-procedure cvReleaseKalman; external tracking_lib;
+{$IFDEF SAFELOADLIB}
+  Init_opencv_Tracking_lib;
 {$ENDIF}
+cvKalmanUpdateByTime := @cvKalmanPredict;
+cvKalmanUpdateByMeasurement := @cvKalmanCorrect;
 
 end.

@@ -47,12 +47,14 @@ const
   CV_VERSION_MAJOR = '4';
   CV_VERSION_MINOR = '13';
   CV_VERSION_REVISION = '3';
-{$ELSEIF DEFINED(DelphiOCVVersion_30)}
+{$ELSE}
+{$IFDEF DelphiOCVVersion_30}
   CV_VERSION_EPOCH = '3';
   CV_VERSION_MAJOR = '0';
   CV_VERSION_MINOR = '0';
   CV_VERSION_REVISION = '0';
-{$IFEND}
+{$ENDIF}
+{$ENDIF}
   CV_VERSION = CV_VERSION_EPOCH + '.' + CV_VERSION_MAJOR + '.' + CV_VERSION_MINOR + '.' + CV_VERSION_REVISION;
 
   // * old  style version constants*/
@@ -74,27 +76,27 @@ const
   core_lib =
 {$IFDEF MSWINDOWS}
     CV_DLL_DIR + 'opencv_' +
-{$IFDEF DelphiOCVVersion_29}
+ {$IF DEFINED(DelphiOCVVersion_29)}
     'core' +
-{$ELSEIF DEFINED( DelphiOCVVersion_30)}
+ {$ELSEIF DEFINED(DelphiOCVVersion_30)}
     'world' +
-{$IFEND}
+ {$ENDIF}
     CV_VERSION_DLL {$IFDEF DEBUG} + 'd'{$ENDIF} + '.dll';
 {$ELSE}
-{$IFDEF MACOS}
+ {$IFDEF MACOS}
   'opencv_core.dylib';
-{$ELSE}
-{$IFDEF ANDROID}
+ {$ELSE}
+  {$IFDEF ANDROID}
   'libopencv_core.so';
-{$ELSE}
+  {$ELSE}
   'libopencv_core.so';
-{$ENDIF}
-{$ENDIF}
+  {$ENDIF}
+ {$ENDIF}
 {$ENDIF}
 // -------------------------------
 highgui_lib = {$IFDEF MSWINDOWS}
   CV_DLL_DIR + 'opencv_' +
-{$IFDEF DelphiOCVVersion_29}
+{$IF DEFINED(DelphiOCVVersion_29)}
   'highgui' +
 {$ELSEIF DEFINED( DelphiOCVVersion_30)}
   'world' +
@@ -114,7 +116,7 @@ highgui_lib = {$IFDEF MSWINDOWS}
 // -------------------------------
 features2d_lib = {$IFDEF MSWINDOWS}
   CV_DLL_DIR + 'opencv_' +
-{$IFDEF DelphiOCVVersion_29}
+{$IF DEFINED(DelphiOCVVersion_29)}
   'features2d' +
 {$ELSEIF DEFINED( DelphiOCVVersion_30)}
   'world' +
@@ -134,7 +136,7 @@ features2d_lib = {$IFDEF MSWINDOWS}
 // -------------------------------
 imgproc_lib = {$IFDEF MSWINDOWS}
   CV_DLL_DIR + 'opencv_' +
-{$IFDEF DelphiOCVVersion_29}
+{$IF DEFINED(DelphiOCVVersion_29)}
   'imgproc' +
 {$ELSEIF DEFINED( DelphiOCVVersion_30)}
   'world' +
@@ -154,7 +156,7 @@ imgproc_lib = {$IFDEF MSWINDOWS}
 // -------------------------------
 objdetect_lib = {$IFDEF MSWINDOWS}
   CV_DLL_DIR + 'opencv_' +
-{$IFDEF DelphiOCVVersion_29}
+{$IF DEFINED(DelphiOCVVersion_29)}
   'objdetect' +
 {$ELSEIF DEFINED( DelphiOCVVersion_30)}
   'world' +
@@ -174,9 +176,9 @@ objdetect_lib = {$IFDEF MSWINDOWS}
 // -------------------------------
 legacy_lib = {$IFDEF MSWINDOWS}
   CV_DLL_DIR + 'opencv_' +
-{$IFDEF DelphiOCVVersion_29}
+{$IF DEFINED(DelphiOCVVersion_29)}
   'legacy' +
-{$ELSEIF DEFINED( DelphiOCVVersion_30)}
+{$ELSEIF DEFINED(DelphiOCVVersion_30)}
   'world' +
 {$IFEND}
   CV_VERSION_DLL {$IFDEF DEBUG} + 'd'{$ENDIF} + '.dll';
@@ -194,7 +196,7 @@ legacy_lib = {$IFDEF MSWINDOWS}
 // -------------------------------
 calib3d_lib = {$IFDEF MSWINDOWS}
   CV_DLL_DIR + 'opencv_' +
-{$IFDEF DelphiOCVVersion_29}
+{$IF DEFINED(DelphiOCVVersion_29)}
   'calib3d' +
 {$ELSEIF DEFINED( DelphiOCVVersion_30)}
   'world' +
@@ -214,9 +216,9 @@ calib3d_lib = {$IFDEF MSWINDOWS}
 // -------------------------------
 tracking_lib = {$IFDEF MSWINDOWS}
   CV_DLL_DIR + 'opencv_' +
-{$IFDEF DelphiOCVVersion_29}
+{$IF DEFINED(DelphiOCVVersion_29)}
   'video' +
-{$ELSEIF DEFINED( DelphiOCVVersion_30)}
+{$ELSEIF DEFINED(DelphiOCVVersion_30)}
   'world' +
 {$IFEND}
   CV_VERSION_DLL {$IFDEF DEBUG} + 'd'{$ENDIF} + '.dll';
@@ -234,7 +236,7 @@ tracking_lib = {$IFDEF MSWINDOWS}
 // -------------------------------
 nonfree_lib = {$IFDEF MSWINDOWS}
   CV_DLL_DIR + 'opencv_' +
-{$IFDEF DelphiOCVVersion_29}
+{$IF DEFINED(DelphiOCVVersion_29)}
   'nonfree' +
 {$ELSEIF DEFINED( DelphiOCVVersion_30)}
   'world' +
@@ -268,7 +270,7 @@ opencv_classes_lib = {$IFDEF MSWINDOWS}
 // -------------------------------
 opencv_photo_lib = {$IFDEF MSWINDOWS}
   CV_DLL_DIR + 'opencv_' +
-{$IFDEF DelphiOCVVersion_29}
+{$IF DEFINED(DelphiOCVVersion_29)}
   'photo' +
 {$ELSEIF DEFINED( DelphiOCVVersion_30)}
   'world' +
@@ -288,7 +290,7 @@ opencv_photo_lib = {$IFDEF MSWINDOWS}
 // -------------------------------
 opencv_contrib_lib = {$IFDEF MSWINDOWS}
   CV_DLL_DIR + 'opencv_' +
-{$IFDEF DelphiOCVVersion_29}
+{$IF DEFINED(DelphiOCVVersion_29)}
   'contrib' +
 {$ELSEIF DEFINED( DelphiOCVVersion_30)}
   'world' +

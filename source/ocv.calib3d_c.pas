@@ -95,14 +95,14 @@ function cvCreatePOSITObject(points: pCvPoint3D32f; point_count: Integer): PCvPO
 {$IFDEF SAFELOADLIB}
 
 Type
-  TcvPOSIT = procedure(posit_object: PCvPOSITObject; imagePoints: pCvPoint2D32f; focal_length: double; criteria: TCvTermCriteria;
-    rotation_matrix: TCvMatr32f; translation_vector: TCvVect32f); cdecl;
+  TcvPOSIT = procedure(posit_object: PCvPOSITObject; imagePoints: pCvPoint2D32f; focal_length: double; criteria: TCvTermCriteria; rotation_matrix: TCvMatr32f;
+    translation_vector: TCvVect32f); cdecl;
 
 var
   cvPOSIT: TcvPOSIT;
 {$ELSE}
-procedure cvPOSIT(posit_object: PCvPOSITObject; imagePoints: pCvPoint2D32f; focal_length: double; criteria: TCvTermCriteria;
-  rotation_matrix: TCvMatr32f; translation_vector: TCvVect32f); cdecl;
+procedure cvPOSIT(posit_object: PCvPOSITObject; imagePoints: pCvPoint2D32f; focal_length: double; criteria: TCvTermCriteria; rotation_matrix: TCvMatr32f;
+  translation_vector: TCvVect32f); cdecl;
 {$ENDIF}
 (*
   Releases CvPOSITObject structure
@@ -151,17 +151,17 @@ const
   CV_FM_7POINT = 1;
   CV_FM_8POINT = 2;
 
-  CV_LMEDS = 4;
+  CV_LMEDS  = 4;
   CV_RANSAC = 8;
 
-  CV_FM_LMEDS_ONLY = CV_LMEDS;
+  CV_FM_LMEDS_ONLY  = CV_LMEDS;
   CV_FM_RANSAC_ONLY = CV_RANSAC;
-  CV_FM_LMEDS = CV_LMEDS;
-  CV_FM_RANSAC = CV_RANSAC;
+  CV_FM_LMEDS       = CV_LMEDS;
+  CV_FM_RANSAC      = CV_RANSAC;
 
   CV_ITERATIVE = 0;
-  CV_EPNP = 1; // F.Moreno-Noguer, V.Lepetit and P.Fua "EPnP: Efficient Perspective-n-Point Camera Pose Estimation"
-  CV_P3P = 2;
+  CV_EPNP      = 1; // F.Moreno-Noguer, V.Lepetit and P.Fua "EPnP: Efficient Perspective-n-Point Camera Pose Estimation"
+  CV_P3P       = 2;
   // X.S. Gao, X.-R. Hou, J. Tang, H.-F. Chang; "Complete Solution Classification for the Perspective-Three-Point Problem"
 
   (*
@@ -174,14 +174,14 @@ const
 {$IFDEF SAFELOADLIB}
 
 Type
-  TcvFindFundamentalMat = function(const points1: pCvMat; const points2: pCvMat; fundamental_matrix: pCvMat; method: Integer = CV_FM_RANSAC;
-    param1: double = 3; param2: double = 0.99; status: pCvMat = nil): Integer; cdecl;
+  TcvFindFundamentalMat = function(const points1: pCvMat; const points2: pCvMat; fundamental_matrix: pCvMat; method: Integer = CV_FM_RANSAC; param1: double = 3;
+    param2: double = 0.99; status: pCvMat = nil): Integer; cdecl;
 
 Var
   cvFindFundamentalMat: TcvFindFundamentalMat;
 {$ELSE}
-function cvFindFundamentalMat(const points1: pCvMat; const points2: pCvMat; fundamental_matrix: pCvMat; method: Integer = CV_FM_RANSAC;
-  param1: double = 3; param2: double = 0.99; status: pCvMat = nil): Integer; cdecl;
+function cvFindFundamentalMat(const points1: pCvMat; const points2: pCvMat; fundamental_matrix: pCvMat; method: Integer = CV_FM_RANSAC; param1: double = 3;
+  param2: double = 0.99; status: pCvMat = nil): Integer; cdecl;
 {$ENDIF}
 (*
   For each input point on one of images
@@ -196,14 +196,12 @@ function cvFindFundamentalMat(const points1: pCvMat; const points2: pCvMat; fund
 {$IFDEF SAFELOADLIB}
 
 Type
-  TcvComputeCorrespondEpilines = procedure(const points: pCvMat; which_image: Integer; const fundamental_matrix: pCvMat;
-    correspondent_lines: pCvMat); cdecl;
+  TcvComputeCorrespondEpilines = procedure(const points: pCvMat; which_image: Integer; const fundamental_matrix: pCvMat; correspondent_lines: pCvMat); cdecl;
 
 var
   cvComputeCorrespondEpilines: TcvComputeCorrespondEpilines;
 {$ELSE}
-procedure cvComputeCorrespondEpilines(const points: pCvMat; which_image: Integer; const fundamental_matrix: pCvMat;
-  correspondent_lines: pCvMat); cdecl;
+procedure cvComputeCorrespondEpilines(const points: pCvMat; which_image: Integer; const fundamental_matrix: pCvMat; correspondent_lines: pCvMat); cdecl;
 {$ENDIF}
 (*
   Triangulation functions
@@ -259,9 +257,8 @@ Type
 var
   cvGetOptimalNewCameraMatrix: TcvGetOptimalNewCameraMatrix;
 {$ELSE}
-procedure cvGetOptimalNewCameraMatrix(const camera_matrix: pCvMat; const dist_coeffs: pCvMat; image_size: TCvSize; alpha: double;
-  new_camera_matrix: pCvMat; new_imag_size: TCvSize { = CV_DEFAULT(cvSize(0,0))) }; valid_pixel_ROI: PCvRect = nil;
-  center_principal_point: Integer = 0); cdecl;
+procedure cvGetOptimalNewCameraMatrix(const camera_matrix: pCvMat; const dist_coeffs: pCvMat; image_size: TCvSize; alpha: double; new_camera_matrix: pCvMat;
+  new_imag_size: TCvSize { = CV_DEFAULT(cvSize(0,0))) }; valid_pixel_ROI: PCvRect = nil; center_principal_point: Integer = 0); cdecl;
 {$ENDIF}
 (*
   Converts rotation vector to rotation matrix or vice versa
@@ -292,14 +289,14 @@ function cvRodrigues2(const src: pCvMat; dst: pCvMat; jacobian: pCvMat = nil): I
 {$IFDEF SAFELOADLIB}
 
 type
-  TcvFindHomography = function(const src_points: pCvMat; const dst_points: pCvMat; homography: pCvMat; method: Integer = 0;
-    ransacReprojThreshold: double = 3; mask: pCvMat = nil): Integer; cdecl;
+  TcvFindHomography = function(const src_points: pCvMat; const dst_points: pCvMat; homography: pCvMat; method: Integer = 0; ransacReprojThreshold: double = 3;
+    mask: pCvMat = nil): Integer; cdecl;
 
 Var
   cvFindHomography: TcvFindHomography;
 {$ELSE}
-function cvFindHomography(const src_points: pCvMat; const dst_points: pCvMat; homography: pCvMat; method: Integer = 0;
-  ransacReprojThreshold: double = 3; mask: pCvMat = nil): Integer; cdecl;
+function cvFindHomography(const src_points: pCvMat; const dst_points: pCvMat; homography: pCvMat; method: Integer = 0; ransacReprojThreshold: double = 3;
+  mask: pCvMat = nil): Integer; cdecl;
 {$ENDIF}
 (*
   Computes RQ decomposition for 3x3 matrices
@@ -313,14 +310,14 @@ function cvFindHomography(const src_points: pCvMat; const dst_points: pCvMat; ho
 {$IFDEF SAFELOADLIB}
 
 type
-  TcvRQDecomp3x3 = procedure(const matrixM: pCvMat; matrixR: pCvMat; matrixQ: pCvMat; matrixQx: pCvMat = nil; matrixQy: pCvMat = nil;
-    matrixQz: pCvMat = nil; eulerAngles: PCvPoint3D64f = nil); cdecl;
+  TcvRQDecomp3x3 = procedure(const matrixM: pCvMat; matrixR: pCvMat; matrixQ: pCvMat; matrixQx: pCvMat = nil; matrixQy: pCvMat = nil; matrixQz: pCvMat = nil;
+    eulerAngles: PCvPoint3D64f = nil); cdecl;
 
 Var
   cvRQDecomp3x3: TcvRQDecomp3x3;
 {$ELSE}
-procedure cvRQDecomp3x3(const matrixM: pCvMat; matrixR: pCvMat; matrixQ: pCvMat; matrixQx: pCvMat = nil; matrixQy: pCvMat = nil;
-  matrixQz: pCvMat = nil; eulerAngles: PCvPoint3D64f = nil); cdecl;
+procedure cvRQDecomp3x3(const matrixM: pCvMat; matrixR: pCvMat; matrixQ: pCvMat; matrixQx: pCvMat = nil; matrixQy: pCvMat = nil; matrixQz: pCvMat = nil;
+  eulerAngles: PCvPoint3D64f = nil); cdecl;
 {$ENDIF}
 (*
   Computes projection matrix decomposition
@@ -375,15 +372,15 @@ procedure cvCalcMatMulDeriv(const A: pCvMat; const B: pCvMat; dABdA: pCvMat; dAB
 
 type
   TcvComposeRT = procedure(const _rvec1: pCvMat; const _tvec1: pCvMat; const _rvec2: pCvMat; const _tvec2: pCvMat; _rvec3: pCvMat; _tvec3: pCvMat;
-    dr3dr1: pCvMat = nil; dr3dt1: pCvMat = nil; dr3dr2: pCvMat = nil; dr3dt2: pCvMat = nil; dt3dr1: pCvMat = nil; dt3dt1: pCvMat = nil;
-    dt3dr2: pCvMat = nil; dt3dt2: pCvMat = nil); cdecl;
+    dr3dr1: pCvMat = nil; dr3dt1: pCvMat = nil; dr3dr2: pCvMat = nil; dr3dt2: pCvMat = nil; dt3dr1: pCvMat = nil; dt3dt1: pCvMat = nil; dt3dr2: pCvMat = nil;
+    dt3dt2: pCvMat = nil); cdecl;
 
 var
   cvComposeRT: TcvComposeRT;
 {$ELSE}
 procedure cvComposeRT(const _rvec1: pCvMat; const _tvec1: pCvMat; const _rvec2: pCvMat; const _tvec2: pCvMat; _rvec3: pCvMat; _tvec3: pCvMat;
-  dr3dr1: pCvMat = nil; dr3dt1: pCvMat = nil; dr3dr2: pCvMat = nil; dr3dt2: pCvMat = nil; dt3dr1: pCvMat = nil; dt3dt1: pCvMat = nil;
-  dt3dr2: pCvMat = nil; dt3dt2: pCvMat = nil); cdecl;
+  dr3dr1: pCvMat = nil; dr3dt1: pCvMat = nil; dr3dr2: pCvMat = nil; dr3dt2: pCvMat = nil; dt3dr1: pCvMat = nil; dt3dt1: pCvMat = nil; dt3dr2: pCvMat = nil;
+  dt3dt2: pCvMat = nil); cdecl;
 {$ENDIF}
 (*
   Projects object points to the view plane using
@@ -400,9 +397,9 @@ procedure cvComposeRT(const _rvec1: pCvMat; const _tvec1: pCvMat; const _rvec2: 
 {$IFDEF SAFELOADLIB}
 
 type
-  TcvProjectPoints2 = procedure(const object_points: pCvMat; const rotation_vector: pCvMat; const translation_vector: pCvMat;
-    const camera_matrix: pCvMat; const distortion_coeffs: pCvMat; image_points: pCvMat; dpdrot: pCvMat = nil; dpdt: pCvMat = nil; dpdf: pCvMat = nil;
-    dpdc: pCvMat = nil; dpddist: pCvMat = nil; aspect_ratio: double = 0); cdecl;
+  TcvProjectPoints2 = procedure(const object_points: pCvMat; const rotation_vector: pCvMat; const translation_vector: pCvMat; const camera_matrix: pCvMat;
+    const distortion_coeffs: pCvMat; image_points: pCvMat; dpdrot: pCvMat = nil; dpdt: pCvMat = nil; dpdf: pCvMat = nil; dpdc: pCvMat = nil;
+    dpddist: pCvMat = nil; aspect_ratio: double = 0); cdecl;
 
 var
   cvProjectPoints2: TcvProjectPoints2;
@@ -431,8 +428,8 @@ type
 var
   cvFindExtrinsicCameraParams2: TcvFindExtrinsicCameraParams2;
 {$ELSE}
-procedure cvFindExtrinsicCameraParams2(const object_points: pCvMat; const image_points: pCvMat; const camera_matrix: pCvMat;
-  const distortion_coeffs: pCvMat; rotation_vector: pCvMat; translation_vector: pCvMat; use_extrinsic_guess: Integer = 0); cdecl;
+procedure cvFindExtrinsicCameraParams2(const object_points: pCvMat; const image_points: pCvMat; const camera_matrix: pCvMat; const distortion_coeffs: pCvMat;
+  rotation_vector: pCvMat; translation_vector: pCvMat; use_extrinsic_guess: Integer = 0); cdecl;
 {$ENDIF}
 (* Computes initial estimate of the intrinsic camera parameters
   in case of planar calibration target (e.g. chessboard)
@@ -453,15 +450,15 @@ Type
 var
   cvInitIntrinsicParams2D: TcvInitIntrinsicParams2D;
 {$ELSE}
-procedure cvInitIntrinsicParams2D(const object_points: pCvMat; const image_points: pCvMat; const npoints: pCvMat; image_size: TCvSize;
-  camera_matrix: pCvMat; aspect_ratio: double = 1); cdecl;
+procedure cvInitIntrinsicParams2D(const object_points: pCvMat; const image_points: pCvMat; const npoints: pCvMat; image_size: TCvSize; camera_matrix: pCvMat;
+  aspect_ratio: double = 1); cdecl;
 {$ENDIF}
 
 const
   CV_CALIB_CB_ADAPTIVE_THRESH = 1;
   CV_CALIB_CB_NORMALIZE_IMAGE = 2;
-  CV_CALIB_CB_FILTER_QUADS = 4;
-  CV_CALIB_CB_FAST_CHECK = 8;
+  CV_CALIB_CB_FILTER_QUADS    = 4;
+  CV_CALIB_CB_FAST_CHECK      = 8;
 
   (* Performs a fast check if a chessboard is in the input image. This is a workaround to
     a problem of cvFindChessboardCorners being slow on images with no chessboard
@@ -507,19 +504,19 @@ function cvFindChessboardCorners(const image: Pointer; pattern_size: TCvSize; co
 
 const
   CV_CALIB_USE_INTRINSIC_GUESS = 1;
-  CV_CALIB_FIX_ASPECT_RATIO = 2;
+  CV_CALIB_FIX_ASPECT_RATIO    = 2;
   CV_CALIB_FIX_PRINCIPAL_POINT = 4;
-  CV_CALIB_ZERO_TANGENT_DIST = 8;
-  CV_CALIB_FIX_FOCAL_LENGTH = 16;
-  CV_CALIB_FIX_K1 = 32;
-  CV_CALIB_FIX_K2 = 64;
-  CV_CALIB_FIX_K3 = 128;
-  CV_CALIB_FIX_K4 = 2048;
-  CV_CALIB_FIX_K5 = 4096;
-  CV_CALIB_FIX_K6 = 8192;
-  CV_CALIB_RATIONAL_MODEL = 16384;
-  CV_CALIB_THIN_PRISM_MODEL = 32768;
-  CV_CALIB_FIX_S1_S2_S3_S4 = 65536;
+  CV_CALIB_ZERO_TANGENT_DIST   = 8;
+  CV_CALIB_FIX_FOCAL_LENGTH    = 16;
+  CV_CALIB_FIX_K1              = 32;
+  CV_CALIB_FIX_K2              = 64;
+  CV_CALIB_FIX_K3              = 128;
+  CV_CALIB_FIX_K4              = 2048;
+  CV_CALIB_FIX_K5              = 4096;
+  CV_CALIB_FIX_K6              = 8192;
+  CV_CALIB_RATIONAL_MODEL      = 16384;
+  CV_CALIB_THIN_PRISM_MODEL    = 32768;
+  CV_CALIB_FIX_S1_S2_S3_S4     = 65536;
 
   (*
     Draws individual chessboard corners or the whole chessboard detected
@@ -534,8 +531,7 @@ const
 {$IFDEF SAFELOADLIB}
 
 type
-  TcvDrawChessboardCorners = procedure(image: pIplImage; pattern_size: TCvSize; corners: pCvPoint2D32f; count: Integer;
-    pattern_was_found: Integer); cdecl;
+  TcvDrawChessboardCorners = procedure(image: pIplImage; pattern_size: TCvSize; corners: pCvPoint2D32f; count: Integer; pattern_was_found: Integer); cdecl;
 
 var
   cvDrawChessboardCorners: TcvDrawChessboardCorners;
@@ -606,19 +602,17 @@ function cvCalibrateCamera2(
 
 type
   TcvCalibrationMatrixValues = procedure(const camera_matrix: pCvMat; image_size: TCvSize; aperture_width: double = 0; aperture_height: double = 0;
-    fovx: PDouble = nil; fovy: PDouble = nil; focal_length: PDouble = nil; principal_point: PCvPoint2D64f = nil;
-    pixel_aspect_ratio: PDouble = nil); cdecl;
+    fovx: PDouble = nil; fovy: PDouble = nil; focal_length: PDouble = nil; principal_point: PCvPoint2D64f = nil; pixel_aspect_ratio: PDouble = nil); cdecl;
 
 Var
   cvCalibrationMatrixValues: TcvCalibrationMatrixValues;
 {$ELSE}
 procedure cvCalibrationMatrixValues(const camera_matrix: pCvMat; image_size: TCvSize; aperture_width: double = 0; aperture_height: double = 0;
-  fovx: PDouble = nil; fovy: PDouble = nil; focal_length: PDouble = nil; principal_point: PCvPoint2D64f = nil;
-  pixel_aspect_ratio: PDouble = nil); cdecl;
+  fovx: PDouble = nil; fovy: PDouble = nil; focal_length: PDouble = nil; principal_point: PCvPoint2D64f = nil; pixel_aspect_ratio: PDouble = nil); cdecl;
 {$ENDIF}
 
 const
-  CV_CALIB_FIX_INTRINSIC = 256;
+  CV_CALIB_FIX_INTRINSIC     = 256;
   CV_CALIB_SAME_FOCAL_LENGTH = 512;
 
   (* Computes the transformation from one camera coordinate system to another one
@@ -639,17 +633,16 @@ const
 
 type
   TcvStereoCalibrate = function(const object_points: pCvMat; const image_points1: pCvMat; const image_points2: pCvMat; const npoints: pCvMat;
-    camera_matrix1: pCvMat; dist_coeffs1: pCvMat; camera_matrix2: pCvMat; dist_coeffs2: pCvMat; image_size: TCvSize; R: pCvMat; T: pCvMat;
-    E: pCvMat { = nil }; F: pCvMat { = nil };
-    term_crit: TCvTermCriteria { = CV_DEFAULT(cvTermCriteria(CV_TERMCRIT_ITER + CV_TERMCRIT_EPS, 30, 1E-6)) };
+    camera_matrix1: pCvMat; dist_coeffs1: pCvMat; camera_matrix2: pCvMat; dist_coeffs2: pCvMat; image_size: TCvSize; R: pCvMat; T: pCvMat; E: pCvMat { = nil };
+    F: pCvMat { = nil }; term_crit: TCvTermCriteria { = CV_DEFAULT(cvTermCriteria(CV_TERMCRIT_ITER + CV_TERMCRIT_EPS, 30, 1E-6)) };
     flags: Integer { = CV_DEFAULT(CV_CALIB_FIX_INTRINSIC) } ): double; cdecl;
 
 var
   cvStereoCalibrate: TcvStereoCalibrate;
 {$ELSE}
-function cvStereoCalibrate(const object_points: pCvMat; const image_points1: pCvMat; const image_points2: pCvMat; const npoints: pCvMat;
-  camera_matrix1: pCvMat; dist_coeffs1: pCvMat; camera_matrix2: pCvMat; dist_coeffs2: pCvMat; image_size: TCvSize; R: pCvMat; T: pCvMat;
-  E: pCvMat { = nil }; F: pCvMat { = nil }; term_crit: TCvTermCriteria { = CV_DEFAULT(cvTermCriteria(CV_TERMCRIT_ITER + CV_TERMCRIT_EPS, 30, 1E-6)) };
+function cvStereoCalibrate(const object_points: pCvMat; const image_points1: pCvMat; const image_points2: pCvMat; const npoints: pCvMat; camera_matrix1: pCvMat;
+  dist_coeffs1: pCvMat; camera_matrix2: pCvMat; dist_coeffs2: pCvMat; image_size: TCvSize; R: pCvMat; T: pCvMat; E: pCvMat { = nil }; F: pCvMat { = nil };
+  term_crit: TCvTermCriteria { = CV_DEFAULT(cvTermCriteria(CV_TERMCRIT_ITER + CV_TERMCRIT_EPS, 30, 1E-6)) };
   flags: Integer { = CV_DEFAULT(CV_CALIB_FIX_INTRINSIC) } ): double; cdecl;
 {$ENDIF}
 
@@ -684,8 +677,8 @@ var
 {$ELSE}
 procedure cvStereoRectify(const camera_matrix1: pCvMat; const camera_matrix2: pCvMat; const dist_coeffs1: pCvMat; const dist_coeffs2: pCvMat;
   image_size: TCvSize; const R: pCvMat; const T: pCvMat; R1: pCvMat; R2: pCvMat; P1: pCvMat; P2: pCvMat; Q: pCvMat { = nil };
-  flags: Integer { = CV_CALIB_ZERO_DISPARITY }; alpha: double { = -1 }; new_image_size: TCvSize { =CV_DEFAULT(cvSize(0,0)) };
-  valid_pix_ROI1: PCvRect { =nil }; valid_pix_ROI2: PCvRect { =nil } ); cdecl;
+  flags: Integer { = CV_CALIB_ZERO_DISPARITY }; alpha: double { = -1 }; new_image_size: TCvSize { =CV_DEFAULT(cvSize(0,0)) }; valid_pix_ROI1: PCvRect { =nil };
+  valid_pix_ROI2: PCvRect { =nil } ); cdecl;
 {$ENDIF}
 (*
   Computes rectification transformations for uncalibrated pair of images using a set
@@ -712,7 +705,7 @@ function cvStereoRectifyUncalibrated(const points1: pCvMat; const points2: pCvMa
 (* stereo correspondence parameters and functions *)
 const
   CV_STEREO_BM_NORMALIZED_RESPONSE = 0;
-  CV_STEREO_BM_XSOBEL = 1;
+  CV_STEREO_BM_XSOBEL              = 1;
 
 Type
   (* Block matching algorithm structure *)
@@ -757,11 +750,11 @@ Type
     // pre-filtering (normalization of input images)
     preFilterType: Integer; // =CV_STEREO_BM_NORMALIZED_RESPONSE now
     preFilterSize: Integer; // averaging window size: ~5x5..21x21
-    preFilterCap: Integer; // the output of pre-filtering is clipped by [-preFilterCap,preFilterCap]
+    preFilterCap: Integer;  // the output of pre-filtering is clipped by [-preFilterCap,preFilterCap]
 
     // correspondence using Sum of Absolute Difference (SAD)
-    SADWindowSize: Integer; // ~5x5..21x21
-    minDisparity: Integer; // minimum disparity (can be negative)
+    SADWindowSize: Integer;       // ~5x5..21x21
+    minDisparity: Integer;        // minimum disparity (can be negative)
     numberOfDisparities: Integer; // maximum disparity - minimum disparity (> 0)
 
     // post-filtering
@@ -771,7 +764,7 @@ Type
     // SAD(d) >= SAD(d*)*(1 + uniquenessRatio/100.)
     // for any d != d*+/-1 within the search range.
     speckleWindowSize: Integer; // disparity variation window
-    speckleRange: Integer; // acceptable range of variation in window
+    speckleRange: Integer;      // acceptable range of variation in window
 
     trySmallerWindows: Integer; // if 1, the results may be more accurate,
     // at the expense of slower processing
@@ -787,9 +780,9 @@ Type
   end;
 
 const
-  CV_STEREO_BM_BASIC = 0;
+  CV_STEREO_BM_BASIC    = 0;
   CV_STEREO_BM_FISH_EYE = 1;
-  CV_STEREO_BM_NARROW = 2;
+  CV_STEREO_BM_NARROW   = 2;
 
   (*
     CVAPI(CvStereoBMState* ) cvCreateStereoBMState(int preset CV_DEFAULT(CV_STEREO_BM_BASIC),
@@ -839,14 +832,12 @@ procedure cvFindStereoCorrespondenceBM(const left: pCvArr; const right: pCvArr; 
 {$IFDEF SAFELOADLIB}
 
 type
-  TcvGetValidDisparityROI = function(roi1: TCvRect; roi2: TCvRect; minDisparity: Integer; numberOfDisparities: Integer; SADWindowSize: Integer)
-    : TCvRect; cdecl;
+  TcvGetValidDisparityROI = function(roi1: TCvRect; roi2: TCvRect; minDisparity: Integer; numberOfDisparities: Integer; SADWindowSize: Integer): TCvRect; cdecl;
 
 var
   cvGetValidDisparityROI: TcvGetValidDisparityROI;
 {$ELSE}
-function cvGetValidDisparityROI(roi1: TCvRect; roi2: TCvRect; minDisparity: Integer; numberOfDisparities: Integer; SADWindowSize: Integer)
-  : TCvRect; cdecl;
+function cvGetValidDisparityROI(roi1: TCvRect; roi2: TCvRect; minDisparity: Integer; numberOfDisparities: Integer; SADWindowSize: Integer): TCvRect; cdecl;
 {$ENDIF}
 (*
   CVAPI(void) cvValidateDisparity( CvArr* disparity, const CvArr* cost,
@@ -862,8 +853,7 @@ type
 var
   cvValidateDisparity: TcvValidateDisparity;
 {$ELSE}
-procedure cvValidateDisparity(disparity: pCvArr; const cost: pCvArr; minDisparity: Integer; numberOfDisparities: Integer;
-  disp12MaxDiff: Integer = 1); cdecl;
+procedure cvValidateDisparity(disparity: pCvArr; const cost: pCvArr; minDisparity: Integer; numberOfDisparities: Integer; disp12MaxDiff: Integer = 1); cdecl;
 {$ENDIF}
 (*
   Reprojects the computed disparity image to the 3D space using the specified 4x4 matrix
@@ -953,39 +943,69 @@ initialization
 Init_opencv_calib3d_lib;
 
 {$ELSE}
-function cvCreatePOSITObject; external calib3d_lib;
-procedure cvPOSIT; external calib3d_lib;
-procedure cvReleasePOSITObject; external calib3d_lib;
-function cvRANSACUpdateNumIters; external calib3d_lib;
-procedure cvConvertPointsHomogeneous; external calib3d_lib;
-function cvFindFundamentalMat; external calib3d_lib;
-procedure cvComputeCorrespondEpilines; external calib3d_lib;
-procedure cvTriangulatePoints; external calib3d_lib;
-procedure cvCorrectMatches; external calib3d_lib;
-procedure cvGetOptimalNewCameraMatrix; external calib3d_lib;
-function cvRodrigues2; external calib3d_lib;
-function cvFindHomography; external calib3d_lib;
-procedure cvRQDecomp3x3; external calib3d_lib;
-procedure cvDecomposeProjectionMatrix; external calib3d_lib;
-procedure cvCalcMatMulDeriv; external calib3d_lib;
-procedure cvComposeRT; external calib3d_lib;
-procedure cvProjectPoints2; external calib3d_lib;
-procedure cvFindExtrinsicCameraParams2; external calib3d_lib;
-procedure cvInitIntrinsicParams2D; external calib3d_lib;
-function cvCheckChessboard; external calib3d_lib;
-function cvFindChessboardCorners; external calib3d_lib;
-procedure cvDrawChessboardCorners; external calib3d_lib;
-function cvCalibrateCamera2; external calib3d_lib;
-procedure cvCalibrationMatrixValues; external calib3d_lib;
-function cvStereoCalibrate; external calib3d_lib;
-procedure cvStereoRectify; external calib3d_lib;
-function cvStereoRectifyUncalibrated; external calib3d_lib;
-function cvCreateStereoBMState; external calib3d_lib;
-procedure cvReleaseStereoBMState; external calib3d_lib;
-procedure cvFindStereoCorrespondenceBM; external calib3d_lib;
-function cvGetValidDisparityROI; external calib3d_lib;
-procedure cvValidateDisparity; external calib3d_lib;
-procedure cvReprojectImageTo3D; external calib3d_lib;
+function cvCreatePOSITObject(points: pCvPoint3D32f; point_count: Integer): PCvPOSITObject; cdecl; external calib3d_lib;
+procedure cvPOSIT(posit_object: PCvPOSITObject; imagePoints: pCvPoint2D32f; focal_length: double; criteria: TCvTermCriteria; rotation_matrix: TCvMatr32f;
+  translation_vector: TCvVect32f); cdecl; external calib3d_lib;
+procedure cvReleasePOSITObject(Var posit_object: PCvPOSITObject); cdecl; external calib3d_lib;
+function cvRANSACUpdateNumIters(p: double; err_prob: double; model_points: Integer; max_iters: Integer): Integer; cdecl; external calib3d_lib;
+procedure cvConvertPointsHomogeneous(const src: pCvMat; dst: pCvMat); cdecl; external calib3d_lib;
+function cvFindFundamentalMat(const points1: pCvMat; const points2: pCvMat; fundamental_matrix: pCvMat; method: Integer = CV_FM_RANSAC; param1: double = 3;
+  param2: double = 0.99; status: pCvMat = nil): Integer; cdecl; external calib3d_lib;
+procedure cvComputeCorrespondEpilines(const points: pCvMat; which_image: Integer; const fundamental_matrix: pCvMat; correspondent_lines: pCvMat); cdecl;
+  external calib3d_lib;
+procedure cvTriangulatePoints(projMatr1: pCvMat; projMatr2: pCvMat; projPoints1: pCvMat; projPoints2: pCvMat; points4D: pCvMat); cdecl; external calib3d_lib;
+procedure cvCorrectMatches(F: pCvMat; points1: pCvMat; points2: pCvMat; new_points1: pCvMat; new_points2: pCvMat); cdecl; external calib3d_lib;
+procedure cvGetOptimalNewCameraMatrix(const camera_matrix: pCvMat; const dist_coeffs: pCvMat; image_size: TCvSize; alpha: double; new_camera_matrix: pCvMat;
+  new_imag_size: TCvSize { = CV_DEFAULT(cvSize(0,0))) }; valid_pixel_ROI: PCvRect = nil; center_principal_point: Integer = 0); cdecl; external calib3d_lib;
+function cvRodrigues2(const src: pCvMat; dst: pCvMat; jacobian: pCvMat = nil): Integer; cdecl; external calib3d_lib;
+function cvFindHomography(const src_points: pCvMat; const dst_points: pCvMat; homography: pCvMat; method: Integer = 0; ransacReprojThreshold: double = 3;
+  mask: pCvMat = nil): Integer; cdecl; external calib3d_lib;
+procedure cvRQDecomp3x3(const matrixM: pCvMat; matrixR: pCvMat; matrixQ: pCvMat; matrixQx: pCvMat = nil; matrixQy: pCvMat = nil; matrixQz: pCvMat = nil;
+  eulerAngles: PCvPoint3D64f = nil); cdecl; external calib3d_lib;
+procedure cvDecomposeProjectionMatrix(const projMatr: pCvMat; calibMatr: pCvMat; rotMatr: pCvMat; posVect: pCvMat; rotMatrX: pCvMat = nil;
+  rotMatrY: pCvMat = nil; rotMatrZ: pCvMat = nil; eulerAngles: PCvPoint3D64f = nil); cdecl; external calib3d_lib;
+procedure cvCalcMatMulDeriv(const A: pCvMat; const B: pCvMat; dABdA: pCvMat; dABdB: pCvMat); cdecl; external calib3d_lib;
+procedure cvComposeRT(const _rvec1: pCvMat; const _tvec1: pCvMat; const _rvec2: pCvMat; const _tvec2: pCvMat; _rvec3: pCvMat; _tvec3: pCvMat;
+  dr3dr1: pCvMat = nil; dr3dt1: pCvMat = nil; dr3dr2: pCvMat = nil; dr3dt2: pCvMat = nil; dt3dr1: pCvMat = nil; dt3dt1: pCvMat = nil; dt3dr2: pCvMat = nil;
+  dt3dt2: pCvMat = nil); cdecl; external calib3d_lib;
+procedure cvProjectPoints2(const object_points: pCvMat; const rotation_vector: pCvMat; const translation_vector: pCvMat; const camera_matrix: pCvMat;
+  const distortion_coeffs: pCvMat; image_points: pCvMat; dpdrot: pCvMat = nil; dpdt: pCvMat = nil; dpdf: pCvMat = nil; dpdc: pCvMat = nil;
+  dpddist: pCvMat = nil; aspect_ratio: double = 0); cdecl; external calib3d_lib;
+procedure cvFindExtrinsicCameraParams2(const object_points: pCvMat; const image_points: pCvMat; const camera_matrix: pCvMat; const distortion_coeffs: pCvMat;
+  rotation_vector: pCvMat; translation_vector: pCvMat; use_extrinsic_guess: Integer = 0); cdecl; external calib3d_lib;
+procedure cvInitIntrinsicParams2D(const object_points: pCvMat; const image_points: pCvMat; const npoints: pCvMat; image_size: TCvSize; camera_matrix: pCvMat;
+  aspect_ratio: double = 1); cdecl; external calib3d_lib;
+function cvCheckChessboard(const image: pCvArr; size: TCvSize): Integer; cdecl; external calib3d_lib;
+function cvFindChessboardCorners(const image: Pointer; pattern_size: TCvSize; corners: pCvPoint2D32f; corner_count: pInteger = nil;
+  flags: Integer = CV_CALIB_CB_ADAPTIVE_THRESH + CV_CALIB_CB_NORMALIZE_IMAGE): Integer; cdecl; external calib3d_lib;
+procedure cvDrawChessboardCorners(image: pIplImage; pattern_size: TCvSize; corners: pCvPoint2D32f; count: Integer; pattern_was_found: Integer); cdecl;
+  external calib3d_lib;
+function cvCalibrateCamera2(const object_points: pCvMat; const image_points: pCvMat; const point_counts: pCvMat; image_size: TCvSize; camera_matrix: pCvMat;
+  distortion_coeffs: pCvMat; rotation_vectors: pCvMat { =nil }; translation_vectors: pCvMat { =nil }; flags: Integer { =0 };
+  term_crit: TCvTermCriteria { =cvTermCriteria(CV_TERMCRIT_ITER+CV_TERMCRIT_EPS,30,DBL_EPSILON) }
+  ): double; cdecl; external calib3d_lib;
+procedure cvCalibrationMatrixValues(const camera_matrix: pCvMat; image_size: TCvSize; aperture_width: double = 0; aperture_height: double = 0;
+  fovx: PDouble = nil; fovy: PDouble = nil; focal_length: PDouble = nil; principal_point: PCvPoint2D64f = nil; pixel_aspect_ratio: PDouble = nil); cdecl;
+  external calib3d_lib;
+function cvStereoCalibrate(const object_points: pCvMat; const image_points1: pCvMat; const image_points2: pCvMat; const npoints: pCvMat; camera_matrix1: pCvMat;
+  dist_coeffs1: pCvMat; camera_matrix2: pCvMat; dist_coeffs2: pCvMat; image_size: TCvSize; R: pCvMat; T: pCvMat; E: pCvMat { = nil }; F: pCvMat { = nil };
+  term_crit: TCvTermCriteria { = CV_DEFAULT(cvTermCriteria(CV_TERMCRIT_ITER + CV_TERMCRIT_EPS, 30, 1E-6)) };
+  flags: Integer { = CV_DEFAULT(CV_CALIB_FIX_INTRINSIC) } ): double; cdecl; external calib3d_lib;
+procedure cvStereoRectify(const camera_matrix1: pCvMat; const camera_matrix2: pCvMat; const dist_coeffs1: pCvMat; const dist_coeffs2: pCvMat;
+  image_size: TCvSize; const R: pCvMat; const T: pCvMat; R1: pCvMat; R2: pCvMat; P1: pCvMat; P2: pCvMat; Q: pCvMat { = nil };
+  flags: Integer { = CV_CALIB_ZERO_DISPARITY }; alpha: double { = -1 }; new_image_size: TCvSize { =CV_DEFAULT(cvSize(0,0)) }; valid_pix_ROI1: PCvRect { =nil };
+  valid_pix_ROI2: PCvRect { =nil } ); cdecl; external calib3d_lib;
+function cvStereoRectifyUncalibrated(const points1: pCvMat; const points2: pCvMat; const F: pCvMat; img_size: TCvSize; H1: pCvMat; H2: pCvMat;
+  threshold: double = 5): Integer; cdecl; external calib3d_lib;
+function cvCreateStereoBMState(preset: Integer = CV_STEREO_BM_BASIC; numberOfDisparities: Integer = 0): pCvStereoBMState; cdecl; external calib3d_lib;
+procedure cvReleaseStereoBMState(Var state: pCvStereoBMState); cdecl; external calib3d_lib;
+procedure cvFindStereoCorrespondenceBM(const left: pCvArr; const right: pCvArr; disparity: pCvArr; state: pCvStereoBMState); cdecl; external calib3d_lib;
+function cvGetValidDisparityROI(roi1: TCvRect; roi2: TCvRect; minDisparity: Integer; numberOfDisparities: Integer; SADWindowSize: Integer): TCvRect; cdecl;
+  external calib3d_lib;
+procedure cvValidateDisparity(disparity: pCvArr; const cost: pCvArr; minDisparity: Integer; numberOfDisparities: Integer; disp12MaxDiff: Integer = 1); cdecl;
+  external calib3d_lib;
+procedure cvReprojectImageTo3D(const disparityImage: pCvMat; _3dImage: pIplImage; const Q: pCvMat; handleMissingValues: Integer = 0); cdecl;
+  external calib3d_lib;
 {$ENDIF}
 
 end.

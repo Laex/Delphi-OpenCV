@@ -56,9 +56,9 @@ unit ocv.lock;
 interface
 
 Uses
-  Winapi.Windows
+  Windows
 {$IF DEFINED(USE_CRITICALSECTION) OR DEFINED(USE_SIMLOCK)}
-    , System.SyncObjs
+    , SyncObjs
 {$IFEND}
     ;
 
@@ -114,13 +114,13 @@ type
   SRWLOCK = Pointer;
 
 {$WARNINGS OFF}
-procedure AcquireSRWLockShared(var P: SRWLOCK); stdcall; external 'kernel32.dll' name 'AcquireSRWLockShared' delayed;
-procedure ReleaseSRWLockShared(var P: SRWLOCK); stdcall; external 'kernel32.dll' name 'ReleaseSRWLockShared' delayed;
-procedure AcquireSRWLockExclusive(var P: SRWLOCK); stdcall; external 'kernel32.dll' name 'AcquireSRWLockExclusive' delayed;
-procedure ReleaseSRWLockExclusive(var P: SRWLOCK); stdcall; external 'kernel32.dll' name 'ReleaseSRWLockExclusive' delayed;
-procedure InitializeSRWLock(var P: SRWLOCK); stdcall; external 'kernel32.dll' name 'InitializeSRWLock' delayed;
-function TryAcquireSRWLockExclusive(Var P: SRWLOCK): Boolean; stdcall; external 'kernel32.dll' name 'TryAcquireSRWLockExclusive' delayed;
-function TryAcquireSRWLockShared(Var P: SRWLOCK): Boolean; stdcall; external 'kernel32.dll' name 'TryAcquireSRWLockShared' delayed;
+procedure AcquireSRWLockShared(var P: SRWLOCK); stdcall; external 'kernel32.dll' name 'AcquireSRWLockShared'{$IFNDEF FPC} delayed{$ENDIF};
+procedure ReleaseSRWLockShared(var P: SRWLOCK); stdcall; external 'kernel32.dll' name 'ReleaseSRWLockShared' {$IFNDEF FPC} delayed{$ENDIF};
+procedure AcquireSRWLockExclusive(var P: SRWLOCK); stdcall; external 'kernel32.dll' name 'AcquireSRWLockExclusive' {$IFNDEF FPC} delayed{$ENDIF};
+procedure ReleaseSRWLockExclusive(var P: SRWLOCK); stdcall; external 'kernel32.dll' name 'ReleaseSRWLockExclusive' {$IFNDEF FPC} delayed{$ENDIF};
+procedure InitializeSRWLock(var P: SRWLOCK); stdcall; external 'kernel32.dll' name 'InitializeSRWLock' {$IFNDEF FPC} delayed{$ENDIF};
+function TryAcquireSRWLockExclusive(Var P: SRWLOCK): Boolean; stdcall; external 'kernel32.dll' name 'TryAcquireSRWLockExclusive' {$IFNDEF FPC} delayed{$ENDIF};
+function TryAcquireSRWLockShared(Var P: SRWLOCK): Boolean; stdcall; external 'kernel32.dll' name 'TryAcquireSRWLockShared' {$IFNDEF FPC} delayed{$ENDIF};
 {$WARNINGS ON}
 { TSRWLock }
 

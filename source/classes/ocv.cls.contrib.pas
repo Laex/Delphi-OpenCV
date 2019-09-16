@@ -37,7 +37,7 @@ Uses
 Type
   TInputArrayOfIplImage = TArrayOfpIplImage; // InputArrayOfArrays
   TInputArrayOfMat = TArrayOfIMat; // InputArrayOfArrays
-  TInputArrayOfInteger = TArray<Integer>; // InputArray
+  TInputArrayOfInteger = {$IFDEF FPC}specialize {$ENDIF}TArray<Integer>; // InputArray
 
   IFaceRecognizer = interface(IOCVCommon)
     ['{199DE478-2C78-4347-B553-C062290C78D2}']
@@ -200,7 +200,7 @@ end;
 
 procedure TFaceRecognizer.train(src: TInputArrayOfMat; labels: TInputArrayOfInteger);
 Var
-  src_mat: TArray<TOpenCVClass>;
+  src_mat: {$IFDEF FPC}specialize {$ENDIF}TArray<TOpenCVClass>;
   i: Integer;
 begin
   SetLength(src_mat, Length(src));
@@ -237,7 +237,7 @@ initialization
 Init_opencv_contrib;
 
 {$ELSE}
-function InitModule_contrib; external opencv_contrib_lib name '?initModule_contrib@cv@@YA_NXZ';
+function InitModule_contrib(): cbool; cdecl; external opencv_contrib_lib name '?initModule_contrib@cv@@YA_NXZ';
 {$ENDIF}
 
 end.
