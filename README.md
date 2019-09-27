@@ -15,7 +15,7 @@ or from the repository:
 (1) 32-bit in the "Delphi-OpenCV\redist\VC14\x86\"
 (2) 64-bit in the "Delphi-OpenCV\redist\VC14\x64\"
 ```
-* Shared library FFMPEG 4.2 for Windows can be downloaded from [here][5]<br>
+* Shared library FFMPEG 4.2.1 for Windows can be downloaded from [here][5]<br>
 ```
 (3) FFmpeg 32-bit Shared
 (4) FFmpeg 64-bit Shared

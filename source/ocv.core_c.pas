@@ -156,7 +156,7 @@ procedure cvResetImageROI(image: pIplImage); cdecl;
 {$EXTERNALSYM cvGetImageROI}
 function cvGetImageROI(const image: pIplImage): TCvRect; cdecl;
 
-{ Allocates and initalizes CvMat header
+{ Allocates and initializes CvMat header
   CVAPI(CvMat*)  cvCreateMatHeader( int rows, int cols, int type );
 }
 {$EXTERNALSYM cvCreateMatHeader}

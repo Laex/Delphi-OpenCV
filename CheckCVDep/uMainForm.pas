@@ -26,20 +26,28 @@ var
 implementation
 
 {$R *.dfm}
-{$I libversion.inc}
+{$I ffmpeg.inc}
 
 const
 
   MSDLL_Core: array of string = ['concrt140', 'msvcp140', 'ucrtbase', 'vcruntime140'];
 
-  CVDLL_Core: array of string = ['opencv_calib3d2413', 'opencv_contrib2413', 'opencv_core2413', 'opencv_features2d2413', 'opencv_flann2413', 'opencv_gpu2413', 'opencv_highgui2413',
-    'opencv_imgproc2413', 'opencv_legacy2413', 'opencv_ml2413', 'opencv_nonfree2413', 'opencv_objdetect2413', 'opencv_ocl2413', 'opencv_photo2413', 'opencv_stitching2413',
-    'opencv_superres2413', 'opencv_video2413', 'opencv_videostab2413', 'opencv_ffmpeg2413'];
+  CVDLL_Core: array of string = ['opencv_calib3d2413', 'opencv_contrib2413', 'opencv_core2413', 'opencv_features2d2413', 'opencv_flann2413', 'opencv_gpu2413',
+    'opencv_highgui2413', 'opencv_imgproc2413', 'opencv_legacy2413', 'opencv_ml2413', 'opencv_nonfree2413', 'opencv_objdetect2413', 'opencv_ocl2413',
+    'opencv_photo2413', 'opencv_stitching2413', 'opencv_superres2413', 'opencv_video2413', 'opencv_videostab2413', 'opencv_ffmpeg2413'];
 
   CVDLL_Classes: array of string = ['opencv_classes2413'];
 
   FFMPEGDLL: array of string = [ //
-    AVCODEC_LIBNAME, AVDEVICE_LIBNAME, AVFILTER_LIBNAME, AVFORMAT_LIBNAME, AVUTIL_LIBNAME, SWRESAMPLE_LIBNAME, SWSCALE_LIBNAME];
+    swscale_dll,                 //
+    avutil_dll,                  //
+    avcodec_dll,                 //
+    avdevice_dll,                //
+    avformat_dll,                //
+    postproc_dll,                //
+    swresample_dll,              //
+    avfilter_dll                 //
+    ];
 
   SDLDLL: array of string = ['SDL', 'SDL2'];
 
