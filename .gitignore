@@ -50,6 +50,7 @@ CVAutoInstaller/
 *.local
 *.identcache 
 *.cmd
+!InitDelphiFFMPEG.cmd
 *.stat
 *.iobj
 *.ipdb
