@@ -118,10 +118,11 @@ Examples of use of components
 <PROJECT_ROOT>\samples\Components\ComponentsDemo.groupproj
 ```
 <b>Donate</b><br>
-<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=5Z5JQ7C9JCJQN">PayPal USD</a><br>
-<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=WQYST8J8PR4K2">PayPal EUR</a><br>
-<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=XN8D6TJMSXPFL">PayPal RUB</a><br>
+<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=5Z5JQ7C9JCJQN">PayPal USD</a>
+<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=WQYST8J8PR4K2">PayPal EUR</a>
+<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=XN8D6TJMSXPFL">PayPal RUB</a>
 <a href="https://money.yandex.ru/to/410011600173245">Yandex Money</a>
+[![Donatecoins](http://donatecoins.org/btc/3MTXVtRgQnA22EtBxP97Nws6GS8autp38s.svg)](http://donatecoins.org/btc/3MTXVtRgQnA22EtBxP97Nws6GS8autp38s)
 
 
 [1]: https://github.com/Laex/Delphi-OpenCV/archive/master.zip
