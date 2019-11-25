@@ -168,28 +168,24 @@ type
     property Interpolation: TocvInterpolationMethod read FInterpolation write FInterpolation default INTER_LINEAR;
   end;
 
-  TocvColorConversion = (BGR2BGRA, RGB2RGBA, BGRA2BGR, RGBA2RGB, BGR2RGBA, RGB2BGRA, RGBA2BGR, BGRA2RGB, BGR2RGB,
-    RGB2BGR, BGRA2RGBA, RGBA2BGRA, BGR2GRAY, RGB2GRAY, GRAY2BGR, GRAY2RGB, GRAY2BGRA, GRAY2RGBA, BGRA2GRAY, RGBA2GRAY,
-    BGR2BGR565, RGB2BGR565, BGR5652BGR, BGR5652RGB, BGRA2BGR565, RGBA2BGR565, BGR5652BGRA, BGR5652RGBA, GRAY2BGR565,
-    BGR5652GRAY, BGR2BGR555, RGB2BGR555, BGR5552BGR, BGR5552RGB, BGRA2BGR555, RGBA2BGR555, BGR5552BGRA, BGR5552RGBA,
-    GRAY2BGR555, BGR5552GRAY, BGR2XYZ, RGB2XYZ, XYZ2BGR, XYZ2RGB, BGR2YCrCb, RGB2YCrCb, YCrCb2BGR, YCrCb2RGB, BGR2HSV,
-    RGB2HSV, BGR2Lab, RGB2Lab, BayerBG2BGR, BayerGB2BGR, BayerRG2BGR, BayerGR2BGR, BayerBG2RGB, BayerGB2RGB,
-    BayerRG2RGB, BayerGR2RGB, BGR2Luv, RGB2Luv, BGR2HLS, RGB2HLS, HSV2BGR, HSV2RGB, Lab2BGR, Lab2RGB, Luv2BGR, Luv2RGB,
-    HLS2BGR, HLS2RGB, BayerBG2BGR_VNG, BayerGB2BGR_VNG, BayerRG2BGR_VNG, BayerGR2BGR_VNG, BayerBG2RGB_VNG,
-    BayerGB2RGB_VNG, BayerRG2RGB_VNG, BayerGR2RGB_VNG, BGR2HSV_FULL, RGB2HSV_FULL, BGR2HLS_FULL, RGB2HLS_FULL,
-    HSV2BGR_FULL, HSV2RGB_FULL, HLS2BGR_FULL, HLS2RGB_FULL, LBGR2Lab, LRGB2Lab, LBGR2Luv, LRGB2Luv, Lab2LBGR, Lab2LRGB,
-    Luv2LBGR, Luv2LRGB, BGR2YUV, RGB2YUV, YUV2BGR, YUV2RGB, BayerBG2GRAY, BayerGB2GRAY, BayerRG2GRAY, BayerGR2GRAY,
+  TocvColorConversion = (BGR2BGRA, RGB2RGBA, BGRA2BGR, RGBA2RGB, BGR2RGBA, RGB2BGRA, RGBA2BGR, BGRA2RGB, BGR2RGB, RGB2BGR, BGRA2RGBA, RGBA2BGRA, BGR2GRAY,
+    RGB2GRAY, GRAY2BGR, GRAY2RGB, GRAY2BGRA, GRAY2RGBA, BGRA2GRAY, RGBA2GRAY, BGR2BGR565, RGB2BGR565, BGR5652BGR, BGR5652RGB, BGRA2BGR565, RGBA2BGR565,
+    BGR5652BGRA, BGR5652RGBA, GRAY2BGR565, BGR5652GRAY, BGR2BGR555, RGB2BGR555, BGR5552BGR, BGR5552RGB, BGRA2BGR555, RGBA2BGR555, BGR5552BGRA, BGR5552RGBA,
+    GRAY2BGR555, BGR5552GRAY, BGR2XYZ, RGB2XYZ, XYZ2BGR, XYZ2RGB, BGR2YCrCb, RGB2YCrCb, YCrCb2BGR, YCrCb2RGB, BGR2HSV, RGB2HSV, BGR2Lab, RGB2Lab, BayerBG2BGR,
+    BayerGB2BGR, BayerRG2BGR, BayerGR2BGR, BayerBG2RGB, BayerGB2RGB, BayerRG2RGB, BayerGR2RGB, BGR2Luv, RGB2Luv, BGR2HLS, RGB2HLS, HSV2BGR, HSV2RGB, Lab2BGR,
+    Lab2RGB, Luv2BGR, Luv2RGB, HLS2BGR, HLS2RGB, BayerBG2BGR_VNG, BayerGB2BGR_VNG, BayerRG2BGR_VNG, BayerGR2BGR_VNG, BayerBG2RGB_VNG, BayerGB2RGB_VNG,
+    BayerRG2RGB_VNG, BayerGR2RGB_VNG, BGR2HSV_FULL, RGB2HSV_FULL, BGR2HLS_FULL, RGB2HLS_FULL, HSV2BGR_FULL, HSV2RGB_FULL, HLS2BGR_FULL, HLS2RGB_FULL, LBGR2Lab,
+    LRGB2Lab, LBGR2Luv, LRGB2Luv, Lab2LBGR, Lab2LRGB, Luv2LBGR, Luv2LRGB, BGR2YUV, RGB2YUV, YUV2BGR, YUV2RGB, BayerBG2GRAY, BayerGB2GRAY, BayerRG2GRAY,
+    BayerGR2GRAY,
     // YUV 4:2:0 formats family;
-    YUV2RGB_NV12, YUV2BGR_NV12, YUV2RGB_NV21, YUV2BGR_NV21, YUV420sp2RGB, YUV420sp2BGR, YUV2RGBA_NV12, YUV2BGRA_NV12,
-    YUV2RGBA_NV21, YUV2BGRA_NV21, YUV420sp2RGBA, YUV420sp2BGRA, YUV2RGB_YV12, YUV2BGR_YV12, YUV2RGB_IYUV, YUV2BGR_IYUV,
-    YUV2RGB_I420, YUV2BGR_I420, YUV420p2RGB, YUV420p2BGR, YUV2RGBA_YV12, YUV2BGRA_YV12, YUV2RGBA_IYUV, YUV2BGRA_IYUV,
-    YUV2RGBA_I420, YUV2BGRA_I420, YUV420p2RGBA, YUV420p2BGRA, YUV2GRAY_420, YUV2GRAY_NV21, YUV2GRAY_NV12, YUV2GRAY_YV12,
-    YUV2GRAY_IYUV, YUV2GRAY_I420, YUV420sp2GRAY, YUV420p2GRAY,
+    YUV2RGB_NV12, YUV2BGR_NV12, YUV2RGB_NV21, YUV2BGR_NV21, YUV420sp2RGB, YUV420sp2BGR, YUV2RGBA_NV12, YUV2BGRA_NV12, YUV2RGBA_NV21, YUV2BGRA_NV21,
+    YUV420sp2RGBA, YUV420sp2BGRA, YUV2RGB_YV12, YUV2BGR_YV12, YUV2RGB_IYUV, YUV2BGR_IYUV, YUV2RGB_I420, YUV2BGR_I420, YUV420p2RGB, YUV420p2BGR, YUV2RGBA_YV12,
+    YUV2BGRA_YV12, YUV2RGBA_IYUV, YUV2BGRA_IYUV, YUV2RGBA_I420, YUV2BGRA_I420, YUV420p2RGBA, YUV420p2BGRA, YUV2GRAY_420, YUV2GRAY_NV21, YUV2GRAY_NV12,
+    YUV2GRAY_YV12, YUV2GRAY_IYUV, YUV2GRAY_I420, YUV420sp2GRAY, YUV420p2GRAY,
     // YUV 4:2:2 formats family;
-    YUV2RGB_UYVY, YUV2BGR_UYVY, YUV2RGB_Y422, YUV2BGR_Y422, YUV2RGB_UYNV, YUV2BGR_UYNV, YUV2RGBA_UYVY, YUV2BGRA_UYVY,
-    YUV2RGBA_Y422, YUV2BGRA_Y422, YUV2RGBA_UYNV, YUV2BGRA_UYNV, YUV2RGB_YUY2, YUV2BGR_YUY2, YUV2RGB_YVYU, YUV2BGR_YVYU,
-    YUV2RGB_YUYV, YUV2BGR_YUYV, YUV2RGB_YUNV, YUV2BGR_YUNV, YUV2RGBA_YUY2, YUV2BGRA_YUY2, YUV2RGBA_YVYU, YUV2BGRA_YVYU,
-    YUV2RGBA_YUYV, YUV2BGRA_YUYV, YUV2RGBA_YUNV, YUV2BGRA_YUNV, YUV2GRAY_UYVY, YUV2GRAY_YUY2, YUV2GRAY_Y422,
+    YUV2RGB_UYVY, YUV2BGR_UYVY, YUV2RGB_Y422, YUV2BGR_Y422, YUV2RGB_UYNV, YUV2BGR_UYNV, YUV2RGBA_UYVY, YUV2BGRA_UYVY, YUV2RGBA_Y422, YUV2BGRA_Y422,
+    YUV2RGBA_UYNV, YUV2BGRA_UYNV, YUV2RGB_YUY2, YUV2BGR_YUY2, YUV2RGB_YVYU, YUV2BGR_YVYU, YUV2RGB_YUYV, YUV2BGR_YUYV, YUV2RGB_YUNV, YUV2BGR_YUNV, YUV2RGBA_YUY2,
+    YUV2BGRA_YUY2, YUV2RGBA_YVYU, YUV2BGRA_YVYU, YUV2RGBA_YUYV, YUV2BGRA_YUYV, YUV2RGBA_YUNV, YUV2BGRA_YUNV, YUV2GRAY_UYVY, YUV2GRAY_YUY2, YUV2GRAY_Y422,
     YUV2GRAY_UYNV, YUV2GRAY_YVYU, YUV2GRAY_YUYV, YUV2GRAY_YUNV,
     // alpha premultiplication;
     RGBA2mRGBA, mRGBA2RGBA, COLORCVT_MAX);
@@ -198,38 +194,32 @@ type
 
   TocvCvtColorOperation = class(TocvCustomImageOperation)
   private const
-    cIPLDepth: array [TocvIPLDepth] of Integer = (IPL_DEPTH_1U, IPL_DEPTH_8U, IPL_DEPTH_16U, IPL_DEPTH_32F,
-      IPL_DEPTH_64F, (IPL_DEPTH_SIGN or 8), IPL_DEPTH_16S, IPL_DEPTH_32S);
+    cIPLDepth: array [TocvIPLDepth] of Integer = (IPL_DEPTH_1U, IPL_DEPTH_8U, IPL_DEPTH_16U, IPL_DEPTH_32F, IPL_DEPTH_64F, (IPL_DEPTH_SIGN or 8), IPL_DEPTH_16S,
+      IPL_DEPTH_32S);
 
-    cColorConversion: array [TocvColorConversion] of Integer = (CV_BGR2BGRA, CV_RGB2RGBA, CV_BGRA2BGR, CV_RGBA2RGB,
-      CV_BGR2RGBA, CV_RGB2BGRA, CV_RGBA2BGR, CV_BGRA2RGB, CV_BGR2RGB, CV_RGB2BGR, CV_BGRA2RGBA, CV_RGBA2BGRA,
-      CV_BGR2GRAY, CV_RGB2GRAY, CV_GRAY2BGR, CV_GRAY2RGB, CV_GRAY2BGRA, CV_GRAY2RGBA, CV_BGRA2GRAY, CV_RGBA2GRAY,
-      CV_BGR2BGR565, CV_RGB2BGR565, CV_BGR5652BGR, CV_BGR5652RGB, CV_BGRA2BGR565, CV_RGBA2BGR565, CV_BGR5652BGRA,
-      CV_BGR5652RGBA, CV_GRAY2BGR565, CV_BGR5652GRAY, CV_BGR2BGR555, CV_RGB2BGR555, CV_BGR5552BGR, CV_BGR5552RGB,
-      CV_BGRA2BGR555, CV_RGBA2BGR555, CV_BGR5552BGRA, CV_BGR5552RGBA, CV_GRAY2BGR555, CV_BGR5552GRAY, CV_BGR2XYZ,
-      CV_RGB2XYZ, CV_XYZ2BGR, CV_XYZ2RGB, CV_BGR2YCrCb, CV_RGB2YCrCb, CV_YCrCb2BGR, CV_YCrCb2RGB, CV_BGR2HSV,
-      CV_RGB2HSV, CV_BGR2Lab, CV_RGB2Lab, CV_BayerBG2BGR, CV_BayerGB2BGR, CV_BayerRG2BGR, CV_BayerGR2BGR,
-      CV_BayerBG2RGB, CV_BayerGB2RGB, CV_BayerRG2RGB, CV_BayerGR2RGB, CV_BGR2Luv, CV_RGB2Luv, CV_BGR2HLS, CV_RGB2HLS,
-      CV_HSV2BGR, CV_HSV2RGB, CV_Lab2BGR, CV_Lab2RGB, CV_Luv2BGR, CV_Luv2RGB, CV_HLS2BGR, CV_HLS2RGB,
-      CV_BayerBG2BGR_VNG, CV_BayerGB2BGR_VNG, CV_BayerRG2BGR_VNG, CV_BayerGR2BGR_VNG, CV_BayerBG2RGB_VNG,
-      CV_BayerGB2RGB_VNG, CV_BayerRG2RGB_VNG, CV_BayerGR2RGB_VNG, CV_BGR2HSV_FULL, CV_RGB2HSV_FULL, CV_BGR2HLS_FULL,
-      CV_RGB2HLS_FULL, CV_HSV2BGR_FULL, CV_HSV2RGB_FULL, CV_HLS2BGR_FULL, CV_HLS2RGB_FULL, CV_LBGR2Lab, CV_LRGB2Lab,
-      CV_LBGR2Luv, CV_LRGB2Luv, CV_Lab2LBGR, CV_Lab2LRGB, CV_Luv2LBGR, CV_Luv2LRGB, CV_BGR2YUV, CV_RGB2YUV, CV_YUV2BGR,
-      CV_YUV2RGB, CV_BayerBG2GRAY, CV_BayerGB2GRAY, CV_BayerRG2GRAY, CV_BayerGR2GRAY,
+    cColorConversion: array [TocvColorConversion] of Integer = (CV_BGR2BGRA, CV_RGB2RGBA, CV_BGRA2BGR, CV_RGBA2RGB, CV_BGR2RGBA, CV_RGB2BGRA, CV_RGBA2BGR,
+      CV_BGRA2RGB, CV_BGR2RGB, CV_RGB2BGR, CV_BGRA2RGBA, CV_RGBA2BGRA, CV_BGR2GRAY, CV_RGB2GRAY, CV_GRAY2BGR, CV_GRAY2RGB, CV_GRAY2BGRA, CV_GRAY2RGBA,
+      CV_BGRA2GRAY, CV_RGBA2GRAY, CV_BGR2BGR565, CV_RGB2BGR565, CV_BGR5652BGR, CV_BGR5652RGB, CV_BGRA2BGR565, CV_RGBA2BGR565, CV_BGR5652BGRA, CV_BGR5652RGBA,
+      CV_GRAY2BGR565, CV_BGR5652GRAY, CV_BGR2BGR555, CV_RGB2BGR555, CV_BGR5552BGR, CV_BGR5552RGB, CV_BGRA2BGR555, CV_RGBA2BGR555, CV_BGR5552BGRA,
+      CV_BGR5552RGBA, CV_GRAY2BGR555, CV_BGR5552GRAY, CV_BGR2XYZ, CV_RGB2XYZ, CV_XYZ2BGR, CV_XYZ2RGB, CV_BGR2YCrCb, CV_RGB2YCrCb, CV_YCrCb2BGR, CV_YCrCb2RGB,
+      CV_BGR2HSV, CV_RGB2HSV, CV_BGR2Lab, CV_RGB2Lab, CV_BayerBG2BGR, CV_BayerGB2BGR, CV_BayerRG2BGR, CV_BayerGR2BGR, CV_BayerBG2RGB, CV_BayerGB2RGB,
+      CV_BayerRG2RGB, CV_BayerGR2RGB, CV_BGR2Luv, CV_RGB2Luv, CV_BGR2HLS, CV_RGB2HLS, CV_HSV2BGR, CV_HSV2RGB, CV_Lab2BGR, CV_Lab2RGB, CV_Luv2BGR, CV_Luv2RGB,
+      CV_HLS2BGR, CV_HLS2RGB, CV_BayerBG2BGR_VNG, CV_BayerGB2BGR_VNG, CV_BayerRG2BGR_VNG, CV_BayerGR2BGR_VNG, CV_BayerBG2RGB_VNG, CV_BayerGB2RGB_VNG,
+      CV_BayerRG2RGB_VNG, CV_BayerGR2RGB_VNG, CV_BGR2HSV_FULL, CV_RGB2HSV_FULL, CV_BGR2HLS_FULL, CV_RGB2HLS_FULL, CV_HSV2BGR_FULL, CV_HSV2RGB_FULL,
+      CV_HLS2BGR_FULL, CV_HLS2RGB_FULL, CV_LBGR2Lab, CV_LRGB2Lab, CV_LBGR2Luv, CV_LRGB2Luv, CV_Lab2LBGR, CV_Lab2LRGB, CV_Luv2LBGR, CV_Luv2LRGB, CV_BGR2YUV,
+      CV_RGB2YUV, CV_YUV2BGR, CV_YUV2RGB, CV_BayerBG2GRAY, CV_BayerGB2GRAY, CV_BayerRG2GRAY, CV_BayerGR2GRAY,
       // YUV 4:2:0 formats family;
-      CV_YUV2RGB_NV12, CV_YUV2BGR_NV12, CV_YUV2RGB_NV21, CV_YUV2BGR_NV21, CV_YUV420sp2RGB, CV_YUV420sp2BGR,
-      CV_YUV2RGBA_NV12, CV_YUV2BGRA_NV12, CV_YUV2RGBA_NV21, CV_YUV2BGRA_NV21, CV_YUV420sp2RGBA, CV_YUV420sp2BGRA,
-      CV_YUV2RGB_YV12, CV_YUV2BGR_YV12, CV_YUV2RGB_IYUV, CV_YUV2BGR_IYUV, CV_YUV2RGB_I420, CV_YUV2BGR_I420,
-      CV_YUV420p2RGB, CV_YUV420p2BGR, CV_YUV2RGBA_YV12, CV_YUV2BGRA_YV12, CV_YUV2RGBA_IYUV, CV_YUV2BGRA_IYUV,
-      CV_YUV2RGBA_I420, CV_YUV2BGRA_I420, CV_YUV420p2RGBA, CV_YUV420p2BGRA, CV_YUV2GRAY_420, CV_YUV2GRAY_NV21,
-      CV_YUV2GRAY_NV12, CV_YUV2GRAY_YV12, CV_YUV2GRAY_IYUV, CV_YUV2GRAY_I420, CV_YUV420sp2GRAY, CV_YUV420p2GRAY,
+      CV_YUV2RGB_NV12, CV_YUV2BGR_NV12, CV_YUV2RGB_NV21, CV_YUV2BGR_NV21, CV_YUV420sp2RGB, CV_YUV420sp2BGR, CV_YUV2RGBA_NV12, CV_YUV2BGRA_NV12,
+      CV_YUV2RGBA_NV21, CV_YUV2BGRA_NV21, CV_YUV420sp2RGBA, CV_YUV420sp2BGRA, CV_YUV2RGB_YV12, CV_YUV2BGR_YV12, CV_YUV2RGB_IYUV, CV_YUV2BGR_IYUV,
+      CV_YUV2RGB_I420, CV_YUV2BGR_I420, CV_YUV420p2RGB, CV_YUV420p2BGR, CV_YUV2RGBA_YV12, CV_YUV2BGRA_YV12, CV_YUV2RGBA_IYUV, CV_YUV2BGRA_IYUV,
+      CV_YUV2RGBA_I420, CV_YUV2BGRA_I420, CV_YUV420p2RGBA, CV_YUV420p2BGRA, CV_YUV2GRAY_420, CV_YUV2GRAY_NV21, CV_YUV2GRAY_NV12, CV_YUV2GRAY_YV12,
+      CV_YUV2GRAY_IYUV, CV_YUV2GRAY_I420, CV_YUV420sp2GRAY, CV_YUV420p2GRAY,
       // YUV 4:2:2 formats family;
-      CV_YUV2RGB_UYVY, CV_YUV2BGR_UYVY, CV_YUV2RGB_Y422, CV_YUV2BGR_Y422, CV_YUV2RGB_UYNV, CV_YUV2BGR_UYNV,
-      CV_YUV2RGBA_UYVY, CV_YUV2BGRA_UYVY, CV_YUV2RGBA_Y422, CV_YUV2BGRA_Y422, CV_YUV2RGBA_UYNV, CV_YUV2BGRA_UYNV,
-      CV_YUV2RGB_YUY2, CV_YUV2BGR_YUY2, CV_YUV2RGB_YVYU, CV_YUV2BGR_YVYU, CV_YUV2RGB_YUYV, CV_YUV2BGR_YUYV,
-      CV_YUV2RGB_YUNV, CV_YUV2BGR_YUNV, CV_YUV2RGBA_YUY2, CV_YUV2BGRA_YUY2, CV_YUV2RGBA_YVYU, CV_YUV2BGRA_YVYU,
-      CV_YUV2RGBA_YUYV, CV_YUV2BGRA_YUYV, CV_YUV2RGBA_YUNV, CV_YUV2BGRA_YUNV, CV_YUV2GRAY_UYVY, CV_YUV2GRAY_YUY2,
-      CV_YUV2GRAY_Y422, CV_YUV2GRAY_UYNV, CV_YUV2GRAY_YVYU, CV_YUV2GRAY_YUYV, CV_YUV2GRAY_YUNV,
+      CV_YUV2RGB_UYVY, CV_YUV2BGR_UYVY, CV_YUV2RGB_Y422, CV_YUV2BGR_Y422, CV_YUV2RGB_UYNV, CV_YUV2BGR_UYNV, CV_YUV2RGBA_UYVY, CV_YUV2BGRA_UYVY,
+      CV_YUV2RGBA_Y422, CV_YUV2BGRA_Y422, CV_YUV2RGBA_UYNV, CV_YUV2BGRA_UYNV, CV_YUV2RGB_YUY2, CV_YUV2BGR_YUY2, CV_YUV2RGB_YVYU, CV_YUV2BGR_YVYU,
+      CV_YUV2RGB_YUYV, CV_YUV2BGR_YUYV, CV_YUV2RGB_YUNV, CV_YUV2BGR_YUNV, CV_YUV2RGBA_YUY2, CV_YUV2BGRA_YUY2, CV_YUV2RGBA_YVYU, CV_YUV2BGRA_YVYU,
+      CV_YUV2RGBA_YUYV, CV_YUV2BGRA_YUYV, CV_YUV2RGBA_YUNV, CV_YUV2BGRA_YUNV, CV_YUV2GRAY_UYVY, CV_YUV2GRAY_YUY2, CV_YUV2GRAY_Y422, CV_YUV2GRAY_UYNV,
+      CV_YUV2GRAY_YVYU, CV_YUV2GRAY_YUYV, CV_YUV2GRAY_YUNV,
       // alpha premultiplication;
       CV_RGBA2mRGBA, CV_mRGBA2RGBA, CV_COLORCVT_MAX);
   private
@@ -335,8 +325,7 @@ type
     property VideoSource: IocvDataSource Read FocvVideoSource write SetVideoSource_Source2;
     property OnGetSourceImage: TOnGetImage read FOnGetImage write FOnGetImage;
     property OnGetMaskImage: TOnGetImage read FOnGetMaskImage write FOnGetMaskImage;
-    property TransformInterpolation: TocvInterpolationMethod read FTransformInterpolation write FTransformInterpolation
-      default INTER_CUBIC;
+    property TransformInterpolation: TocvInterpolationMethod read FTransformInterpolation write FTransformInterpolation default INTER_CUBIC;
   public
     constructor Create(AOwner: TPersistent); override;
   protected
@@ -427,8 +416,7 @@ type
     property SmoothType: TocvSmoothOperations read FSmoothOperation write SetSmoothOperation default GAUSSIAN;
   end;
 
-  TocvThresholdType = (THRESH_BINARY, THRESH_BINARY_INV, THRESH_TRUNC, THRESH_TOZERO, THRESH_TOZERO_INV, THRESH_MASK,
-    THRESH_OTSU);
+  TocvThresholdType = (THRESH_BINARY, THRESH_BINARY_INV, THRESH_TRUNC, THRESH_TOZERO, THRESH_TOZERO_INV, THRESH_MASK, THRESH_OTSU);
 
   TocvCustomThresholdOperation = class(TocvCustomImageOperation)
   private
@@ -460,8 +448,8 @@ type
     constructor Create(AOwner: TPersistent); override;
     function DoTransform(const Source: IocvImage; out Destanation: IocvImage): Boolean; override;
   published
-    property AdaptiveThresholdType: TocvAdaptiveThresholdType read GetAdaptiveThresholdType
-      write SetAdaptiveThresholdType default ADAPTIVE_THRESH_MEAN_C; // index 1
+    property AdaptiveThresholdType: TocvAdaptiveThresholdType read GetAdaptiveThresholdType write SetAdaptiveThresholdType default ADAPTIVE_THRESH_MEAN_C;
+    // index 1
     property BlockSize: Integer index 2 Read GetIntParam write SetIntParam; // 3
     property Param: Double index 1 Read GetFloatParam write SetFloatParam; // 5;
   end;
@@ -586,8 +574,7 @@ type
     property RotateAroundCenter: Boolean index 0 Read GetBoolParam write SetBoolParam;
     property CustomCenter: TocvPoint2D32f Read FCenter write FCenter;
     property Method: TocvInterpolationMethod read FMethod write FMethod default INTER_LINEAR;
-    property WarpingFlag: TocvInterpolationWarpingFlagSet read FWarpingFlag write FWarpingFlag
-      default [WARP_FILL_OUTLIERS];
+    property WarpingFlag: TocvInterpolationWarpingFlagSet read FWarpingFlag write FWarpingFlag default [WARP_FILL_OUTLIERS];
     property Scale: Double index 0 Read GetFloatParam write SetFloatParam;
     property FillColor: TColor read FFillColor write FFillColor default clBlack;
   end;
@@ -635,8 +622,7 @@ type
     property SourceQuad: TocvQuad read FSourceQuad write FSourceQuad;
     property DestQuad: TocvQuad read FDestQuad write FDestQuad;
     property Method: TocvInterpolationMethod read FMethod write FMethod default INTER_LINEAR;
-    property WarpingFlag: TocvInterpolationWarpingFlagSet read FWarpingFlag write FWarpingFlag
-      default [WARP_FILL_OUTLIERS];
+    property WarpingFlag: TocvInterpolationWarpingFlagSet read FWarpingFlag write FWarpingFlag default [WARP_FILL_OUTLIERS];
     property FullSourceImage: Boolean index 0 Read GetBoolParam write SetBoolParam;
     property FillColor: TColor Read FFillColor write FFillColor;
   end;
@@ -709,8 +695,7 @@ type
 
   TocvMotionDetectCalcRectType = (mdBoundingRect, mdMinAreaRect);
 
-  TocvContourApproximationMethods = (CHAIN_CODE, CHAIN_APPROX_NONE, CHAIN_APPROX_SIMPLE, CHAIN_APPROX_TC89_L1,
-    CHAIN_APPROX_TC89_KCOS, LINK_RUNS);
+  TocvContourApproximationMethods = (CHAIN_CODE, CHAIN_APPROX_NONE, CHAIN_APPROX_SIMPLE, CHAIN_APPROX_TC89_L1, CHAIN_APPROX_TC89_KCOS, LINK_RUNS);
 
   TocvDrawMotionRect = TocvDrawColor;
 
@@ -877,8 +862,7 @@ type
     property NotifyOnlyWhenFound: Boolean index 1 Read GetBoolParam write SetBoolParam;
   end;
 
-  TocvEditorOperation = (eopNone, eopSature, eopExpo, eopHue, eopTemperature, eopWhite, eopShadow, eopContrast,
-    eopClarity);
+  TocvEditorOperation = (eopNone, eopSature, eopExpo, eopHue, eopTemperature, eopWhite, eopShadow, eopContrast, eopClarity);
 
   TocvEditor = class(TocvCustomImageOperation)
   private
@@ -944,8 +928,7 @@ type
   published
     property Preprocessing: TocvCustomImageOperation read GetProperties write SetProperties;
     property RetrievalMode: TocvContourRetrievalModes read FRetrievalMode write FRetrievalMode default RETR_LIST;
-    property ApproximationMethod: TocvContourApproximationMethods read FApproximationMethod write FApproximationMethod
-      default CHAIN_APPROX_SIMPLE;
+    property ApproximationMethod: TocvContourApproximationMethods read FApproximationMethod write FApproximationMethod default CHAIN_APPROX_SIMPLE;
     property Offset: TocvPoint2D32i read FOffset write FOffset;
     property MinArea: Integer index 0 Read GetIntParam write SetIntParam;
     property ContourDraw: TocvContourDraw read FContourDraw write FContourDraw;
@@ -1036,8 +1019,7 @@ type
     property Operation: TocvCustomImageOperation read GetProperties write SetProperties;
     property Operations: TocvImageOperationCollection Read FOperations write FOperations;
     property OperationsEnabled: Boolean read FUseCollection write SetUseCollection default True;
-    property OnBeforeEachOperation: TOnOcvNotifyCollectionItem read FOnBeforeEachOperation
-      write SetOnBeforeEachOperation;
+    property OnBeforeEachOperation: TOnOcvNotifyCollectionItem read FOnBeforeEachOperation write SetOnBeforeEachOperation;
     property OnAfterEachOperation: TOnOcvNotifyCollectionItem read FOnAfterEachOperation write SetOnAfterEachOperation;
     property Enabled: Boolean read FEnabled Write FEnabled default True;
   end;
@@ -1428,8 +1410,7 @@ end;
 
 { TocvImageOperationSmooth }
 Const
-  ocvSmoothOperations: array [TocvSmoothOperations] of Integer = (CV_BLUR_NO_SCALE, CV_BLUR, CV_GAUSSIAN, CV_MEDIAN,
-    CV_BILATERAL);
+  ocvSmoothOperations: array [TocvSmoothOperations] of Integer = (CV_BLUR_NO_SCALE, CV_BLUR, CV_GAUSSIAN, CV_MEDIAN, CV_BILATERAL);
 
 procedure TocvSmoothOperation.AssignTo(Dest: TPersistent);
 begin
@@ -1538,8 +1519,7 @@ begin
 end;
 
 const
-  EDMorpgOp: array [TocvErodeDilateMode] of Integer = (CV_SHAPE_RECT, CV_SHAPE_CROSS, CV_SHAPE_ELLIPSE,
-    CV_SHAPE_CUSTOM);
+  EDMorpgOp: array [TocvErodeDilateMode] of Integer = (CV_SHAPE_RECT, CV_SHAPE_CROSS, CV_SHAPE_ELLIPSE, CV_SHAPE_CUSTOM);
 
   { TocvErode }
 
@@ -1580,8 +1560,7 @@ Var
   TempImg: pIplImage;
 begin
   TempImg := cvCreateImage(cvGetSize(Source.IpImage), IPL_DEPTH_16S, Source.IpImage^.nChannels);
-  Destanation := TocvImage.Create(cvCreateImage(cvGetSize(Source.IpImage), Source.IpImage^.Depth,
-    Source.IpImage^.nChannels));
+  Destanation := TocvImage.Create(cvCreateImage(cvGetSize(Source.IpImage), Source.IpImage^.Depth, Source.IpImage^.nChannels));
   cvLaplace(Source.IpImage, TempImg, Aperture);
   cvConvertScale(TempImg, Destanation.IpImage);
   cvReleaseImage(TempImg);
@@ -1603,8 +1582,7 @@ Var
   TmpImg: pIplImage;
 begin
   TmpImg := cvCreateImage(cvGetSize(Source.IpImage), IPL_DEPTH_16S, Source.IpImage^.nChannels);
-  Destanation := TocvImage.Create(cvCreateImage(cvGetSize(Source.IpImage), Source.IpImage^.Depth,
-    Source.IpImage^.nChannels));
+  Destanation := TocvImage.Create(cvCreateImage(cvGetSize(Source.IpImage), Source.IpImage^.Depth, Source.IpImage^.nChannels));
   cvSobel(Source.IpImage, TmpImg, XOrder, YOrder, Aperture);
   cvConvertScale(TmpImg, Destanation.IpImage);
   cvReleaseImage(TmpImg);
@@ -1757,8 +1735,8 @@ end;
 { TocvThresholdOperation }
 
 Const
-  cThreshold: array [TocvThresholdType] of Integer = (CV_THRESH_BINARY, CV_THRESH_BINARY_INV, CV_THRESH_TRUNC,
-    CV_THRESH_TOZERO, CV_THRESH_TOZERO_INV, CV_THRESH_MASK, CV_THRESH_OTSU);
+  cThreshold: array [TocvThresholdType] of Integer = (CV_THRESH_BINARY, CV_THRESH_BINARY_INV, CV_THRESH_TRUNC, CV_THRESH_TOZERO, CV_THRESH_TOZERO_INV,
+    CV_THRESH_MASK, CV_THRESH_OTSU);
 
 constructor TocvThresholdOperation.Create { (AOwner: TComponent) };
 begin
@@ -1793,8 +1771,7 @@ end;
 { TocvAdaptiveThresholdOperation }
 
 const
-  cAdaptiveThresholdType: array [TocvAdaptiveThresholdType] of Integer = (CV_ADAPTIVE_THRESH_MEAN_C,
-    CV_ADAPTIVE_THRESH_GAUSSIAN_C);
+  cAdaptiveThresholdType: array [TocvAdaptiveThresholdType] of Integer = (CV_ADAPTIVE_THRESH_MEAN_C, CV_ADAPTIVE_THRESH_GAUSSIAN_C);
 
 constructor TocvAdaptiveThresholdOperation.Create { (AOwner: TComponent) };
 begin
@@ -1817,8 +1794,8 @@ end;
 function TocvAdaptiveThresholdOperation.DoTransform(const Source: IocvImage; out Destanation: IocvImage): Boolean;
 begin
   Destanation := TocvImage.Create(cvCreateImage(cvGetSize(Source.IpImage), IPL_DEPTH_8U, 1));
-  cvAdaptiveThreshold(Source.GrayImage.IpImage, Destanation.IpImage, MaxValue,
-    cAdaptiveThresholdType[AdaptiveThresholdType], cThreshold[ThresholdType], BlockSize, Param);
+  cvAdaptiveThreshold(Source.GrayImage.IpImage, Destanation.IpImage, MaxValue, cAdaptiveThresholdType[AdaptiveThresholdType], cThreshold[ThresholdType],
+    BlockSize, Param);
   Result := True;
 end;
 
@@ -1868,11 +1845,10 @@ begin
     Destanation := Source; // .Clone;
     if Preprocessing.Transform(Source, th_image) then
     begin
-      contoursCont := cvFindContours(th_image.IpImage, storage, @Contours, SizeOf(TCvContour), Integer(RetrievalMode),
-        Integer(ApproximationMethod), cvPoint(Offset.X, Offset.Y));
+      contoursCont := cvFindContours(th_image.IpImage, storage, @Contours, SizeOf(TCvContour), Integer(RetrievalMode), Integer(ApproximationMethod),
+        cvPoint(Offset.X, Offset.Y));
       if ApproxPoly.Enabled then
-        FContours := cvApproxPoly(Contours, SizeOf(TCvContour), storage, CV_POLY_APPROX_DP, ApproxPoly.Eps,
-          Integer(ApproxPoly.Recursive));
+        FContours := cvApproxPoly(Contours, SizeOf(TCvContour), storage, CV_POLY_APPROX_DP, ApproxPoly.Eps, Integer(ApproxPoly.Recursive));
       DoNotifyContours(Destanation, contoursCont, Contours);
       if (contoursCont > 0) and ContourDraw.Enabled then
       begin
@@ -1885,16 +1861,14 @@ begin
           begin
             area := cvContourArea(s_contours, CV_WHOLE_SEQ);
             if abs(area) > MinArea then
-              cvDrawContours(Destanation.IpImage, s_contours, CV_RGB(er, eg, eb), CV_RGB(hr, hg, hb),
-                ContourDraw.MaxLevel, ContourDraw.Thickness, cLineType[ContourDraw.LineType],
-                cvPoint(ContourDraw.Offset.X, ContourDraw.Offset.Y));
+              cvDrawContours(Destanation.IpImage, s_contours, CV_RGB(er, eg, eb), CV_RGB(hr, hg, hb), ContourDraw.MaxLevel, ContourDraw.Thickness,
+                cLineType[ContourDraw.LineType], cvPoint(ContourDraw.Offset.X, ContourDraw.Offset.Y));
             s_contours := s_contours.h_next;
           end;
         end
         else
-          cvDrawContours(Destanation.IpImage, FContours, CV_RGB(er, eg, eb), CV_RGB(hr, hg, hb), ContourDraw.MaxLevel,
-            ContourDraw.Thickness, cLineType[ContourDraw.LineType],
-            cvPoint(ContourDraw.Offset.X, ContourDraw.Offset.Y));
+          cvDrawContours(Destanation.IpImage, FContours, CV_RGB(er, eg, eb), CV_RGB(hr, hg, hb), ContourDraw.MaxLevel, ContourDraw.Thickness,
+            cLineType[ContourDraw.LineType], cvPoint(ContourDraw.Offset.X, ContourDraw.Offset.Y));
       end;
       Result := True;
     end;
@@ -1903,8 +1877,7 @@ begin
   end;
 end;
 
-procedure TocvContoursOperation.DoNotifyContours(const Image: IocvImage; const ContourCount: Integer;
-  const Contours: pCvSeq);
+procedure TocvContoursOperation.DoNotifyContours(const Image: IocvImage; const ContourCount: Integer; const Contours: pCvSeq);
 begin
   if Assigned(OnContour) then
     OnContour(Self, Image, ContourCount, Contours);
@@ -2128,8 +2101,8 @@ begin
       OnHaarCascade(Self, Destanation, FHaarRects);
     if DrawHaarCascade.Enabled then
       for i := 0 to High(FHaarRects) do
-        Destanation.Canvas.Rectangle(FHaarRects[i].Left, FHaarRects[i].Top, FHaarRects[i].Right, FHaarRects[i].Bottom,
-          DrawHaarCascade.Color, DrawHaarCascade.Thickness, DrawHaarCascade.LineType, DrawHaarCascade.Shift);
+        Destanation.Canvas.Rectangle(FHaarRects[i].Left, FHaarRects[i].Top, FHaarRects[i].Right, FHaarRects[i].Bottom, DrawHaarCascade.Color,
+          DrawHaarCascade.Thickness, DrawHaarCascade.LineType, DrawHaarCascade.Shift);
   end;
   // if Assigned(FCascade) then
   // begin
@@ -2306,8 +2279,7 @@ begin
   Destanation := Source;
   if Assigned(IPLTemplate) then
   begin
-    imgMat := cvCreateImage(cvSize(Source.IpImage^.Width - IPLTemplate^.Width + 1,
-      Source.IpImage^.height - IPLTemplate^.height + 1), IPL_DEPTH_32F, 1);
+    imgMat := cvCreateImage(cvSize(Source.IpImage^.Width - IPLTemplate^.Width + 1, Source.IpImage^.height - IPLTemplate^.height + 1), IPL_DEPTH_32F, 1);
     cvMatchTemplate(Source.IpImage, IPLTemplate, imgMat, Integer(FMethod));
 
     if Assigned(OnMathTemplateRect) or DrawRect.Enabled then
@@ -2420,8 +2392,7 @@ begin
     // FContours := AllocMem(SizeOf(TCvSeq));
     try
       FContours := nil;
-      cvFindContours(ThresholdImage.IpImage, storage, @FContours, SizeOf(TCvContour), CV_RETR_LIST,
-        CV_CHAIN_APPROX_SIMPLE, cvPoint(0, 0));
+      cvFindContours(ThresholdImage.IpImage, storage, @FContours, SizeOf(TCvContour), CV_RETR_LIST, CV_CHAIN_APPROX_SIMPLE, cvPoint(0, 0));
 
       black := CV_RGB(0, 0, 0);
       white := CV_RGB(255, 255, 255);
@@ -2441,8 +2412,7 @@ begin
       SetLength(Rects, 0);
 
       FContours := nil;
-      cvFindContours(ThresholdImage.IpImage, storage, @FContours, SizeOf(TCvContour), CV_RETR_LIST,
-        CV_CHAIN_APPROX_NONE, cvPoint(0, 0));
+      cvFindContours(ThresholdImage.IpImage, storage, @FContours, SizeOf(TCvContour), CV_RETR_LIST, CV_CHAIN_APPROX_NONE, cvPoint(0, 0));
 
       if Assigned(FContours) then
       begin
@@ -2459,17 +2429,15 @@ begin
           else if CalcRectType = mdMinAreaRect then
           begin
             Rect2d := cvMinAreaRect2(c);
-            Rects[i] := ocvRect(Round(Rect2d.Center.X - Rect2d.Size.Width / 2),
-              Round(Rect2d.Center.Y - Rect2d.Size.height / 2), Round(Rect2d.Center.X + Rect2d.Size.Width / 2),
-              Round(Rect2d.Center.Y + Rect2d.Size.height / 2));
+            Rects[i] := ocvRect(Round(Rect2d.Center.X - Rect2d.Size.Width / 2), Round(Rect2d.Center.Y - Rect2d.Size.height / 2),
+              Round(Rect2d.Center.X + Rect2d.Size.Width / 2), Round(Rect2d.Center.Y + Rect2d.Size.height / 2));
           end;
 
           if DrawMotionRect.Enabled then
           begin
             GetRGBValue(DrawMotionRect.Color, r, g, b);
-            cvRectangle(Destanation.IpImage, cvPoint(Rects[i].Left, Rects[i].Top),
-              cvPoint(Rects[i].Right, Rects[i].Bottom), CV_RGB(r, g, b), DrawMotionRect.Thickness,
-              cLineType[DrawMotionRect.LineType], DrawMotionRect.Shift);
+            cvRectangle(Destanation.IpImage, cvPoint(Rects[i].Left, Rects[i].Top), cvPoint(Rects[i].Right, Rects[i].Bottom), CV_RGB(r, g, b),
+              DrawMotionRect.Thickness, cLineType[DrawMotionRect.LineType], DrawMotionRect.Shift);
           end;
           Inc(i);
           c := c.h_next;
@@ -2845,8 +2813,7 @@ begin
     warp_matrix := cvCreateMat(3, 3, CV_32FC1);
     dst := cvCloneImage(Source.IpImage);
     cvGetPerspectiveTransform(@srcQuad, @dstQuad, warp_matrix);
-    cvWarpPerspective(Source.IpImage, dst, warp_matrix, CV_INTER_LINEAR or CV_WARP_FILL_OUTLIERS,
-      ColorToCvRGB(FillColor));
+    cvWarpPerspective(Source.IpImage, dst, warp_matrix, CV_INTER_LINEAR or CV_WARP_FILL_OUTLIERS, ColorToCvRGB(FillColor));
     Destanation := TocvImage.Create(dst);
   end
   else
@@ -3075,14 +3042,12 @@ begin
       if Smooth.Enabled then
       begin
         D := Source.Same;
-        cvSmooth(Source.IpImage, D.IpImage, ocvSmoothOperations[Smooth.SmoothType], Smooth.size1, Smooth.size2,
-          Smooth.sigma1, Smooth.sigma2);
+        cvSmooth(Source.IpImage, D.IpImage, ocvSmoothOperations[Smooth.SmoothType], Smooth.size1, Smooth.size2, Smooth.sigma1, Smooth.sigma2);
       end
       else
         D := Source;
 
-      results := cvHoughCircles(D.GrayImage.IpImage, storage, Integer(Method), InverseRatio, MinDist, Param1, Param2,
-        MinRadius, MaxRadius);
+      results := cvHoughCircles(D.GrayImage.IpImage, storage, Integer(Method), InverseRatio, MinDist, Param1, Param2, MinRadius, MaxRadius);
       if Assigned(results) then
       begin
         SetLength(Circles, results^.total);
@@ -3093,8 +3058,8 @@ begin
           Circles[i].cY := cvRound(p^[1]);
           Circles[i].Radius := cvRound(p^[2]);
           if DrawCircle.Enabled then
-            cvCircle(Destanation.IpImage, cvPoint(Circles[i].cX, Circles[i].cY), Circles[i].Radius, DrawCircle.cvColor,
-              DrawCircle.Thickness, DrawCircle.cvLineType, DrawCircle.Shift);
+            cvCircle(Destanation.IpImage, cvPoint(Circles[i].cX, Circles[i].cY), Circles[i].Radius, DrawCircle.cvColor, DrawCircle.Thickness,
+              DrawCircle.cvLineType, DrawCircle.Shift);
         end;
       end;
       if Assigned(OnCircles) and ((Length(Circles) > 0) or (not NotifyOnlyWhenFound)) then
@@ -3168,8 +3133,7 @@ begin
           ocvlines[i].S := line^[0];
           ocvlines[i].E := line^[1];
           if DrawLines.Enabled then
-            cvLine(Destanation.IpImage, line^[0], line^[1], DrawLines.cvColor, DrawLines.Thickness,
-              DrawLines.cvLineType, DrawLines.Shift);
+            cvLine(Destanation.IpImage, line^[0], line^[1], DrawLines.cvColor, DrawLines.Thickness, DrawLines.cvLineType, DrawLines.Shift);
         end;
       end;
 
@@ -3310,9 +3274,11 @@ end;
 function TocvCvtColorOperation.DoTransform(const Source: IocvImage; out Destanation: IocvImage): Boolean;
 Var
   iImage: pIplImage;
+  // T:TCvSize;
 begin
   // if FAutoCalcParams then
   // CalculateImageParams(Source);
+  // T := cvGetSize(Source.IpImage);
   iImage := cvCreateImage(cvGetSize(Source.IpImage), cIPLDepth[Depth], Channels);
   try
     cvCvtColor(Source.IpImage, iImage, cColorConversion[ColorConversion]);
