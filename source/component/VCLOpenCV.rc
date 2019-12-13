@@ -1,0 +1,7 @@
+TOCVFILESOURCE BITMAP "Resource\\filesource.bmp"
+TOCVIMAGEOPERATION BITMAP "Resource\\imagetransform.bmp"
+TOCVIPCAMSOURCE BITMAP "Resource\\ipcamera.bmp"
+TOCVCAMERASOURCE BITMAP "Resource\\webcamera.bmp"
+TOCVVIDEOWRITER BITMAP "Resource\\wideowriter.bmp"
+TOCVFFMPEGIPCAMSOURCE BITMAP "Resource\\ipcameraffmpeg.bmp"
+TOCVVIEW BITMAP "Resource\\view.bmp"

@@ -1,7 +1,7 @@
 ﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <PropertyGroup>
-        <ProjectGuid>{3BC74F10-002A-41D7-B09F-6458FF2CE8F4}</ProjectGuid>
-        <MainSource>dclFFMSource260.dpk</MainSource>
+        <ProjectGuid>{D70F4389-1EDC-42D3-A96C-1B6DD1EEE69E}</ProjectGuid>
+        <MainSource>dclFMXOpenCV.dpk</MainSource>
         <ProjectVersion>18.8</ProjectVersion>
         <FrameworkType>None</FrameworkType>
         <Base>True</Base>
@@ -35,6 +35,11 @@
     </PropertyGroup>
     <PropertyGroup Condition="('$(Platform)'=='iOSSimulator' and '$(Base)'=='true') or '$(Base_iOSSimulator)'!=''">
         <Base_iOSSimulator>true</Base_iOSSimulator>
+        <CfgParent>Base</CfgParent>
+        <Base>true</Base>
+    </PropertyGroup>
+    <PropertyGroup Condition="('$(Platform)'=='Linux64' and '$(Base)'=='true') or '$(Base_Linux64)'!=''">
+        <Base_Linux64>true</Base_Linux64>
         <CfgParent>Base</CfgParent>
         <Base>true</Base>
     </PropertyGroup>
@@ -75,11 +80,6 @@
         <Base>true</Base>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base)'!=''">
-        <DCC_Namespace>System;Xml;Data;Datasnap;Web;Soap;$(DCC_Namespace)</DCC_Namespace>
-        <GenDll>true</GenDll>
-        <DCC_CBuilderOutput>All</DCC_CBuilderOutput>
-        <GenPackage>true</GenPackage>
-        <SanitizedProjectName>dclFFMSource260</SanitizedProjectName>
         <DCC_DcuOutput>.\$(Platform)\$(Config)</DCC_DcuOutput>
         <DCC_ExeOutput>.\$(Platform)\$(Config)</DCC_ExeOutput>
         <DCC_E>false</DCC_E>
@@ -87,70 +87,53 @@
         <DCC_S>false</DCC_S>
         <DCC_F>false</DCC_F>
         <DCC_K>false</DCC_K>
+        <GenDll>true</GenDll>
+        <GenPackage>true</GenPackage>
+        <DCC_Namespace>System;Xml;Data;Datasnap;Web;Soap;$(DCC_Namespace)</DCC_Namespace>
+        <DCC_CBuilderOutput>All</DCC_CBuilderOutput>
+        <SanitizedProjectName>dclFMXOpenCV</SanitizedProjectName>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Android)'!=''">
-        <EnabledSysJars>android-support-v4.dex.jar;apk-expansion.dex.jar;cloud-messaging.dex.jar;fmx.dex.jar;google-analytics-v2.dex.jar;google-play-billing.dex.jar;google-play-licensing.dex.jar;google-play-services.dex.jar</EnabledSysJars>
-        <DCC_UsePackage>rtl;$(DCC_UsePackage)</DCC_UsePackage>
         <DCC_CBuilderOutput>None</DCC_CBuilderOutput>
+        <EnabledSysJars>android-support-v4.dex.jar;cloud-messaging.dex.jar;com-google-android-gms.play-services-ads-base.17.2.0.dex.jar;com-google-android-gms.play-services-ads-identifier.16.0.0.dex.jar;com-google-android-gms.play-services-ads-lite.17.2.0.dex.jar;com-google-android-gms.play-services-ads.17.2.0.dex.jar;com-google-android-gms.play-services-analytics-impl.16.0.8.dex.jar;com-google-android-gms.play-services-analytics.16.0.8.dex.jar;com-google-android-gms.play-services-base.16.0.1.dex.jar;com-google-android-gms.play-services-basement.16.2.0.dex.jar;com-google-android-gms.play-services-gass.17.2.0.dex.jar;com-google-android-gms.play-services-identity.16.0.0.dex.jar;com-google-android-gms.play-services-maps.16.1.0.dex.jar;com-google-android-gms.play-services-measurement-base.16.4.0.dex.jar;com-google-android-gms.play-services-measurement-sdk-api.16.4.0.dex.jar;com-google-android-gms.play-services-stats.16.0.1.dex.jar;com-google-android-gms.play-services-tagmanager-v4-impl.16.0.8.dex.jar;com-google-android-gms.play-services-tasks.16.0.1.dex.jar;com-google-android-gms.play-services-wallet.16.0.1.dex.jar;com-google-firebase.firebase-analytics.16.4.0.dex.jar;com-google-firebase.firebase-common.16.1.0.dex.jar;com-google-firebase.firebase-iid-interop.16.0.1.dex.jar;com-google-firebase.firebase-iid.17.1.1.dex.jar;com-google-firebase.firebase-measurement-connector.17.0.1.dex.jar;com-google-firebase.firebase-messaging.17.5.0.dex.jar;fmx.dex.jar;google-play-billing.dex.jar;google-play-licensing.dex.jar</EnabledSysJars>
+        <DCC_UsePackage>rtl;fmx;$(DCC_UsePackage)</DCC_UsePackage>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Android64)'!=''">
-        <VerInfo_Keys>package=com.embarcadero.$(MSBuildProjectName);label=$(MSBuildProjectName);versionCode=1;versionName=1.0.0;persistent=False;restoreAnyVersion=False;installLocation=auto;largeHeap=False;theme=TitleBar;hardwareAccelerated=true;apiKey=</VerInfo_Keys>
-        <BT_BuildType>Debug</BT_BuildType>
-        <Base_Android>true</Base_Android>
-        <CfgParent>Base</CfgParent>
-        <Base>true</Base>
-        <EnabledSysJars>android-support-v4.dex.jar;apk-expansion.dex.jar;cloud-messaging.dex.jar;fmx.dex.jar;google-analytics-v2.dex.jar;google-play-billing.dex.jar;google-play-licensing.dex.jar;google-play-services.dex.jar</EnabledSysJars>
-        <DCC_UsePackage>rtl;$(DCC_UsePackage);$(DCC_UsePackage)</DCC_UsePackage>
         <DCC_CBuilderOutput>None</DCC_CBuilderOutput>
+        <EnabledSysJars>android-support-v4.dex.jar;cloud-messaging.dex.jar;com-google-android-gms.play-services-ads-base.17.2.0.dex.jar;com-google-android-gms.play-services-ads-identifier.16.0.0.dex.jar;com-google-android-gms.play-services-ads-lite.17.2.0.dex.jar;com-google-android-gms.play-services-ads.17.2.0.dex.jar;com-google-android-gms.play-services-analytics-impl.16.0.8.dex.jar;com-google-android-gms.play-services-analytics.16.0.8.dex.jar;com-google-android-gms.play-services-base.16.0.1.dex.jar;com-google-android-gms.play-services-basement.16.2.0.dex.jar;com-google-android-gms.play-services-gass.17.2.0.dex.jar;com-google-android-gms.play-services-identity.16.0.0.dex.jar;com-google-android-gms.play-services-maps.16.1.0.dex.jar;com-google-android-gms.play-services-measurement-base.16.4.0.dex.jar;com-google-android-gms.play-services-measurement-sdk-api.16.4.0.dex.jar;com-google-android-gms.play-services-stats.16.0.1.dex.jar;com-google-android-gms.play-services-tagmanager-v4-impl.16.0.8.dex.jar;com-google-android-gms.play-services-tasks.16.0.1.dex.jar;com-google-android-gms.play-services-wallet.16.0.1.dex.jar;com-google-firebase.firebase-analytics.16.4.0.dex.jar;com-google-firebase.firebase-common.16.1.0.dex.jar;com-google-firebase.firebase-iid-interop.16.0.1.dex.jar;com-google-firebase.firebase-iid.17.1.1.dex.jar;com-google-firebase.firebase-measurement-connector.17.0.1.dex.jar;com-google-firebase.firebase-messaging.17.5.0.dex.jar;fmx.dex.jar;google-play-billing.dex.jar;google-play-licensing.dex.jar</EnabledSysJars>
+        <DCC_UsePackage>rtl;fmx;$(DCC_UsePackage)</DCC_UsePackage>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_iOSDevice32)'!=''">
-        <VerInfo_Keys>CFBundleName=$(MSBuildProjectName);CFBundleDevelopmentRegion=en;CFBundleDisplayName=$(MSBuildProjectName);CFBundleIdentifier=$(MSBuildProjectName);CFBundleInfoDictionaryVersion=7.1;CFBundleVersion=1.0.0.0;CFBundlePackageType=APPL;CFBundleSignature=????;LSRequiresIPhoneOS=true;CFBundleAllowMixedLocalizations=YES;CFBundleExecutable=$(MSBuildProjectName);UIDeviceFamily=iPhone &amp; iPad;CFBundleResourceSpecification=ResourceRules.plist;NSLocationAlwaysUsageDescription=The reason for accessing the location information of the user;NSLocationWhenInUseUsageDescription=The reason for accessing the location information of the user;FMLocalNotificationPermission=false</VerInfo_Keys>
-        <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
-        <DCC_UsePackage>rtl;$(DCC_UsePackage);$(DCC_UsePackage)</DCC_UsePackage>
-        <VerInfo_BundleId>$(MSBuildProjectName)</VerInfo_BundleId>
-        <BT_BuildType>Debug</BT_BuildType>
-        <CfgParent>Base</CfgParent>
-        <Base>true</Base>
-        <VerInfo_UIDeviceFamily>iPhoneAndiPad</VerInfo_UIDeviceFamily>
         <DCC_CBuilderOutput>None</DCC_CBuilderOutput>
-        <Base_iOSDevice>true</Base_iOSDevice>
+        <DCC_UsePackage>rtl;fmx;$(DCC_UsePackage)</DCC_UsePackage>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_iOSDevice64)'!=''">
-        <VerInfo_Keys>CFBundleName=$(MSBuildProjectName);CFBundleDevelopmentRegion=en;CFBundleDisplayName=$(MSBuildProjectName);CFBundleIdentifier=$(MSBuildProjectName);CFBundleInfoDictionaryVersion=7.1;CFBundleVersion=1.0.0.0;CFBundlePackageType=APPL;CFBundleSignature=????;LSRequiresIPhoneOS=true;CFBundleAllowMixedLocalizations=YES;CFBundleExecutable=$(MSBuildProjectName);UIDeviceFamily=iPhone &amp; iPad;CFBundleResourceSpecification=ResourceRules.plist;NSLocationAlwaysUsageDescription=The reason for accessing the location information of the user;NSLocationWhenInUseUsageDescription=The reason for accessing the location information of the user;FMLocalNotificationPermission=false</VerInfo_Keys>
-        <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
-        <DCC_UsePackage>rtl;$(DCC_UsePackage);$(DCC_UsePackage)</DCC_UsePackage>
-        <VerInfo_BundleId>$(MSBuildProjectName)</VerInfo_BundleId>
-        <BT_BuildType>Debug</BT_BuildType>
-        <CfgParent>Base</CfgParent>
-        <Base>true</Base>
-        <VerInfo_UIDeviceFamily>iPhoneAndiPad</VerInfo_UIDeviceFamily>
         <DCC_CBuilderOutput>None</DCC_CBuilderOutput>
-        <Base_iOSDevice>true</Base_iOSDevice>
+        <DCC_UsePackage>rtl;fmx;$(DCC_UsePackage)</DCC_UsePackage>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_iOSSimulator)'!=''">
-        <DCC_UsePackage>rtl;$(DCC_UsePackage)</DCC_UsePackage>
         <DCC_CBuilderOutput>None</DCC_CBuilderOutput>
+        <DCC_UsePackage>rtl;fmx;$(DCC_UsePackage)</DCC_UsePackage>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Base_Linux64)'!=''">
+        <DCC_UsePackage>rtl;$(DCC_UsePackage)</DCC_UsePackage>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_OSX32)'!=''">
-        <DCC_UsePackage>rtl;$(DCC_UsePackage)</DCC_UsePackage>
+        <DCC_UsePackage>rtl;fmx;$(DCC_UsePackage)</DCC_UsePackage>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_OSX64)'!=''">
-        <VerInfo_Keys>CFBundleName=$(MSBuildProjectName);CFBundleDisplayName=$(MSBuildProjectName);CFBundleIdentifier=$(MSBuildProjectName);CFBundleVersion=1.0.0;CFBundleShortVersionString=1.0.0;CFBundlePackageType=APPL;CFBundleSignature=????;CFBundleAllowMixedLocalizations=YES;CFBundleExecutable=$(MSBuildProjectName);NSHighResolutionCapable=true;LSApplicationCategoryType=public.app-category.utilities;NSLocationUsageDescription=The reason for accessing the location information of the user;NSContactsUsageDescription=The reason for accessing the contacts</VerInfo_Keys>
-        <BT_BuildType>Debug</BT_BuildType>
-        <Base_OSX32>true</Base_OSX32>
-        <CfgParent>Base</CfgParent>
-        <Base>true</Base>
-        <DCC_UsePackage>rtl;$(DCC_UsePackage);$(DCC_UsePackage)</DCC_UsePackage>
+        <DCC_UsePackage>rtl;fmx;$(DCC_UsePackage)</DCC_UsePackage>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Win32)'!=''">
-        <DCC_UsePackage>rtl;ocvOpenCV210;ocvOpenCV220;ocvOpenCV300;ocvOpenCV310;$(DCC_UsePackage)</DCC_UsePackage>
-        <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
-        <VerInfo_Locale>1033</VerInfo_Locale>
-        <VerInfo_Keys>CompanyName=;FileVersion=1.0.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductVersion=1.0.0.0;Comments=;ProgramID=com.embarcadero.$(ModuleName);FileDescription=$(ModuleName);ProductName=$(ModuleName)</VerInfo_Keys>
         <DCC_Namespace>Winapi;System.Win;Data.Win;Datasnap.Win;Web.Win;Soap.Win;Xml.Win;Bde;$(DCC_Namespace)</DCC_Namespace>
+        <BT_BuildType>Debug</BT_BuildType>
+        <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
+        <VerInfo_Keys>CompanyName=;FileDescription=$(MSBuildProjectName);FileVersion=1.0.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProgramID=com.embarcadero.$(MSBuildProjectName);ProductName=$(MSBuildProjectName);ProductVersion=1.0.0.0;Comments=</VerInfo_Keys>
+        <VerInfo_Locale>1033</VerInfo_Locale>
+        <DCC_UsePackage>rtl;fmx;rclVCLOpenCV;rclFMXOpenCV;$(DCC_UsePackage)</DCC_UsePackage>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Win64)'!=''">
-        <DCC_UsePackage>rtl;ocvOpenCV210;ocvOpenCV220;ocvOpenCV310;$(DCC_UsePackage)</DCC_UsePackage>
+        <DCC_UsePackage>rtl;fmx;$(DCC_UsePackage)</DCC_UsePackage>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1)'!=''">
         <DCC_Define>DEBUG;$(DCC_Define)</DCC_Define>
@@ -161,9 +144,6 @@
         <DCC_RemoteDebug>true</DCC_RemoteDebug>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1_Win32)'!=''">
-        <DCC_Description>OpenCV FFMPEG component</DCC_Description>
-        <VerInfo_Locale>1033</VerInfo_Locale>
-        <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
         <DCC_RemoteDebug>false</DCC_RemoteDebug>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2)'!=''">
@@ -176,13 +156,15 @@
         <DelphiCompile Include="$(MainSource)">
             <MainSource>MainSource</MainSource>
         </DelphiCompile>
-        <DCCReference Include="dclFFMSource.res"/>
+        <DCCReference Include="FMXOpenCV.res"/>
         <DCCReference Include="designide.dcp"/>
-        <DCCReference Include="dclCommonOpenCV260.dcp"/>
-        <DCCReference Include="..\ocv.comp.RegisterFFM.pas"/>
-        <DCCReference Include="..\ocv.comp.FFMSource.pas"/>
-        <RcCompile Include="..\dclFFMSource.rc">
-            <Form>dclFFMSource.res</Form>
+        <DCCReference Include="rtl.dcp"/>
+        <DCCReference Include="fmx.dcp"/>
+        <DCCReference Include="rclVCLOpenCV.dcp"/>
+        <DCCReference Include="rclFMXOpenCV.dcp"/>
+        <DCCReference Include="..\ocv.comp.RegisterFMX.pas"/>
+        <RcCompile Include="..\FMXOpenCV.rc">
+            <Form>FMXOpenCV.res</Form>
         </RcCompile>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
@@ -202,11 +184,17 @@
         <BorlandProject>
             <Delphi.Personality>
                 <Source>
-                    <Source Name="MainSource">dclFFMSource260.dpk</Source>
+                    <Source Name="MainSource">dclFMXOpenCV.dpk</Source>
                 </Source>
                 <Excluded_Packages>
-                    <Excluded_Packages Name="$(BDSBIN)\dcloffice2k240.bpl">Microsoft Office 2000 Sample Automation Server Wrapper Components</Excluded_Packages>
-                    <Excluded_Packages Name="$(BDSBIN)\dclofficexp240.bpl">Microsoft Office XP Sample Automation Server Wrapper Components</Excluded_Packages>
+                    <Excluded_Packages Name="C:\Users\Public\Documents\Embarcadero\Studio\20.0\Bpl\dclCommonOpenCV260.bpl">OpenCV common component</Excluded_Packages>
+                    <Excluded_Packages Name="C:\Users\Public\Documents\Embarcadero\Studio\20.0\Bpl\dclFMXOpenCV260.bpl">OpenCV FMX component</Excluded_Packages>
+                    <Excluded_Packages Name="C:\Users\Public\Documents\Embarcadero\Studio\20.0\Bpl\dclFFMSource260.bpl">OpenCV FFMPEG component</Excluded_Packages>
+                    <Excluded_Packages Name="C:\Users\Public\Documents\Embarcadero\Studio\20.0\Bpl\dclVCLOpenCV260.bpl">OpenCV VCL component</Excluded_Packages>
+                    <Excluded_Packages Name="$(BDSBIN)\dcloffice2k260.bpl">Microsoft Office 2000 Sample Automation Server Wrapper Components</Excluded_Packages>
+                    <Excluded_Packages Name="$(BDSBIN)\dclofficexp260.bpl">Microsoft Office XP Sample Automation Server Wrapper Components</Excluded_Packages>
+                    <Excluded_Packages Name="$(BDSBIN)\dclFMXtee9260.bpl">TeeChart Lite FMX Components</Excluded_Packages>
+                    <Excluded_Packages Name="$(BDSBIN)\dcltee9260.bpl">TeeChart Standard VCL Components</Excluded_Packages>
                 </Excluded_Packages>
             </Delphi.Personality>
             <Deployment Version="3">
@@ -215,39 +203,19 @@
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile LocalName="C:\Users\Public\Documents\Embarcadero\Studio\20.0\Bpl\dclFFMSource260.bpl" Configuration="Debug" Class="ProjectOutput">
-                    <Platform Name="Win32">
-                        <RemoteName>dclFFMSource260.bpl</RemoteName>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                </DeployFile>
-                <DeployFile LocalName="$(BDS)\Redist\osx64\libcgsqlite3.dylib" Class="DependencyModule">
-                    <Platform Name="OSX64">
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                </DeployFile>
-                <DeployFile LocalName="$(BDS)\Redist\iossimulator\libPCRE.dylib" Class="DependencyModule">
-                    <Platform Name="iOSSimulator">
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                </DeployFile>
-                <DeployFile LocalName="$(BDS)\Redist\iossim32\libcgunwind.1.0.dylib" Class="DependencyModule">
-                    <Platform Name="iOSSimulator">
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                </DeployFile>
                 <DeployFile LocalName="$(BDS)\Redist\iossimulator\libcgunwind.1.0.dylib" Class="DependencyModule">
                     <Platform Name="iOSSimulator">
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile LocalName="$(BDS)\Redist\osx32\libcgsqlite3.dylib" Class="DependencyModule">
-                    <Platform Name="OSX32">
+                <DeployFile LocalName="$(BDS)\Redist\iossimulator\libpcre.dylib" Class="DependencyModule">
+                    <Platform Name="iOSSimulator">
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile LocalName="$(BDS)\Redist\iossimulator\libpcre.dylib" Class="DependencyModule">
-                    <Platform Name="iOSSimulator">
+                <DeployFile LocalName="C:\Users\Public\Documents\Embarcadero\Studio\20.0\Bpl\dclFMXOpenCV.bpl" Configuration="Debug" Class="ProjectOutput">
+                    <Platform Name="Win32">
+                        <RemoteName>dclFMXOpenCV.bpl</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
@@ -311,7 +279,6 @@
                         <Operation>1</Operation>
                     </Platform>
                 </DeployClass>
-                <DeployClass Name="AndroidLibnativeX86File"/>
                 <DeployClass Name="AndroidServiceOutput">
                     <Platform Name="Android">
                         <RemoteDir>library\lib\armeabi-v7a</RemoteDir>
@@ -618,29 +585,7 @@
                         <Operation>0</Operation>
                     </Platform>
                 </DeployClass>
-                <DeployClass Name="iPad_Launch1024">
-                    <Platform Name="iOSDevice32">
-                        <Operation>1</Operation>
-                    </Platform>
-                    <Platform Name="iOSDevice64">
-                        <Operation>1</Operation>
-                    </Platform>
-                    <Platform Name="iOSSimulator">
-                        <Operation>1</Operation>
-                    </Platform>
-                </DeployClass>
                 <DeployClass Name="iPad_Launch1024x768">
-                    <Platform Name="iOSDevice32">
-                        <Operation>1</Operation>
-                    </Platform>
-                    <Platform Name="iOSDevice64">
-                        <Operation>1</Operation>
-                    </Platform>
-                    <Platform Name="iOSSimulator">
-                        <Operation>1</Operation>
-                    </Platform>
-                </DeployClass>
-                <DeployClass Name="iPad_Launch1536">
                     <Platform Name="iOSDevice32">
                         <Operation>1</Operation>
                     </Platform>
@@ -674,17 +619,6 @@
                     </Platform>
                 </DeployClass>
                 <DeployClass Name="iPad_Launch1668x2388">
-                    <Platform Name="iOSDevice32">
-                        <Operation>1</Operation>
-                    </Platform>
-                    <Platform Name="iOSDevice64">
-                        <Operation>1</Operation>
-                    </Platform>
-                    <Platform Name="iOSSimulator">
-                        <Operation>1</Operation>
-                    </Platform>
-                </DeployClass>
-                <DeployClass Name="iPad_Launch2048">
                     <Platform Name="iOSDevice32">
                         <Operation>1</Operation>
                     </Platform>
@@ -740,17 +674,6 @@
                     </Platform>
                 </DeployClass>
                 <DeployClass Name="iPad_Launch2732x2048">
-                    <Platform Name="iOSDevice32">
-                        <Operation>1</Operation>
-                    </Platform>
-                    <Platform Name="iOSDevice64">
-                        <Operation>1</Operation>
-                    </Platform>
-                    <Platform Name="iOSSimulator">
-                        <Operation>1</Operation>
-                    </Platform>
-                </DeployClass>
-                <DeployClass Name="iPad_Launch768">
                     <Platform Name="iOSDevice32">
                         <Operation>1</Operation>
                     </Platform>
@@ -1039,8 +962,8 @@
                 <ProjectRoot Platform="iOSDevice64" Name="$(PROJECTNAME).app"/>
                 <ProjectRoot Platform="Win64" Name="$(PROJECTNAME)"/>
                 <ProjectRoot Platform="iOSDevice32" Name="$(PROJECTNAME).app"/>
-                <ProjectRoot Platform="Win32" Name="$(PROJECTNAME)"/>
                 <ProjectRoot Platform="Linux64" Name="$(PROJECTNAME)"/>
+                <ProjectRoot Platform="Win32" Name="$(PROJECTNAME)"/>
                 <ProjectRoot Platform="OSX32" Name="$(PROJECTNAME)"/>
                 <ProjectRoot Platform="Android" Name="$(PROJECTNAME)"/>
                 <ProjectRoot Platform="OSX64" Name="$(PROJECTNAME)"/>
