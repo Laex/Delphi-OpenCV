@@ -43,7 +43,9 @@ Target platform 64-bit: (2),(4),(6),(8) -> "C:\Windows\System32\"
 Target platform 32-bit: (1),(3),(5),(7) -> "C:\Windows\SysWOW64\"
 ```
 <b>OS Windows 32-bit</b><br>
+```
 Target platform 32-bit: (1),(3),(5),(7) -> "C:\Windows\System32\"
+```
 ### 2. Delphi environment setting
 Download and unzip the [archive][1] or clone repository<br>
 ```
@@ -63,7 +65,7 @@ Get the following directory structure<br>
 	<source3>	- attempt for opencv 3
 	<source4>	- blank for OpenCV 4
 ```
-Run InitDelphiFFMPEG.cmd to initialize the "Delphi-FFMPEG" submodule. The <Delphi-FFMPEG> directory should be populated with sources for "Delphi-FFMPEG".
+Run <b>InitDelphiFFMPEG.cmd<b> to initialize the "Delphi-FFMPEG" submodule. The <Delphi-FFMPEG> directory should be populated with sources for "Delphi-FFMPEG".
 If it didn’t work, then
 ```
 git clone https://github.com/Laex/Delphi-FFMPEG.git
