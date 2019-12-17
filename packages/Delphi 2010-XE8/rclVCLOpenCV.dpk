@@ -25,7 +25,6 @@ package rclVCLOpenCV;
 {$IMAGEBASE $400000}
 {$DEFINE DEBUG}
 {$ENDIF IMPLICITBUILDING}
-{$DESCRIPTION 'OpenCV VCL runtime library'}
 {$RUNONLY}
 {$IMPLICITBUILD ON}
 
@@ -35,23 +34,23 @@ requires
   rtpFFMPEG;
 
 contains
-  ocv.calib3d_c in '..\..\ocv.calib3d_c.pas',
-  ocv.compat in '..\..\ocv.compat.pas',
-  ocv.core.types_c in '..\..\ocv.core.types_c.pas',
-  ocv.core_c in '..\..\ocv.core_c.pas',
-  ocv.editor in '..\..\ocv.editor.pas',
-  ocv.haar in '..\..\ocv.haar.pas',
-  ocv.highgui_c in '..\..\ocv.highgui_c.pas',
-  ocv.imgproc.types_c in '..\..\ocv.imgproc.types_c.pas',
-  ocv.imgproc_c in '..\..\ocv.imgproc_c.pas',
-  ocv.legacy in '..\..\ocv.legacy.pas',
-  ocv.lib in '..\..\ocv.lib.pas',
-  ocv.lock in '..\..\ocv.lock.pas',
-  ocv.nonfree in '..\..\ocv.nonfree.pas',
-  ocv.objdetect_c in '..\..\ocv.objdetect_c.pas',
-  ocv.photo_c in '..\..\ocv.photo_c.pas',
-  ocv.tracking_c in '..\..\ocv.tracking_c.pas',
-  ocv.utils in '..\..\ocv.utils.pas',
+  ocv.calib3d_c in '..\ocv.calib3d_c.pas',
+  ocv.compat in '..\ocv.compat.pas',
+  ocv.core.types_c in '..\ocv.core.types_c.pas',
+  ocv.core_c in '..\ocv.core_c.pas',
+  ocv.editor in '..\ocv.editor.pas',
+  ocv.haar in '..\ocv.haar.pas',
+  ocv.highgui_c in '..\ocv.highgui_c.pas',
+  ocv.imgproc.types_c in '..\ocv.imgproc.types_c.pas',
+  ocv.imgproc_c in '..\ocv.imgproc_c.pas',
+  ocv.legacy in '..\ocv.legacy.pas',
+  ocv.lib in '..\ocv.lib.pas',
+  ocv.lock in '..\ocv.lock.pas',
+  ocv.nonfree in '..\ocv.nonfree.pas',
+  ocv.objdetect_c in '..\ocv.objdetect_c.pas',
+  ocv.photo_c in '..\ocv.photo_c.pas',
+  ocv.tracking_c in '..\ocv.tracking_c.pas',
+  ocv.utils in '..\ocv.utils.pas',
   ocv.comp.ImageOperation in '..\ocv.comp.ImageOperation.pas',
   ocv.comp.proc in '..\ocv.comp.proc.pas',
   ocv.comp.Source in '..\ocv.comp.Source.pas',

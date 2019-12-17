@@ -26,8 +26,8 @@ package dclFMXOpenCV;
 {$IMAGEBASE $400000}
 {$DEFINE DEBUG}
 {$ENDIF IMPLICITBUILDING}
-{$DESCRIPTION 'OpenCV FMX designtime component'}
 {$IMPLICITBUILD ON}
+{$DESCRIPTION 'OpenCV FMX designtime component'}
 
 requires
   designide,

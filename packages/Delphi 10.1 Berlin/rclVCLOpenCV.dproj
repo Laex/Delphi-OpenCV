@@ -65,7 +65,7 @@
         <VerInfo_Locale>1033</VerInfo_Locale>
         <VerInfo_Keys>CompanyName=;FileDescription=$(MSBuildProjectName);FileVersion=1.0.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductName=$(MSBuildProjectName);ProductVersion=1.0.0.0;Comments=;ProgramID=com.embarcadero.$(ModuleName)</VerInfo_Keys>
         <BT_BuildType>Debug</BT_BuildType>
-        <DCC_Namespace>Winapi;System.Win;Data.Win;Datasnap.Win;Web.Win;Soap.Win;Xml.Win;Bde;$(DCC_Namespace)</DCC_Namespace>
+        <DCC_Namespace>System.Win;Data.Win;Datasnap.Win;Web.Win;Soap.Win;Xml.Win;Bde;$(DCC_Namespace)</DCC_Namespace>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1)'!=''">
         <DCC_Define>RELEASE;$(DCC_Define)</DCC_Define>
@@ -88,33 +88,30 @@
         <DCCReference Include="rtl.dcp"/>
         <DCCReference Include="vcl.dcp"/>
         <DCCReference Include="rtpFFMPEG.dcp"/>
-        <DCCReference Include="..\..\ocv.calib3d_c.pas"/>
-        <DCCReference Include="..\..\ocv.compat.pas"/>
-        <DCCReference Include="..\..\ocv.core.types_c.pas"/>
-        <DCCReference Include="..\..\ocv.core_c.pas"/>
-        <DCCReference Include="..\..\ocv.editor.pas"/>
-        <DCCReference Include="..\..\ocv.haar.pas"/>
-        <DCCReference Include="..\..\ocv.highgui_c.pas"/>
-        <DCCReference Include="..\..\ocv.imgproc.types_c.pas"/>
-        <DCCReference Include="..\..\ocv.imgproc_c.pas"/>
-        <DCCReference Include="..\..\ocv.legacy.pas"/>
-        <DCCReference Include="..\..\ocv.lib.pas"/>
-        <DCCReference Include="..\..\ocv.lock.pas"/>
-        <DCCReference Include="..\..\ocv.nonfree.pas"/>
-        <DCCReference Include="..\..\ocv.objdetect_c.pas"/>
-        <DCCReference Include="..\..\ocv.photo_c.pas"/>
-        <DCCReference Include="..\..\ocv.tracking_c.pas"/>
-        <DCCReference Include="..\..\ocv.utils.pas"/>
+        <DCCReference Include="..\..\source\ocv.calib3d_c.pas"/>
+        <DCCReference Include="..\..\source\ocv.compat.pas"/>
+        <DCCReference Include="..\..\source\ocv.core.types_c.pas"/>
+        <DCCReference Include="..\..\source\ocv.core_c.pas"/>
+        <DCCReference Include="..\..\source\ocv.editor.pas"/>
+        <DCCReference Include="..\..\source\ocv.haar.pas"/>
+        <DCCReference Include="..\..\source\ocv.highgui_c.pas"/>
+        <DCCReference Include="..\..\source\ocv.imgproc.types_c.pas"/>
+        <DCCReference Include="..\..\source\ocv.imgproc_c.pas"/>
+        <DCCReference Include="..\..\source\ocv.legacy.pas"/>
+        <DCCReference Include="..\..\source\ocv.lib.pas"/>
+        <DCCReference Include="..\..\source\ocv.lock.pas"/>
+        <DCCReference Include="..\..\source\ocv.nonfree.pas"/>
+        <DCCReference Include="..\..\source\ocv.objdetect_c.pas"/>
+        <DCCReference Include="..\..\source\ocv.photo_c.pas"/>
+        <DCCReference Include="..\..\source\ocv.tracking_c.pas"/>
+        <DCCReference Include="..\..\source\ocv.utils.pas"/>
+        <DCCReference Include="..\ocv.comp.FFMSource.pas"/>
         <DCCReference Include="..\ocv.comp.ImageOperation.pas"/>
         <DCCReference Include="..\ocv.comp.proc.pas"/>
         <DCCReference Include="..\ocv.comp.Source.pas"/>
         <DCCReference Include="..\ocv.comp.Types.pas"/>
         <DCCReference Include="..\ocv.comp.VideoWriter.pas"/>
         <DCCReference Include="..\ocv.comp.View.pas"/>
-        <DCCReference Include="..\ocv.comp.FFMSource.pas"/>
-        <RcCompile Include="..\..\..\resource\facedetectxml\haarcascade.rc">
-            <Form>haarcascade.res</Form>
-        </RcCompile>
         <BuildConfiguration Include="Debug">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

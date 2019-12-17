@@ -36,6 +36,6 @@ requires
 
 contains
   ocv.comp.ViewFMX in '..\ocv.comp.ViewFMX.pas',
-  ocv.fmxutils in '..\..\ocv.fmxutils.pas';
+  ocv.fmxutils in '..\..\source\ocv.fmxutils.pas';
 
 end.

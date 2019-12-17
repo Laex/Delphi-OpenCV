@@ -61,7 +61,7 @@
         <BT_BuildType>Debug</BT_BuildType>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Win32)'!=''">
-        <DCC_Namespace>Winapi;System.Win;Data.Win;Datasnap.Win;Web.Win;Soap.Win;Xml.Win;Bde;$(DCC_Namespace)</DCC_Namespace>
+        <DCC_Namespace>System.Win;Data.Win;Datasnap.Win;Web.Win;Soap.Win;Xml.Win;Bde;$(DCC_Namespace)</DCC_Namespace>
         <VerInfo_Locale>1033</VerInfo_Locale>
         <VerInfo_Keys>CompanyName=;FileDescription=;FileVersion=1.0.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductName=;ProductVersion=1.0.0.0;Comments=</VerInfo_Keys>
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
@@ -87,31 +87,31 @@
         <DCCReference Include="rtl.dcp"/>
         <DCCReference Include="vcl.dcp"/>
         <DCCReference Include="rtpFFMPEG.dcp"/>
-        <DCCReference Include="..\..\ocv.calib3d_c.pas"/>
-        <DCCReference Include="..\..\ocv.compat.pas"/>
-        <DCCReference Include="..\..\ocv.core.types_c.pas"/>
-        <DCCReference Include="..\..\ocv.core_c.pas"/>
-        <DCCReference Include="..\..\ocv.editor.pas"/>
-        <DCCReference Include="..\..\ocv.haar.pas"/>
-        <DCCReference Include="..\..\ocv.highgui_c.pas"/>
-        <DCCReference Include="..\..\ocv.imgproc.types_c.pas"/>
-        <DCCReference Include="..\..\ocv.imgproc_c.pas"/>
-        <DCCReference Include="..\..\ocv.legacy.pas"/>
-        <DCCReference Include="..\..\ocv.lib.pas"/>
-        <DCCReference Include="..\..\ocv.lock.pas"/>
-        <DCCReference Include="..\..\ocv.nonfree.pas"/>
-        <DCCReference Include="..\..\ocv.objdetect_c.pas"/>
-        <DCCReference Include="..\..\ocv.photo_c.pas"/>
-        <DCCReference Include="..\..\ocv.tracking_c.pas"/>
-        <DCCReference Include="..\..\ocv.utils.pas"/>
+        <DCCReference Include="..\..\source\ocv.calib3d_c.pas"/>
+        <DCCReference Include="..\..\source\ocv.compat.pas"/>
+        <DCCReference Include="..\..\source\ocv.core.types_c.pas"/>
+        <DCCReference Include="..\..\source\ocv.core_c.pas"/>
+        <DCCReference Include="..\..\source\ocv.editor.pas"/>
+        <DCCReference Include="..\..\source\ocv.haar.pas"/>
+        <DCCReference Include="..\..\source\ocv.highgui_c.pas"/>
+        <DCCReference Include="..\..\source\ocv.imgproc.types_c.pas"/>
+        <DCCReference Include="..\..\source\ocv.imgproc_c.pas"/>
+        <DCCReference Include="..\..\source\ocv.legacy.pas"/>
+        <DCCReference Include="..\..\source\ocv.lib.pas"/>
+        <DCCReference Include="..\..\source\ocv.lock.pas"/>
+        <DCCReference Include="..\..\source\ocv.nonfree.pas"/>
+        <DCCReference Include="..\..\source\ocv.objdetect_c.pas"/>
+        <DCCReference Include="..\..\source\ocv.photo_c.pas"/>
+        <DCCReference Include="..\..\source\ocv.tracking_c.pas"/>
+        <DCCReference Include="..\..\source\ocv.utils.pas"/>
+        <DCCReference Include="..\ocv.comp.FFMSource.pas"/>
         <DCCReference Include="..\ocv.comp.ImageOperation.pas"/>
         <DCCReference Include="..\ocv.comp.proc.pas"/>
         <DCCReference Include="..\ocv.comp.Source.pas"/>
         <DCCReference Include="..\ocv.comp.Types.pas"/>
         <DCCReference Include="..\ocv.comp.VideoWriter.pas"/>
         <DCCReference Include="..\ocv.comp.View.pas"/>
-        <DCCReference Include="..\ocv.comp.FFMSource.pas"/>
-        <RcCompile Include="..\..\..\resource\facedetectxml\haarcascade.rc">
+        <RcCompile Include="..\..\resource\facedetectxml\haarcascade.rc">
             <Form>haarcascade.res</Form>
         </RcCompile>
         <BuildConfiguration Include="Debug">
@@ -150,16 +150,7 @@
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployClass Name="DependencyModule">
-                    <Platform Name="Win32">
-                        <Operation>0</Operation>
-                        <Extensions>.dll;.bpl</Extensions>
-                    </Platform>
-                    <Platform Name="OSX32">
-                        <Operation>1</Operation>
-                        <Extensions>.dylib</Extensions>
-                    </Platform>
-                </DeployClass>
+                <DeployClass Name="ProjectiOSDeviceResourceRules"/>
                 <DeployClass Name="ProjectOSXResource">
                     <Platform Name="OSX32">
                         <RemoteDir>Contents\Resources</RemoteDir>
@@ -473,7 +464,16 @@
                         <Operation>1</Operation>
                     </Platform>
                 </DeployClass>
-                <DeployClass Name="ProjectiOSDeviceResourceRules"/>
+                <DeployClass Name="DependencyModule">
+                    <Platform Name="Win32">
+                        <Operation>0</Operation>
+                        <Extensions>.dll;.bpl</Extensions>
+                    </Platform>
+                    <Platform Name="OSX32">
+                        <Operation>1</Operation>
+                        <Extensions>.dylib</Extensions>
+                    </Platform>
+                </DeployClass>
                 <ProjectRoot Platform="iOSDevice64" Name="$(PROJECTNAME).app"/>
                 <ProjectRoot Platform="Win64" Name="$(PROJECTNAME)"/>
                 <ProjectRoot Platform="iOSDevice32" Name="$(PROJECTNAME).app"/>

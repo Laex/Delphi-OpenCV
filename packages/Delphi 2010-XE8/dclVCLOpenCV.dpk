@@ -26,8 +26,8 @@ package dclVCLOpenCV;
 {$IMAGEBASE $400000}
 {$DEFINE DEBUG}
 {$ENDIF IMPLICITBUILDING}
-{$DESCRIPTION 'OpenCV VCL designtime component'}
 {$IMPLICITBUILD ON}
+{$DESCRIPTION 'OpenCV VCL designtime component'}
 
 requires
   designide,
