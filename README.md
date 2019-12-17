@@ -65,7 +65,7 @@ Get the following directory structure<br>
 	<source3>	- attempt for opencv 3
 	<source4>	- blank for OpenCV 4
 ```
-Run <b>InitDelphiFFMPEG.cmd<b> to initialize the "Delphi-FFMPEG" submodule. The <Delphi-FFMPEG> directory should be populated with sources for "Delphi-FFMPEG".
+Run <b>InitDelphiFFMPEG.cmd</b> to initialize the <b>Delphi-FFMPEG</b> submodule. The <b><Delphi-FFMPEG></b> directory should be populated with sources for <b>Delphi-FFMPEG</b>.
 If it didn’t work, then
 ```
 git clone https://github.com/Laex/Delphi-FFMPEG.git
