@@ -1,0 +1,63 @@
+package rclVCLOpenCV;
+
+{$R *.res}
+{$IFDEF IMPLICITBUILDING This IFDEF should not be used by users}
+{$ALIGN 8}
+{$ASSERTIONS ON}
+{$BOOLEVAL OFF}
+{$DEBUGINFO OFF}
+{$EXTENDEDSYNTAX ON}
+{$IMPORTEDDATA ON}
+{$IOCHECKS ON}
+{$LOCALSYMBOLS ON}
+{$LONGSTRINGS ON}
+{$OPENSTRINGS ON}
+{$OPTIMIZATION OFF}
+{$OVERFLOWCHECKS OFF}
+{$RANGECHECKS OFF}
+{$REFERENCEINFO ON}
+{$SAFEDIVIDE OFF}
+{$STACKFRAMES ON}
+{$TYPEDADDRESS OFF}
+{$VARSTRINGCHECKS ON}
+{$WRITEABLECONST OFF}
+{$MINENUMSIZE 1}
+{$IMAGEBASE $400000}
+{$DEFINE DEBUG}
+{$ENDIF IMPLICITBUILDING}
+{$DESCRIPTION 'OpenCV VCL runtime library'}
+{$RUNONLY}
+{$IMPLICITBUILD ON}
+
+requires
+  rtl,
+  vcl,
+  rtpFFMPEG;
+
+contains
+  ocv.calib3d_c in '..\..\ocv.calib3d_c.pas',
+  ocv.compat in '..\..\ocv.compat.pas',
+  ocv.core.types_c in '..\..\ocv.core.types_c.pas',
+  ocv.core_c in '..\..\ocv.core_c.pas',
+  ocv.editor in '..\..\ocv.editor.pas',
+  ocv.haar in '..\..\ocv.haar.pas',
+  ocv.highgui_c in '..\..\ocv.highgui_c.pas',
+  ocv.imgproc.types_c in '..\..\ocv.imgproc.types_c.pas',
+  ocv.imgproc_c in '..\..\ocv.imgproc_c.pas',
+  ocv.legacy in '..\..\ocv.legacy.pas',
+  ocv.lib in '..\..\ocv.lib.pas',
+  ocv.lock in '..\..\ocv.lock.pas',
+  ocv.nonfree in '..\..\ocv.nonfree.pas',
+  ocv.objdetect_c in '..\..\ocv.objdetect_c.pas',
+  ocv.photo_c in '..\..\ocv.photo_c.pas',
+  ocv.tracking_c in '..\..\ocv.tracking_c.pas',
+  ocv.utils in '..\..\ocv.utils.pas',
+  ocv.comp.ImageOperation in '..\ocv.comp.ImageOperation.pas',
+  ocv.comp.proc in '..\ocv.comp.proc.pas',
+  ocv.comp.Source in '..\ocv.comp.Source.pas',
+  ocv.comp.Types in '..\ocv.comp.Types.pas',
+  ocv.comp.VideoWriter in '..\ocv.comp.VideoWriter.pas',
+  ocv.comp.View in '..\ocv.comp.View.pas',
+  ocv.comp.FFMSource in '..\ocv.comp.FFMSource.pas';
+
+end.

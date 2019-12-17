@@ -1,0 +1,84 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{B1BE231E-122D-4633-BC03-5788AEDED43E}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="rtpFFMPEG.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="rclFMXOpenCV.dproj">
+            <Dependencies>rtpFFMPEG.dproj</Dependencies>
+        </Projects>
+        <Projects Include="rclVCLOpenCV.dproj">
+            <Dependencies>rclFMXOpenCV.dproj</Dependencies>
+        </Projects>
+        <Projects Include="dclVCLOpenCV.dproj">
+            <Dependencies>rclVCLOpenCV.dproj</Dependencies>
+        </Projects>
+        <Projects Include="dclFMXOpenCV.dproj">
+            <Dependencies>dclVCLOpenCV.dproj</Dependencies>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="rtpFFMPEG">
+        <MSBuild Projects="rtpFFMPEG.dproj"/>
+    </Target>
+    <Target Name="rtpFFMPEG:Clean">
+        <MSBuild Projects="rtpFFMPEG.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="rtpFFMPEG:Make">
+        <MSBuild Projects="rtpFFMPEG.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="rclFMXOpenCV" DependsOnTargets="rtpFFMPEG">
+        <MSBuild Projects="rclFMXOpenCV.dproj"/>
+    </Target>
+    <Target Name="rclFMXOpenCV:Clean" DependsOnTargets="rtpFFMPEG:Clean">
+        <MSBuild Projects="rclFMXOpenCV.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="rclFMXOpenCV:Make" DependsOnTargets="rtpFFMPEG:Make">
+        <MSBuild Projects="rclFMXOpenCV.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="rclVCLOpenCV" DependsOnTargets="rclFMXOpenCV">
+        <MSBuild Projects="rclVCLOpenCV.dproj"/>
+    </Target>
+    <Target Name="rclVCLOpenCV:Clean" DependsOnTargets="rclFMXOpenCV:Clean">
+        <MSBuild Projects="rclVCLOpenCV.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="rclVCLOpenCV:Make" DependsOnTargets="rclFMXOpenCV:Make">
+        <MSBuild Projects="rclVCLOpenCV.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="dclVCLOpenCV" DependsOnTargets="rclVCLOpenCV">
+        <MSBuild Projects="dclVCLOpenCV.dproj"/>
+    </Target>
+    <Target Name="dclVCLOpenCV:Clean" DependsOnTargets="rclVCLOpenCV:Clean">
+        <MSBuild Projects="dclVCLOpenCV.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="dclVCLOpenCV:Make" DependsOnTargets="rclVCLOpenCV:Make">
+        <MSBuild Projects="dclVCLOpenCV.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="dclFMXOpenCV" DependsOnTargets="dclVCLOpenCV">
+        <MSBuild Projects="dclFMXOpenCV.dproj"/>
+    </Target>
+    <Target Name="dclFMXOpenCV:Clean" DependsOnTargets="dclVCLOpenCV:Clean">
+        <MSBuild Projects="dclFMXOpenCV.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="dclFMXOpenCV:Make" DependsOnTargets="dclVCLOpenCV:Make">
+        <MSBuild Projects="dclFMXOpenCV.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="rtpFFMPEG;rclFMXOpenCV;rclVCLOpenCV;dclVCLOpenCV;dclFMXOpenCV"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="rtpFFMPEG:Clean;rclFMXOpenCV:Clean;rclVCLOpenCV:Clean;dclVCLOpenCV:Clean;dclFMXOpenCV:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="rtpFFMPEG:Make;rclFMXOpenCV:Make;rclVCLOpenCV:Make;dclVCLOpenCV:Make;dclFMXOpenCV:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>
