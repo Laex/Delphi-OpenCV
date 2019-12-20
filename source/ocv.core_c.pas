@@ -2675,10 +2675,13 @@ asm
   pop     ecx       // чистим стек
   mov     ecx, edx   // сохраняем младшую часть результата _cvGetSize
   pop     edx       // восстанавливаем Result
+{$IFDEF FPC}
+  mov     DWORD PTR [ebp-$08],eax
+  mov     DWORD PTR [ebp-$04],ecx
+{$ELSE}
   mov     Result.width, eax
-//  mov     DWORD PTR [ebp-$08],eax
   mov     Result.height, ecx
-//  mov     DWORD PTR [ebp-$04],ecx
+{$ENDIF FPC}
 end;
 {$ENDIF CPU32}
 {$IFDEF CPU64}

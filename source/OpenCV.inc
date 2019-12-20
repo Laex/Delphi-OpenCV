@@ -538,6 +538,7 @@
 { Set FreePascal to Delphi mode }
 {$IFDEF FPC}
   {$mode objfpc}
+//  {$MODE DELPHI}
   {$H+}
   {$modeswitch ADVANCEDRECORDS}
   {$DEFINE CPUASM}

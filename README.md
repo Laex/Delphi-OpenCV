@@ -22,9 +22,9 @@ or from the repository (Delphi-OpenCV\redist\ffmpeg):
 (4) FFmpeg 64-bit Shared "\x64"
 ```
 * Dynamic library OpenCV need to download [here][4]<br>
-Files: *2413.dll and *2413d.dll
-```
+Files: *2413.dll and *2413d.dll<br>
 After installing OpenCV:
+```
 (5) 32-bit in the C:\OpenCV\build\x86\vc14\bin\*.dll
 (6) 64-bit in the C:\OpenCV\build\x64\vc14\bin\*.dll
 ```
@@ -35,17 +35,7 @@ or from the repository (Delphi-OpenCV\redist\SDL\1.2 and \2.0):
 (8) 64-bit - SDL.dll and SDL2.dll "\x64"
 ```
 # How to install:
-## 1. Copy dynamic libraries files
-<b>OS Windows 64-bit</b><br>
-```
-Target platform 64-bit: (2),(4),(6),(8) -> "C:\Windows\System32\"
-Target platform 32-bit: (1),(3),(5),(7) -> "C:\Windows\SysWOW64\"
-```
-<b>OS Windows 32-bit</b><br>
-```
-Target platform 32-bit: (1),(3),(5),(7) -> "C:\Windows\System32\"
-```
-## 2. Delphi environment setting
+## 1. Delphi environment setting
 Download and unzip the [archive][1] or clone repository<br>
 ```
 git clone https://github.com/Laex/Delphi-OpenCV.git
@@ -83,6 +73,17 @@ Add the search path for the modules of the project in Delphi IDE<br>
 <PROJECT_ROOT>\Delphi-FFMPEG\source
 ```
 where ```<PROJECT_ROOT>``` directory, which was unzipped (or cloned) repository.<br>
+## 2. Copy dynamic libraries files
+<b>OS Windows 64-bit</b><br>
+```
+Target platform 64-bit: (2),(4),(6),(8) -> "C:\Windows\System32\"
+Target platform 32-bit: (1),(3),(5),(7) -> "C:\Windows\SysWOW64\"
+```
+<b>OS Windows 32-bit</b><br>
+```
+Target platform 32-bit: (1),(3),(5),(7) -> "C:\Windows\System32\"
+```
+<b>Alternatively</b>, dynamic libraries can be placed next to an executable file.
 ## 3. Verify that the environment is configured correctly
 Run from the repository
 ```
