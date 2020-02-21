@@ -27,6 +27,7 @@ package rclFMXOpenCV;
 {$ENDIF IMPLICITBUILDING}
 {$RUNONLY}
 {$IMPLICITBUILD ON}
+{$DESCRIPTION 'OpenCV FMX runtime library'}
 
 requires
   rtl,
