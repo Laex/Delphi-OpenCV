@@ -240,7 +240,7 @@ begin
   if (csDesigning in ComponentState) then
   begin
     Canvas.Stroke.Thickness := 1;
-    Canvas.Stroke.Kind := TBrushKind.bkSolid;
+    Canvas.Stroke.Kind := TBrushKind.{$IFDEF DELPHI28_UP}Solid{$ELSE}bkSolid{$ENDIF};
     Canvas.Stroke.Color := TAlphaColorRec.Black;
     Canvas.DrawRect(RectF(0, 0, Width, Height), 0, 0, AllCorners, 1);
   end
