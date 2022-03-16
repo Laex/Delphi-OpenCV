@@ -116,8 +116,8 @@ procedure cvCalcCovarMatrixEx(nObjects: Integer; input: pointer; ioFlags: Intege
   float* eigVals );
 *)
 {$EXTERNALSYM cvCalcEigenObjects}
-procedure cvCalcEigenObjects(nObjects: Integer; input: pointer; output: pointer; ioFlags: Integer; ioBufSize: Integer; userData: pointer;
-  calcLimit: pCvTermCriteria; avg: pIplImage; eigVals: pFloat); cdecl;
+procedure cvCalcEigenObjects(nObjects: Integer; input: pointer; output: pointer; ioFlags: Integer; ioBufSize: Integer; userData: pointer; calcLimit: pCvTermCriteria;
+  avg: pIplImage; eigVals: pFloat); cdecl;
 
 (* Calculates dot product (obj - avg) * eigObj (i.e. projects image to eigen vector)
 
@@ -388,8 +388,8 @@ procedure cvCreateHandMask(var hand_points: TCvSeq; var img_mask: TIplImage; var
   CvMemStorage* storage, CvSeq **numbers);
 *)
 {$EXTERNALSYM cvFindHandRegion}
-procedure cvFindHandRegion(var points: TCvPoint3D32f; count: Integer; var indexs: TCvSeq; var line: Single; size: TCvSize2D32f; flag: Integer;
-  var center: TCvPoint3D32f; var storage: TCvMemStorage; var numbers: pCvSeq); cdecl;
+procedure cvFindHandRegion(var points: TCvPoint3D32f; count: Integer; var indexs: TCvSeq; var line: Single; size: TCvSize2D32f; flag: Integer; var center: TCvPoint3D32f;
+  var storage: TCvMemStorage; var numbers: pCvSeq); cdecl;
 
 (* Finds hand region in range image data (advanced version)
 
@@ -400,8 +400,8 @@ procedure cvFindHandRegion(var points: TCvPoint3D32f; count: Integer; var indexs
   CvMemStorage* storage, CvSeq **numbers);
 *)
 {$EXTERNALSYM cvFindHandRegionA}
-procedure cvFindHandRegionA(var points: TCvPoint3D32f; count: Integer; var indexs: TCvSeq; var line: Single; size: TCvSize2D32f; jc: Integer;
-  var center: TCvPoint3D32f; var storage: TCvMemStorage; var numbers: pCvSeq); cdecl;
+procedure cvFindHandRegionA(var points: TCvPoint3D32f; count: Integer; var indexs: TCvSeq; var line: Single; size: TCvSize2D32f; jc: Integer; var center: TCvPoint3D32f;
+  var storage: TCvMemStorage; var numbers: pCvSeq); cdecl;
 
 (* Calculates the cooficients of the homography matrix
 
@@ -464,8 +464,8 @@ const
     double parameter4 CV_DEFAULT(0));
   *)
 
-function cvFindDominantPoints(contour: pCvSeq; storage: pCvMemStorage; method: Integer = CV_DOMINANT_IPAN; parameter1: double = 0; parameter2: double = 0;
-  parameter3: double = 0; parameter4: double = 0): pCvSeq; cdecl;
+function cvFindDominantPoints(contour: pCvSeq; storage: pCvMemStorage; method: Integer = CV_DOMINANT_IPAN; parameter1: double = 0; parameter2: double = 0; parameter3: double = 0;
+  parameter4: double = 0): pCvSeq; cdecl;
 
 (* *************************************************************************************** *)
 //
@@ -1043,8 +1043,8 @@ const
     int coeff_usage, CvSize  win,
     CvTermCriteria criteria, int calc_gradient CV_DEFAULT(1));
   }
-procedure cvSnakeImage(const image: pIplImage; points: pCvPointArray; length: Integer; alpha: PSingle; beta: PSingle; gamma: PSingle; coeff_usage: Integer;
-  win: TCvSize; criteria: TCvTermCriteria; calc_gradient: Integer = 1); cdecl;
+procedure cvSnakeImage(const image: pIplImage; points: pCvPointArray; length: Integer; alpha: PSingle; beta: PSingle; gamma: PSingle; coeff_usage: Integer; win: TCvSize;
+  criteria: TCvTermCriteria; calc_gradient: Integer = 1); cdecl;
 
 (* ***************************************************************************************\
   // *                                    Texture Descriptors                                 *
@@ -3165,8 +3165,7 @@ Type
   // CvMemStorage* storage, CvSeq** comp,
   // int level, double threshold1,
   // double threshold2 );
-procedure cvPyrSegmentation(src: pIplImage; dst: pIplImage; storage: pCvMemStorage;
-  var comp: pCvSeq; level: Integer; threshold1: double; threshold2: double); cdecl;
+procedure cvPyrSegmentation(src: pIplImage; dst: pIplImage; storage: pCvMemStorage; var comp: pCvSeq; level: Integer; threshold1: double; threshold2: double); cdecl;
 
 (* ***************************************************************************************\
   // *                              Planar subdivisions                                       *
@@ -3514,7 +3513,7 @@ const
 Type
 
   ppCvBGStatModel = ^pCvBGStatModel;
-  pCvBGStatModel = ^TCvBGStatModel;
+  pCvBGStatModel  = ^TCvBGStatModel;
 
   // typedef void (CV_CDECL * CvReleaseBGStatModel)( struct CvBGStatModel** bg_model );
   TCvReleaseBGStatModel = procedure(
@@ -3785,15 +3784,14 @@ function cvCreateBGCodeBookModel: pCvBGCodeBookModel; cdecl;
 // CVAPI(void) cvReleaseBGCodeBookModel( CvBGCodeBookModel** model );
 procedure cvReleaseBGCodeBookModel(model: pCvBGCodeBookModel); cdecl;
 // CVAPI(void) cvBGCodeBookUpdate( CvBGCodeBookModel* model, const CvArr* image, CvRect roi CV_DEFAULT(cvRect(0,0,0,0)),const CvArr* mask CV_DEFAULT(0) );
-procedure cvBGCodeBookUpdate(model: pCvBGCodeBookModel; const image: pIplImage; roi: TCvRect { =CV_DEFAULT(cvRect(0,0,0,0)) };
-  const mask: pCvArr { =0 } ); cdecl;
+procedure cvBGCodeBookUpdate(model: pCvBGCodeBookModel; const image: pIplImage; roi: TCvRect { =CV_DEFAULT(cvRect(0,0,0,0)) }; const mask: pCvArr { =0 } ); cdecl;
 // CVAPI(int) cvBGCodeBookDiff( const CvBGCodeBookModel* model, const CvArr* image, CvArr* fgmask, CvRect roi CV_DEFAULT(cvRect(0,0,0,0)) );
 function cvBGCodeBookDiff(const model: pCvBGCodeBookModel; const image: pCvArr; fgmask: pCvArr; roi: TCvRect { = cvRect(0,0,0,0) } ): Integer; cdecl;
 // CVAPI(void) cvBGCodeBookClearStale( CvBGCodeBookModel* model, int staleThresh, CvRect roi CV_DEFAULT(cvRect(0,0,0,0)), const CvArr* mask CV_DEFAULT(0) );
 procedure cvBGCodeBookClearStale(model: pCvBGCodeBookModel; staleThresh: Integer; roi: TCvRect { =cvRect(0,0,0,0) }; const mask: pCvArr = nil); cdecl;
 // CVAPI(CvSeq*) cvSegmentFGMask( CvArr *fgmask, int poly1Hull0 CV_DEFAULT(1), float perimScale CV_DEFAULT(4.f), CvMemStorage* storage CV_DEFAULT(0), CvPoint offset CV_DEFAULT(cvPoint(0,0)));
-function cvSegmentFGMask(fgmask: pCvArr; poly1Hull0: Integer { =1 }; perimScale: Single { = 4 }; storage: pCvMemStorage { =nil };
-  offset: TCvPoint { =cvPoint(0,0) } ): pCvSeq; cdecl;
+function cvSegmentFGMask(fgmask: pCvArr; poly1Hull0: Integer { =1 }; perimScale: Single { = 4 }; storage: pCvMemStorage { =nil }; offset: TCvPoint { =cvPoint(0,0) } )
+  : pCvSeq; cdecl;
 
 const
   CV_UNDEF_SC_PARAM        = 12345; // default value of parameters
@@ -3835,9 +3833,8 @@ const
     double  param4 CV_DEFAULT(CV_UNDEF_SC_PARAM),
     double  param5 CV_DEFAULT(CV_UNDEF_SC_PARAM) );
   *)
-procedure cvFindStereoCorrespondence(const leftImage: pCvArr; const rightImage: pCvArr; mode: Integer; dispImage: pCvArr; maxDisparity: Integer;
-  param1: double = CV_UNDEF_SC_PARAM; param2: double = CV_UNDEF_SC_PARAM; param3: double = CV_UNDEF_SC_PARAM; param4: double = CV_UNDEF_SC_PARAM;
-  param5: double = CV_UNDEF_SC_PARAM); cdecl;
+procedure cvFindStereoCorrespondence(const leftImage: pCvArr; const rightImage: pCvArr; mode: Integer; dispImage: pCvArr; maxDisparity: Integer; param1: double = CV_UNDEF_SC_PARAM;
+  param2: double = CV_UNDEF_SC_PARAM; param3: double = CV_UNDEF_SC_PARAM; param4: double = CV_UNDEF_SC_PARAM; param5: double = CV_UNDEF_SC_PARAM); cdecl;
 
 (*
   ***************************************************************************************
@@ -3906,8 +3903,7 @@ Type
     CvPoint2D32f* warpPoint,
     int direction);
   *)
-function icvConvertWarpCoordinates(coeffs: TicvConvertWarpCoordinatesCoeff; cameraPoint: pCvPoint2D32f; warpPoint: pCvPoint2D32f; direction: Integer)
-  : Integer; cdecl;
+function icvConvertWarpCoordinates(coeffs: TicvConvertWarpCoordinatesCoeff; cameraPoint: pCvPoint2D32f; warpPoint: pCvPoint2D32f; direction: Integer): Integer; cdecl;
 (*
   CVAPI(int) icvGetSymPoint3D(  CvPoint3D64f pointCorner,
   CvPoint3D64f point1,
@@ -3933,8 +3929,7 @@ function icvCompute3DPoint(alpha: double; betta: double; coeffs: pCvStereoLineCo
   double*     convRotMatr,
   double*     convTransVect);
 *)
-function icvCreateConvertMatrVect(rotMatr1: pdouble; transVect1: pdouble; rotMatr2: pdouble; transVect2: pdouble; convRotMatr: pdouble; convTransVect: pdouble)
-  : Integer; cdecl;
+function icvCreateConvertMatrVect(rotMatr1: pdouble; transVect1: pdouble; rotMatr2: pdouble; transVect2: pdouble; convRotMatr: pdouble; convTransVect: pdouble): Integer; cdecl;
 (*
   CVAPI(int) icvConvertPointSystem(CvPoint3D64f  M2,
   CvPoint3D64f* M1,
@@ -3950,8 +3945,7 @@ function icvComputeCoeffForStereo(stereoCamera: pCvStereoCamera): Integer; cdecl
 (*
   CVAPI(int) icvGetCrossPieceVector(CvPoint2D32f p1_start,CvPoint2D32f p1_end,CvPoint2D32f v2_start,CvPoint2D32f v2_end,CvPoint2D32f *cross);
 *)
-function icvGetCrossPieceVector(p1_start: TCvPoint2D32f; p1_end: TCvPoint2D32f; v2_start: TCvPoint2D32f; v2_end: TCvPoint2D32f; cross: pCvPoint2D32f)
-  : Integer; cdecl;
+function icvGetCrossPieceVector(p1_start: TCvPoint2D32f; p1_end: TCvPoint2D32f; v2_start: TCvPoint2D32f; v2_end: TCvPoint2D32f; cross: pCvPoint2D32f): Integer; cdecl;
 (*
   CVAPI(int) icvGetCrossLineDirect(CvPoint2D32f p1,CvPoint2D32f p2,float a,float b,float c,CvPoint2D32f* cross);
 *)
@@ -3970,8 +3964,8 @@ function icvDefinePointPosition(point1: TCvPoint2D32f; point2: TCvPoint2D32f; po
   CvStereoCamera* stereoparams
   );
 *)
-function icvStereoCalibration(numImages: Integer; nums: PInteger; imageSize: TCvSize; imagePoints1: pCvPoint2D32f; imagePoints2: pCvPoint2D32f;
-  objectPoints: pCvPoint3D32f; stereoparams: pCvStereoCamera): Integer; cdecl;
+function icvStereoCalibration(numImages: Integer; nums: PInteger; imageSize: TCvSize; imagePoints1: pCvPoint2D32f; imagePoints2: pCvPoint2D32f; objectPoints: pCvPoint3D32f;
+  stereoparams: pCvStereoCamera): Integer; cdecl;
 (*
   CVAPI(int) icvComputeRestStereoParams(CvStereoCamera *stereoparams);
 *)
@@ -3994,8 +3988,8 @@ procedure cvComputePerspectiveMap(const coeffs: TicvConvertWarpCoordinatesCoeff;
   CvStereoLineCoeff*    coeffs,
   int* needSwapCameras);
 *)
-function icvComCoeffForLine(point1: TCvPoint2D64f; point2: TCvPoint2D64f; point3: TCvPoint2D64f; point4: TCvPoint2D64f; camMatr1: pdouble; rotMatr1: pdouble;
-  transVect1: pdouble; camMatr2: pdouble; rotMatr2: pdouble; transVect2: pdouble; coeffs: pCvStereoLineCoeff; needSwapCameras: PInteger): Integer; cdecl;
+function icvComCoeffForLine(point1: TCvPoint2D64f; point2: TCvPoint2D64f; point3: TCvPoint2D64f; point4: TCvPoint2D64f; camMatr1: pdouble; rotMatr1: pdouble; transVect1: pdouble;
+  camMatr2: pdouble; rotMatr2: pdouble; transVect2: pdouble; coeffs: pCvStereoLineCoeff; needSwapCameras: PInteger): Integer; cdecl;
 (*
   CVAPI(int) icvGetDirectionForPoint(  CvPoint2D64f point,
   double* camMatr,
@@ -4007,8 +4001,7 @@ function icvGetDirectionForPoint(point: TCvPoint2D64f; camMatr: pdouble; direct:
   CvPoint3D64f point21,CvPoint3D64f point22,
   CvPoint3D64f* midPoint);
 *)
-function icvGetCrossLines(point11: TCvPoint3D64f; point12: TCvPoint3D64f; point21: TCvPoint3D64f; point22: TCvPoint3D64f; midPoint: pCvPoint3D64f)
-  : Integer; cdecl;
+function icvGetCrossLines(point11: TCvPoint3D64f; point12: TCvPoint3D64f; point21: TCvPoint3D64f; point22: TCvPoint3D64f; midPoint: pCvPoint3D64f): Integer; cdecl;
 (*
   CVAPI(int) icvComputeStereoLineCoeffs(   CvPoint3D64f pointA,
   CvPoint3D64f pointB,
@@ -4016,8 +4009,7 @@ function icvGetCrossLines(point11: TCvPoint3D64f; point12: TCvPoint3D64f; point2
   double gamma,
   CvStereoLineCoeff*    coeffs);
 *)
-function icvComputeStereoLineCoeffs(pointA: TCvPoint3D64f; pointB: TCvPoint3D64f; pointCam1: TCvPoint3D64f; gamma: double; coeffs: pCvStereoLineCoeff)
-  : Integer; cdecl;
+function icvComputeStereoLineCoeffs(pointA: TCvPoint3D64f; pointB: TCvPoint3D64f; pointCam1: TCvPoint3D64f; gamma: double; coeffs: pCvStereoLineCoeff): Integer; cdecl;
 (*
   CVAPI(int) icvComputeFundMatrEpipoles ( double* camMatr1,
   double*     rotMatr1,
@@ -4080,8 +4072,7 @@ procedure icvGetCrossPieceDirect(p_start: TCvPoint2D64f; p_end: TCvPoint2D64f; a
   CvPoint2D64f* cross,
   int* result);
 *)
-procedure icvGetCrossPiecePiece(p1_start: TCvPoint2D64f; p1_end: TCvPoint2D64f; p2_start: TCvPoint2D64f; p2_end: TCvPoint2D64f; cross: pCvPoint2D64f;
-  result: PInteger); cdecl;
+procedure icvGetCrossPiecePiece(p1_start: TCvPoint2D64f; p1_end: TCvPoint2D64f; p2_start: TCvPoint2D64f; p2_end: TCvPoint2D64f; cross: pCvPoint2D64f; result: PInteger); cdecl;
 (*
   CVAPI(void) icvGetPieceLength(CvPoint2D64f point1,CvPoint2D64f point2,double* dist);
 *)
@@ -4119,9 +4110,8 @@ procedure icvProjectPointToImage(point: TCvPoint3D64f; camMatr: pdouble; rotMatr
 Type
   TicvGetQuadsTransformQuad = array [0 .. 3, 0 .. 1] of double;
 
-procedure icvGetQuadsTransform(imageSize: TCvSize; camMatr1: pdouble; rotMatr1: pdouble; transVect1: pdouble; camMatr2: pdouble; rotMatr2: pdouble;
-  transVect2: pdouble; warpSize: pCvSize; quad1: TicvGetQuadsTransformQuad; quad2: TicvGetQuadsTransformQuad; fundMatr: pdouble; epipole1: pCvPoint3D64f;
-  epipole2: pCvPoint3D64f); cdecl;
+procedure icvGetQuadsTransform(imageSize: TCvSize; camMatr1: pdouble; rotMatr1: pdouble; transVect1: pdouble; camMatr2: pdouble; rotMatr2: pdouble; transVect2: pdouble;
+  warpSize: pCvSize; quad1: TicvGetQuadsTransformQuad; quad2: TicvGetQuadsTransformQuad; fundMatr: pdouble; epipole1: pCvPoint3D64f; epipole2: pCvPoint3D64f); cdecl;
 (*
   CVAPI(void) icvGetQuadsTransformStruct(  CvStereoCamera* stereoCamera);
 *)
@@ -4138,8 +4128,8 @@ procedure icvComputeStereoParamsForCameras(stereoCamera: pCvStereoCamera); cdecl
   CvPoint2D64f* point21,CvPoint2D64f* point22,
   int* result);
 *)
-procedure icvGetCutPiece(areaLineCoef1: pdouble; areaLineCoef2: pdouble; epipole: TCvPoint2D64f; imageSize: TCvSize; point11: pCvPoint2D64f;
-  point12: pCvPoint2D64f; point21: pCvPoint2D64f; point22: pCvPoint2D64f; result: PInteger); cdecl;
+procedure icvGetCutPiece(areaLineCoef1: pdouble; areaLineCoef2: pdouble; epipole: TCvPoint2D64f; imageSize: TCvSize; point11: pCvPoint2D64f; point12: pCvPoint2D64f;
+  point21: pCvPoint2D64f; point22: pCvPoint2D64f; result: PInteger); cdecl;
 (*
   CVAPI(void) icvGetMiddleAnglePoint(   CvPoint2D64f basePoint,
   CvPoint2D64f point1,CvPoint2D64f point2,
@@ -4203,11 +4193,11 @@ procedure cvDeInterlace(const frame: pCvArr; fieldEven: pCvArr; fieldOdd: pCvArr
   Contour tree header
 *)
 // typedef  struct CvContourTree
-//  {
-//  CV_SEQUENCE_FIELDS()
-//  CvPoint p1;            /* the first point of the binary tree root segment */
-//  CvPoint p2;            /* the last point of the binary tree root segment */
-//  } CvContourTree;
+// {
+// CV_SEQUENCE_FIELDS()
+// CvPoint p1;            /* the first point of the binary tree root segment */
+// CvPoint p2;            /* the last point of the binary tree root segment */
+// } CvContourTree;
 (*
   Builds hierarhical representation of a contour
 *)
@@ -4358,8 +4348,7 @@ function cvInitFaceTracker(pFaceTracking: pCvFaceTracker; const imgGray: pIplIma
   CvRect* pRects, int nRects,
   CvPoint* ptRotate, double* dbAngleRotate);
 *)
-function cvTrackFace(pFaceTracker: pCvFaceTracker; imgGray: pIplImage; pRects: pCvRect; nRects: Integer; ptRotate: pCvPoint; dbAngleRotate: pdouble)
-  : Integer; cdecl;
+function cvTrackFace(pFaceTracker: pCvFaceTracker; imgGray: pIplImage; pRects: pCvRect; nRects: Integer; ptRotate: pCvPoint; dbAngleRotate: pdouble): Integer; cdecl;
 (*
   CVAPI(void) cvReleaseFaceTracker(CvFaceTracker** ppFaceTracker);
 *)
@@ -4468,8 +4457,8 @@ Type
 
 {$EXTERNALSYM cv3dTrackerCalibrateCameras}
 
-function cv3dTrackerCalibrateCameras(num_cameras: Integer; camera_intrinsics: pCv3dTrackerCameraIntrinsics; etalon_size: TCvSize; square_size: Single;
-  var samples: pIplImage; camera_info: pCv3dTrackerCameraInfo): TCvBool; cdecl;
+function cv3dTrackerCalibrateCameras(num_cameras: Integer; camera_intrinsics: pCv3dTrackerCameraIntrinsics; etalon_size: TCvSize; square_size: Single; var samples: pIplImage;
+  camera_info: pCv3dTrackerCameraInfo): TCvBool; cdecl;
 
 (*
   CVAPI(int)  cv3dTrackerLocateObjects(int num_cameras, int num_objects,
@@ -4612,8 +4601,8 @@ type
     int contour_orientation CV_DEFAULT(-1),
     int attempt_number CV_DEFAULT(10));
   *)
-function cvVoronoiDiagramFromContour(ContourSeq: pCvSeq; var VoronoiDiagram: pCvVoronoiDiagram2D; VoronoiStorage: pCvMemStorage;
-  contour_type: TCvLeeParameters = CV_LEE_INT; contour_orientation: Integer = -1; attempt_number: Integer = 10): Integer; cdecl;
+function cvVoronoiDiagramFromContour(ContourSeq: pCvSeq; var VoronoiDiagram: pCvVoronoiDiagram2D; VoronoiStorage: pCvMemStorage; contour_type: TCvLeeParameters = CV_LEE_INT;
+  contour_orientation: Integer = -1; attempt_number: Integer = 10): Integer; cdecl;
 (*
   Computes Voronoi Diagram for domains in given image
 *)
@@ -4680,8 +4669,7 @@ Type
   TcvInitPerspectiveTransformVertex = array [0 .. 3] of TCvPoint2D32f;
   TcvInitPerspectiveTransformMatrix = array [0 .. 2, 0 .. 2] of double;
 
-procedure cvInitPerspectiveTransform(size: TCvSize; const vertex: TcvInitPerspectiveTransformVertex; matrix: TcvInitPerspectiveTransformMatrix;
-  rectMap: pCvArr); cdecl;
+procedure cvInitPerspectiveTransform(size: TCvSize; const vertex: TcvInitPerspectiveTransformVertex; matrix: TcvInitPerspectiveTransformMatrix; rectMap: pCvArr); cdecl;
 
 (*
   CVAPI(void) cvInitStereoRectification( CvStereoCamera* params,
@@ -4744,8 +4732,8 @@ procedure cvPreWarpImage(line_count: Integer; img: pIplImage; dst: puchar; dst_n
   int*   num_runs1,
   int*   num_runs2);
 *)
-procedure cvFindRuns(line_count: Integer; prewarp1: puchar; prewarp2: puchar; line_lengths1: PInteger; line_lengths2: PInteger; runs1: PInteger;
-  runs2: PInteger; num_runs1: PInteger; num_runs2: PInteger); cdecl;
+procedure cvFindRuns(line_count: Integer; prewarp1: puchar; prewarp2: puchar; line_lengths1: PInteger; line_lengths2: PInteger; runs1: PInteger; runs2: PInteger;
+  num_runs1: PInteger; num_runs2: PInteger); cdecl;
 (*
   Compares two sets of compressed scanlines
 *)
@@ -4792,9 +4780,8 @@ procedure cvMakeAlphaScanlines(scanlines1: PInteger; scanlines2: PInteger; scanl
   int*   first_corr,
   int*   second_corr);
 *)
-procedure cvMorphEpilinesMulti(line_count: Integer; first_pix: puchar; first_num: PInteger; second_pix: puchar; second_num: PInteger; dst_pix: puchar;
-  dst_num: PInteger; alpha: float; first: PInteger; first_runs: PInteger; second: PInteger; second_runs: PInteger; first_corr: PInteger;
-  second_corr: PInteger); cdecl;
+procedure cvMorphEpilinesMulti(line_count: Integer; first_pix: puchar; first_num: PInteger; second_pix: puchar; second_num: PInteger; dst_pix: puchar; dst_num: PInteger;
+  alpha: float; first: PInteger; first_runs: PInteger; second: PInteger; second_runs: PInteger; first_corr: PInteger; second_corr: PInteger); cdecl;
 (*
   Does reverse warping of the morphing result to make
   it fill the destination image rectangle
@@ -5030,8 +5017,8 @@ function cvFindFeaturesBoxed(tr: pCvFeatureTree; bounds_min: pCvMat; bounds_max:
   int type CV_DEFAULT(CV_64FC1), double r CV_DEFAULT(4),
   int64 seed CV_DEFAULT(-1));
 *)
-function cvCreateLSH(ops: pCvLSHOperations; d: Integer; L: Integer { =10 }; K: Integer { =10 }; type_: Integer { =CV_64FC1 }; r: double { =4 };
-  seed: int64 { =-1 } ): pCvLSH; cdecl;
+function cvCreateLSH(ops: pCvLSHOperations; d: Integer; L: Integer { =10 }; K: Integer { =10 }; type_: Integer { =CV_64FC1 }; r: double { =4 }; seed: int64 { =-1 } )
+  : pCvLSH; cdecl;
 (*
   Construct in-memory LSH table, with n bins.
 *)
@@ -5040,8 +5027,7 @@ function cvCreateLSH(ops: pCvLSHOperations; d: Integer; L: Integer { =10 }; K: I
   int type CV_DEFAULT(CV_64FC1), double r CV_DEFAULT(4),
   int64 seed CV_DEFAULT(-1));
 *)
-function cvCreateMemoryLSH(d: Integer; n: Integer; L: Integer { =10 }; K: Integer { =10 }; type_: Integer { =CV_64FC1 }; r: double { =4 }; seed: int64 { =-1 } )
-  : pCvLSH; cdecl;
+function cvCreateMemoryLSH(d: Integer; n: Integer; L: Integer { =10 }; K: Integer { =10 }; type_: Integer { =CV_64FC1 }; r: double { =4 }; seed: int64 { =-1 } ): pCvLSH; cdecl;
 (*
   Free the given LSH structure.
 *)
@@ -5120,8 +5106,8 @@ procedure cvCalcOpticalFlowLK(const prev: pCvArr; const curr: pCvArr; win_size: 
   CvSize max_range, int use_previous,
   CvArr* velx, CvArr* vely );
 *)
-procedure cvCalcOpticalFlowBM(const prev: pCvArr; const curr: pCvArr; block_size: TCvSize; shift_size: TCvSize; max_range: TCvSize; use_previous: Integer;
-  velx: pCvArr; vely: pCvArr); cdecl;
+procedure cvCalcOpticalFlowBM(const prev: pCvArr; const curr: pCvArr; block_size: TCvSize; shift_size: TCvSize; max_range: TCvSize; use_previous: Integer; velx: pCvArr;
+  vely: pCvArr); cdecl;
 (*
   Calculates Optical flow for 2 images using Horn & Schunck algorithm
 *)
@@ -5130,8 +5116,7 @@ procedure cvCalcOpticalFlowBM(const prev: pCvArr; const curr: pCvArr; block_size
   int use_previous, CvArr* velx, CvArr* vely,
   double lambda, CvTermCriteria criteria );
 *)
-procedure cvCalcOpticalFlowHS(const prev: pCvArr; const curr: pCvArr; use_previous: Integer; velx: pCvArr; vely: pCvArr; lambda: double;
-  criteria: TCvTermCriteria); cdecl;
+procedure cvCalcOpticalFlowHS(const prev: pCvArr; const curr: pCvArr; use_previous: Integer; velx: pCvArr; vely: pCvArr; lambda: double; criteria: TCvTermCriteria); cdecl;
 (*
   ***************************************************************************************\
   *                           Background/foreground segmentation                           *
@@ -5392,197 +5377,236 @@ begin
   result := (edge and (not 3)) + ((edge + rotate) and 3);
 end;
 
-function cvCreateStereoGCState(numberOfDisparities: Integer; maxIters: Integer): pCvStereoGCState; cdecl; external legacy_lib;
+function cvCreateStereoGCState(numberOfDisparities: Integer; maxIters: Integer): pCvStereoGCState; cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 procedure cvFindStereoCorrespondenceGC(const left: pIplImage; const right: pIplImage; disparityLeft: pCvMat; disparityRight: pCvMat; state: pCvStereoGCState;
-  useDisparityGuess: Integer = 0); cdecl; external legacy_lib;
-procedure cvReleaseStereoGCState(Var state: pCvStereoGCState); cdecl; external legacy_lib;
-procedure cvSnakeImage(const image: pIplImage; points: pCvPointArray; length: Integer; alpha: PSingle; beta: PSingle; gamma: PSingle; coeff_usage: Integer;
-  win: TCvSize; criteria: TCvTermCriteria; calc_gradient: Integer = 1); cdecl; external legacy_lib;
+  useDisparityGuess: Integer = 0); cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure cvReleaseStereoGCState(Var state: pCvStereoGCState); cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure cvSnakeImage(const image: pIplImage; points: pCvPointArray; length: Integer; alpha: PSingle; beta: PSingle; gamma: PSingle; coeff_usage: Integer; win: TCvSize;
+  criteria: TCvTermCriteria; calc_gradient: Integer = 1); cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 function cvCreateSubdiv2D(subdiv_type: Integer; header_size: Integer; vtx_size: Integer; quadedge_size: Integer; storage: pCvMemStorage): pCvSubdiv2D; cdecl;
-  external legacy_lib;
-procedure cvInitSubdivDelaunay2D(subdiv: pCvSubdiv2D; rect: TCvRect); cdecl; external legacy_lib;
+  external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure cvInitSubdivDelaunay2D(subdiv: pCvSubdiv2D; rect: TCvRect); cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 function cvSubdiv2DLocate(subdiv: pCvSubdiv2D; pt: TCvPoint2D32f; edge: pCvSubdiv2DEdge; vertex: pCvSubdiv2DPoint = nil): TCvSubdiv2DPointLocation; cdecl;
-  external legacy_lib;
-procedure cvCalcSubdivVoronoi2D(subdiv: pCvSubdiv2D); cdecl; external legacy_lib;
-function cvSubdivDelaunay2DInsert(subdiv: pCvSubdiv2D; pt: TCvPoint2D32f): pCvSubdiv2DPoint; cdecl; external legacy_lib;
-function cvCreateGaussianBGModel(first_frame: pIplImage; parameters: pCvGaussBGStatModelParams = nil): pCvBGStatModel; cdecl; external legacy_lib;
-function cvUpdateBGStatModel(current_frame: pIplImage; bg_model: pCvBGStatModel; learningRate: double = -1): Integer; cdecl; external legacy_lib;
-procedure cvReleaseBGStatModel(Var bg_model: pCvBGStatModel); cdecl; external legacy_lib;
-function cvCreateFGDStatModel(first_frame: pIplImage; parameters: pCvFGDStatModelParams = nil): pCvBGStatModel; cdecl; external legacy_lib;
-function cvCreateBGCodeBookModel: pCvBGCodeBookModel; cdecl; external legacy_lib;
-procedure cvReleaseBGCodeBookModel(model: pCvBGCodeBookModel); cdecl; external legacy_lib;
-procedure cvBGCodeBookUpdate(model: pCvBGCodeBookModel; const image: pIplImage; roi: TCvRect { =CV_DEFAULT(cvRect(0,0,0,0)) }; const mask: pCvArr { =0 } );
-  cdecl; external legacy_lib;
+  external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure cvCalcSubdivVoronoi2D(subdiv: pCvSubdiv2D); cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+function cvSubdivDelaunay2DInsert(subdiv: pCvSubdiv2D; pt: TCvPoint2D32f): pCvSubdiv2DPoint; cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+function cvCreateGaussianBGModel(first_frame: pIplImage; parameters: pCvGaussBGStatModelParams = nil): pCvBGStatModel; cdecl;
+  external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+function cvUpdateBGStatModel(current_frame: pIplImage; bg_model: pCvBGStatModel; learningRate: double = -1): Integer; cdecl;
+  external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure cvReleaseBGStatModel(Var bg_model: pCvBGStatModel); cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+function cvCreateFGDStatModel(first_frame: pIplImage; parameters: pCvFGDStatModelParams = nil): pCvBGStatModel; cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+function cvCreateBGCodeBookModel: pCvBGCodeBookModel; cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure cvReleaseBGCodeBookModel(model: pCvBGCodeBookModel); cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure cvBGCodeBookUpdate(model: pCvBGCodeBookModel; const image: pIplImage; roi: TCvRect { =CV_DEFAULT(cvRect(0,0,0,0)) }; const mask: pCvArr { =0 } ); cdecl;
+  external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 function cvBGCodeBookDiff(const model: pCvBGCodeBookModel; const image: pCvArr; fgmask: pCvArr; roi: TCvRect { = cvRect(0,0,0,0) } ): Integer; cdecl;
-  external legacy_lib;
+  external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 procedure cvBGCodeBookClearStale(model: pCvBGCodeBookModel; staleThresh: Integer; roi: TCvRect { =cvRect(0,0,0,0) }; const mask: pCvArr = nil); cdecl;
-  external legacy_lib;
-function cvSegmentFGMask(fgmask: pCvArr; poly1Hull0: Integer { =1 }; perimScale: Single { = 4 }; storage: pCvMemStorage { =nil };
-  offset: TCvPoint { =cvPoint(0,0) } ): pCvSeq; cdecl; external legacy_lib;
-procedure cvPyrSegmentation(src: pIplImage; dst: pIplImage; storage: pCvMemStorage;
-  var comp: pCvSeq; level: Integer; threshold1: double; threshold2: double); cdecl; external legacy_lib;
-procedure cvCalcEigenObjects(nObjects: Integer; input: pointer; output: pointer; ioFlags: Integer; ioBufSize: Integer; userData: pointer;
-  calcLimit: pCvTermCriteria; avg: pIplImage; eigVals: pFloat); cdecl; external legacy_lib;
-procedure cvEigenDecomposite(obj: pIplImage; nEigObjs: Integer; eigInput: pointer; ioFlags: Integer; userData: pointer; avg: pIplImage; coeffs: pFloat); cdecl; external legacy_lib;
-function cvSegmentImage(const srcarr: pCvArr; dstarr: pCvArr; canny_threshold: double; ffill_threshold: double; storage: pCvMemStorage): pCvSeq; cdecl; external legacy_lib;
-procedure cvCalcCovarMatrixEx(nObjects: Integer; input: pointer; ioFlags: Integer; ioBufSize: Integer; buffer: pByte; userData: pointer; avg: pIplImage;
-  var covarMatrix: Single); cdecl; external legacy_lib;
-function cvCalcDecompCoeff(obj: pIplImage; eigObj: pIplImage; avg: pIplImage): double; cdecl; external legacy_lib;
-procedure cvEigenProjection(eigInput: pointer; nEigObjs: Integer; ioFlags: Integer; userData: pointer; coeffs: PSingle; avg: pIplImage; proj: pIplImage); cdecl; external legacy_lib;
-function icvCreate1DHMM(var this_hmm: pCvEHMM; state_number: Integer; Var num_mix: Integer; obs_size: Integer): Integer; cdecl; external legacy_lib;
-function icvRelease1DHMM(var phmm: pCvEHMM): Integer; cdecl; external legacy_lib;
-function icvUniform1DSegm(var obs_info: TCv1DObsInfo; var hmm: TCvEHMM): Integer; cdecl; external legacy_lib;
-function icvInit1DMixSegm(var obs_info_array: pCv1DObsInfo; num_img: Integer; var hmm: TCvEHMM): Integer; cdecl; external legacy_lib;
-function icvEstimate1DHMMStateParams(var obs_info_array: pCvImgObsInfo; num_img: Integer; var hmm: TCvEHMM): Integer; cdecl; external legacy_lib;
-function icvEstimate1DObsProb(var obs_info: TCvImgObsInfo; var hmm: TCvEHMM): Integer; cdecl; external legacy_lib;
-function icvEstimate1DTransProb(var obs_info_array: pCv1DObsInfo; num_seq: Integer; var hmm: TCvEHMM): Integer; cdecl; external legacy_lib;
-function icvViterbi(var obs_info: TCv1DObsInfo; var hmm: TCvEHMM): Single; cdecl; external legacy_lib;
-function icv1DMixSegmL2(var obs_info_array: pCvImgObsInfo; num_img: Integer; var hmm: TCvEHMM): Integer; cdecl; external legacy_lib;
-function cvCreate2DHMM(Var stateNumber: Integer; Var numMix: Integer; obsSize: Integer): pCvEHMM; cdecl; external legacy_lib;
-procedure cvRelease2DHMM(var hmm: pCvEHMM); cdecl; external legacy_lib;
-function cvCreateObsInfo(numObs: TCvSize; obsSize: Integer): pCvImgObsInfo; cdecl; external legacy_lib;
-procedure cvReleaseObsInfo(var obs_info: pCvImgObsInfo); cdecl; external legacy_lib;
-procedure cvImgToObs_DCT(const arr: pCvArr; var obs: Single; dctSize: TCvSize; obsSize: TCvSize; delta: TCvSize); cdecl; external legacy_lib;
-procedure cvUniformImgSegm(var obs_info: TCvImgObsInfo; var ehmm: TCvEHMM); cdecl; external legacy_lib;
-procedure cvInitMixSegm(var obs_info_array: pCvImgObsInfo; num_img: Integer; var hmm: TCvEHMM); cdecl; external legacy_lib;
-procedure cvEstimateHMMStateParams(var obs_info_array: pCvImgObsInfo; num_img: Integer; var hmm: TCvEHMM); cdecl; external legacy_lib;
-procedure cvEstimateTransProb(var obs_info_array: pCvImgObsInfo; num_img: Integer; var hmm: TCvEHMM); cdecl; external legacy_lib;
-procedure cvEstimateObsProb(var obs_info: TCvImgObsInfo; var hmm: TCvEHMM); cdecl; external legacy_lib;
-function cvEViterbi(var obs_info: TCvImgObsInfo; var hmm: TCvEHMM): Single; cdecl; external legacy_lib;
-procedure cvMixSegmL2(var obs_info_array: pCvImgObsInfo; num_img: Integer; var hmm: TCvEHMM); cdecl; external legacy_lib;
-procedure cvCreateHandMask(var hand_points: TCvSeq; var img_mask: TIplImage; var roi: TCvRect); cdecl; external legacy_lib;
-procedure cvFindHandRegion(var points: TCvPoint3D32f; count: Integer; var indexs: TCvSeq; var line: Single; size: TCvSize2D32f; flag: Integer;
-  var center: TCvPoint3D32f; var storage: TCvMemStorage; var numbers: pCvSeq); cdecl; external legacy_lib;
-procedure cvFindHandRegionA(var points: TCvPoint3D32f; count: Integer; var indexs: TCvSeq; var line: Single; size: TCvSize2D32f; jc: Integer;
-  var center: TCvPoint3D32f; var storage: TCvMemStorage; var numbers: pCvSeq); cdecl; external legacy_lib;
-procedure cvCalcImageHomography(var line: Single; var center: TCvPoint3D32f; var intrinsic: Single; var homography: Single); cdecl; external legacy_lib;
-procedure cvCalcPGH(const contour: pCvSeq; var hist: TCvHistogram); cdecl; external legacy_lib;
-function cvFindDominantPoints(contour: pCvSeq; storage: pCvMemStorage; method: Integer = CV_DOMINANT_IPAN; parameter1: double = 0; parameter2: double = 0;
-  parameter3: double = 0; parameter4: double = 0): pCvSeq; cdecl; external legacy_lib;
-procedure cvFindStereoCorrespondence(const leftImage: pCvArr; const rightImage: pCvArr; mode: Integer; dispImage: pCvArr; maxDisparity: Integer;
-  param1: double = CV_UNDEF_SC_PARAM; param2: double = CV_UNDEF_SC_PARAM; param3: double = CV_UNDEF_SC_PARAM; param4: double = CV_UNDEF_SC_PARAM;
-  param5: double = CV_UNDEF_SC_PARAM); cdecl; external legacy_lib;
-function icvConvertWarpCoordinates(coeffs: TicvConvertWarpCoordinatesCoeff; cameraPoint: pCvPoint2D32f; warpPoint: pCvPoint2D32f; direction: Integer)
-  : Integer; cdecl; external legacy_lib;
-function icvGetSymPoint3D(pointCorner: TCvPoint3D64f; point1: TCvPoint3D64f; point2: TCvPoint3D64f; pointSym2: pCvPoint3D64f): Integer; cdecl; external legacy_lib;
-procedure icvGetPieceLength3D(point1: TCvPoint3D64f; point2: TCvPoint3D64f; dist: pdouble); cdecl; external legacy_lib;
-function icvCompute3DPoint(alpha: double; betta: double; coeffs: pCvStereoLineCoeff; point: pCvPoint3D64f): Integer; cdecl; external legacy_lib;
-function icvCreateConvertMatrVect(rotMatr1: pdouble; transVect1: pdouble; rotMatr2: pdouble; transVect2: pdouble; convRotMatr: pdouble; convTransVect: pdouble)
-  : Integer; cdecl; external legacy_lib;
-function icvConvertPointSystem(M2: TCvPoint3D64f; M1: pCvPoint3D64f; rotMatr: pdouble; transVect: pdouble): Integer; cdecl; external legacy_lib;
-function icvComputeCoeffForStereo(stereoCamera: pCvStereoCamera): Integer; cdecl; external legacy_lib;
-function icvGetCrossPieceVector(p1_start: TCvPoint2D32f; p1_end: TCvPoint2D32f; v2_start: TCvPoint2D32f; v2_end: TCvPoint2D32f; cross: pCvPoint2D32f)
-  : Integer; cdecl; external legacy_lib;
-function icvGetCrossLineDirect(p1: TCvPoint2D32f; p2: TCvPoint2D32f; a: float; b: float; c: float; cross: pCvPoint2D32f): Integer; cdecl; external legacy_lib;
-function icvDefinePointPosition(point1: TCvPoint2D32f; point2: TCvPoint2D32f; point: TCvPoint2D32f): float; cdecl; external legacy_lib;
-function icvStereoCalibration(numImages: Integer; nums: PInteger; imageSize: TCvSize; imagePoints1: pCvPoint2D32f; imagePoints2: pCvPoint2D32f;
-  objectPoints: pCvPoint3D32f; stereoparams: pCvStereoCamera): Integer; cdecl; external legacy_lib;
-function icvComputeRestStereoParams(stereoparams: pCvStereoCamera): Integer; cdecl; external legacy_lib;
-procedure cvComputePerspectiveMap(const coeffs: TicvConvertWarpCoordinatesCoeff; rectMapX: pCvArr; rectMapY: pCvArr); cdecl; external legacy_lib;
-function icvComCoeffForLine(point1: TCvPoint2D64f; point2: TCvPoint2D64f; point3: TCvPoint2D64f; point4: TCvPoint2D64f; camMatr1: pdouble; rotMatr1: pdouble;
-  transVect1: pdouble; camMatr2: pdouble; rotMatr2: pdouble; transVect2: pdouble; coeffs: pCvStereoLineCoeff; needSwapCameras: PInteger): Integer; cdecl; external legacy_lib;
-function icvGetDirectionForPoint(point: TCvPoint2D64f; camMatr: pdouble; direct: pCvPoint3D64f): Integer; cdecl; external legacy_lib;
-function icvGetCrossLines(point11: TCvPoint3D64f; point12: TCvPoint3D64f; point21: TCvPoint3D64f; point22: TCvPoint3D64f; midPoint: pCvPoint3D64f)
-  : Integer; cdecl; external legacy_lib;
-function icvComputeStereoLineCoeffs(pointA: TCvPoint3D64f; pointB: TCvPoint3D64f; pointCam1: TCvPoint3D64f; gamma: double; coeffs: pCvStereoLineCoeff)
-  : Integer; cdecl; external legacy_lib;
-function icvGetAngleLine(startPoint: TCvPoint2D64f; imageSize: TCvSize; point1: pCvPoint2D64f; point2: pCvPoint2D64f): Integer; cdecl; external legacy_lib;
-procedure icvGetCoefForPiece(p_start: TCvPoint2D64f; p_end: TCvPoint2D64f; a: pdouble; b: pdouble; c: pdouble; result: PInteger); cdecl; external legacy_lib;
-procedure icvComputeeInfiniteProject1(rotMatr: pdouble; camMatr1: pdouble; camMatr2: pdouble; point1: TCvPoint2D32f; point2: pCvPoint2D32f); cdecl; external legacy_lib;
-procedure icvComputeeInfiniteProject2(rotMatr: pdouble; camMatr1: pdouble; camMatr2: pdouble; point1: pCvPoint2D32f; point2: TCvPoint2D32f); cdecl; external legacy_lib;
-procedure icvGetCrossDirectDirect(direct1: pdouble; direct2: pdouble; cross: pCvPoint2D64f; result: PInteger); cdecl; external legacy_lib;
-procedure icvGetCrossPieceDirect(p_start: TCvPoint2D64f; p_end: TCvPoint2D64f; a: double; b: double; c: double; cross: pCvPoint2D64f; result: PInteger); cdecl; external legacy_lib;
-procedure icvGetCrossPiecePiece(p1_start: TCvPoint2D64f; p1_end: TCvPoint2D64f; p2_start: TCvPoint2D64f; p2_end: TCvPoint2D64f; cross: pCvPoint2D64f;
-  result: PInteger); cdecl; external legacy_lib;
-procedure icvGetPieceLength(point1: TCvPoint2D64f; point2: TCvPoint2D64f; dist: pdouble); cdecl; external legacy_lib;
-procedure icvGetCrossRectDirect(imageSize: TCvSize; a: double; b: double; c: double; start: pCvPoint2D64f; end_: pCvPoint2D64f; result: PInteger); cdecl; external legacy_lib;
-procedure icvProjectPointToImage(point: TCvPoint3D64f; camMatr: pdouble; rotMatr: pdouble; transVect: pdouble; projPoint: pCvPoint2D64f); cdecl; external legacy_lib;
-procedure icvGetQuadsTransform(imageSize: TCvSize; camMatr1: pdouble; rotMatr1: pdouble; transVect1: pdouble; camMatr2: pdouble; rotMatr2: pdouble;
-  transVect2: pdouble; warpSize: pCvSize; quad1: TicvGetQuadsTransformQuad; quad2: TicvGetQuadsTransformQuad; fundMatr: pdouble; epipole1: pCvPoint3D64f;
-  epipole2: pCvPoint3D64f); cdecl; external legacy_lib;
-procedure icvGetQuadsTransformStruct(stereoCamera: pCvStereoCamera); cdecl; external legacy_lib;
-procedure icvComputeStereoParamsForCameras(stereoCamera: pCvStereoCamera); cdecl; external legacy_lib;
-procedure icvGetCutPiece(areaLineCoef1: pdouble; areaLineCoef2: pdouble; epipole: TCvPoint2D64f; imageSize: TCvSize; point11: pCvPoint2D64f;
-  point12: pCvPoint2D64f; point21: pCvPoint2D64f; point22: pCvPoint2D64f; result: PInteger); cdecl; external legacy_lib;
-procedure icvGetMiddleAnglePoint(basePoint: TCvPoint2D64f; point1: TCvPoint2D64f; point2: TCvPoint2D64f; midPoint: pCvPoint2D64f); cdecl; external legacy_lib;
-procedure icvGetNormalDirect(direct: pdouble; point: TCvPoint2D64f; normDirect: pdouble); cdecl; external legacy_lib;
-function icvGetVect(basePoint: TCvPoint2D64f; point1: TCvPoint2D64f; point2: TCvPoint2D64f): double; cdecl; external legacy_lib;
-procedure icvProjectPointToDirect(point: TCvPoint2D64f; lineCoeff: pdouble; projectPoint: pCvPoint2D64f); cdecl; external legacy_lib;
-procedure icvGetDistanceFromPointToDirect(point: TCvPoint2D64f; lineCoef: pdouble; dist: pdouble); cdecl; external legacy_lib;
-function icvCreateIsometricImage(src: pIplImage; dst: pIplImage; desired_depth: Integer; desired_num_channels: Integer): pIplImage; cdecl; external legacy_lib;
-procedure cvDeInterlace(const frame: pCvArr; fieldEven: pCvArr; fieldOdd: pCvArr); cdecl; external legacy_lib;
-function cvCreateContourTree(const contour: pCvSeq; storage: pCvMemStorage; threshold: double): pCvContourTree; cdecl; external legacy_lib;
-function cvContourFromContourTree(const tree: pCvContourTree; storage: pCvMemStorage; criteria: TCvTermCriteria): pCvSeq; cdecl; external legacy_lib;
-function cvMatchContourTrees(const tree1: pCvContourTree; const tree2: pCvContourTree; method: Integer; threshold: double): double; cdecl; external legacy_lib;
-function cvCalcContoursCorrespondence(const contour1: pCvSeq; const contour2: pCvSeq; storage: pCvMemStorage): pCvSeq; cdecl; external legacy_lib;
-function cvMorphContours(const contour1: pCvSeq; const contour2: pCvSeq; corr: pCvSeq; alpha: double; storage: pCvMemStorage): pCvSeq; cdecl; external legacy_lib;
+  external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+function cvSegmentFGMask(fgmask: pCvArr; poly1Hull0: Integer { =1 }; perimScale: Single { = 4 }; storage: pCvMemStorage { =nil }; offset: TCvPoint { =cvPoint(0,0) } ): pCvSeq;
+  cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure cvPyrSegmentation(src: pIplImage; dst: pIplImage; storage: pCvMemStorage; var comp: pCvSeq; level: Integer; threshold1: double; threshold2: double); cdecl;
+  external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure cvCalcEigenObjects(nObjects: Integer; input: pointer; output: pointer; ioFlags: Integer; ioBufSize: Integer; userData: pointer; calcLimit: pCvTermCriteria;
+  avg: pIplImage; eigVals: pFloat); cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure cvEigenDecomposite(obj: pIplImage; nEigObjs: Integer; eigInput: pointer; ioFlags: Integer; userData: pointer; avg: pIplImage; coeffs: pFloat); cdecl;
+  external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+function cvSegmentImage(const srcarr: pCvArr; dstarr: pCvArr; canny_threshold: double; ffill_threshold: double; storage: pCvMemStorage): pCvSeq; cdecl;
+  external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure cvCalcCovarMatrixEx(nObjects: Integer; input: pointer; ioFlags: Integer; ioBufSize: Integer; buffer: pByte; userData: pointer; avg: pIplImage; var covarMatrix: Single);
+  cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+function cvCalcDecompCoeff(obj: pIplImage; eigObj: pIplImage; avg: pIplImage): double; cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure cvEigenProjection(eigInput: pointer; nEigObjs: Integer; ioFlags: Integer; userData: pointer; coeffs: PSingle; avg: pIplImage; proj: pIplImage); cdecl;
+  external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+function icvCreate1DHMM(var this_hmm: pCvEHMM; state_number: Integer; Var num_mix: Integer; obs_size: Integer): Integer; cdecl;
+  external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+function icvRelease1DHMM(var phmm: pCvEHMM): Integer; cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+function icvUniform1DSegm(var obs_info: TCv1DObsInfo; var hmm: TCvEHMM): Integer; cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+function icvInit1DMixSegm(var obs_info_array: pCv1DObsInfo; num_img: Integer; var hmm: TCvEHMM): Integer; cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+function icvEstimate1DHMMStateParams(var obs_info_array: pCvImgObsInfo; num_img: Integer; var hmm: TCvEHMM): Integer; cdecl;
+  external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+function icvEstimate1DObsProb(var obs_info: TCvImgObsInfo; var hmm: TCvEHMM): Integer; cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+function icvEstimate1DTransProb(var obs_info_array: pCv1DObsInfo; num_seq: Integer; var hmm: TCvEHMM): Integer; cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+function icvViterbi(var obs_info: TCv1DObsInfo; var hmm: TCvEHMM): Single; cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+function icv1DMixSegmL2(var obs_info_array: pCvImgObsInfo; num_img: Integer; var hmm: TCvEHMM): Integer; cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+function cvCreate2DHMM(Var stateNumber: Integer; Var numMix: Integer; obsSize: Integer): pCvEHMM; cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure cvRelease2DHMM(var hmm: pCvEHMM); cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+function cvCreateObsInfo(numObs: TCvSize; obsSize: Integer): pCvImgObsInfo; cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure cvReleaseObsInfo(var obs_info: pCvImgObsInfo); cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure cvImgToObs_DCT(const arr: pCvArr; var obs: Single; dctSize: TCvSize; obsSize: TCvSize; delta: TCvSize); cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure cvUniformImgSegm(var obs_info: TCvImgObsInfo; var ehmm: TCvEHMM); cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure cvInitMixSegm(var obs_info_array: pCvImgObsInfo; num_img: Integer; var hmm: TCvEHMM); cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure cvEstimateHMMStateParams(var obs_info_array: pCvImgObsInfo; num_img: Integer; var hmm: TCvEHMM); cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure cvEstimateTransProb(var obs_info_array: pCvImgObsInfo; num_img: Integer; var hmm: TCvEHMM); cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure cvEstimateObsProb(var obs_info: TCvImgObsInfo; var hmm: TCvEHMM); cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+function cvEViterbi(var obs_info: TCvImgObsInfo; var hmm: TCvEHMM): Single; cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure cvMixSegmL2(var obs_info_array: pCvImgObsInfo; num_img: Integer; var hmm: TCvEHMM); cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure cvCreateHandMask(var hand_points: TCvSeq; var img_mask: TIplImage; var roi: TCvRect); cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure cvFindHandRegion(var points: TCvPoint3D32f; count: Integer; var indexs: TCvSeq; var line: Single; size: TCvSize2D32f; flag: Integer; var center: TCvPoint3D32f;
+  var storage: TCvMemStorage; var numbers: pCvSeq); cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure cvFindHandRegionA(var points: TCvPoint3D32f; count: Integer; var indexs: TCvSeq; var line: Single; size: TCvSize2D32f; jc: Integer; var center: TCvPoint3D32f;
+  var storage: TCvMemStorage; var numbers: pCvSeq); cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure cvCalcImageHomography(var line: Single; var center: TCvPoint3D32f; var intrinsic: Single; var homography: Single); cdecl;
+  external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure cvCalcPGH(const contour: pCvSeq; var hist: TCvHistogram); cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+function cvFindDominantPoints(contour: pCvSeq; storage: pCvMemStorage; method: Integer = CV_DOMINANT_IPAN; parameter1: double = 0; parameter2: double = 0; parameter3: double = 0;
+  parameter4: double = 0): pCvSeq; cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure cvFindStereoCorrespondence(const leftImage: pCvArr; const rightImage: pCvArr; mode: Integer; dispImage: pCvArr; maxDisparity: Integer; param1: double = CV_UNDEF_SC_PARAM;
+  param2: double = CV_UNDEF_SC_PARAM; param3: double = CV_UNDEF_SC_PARAM; param4: double = CV_UNDEF_SC_PARAM; param5: double = CV_UNDEF_SC_PARAM); cdecl;
+  external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+function icvConvertWarpCoordinates(coeffs: TicvConvertWarpCoordinatesCoeff; cameraPoint: pCvPoint2D32f; warpPoint: pCvPoint2D32f; direction: Integer): Integer; cdecl;
+  external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+function icvGetSymPoint3D(pointCorner: TCvPoint3D64f; point1: TCvPoint3D64f; point2: TCvPoint3D64f; pointSym2: pCvPoint3D64f): Integer; cdecl;
+  external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure icvGetPieceLength3D(point1: TCvPoint3D64f; point2: TCvPoint3D64f; dist: pdouble); cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+function icvCompute3DPoint(alpha: double; betta: double; coeffs: pCvStereoLineCoeff; point: pCvPoint3D64f): Integer; cdecl;
+  external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+function icvCreateConvertMatrVect(rotMatr1: pdouble; transVect1: pdouble; rotMatr2: pdouble; transVect2: pdouble; convRotMatr: pdouble; convTransVect: pdouble): Integer; cdecl;
+  external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+function icvConvertPointSystem(M2: TCvPoint3D64f; M1: pCvPoint3D64f; rotMatr: pdouble; transVect: pdouble): Integer; cdecl;
+  external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+function icvComputeCoeffForStereo(stereoCamera: pCvStereoCamera): Integer; cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+function icvGetCrossPieceVector(p1_start: TCvPoint2D32f; p1_end: TCvPoint2D32f; v2_start: TCvPoint2D32f; v2_end: TCvPoint2D32f; cross: pCvPoint2D32f): Integer; cdecl;
+  external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+function icvGetCrossLineDirect(p1: TCvPoint2D32f; p2: TCvPoint2D32f; a: float; b: float; c: float; cross: pCvPoint2D32f): Integer; cdecl;
+  external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+function icvDefinePointPosition(point1: TCvPoint2D32f; point2: TCvPoint2D32f; point: TCvPoint2D32f): float; cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+function icvStereoCalibration(numImages: Integer; nums: PInteger; imageSize: TCvSize; imagePoints1: pCvPoint2D32f; imagePoints2: pCvPoint2D32f; objectPoints: pCvPoint3D32f;
+  stereoparams: pCvStereoCamera): Integer; cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+function icvComputeRestStereoParams(stereoparams: pCvStereoCamera): Integer; cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure cvComputePerspectiveMap(const coeffs: TicvConvertWarpCoordinatesCoeff; rectMapX: pCvArr; rectMapY: pCvArr); cdecl;
+  external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+function icvComCoeffForLine(point1: TCvPoint2D64f; point2: TCvPoint2D64f; point3: TCvPoint2D64f; point4: TCvPoint2D64f; camMatr1: pdouble; rotMatr1: pdouble; transVect1: pdouble;
+  camMatr2: pdouble; rotMatr2: pdouble; transVect2: pdouble; coeffs: pCvStereoLineCoeff; needSwapCameras: PInteger): Integer; cdecl;
+  external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+function icvGetDirectionForPoint(point: TCvPoint2D64f; camMatr: pdouble; direct: pCvPoint3D64f): Integer; cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+function icvGetCrossLines(point11: TCvPoint3D64f; point12: TCvPoint3D64f; point21: TCvPoint3D64f; point22: TCvPoint3D64f; midPoint: pCvPoint3D64f): Integer; cdecl;
+  external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+function icvComputeStereoLineCoeffs(pointA: TCvPoint3D64f; pointB: TCvPoint3D64f; pointCam1: TCvPoint3D64f; gamma: double; coeffs: pCvStereoLineCoeff): Integer; cdecl;
+  external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+function icvGetAngleLine(startPoint: TCvPoint2D64f; imageSize: TCvSize; point1: pCvPoint2D64f; point2: pCvPoint2D64f): Integer; cdecl;
+  external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure icvGetCoefForPiece(p_start: TCvPoint2D64f; p_end: TCvPoint2D64f; a: pdouble; b: pdouble; c: pdouble; result: PInteger); cdecl;
+  external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure icvComputeeInfiniteProject1(rotMatr: pdouble; camMatr1: pdouble; camMatr2: pdouble; point1: TCvPoint2D32f; point2: pCvPoint2D32f); cdecl;
+  external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure icvComputeeInfiniteProject2(rotMatr: pdouble; camMatr1: pdouble; camMatr2: pdouble; point1: pCvPoint2D32f; point2: TCvPoint2D32f); cdecl;
+  external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure icvGetCrossDirectDirect(direct1: pdouble; direct2: pdouble; cross: pCvPoint2D64f; result: PInteger); cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure icvGetCrossPieceDirect(p_start: TCvPoint2D64f; p_end: TCvPoint2D64f; a: double; b: double; c: double; cross: pCvPoint2D64f; result: PInteger); cdecl;
+  external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure icvGetCrossPiecePiece(p1_start: TCvPoint2D64f; p1_end: TCvPoint2D64f; p2_start: TCvPoint2D64f; p2_end: TCvPoint2D64f; cross: pCvPoint2D64f; result: PInteger); cdecl;
+  external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure icvGetPieceLength(point1: TCvPoint2D64f; point2: TCvPoint2D64f; dist: pdouble); cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure icvGetCrossRectDirect(imageSize: TCvSize; a: double; b: double; c: double; start: pCvPoint2D64f; end_: pCvPoint2D64f; result: PInteger); cdecl;
+  external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure icvProjectPointToImage(point: TCvPoint3D64f; camMatr: pdouble; rotMatr: pdouble; transVect: pdouble; projPoint: pCvPoint2D64f); cdecl;
+  external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure icvGetQuadsTransform(imageSize: TCvSize; camMatr1: pdouble; rotMatr1: pdouble; transVect1: pdouble; camMatr2: pdouble; rotMatr2: pdouble; transVect2: pdouble;
+  warpSize: pCvSize; quad1: TicvGetQuadsTransformQuad; quad2: TicvGetQuadsTransformQuad; fundMatr: pdouble; epipole1: pCvPoint3D64f; epipole2: pCvPoint3D64f); cdecl;
+  external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure icvGetQuadsTransformStruct(stereoCamera: pCvStereoCamera); cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure icvComputeStereoParamsForCameras(stereoCamera: pCvStereoCamera); cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure icvGetCutPiece(areaLineCoef1: pdouble; areaLineCoef2: pdouble; epipole: TCvPoint2D64f; imageSize: TCvSize; point11: pCvPoint2D64f; point12: pCvPoint2D64f;
+  point21: pCvPoint2D64f; point22: pCvPoint2D64f; result: PInteger); cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure icvGetMiddleAnglePoint(basePoint: TCvPoint2D64f; point1: TCvPoint2D64f; point2: TCvPoint2D64f; midPoint: pCvPoint2D64f); cdecl;
+  external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure icvGetNormalDirect(direct: pdouble; point: TCvPoint2D64f; normDirect: pdouble); cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+function icvGetVect(basePoint: TCvPoint2D64f; point1: TCvPoint2D64f; point2: TCvPoint2D64f): double; cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure icvProjectPointToDirect(point: TCvPoint2D64f; lineCoeff: pdouble; projectPoint: pCvPoint2D64f); cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure icvGetDistanceFromPointToDirect(point: TCvPoint2D64f; lineCoef: pdouble; dist: pdouble); cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+function icvCreateIsometricImage(src: pIplImage; dst: pIplImage; desired_depth: Integer; desired_num_channels: Integer): pIplImage; cdecl;
+  external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure cvDeInterlace(const frame: pCvArr; fieldEven: pCvArr; fieldOdd: pCvArr); cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+function cvCreateContourTree(const contour: pCvSeq; storage: pCvMemStorage; threshold: double): pCvContourTree; cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+function cvContourFromContourTree(const tree: pCvContourTree; storage: pCvMemStorage; criteria: TCvTermCriteria): pCvSeq; cdecl;
+  external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+function cvMatchContourTrees(const tree1: pCvContourTree; const tree2: pCvContourTree; method: Integer; threshold: double): double; cdecl;
+  external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+function cvCalcContoursCorrespondence(const contour1: pCvSeq; const contour2: pCvSeq; storage: pCvMemStorage): pCvSeq; cdecl;
+  external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+function cvMorphContours(const contour1: pCvSeq; const contour2: pCvSeq; corr: pCvSeq; alpha: double; storage: pCvMemStorage): pCvSeq; cdecl;
+  external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 function cvCreateGLCM(const srcImage: pIplImage; stepMagnitude: Integer; const stepDirections: PInteger = nil; numStepDirections: Integer = 0;
-  optimizationType: Integer = CV_GLCM_OPTIMIZATION_NONE): pCvGLCM; cdecl; external legacy_lib;
-procedure cvReleaseGLCM(var GLCM: pCvGLCM; flag: Integer = CV_GLCM_ALL); cdecl; external legacy_lib;
-procedure cvCreateGLCMDescriptors(destGLCM: pCvGLCM; descriptorOptimizationType: Integer = CV_GLCMDESC_OPTIMIZATION_ALLOWDOUBLENEST); cdecl; external legacy_lib;
-function cvGetGLCMDescriptor(GLCM: pCvGLCM; step: Integer; descriptor: Integer): double; cdecl; external legacy_lib;
-procedure cvGetGLCMDescriptorStatistics(GLCM: pCvGLCM; descriptor: Integer; average: pdouble; standardDeviation: pdouble); cdecl; external legacy_lib;
-function cvCreateGLCMImage(GLCM: pCvGLCM; step: Integer): pIplImage; cdecl; external legacy_lib;
-function cvInitFaceTracker(pFaceTracking: pCvFaceTracker; const imgGray: pIplImage; pRects: pCvRect; nRects: Integer): pCvFaceTracker; cdecl; external legacy_lib;
-function cvTrackFace(pFaceTracker: pCvFaceTracker; imgGray: pIplImage; pRects: pCvRect; nRects: Integer; ptRotate: pCvPoint; dbAngleRotate: pdouble)
-  : Integer; cdecl; external legacy_lib;
-procedure cvReleaseFaceTracker(var ppFaceTracker: pCvFaceTracker); cdecl; external legacy_lib;
-function cvFindFace(image: pIplImage; storage: pCvMemStorage): pCvSeq; cdecl; external legacy_lib;
-function cvPostBoostingFindFace(image: pIplImage; storage: pCvMemStorage): pCvSeq; cdecl; external legacy_lib;
-function cv3dTrackerCalibrateCameras(num_cameras: Integer; camera_intrinsics: pCv3dTrackerCameraIntrinsics; etalon_size: TCvSize; square_size: Single;
-  var samples: pIplImage; camera_info: pCv3dTrackerCameraInfo): TCvBool; cdecl; external legacy_lib;
+  optimizationType: Integer = CV_GLCM_OPTIMIZATION_NONE): pCvGLCM; cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure cvReleaseGLCM(var GLCM: pCvGLCM; flag: Integer = CV_GLCM_ALL); cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure cvCreateGLCMDescriptors(destGLCM: pCvGLCM; descriptorOptimizationType: Integer = CV_GLCMDESC_OPTIMIZATION_ALLOWDOUBLENEST); cdecl;
+  external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+function cvGetGLCMDescriptor(GLCM: pCvGLCM; step: Integer; descriptor: Integer): double; cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure cvGetGLCMDescriptorStatistics(GLCM: pCvGLCM; descriptor: Integer; average: pdouble; standardDeviation: pdouble); cdecl;
+  external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+function cvCreateGLCMImage(GLCM: pCvGLCM; step: Integer): pIplImage; cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+function cvInitFaceTracker(pFaceTracking: pCvFaceTracker; const imgGray: pIplImage; pRects: pCvRect; nRects: Integer): pCvFaceTracker; cdecl;
+  external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+function cvTrackFace(pFaceTracker: pCvFaceTracker; imgGray: pIplImage; pRects: pCvRect; nRects: Integer; ptRotate: pCvPoint; dbAngleRotate: pdouble): Integer; cdecl;
+  external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure cvReleaseFaceTracker(var ppFaceTracker: pCvFaceTracker); cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+function cvFindFace(image: pIplImage; storage: pCvMemStorage): pCvSeq; cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+function cvPostBoostingFindFace(image: pIplImage; storage: pCvMemStorage): pCvSeq; cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+function cv3dTrackerCalibrateCameras(num_cameras: Integer; camera_intrinsics: pCv3dTrackerCameraIntrinsics; etalon_size: TCvSize; square_size: Single; var samples: pIplImage;
+  camera_info: pCv3dTrackerCameraInfo): TCvBool; cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 function cv3dTrackerLocateObjects(num_cameras: Integer; num_objects: Integer; camera_info: pCv3dTrackerCameraInfo; tracking_info: pCv3dTracker2dTrackedObject;
-  tracked_objects: pCv3dTrackerTrackedObject): Integer; cdecl; external legacy_lib;
-function cvVoronoiDiagramFromContour(ContourSeq: pCvSeq; var VoronoiDiagram: pCvVoronoiDiagram2D; VoronoiStorage: pCvMemStorage;
-  contour_type: TCvLeeParameters = CV_LEE_INT; contour_orientation: Integer = -1; attempt_number: Integer = 10): Integer; cdecl; external legacy_lib;
+  tracked_objects: pCv3dTrackerTrackedObject): Integer; cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+function cvVoronoiDiagramFromContour(ContourSeq: pCvSeq; var VoronoiDiagram: pCvVoronoiDiagram2D; VoronoiStorage: pCvMemStorage; contour_type: TCvLeeParameters = CV_LEE_INT;
+  contour_orientation: Integer = -1; attempt_number: Integer = 10): Integer; cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 function cvVoronoiDiagramFromImage(pImage: pIplImage; var ContourSeq: pCvSeq; var VoronoiDiagram: pCvVoronoiDiagram2D; VoronoiStorage: pCvMemStorage;
-  regularization_method: TCvLeeParameters = CV_LEE_NON; approx_precision: float = -1 { CV_LEE_AUTO } ): Integer; cdecl; external legacy_lib;
-procedure cvReleaseVoronoiStorage(VoronoiDiagram: pCvVoronoiDiagram2D; var pVoronoiStorage: pCvMemStorage); cdecl; external legacy_lib;
-function cvLinearContorModelFromVoronoiDiagram(VoronoiDiagram: pCvVoronoiDiagram2D; maxWidth: float): pCvGraph; cdecl; external legacy_lib;
-function cvReleaseLinearContorModelStorage(var Graph: pCvGraph): Integer; cdecl; external legacy_lib;
-procedure cvInitPerspectiveTransform(size: TCvSize; const vertex: TcvInitPerspectiveTransformVertex; matrix: TcvInitPerspectiveTransformMatrix;
-  rectMap: pCvArr); cdecl; external legacy_lib;
-procedure cvMakeScanlines(const matrix: pCvMatrix3; img_size: TCvSize; scanlines1: PInteger; scanlines2: PInteger; lengths1: PInteger; lengths2: PInteger;
-  line_count: PInteger); cdecl; external legacy_lib;
-procedure cvPreWarpImage(line_count: Integer; img: pIplImage; dst: puchar; dst_nums: PInteger; scanlines: PInteger); cdecl; external legacy_lib;
-procedure cvFindRuns(line_count: Integer; prewarp1: puchar; prewarp2: puchar; line_lengths1: PInteger; line_lengths2: PInteger; runs1: PInteger;
-  runs2: PInteger; num_runs1: PInteger; num_runs2: PInteger); cdecl; external legacy_lib;
+  regularization_method: TCvLeeParameters = CV_LEE_NON; approx_precision: float = -1 { CV_LEE_AUTO } ): Integer; cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure cvReleaseVoronoiStorage(VoronoiDiagram: pCvVoronoiDiagram2D; var pVoronoiStorage: pCvMemStorage); cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+function cvLinearContorModelFromVoronoiDiagram(VoronoiDiagram: pCvVoronoiDiagram2D; maxWidth: float): pCvGraph; cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+function cvReleaseLinearContorModelStorage(var Graph: pCvGraph): Integer; cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure cvInitPerspectiveTransform(size: TCvSize; const vertex: TcvInitPerspectiveTransformVertex; matrix: TcvInitPerspectiveTransformMatrix; rectMap: pCvArr); cdecl;
+  external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure cvMakeScanlines(const matrix: pCvMatrix3; img_size: TCvSize; scanlines1: PInteger; scanlines2: PInteger; lengths1: PInteger; lengths2: PInteger; line_count: PInteger);
+  cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure cvPreWarpImage(line_count: Integer; img: pIplImage; dst: puchar; dst_nums: PInteger; scanlines: PInteger); cdecl;
+  external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure cvFindRuns(line_count: Integer; prewarp1: puchar; prewarp2: puchar; line_lengths1: PInteger; line_lengths2: PInteger; runs1: PInteger; runs2: PInteger;
+  num_runs1: PInteger; num_runs2: PInteger); cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 procedure cvDynamicCorrespondMulti(line_count: Integer; first: PInteger; first_runs: PInteger; second: PInteger; second_runs: PInteger; first_corr: PInteger;
-  second_corr: PInteger); cdecl; external legacy_lib;
-procedure cvMakeAlphaScanlines(scanlines1: PInteger; scanlines2: PInteger; scanlinesA: PInteger; lengths: PInteger; line_count: Integer; alpha: float); cdecl; external legacy_lib;
-procedure cvMorphEpilinesMulti(line_count: Integer; first_pix: puchar; first_num: PInteger; second_pix: puchar; second_num: PInteger; dst_pix: puchar;
-  dst_num: PInteger; alpha: float; first: PInteger; first_runs: PInteger; second: PInteger; second_runs: PInteger; first_corr: PInteger;
-  second_corr: PInteger); cdecl; external legacy_lib;
-procedure cvPostWarpImage(line_count: Integer; src: puchar; src_nums: PInteger; img: pIplImage; scanlines: PInteger); cdecl; external legacy_lib;
-procedure cvDeleteMoire(img: pIplImage); cdecl; external legacy_lib;
-function cvCreateConDensation(dynam_params: Integer; measure_params: Integer; sample_count: Integer): pCvConDensation; cdecl; external legacy_lib;
-procedure cvReleaseConDensation(var condens: pCvConDensation); cdecl; external legacy_lib;
-procedure cvConDensUpdateByTime(condens: pCvConDensation); cdecl; external legacy_lib;
-procedure cvConDensInitSampleSet(condens: pCvConDensation; lower_bound: pCvMat; upper_bound: pCvMat); cdecl; external legacy_lib;
-procedure cvClearSubdivVoronoi2D(subdiv: pCvSubdiv2D); cdecl; external legacy_lib;
-function cvFindNearestPoint2D(subdiv: pCvSubdiv2D; pt: TCvPoint2D32f): pCvSubdiv2DPoint; cdecl; external legacy_lib;
-procedure icvDrawMosaic(subdiv: pCvSubdiv2D; src: pIplImage; dst: pIplImage); cdecl; external legacy_lib;
-function icvSubdiv2DCheck(subdiv: pCvSubdiv2D): Integer; cdecl; external legacy_lib;
-function cvCreateKDTree(desc: pCvMat): pCvFeatureTree; cdecl; external legacy_lib;
-function cvCreateSpillTree(const raw_data: pCvMat; const naive: Integer = 50; const rho: double = 0.7; const tau: double = 0.1): pCvFeatureTree; cdecl; external legacy_lib;
-procedure cvReleaseFeatureTree(tr: pCvFeatureTree); cdecl; external legacy_lib;
-procedure cvFindFeatures(tr: pCvFeatureTree; const query_points: pCvMat; indices: pCvMat; dist: pCvMat; K: Integer; emax: Integer = 20); cdecl; external legacy_lib;
-function cvFindFeaturesBoxed(tr: pCvFeatureTree; bounds_min: pCvMat; bounds_max: pCvMat; out_indices: pCvMat): Integer; cdecl; external legacy_lib;
-function cvCreateLSH(ops: pCvLSHOperations; d: Integer; L: Integer { =10 }; K: Integer { =10 }; type_: Integer { =CV_64FC1 }; r: double { =4 };
-  seed: int64 { =-1 } ): pCvLSH; cdecl; external legacy_lib;
-function cvCreateMemoryLSH(d: Integer; n: Integer; L: Integer { =10 }; K: Integer { =10 }; type_: Integer { =CV_64FC1 }; r: double { =4 }; seed: int64 { =-1 } )
-  : pCvLSH; cdecl; external legacy_lib;
-procedure cvReleaseLSH(lsh: pCvLSH); cdecl; external legacy_lib;
-function LSHSize(lsh: pCvLSH): uint; cdecl; external legacy_lib;
-procedure cvLSHAdd(lsh: pCvLSH; const data: pCvMat; indices: pCvMat = nil); cdecl; external legacy_lib;
-procedure cvLSHRemove(lsh: pCvLSH; const indices: pCvMat); cdecl; external legacy_lib;
-procedure cvLSHQuery(lsh: pCvLSH; const query_points: pCvMat; indices: pCvMat; dist: pCvMat; K: Integer; emax: Integer); cdecl; external legacy_lib;
-procedure cvCalcOpticalFlowLK(const prev: pCvArr; const curr: pCvArr; win_size: TCvSize; velx: pCvArr; vely: pCvArr); cdecl; external legacy_lib;
-procedure cvCalcOpticalFlowBM(const prev: pCvArr; const curr: pCvArr; block_size: TCvSize; shift_size: TCvSize; max_range: TCvSize; use_previous: Integer;
-  velx: pCvArr; vely: pCvArr); cdecl; external legacy_lib;
-procedure cvCalcOpticalFlowHS(const prev: pCvArr; const curr: pCvArr; use_previous: Integer; velx: pCvArr; vely: pCvArr; lambda: double;
-  criteria: TCvTermCriteria); cdecl; external legacy_lib;
-procedure cvRefineForegroundMaskBySegm(segments: pCvSeq; bg_model: pCvBGStatModel); cdecl; external legacy_lib;
-function cvChangeDetection(prev_frame: pIplImage; curr_frame: pIplImage; change_mask: pIplImage): Integer; cdecl; external legacy_lib;
+  second_corr: PInteger); cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure cvMakeAlphaScanlines(scanlines1: PInteger; scanlines2: PInteger; scanlinesA: PInteger; lengths: PInteger; line_count: Integer; alpha: float); cdecl;
+  external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure cvMorphEpilinesMulti(line_count: Integer; first_pix: puchar; first_num: PInteger; second_pix: puchar; second_num: PInteger; dst_pix: puchar; dst_num: PInteger;
+  alpha: float; first: PInteger; first_runs: PInteger; second: PInteger; second_runs: PInteger; first_corr: PInteger; second_corr: PInteger); cdecl;
+  external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure cvPostWarpImage(line_count: Integer; src: puchar; src_nums: PInteger; img: pIplImage; scanlines: PInteger); cdecl;
+  external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure cvDeleteMoire(img: pIplImage); cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+function cvCreateConDensation(dynam_params: Integer; measure_params: Integer; sample_count: Integer): pCvConDensation; cdecl;
+  external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure cvReleaseConDensation(var condens: pCvConDensation); cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure cvConDensUpdateByTime(condens: pCvConDensation); cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure cvConDensInitSampleSet(condens: pCvConDensation; lower_bound: pCvMat; upper_bound: pCvMat); cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure cvClearSubdivVoronoi2D(subdiv: pCvSubdiv2D); cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+function cvFindNearestPoint2D(subdiv: pCvSubdiv2D; pt: TCvPoint2D32f): pCvSubdiv2DPoint; cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure icvDrawMosaic(subdiv: pCvSubdiv2D; src: pIplImage; dst: pIplImage); cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+function icvSubdiv2DCheck(subdiv: pCvSubdiv2D): Integer; cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+function cvCreateKDTree(desc: pCvMat): pCvFeatureTree; cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+function cvCreateSpillTree(const raw_data: pCvMat; const naive: Integer = 50; const rho: double = 0.7; const tau: double = 0.1): pCvFeatureTree; cdecl;
+  external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure cvReleaseFeatureTree(tr: pCvFeatureTree); cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure cvFindFeatures(tr: pCvFeatureTree; const query_points: pCvMat; indices: pCvMat; dist: pCvMat; K: Integer; emax: Integer = 20); cdecl;
+  external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+function cvFindFeaturesBoxed(tr: pCvFeatureTree; bounds_min: pCvMat; bounds_max: pCvMat; out_indices: pCvMat): Integer; cdecl;
+  external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+function cvCreateLSH(ops: pCvLSHOperations; d: Integer; L: Integer { =10 }; K: Integer { =10 }; type_: Integer { =CV_64FC1 }; r: double { =4 }; seed: int64 { =-1 } ): pCvLSH;
+  cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+function cvCreateMemoryLSH(d: Integer; n: Integer; L: Integer { =10 }; K: Integer { =10 }; type_: Integer { =CV_64FC1 }; r: double { =4 }; seed: int64 { =-1 } ): pCvLSH; cdecl;
+  external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure cvReleaseLSH(lsh: pCvLSH); cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+function LSHSize(lsh: pCvLSH): uint; cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure cvLSHAdd(lsh: pCvLSH; const data: pCvMat; indices: pCvMat = nil); cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure cvLSHRemove(lsh: pCvLSH; const indices: pCvMat); cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure cvLSHQuery(lsh: pCvLSH; const query_points: pCvMat; indices: pCvMat; dist: pCvMat; K: Integer; emax: Integer); cdecl;
+  external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure cvCalcOpticalFlowLK(const prev: pCvArr; const curr: pCvArr; win_size: TCvSize; velx: pCvArr; vely: pCvArr); cdecl;
+  external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure cvCalcOpticalFlowBM(const prev: pCvArr; const curr: pCvArr; block_size: TCvSize; shift_size: TCvSize; max_range: TCvSize; use_previous: Integer; velx: pCvArr;
+  vely: pCvArr); cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure cvCalcOpticalFlowHS(const prev: pCvArr; const curr: pCvArr; use_previous: Integer; velx: pCvArr; vely: pCvArr; lambda: double; criteria: TCvTermCriteria); cdecl;
+  external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure cvRefineForegroundMaskBySegm(segments: pCvSeq; bg_model: pCvBGStatModel); cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+function cvChangeDetection(prev_frame: pIplImage; curr_frame: pIplImage; change_mask: pIplImage): Integer; cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
 end.

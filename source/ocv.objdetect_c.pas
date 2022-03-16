@@ -144,27 +144,13 @@ Type
   // It is obsolete: convert your cascade to xml and use cvLoad instead
   // CVAPI(CvHaarClassifierCascade*) cvLoadHaarClassifierCascade(
   // const char* directory, CvSize orig_window_size);
-{$IFDEF SAFELOADLIB}
 
-type
-  TcvLoadHaarClassifierCascade = function(const directory: PAnsiChar; orig_window_size: TCvSize): pCvHaarClassifierCascade; cdecl;
-
-var
-  cvLoadHaarClassifierCascade: TcvLoadHaarClassifierCascade;
-{$ELSE}
 function cvLoadHaarClassifierCascade(const directory: PAnsiChar; orig_window_size: TCvSize): pCvHaarClassifierCascade; cdecl;
-{$ENDIF}
+
 // CVAPI(void) cvReleaseHaarClassifierCascade( CvHaarClassifierCascade** cascade );
-{$IFDEF SAFELOADLIB}
 
-type
-  TcvReleaseHaarClassifierCascade = procedure(Var cascade: pCvHaarClassifierCascade); cdecl;
-
-var
-  cvReleaseHaarClassifierCascade: TcvReleaseHaarClassifierCascade;
-{$ELSE}
 procedure cvReleaseHaarClassifierCascade(Var cascade: pCvHaarClassifierCascade); cdecl;
-{$ENDIF}
+
 
 Const
   CV_HAAR_DO_CANNY_PRUNING = 1;
@@ -178,20 +164,11 @@ Const
   // int min_neighbors CV_DEFAULT(3), int flags CV_DEFAULT(0),
   // CvSize min_size CV_DEFAULT(cvSize(0,0)), CvSize max_size CV_DEFAULT(cvSize(0,0)));
 
-{$IFDEF SAFELOADLIB}
 
-type
-  TcvHaarDetectObjects = function(const image: pCvArr; cascade: pCvHaarClassifierCascade; storage: pCvMemStorage; scale_factor: Double { 1.1 };
-    min_neighbors: Integer { 3 }; flags: Integer { 0 }; min_size: TCvSize { CV_DEFAULT(cvSize(0,0)) }; max_size: TCvSize { CV_DEFAULT(cvSize(0,0)) } )
-    : pCvSeq; cdecl;
-
-var
-  cvHaarDetectObjects: TcvHaarDetectObjects;
-{$ELSE}
 function cvHaarDetectObjects(const image: pCvArr; cascade: pCvHaarClassifierCascade; storage: pCvMemStorage; scale_factor: Double { 1.1 };
   min_neighbors: Integer { 3 }; flags: Integer { 0 }; min_size: TCvSize { CV_DEFAULT(cvSize(0,0)) }; max_size: TCvSize { CV_DEFAULT(cvSize(0,0)) } )
   : pCvSeq; cdecl;
-{$ENDIF}
+
 (*
   sets images for haar classifier cascade
 
@@ -199,34 +176,19 @@ function cvHaarDetectObjects(const image: pCvArr; cascade: pCvHaarClassifierCasc
   const CvArr* sum, const CvArr* sqsum,
   const CvArr* tilted_sum, double scale );
 *)
-{$IFDEF SAFELOADLIB}
 
-type
-  TcvSetImagesForHaarClassifierCascade = procedure(cascade: pCvHaarClassifierCascade; const sum: pCvArr; const sqsum: pCvArr;
-    const tilted_sum: pCvArr; scale: Double); cdecl;
-
-var
-  cvSetImagesForHaarClassifierCascade: TcvSetImagesForHaarClassifierCascade;
-{$ELSE}
 procedure cvSetImagesForHaarClassifierCascade(cascade: pCvHaarClassifierCascade; const sum: pCvArr; const sqsum: pCvArr; const tilted_sum: pCvArr;
   scale: Double); cdecl;
-{$ENDIF}
+
 (*
   runs the cascade on the specified window
 
   CVAPI(int) cvRunHaarClassifierCascade( const CvHaarClassifierCascade* cascade,
   CvPoint pt, int start_stage CV_DEFAULT(0));
 *)
-{$IFDEF SAFELOADLIB}
 
-type
-  TcvRunHaarClassifierCascade = function(const cascade: pCvHaarClassifierCascade; pt: TCvPoint; start_stage: Integer = 0): Integer; cdecl;
-
-var
-  cvRunHaarClassifierCascade: TcvRunHaarClassifierCascade;
-{$ELSE}
 function cvRunHaarClassifierCascade(const cascade: pCvHaarClassifierCascade; pt: TCvPoint; start_stage: Integer = 0): Integer; cdecl;
-{$ENDIF}
+
 // ****************************************************************************************
 // *                         Latent SVM Object Detection functions                        *
 // ****************************************************************************************
@@ -316,16 +278,9 @@ Type
   // trained Latent SVM detector in internal representation
 
   // CVAPI(CvLatentSvmDetector*) cvLoadLatentSvmDetector(const char* filename);
-{$IFDEF SAFELOADLIB}
 
-type
-  TcvLoadLatentSvmDetector = function(const filename: pCVChar): pCvLatentSvmDetector; cdecl;
-
-var
-  cvLoadLatentSvmDetector: TcvLoadLatentSvmDetector;
-{$ELSE}
 function cvLoadLatentSvmDetector(const filename: pCVChar): pCvLatentSvmDetector; cdecl;
-{$ENDIF}
+
 (*
   release memory allocated for CvLatentSvmDetector structure
 
@@ -337,16 +292,9 @@ function cvLoadLatentSvmDetector(const filename: pCVChar): pCvLatentSvmDetector;
 
   CVAPI(void) cvReleaseLatentSvmDetector(CvLatentSvmDetector** detector);
 *)
-{$IFDEF SAFELOADLIB}
 
-type
-  TcvReleaseLatentSvmDetector = procedure(Var detector: pCvLatentSvmDetector); cdecl;
-
-var
-  cvReleaseLatentSvmDetector: TcvReleaseLatentSvmDetector;
-{$ELSE}
 procedure cvReleaseLatentSvmDetector(Var detector: pCvLatentSvmDetector); cdecl;
-{$ENDIF}
+
 (*
   find rectangular regions in the given image that are likely
   to contain objects and corresponding confidence levels
@@ -372,18 +320,10 @@ procedure cvReleaseLatentSvmDetector(Var detector: pCvLatentSvmDetector); cdecl;
   float overlap_threshold CV_DEFAULT(0.5f),
   int numThreads CV_DEFAULT(-1));
 *)
-{$IFDEF SAFELOADLIB}
 
-type
-  TcvLatentSvmDetectObjects = function(image: pIplImage; detector: pCvLatentSvmDetector; storage: pCvMemStorage; overlap_threshold: single = 0.5;
-    numThreads: Integer = -1): pCvSeq; cdecl;
-
-var
-  cvLatentSvmDetectObjects: TcvLatentSvmDetectObjects;
-{$ELSE}
 function cvLatentSvmDetectObjects(image: pIplImage; detector: pCvLatentSvmDetector; storage: pCvMemStorage; overlap_threshold: single = 0.5;
   numThreads: Integer = -1): pCvSeq; cdecl;
-{$ENDIF}
+
 (*
   CV_EXPORTS CvSeq* cvHaarDetectObjectsForROC( const CvArr* image,
   CvHaarClassifierCascade* cascade, CvMemStorage* storage,
@@ -411,47 +351,22 @@ type
     corners: PCvMat;
   end;
 
-{$IF DEFINED(SAFELOADLIB) AND DEFINED(DEBUG)}
-procedure Init_opencv_objdetect_lib;
-{$IFEND}
-
 implementation
 
 uses ocv.lib;
 
-{$IFDEF SAFELOADLIB}
 
-Var
-  objdetectDLL: Cardinal;
-
-procedure Init_opencv_objdetect_lib;
-begin
-  objdetectDLL := ocvLoadLibrary(objdetect_lib);
-  Assert(objdetectDLL <> 0, 'Can not init ' + objdetect_lib);
-
-  cvLatentSvmDetectObjects := ocvGetProcAddress('cvLatentSvmDetectObjects', objdetectDLL);
-  cvLoadLatentSvmDetector := ocvGetProcAddress('cvLoadLatentSvmDetector', objdetectDLL);
-  cvReleaseLatentSvmDetector := ocvGetProcAddress('cvReleaseLatentSvmDetector', objdetectDLL);
-  cvHaarDetectObjects := ocvGetProcAddress('cvHaarDetectObjects', objdetectDLL);
-  cvLoadHaarClassifierCascade := ocvGetProcAddress('cvLoadHaarClassifierCascade', objdetectDLL);
-  cvReleaseHaarClassifierCascade := ocvGetProcAddress('cvReleaseHaarClassifierCascade', objdetectDLL);
-  cvSetImagesForHaarClassifierCascade := ocvGetProcAddress('cvSetImagesForHaarClassifierCascade', objdetectDLL);
-  cvRunHaarClassifierCascade := ocvGetProcAddress('cvRunHaarClassifierCascade', objdetectDLL);
-
-end;
-{$ELSE}
 function cvLatentSvmDetectObjects(image: pIplImage; detector: pCvLatentSvmDetector; storage: pCvMemStorage; overlap_threshold: single = 0.5;
-  numThreads: Integer = -1): pCvSeq; cdecl; external objdetect_lib;
-function cvLoadLatentSvmDetector(const filename: pCVChar): pCvLatentSvmDetector; cdecl; external objdetect_lib;
-procedure cvReleaseLatentSvmDetector(Var detector: pCvLatentSvmDetector); cdecl; external objdetect_lib;
+  numThreads: Integer = -1): pCvSeq; cdecl; external objdetect_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+function cvLoadLatentSvmDetector(const filename: pCVChar): pCvLatentSvmDetector; cdecl; external objdetect_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure cvReleaseLatentSvmDetector(Var detector: pCvLatentSvmDetector); cdecl; external objdetect_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 function cvHaarDetectObjects(const image: pCvArr; cascade: pCvHaarClassifierCascade; storage: pCvMemStorage; scale_factor: Double { 1.1 };
   min_neighbors: Integer { 3 }; flags: Integer { 0 }; min_size: TCvSize { CV_DEFAULT(cvSize(0,0)) }; max_size: TCvSize { CV_DEFAULT(cvSize(0,0)) } )
-  : pCvSeq; cdecl; external objdetect_lib;
-function cvLoadHaarClassifierCascade(const directory: PAnsiChar; orig_window_size: TCvSize): pCvHaarClassifierCascade; cdecl; external objdetect_lib;
-procedure cvReleaseHaarClassifierCascade(Var cascade: pCvHaarClassifierCascade); cdecl; external objdetect_lib;
+  : pCvSeq; cdecl; external objdetect_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+function cvLoadHaarClassifierCascade(const directory: PAnsiChar; orig_window_size: TCvSize): pCvHaarClassifierCascade; cdecl; external objdetect_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure cvReleaseHaarClassifierCascade(Var cascade: pCvHaarClassifierCascade); cdecl; external objdetect_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 procedure cvSetImagesForHaarClassifierCascade(cascade: pCvHaarClassifierCascade; const sum: pCvArr; const sqsum: pCvArr; const tilted_sum: pCvArr;
-  scale: Double); cdecl; external objdetect_lib;
-function cvRunHaarClassifierCascade(const cascade: pCvHaarClassifierCascade; pt: TCvPoint; start_stage: Integer = 0): Integer; cdecl; external objdetect_lib;
-{$ENDIF}
+  scale: Double); cdecl; external objdetect_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+function cvRunHaarClassifierCascade(const cascade: pCvHaarClassifierCascade; pt: TCvPoint; start_stage: Integer = 0): Integer; cdecl; external objdetect_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
 end.

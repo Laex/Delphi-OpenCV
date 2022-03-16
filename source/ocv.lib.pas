@@ -42,24 +42,24 @@ unit ocv.lib;
 interface
 
 const
-{$IFDEF DelphiOCVVersion_29}
-  CV_VERSION_EPOCH = '2';
-  CV_VERSION_MAJOR = '4';
-  CV_VERSION_MINOR = '13';
-  CV_VERSION_REVISION = '3';
-{$ELSE}
-{$IFDEF DelphiOCVVersion_30}
-  CV_VERSION_EPOCH = '3';
-  CV_VERSION_MAJOR = '0';
-  CV_VERSION_MINOR = '0';
-  CV_VERSION_REVISION = '0';
-{$ENDIF}
-{$ENDIF}
+  // {$IFDEF DelphiOCVVersion_29}
+  CV_VERSION_EPOCH    = '2';
+  CV_VERSION_MAJOR    = '4';
+  CV_VERSION_MINOR    = '13';
+  CV_VERSION_REVISION = '6';
+  // {$ELSE}
+  // {$IFDEF DelphiOCVVersion_30}
+  // CV_VERSION_EPOCH = '3';
+  // CV_VERSION_MAJOR = '0';
+  // CV_VERSION_MINOR = '0';
+  // CV_VERSION_REVISION = '0';
+  // {$ENDIF}
+  // {$ENDIF}
   CV_VERSION = CV_VERSION_EPOCH + '.' + CV_VERSION_MAJOR + '.' + CV_VERSION_MINOR + '.' + CV_VERSION_REVISION;
 
   // * old  style version constants*/
-  CV_MAJOR_VERSION = CV_VERSION_EPOCH;
-  CV_MINOR_VERSION = CV_VERSION_MAJOR;
+  CV_MAJOR_VERSION    = CV_VERSION_EPOCH;
+  CV_MINOR_VERSION    = CV_VERSION_MAJOR;
   CV_SUBMINOR_VERSION = CV_VERSION_MINOR;
 
   CV_VERSION_DLL = CV_VERSION_EPOCH + CV_VERSION_MAJOR + CV_VERSION_MINOR;
@@ -76,22 +76,22 @@ const
   core_lib =
 {$IFDEF MSWINDOWS}
     CV_DLL_DIR + 'opencv_' +
- {$IF DEFINED(DelphiOCVVersion_29)}
+{$IF DEFINED(DelphiOCVVersion_29)}
     'core' +
- {$ELSEIF DEFINED(DelphiOCVVersion_30)}
+{$ELSEIF DEFINED(DelphiOCVVersion_30)}
     'world' +
- {$ENDIF}
+{$ENDIF}
     CV_VERSION_DLL {$IFDEF DEBUG} + 'd'{$ENDIF} + '.dll';
 {$ELSE}
- {$IFDEF MACOS}
+{$IFDEF MACOS}
   'opencv_core.dylib';
- {$ELSE}
-  {$IFDEF ANDROID}
+{$ELSE}
+{$IFDEF ANDROID}
   'libopencv_core.so';
-  {$ELSE}
+{$ELSE}
   'libopencv_core.so';
-  {$ENDIF}
- {$ENDIF}
+{$ENDIF}
+{$ENDIF}
 {$ENDIF}
 // -------------------------------
 highgui_lib = {$IFDEF MSWINDOWS}
@@ -312,112 +312,7 @@ opencv_contrib_lib = {$IFDEF MSWINDOWS}
 //
 // -------------------------------
 //
-{$IFDEF SAFELOADLIB}
-function ocvLoadLibrary(const Name: String): Cardinal;
-function ocvFreeLibrary(const LibHandle: Cardinal; const Remove: Boolean = true): Boolean;
-function ocvGetProcAddress(const ProcName: String; const LibHandle: Cardinal = 0; const Check: Boolean = true): Pointer;
-procedure ocvErrorMessage(const ErrorText: String);
-{$ENDIF}
 
 implementation
-
-{$IFDEF SAFELOADLIB}
-
-Uses
-  Winapi.Windows,
-  System.Generics.Collections,
-  ocv.utils;
-
-procedure ocvErrorMessage(const ErrorText: String);
-begin
-  if IsConsole then
-  begin
-    Writeln(ErrorText);
-    Writeln('Press ENTER for exit');
-    Readln;
-  end
-  else
-    MessageBox(0, LPCWSTR(ErrorText), 'Error', MB_OK);
-  Halt(1);
-end;
-
-{$IFDEF USE_STUB_FOR_MISS_FUNC}
-procedure STUB_PROC;
-begin
-  ocvErrorMessage('STUB: Call missing functions');
-end;
-{$ENDIF}
-
-Type
-  TOCVLibHandles = TDictionary<String, Cardinal>;
-
-Var
-  OCVLibHandles: TOCVLibHandles;
-
-function ocvLoadLibrary(const Name: String): Cardinal;
-begin
-  if not OCVLibHandles.TryGetValue(Name, Result) then
-  begin
-{$R-}
-    Result := LoadLibrary(LPCWSTR(@Name[1]));
-{$R+}
-    if Result = 0 then
-      ocvErrorMessage('Can not load DLL: ' + Name);
-    OCVLibHandles.Add(Name, Result);
-  end;
-end;
-
-function ocvFreeLibrary(const LibHandle: Cardinal; const Remove: Boolean): Boolean;
-Var
-  P: TPair<String, Cardinal>;
-begin
-  if LibHandle = 0 then
-    Result := False
-  else
-  begin
-    Result := FreeLibrary(LibHandle);
-    if Remove and OCVLibHandles.ContainsValue(LibHandle) then
-      for P in OCVLibHandles do
-        if P.Value = LibHandle then
-        begin
-          OCVLibHandles.Remove(P.Key);
-          Break;
-        end;
-  end;
-end;
-
-function ocvGetProcAddress(const ProcName: String; const LibHandle: Cardinal; const Check: Boolean): Pointer;
-begin
-  if LibHandle = 0 then
-    Result := nil
-  else
-    Result := GetProcAddress(LibHandle, c_str(ProcName));
-  if not Assigned(Result) then
-{$IFDEF USE_STUB_FOR_MISS_FUNC}
-    Result := @STUB_PROC;
-{$ELSE}
-    ocvErrorMessage('Can not load procedure or function: ' + ProcName);
-{$ENDIF}
-end;
-
-procedure ocvFreeLibraries;
-Var
-  P: TPair<String, Cardinal>;
-begin
-  for P in OCVLibHandles do
-    ocvFreeLibrary(P.Value, False);
-  OCVLibHandles.Clear;
-end;
-
-initialization
-
-OCVLibHandles := TOCVLibHandles.Create;
-
-finalization
-
-ocvFreeLibraries;
-OCVLibHandles.Free;
-
-{$ENDIF}
 
 end.

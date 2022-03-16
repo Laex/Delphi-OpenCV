@@ -57,7 +57,7 @@ const
   (*
     Inpainting algorithms
   *)
-  CV_INPAINT_NS = 0;
+  CV_INPAINT_NS    = 0;
   CV_INPAINT_TELEA = 1;
 
   (*
@@ -67,43 +67,13 @@ const
     CvArr* dst, double inpaintRange, int flags );
   *)
 
-{$IFDEF SAFELOADLIB}
-
-Type
-  TcvInpaint = procedure(const src: pCvArr; const inpaint_mask: pCvArr; dst: pCvArr; inpaintRange: double; flags: Integer); cdecl;
-
-Var
-  cvInpaint: TcvInpaint = nil;
-{$ELSE}
 procedure cvInpaint(const src: pCvArr; const inpaint_mask: pCvArr; dst: pCvArr; inpaintRange: double; flags: Integer); cdecl;
-{$ENDIF}
-
-{$IF DEFINED(SAFELOADLIB) AND DEFINED(DEBUG)}
-procedure Init_opencv_photo_lib;
-{$ENDIF}
 
 implementation
 
 uses ocv.lib;
 
-{$IFDEF SAFELOADLIB}
-
-Var
-  PhotoDLL: Cardinal;
-
-procedure Init_opencv_photo_lib;
-begin
-  PhotoDLL := ocvLoadLibrary(opencv_photo_lib);
-  Assert(PhotoDLL <> 0, 'Can not init ' + opencv_photo_lib);
-  cvInpaint := ocvGetProcAddress('cvInpaint', PhotoDLL);
-end;
-
-initialization
-
-Init_opencv_photo_lib;
-
-{$ELSE}
-procedure cvInpaint(const src: pCvArr; const inpaint_mask: pCvArr; dst: pCvArr; inpaintRange: double; flags: Integer); cdecl; external opencv_photo_lib;
-{$ENDIF}
+procedure cvInpaint(const src: pCvArr; const inpaint_mask: pCvArr; dst: pCvArr; inpaintRange: double; flags: Integer); cdecl;
+  external opencv_photo_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
 end.

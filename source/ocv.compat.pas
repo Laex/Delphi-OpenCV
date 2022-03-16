@@ -97,13 +97,13 @@ type
 
 var
   // Assigning values t​othe constants has been moved to the section of the module initialization
-  CV_MAT32F: Integer; // = CV_32FC1;
+  CV_MAT32F: Integer;     // = CV_32FC1;
   CV_MAT3x1_32F: Integer; // = CV_32FC1;
   CV_MAT4x1_32F: Integer; // = CV_32FC1;
   CV_MAT3x3_32F: Integer; // = CV_32FC1;
   CV_MAT4x4_32F: Integer; // = CV_32FC1;
 
-  CV_MAT64D: Integer; // = CV_64FC1;
+  CV_MAT64D: Integer;     // = CV_64FC1;
   CV_MAT3x1_64D: Integer; // = CV_64FC1;
   CV_MAT4x1_64D: Integer; // = CV_64FC1;
   CV_MAT3x3_64D: Integer; // = CV_64FC1;
@@ -134,17 +134,9 @@ type
     CV_EXPORTS CvMat cvMatArray( int rows, int cols, int type,
     int count, void* data CV_DEFAULT(0));
   *)
-{$IFDEF SAFELOADLIB}
 
-type
-  TcvMatArray_fun = function(rows: Integer; cols: Integer; type_: Integer; count: Integer; data: Pointer = nil): TCvMat; cdecl;
-
-Var
-  cvMatArray: TcvMatArray_fun;
-{$ELSE}
 function cvMatArray(rows: Integer; cols: Integer; type_: Integer; count: Integer; data: Pointer = nil): TCvMat; cdecl;
 
-{$ENDIF}
 // #define cvUpdateMHIByTime  cvUpdateMotionHistory
 //
 // #define cvAccMask cvAcc
@@ -158,69 +150,32 @@ function cvMatArray(rows: Integer; cols: Integer; type_: Integer; count: Integer
 (*
   CV_EXPORTS double cvMean( const CvArr* image, const CvArr* mask CV_DEFAULT(0));
 *)
-{$IFDEF SAFELOADLIB}
 
-Type
-  TcvMean = function(const image: PCvArr; const mask: PCvArr = nil): Double; cdecl;
-
-var
-  cvMean: TcvMean;
-{$ELSE}
 function cvMean(const image: PCvArr; const mask: PCvArr = nil): Double; cdecl;
-{$ENDIF}
 (*
   CV_EXPORTS double cvSumPixels( const CvArr* image );
 *)
-{$IFDEF SAFELOADLIB}
-
-type
-  TcvSumPixels = function(const image: PCvArr): Double; cdecl;
-
-var
-  cvSumPixels: TcvSumPixels;
-{$ELSE}
 function cvSumPixels(const image: PCvArr): Double; cdecl;
-{$ENDIF}
+
 (*
   CV_EXPORTS void  cvMean_StdDev( const CvArr* image, double* mean, double* sdv,
   const CvArr* mask CV_DEFAULT(0));
 *)
-{$IFDEF SAFELOADLIB}
 
-type
-  TcvMean_StdDev = procedure(const image: PCvArr; mean: PDouble; sdv: PDouble; const mask: PCvArr = nil); cdecl;
-
-var
-  cvMean_StdDev: TcvMean_StdDev;
-{$ELSE}
 procedure cvMean_StdDev(const image: PCvArr; mean: PDouble; sdv: PDouble; const mask: PCvArr = nil); cdecl;
-{$ENDIF}
+
 (*
   CV_EXPORTS void cvmPerspectiveProject( const CvMat* mat, const CvArr* src, CvArr* dst );
 *)
-{$IFDEF SAFELOADLIB}
 
-type
-  TcvmPerspectiveProject = procedure(const mat: PCvMat; const src: PCvArr; dst: PCvArr); cdecl;
-
-var
-  cvmPerspectiveProject: TcvmPerspectiveProject;
-{$ELSE}
 procedure cvmPerspectiveProject(const mat: PCvMat; const src: PCvArr; dst: PCvArr); cdecl;
-{$ENDIF}
+
 (*
   CV_EXPORTS void cvFillImage( CvArr* mat, double color );
 *)
-{$IFDEF SAFELOADLIB}
 
-type
-  TcvFillImage = procedure(mat: PCvArr; color: Double); cdecl;
-
-var
-  cvFillImage: TcvFillImage;
-{$ELSE}
 procedure cvFillImage(mat: PCvArr; color: Double); cdecl;
-{$ENDIF}
+
 //
 // #define cvCvtPixToPlane cvSplit //defined in ocv.core_c
 // #define cvCvtPlaneToPix cvMerge //defined in ocv.core_c
@@ -235,8 +190,8 @@ type
   pCvRandState = ^TCvRandState;
 
   TCvRandState = record
-    state: TCvRNG; (* RNG state (the current seed and carry) *)
-    disttype: Integer; (* distribution type *)
+    state: TCvRNG;                      (* RNG state (the current seed and carry) *)
+    disttype: Integer;                  (* distribution type *)
     param: array [0 .. 1] of TCvScalar; (* parameters of RNG *)
   end;
 
@@ -246,162 +201,70 @@ type
     CV_EXPORTS void  cvRandSetRange( CvRandState* state, double param1,
     double param2, int index CV_DEFAULT(-1));
   *)
-{$IFDEF SAFELOADLIB}
 
-type
-  TcvRandSetRange = procedure(state: pCvRandState; param1: Double; param2: Double; index: Integer = -1); cdecl;
-
-var
-  cvRandSetRange: TcvRandSetRange;
-{$ELSE}
 procedure cvRandSetRange(state: pCvRandState; param1: Double; param2: Double; index: Integer = -1); cdecl;
-{$ENDIF}
+
 (*
   CV_EXPORTS void  cvRandInit( CvRandState* state, double param1,
   double param2, int seed,
   int disttype CV_DEFAULT(CV_RAND_UNI));
 *)
-{$IFDEF SAFELOADLIB}
 
-type
-  TcvRandInit = procedure(state: pCvRandState; param1: Double; param2: Double; seed: Integer; disttype: Integer = CV_RAND_UNI); cdecl;
-
-var
-  cvRandInit: TcvRandInit;
-{$ELSE}
 procedure cvRandInit(state: pCvRandState; param1: Double; param2: Double; seed: Integer; disttype: Integer = CV_RAND_UNI); cdecl;
-{$ENDIF}
+
 (*
   Fills array with random numbers
 
   CV_EXPORTS void cvRand( CvRandState* state, CvArr* arr );
 *)
-{$IFDEF SAFELOADLIB}
 
-type
-  TcvRand = procedure(state: pCvRandState; arr: PCvArr); cdecl;
-
-var
-  cvRand: TcvRand;
-{$ELSE}
 procedure cvRand(state: pCvRandState; arr: PCvArr); cdecl;
-{$ENDIF}
 // #define cvRandNext( _state ) cvRandInt( &(_state)->state )
 
 // CV_EXPORTS void cvbRand( CvRandState* state, float* dst, int len );
-{$IFDEF SAFELOADLIB}
 
-type
-  TcvbRand = procedure(state: pCvRandState; dst: PSingle; len: Integer); cdecl;
-
-var
-  cvbRand: TcvbRand;
-{$ELSE}
 procedure cvbRand(state: pCvRandState; dst: PSingle; len: Integer); cdecl;
-{$ENDIF}
+
 // CV_EXPORTS void  cvbCartToPolar( const float* y, const float* x, float* magnitude, float* angle, int len );
-{$IFDEF SAFELOADLIB}
 
-type
-  TcvbCartToPolar = procedure(const y: PSingle; const x: PSingle; Var magnitude: Single; Var angle: Single; len: Integer); cdecl;
-
-var
-  cvbCartToPolar: TcvbCartToPolar;
-{$ELSE}
 procedure cvbCartToPolar(const y: PSingle; const x: PSingle; Var magnitude: Single; Var angle: Single; len: Integer); cdecl;
-{$ENDIF}
+
 // CV_EXPORTS void  cvbFastArctan( const float* y, const float* x, float* angle, int len );
-{$IFDEF SAFELOADLIB}
 
-type
-  TcvbFastArctan = procedure(const y: PSingle; const x: PSingle; Var angle: Single; len: Integer); cdecl;
-
-var
-  cvbFastArctan: TcvbFastArctan;
-{$ELSE}
 procedure cvbFastArctan(const y: PSingle; const x: PSingle; Var angle: Single; len: Integer); cdecl;
-{$ENDIF}
+
 // CV_EXPORTS void  cvbSqrt( const float* x, float* y, int len );
-{$IFDEF SAFELOADLIB}
 
-type
-  TcvbSqrt = procedure(const x: PSingle; Var y: Single; len: Integer); cdecl;
-
-var
-  cvbSqrt: TcvbSqrt;
-{$ELSE}
 procedure cvbSqrt(const x: PSingle; Var y: Single; len: Integer); cdecl;
-{$ENDIF}
+
 // CV_EXPORTS void  cvbInvSqrt( const float* x, float* y, int len );
-{$IFDEF SAFELOADLIB}
 
-type
-  TcvbInvSqrt = procedure(const x: PSingle; Var y: Single; len: Integer); cdecl;
-
-var
-  cvbInvSqrt: TcvbInvSqrt;
-{$ELSE}
 procedure cvbInvSqrt(const x: PSingle; Var y: Single; len: Integer); cdecl;
-{$ENDIF}
+
 // CV_EXPORTS void  cvbReciprocal( const float* x, float* y, int len );
-{$IFDEF SAFELOADLIB}
 
-type
-  TcvbReciprocal = procedure(const x: PSingle; var y: Single; len: Integer); cdecl;
-
-var
-  cvbReciprocal: TcvbReciprocal;
-{$ELSE}
 procedure cvbReciprocal(const x: PSingle; var y: Single; len: Integer); cdecl;
-{$ENDIF}
+
 // CV_EXPORTS void  cvbFastExp( const float* x, double* y, int len );
-{$IFDEF SAFELOADLIB}
 
-type
-  TcvbFastExp = procedure(const x: PSingle; Var y: Double; len: Integer); cdecl;
-
-var
-  cvbFastExp: TcvbFastExp;
-{$ELSE}
 procedure cvbFastExp(const x: PSingle; Var y: Double; len: Integer); cdecl;
-{$ENDIF}
+
 // CV_EXPORTS void  cvbFastLog( const double* x, float* y, int len );
-{$IFDEF SAFELOADLIB}
 
-type
-  TcvbFastLog = procedure(const x: PDouble; Var y: Single; len: Integer); cdecl;
-
-var
-  cvbFastLog: TcvbFastLog;
-{$ELSE}
 procedure cvbFastLog(const x: PDouble; Var y: Single; len: Integer); cdecl;
-{$ENDIF}
+
 (*
   CV_EXPORTS CvRect  cvContourBoundingRect( void* point_set, int update CV_DEFAULT(0));
 *)
-{$IFDEF SAFELOADLIB}
 
-type
-  TcvContourBoundingRect = function(point_set: Pointer; update: Integer = 0): TCvRect; cdecl;
-
-var
-  cvContourBoundingRect: TcvContourBoundingRect;
-{$ELSE}
 function cvContourBoundingRect(point_set: Pointer; update: Integer = 0): TCvRect; cdecl;
-{$ENDIF}
+
 (*
   CV_EXPORTS double cvPseudoInverse( const CvArr* src, CvArr* dst );
 *)
-{$IFDEF SAFELOADLIB}
 
-type
-  TcvPseudoInverse = function(const src: PCvArr; dst: PCvArr): Double; cdecl;
-
-var
-  cvPseudoInverse: TcvPseudoInverse;
-{$ELSE}
 function cvPseudoInverse(const src: PCvArr; dst: PCvArr): Double; cdecl;
-{$ENDIF}
+
 // #define cvPseudoInv cvPseudoInverse
 // #define cvContourMoments( contour, moments ) cvMoments( contour, moments, 0 )
 //
@@ -447,18 +310,9 @@ function cvPseudoInverse(const src: PCvArr; dst: PCvArr): Double; cdecl;
   CvRect* bound_rect,
   int orientation, int* hull, int* hullsize );
 *)
-{$IFDEF SAFELOADLIB}
 
-type
-  TcvConvexHull = procedure(points: PCvPoint; num_points: Integer; bound_rect: PCvRect; orientation: Integer; Var hull: Integer;
-    Var hullsize: Integer); cdecl;
+procedure cvConvexHull(points: PCvPoint; num_points: Integer; bound_rect: PCvRect; orientation: Integer; Var hull: Integer; Var hullsize: Integer); cdecl;
 
-var
-  cvConvexHull: TcvConvexHull;
-{$ELSE}
-procedure cvConvexHull(points: PCvPoint; num_points: Integer; bound_rect: PCvRect; orientation: Integer; Var hull: Integer;
-  Var hullsize: Integer); cdecl;
-{$ENDIF}
 (*
   CV_EXPORTS void cvMinAreaRect( CvPoint* points, int n,
   int left, int bottom,
@@ -467,69 +321,35 @@ procedure cvConvexHull(points: PCvPoint; num_points: Integer; bound_rect: PCvRec
   CvPoint2D32f* vect1,
   CvPoint2D32f* vect2 );
 *)
-{$IFDEF SAFELOADLIB}
 
-type
-  TcvMinAreaRect = procedure(points: PCvPoint; n: Integer; left: Integer; bottom: Integer; right: Integer; top: Integer;
-    anchor: PCvPoint2D32f; vect1: PCvPoint2D32f; vect2: PCvPoint2D32f); cdecl;
-
-var
-  cvMinAreaRect: TcvMinAreaRect;
-{$ELSE}
-procedure cvMinAreaRect(points: PCvPoint; n: Integer; left: Integer; bottom: Integer; right: Integer; top: Integer; anchor: PCvPoint2D32f;
-  vect1: PCvPoint2D32f; vect2: PCvPoint2D32f); cdecl;
-{$ENDIF}
+procedure cvMinAreaRect(points: PCvPoint; n: Integer; left: Integer; bottom: Integer; right: Integer; top: Integer; anchor: PCvPoint2D32f; vect1: PCvPoint2D32f;
+  vect2: PCvPoint2D32f); cdecl;
 
 Type
-  TCvDisType = type Integer;
-  TCvChainApproxMethod = type Integer;
+  TCvDisType              = type Integer;
+  TCvChainApproxMethod    = type Integer;
   TCvContourRetrievalMode = type Integer;
 
   (*
     CV_EXPORTS  void  cvFitLine3D( CvPoint3D32f* points, int count, int dist,
     void *param, float reps, float aeps, float* line );
   *)
-{$IFDEF SAFELOADLIB}
 
-type
-  TcvFitLine3D = procedure(points: PCvPoint3D32f; count: Integer; dist: Integer; param: Pointer; reps: Single; aeps: Single;
-    Var line: Single); cdecl;
+procedure cvFitLine3D(points: PCvPoint3D32f; count: Integer; dist: Integer; param: Pointer; reps: Single; aeps: Single; Var line: Single); cdecl;
 
-var
-  cvFitLine3D: TcvFitLine3D;
-{$ELSE}
-procedure cvFitLine3D(points: PCvPoint3D32f; count: Integer; dist: Integer; param: Pointer; reps: Single; aeps: Single;
-  Var line: Single); cdecl;
-{$ENDIF}
 (*
   Fits a line into set of 2d points in a robust way (M-estimator technique)
 
   CV_EXPORTS  void  cvFitLine2D( CvPoint2D32f* points, int count, int dist,
   void *param, float reps, float aeps, float* line );
 *)
-{$IFDEF SAFELOADLIB}
 
-type
-  TcvFitLine2D = procedure(points: PCvPoint2D32f; count: Integer; dist: Integer; param: Pointer; reps: Single; aeps: Single;
-    Var line: Single); cdecl;
+procedure cvFitLine2D(points: PCvPoint2D32f; count: Integer; dist: Integer; param: Pointer; reps: Single; aeps: Single; Var line: Single); cdecl;
 
-var
-  cvFitLine2D: TcvFitLine2D;
-{$ELSE}
-procedure cvFitLine2D(points: PCvPoint2D32f; count: Integer; dist: Integer; param: Pointer; reps: Single; aeps: Single;
-  Var line: Single); cdecl;
-{$ENDIF}
 // CV_EXPORTS  void  cvFitEllipse( const CvPoint2D32f* points, int count, CvBox2D* box );
-{$IFDEF SAFELOADLIB}
 
-type
-  TcvFitEllipse = procedure(const points: PCvPoint2D32f; count: Integer; Var box: TCvBox2D); cdecl;
-
-var
-  cvFitEllipse: TcvFitEllipse;
-{$ELSE}
 procedure cvFitEllipse(const points: PCvPoint2D32f; count: Integer; Var box: TCvBox2D); cdecl;
-{$ENDIF}
+
 (*
   Projects 2d points to one of standard coordinate planes
   (i.e. removes one of coordinates)
@@ -539,16 +359,9 @@ procedure cvFitEllipse(const points: PCvPoint2D32f; count: Integer; Var box: TCv
   int xIndx CV_DEFAULT(0),
   int yIndx CV_DEFAULT(1));
 *)
-{$IFDEF SAFELOADLIB}
 
-type
-  TcvProject3D = procedure(points3D: PCvPoint3D32f; count: Integer; points2D: PCvPoint2D32f; xIndx: Integer = 0; yIndx: Integer = 1); cdecl;
-
-var
-  cvProject3D: TcvProject3D;
-{$ELSE}
 procedure cvProject3D(points3D: PCvPoint3D32f; count: Integer; points2D: PCvPoint2D32f; xIndx: Integer = 0; yIndx: Integer = 1); cdecl;
-{$ENDIF}
+
 (* Retrieves value of the particular bin
   of x-dimensional (x=1,2,3,...) histogram
 
@@ -582,52 +395,26 @@ procedure cvProject3D(points3D: PCvPoint3D32f; count: Integer; points2D: PCvPoin
   double theta, int threshold,
   float* lines, int linesNumber );
 *)
-{$IFDEF SAFELOADLIB}
 
-type
-  TcvHoughLines = function(image: PCvArr; rho: Double; theta: Double; threshold: Integer; lines: pfloat; linesNumber: Integer)
-    : Integer; cdecl;
-
-var
-  cvHoughLines: TcvHoughLines;
-{$ELSE}
 function cvHoughLines(image: PCvArr; rho: Double; theta: Double; threshold: Integer; lines: pfloat; linesNumber: Integer): Integer; cdecl;
-{$ENDIF}
+
 (*
   CV_EXPORTS  int  cvHoughLinesP( CvArr* image, double rho,
   double theta, int threshold,
   int lineLength, int lineGap,
   int* lines, int linesNumber );
 *)
-{$IFDEF SAFELOADLIB}
 
-type
-  TcvHoughLinesP = function(image: PCvArr; rho: Double; theta: Double; threshold: Integer; lineLength: Integer; lineGap: Integer;
-    lines: pInteger; linesNumber: Integer): Integer; cdecl;
+function cvHoughLinesP(image: PCvArr; rho: Double; theta: Double; threshold: Integer; lineLength: Integer; lineGap: Integer; lines: pInteger; linesNumber: Integer): Integer; cdecl;
 
-var
-  cvHoughLinesP: TcvHoughLinesP;
-{$ELSE}
-function cvHoughLinesP(image: PCvArr; rho: Double; theta: Double; threshold: Integer; lineLength: Integer; lineGap: Integer;
-  lines: pInteger; linesNumber: Integer): Integer; cdecl;
-{$ENDIF}
 (*
   CV_EXPORTS  int  cvHoughLinesSDiv( CvArr* image, double rho, int srn,
   double theta, int stn, int threshold,
   float* lines, int linesNumber );
 *)
-{$IFDEF SAFELOADLIB}
 
-type
-  TcvHoughLinesSDiv = function(image: PCvArr; rho: Double; srn: Integer; theta: Double; stn: Integer; threshold: Integer; lines: pfloat;
-    linesNumber: Integer): Integer; cdecl;
+function cvHoughLinesSDiv(image: PCvArr; rho: Double; srn: Integer; theta: Double; stn: Integer; threshold: Integer; lines: pfloat; linesNumber: Integer): Integer; cdecl;
 
-var
-  cvHoughLinesSDiv: TcvHoughLinesSDiv;
-{$ELSE}
-function cvHoughLinesSDiv(image: PCvArr; rho: Double; srn: Integer; theta: Double; stn: Integer; threshold: Integer; lines: pfloat;
-  linesNumber: Integer): Integer; cdecl;
-{$ENDIF}
 (*
   CV_EXPORTS  float  cvCalcEMD( const float* signature1, int size1,
   const float* signature2, int size2,
@@ -636,129 +423,61 @@ function cvHoughLinesSDiv(image: PCvArr; rho: Double; srn: Integer; theta: Doubl
   float* lower_bound CV_DEFAULT(0),
   void* user_param CV_DEFAULT(0));
 *)
-{$IFDEF SAFELOADLIB}
 
-type
-  TcvCalcEMD = function(const signature1: pfloat; size1: Integer; const signature2: pfloat; size2: Integer; dims: Integer;
-    dist_type: Integer = CV_DIST_L2; dist_func: TCvDistanceFunction = nil; lower_bound: pfloat = nil; user_param: Pointer = nil)
-    : float; cdecl;
+function cvCalcEMD(const signature1: pfloat; size1: Integer; const signature2: pfloat; size2: Integer; dims: Integer; dist_type: Integer = CV_DIST_L2;
+  dist_func: TCvDistanceFunction = nil; lower_bound: pfloat = nil; user_param: Pointer = nil): float; cdecl;
 
-var
-  cvCalcEMD: TcvCalcEMD;
-
-{$ELSE}
-function cvCalcEMD(const signature1: pfloat; size1: Integer; const signature2: pfloat; size2: Integer; dims: Integer;
-  dist_type: Integer = CV_DIST_L2; dist_func: TCvDistanceFunction = nil; lower_bound: pfloat = nil; user_param: Pointer = nil)
-  : float; cdecl;
-{$ENDIF}
 (*
   CV_EXPORTS  void  cvKMeans( int num_clusters, float** samples,
   int num_samples, int vec_size,
   CvTermCriteria termcrit, int* cluster_idx );
 *)
-{$IFDEF SAFELOADLIB}
 
-type
-  TcvKMeans = procedure(num_clusters: Integer; Var samples: PSingle; num_samples: Integer; vec_size: Integer; termcrit: TCvTermCriteria;
-    Var cluster_idx: Integer); cdecl;
+procedure cvKMeans(num_clusters: Integer; Var samples: PSingle; num_samples: Integer; vec_size: Integer; termcrit: TCvTermCriteria; Var cluster_idx: Integer); cdecl;
 
-var
-  cvKMeans: TcvKMeans;
-{$ELSE}
-procedure cvKMeans(num_clusters: Integer; Var samples: PSingle; num_samples: Integer; vec_size: Integer; termcrit: TCvTermCriteria;
-  Var cluster_idx: Integer); cdecl;
-{$ENDIF}
 (*
   CV_EXPORTS void  cvStartScanGraph( CvGraph* graph, CvGraphScanner* scanner,
   CvGraphVtx* vtx CV_DEFAULT(NULL),
   int mask CV_DEFAULT(CV_GRAPH_ALL_ITEMS));
 *)
-{$IFDEF SAFELOADLIB}
 
-type
-  TcvStartScanGraph = procedure(graph: PCvGraph; scanner: PCvGraphScanner; vtx: PCvGraphVtx = nil;
-    mask: Integer = CV_GRAPH_ALL_ITEMS); cdecl;
-
-var
-  cvStartScanGraph: TcvStartScanGraph;
-{$ELSE}
 procedure cvStartScanGraph(graph: PCvGraph; scanner: PCvGraphScanner; vtx: PCvGraphVtx = nil; mask: Integer = CV_GRAPH_ALL_ITEMS); cdecl;
-{$ENDIF}
+
 // CV_EXPORTS  void  cvEndScanGraph( CvGraphScanner* scanner );
-{$IFDEF SAFELOADLIB}
 
-type
-  TcvEndScanGraph = procedure(scanner: PCvGraphScanner); cdecl;
-
-var
-  cvEndScanGraph: TcvEndScanGraph;
-{$ELSE}
 procedure cvEndScanGraph(scanner: PCvGraphScanner); cdecl;
-{$ENDIF}
+
 (* old drawing functions *)
 
 (*
   CV_EXPORTS void  cvLineAA( CvArr* img, CvPoint pt1, CvPoint pt2,
   double color, int scale CV_DEFAULT(0));
 *)
-{$IFDEF SAFELOADLIB}
 
-type
-  TcvLineAA = procedure(img: PCvArr; pt1: TCvPoint; pt2: TCvPoint; color: Double; scale: Integer = 0); cdecl;
-
-var
-  cvLineAA: TcvLineAA;
-{$ELSE}
 procedure cvLineAA(img: PCvArr; pt1: TCvPoint; pt2: TCvPoint; color: Double; scale: Integer = 0); cdecl;
-{$ENDIF}
+
 (*
   CV_EXPORTS void  cvCircleAA( CvArr* img, CvPoint center, int radius,
   double color, int scale CV_DEFAULT(0) );
 *)
-{$IFDEF SAFELOADLIB}
 
-type
-  TcvCircleAA = procedure(img: PCvArr; center: TCvPoint; radius: Integer; color: Double; scale: Integer = 0); cdecl;
-
-var
-  cvCircleAA: TcvCircleAA;
-{$ELSE}
 procedure cvCircleAA(img: PCvArr; center: TCvPoint; radius: Integer; color: Double; scale: Integer = 0); cdecl;
-{$ENDIF}
+
 (*
   CV_EXPORTS void  cvEllipseAA( CvArr* img, CvPoint center, CvSize axes,
   double angle, double start_angle,
   double end_angle, double color,
   int scale CV_DEFAULT(0) );
 *)
-{$IFDEF SAFELOADLIB}
 
-type
-  TcvEllipseAA = procedure(img: PCvArr; center: TCvPoint; axes: TCvSize; angle: Double; start_angle: Double; end_angle: Double;
-    color: Double; scale: Integer = 0); cdecl;
+procedure cvEllipseAA(img: PCvArr; center: TCvPoint; axes: TCvSize; angle: Double; start_angle: Double; end_angle: Double; color: Double; scale: Integer = 0); cdecl;
 
-var
-  cvEllipseAA: TcvEllipseAA;
-{$ELSE}
-procedure cvEllipseAA(img: PCvArr; center: TCvPoint; axes: TCvSize; angle: Double; start_angle: Double; end_angle: Double; color: Double;
-  scale: Integer = 0); cdecl;
-{$ENDIF}
 (*
   CV_EXPORTS void  cvPolyLineAA( CvArr* img, CvPoint** pts, int* npts, int contours,
   int is_closed, double color, int scale CV_DEFAULT(0) );
 *)
-{$IFDEF SAFELOADLIB}
 
-type
-  TcvPolyLineAA = procedure(img: PCvArr; Var pts: PCvPoint; Var npts: Integer; contours: Integer; is_closed: Integer; color: Double;
-    scale: Integer = 0); cdecl;
-
-var
-  cvPolyLineAA: TcvPolyLineAA;
-{$ELSE}
-procedure cvPolyLineAA(img: PCvArr; Var pts: PCvPoint; Var npts: Integer; contours: Integer; is_closed: Integer; color: Double;
-  scale: Integer = 0); cdecl;
-{$ENDIF}
+procedure cvPolyLineAA(img: PCvArr; Var pts: PCvPoint; Var npts: Integer; contours: Integer; is_closed: Integer; color: Double; scale: Integer = 0); cdecl;
 
 (* ***************************************************************************************\
   *                                   Pixel Access Macros                                  *
@@ -780,14 +499,14 @@ Type
   // } CvPixelPosition8u;
 
   TCvPixelPosition8u = record
-    currline: PUChar; (* pointer to the start of the current pixel line *)
-    topline: PUChar; (* pointer to the start of the top pixel line *)
+    currline: PUChar;   (* pointer to the start of the current pixel line *)
+    topline: PUChar;    (* pointer to the start of the top pixel line *)
     bottomline: PUChar; (* pointer to the start of the first line *)
     (* which is below the image *)
-    x: Integer; (* current x coordinate ( in pixels ) *)
-    width: Integer; (* width of the image  ( in pixels ) *)
+    x: Integer;      (* current x coordinate ( in pixels ) *)
+    width: Integer;  (* width of the image  ( in pixels ) *)
     height: Integer; (* height of the image  ( in pixels ) *)
-    step: Integer; (* distance between lines ( in elements of single *)
+    step: Integer;   (* distance between lines ( in elements of single *)
     (* plane ) *)
     step_arr: array [0 .. 2] of Integer; (* array: ( 0, -step, step ). It is used for *)
     (* vertical moving *)
@@ -861,12 +580,9 @@ Type
     (pos).x = (_x),                                                          \
     (pos).currline = (origin) + (pos).step*(_y) )
   *)
-procedure CV_INIT_PIXEL_POS(var pos: TCvPixelPosition8u; origin, _step: Integer; roi: TIplROI; _x, _y, orientation: Integer);
-  inline; overload;
-procedure CV_INIT_PIXEL_POS(var pos: TCvPixelPosition8s; origin, _step: Integer; roi: TIplROI; _x, _y, orientation: Integer);
-  inline; overload;
-procedure CV_INIT_PIXEL_POS(var pos: TCvPixelPosition32f; origin, _step: Integer; roi: TIplROI; _x, _y, orientation: Integer);
-  inline; overload;
+procedure CV_INIT_PIXEL_POS(var pos: TCvPixelPosition8u; origin, _step: Integer; roi: TIplROI; _x, _y, orientation: Integer); inline; overload;
+procedure CV_INIT_PIXEL_POS(var pos: TCvPixelPosition8s; origin, _step: Integer; roi: TIplROI; _x, _y, orientation: Integer); inline; overload;
+procedure CV_INIT_PIXEL_POS(var pos: TCvPixelPosition32f; origin, _step: Integer; roi: TIplROI; _x, _y, orientation: Integer); inline; overload;
 
 (* Move to specified point ( absolute shift ) *)
 (* pos    - position structure *)
@@ -914,12 +630,12 @@ procedure CV_INIT_PIXEL_POS(var pos: TCvPixelPosition32f; origin, _step: Integer
 (* right down *)
 // #define CV_MOVE_RD( pos, cs ) ( CV_MOVE_RIGHT(pos, cs), CV_MOVE_DOWN(pos, cs))
 
-(* Move by one pixel relatively to current position with wrapping when the position     *)
-  (* achieves image boundary                                                              *)
-  (*  pos    - position structure                                                         *)
-  (*  cs     - number of the image channels                                               *)
-  //
-  (* left *)
+(* Move by one pixel relatively to current position with wrapping when the position *)
+(* achieves image boundary *)
+(* pos    - position structure *)
+(* cs     - number of the image channels *)
+//
+(* left *)
 // #define CV_MOVE_LEFT_WRAP( pos, cs ) \
 // ((pos).currline + ( --(pos).x >= 0 ? (pos).x : ((pos).x = (pos).width-1))*(cs))
 //
@@ -948,15 +664,15 @@ procedure CV_INIT_PIXEL_POS(var pos: TCvPixelPosition32f; origin, _step: Integer
 
 const
   (* Numeric constants which used for moving in arbitrary direction *)
-  CV_SHIFT_NONE = 2;
-  CV_SHIFT_LEFT = 1;
+  CV_SHIFT_NONE  = 2;
+  CV_SHIFT_LEFT  = 1;
   CV_SHIFT_RIGHT = 3;
-  CV_SHIFT_UP = 6;
-  CV_SHIFT_DOWN = 10;
-  CV_SHIFT_LU = 5;
-  CV_SHIFT_RU = 7;
-  CV_SHIFT_LD = 9;
-  CV_SHIFT_RD = 11;
+  CV_SHIFT_UP    = 6;
+  CV_SHIFT_DOWN  = 10;
+  CV_SHIFT_LU    = 5;
+  CV_SHIFT_RU    = 7;
+  CV_SHIFT_LD    = 9;
+  CV_SHIFT_RD    = 11;
 
   (* Move by one pixel in specified direction *)
   (* pos    - position structure *)
@@ -1000,19 +716,9 @@ Type
     const float* distortion_coeffs,
     int interpolate );
   *)
-{$IFDEF SAFELOADLIB}
 
-type
-  TcvUnDistortOnce = procedure(const src: PCvArr; dst: PCvArr; const intrinsic_matrix: PSingle; const distortion_coeffs: PSingle;
-    interpolate: Integer); cdecl;
+procedure cvUnDistortOnce(const src: PCvArr; dst: PCvArr; const intrinsic_matrix: PSingle; const distortion_coeffs: PSingle; interpolate: Integer); cdecl;
 
-var
-  cvUnDistortOnce: TcvUnDistortOnce;
-
-{$ELSE}
-procedure cvUnDistortOnce(const src: PCvArr; dst: PCvArr; const intrinsic_matrix: PSingle; const distortion_coeffs: PSingle;
-  interpolate: Integer); cdecl;
-{$ENDIF}
 (*
   the two functions below have quite hackerish implementations, use with care
   (or, which is better, switch to cvUndistortInitMap and cvRemap instead
@@ -1026,58 +732,29 @@ procedure cvUnDistortOnce(const src: PCvArr; dst: PCvArr; const intrinsic_matrix
   const CvArr* undistortion_map,
   int interpolate );
 *)
-{$IFDEF SAFELOADLIB}
 
-type
-  TcvUnDistortInit = procedure(const src: PCvArr; undistortion_map: PCvArr; const A: PSingle; const k: PSingle;
-    interpolate: Integer); cdecl;
-  TcvUnDistort = procedure(const src: PCvArr; dst: PCvArr; const undistortion_map: PCvArr; interpolate: Integer); cdecl;
-
-var
-  cvUnDistortInit: TcvUnDistortInit;
-  cvUnDistort: TcvUnDistort;
-
-{$ELSE}
 procedure cvUnDistortInit(const src: PCvArr; undistortion_map: PCvArr; const A: PSingle; const k: PSingle; interpolate: Integer); cdecl;
 procedure cvUnDistort(const src: PCvArr; dst: PCvArr; const undistortion_map: PCvArr; interpolate: Integer); cdecl;
-{$ENDIF}
+
 (*
   Find fundamental matrix
 
   CV_EXPORTS void  cvFindFundamentalMatrix( int* points1, int* points2,
   int numpoints, int method, float* matrix );
 *)
-{$IFDEF SAFELOADLIB}
 
-type
-  TcvFindFundamentalMatrix = procedure(Var points1: Integer; Var points2: Integer; numpoints: Integer; method: Integer;
-    Var matrix: Single); cdecl;
+procedure cvFindFundamentalMatrix(Var points1: Integer; Var points2: Integer; numpoints: Integer; method: Integer; Var matrix: Single); cdecl;
 
-var
-  cvFindFundamentalMatrix: TcvFindFundamentalMatrix;
-{$ELSE}
-procedure cvFindFundamentalMatrix(Var points1: Integer; Var points2: Integer; numpoints: Integer; method: Integer;
-  Var matrix: Single); cdecl;
-{$ENDIF}
 (*
   CV_EXPORTS int cvFindChessBoardCornerGuesses( const void* arr, void* thresharr,
   CvMemStorage* storage,
   CvSize pattern_size, CvPoint2D32f * corners,
   int *corner_count );
 *)
-{$IFDEF SAFELOADLIB}
 
-type
-  TcvFindChessBoardCornerGuesses = function(const arr: Pointer; thresharr: Pointer; storage: PCvMemStorage; pattern_size: TCvSize;
-    corners: PCvPoint2D32f; corner_count: pInteger): Integer; cdecl;
+function cvFindChessBoardCornerGuesses(const arr: Pointer; thresharr: Pointer; storage: PCvMemStorage; pattern_size: TCvSize; corners: PCvPoint2D32f; corner_count: pInteger)
+  : Integer; cdecl;
 
-var
-  cvFindChessBoardCornerGuesses: TcvFindChessBoardCornerGuesses;
-
-{$ELSE}
-function cvFindChessBoardCornerGuesses(const arr: Pointer; thresharr: Pointer; storage: PCvMemStorage; pattern_size: TCvSize;
-  corners: PCvPoint2D32f; corner_count: pInteger): Integer; cdecl;
-{$ENDIF}
 (*
   Calibrates camera using multiple views of calibration pattern
 
@@ -1086,40 +763,20 @@ function cvFindChessBoardCornerGuesses(const arr: Pointer; thresharr: Pointer; s
   float* _distortion_coeffs, float* _camera_matrix, float* _translation_vectors,
   float* _rotation_matrices, int flags );
 *)
-{$IFDEF SAFELOADLIB}
 
-type
-  TcvCalibrateCamera = procedure(image_count: Integer; Var _point_counts: Integer; image_size: TCvSize; _image_points: PCvPoint2D32f;
-    _object_points: PCvPoint3D32f; _distortion_coeffs: PSingle; _camera_matrix: PSingle; _translation_vectors: PSingle;
-    _rotation_matrices: PSingle; flags: Integer); cdecl;
+procedure cvCalibrateCamera(image_count: Integer; Var _point_counts: Integer; image_size: TCvSize; _image_points: PCvPoint2D32f; _object_points: PCvPoint3D32f;
+  _distortion_coeffs: PSingle; _camera_matrix: PSingle; _translation_vectors: PSingle; _rotation_matrices: PSingle; flags: Integer); cdecl;
 
-var
-  cvCalibrateCamera: TcvCalibrateCamera;
-{$ELSE}
-procedure cvCalibrateCamera(image_count: Integer; Var _point_counts: Integer; image_size: TCvSize; _image_points: PCvPoint2D32f;
-  _object_points: PCvPoint3D32f; _distortion_coeffs: PSingle; _camera_matrix: PSingle; _translation_vectors: PSingle;
-  _rotation_matrices: PSingle; flags: Integer); cdecl;
-{$ENDIF}
 (*
   CV_EXPORTS void cvCalibrateCamera_64d( int image_count, int* _point_counts,
   CvSize image_size, CvPoint2D64f* _image_points, CvPoint3D64f* _object_points,
   double* _distortion_coeffs, double* _camera_matrix, double* _translation_vectors,
   double* _rotation_matrices, int flags );
 *)
-{$IFDEF SAFELOADLIB}
 
-type
-  TcvCalibrateCamera_64d = procedure(image_count: Integer; Var _point_counts: Integer; image_size: TCvSize; _image_points: PCvPoint2D64f;
-    _object_points: PCvPoint3D64f; _distortion_coeffs: PDouble; _camera_matrix: PDouble; _translation_vectors: PDouble;
-    _rotation_matrices: PDouble; flags: Integer); cdecl;
+procedure cvCalibrateCamera_64d(image_count: Integer; Var _point_counts: Integer; image_size: TCvSize; _image_points: PCvPoint2D64f; _object_points: PCvPoint3D64f;
+  _distortion_coeffs: PDouble; _camera_matrix: PDouble; _translation_vectors: PDouble; _rotation_matrices: PDouble; flags: Integer); cdecl;
 
-var
-  cvCalibrateCamera_64d: TcvCalibrateCamera_64d;
-{$ELSE}
-procedure cvCalibrateCamera_64d(image_count: Integer; Var _point_counts: Integer; image_size: TCvSize; _image_points: PCvPoint2D64f;
-  _object_points: PCvPoint3D64f; _distortion_coeffs: PDouble; _camera_matrix: PDouble; _translation_vectors: PDouble;
-  _rotation_matrices: PDouble; flags: Integer); cdecl;
-{$ENDIF}
 (*
   Find 3d position of object given intrinsic camera parameters,
   3d model of the object and projection of the object into view plane
@@ -1130,21 +787,10 @@ procedure cvCalibrateCamera_64d(image_count: Integer; Var _point_counts: Integer
   CvPoint2D32f principal_point, float* _distortion_coeffs,
   float* _rotation_vector, float* _translation_vector );
 *)
-{$IFDEF SAFELOADLIB}
 
-type
-  TcvFindExtrinsicCameraParams = procedure(point_count: Integer; image_size: TCvSize; _image_points: PCvPoint2D32f;
-    _object_points: PCvPoint3D32f; focal_length: PSingle; principal_point: TCvPoint2D32f; _distortion_coeffs: PSingle;
-    _rotation_vector: PSingle; _translation_vector: PSingle); cdecl;
+procedure cvFindExtrinsicCameraParams(point_count: Integer; image_size: TCvSize; _image_points: PCvPoint2D32f; _object_points: PCvPoint3D32f; focal_length: PSingle;
+  principal_point: TCvPoint2D32f; _distortion_coeffs: PSingle; _rotation_vector: PSingle; _translation_vector: PSingle); cdecl;
 
-var
-  cvFindExtrinsicCameraParams: TcvFindExtrinsicCameraParams;
-
-{$ELSE}
-procedure cvFindExtrinsicCameraParams(point_count: Integer; image_size: TCvSize; _image_points: PCvPoint2D32f;
-  _object_points: PCvPoint3D32f; focal_length: PSingle; principal_point: TCvPoint2D32f; _distortion_coeffs: PSingle;
-  _rotation_vector: PSingle; _translation_vector: PSingle); cdecl;
-{$ENDIF}
 (*
   Variant of the previous function that takes double-precision parameters
 
@@ -1154,20 +800,9 @@ procedure cvFindExtrinsicCameraParams(point_count: Integer; image_size: TCvSize;
   CvPoint2D64f principal_point, double* _distortion_coeffs,
   double* _rotation_vector, double* _translation_vector );
 *)
-{$IFDEF SAFELOADLIB}
 
-type
-  TcvFindExtrinsicCameraParams_64d = procedure(point_count: Integer; image_size: TCvSize; _image_points: PCvPoint2D64f;
-    _object_points: PCvPoint3D64f; focal_length: PDouble; principal_point: TCvPoint2D64f; _distortion_coeffs: PDouble;
-    _rotation_vector: PDouble; _translation_vector: PDouble); cdecl;
-
-var
-  cvFindExtrinsicCameraParams_64d: TcvFindExtrinsicCameraParams_64d;
-{$ELSE}
-procedure cvFindExtrinsicCameraParams_64d(point_count: Integer; image_size: TCvSize; _image_points: PCvPoint2D64f;
-  _object_points: PCvPoint3D64f; focal_length: PDouble; principal_point: TCvPoint2D64f; _distortion_coeffs: PDouble;
-  _rotation_vector: PDouble; _translation_vector: PDouble); cdecl;
-{$ENDIF}
+procedure cvFindExtrinsicCameraParams_64d(point_count: Integer; image_size: TCvSize; _image_points: PCvPoint2D64f; _object_points: PCvPoint3D64f; focal_length: PDouble;
+  principal_point: TCvPoint2D64f; _distortion_coeffs: PDouble; _rotation_vector: PDouble; _translation_vector: PDouble); cdecl;
 
 const
   (* Rodrigues transform *)
@@ -1180,16 +815,9 @@ const
     CV_EXPORTS void  cvRodrigues( CvMat* rotation_matrix, CvMat* rotation_vector,
     CvMat* jacobian, int conv_type );
   *)
-{$IFDEF SAFELOADLIB}
 
-type
-  TcvRodrigues = procedure(rotation_matrix: PCvMat; rotation_vector: PCvMat; jacobian: PCvMat; conv_type: Integer); cdecl;
-
-var
-  cvRodrigues: TcvRodrigues;
-{$ELSE}
 procedure cvRodrigues(rotation_matrix: PCvMat; rotation_vector: PCvMat; jacobian: PCvMat; conv_type: Integer); cdecl;
-{$ENDIF}
+
 (*
   Does reprojection of 3d object points to the view plane
 
@@ -1203,22 +831,10 @@ procedure cvRodrigues(rotation_matrix: PCvMat; rotation_vector: PCvMat; jacobian
   double* _deriv_points_principal_point,
   double* _deriv_points_distortion_coeffs );
 *)
-{$IFDEF SAFELOADLIB}
+procedure cvProjectPoints(point_count: Integer; _object_points: PCvPoint3D64f; _rotation_vector: PDouble; _translation_vector: PDouble; focal_length: PDouble;
+  principal_point: TCvPoint2D64f; _distortion: PDouble; _image_points: PCvPoint2D64f; _deriv_points_rotation_matrix: PDouble; _deriv_points_translation_vect: PDouble;
+  _deriv_points_focal: PDouble; _deriv_points_principal_point: PDouble; _deriv_points_distortion_coeffs: PDouble); cdecl;
 
-type
-  TcvProjectPoints = procedure(point_count: Integer; _object_points: PCvPoint3D64f; _rotation_vector: PDouble; _translation_vector: PDouble;
-    focal_length: PDouble; principal_point: TCvPoint2D64f; _distortion: PDouble; _image_points: PCvPoint2D64f;
-    _deriv_points_rotation_matrix: PDouble; _deriv_points_translation_vect: PDouble; _deriv_points_focal: PDouble;
-    _deriv_points_principal_point: PDouble; _deriv_points_distortion_coeffs: PDouble); cdecl;
-
-var
-  cvProjectPoints: TcvProjectPoints;
-{$ELSE}
-procedure cvProjectPoints(point_count: Integer; _object_points: PCvPoint3D64f; _rotation_vector: PDouble; _translation_vector: PDouble;
-  focal_length: PDouble; principal_point: TCvPoint2D64f; _distortion: PDouble; _image_points: PCvPoint2D64f;
-  _deriv_points_rotation_matrix: PDouble; _deriv_points_translation_vect: PDouble; _deriv_points_focal: PDouble;
-  _deriv_points_principal_point: PDouble; _deriv_points_distortion_coeffs: PDouble); cdecl;
-{$ENDIF}
 (*
   Simpler version of the previous function
 
@@ -1226,18 +842,10 @@ procedure cvProjectPoints(point_count: Integer; _object_points: PCvPoint3D64f; _
   double* _rotation_matrix, double*  _translation_vector,
   double* _camera_matrix, double* _distortion, CvPoint2D64f* _image_points );
 *)
-{$IFDEF SAFELOADLIB}
 
-type
-  TcvProjectPointsSimple = procedure(point_count: Integer; _object_points: PCvPoint3D64f; _rotation_matrix: PDouble;
-    _translation_vector: PDouble; _camera_matrix: PDouble; _distortion: PDouble; _image_points: PCvPoint2D64f); cdecl;
+procedure cvProjectPointsSimple(point_count: Integer; _object_points: PCvPoint3D64f; _rotation_matrix: PDouble; _translation_vector: PDouble; _camera_matrix: PDouble;
+  _distortion: PDouble; _image_points: PCvPoint2D64f); cdecl;
 
-var
-  cvProjectPointsSimple: TcvProjectPointsSimple;
-{$ELSE}
-procedure cvProjectPointsSimple(point_count: Integer; _object_points: PCvPoint3D64f; _rotation_matrix: PDouble;
-  _translation_vector: PDouble; _camera_matrix: PDouble; _distortion: PDouble; _image_points: PCvPoint2D64f); cdecl;
-{$ENDIF}
 // #define cvMake2DPoints cvConvertPointsHomogeneous
 // #define cvMake3DPoints cvConvertPointsHomogeneous
 //
@@ -1290,17 +898,9 @@ type
   end;
 
   // CVAPI(CvSURFParams) cvSURFParams( double hessianThreshold, int extended CV_DEFAULT(0) );
-{$IFDEF SAFELOADLIB}
 
-type
-  TcvSURFParams_fun = function(hessianThreshold: Double; _extended: Integer = 0): TCvSURFParams; cdecl;
-
-var
-  cvSURFParams: TcvSURFParams_fun;
-
-{$ELSE}
 function cvSURFParams(hessianThreshold: Double; _extended: Integer = 0): TCvSURFParams; cdecl;
-{$ENDIF}
+
 (*
   If useProvidedKeyPts!=0, keypoints are not detected, but descriptors are computed
   at the locations provided in keypoints (a CvSeq of CvSURFPoint).
@@ -1310,18 +910,9 @@ function cvSURFParams(hessianThreshold: Double; _extended: Integer = 0): TCvSURF
   CvMemStorage* storage, CvSURFParams params,
   int useProvidedKeyPts CV_DEFAULT(0)  );
 *)
-{$IFDEF SAFELOADLIB}
 
-type
-  TcvExtractSURF = procedure(const img: PCvArr; const mask: PCvArr; keypoints: ppCvSeq; descriptors: ppCvSeq; storage: PCvMemStorage;
-    params: TCvSURFParams; useProvidedKeyPts: Integer = 0); cdecl;
-
-var
-  cvExtractSURF: TcvExtractSURF;
-{$ELSE}
-procedure cvExtractSURF(const img: PCvArr; const mask: PCvArr; keypoints: ppCvSeq; descriptors: ppCvSeq; storage: PCvMemStorage;
-  params: TCvSURFParams; useProvidedKeyPts: Integer = 0); cdecl;
-{$ENDIF}
+procedure cvExtractSURF(const img: PCvArr; const mask: PCvArr; keypoints: ppCvSeq; descriptors: ppCvSeq; storage: PCvMemStorage; params: TCvSURFParams;
+  useProvidedKeyPts: Integer = 0); cdecl;
 
 Type
   (* Maximal Stable Regions Parameters *)
@@ -1382,34 +973,17 @@ Type
     double min_margin CV_DEFAULT(.003),
     int edge_blur_size CV_DEFAULT(5) );
   *)
-{$IFDEF SAFELOADLIB}
 
-type
-  TCvMSERParams_fun = function(delta: Integer = 5; min_area: Integer = 60; max_area: Integer = 14400; max_variation: float = 0.25;
-    min_diversity: float = 0.2; max_evolution: Integer = 200; area_threshold: Double = 1.01; min_margin: Double = 0.003;
-    edge_blur_size: Integer = 5): TCvMSERParams; cdecl;
+function cvMSERParams(delta: Integer = 5; min_area: Integer = 60; max_area: Integer = 14400; max_variation: float = 0.25; min_diversity: float = 0.2; max_evolution: Integer = 200;
+  area_threshold: Double = 1.01; min_margin: Double = 0.003; edge_blur_size: Integer = 5): TCvMSERParams; cdecl;
 
-var
-  cvMSERParams: TCvMSERParams_fun;
-{$ELSE}
-  // function cvMSERParams(delta: Integer = 5; min_area: Integer = 60; max_area: Integer = 14400; max_variation: float = 0.25; min_diversity: float = 0.2;
-  // max_evolution: Integer = 200; area_threshold: Double = 1.01; min_margin: Double = 0.003; edge_blur_size: Integer = 5): TCvMSERParams; cdecl;
-{$ENDIF}
-  (*
-    Extracts the contours of Maximally Stable Extremal Regions
+(*
+  Extracts the contours of Maximally Stable Extremal Regions
 
-    CVAPI(void) cvExtractMSER( CvArr* _img, CvArr* _mask, CvSeq** contours, CvMemStorage* storage, CvMSERParams params );
-  *)
-{$IFDEF SAFELOADLIB}
+  CVAPI(void) cvExtractMSER( CvArr* _img, CvArr* _mask, CvSeq** contours, CvMemStorage* storage, CvMSERParams params );
+*)
 
-type
-  TcvExtractMSER = procedure(_img: PCvArr; _mask: PCvArr; Var contours: pCvSeq; storage: PCvMemStorage; params: TCvMSERParams); cdecl;
-
-var
-  cvExtractMSER: TcvExtractMSER;
-{$ELSE}
-  // procedure cvExtractMSER(_img: PCvArr; _mask: PCvArr; Var contours: pCvSeq; storage: PCvMemStorage; params: TCvMSERParams); cdecl;
-{$ENDIF}
+procedure cvExtractMSER(_img: PCvArr; _mask: PCvArr; Var contours: pCvSeq; storage: PCvMemStorage; params: TCvMSERParams); cdecl;
 
 Type
   (*
@@ -1477,35 +1051,22 @@ Type
     return params;
     }
   *)
-function cvStarDetectorParams(maxSize: Integer = 45; responseThreshold: Integer = 30; lineThresholdProjected: Integer = 10;
-  lineThresholdBinarized: Integer = 8; suppressNonmaxSize: Integer = 5): TCvStarDetectorParams; inline;
+function cvStarDetectorParams(maxSize: Integer = 45; responseThreshold: Integer = 30; lineThresholdProjected: Integer = 10; lineThresholdBinarized: Integer = 8;
+  suppressNonmaxSize: Integer = 5): TCvStarDetectorParams; inline;
 
 (*
   CVAPI(CvSeq* ) cvGetStarKeypoints( const CvArr* img, CvMemStorage* storage,
   CvStarDetectorParams params CV_DEFAULT(cvStarDetectorParams()));
 *)
-{$IFDEF SAFELOADLIB}
 
-type
-  TcvGetStarKeypoints = function(const img: PCvArr; storage: PCvMemStorage;
-    params: TCvStarDetectorParams { = CV_DEFAULT(cvStarDetectorParams()) } ): pCvSeq; cdecl;
-
-var
-  cvGetStarKeypoints: TcvGetStarKeypoints;
-{$ELSE}
-function cvGetStarKeypoints(const img: PCvArr; storage: PCvMemStorage;
-  params: TCvStarDetectorParams { = CV_DEFAULT(cvStarDetectorParams()) } ): pCvSeq; cdecl;
-{$ENDIF}
-{$IF DEFINED(SAFELOADLIB) AND DEFINED(DEBUG)}
-procedure Init_opencv_legacy_lib;
-{$ENDIF}
+function cvGetStarKeypoints(const img: PCvArr; storage: PCvMemStorage; params: TCvStarDetectorParams { = CV_DEFAULT(cvStarDetectorParams()) } ): pCvSeq; cdecl;
 
 implementation
 
 uses ocv.lib;
 
-//const
-//  compat_lib = legacy_lib;
+const
+  compat_lib = legacy_lib;
 
 procedure CV_INIT_PIXEL_POS(var pos: TCvPixelPosition8u; origin, _step: Integer; roi: TIplROI; _x, _y, orientation: Integer);
 begin
@@ -1571,8 +1132,8 @@ begin
   Result.response := response;
 end;
 
-function cvStarDetectorParams(maxSize: Integer = 45; responseThreshold: Integer = 30; lineThresholdProjected: Integer = 10;
-  lineThresholdBinarized: Integer = 8; suppressNonmaxSize: Integer = 5): TCvStarDetectorParams; inline;
+function cvStarDetectorParams(maxSize: Integer = 45; responseThreshold: Integer = 30; lineThresholdProjected: Integer = 10; lineThresholdBinarized: Integer = 8;
+  suppressNonmaxSize: Integer = 5): TCvStarDetectorParams; inline;
 begin
   Result.maxSize := maxSize;
   Result.responseThreshold := responseThreshold;
@@ -1581,160 +1142,96 @@ begin
   Result.suppressNonmaxSize := suppressNonmaxSize;
 end;
 
-{$IFDEF SAFELOADLIB}
-
-Var
-  compatDLL: Cardinal;
-
-procedure Init_opencv_legacy_lib;
-begin
-  compatDLL := ocvLoadLibrary(compat_lib);
-  Assert(compatDLL <> 0, 'Can not init ' + compat_lib);
-
-  cvMatArray := ocvGetProcAddress('cvMatArray', compatDLL);
-  cvMean := ocvGetProcAddress('cvMean', compatDLL);
-  cvSumPixels := ocvGetProcAddress('cvSumPixels', compatDLL);
-  cvMean_StdDev := ocvGetProcAddress('cvMean_StdDev', compatDLL);
-  cvmPerspectiveProject := ocvGetProcAddress('cvmPerspectiveProject', compatDLL);
-  cvFillImage := ocvGetProcAddress('cvFillImage', compatDLL);
-  cvRandSetRange := ocvGetProcAddress('cvRandSetRange', compatDLL);
-  cvRandInit := ocvGetProcAddress('cvRandInit', compatDLL);
-  cvRand := ocvGetProcAddress('cvRand', compatDLL);
-  cvbRand := ocvGetProcAddress('cvbRand', compatDLL);
-  cvbCartToPolar := ocvGetProcAddress('cvbCartToPolar', compatDLL);
-  cvbFastArctan := ocvGetProcAddress('cvbFastArctan', compatDLL);
-  cvbSqrt := ocvGetProcAddress('cvbSqrt', compatDLL);
-  cvbInvSqrt := ocvGetProcAddress('cvbInvSqrt', compatDLL);
-  cvbReciprocal := ocvGetProcAddress('cvbReciprocal', compatDLL);
-  cvbFastExp := ocvGetProcAddress('cvbFastExp', compatDLL);
-  cvbFastLog := ocvGetProcAddress('cvbFastLog', compatDLL);
-  cvContourBoundingRect := ocvGetProcAddress('cvContourBoundingRect', compatDLL);
-  cvPseudoInverse := ocvGetProcAddress('cvPseudoInverse', compatDLL);
-  cvConvexHull := ocvGetProcAddress('cvConvexHull', compatDLL);
-  cvMinAreaRect := ocvGetProcAddress('cvMinAreaRect', compatDLL);
-  cvFitLine3D := ocvGetProcAddress('cvFitLine3D', compatDLL);
-  cvFitLine2D := ocvGetProcAddress('cvFitLine2D', compatDLL);
-  cvFitEllipse := ocvGetProcAddress('cvFitEllipse', compatDLL);
-  cvProject3D := ocvGetProcAddress('cvProject3D', compatDLL);
-  cvHoughLines := ocvGetProcAddress('cvHoughLines', compatDLL);
-  cvHoughLinesP := ocvGetProcAddress('cvHoughLinesP', compatDLL);
-  cvHoughLinesSDiv := ocvGetProcAddress('cvHoughLinesSDiv', compatDLL);
-  cvCalcEMD := ocvGetProcAddress('cvCalcEMD', compatDLL);
-  cvKMeans := ocvGetProcAddress('cvKMeans', compatDLL);
-  cvStartScanGraph := ocvGetProcAddress('cvStartScanGraph', compatDLL);
-  cvEndScanGraph := ocvGetProcAddress('cvEndScanGraph', compatDLL);
-  cvLineAA := ocvGetProcAddress('cvLineAA', compatDLL);
-  cvCircleAA := ocvGetProcAddress('cvCircleAA', compatDLL);
-  cvEllipseAA := ocvGetProcAddress('cvEllipseAA', compatDLL);
-  cvPolyLineAA := ocvGetProcAddress('cvPolyLineAA', compatDLL);
-  cvUnDistortOnce := ocvGetProcAddress('cvUnDistortOnce', compatDLL);
-  cvUnDistortInit := ocvGetProcAddress('cvUnDistortInit', compatDLL);
-  cvUnDistort := ocvGetProcAddress('cvUnDistort', compatDLL);
-  cvFindFundamentalMatrix := ocvGetProcAddress('cvFindFundamentalMatrix', compatDLL);
-  cvFindChessBoardCornerGuesses := ocvGetProcAddress('cvFindChessBoardCornerGuesses', compatDLL);
-  cvCalibrateCamera := ocvGetProcAddress('cvCalibrateCamera', compatDLL);
-  cvCalibrateCamera_64d := ocvGetProcAddress('cvCalibrateCamera_64d', compatDLL);
-  cvFindExtrinsicCameraParams := ocvGetProcAddress('cvFindExtrinsicCameraParams', compatDLL);
-  cvFindExtrinsicCameraParams_64d := ocvGetProcAddress('cvFindExtrinsicCameraParams_64d', compatDLL);
-  cvRodrigues := ocvGetProcAddress('cvRodrigues', compatDLL);
-  cvProjectPoints := ocvGetProcAddress('cvProjectPoints', compatDLL);
-  cvProjectPointsSimple := ocvGetProcAddress('cvProjectPointsSimple', compatDLL);
-  cvSURFParams := ocvGetProcAddress('cvSURFParams', compatDLL);
-  cvExtractSURF := ocvGetProcAddress('cvExtractSURF', compatDLL);
-  // cvMSERParams := ocvGetProcAddress('cvMSERParams', compatDLL);
-  // cvExtractMSER := ocvGetProcAddress('cvExtractMSER', compatDLL);
-  cvGetStarKeypoints := ocvGetProcAddress('cvGetStarKeypoints', compatDLL);
-
-end;
-{$ELSE}
-function cvMatArray(rows: Integer; cols: Integer; type_: Integer; count: Integer; data: Pointer = nil): TCvMat; cdecl; external legacy_lib;
-function cvMean(const image: PCvArr; const mask: PCvArr = nil): Double; cdecl; external legacy_lib;
-function cvSumPixels(const image: PCvArr): Double; cdecl; external legacy_lib;
-procedure cvMean_StdDev(const image: PCvArr; mean: PDouble; sdv: PDouble; const mask: PCvArr = nil); cdecl; external legacy_lib;
-procedure cvmPerspectiveProject(const mat: PCvMat; const src: PCvArr; dst: PCvArr); cdecl; external legacy_lib;
-procedure cvFillImage(mat: PCvArr; color: Double); cdecl; external legacy_lib;
-procedure cvRandSetRange(state: pCvRandState; param1: Double; param2: Double; index: Integer = -1); cdecl; external legacy_lib;
-procedure cvRandInit(state: pCvRandState; param1: Double; param2: Double; seed: Integer; disttype: Integer = CV_RAND_UNI); cdecl; external legacy_lib;
-procedure cvRand(state: pCvRandState; arr: PCvArr); cdecl; external legacy_lib;
-procedure cvbRand(state: pCvRandState; dst: PSingle; len: Integer); cdecl; external legacy_lib;
-procedure cvbCartToPolar(const y: PSingle; const x: PSingle; Var magnitude: Single; Var angle: Single; len: Integer); cdecl; external legacy_lib;
-procedure cvbFastArctan(const y: PSingle; const x: PSingle; Var angle: Single; len: Integer); cdecl; external legacy_lib;
-procedure cvbSqrt(const x: PSingle; Var y: Single; len: Integer); cdecl; external legacy_lib;
-procedure cvbInvSqrt(const x: PSingle; Var y: Single; len: Integer); cdecl; external legacy_lib;
-procedure cvbReciprocal(const x: PSingle; var y: Single; len: Integer); cdecl; external legacy_lib;
-procedure cvbFastExp(const x: PSingle; Var y: Double; len: Integer); cdecl; external legacy_lib;
-procedure cvbFastLog(const x: PDouble; Var y: Single; len: Integer); cdecl; external legacy_lib;
-function cvContourBoundingRect(point_set: Pointer; update: Integer = 0): TCvRect; cdecl; external legacy_lib;
-function cvPseudoInverse(const src: PCvArr; dst: PCvArr): Double; cdecl; external legacy_lib;
-procedure cvConvexHull(points: PCvPoint; num_points: Integer; bound_rect: PCvRect; orientation: Integer; Var hull: Integer;
-  Var hullsize: Integer); cdecl; external legacy_lib;
-procedure cvMinAreaRect(points: PCvPoint; n: Integer; left: Integer; bottom: Integer; right: Integer; top: Integer; anchor: PCvPoint2D32f;
-  vect1: PCvPoint2D32f; vect2: PCvPoint2D32f); cdecl; external legacy_lib;
-procedure cvFitLine3D(points: PCvPoint3D32f; count: Integer; dist: Integer; param: Pointer; reps: Single; aeps: Single;
-  Var line: Single); cdecl; external legacy_lib;
-procedure cvFitLine2D(points: PCvPoint2D32f; count: Integer; dist: Integer; param: Pointer; reps: Single; aeps: Single;
-  Var line: Single); cdecl; external legacy_lib;
-procedure cvFitEllipse(const points: PCvPoint2D32f; count: Integer; Var box: TCvBox2D); cdecl; external legacy_lib;
-procedure cvProject3D(points3D: PCvPoint3D32f; count: Integer; points2D: PCvPoint2D32f; xIndx: Integer = 0; yIndx: Integer = 1); cdecl; external legacy_lib;
-function cvHoughLines(image: PCvArr; rho: Double; theta: Double; threshold: Integer; lines: pfloat; linesNumber: Integer): Integer; cdecl; external legacy_lib;
-function cvHoughLinesP(image: PCvArr; rho: Double; theta: Double; threshold: Integer; lineLength: Integer; lineGap: Integer;
-  lines: pInteger; linesNumber: Integer): Integer; cdecl; external legacy_lib;
-function cvHoughLinesSDiv(image: PCvArr; rho: Double; srn: Integer; theta: Double; stn: Integer; threshold: Integer; lines: pfloat;
-  linesNumber: Integer): Integer; cdecl; external legacy_lib;
-function cvCalcEMD(const signature1: pfloat; size1: Integer; const signature2: pfloat; size2: Integer; dims: Integer;
-  dist_type: Integer = CV_DIST_L2; dist_func: TCvDistanceFunction = nil; lower_bound: pfloat = nil; user_param: Pointer = nil)
-  : float; cdecl; external legacy_lib;
-procedure cvKMeans(num_clusters: Integer; Var samples: PSingle; num_samples: Integer; vec_size: Integer; termcrit: TCvTermCriteria;
-  Var cluster_idx: Integer); cdecl; external legacy_lib;
-procedure cvStartScanGraph(graph: PCvGraph; scanner: PCvGraphScanner; vtx: PCvGraphVtx = nil; mask: Integer = CV_GRAPH_ALL_ITEMS); cdecl; external legacy_lib;
-procedure cvEndScanGraph(scanner: PCvGraphScanner); cdecl; external legacy_lib;
-procedure cvLineAA(img: PCvArr; pt1: TCvPoint; pt2: TCvPoint; color: Double; scale: Integer = 0); cdecl; external legacy_lib;
-procedure cvCircleAA(img: PCvArr; center: TCvPoint; radius: Integer; color: Double; scale: Integer = 0); cdecl; external legacy_lib;
-procedure cvEllipseAA(img: PCvArr; center: TCvPoint; axes: TCvSize; angle: Double; start_angle: Double; end_angle: Double; color: Double;
-  scale: Integer = 0); cdecl; external legacy_lib;
-procedure cvPolyLineAA(img: PCvArr; Var pts: PCvPoint; Var npts: Integer; contours: Integer; is_closed: Integer; color: Double;
-  scale: Integer = 0); cdecl; external legacy_lib;
-procedure cvUnDistortOnce(const src: PCvArr; dst: PCvArr; const intrinsic_matrix: PSingle; const distortion_coeffs: PSingle;
-  interpolate: Integer); cdecl; external legacy_lib;
-procedure cvUnDistortInit(const src: PCvArr; undistortion_map: PCvArr; const A: PSingle; const k: PSingle; interpolate: Integer); cdecl; external legacy_lib;
-procedure cvUnDistort(const src: PCvArr; dst: PCvArr; const undistortion_map: PCvArr; interpolate: Integer); cdecl; external legacy_lib;
-procedure cvFindFundamentalMatrix(Var points1: Integer; Var points2: Integer; numpoints: Integer; method: Integer;
-  Var matrix: Single); cdecl; external legacy_lib;
-function cvFindChessBoardCornerGuesses(const arr: Pointer; thresharr: Pointer; storage: PCvMemStorage; pattern_size: TCvSize;
-  corners: PCvPoint2D32f; corner_count: pInteger): Integer; cdecl; external legacy_lib;
-procedure cvCalibrateCamera(image_count: Integer; Var _point_counts: Integer; image_size: TCvSize; _image_points: PCvPoint2D32f;
-  _object_points: PCvPoint3D32f; _distortion_coeffs: PSingle; _camera_matrix: PSingle; _translation_vectors: PSingle;
-  _rotation_matrices: PSingle; flags: Integer); cdecl; external legacy_lib;
-procedure cvCalibrateCamera_64d(image_count: Integer; Var _point_counts: Integer; image_size: TCvSize; _image_points: PCvPoint2D64f;
-  _object_points: PCvPoint3D64f; _distortion_coeffs: PDouble; _camera_matrix: PDouble; _translation_vectors: PDouble;
-  _rotation_matrices: PDouble; flags: Integer); cdecl; external legacy_lib;
-procedure cvFindExtrinsicCameraParams(point_count: Integer; image_size: TCvSize; _image_points: PCvPoint2D32f;
-  _object_points: PCvPoint3D32f; focal_length: PSingle; principal_point: TCvPoint2D32f; _distortion_coeffs: PSingle;
-  _rotation_vector: PSingle; _translation_vector: PSingle); cdecl; external legacy_lib;
-procedure cvFindExtrinsicCameraParams_64d(point_count: Integer; image_size: TCvSize; _image_points: PCvPoint2D64f;
-  _object_points: PCvPoint3D64f; focal_length: PDouble; principal_point: TCvPoint2D64f; _distortion_coeffs: PDouble;
-  _rotation_vector: PDouble; _translation_vector: PDouble); cdecl; external legacy_lib;
-procedure cvRodrigues(rotation_matrix: PCvMat; rotation_vector: PCvMat; jacobian: PCvMat; conv_type: Integer); cdecl; external legacy_lib;
-procedure cvProjectPoints(point_count: Integer; _object_points: PCvPoint3D64f; _rotation_vector: PDouble; _translation_vector: PDouble;
-  focal_length: PDouble; principal_point: TCvPoint2D64f; _distortion: PDouble; _image_points: PCvPoint2D64f;
-  _deriv_points_rotation_matrix: PDouble; _deriv_points_translation_vect: PDouble; _deriv_points_focal: PDouble;
-  _deriv_points_principal_point: PDouble; _deriv_points_distortion_coeffs: PDouble); cdecl; external legacy_lib;
-procedure cvProjectPointsSimple(point_count: Integer; _object_points: PCvPoint3D64f; _rotation_matrix: PDouble;
-  _translation_vector: PDouble; _camera_matrix: PDouble; _distortion: PDouble; _image_points: PCvPoint2D64f); cdecl; external legacy_lib;
-function cvSURFParams(hessianThreshold: Double; _extended: Integer = 0): TCvSURFParams; cdecl; external legacy_lib;
-procedure cvExtractSURF(const img: PCvArr; const mask: PCvArr; keypoints: ppCvSeq; descriptors: ppCvSeq; storage: PCvMemStorage;
-  params: TCvSURFParams; useProvidedKeyPts: Integer = 0); cdecl; external legacy_lib;
-// function cvMSERParams; external legacy_lib;
-// procedure cvExtractMSER; external legacy_lib;
-function cvGetStarKeypoints(const img: PCvArr; storage: PCvMemStorage;
-  params: TCvStarDetectorParams { = CV_DEFAULT(cvStarDetectorParams()) } ): pCvSeq; cdecl; external legacy_lib;
-{$ENDIF}
+function cvMatArray(rows: Integer; cols: Integer; type_: Integer; count: Integer; data: Pointer = nil): TCvMat; cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+function cvMean(const image: PCvArr; const mask: PCvArr = nil): Double; cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+function cvSumPixels(const image: PCvArr): Double; cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure cvMean_StdDev(const image: PCvArr; mean: PDouble; sdv: PDouble; const mask: PCvArr = nil); cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure cvmPerspectiveProject(const mat: PCvMat; const src: PCvArr; dst: PCvArr); cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure cvFillImage(mat: PCvArr; color: Double); cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure cvRandSetRange(state: pCvRandState; param1: Double; param2: Double; index: Integer = -1); cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure cvRandInit(state: pCvRandState; param1: Double; param2: Double; seed: Integer; disttype: Integer = CV_RAND_UNI); cdecl;
+  external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure cvRand(state: pCvRandState; arr: PCvArr); cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure cvbRand(state: pCvRandState; dst: PSingle; len: Integer); cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure cvbCartToPolar(const y: PSingle; const x: PSingle; Var magnitude: Single; Var angle: Single; len: Integer); cdecl;
+  external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure cvbFastArctan(const y: PSingle; const x: PSingle; Var angle: Single; len: Integer); cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure cvbSqrt(const x: PSingle; Var y: Single; len: Integer); cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure cvbInvSqrt(const x: PSingle; Var y: Single; len: Integer); cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure cvbReciprocal(const x: PSingle; var y: Single; len: Integer); cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure cvbFastExp(const x: PSingle; Var y: Double; len: Integer); cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure cvbFastLog(const x: PDouble; Var y: Single; len: Integer); cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+function cvContourBoundingRect(point_set: Pointer; update: Integer = 0): TCvRect; cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+function cvPseudoInverse(const src: PCvArr; dst: PCvArr): Double; cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure cvConvexHull(points: PCvPoint; num_points: Integer; bound_rect: PCvRect; orientation: Integer; Var hull: Integer; Var hullsize: Integer); cdecl;
+  external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure cvMinAreaRect(points: PCvPoint; n: Integer; left: Integer; bottom: Integer; right: Integer; top: Integer; anchor: PCvPoint2D32f; vect1: PCvPoint2D32f;
+  vect2: PCvPoint2D32f); cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure cvFitLine3D(points: PCvPoint3D32f; count: Integer; dist: Integer; param: Pointer; reps: Single; aeps: Single; Var line: Single); cdecl;
+  external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure cvFitLine2D(points: PCvPoint2D32f; count: Integer; dist: Integer; param: Pointer; reps: Single; aeps: Single; Var line: Single); cdecl;
+  external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure cvFitEllipse(const points: PCvPoint2D32f; count: Integer; Var box: TCvBox2D); cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure cvProject3D(points3D: PCvPoint3D32f; count: Integer; points2D: PCvPoint2D32f; xIndx: Integer = 0; yIndx: Integer = 1); cdecl;
+  external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+function cvHoughLines(image: PCvArr; rho: Double; theta: Double; threshold: Integer; lines: pfloat; linesNumber: Integer): Integer; cdecl;
+  external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+function cvHoughLinesP(image: PCvArr; rho: Double; theta: Double; threshold: Integer; lineLength: Integer; lineGap: Integer; lines: pInteger; linesNumber: Integer): Integer; cdecl;
+  external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+function cvHoughLinesSDiv(image: PCvArr; rho: Double; srn: Integer; theta: Double; stn: Integer; threshold: Integer; lines: pfloat; linesNumber: Integer): Integer; cdecl;
+  external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+function cvCalcEMD(const signature1: pfloat; size1: Integer; const signature2: pfloat; size2: Integer; dims: Integer; dist_type: Integer = CV_DIST_L2;
+  dist_func: TCvDistanceFunction = nil; lower_bound: pfloat = nil; user_param: Pointer = nil): float; cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure cvKMeans(num_clusters: Integer; Var samples: PSingle; num_samples: Integer; vec_size: Integer; termcrit: TCvTermCriteria; Var cluster_idx: Integer); cdecl;
+  external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure cvStartScanGraph(graph: PCvGraph; scanner: PCvGraphScanner; vtx: PCvGraphVtx = nil; mask: Integer = CV_GRAPH_ALL_ITEMS); cdecl;
+  external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure cvEndScanGraph(scanner: PCvGraphScanner); cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure cvLineAA(img: PCvArr; pt1: TCvPoint; pt2: TCvPoint; color: Double; scale: Integer = 0); cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure cvCircleAA(img: PCvArr; center: TCvPoint; radius: Integer; color: Double; scale: Integer = 0); cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure cvEllipseAA(img: PCvArr; center: TCvPoint; axes: TCvSize; angle: Double; start_angle: Double; end_angle: Double; color: Double; scale: Integer = 0); cdecl;
+  external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure cvPolyLineAA(img: PCvArr; Var pts: PCvPoint; Var npts: Integer; contours: Integer; is_closed: Integer; color: Double; scale: Integer = 0); cdecl;
+  external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure cvUnDistortOnce(const src: PCvArr; dst: PCvArr; const intrinsic_matrix: PSingle; const distortion_coeffs: PSingle; interpolate: Integer); cdecl;
+  external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure cvUnDistortInit(const src: PCvArr; undistortion_map: PCvArr; const A: PSingle; const k: PSingle; interpolate: Integer); cdecl;
+  external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure cvUnDistort(const src: PCvArr; dst: PCvArr; const undistortion_map: PCvArr; interpolate: Integer); cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure cvFindFundamentalMatrix(Var points1: Integer; Var points2: Integer; numpoints: Integer; method: Integer; Var matrix: Single); cdecl;
+  external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+function cvFindChessBoardCornerGuesses(const arr: Pointer; thresharr: Pointer; storage: PCvMemStorage; pattern_size: TCvSize; corners: PCvPoint2D32f; corner_count: pInteger)
+  : Integer; cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure cvCalibrateCamera(image_count: Integer; Var _point_counts: Integer; image_size: TCvSize; _image_points: PCvPoint2D32f; _object_points: PCvPoint3D32f;
+  _distortion_coeffs: PSingle; _camera_matrix: PSingle; _translation_vectors: PSingle; _rotation_matrices: PSingle; flags: Integer); cdecl;
+  external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure cvCalibrateCamera_64d(image_count: Integer; Var _point_counts: Integer; image_size: TCvSize; _image_points: PCvPoint2D64f; _object_points: PCvPoint3D64f;
+  _distortion_coeffs: PDouble; _camera_matrix: PDouble; _translation_vectors: PDouble; _rotation_matrices: PDouble; flags: Integer); cdecl;
+  external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure cvFindExtrinsicCameraParams(point_count: Integer; image_size: TCvSize; _image_points: PCvPoint2D32f; _object_points: PCvPoint3D32f; focal_length: PSingle;
+  principal_point: TCvPoint2D32f; _distortion_coeffs: PSingle; _rotation_vector: PSingle; _translation_vector: PSingle); cdecl;
+  external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure cvFindExtrinsicCameraParams_64d(point_count: Integer; image_size: TCvSize; _image_points: PCvPoint2D64f; _object_points: PCvPoint3D64f; focal_length: PDouble;
+  principal_point: TCvPoint2D64f; _distortion_coeffs: PDouble; _rotation_vector: PDouble; _translation_vector: PDouble); cdecl;
+  external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure cvRodrigues(rotation_matrix: PCvMat; rotation_vector: PCvMat; jacobian: PCvMat; conv_type: Integer); cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure cvProjectPoints(point_count: Integer; _object_points: PCvPoint3D64f; _rotation_vector: PDouble; _translation_vector: PDouble; focal_length: PDouble;
+  principal_point: TCvPoint2D64f; _distortion: PDouble; _image_points: PCvPoint2D64f; _deriv_points_rotation_matrix: PDouble; _deriv_points_translation_vect: PDouble;
+  _deriv_points_focal: PDouble; _deriv_points_principal_point: PDouble; _deriv_points_distortion_coeffs: PDouble); cdecl;
+  external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure cvProjectPointsSimple(point_count: Integer; _object_points: PCvPoint3D64f; _rotation_matrix: PDouble; _translation_vector: PDouble; _camera_matrix: PDouble;
+  _distortion: PDouble; _image_points: PCvPoint2D64f); cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+function cvSURFParams(hessianThreshold: Double; _extended: Integer = 0): TCvSURFParams; cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure cvExtractSURF(const img: PCvArr; const mask: PCvArr; keypoints: ppCvSeq; descriptors: ppCvSeq; storage: PCvMemStorage; params: TCvSURFParams;
+  useProvidedKeyPts: Integer = 0); cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+function cvGetStarKeypoints(const img: PCvArr; storage: PCvMemStorage; params: TCvStarDetectorParams { = CV_DEFAULT(cvStarDetectorParams()) } ): pCvSeq; cdecl;
+  external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+function cvMSERParams(delta: Integer = 5; min_area: Integer = 60; max_area: Integer = 14400; max_variation: float = 0.25; min_diversity: float = 0.2; max_evolution: Integer = 200;
+  area_threshold: Double = 1.01; min_margin: Double = 0.003; edge_blur_size: Integer = 5): TCvMSERParams; cdecl; external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure cvExtractMSER(_img: PCvArr; _mask: PCvArr; Var contours: pCvSeq; storage: PCvMemStorage; params: TCvMSERParams); cdecl;
+  external legacy_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
 initialization
-
-{$IFDEF SAFELOADLIB}
-Init_opencv_legacy_lib;
-{$ENDIF}
 
 CV_MAT32F := CV_32FC1;
 CV_MAT3x1_32F := CV_32FC1;
@@ -1747,7 +1244,5 @@ CV_MAT3x1_64D := CV_64FC1;
 CV_MAT4x1_64D := CV_64FC1;
 CV_MAT3x3_64D := CV_64FC1;
 CV_MAT4x4_64D := CV_64FC1;
-
-
 
 end.

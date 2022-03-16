@@ -2473,23 +2473,23 @@ implementation
 uses
   ocv.lib;
 
-function cvCreateImageHeader(size: TCvSize; depth: Integer; channels: Integer): pIplImage; cdecl; external core_lib;
-function cvInitImageHeader(image: pIplImage; size: TCvSize; depth: Integer; channels: Integer; origin: Integer = 0; align: Integer = 4): pIplImage; cdecl; external core_lib;
-function cvCreateImage(size: TCvSize; depth, channels: Integer): pIplImage; cdecl; external core_lib;
-procedure cvReleaseImageHeader(var image: pIplImage); cdecl; external core_lib;
-procedure cvReleaseImage(var image: pIplImage); cdecl; external core_lib;
-function cvCloneImage(const image: pIplImage): pIplImage; cdecl; external core_lib;
-procedure cvSetImageCOI(image: pIplImage; coi: Integer); cdecl; external core_lib;
-function cvGetImageCOI(const image: pIplImage): Integer; cdecl; external core_lib;
-procedure cvSetImageROI(image: pIplImage; rect: TCvRect); cdecl; external core_lib;
-procedure cvResetImageROI(image: pIplImage); cdecl; external core_lib;
-function cvGetImageROI(const image: pIplImage): TCvRect; cdecl; external core_lib;
-function cvCreateMatHeader(rows: Integer; cols: Integer; cType: Integer): pCvMat; cdecl; external core_lib;
-function cvInitMatHeader(mat: pCvMat; rows: Integer; cols: Integer; _type: Integer; data: Pointer = nil; step: Integer = CV_AUTOSTEP): pCvMat; cdecl; external core_lib;
-function cvCreateMat(rows, cols, cType: Integer): pCvMat; cdecl; external core_lib;
-procedure cvReleaseMat(var mat: pCvMat); cdecl; external core_lib;
-function cvCloneMat(const mat: pCvMat): pCvMat; cdecl; external core_lib;
-function cvGetSubRect(arr: pCvArr; submat: pCvArr; rect: TCvRect): pCvMat; cdecl; external core_lib;
+function cvCreateImageHeader(size: TCvSize; depth: Integer; channels: Integer): pIplImage; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+function cvInitImageHeader(image: pIplImage; size: TCvSize; depth: Integer; channels: Integer; origin: Integer = 0; align: Integer = 4): pIplImage; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+function cvCreateImage(size: TCvSize; depth, channels: Integer): pIplImage; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure cvReleaseImageHeader(var image: pIplImage); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure cvReleaseImage(var image: pIplImage); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+function cvCloneImage(const image: pIplImage): pIplImage; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure cvSetImageCOI(image: pIplImage; coi: Integer); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+function cvGetImageCOI(const image: pIplImage): Integer; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure cvSetImageROI(image: pIplImage; rect: TCvRect); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure cvResetImageROI(image: pIplImage); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+function cvGetImageROI(const image: pIplImage): TCvRect; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+function cvCreateMatHeader(rows: Integer; cols: Integer; cType: Integer): pCvMat; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+function cvInitMatHeader(mat: pCvMat; rows: Integer; cols: Integer; _type: Integer; data: Pointer = nil; step: Integer = CV_AUTOSTEP): pCvMat; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+function cvCreateMat(rows, cols, cType: Integer): pCvMat; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure cvReleaseMat(var mat: pCvMat); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+function cvCloneMat(const mat: pCvMat): pCvMat; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+function cvGetSubRect(arr: pCvArr; submat: pCvArr; rect: TCvRect): pCvMat; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 function cvGetSubArr(arr: pCvArr; submat: pCvArr; rect: TCvRect): pCvMat; cdecl; external core_lib name 'cvGetSubRect';
 
 function cvGetRow(const arr: pCvArr; submat: pCvMat; row: Integer): pCvMat;
@@ -2497,35 +2497,35 @@ begin
   result := cvGetRows(arr, submat, row, row + 1, 1);
 end;
 
-function cvGetCols(const arr: pCvArr; submat: pCvMat; start_col, end_col: Integer): pCvMat; cdecl; external core_lib;
+function cvGetCols(const arr: pCvArr; submat: pCvMat; start_col, end_col: Integer): pCvMat; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
 function cvGetCol(const arr: pCvArr; submat: pCvMat; col: Integer): pCvMat;
 begin
   result := cvGetCols(arr, submat, col, col + 1);
 end;
 
-function cvGetDiag(const arr: pCvArr; submat: pCvMat; diag: Integer = 0): pCvMat; cdecl; external core_lib;
-procedure cvScalarToRawData(const scalar: pCvScalar; data: pCvArr; cType: Integer; extend_to_12: Integer = 0); cdecl; external core_lib;
-procedure cvRawDataToScalar(const data: pCvArr; cType: Integer; scalar: pCvScalar); cdecl; external core_lib;
-function cvCreateMatNDHeader(dims: Integer; const sizes: pInteger; cType: Integer): pCvMatND; cdecl;external core_lib;
-function cvCreateMatND(dims: Integer; const sizes: pInteger; cType: Integer):pCvMatND; cdecl;external core_lib;
+function cvGetDiag(const arr: pCvArr; submat: pCvMat; diag: Integer = 0): pCvMat; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure cvScalarToRawData(const scalar: pCvScalar; data: pCvArr; cType: Integer; extend_to_12: Integer = 0); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure cvRawDataToScalar(const data: pCvArr; cType: Integer; scalar: pCvScalar); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+function cvCreateMatNDHeader(dims: Integer; const sizes: pInteger; cType: Integer): pCvMatND; cdecl;external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+function cvCreateMatND(dims: Integer; const sizes: pInteger; cType: Integer):pCvMatND; cdecl;external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-function cvInitMatNDHeader(mat: pCvMatND; dims: Integer; const sizes: pInteger; cType: Integer; data: pCvArr = nil):pCvMatND; cdecl; external core_lib;
+function cvInitMatNDHeader(mat: pCvMatND; dims: Integer; const sizes: pInteger; cType: Integer; data: pCvArr = nil):pCvMatND; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
 procedure cvReleaseMatND(var mat: pCvMatND); {$IFDEF USE_INLINE} inline; {$ENDIF}
 begin
   cvReleaseMat(pCvMat(mat));
 end;
 
-function cvCloneMatND(const mat: pCvMatND):pCvMatND; cdecl; external core_lib;
+function cvCloneMatND(const mat: pCvMatND):pCvMatND; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-function cvCreateSparseMat(dims: Integer; sizes: pInteger; cType: Integer):pCvSparseMat; cdecl; external core_lib;
+function cvCreateSparseMat(dims: Integer; sizes: pInteger; cType: Integer):pCvSparseMat; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-procedure cvReleaseSparseMat(mat: pCvSparseMat); cdecl; cdecl; external core_lib;
+procedure cvReleaseSparseMat(mat: pCvSparseMat); cdecl; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-function cvCloneSparseMat(const mat: pCvSparseMat):pCvSparseMat; cdecl; external core_lib;
+function cvCloneSparseMat(const mat: pCvSparseMat):pCvSparseMat; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-function cvInitSparseMatIterator(const mat: pCvSparseMat; mat_iterator: pCvSparseMatIterator):pCvSparseNode; cdecl; external core_lib;
+function cvInitSparseMatIterator(const mat: pCvSparseMat; mat_iterator: pCvSparseMatIterator):pCvSparseNode; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
 {
  returns next sparse array node (or NULL if there is no more nodes)
@@ -2579,65 +2579,65 @@ begin
   end;
 end;
 {$ENDIF}
-function cvInitNArrayIterator(count: Integer; arrs: pCvArr; const mask: pCvArr; stubs: pCvMatND; array_iterator: pCvNArrayIterator; flags: Integer = 0): Integer; cdecl; external core_lib;
+function cvInitNArrayIterator(count: Integer; arrs: pCvArr; const mask: pCvArr; stubs: pCvMatND; array_iterator: pCvNArrayIterator; flags: Integer = 0): Integer; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-function cvNextNArraySlice(array_iterator: pCvNArrayIterator): Integer; cdecl; external core_lib;
+function cvNextNArraySlice(array_iterator: pCvNArrayIterator): Integer; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-function cvGetElemType(const arr: pCvArr): Integer; cdecl; external core_lib;
+function cvGetElemType(const arr: pCvArr): Integer; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-function cvGetDims(const arr: pCvArr; sizes: pInteger = nil): Integer; cdecl; external core_lib;
+function cvGetDims(const arr: pCvArr; sizes: pInteger = nil): Integer; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-function cvGetDimSize(const arr: pCvArr; index: Integer): Integer; cdecl; external core_lib;
+function cvGetDimSize(const arr: pCvArr; index: Integer): Integer; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-function cvPtr1D(const arr: pCvArr; idx0: Integer; cType: pInteger = nil): pCvArr; cdecl; external core_lib;
+function cvPtr1D(const arr: pCvArr; idx0: Integer; cType: pInteger = nil): pCvArr; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-function cvPtr2D(const arr: pCvArr; idx0, idx1: Integer; cType: pInteger = nil): pCvArr; cdecl; external core_lib;
+function cvPtr2D(const arr: pCvArr; idx0, idx1: Integer; cType: pInteger = nil): pCvArr; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-function cvPtr3D(const arr: pCvArr; idx0, idx1, idx2: Integer; cType: pInteger = nil): pCvArr; cdecl; external core_lib;
+function cvPtr3D(const arr: pCvArr; idx0, idx1, idx2: Integer; cType: pInteger = nil): pCvArr; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-function cvPtrND(const arr: pCvArr; idx: pInteger; cType: pInteger = nil; create_node: Integer = 1; precalc_hashval: punsigned = nil): pCvArr; cdecl; external core_lib;
+function cvPtrND(const arr: pCvArr; idx: pInteger; cType: pInteger = nil; create_node: Integer = 1; precalc_hashval: punsigned = nil): pCvArr; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-function cvGet1D(const arr: pCvArr; idx0: Integer): TCvScalar; cdecl; external core_lib;
+function cvGet1D(const arr: pCvArr; idx0: Integer): TCvScalar; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-function cvGet2D(const arr: pCvArr; idx0, idx1: Integer): TCvScalar; cdecl; external core_lib;
+function cvGet2D(const arr: pCvArr; idx0, idx1: Integer): TCvScalar; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-function cvGet3D(const arr: pCvArr; idx0, idx1, idx2: Integer): TCvScalar; cdecl; external core_lib;
+function cvGet3D(const arr: pCvArr; idx0, idx1, idx2: Integer): TCvScalar; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-function cvGetND(const arr: pCvArr; idx: pInteger): TCvScalar; cdecl; external core_lib;
+function cvGetND(const arr: pCvArr; idx: pInteger): TCvScalar; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-// function cvGetReal1D(const arr: pIplImage; idx0: Integer): double; cdecl; external core_lib; overload;
-function cvGetReal1D(const arr: pCvArr; idx0: Integer): double; cdecl; external core_lib; overload;
+// function cvGetReal1D(const arr: pIplImage; idx0: Integer): double; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF}; overload;
+function cvGetReal1D(const arr: pCvArr; idx0: Integer): double; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF}; overload;
 
-// function cvGetReal2D(const arr: pCvMat; idx0, idx1: Integer): double; cdecl; external core_lib; overload;
-function cvGetReal2D(const arr: pCvArr; idx0, idx1: Integer): double; cdecl; external core_lib; overload;
+// function cvGetReal2D(const arr: pCvMat; idx0, idx1: Integer): double; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF}; overload;
+function cvGetReal2D(const arr: pCvArr; idx0, idx1: Integer): double; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF}; overload;
 
-function cvGetReal3D(const arr: pCvArr; idx0, idx1, idx2: Integer): double; cdecl; external core_lib;
+function cvGetReal3D(const arr: pCvArr; idx0, idx1, idx2: Integer): double; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-function cvGetRealND(const arr: pCvArr; idx: pInteger): double; cdecl; external core_lib;
+function cvGetRealND(const arr: pCvArr; idx: pInteger): double; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-procedure cvSet1D(arr: pCvArr; idx0: Integer; value: TCvScalar); cdecl; external core_lib;
+procedure cvSet1D(arr: pCvArr; idx0: Integer; value: TCvScalar); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-procedure cvSet2D(arr: pCvArr; idx0, idx1: Integer; value: TCvScalar); cdecl; external core_lib;
+procedure cvSet2D(arr: pCvArr; idx0, idx1: Integer; value: TCvScalar); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-procedure cvSet3D(arr: pCvArr; idx0, idx1, idx2: Integer; value: TCvScalar); cdecl; external core_lib;
+procedure cvSet3D(arr: pCvArr; idx0, idx1, idx2: Integer; value: TCvScalar); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-procedure cvSetND(arr: pCvArr; idx: pInteger; value: TCvScalar); cdecl; external core_lib;
+procedure cvSetND(arr: pCvArr; idx: pInteger; value: TCvScalar); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-procedure cvSetReal1D(arr: pCvArr; idx0: Integer; value: double); cdecl; external core_lib;
+procedure cvSetReal1D(arr: pCvArr; idx0: Integer; value: double); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-procedure cvSetReal2D(arr: pCvArr; idx0, idx1: Integer; value: double); cdecl; external core_lib;
+procedure cvSetReal2D(arr: pCvArr; idx0, idx1: Integer; value: double); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-procedure cvSetReal3D(arr: pCvArr; idx0, idx1, idx2: Integer; value: double); cdecl; external core_lib;
+procedure cvSetReal3D(arr: pCvArr; idx0, idx1, idx2: Integer; value: double); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-procedure cvSetRealND(arr: pCvArr; idx: pInteger; value: double); cdecl; external core_lib;
+procedure cvSetRealND(arr: pCvArr; idx: pInteger; value: double); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-procedure cvClearND(arr: pCvArr; idx: pInteger); cdecl; external core_lib;
+procedure cvClearND(arr: pCvArr; idx: pInteger); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-function cvGetMat(const arr: pCvArr; header: pCvMat; coi: pInteger = nil; allowND: Integer = 0): pCvMat; cdecl; external core_lib;
+function cvGetMat(const arr: pCvArr; header: pCvMat; coi: pInteger = nil; allowND: Integer = 0): pCvMat; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-function cvGetImage(const arr: pCvArr; image_header: pIplImage): pIplImage; cdecl; external core_lib;
+function cvGetImage(const arr: pCvArr; image_header: pIplImage): pIplImage; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-function cvReshapeMatND(const arr: pCvArr; sizeof_header: Integer; header: pCvArr; new_cn, new_dims: Integer; new_sizes: pInteger): pCvArr; cdecl; external core_lib;
+function cvReshapeMatND(const arr: pCvArr; sizeof_header: Integer; header: pCvArr; new_cn, new_dims: Integer; new_sizes: pInteger): pCvArr; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
 function cvReshapeND(const arr: pCvArr; sizeof_header: Integer; header: pCvArr; new_cn, new_dims: Integer; new_sizes: pInteger): pCvArr;
 {$IFDEF USE_INLINE} inline; {$ENDIF}
@@ -2645,22 +2645,19 @@ begin
   result := cvReshapeMatND(arr, sizeof(sizeof_header), header, new_cn, new_dims, new_sizes);
 end;
 
-function cvReshape(const arr: pCvArr; header: pCvMat; new_cn: Integer; new_rows: Integer = 0): pCvMat; cdecl; external core_lib;
+function cvReshape(const arr: pCvArr; header: pCvMat; new_cn: Integer; new_rows: Integer = 0): pCvMat; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-procedure cvRepeat(src, dst: pCvArr); cdecl; external core_lib;
+procedure cvRepeat(src, dst: pCvArr); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-procedure cvCreateData(arr: pCvArr); cdecl; external core_lib;
+procedure cvCreateData(arr: pCvArr); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-procedure cvReleaseData(arr: pCvArr); cdecl; external core_lib;
+procedure cvReleaseData(arr: pCvArr); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-procedure cvSetData(arr: pCvArr; data: Pointer; step: Integer); cdecl; external core_lib;
+procedure cvSetData(arr: pCvArr; data: Pointer; step: Integer); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-procedure cvGetRawData(arr: pCvArr; data: pByte; step: pInteger = nil; roi_size: pCvSize = nil); cdecl; external core_lib;
+procedure cvGetRawData(arr: pCvArr; data: pByte; step: pInteger = nil; roi_size: pCvSize = nil); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
 {$IF DEFINED(DelphiOCVVersion_29)}
-// {$IFDEF VER290}
-// function cvGetSize(const arr: pCvArr): TCvSize; external core_lib;
-// {$ELSE}
 /// / ----------------------
 procedure _cvGetSize(const arr: pCvArr; var size: TCvSize); cdecl; external core_lib name 'cvGetSize';
 {$IFDEF CPU32}
@@ -2697,13 +2694,13 @@ end;
 // {$ENDIF}
 // -------------------
 {$ELSEIF DEFINED(DelphiOCVVersion_30)}
-function cvGetSize(const arr: pCvArr): TCvSize; external core_lib;
+function cvGetSize(const arr: pCvArr): TCvSize; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 {$IFEND}
-// procedure cvCopy; external core_lib;
-procedure cvCopy(const src: pCvArr; dst: pCvArr; const mask: pCvArr = nil); cdecl; external core_lib; overload;
-// procedure cvCopy(const src: pIplImage; dst: pIplImage; const mask: pIplImage = nil); cdecl; external core_lib; overload;
+// procedure cvCopy; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure cvCopy(const src: pCvArr; dst: pCvArr; const mask: pCvArr = nil); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF}; overload;
+// procedure cvCopy(const src: pIplImage; dst: pIplImage; const mask: pIplImage = nil); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF}; overload;
 
-procedure cvSet(arr: pCvArr; value: TCvScalar; const mask: pCvArr = Nil); cdecl; external core_lib;
+procedure cvSet(arr: pCvArr; value: TCvScalar; const mask: pCvArr = Nil); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
 procedure cvSet(mat: pCvMat; i, j: Integer; val: Single); {$IFDEF USE_INLINE} inline; {$ENDIF}
 var
@@ -2719,20 +2716,20 @@ begin
   pf^ := val;
 end;
 
-procedure cvSetZero(arr: pCvArr); cdecl; external core_lib;
+procedure cvSetZero(arr: pCvArr); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
 procedure cvZero(arr: pCvArr); cdecl; external core_lib name 'cvSetZero';
 
-procedure cvSplit(const src: pCvArr; dst0: pCvArr; dst1: pCvArr; dst2: pCvArr = nil; dst3: pCvArr = nil); cdecl; external core_lib;
+procedure cvSplit(const src: pCvArr; dst0: pCvArr; dst1: pCvArr; dst2: pCvArr = nil; dst3: pCvArr = nil); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
 // procedure cvMerge(const src0: pIplImage; const src1: pIplImage; const src2: pIplImage; const src3: pIplImage; dst: pIplImage); cdecl;
-// external core_lib; overload;
-procedure cvMerge(const src0: pCvArr; const src1: pCvArr; const src2: pCvArr; const src3: pCvArr; dst: pCvArr); cdecl; external core_lib; overload;
+// external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF}; overload;
+procedure cvMerge(const src0: pCvArr; const src1: pCvArr; const src2: pCvArr; const src3: pCvArr; dst: pCvArr); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF}; overload;
 
 procedure cvMixChannels(src: array of pCvArr; src_count: Integer; dst: array of pCvArr; dst_count: Integer; const from_to: pInteger;
-  pair_count: Integer); cdecl; external core_lib;
+  pair_count: Integer); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-procedure cvConvertScale(const src: pCvArr; dst: pCvArr; scale: double = 1; shift: double = 0); cdecl; external core_lib;
+procedure cvConvertScale(const src: pCvArr; dst: pCvArr; scale: double = 1; shift: double = 0); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
 procedure cvConvert(const src: pCvArr; dst: pCvArr); {$IFDEF USE_INLINE} inline; {$ENDIF}
 begin
@@ -2743,23 +2740,23 @@ procedure cvScale(const src: pCvArr; dst: pCvArr; scale: double = 1; shift: doub
 
 procedure cvCvtScale(const src: pCvArr; dst: pCvArr; scale: double = 1; shift: double = 0); cdecl; external core_lib name 'cvConvertScale';
 
-procedure cvConvertScaleAbs(const src: pCvArr; dst: pCvArr; scale: double = 1; shift: double = 0); cdecl; external core_lib;
+procedure cvConvertScaleAbs(const src: pCvArr; dst: pCvArr; scale: double = 1; shift: double = 0); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
 procedure cvCvtScaleAbs; cdecl; external core_lib name 'cvConvertScaleAbs';
 
-function cvCheckTermCriteria(criteria: TCvTermCriteria; default_eps: double; default_max_iters: Integer): TCvTermCriteria; cdecl; external core_lib;
+function cvCheckTermCriteria(criteria: TCvTermCriteria; default_eps: double; default_max_iters: Integer): TCvTermCriteria; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-// procedure cvAdd; external core_lib;
-// procedure cvAdd(const src1, src2: pIplImage; dst: pIplImage; const mask: pIplImage = nil); cdecl; external core_lib; overload;
-procedure cvAdd(const src1, src2: pCvArr; dst: pCvArr; const mask: pCvArr = nil); cdecl; external core_lib; overload;
+// procedure cvAdd; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+// procedure cvAdd(const src1, src2: pIplImage; dst: pIplImage; const mask: pIplImage = nil); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF}; overload;
+procedure cvAdd(const src1, src2: pCvArr; dst: pCvArr; const mask: pCvArr = nil); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF}; overload;
 
-// procedure cvAddS; external core_lib;
-// procedure cvAddS(const src: pIplImage; value: TCvScalar; dst: pIplImage; const mask: pIplImage = nil); cdecl; external core_lib; overload;
-procedure cvAddS(const src: pCvArr; value: TCvScalar; dst: pCvArr; const mask: pCvArr = nil); cdecl; external core_lib; overload;
+// procedure cvAddS; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+// procedure cvAddS(const src: pIplImage; value: TCvScalar; dst: pIplImage; const mask: pIplImage = nil); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF}; overload;
+procedure cvAddS(const src: pCvArr; value: TCvScalar; dst: pCvArr; const mask: pCvArr = nil); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF}; overload;
 
-// procedure cvSub; external core_lib;
-// procedure cvSub(const src1, src2: pIplImage; dst: pIplImage; const mask: pIplImage = nil); cdecl; external core_lib; overload;
-procedure cvSub(const src1, src2: pCvArr; dst: pCvArr; const mask: pCvArr = nil); cdecl; external core_lib; overload;
+// procedure cvSub; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+// procedure cvSub(const src1, src2: pIplImage; dst: pIplImage; const mask: pIplImage = nil); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF}; overload;
+procedure cvSub(const src1, src2: pCvArr; dst: pCvArr; const mask: pCvArr = nil); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF}; overload;
 
 procedure cvSubS(const src: pCvArr; value: TCvScalar; dst: pCvArr; const mask: pCvArr); overload;
 begin
@@ -2771,21 +2768,21 @@ begin
   cvAddS(src, CvScalar(-value.val[0], -value.val[1], -value.val[2], -value.val[3]), dst, mask);
 end;
 
-// procedure cvSubRS; external core_lib;
-// procedure cvSubRS(const src: pIplImage; value: TCvScalar; dst: pIplImage; const mask: pIplImage = nil); cdecl; external core_lib; overload;
-procedure cvSubRS(const src: pCvArr; value: TCvScalar; dst: pCvArr; const mask: pCvArr = nil); cdecl; external core_lib; overload;
+// procedure cvSubRS; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+// procedure cvSubRS(const src: pIplImage; value: TCvScalar; dst: pIplImage; const mask: pIplImage = nil); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF}; overload;
+procedure cvSubRS(const src: pCvArr; value: TCvScalar; dst: pCvArr; const mask: pCvArr = nil); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF}; overload;
 
-// procedure cvMul; external core_lib;
-// procedure cvMul(const src1, src2: pIplImage; dst: pIplImage; scale: double = 1); cdecl; external core_lib; overload;
-procedure cvMul(const src1, src2: pCvArr; dst: pCvArr; scale: double = 1); cdecl; external core_lib; overload;
+// procedure cvMul; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+// procedure cvMul(const src1, src2: pIplImage; dst: pIplImage; scale: double = 1); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF}; overload;
+procedure cvMul(const src1, src2: pCvArr; dst: pCvArr; scale: double = 1); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF}; overload;
 
-// procedure cvDiv; external core_lib;
-// procedure cvDiv(const src1, src2: pIplImage; dst: pIplImage; scale: double = 1); cdecl; external core_lib; overload;
-procedure cvDiv(const src1, src2: pCvArr; dst: pCvArr; scale: double = 1); cdecl; external core_lib; overload;
+// procedure cvDiv; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+// procedure cvDiv(const src1, src2: pIplImage; dst: pIplImage; scale: double = 1); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF}; overload;
+procedure cvDiv(const src1, src2: pCvArr; dst: pCvArr; scale: double = 1); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF}; overload;
 
-// procedure cvScaleAdd; external core_lib;
-// procedure cvScaleAdd(const src1: pIplImage; scale: TCvScalar; const src2: pIplImage; dst: pIplImage); cdecl; external core_lib; overload;
-procedure cvScaleAdd(const src1: pCvArr; scale: TCvScalar; const src2: pCvArr; dst: pCvArr); cdecl; external core_lib; overload;
+// procedure cvScaleAdd; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+// procedure cvScaleAdd(const src1: pIplImage; scale: TCvScalar; const src2: pIplImage; dst: pIplImage); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF}; overload;
+procedure cvScaleAdd(const src1: pCvArr; scale: TCvScalar; const src2: pCvArr; dst: pCvArr); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF}; overload;
 
 // define cvAXPY( A, real_scalar, B, C ) cvScaleAdd(A, cvRealScalar(real_scalar), B, C)
 procedure cvAXPY(A: pCvArr; real_scalar: double; B, C: pCvArr); {$IFDEF USE_INLINE} inline; {$ENDIF} overload;
@@ -2798,30 +2795,30 @@ begin
   cvScaleAdd(A, cvRealScalar(real_scalar), B, C);
 end;
 
-// procedure cvAddWeighted; external core_lib;
+// procedure cvAddWeighted; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 // procedure cvAddWeighted(const src1: pIplImage; alpha: double; const src2: pIplImage; beta: double; gamma: double; dst: pIplImage); cdecl;
-// external core_lib; overload;
-procedure cvAddWeighted(const src1: pCvArr; alpha: double; const src2: pCvArr; beta: double; gamma: double; dst: pCvArr); cdecl; external core_lib; overload;
+// external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF}; overload;
+procedure cvAddWeighted(const src1: pCvArr; alpha: double; const src2: pCvArr; beta: double; gamma: double; dst: pCvArr); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF}; overload;
 
-function cvDotProduct(const src1, src2: pCvArr): double; cdecl; external core_lib;
+function cvDotProduct(const src1, src2: pCvArr): double; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-function cvAlloc(size: NativeUInt): Pointer; cdecl; external core_lib;
+function cvAlloc(size: NativeUInt): Pointer; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-procedure cvFree_(ptr: Pointer); cdecl; external core_lib;
+procedure cvFree_(ptr: Pointer); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
 procedure cvInitFont(font: pCvFont; font_face: Integer; hscale: double; vscale: double; shear: double = 0; thickness: Integer = 1;
-  line_type: Integer = 8); cdecl; external core_lib;
+  line_type: Integer = 8); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-procedure cvPutText(img: pCvArr; const text: pCvChar; org: TCvPoint; const font: pCvFont; color: TCvScalar); cdecl; external core_lib;
+procedure cvPutText(img: pCvArr; const text: pCvChar; org: TCvPoint; const font: pCvFont; color: TCvScalar); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
 function cvFont(scale: double; thickness: Integer = 1): TCvFont; {$IFDEF USE_INLINE} inline; {$ENDIF}
 begin
   cvInitFont(@result, CV_FONT_HERSHEY_PLAIN, scale, scale, 0, thickness, CV_AA);
 end;
 
-procedure cvCircle(img: pCvArr; center: TCvPoint; radius: Integer; color: TCvScalar; thickness: Integer = 1; line_type: Integer = 8; shift: Integer = 0); cdecl; external core_lib;
+procedure cvCircle(img: pCvArr; center: TCvPoint; radius: Integer; color: TCvScalar; thickness: Integer = 1; line_type: Integer = 8; shift: Integer = 0); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-procedure cvLine(img: pCvArr; pt1, pt2: TCvPoint; color: TCvScalar; thickness: Integer = 1; line_type: Integer = 8; shift: Integer = 0); cdecl; external core_lib;
+procedure cvLine(img: pCvArr; pt1, pt2: TCvPoint; color: TCvScalar; thickness: Integer = 1; line_type: Integer = 8; shift: Integer = 0); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
 // procedure cvCopyImage; external core_lib name 'cvCopy';
 // procedure cvCopyImage(const src: pIplImage; dst: pIplImage; const mask: pIplImage = nil); cdecl; external core_lib name 'cvCopy'; overload;
@@ -2833,7 +2830,7 @@ begin
 end;
 
 procedure cvSave(const filename: pCvChar; const struct_ptr: Pointer; const name: pCvChar; const comment: pCvChar; attributes: TCvAttrList); cdecl;
-  external core_lib; overload;
+  external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF}; overload;
 
 procedure cvSave(const filename: pCvChar; const struct_ptr: Pointer; const name: pCvChar = Nil; const comment: pCvChar = Nil); overload;
 {$IFDEF USE_INLINE} inline; {$ENDIF}
@@ -2841,54 +2838,54 @@ begin
   cvSave(filename, struct_ptr, name, comment, ZeroCvAttrList);
 end;
 
-function cvLoad(const filename: pCvChar; memstorage: pCvMemStorage = Nil; const name: pCvChar = nil; const real_name: ppCvChar = nil): Pointer; cdecl; external core_lib;
+function cvLoad(const filename: pCvChar; memstorage: pCvMemStorage = Nil; const name: pCvChar = nil; const real_name: ppCvChar = nil): Pointer; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-// procedure cvInRange; external core_lib;
+// procedure cvInRange; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 // procedure cvInRange(const src: pIplImage; const lower: pIplImage; const upper: pIplImage; dst: pIplImage); cdecl;
-// external core_lib; overload;
-procedure cvInRange(const src: pCvArr; const lower: pCvArr; const upper: pCvArr; dst: pCvArr); cdecl; external core_lib; overload;
+// external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF}; overload;
+procedure cvInRange(const src: pCvArr; const lower: pCvArr; const upper: pCvArr; dst: pCvArr); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF}; overload;
 
-// procedure cvInRangeS; external core_lib;
-// procedure cvInRangeS(const src: pIplImage; lower: TCvScalar; upper: TCvScalar; dst: pIplImage); cdecl; external core_lib; overload;
-procedure cvInRangeS(const src: pCvArr; lower: TCvScalar; upper: TCvScalar; dst: pCvArr); cdecl; external core_lib; overload;
+// procedure cvInRangeS; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+// procedure cvInRangeS(const src: pIplImage; lower: TCvScalar; upper: TCvScalar; dst: pIplImage); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF}; overload;
+procedure cvInRangeS(const src: pCvArr; lower: TCvScalar; upper: TCvScalar; dst: pCvArr); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF}; overload;
 
-// procedure cvMinMaxLoc; external core_lib;
+// procedure cvMinMaxLoc; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 // procedure cvMinMaxLoc(const arr: pIplImage; min_val: pDouble; max_val: pDouble; min_loc: pCVPoint = nil; max_loc: pCVPoint = nil;
-// const mask: pIplImage = nil); cdecl; external core_lib; overload;
+// const mask: pIplImage = nil); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF}; overload;
 procedure cvMinMaxLoc(const arr: pCvArr; min_val: pDouble; max_val: pDouble; min_loc: pCVPoint = nil; max_loc: pCVPoint = nil; const mask: pCvArr = nil); cdecl;
-  external core_lib; overload;
+  external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF}; overload;
 
-// procedure cvAnd; external core_lib;
-// procedure cvAnd(const src1: pIplImage; const src2: pIplImage; dst: pIplImage; masl: pIplImage = nil); cdecl; external core_lib; overload;
-procedure cvAnd(const src1: pCvArr; const src2: pCvArr; dst: pCvArr; masl: pCvArr = nil); cdecl; external core_lib; overload;
+// procedure cvAnd; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+// procedure cvAnd(const src1: pIplImage; const src2: pIplImage; dst: pIplImage; masl: pIplImage = nil); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF}; overload;
+procedure cvAnd(const src1: pCvArr; const src2: pCvArr; dst: pCvArr; masl: pCvArr = nil); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF}; overload;
 
-function cvCreateMemStorage(block_size: Integer = 0): pCvMemStorage; cdecl; external core_lib;
+function cvCreateMemStorage(block_size: Integer = 0): pCvMemStorage; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-function cvGetSeqElem(const seq: pCvSeq; index: Integer): Pointer; cdecl; external core_lib;
+function cvGetSeqElem(const seq: pCvSeq; index: Integer): Pointer; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-procedure cvReleaseMemStorage(var storage: pCvMemStorage); cdecl; external core_lib;
+procedure cvReleaseMemStorage(var storage: pCvMemStorage); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-procedure cvRectangle(img: pCvArr; pt1: TCvPoint; pt2: TCvPoint; color: TCvScalar; thickness: Integer = 1; line_type: Integer = 8; shift: Integer = 0); cdecl; external core_lib;
+procedure cvRectangle(img: pCvArr; pt1: TCvPoint; pt2: TCvPoint; color: TCvScalar; thickness: Integer = 1; line_type: Integer = 8; shift: Integer = 0); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-function cvGetRows(const arr: pCvArr; submat: pCvMat; start_row, end_row: Integer; delta_row: Integer = 1): pCvMat; cdecl; external core_lib;
+function cvGetRows(const arr: pCvArr; submat: pCvMat; start_row, end_row: Integer; delta_row: Integer = 1): pCvMat; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-procedure cvFlip(const src: pCvArr; dst: pCvArr = nil; flip_mode: Integer = 0); cdecl; external core_lib;
+procedure cvFlip(const src: pCvArr; dst: pCvArr = nil; flip_mode: Integer = 0); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 procedure cvMirror(const src: pCvArr; dst: pCvArr = nil; flip_mode: Integer = 0); cdecl; external core_lib name 'cvFlip';
 
-procedure cvClearMemStorage(storage: pCvMemStorage); cdecl; external core_lib;
+procedure cvClearMemStorage(storage: pCvMemStorage); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
 procedure cvDrawContours(img: pIplImage; contour: pCvSeq; external_color, hole_color: TCvScalar; max_level, thickness { =1 } , line_type: Integer { =8 };
-  offset: TCvPoint { =cvPoint(0,0) } ); cdecl; external core_lib;
+  offset: TCvPoint { =cvPoint(0,0) } ); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-function cvCreateChildMemStorage(parent: pCvMemStorage): pCvMemStorage; cdecl; external core_lib;
+function cvCreateChildMemStorage(parent: pCvMemStorage): pCvMemStorage; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-procedure cvCvtSeqToArray(const seq: pCvSeq; elements: pCvArr; slice: TCvSlice { =CV_WHOLE_SEQ } ); cdecl; external core_lib;
+procedure cvCvtSeqToArray(const seq: pCvSeq; elements: pCvArr; slice: TCvSlice { =CV_WHOLE_SEQ } ); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-function cvOpenFileStorage(const filename: pCvChar; memstorage: pCvMemStorage; flags: Integer; const encoding: pCvChar = nil): pCvFileStorage; cdecl; external core_lib;
+function cvOpenFileStorage(const filename: pCvChar; memstorage: pCvMemStorage; flags: Integer; const encoding: pCvChar = nil): pCvFileStorage; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-procedure cvReleaseFileStorage(var fs: pCvFileStorage); cdecl; external core_lib;
+procedure cvReleaseFileStorage(var fs: pCvFileStorage); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-function cvGetFileNodeByName(const fs: pCvFileStorage; const map: pCvFileNode; const name: pCvChar): pCvFileNode; cdecl; external core_lib;
+function cvGetFileNodeByName(const fs: pCvFileStorage; const map: pCvFileNode; const name: pCvChar): pCvFileNode; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
 function cvReadInt(const node: pCvFileNode; default_value: Integer = 0): Integer; {$IFDEF USE_INLINE} inline; {$ENDIF}
 begin
@@ -2905,22 +2902,22 @@ begin
   result := cvReadInt(cvGetFileNodeByName(fs, map, name), default_value);
 end;
 
-function cvRead(fs: pCvFileStorage; node: pCvFileNode; attributes: pCvAttrList = nil): pPointer; cdecl; external core_lib;
+function cvRead(fs: pCvFileStorage; node: pCvFileNode; attributes: pCvAttrList = nil): pPointer; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-procedure cvStartReadSeq(const seq: Pointer; reader: pCvSeqReader; reverse: Integer = 0); cdecl; external core_lib;
+procedure cvStartReadSeq(const seq: Pointer; reader: pCvSeqReader; reverse: Integer = 0); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-procedure cvChangeSeqBlock(reader: pCvSeqReader; direction: Integer); cdecl; external core_lib;
+procedure cvChangeSeqBlock(reader: pCvSeqReader; direction: Integer); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-procedure cvFillConvexPoly(img: pCvArr; const pts: pCVPoint; npts: Integer; color: TCvScalar; line_type: Integer = 8; shift: Integer = 0); cdecl; cdecl; external core_lib;
+procedure cvFillConvexPoly(img: pCvArr; const pts: pCVPoint; npts: Integer; color: TCvScalar; line_type: Integer = 8; shift: Integer = 0); cdecl; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
 procedure cvPolyLine(img: pCvArr; pts: pCVPoint; const npts: pInteger; contours: Integer; is_closed: Integer; color: TCvScalar; thickness: Integer = 1;
-  line_type: Integer = 8; shift: Integer = 0); cdecl; external core_lib;
+  line_type: Integer = 8; shift: Integer = 0); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-function cvCreateSeq(seq_flags: Integer; header_size: NativeUInt; elem_size: NativeUInt; storage: pCvMemStorage): pCvSeq; cdecl; external core_lib;
+function cvCreateSeq(seq_flags: Integer; header_size: NativeUInt; elem_size: NativeUInt; storage: pCvMemStorage): pCvSeq; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-procedure cvCreateSeqBlock(writer: pCvSeqWriter); cdecl; external core_lib;
+procedure cvCreateSeqBlock(writer: pCvSeqWriter); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-function cvSeqPush(seq: pCvSeq; const element: Pointer = nil): Pointer; cdecl; external core_lib;
+function cvSeqPush(seq: pCvSeq; const element: Pointer = nil): Pointer; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
 procedure cvEllipseBox(img: pCvArr; box: TCvBox2D; color: TCvScalar; thickness: Integer = 1; line_type: Integer = 8; shift: Integer = 0);
 {$IFDEF USE_INLINE} inline; {$ENDIF}
@@ -2932,18 +2929,18 @@ begin
   cvEllipse(img, cvPointFrom32f(box.center), axes, box.angle, 0, 360, color, thickness, line_type, shift);
 end;
 
-procedure cvOr(const src1, src2: pCvArr; dst: pCvArr; const mask: pCvArr = nil); cdecl; external core_lib;
+procedure cvOr(const src1, src2: pCvArr; dst: pCvArr; const mask: pCvArr = nil); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-procedure cvXor(const src1, src2: pCvArr; dst: pCvArr; const mask: pCvArr = nil); cdecl; external core_lib;
+procedure cvXor(const src1, src2: pCvArr; dst: pCvArr; const mask: pCvArr = nil); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-// procedure cvXorS; external core_lib;
-// procedure cvXorS(const src: pIplImage; value: TCvScalar; dst: pIplImage; const mask: pCvArr = nil); cdecl; external core_lib; overload;
-procedure cvXorS(const src: pCvArr; value: TCvScalar; dst: pCvArr; const mask: pCvArr = nil); cdecl; external core_lib; overload;
+// procedure cvXorS; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+// procedure cvXorS(const src: pIplImage; value: TCvScalar; dst: pIplImage; const mask: pCvArr = nil); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF}; overload;
+procedure cvXorS(const src: pCvArr; value: TCvScalar; dst: pCvArr; const mask: pCvArr = nil); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF}; overload;
 
-procedure cvNot(const src: pCvArr; dst: pCvArr); cdecl; external core_lib;
+procedure cvNot(const src: pCvArr; dst: pCvArr); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
 procedure cvEllipse(img: pCvArr; center: TCvPoint; axes: TCvSize; angle: double; start_angle: double; nd_angle: double; color: TCvScalar;
-  thickness: Integer = 1; line_type: Integer = 8; shift: Integer = 0); cdecl; external core_lib;
+  thickness: Integer = 1; line_type: Integer = 8; shift: Integer = 0); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
 procedure cvFree(var ptr); {$IFDEF USE_INLINE} inline; {$ENDIF}
 begin
@@ -2952,8 +2949,8 @@ begin
   Pointer(ptr) := nil;
 end;
 
-// function cvCountNonZero(arr: pIplImage): Integer; cdecl; external core_lib; overload;
-function cvCountNonZero(arr: pCvArr): Integer; cdecl; external core_lib; overload;
+// function cvCountNonZero(arr: pIplImage): Integer; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF}; overload;
+function cvCountNonZero(arr: pCvArr): Integer; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF}; overload;
 
 function cvGet(const mat: pCvMat; i, j: Integer): Single; {$IFDEF USE_INLINE} inline; {$ENDIF}
 var
@@ -2994,43 +2991,43 @@ procedure cvRelease(var struct_ptr: pCvSeq); cdecl; external core_lib name 'cvRe
 // result := GetTickFrequency() * 1E-6;
 // end;
 
-function cvGetTickCount: int64; cdecl; external core_lib;
+function cvGetTickCount: int64; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-function cvGetTickFrequency: double; cdecl; external core_lib;
+function cvGetTickFrequency: double; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-function cvCheckHardwareSupport(feature: Integer): Integer; cdecl; external core_lib;
+function cvCheckHardwareSupport(feature: Integer): Integer; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-function cvGetNumThreads: Integer; cdecl; external core_lib;
+function cvGetNumThreads: Integer; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-procedure cvSetNumThreads(threads: Integer = 0); cdecl; external core_lib;
+procedure cvSetNumThreads(threads: Integer = 0); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-function cvGetThreadNum: Integer; cdecl; external core_lib;
+function cvGetThreadNum: Integer; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-procedure cvAbsDiff(const src1: pCvArr; const src2: pCvArr; dst: pCvArr); cdecl; external core_lib;
+procedure cvAbsDiff(const src1: pCvArr; const src2: pCvArr; dst: pCvArr); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-function cvNorm(const arr1: pCvArr; const arr2: pCvArr = nil; norm_type: Integer = CV_L2; const mask: pCvArr = nil): double; cdecl; external core_lib;
+function cvNorm(const arr1: pCvArr; const arr2: pCvArr = nil; norm_type: Integer = CV_L2; const mask: pCvArr = nil): double; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-procedure cvSeqRemove(seq: pCvSeq; index: Integer); cdecl; external core_lib;
+procedure cvSeqRemove(seq: pCvSeq; index: Integer); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-procedure cvClearSeq(seq: pCvSeq); cdecl; external core_lib;
+procedure cvClearSeq(seq: pCvSeq); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-procedure cvWrite(fs: pCvFileStorage; const name: pCvChar; const ptr: pCvArr; attributes: TCvAttrList { = cvAttrList() } ); cdecl; external core_lib;
+procedure cvWrite(fs: pCvFileStorage; const name: pCvChar; const ptr: pCvArr; attributes: TCvAttrList { = cvAttrList() } ); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-function cvSeqPartition(const seq: pCvSeq; storage: pCvMemStorage; labels: pCvSeq; is_equal: TCvCmpFunc; userdata: Pointer): Integer; cdecl; external core_lib;
+function cvSeqPartition(const seq: pCvSeq; storage: pCvMemStorage; labels: pCvSeq; is_equal: TCvCmpFunc; userdata: Pointer): Integer; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-function cvSum(const arr: pCvArr): TCvScalar; cdecl; external core_lib;
+function cvSum(const arr: pCvArr): TCvScalar; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-procedure cvRandArr(rng: pCvRNG; arr: pCvArr; dist_type: Integer; param1: TCvScalar; param2: TCvScalar); cdecl; external core_lib;
+procedure cvRandArr(rng: pCvRNG; arr: pCvArr; dist_type: Integer; param1: TCvScalar; param2: TCvScalar); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-procedure cvRandShuffle(mat: pCvArr; rng: pCvRNG; iter_factor: double = 1); cdecl; external core_lib;
+procedure cvRandShuffle(mat: pCvArr; rng: pCvRNG; iter_factor: double = 1); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-procedure cvWriteInt(fs: pCvFileStorage; const name: pCvChar; value: Integer); cdecl; external core_lib;
+procedure cvWriteInt(fs: pCvFileStorage; const name: pCvChar; value: Integer); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-procedure cvWriteReal(fs: pCvFileStorage; const name: pCvChar; value: double); cdecl; external core_lib;
+procedure cvWriteReal(fs: pCvFileStorage; const name: pCvChar; value: double); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-procedure cvWriteString(fs: pCvFileStorage; const name: pCvChar; const str: pCvChar; quote: Integer = 0); cdecl; external core_lib;
+procedure cvWriteString(fs: pCvFileStorage; const name: pCvChar; const str: pCvChar; quote: Integer = 0); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-procedure cvWriteComment(fs: pCvFileStorage; const comment: pCvChar; eol_comment: Integer); cdecl; external core_lib;
+procedure cvWriteComment(fs: pCvFileStorage; const comment: pCvChar; eol_comment: Integer); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
 function cvReadByName(fs: pCvFileStorage; const map: pCvFileNode; const name: pCvChar; attributes: pCvAttrList = nil): Pointer;
 begin
@@ -3057,329 +3054,329 @@ begin
     result := default_value;
 end;
 
-function cvGetErrStatus: Integer; cdecl; external core_lib;
+function cvGetErrStatus: Integer; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-procedure cvSetErrStatus(status: Integer); cdecl; external core_lib;
+procedure cvSetErrStatus(status: Integer); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-function cvGetErrMode: Integer; cdecl; external core_lib;
+function cvGetErrMode: Integer; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-function cvSetErrMode(mode: Integer): Integer; cdecl; external core_lib;
+function cvSetErrMode(mode: Integer): Integer; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-procedure cvError(status: Integer; const func_name: pCvChar; const err_msg: pCvChar; const file_name: pCvChar = nil; line: Integer = 0); cdecl; external core_lib;
+procedure cvError(status: Integer; const func_name: pCvChar; const err_msg: pCvChar; const file_name: pCvChar = nil; line: Integer = 0); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-procedure cvDFT(const src: pCvArr; dst: pCvArr; flags: Integer; nonzero_rows: Integer = 0); cdecl; external core_lib;
+procedure cvDFT(const src: pCvArr; dst: pCvArr; flags: Integer; nonzero_rows: Integer = 0); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
 procedure cvFFT(const src: pCvArr; dst: pCvArr; flags: Integer; nonzero_rows: Integer = 0); cdecl; external core_lib name 'cvDFT';
 
-procedure cvMulSpectrums(const src1: pCvArr; const src2: pCvArr; dst: pCvArr; flags: Integer); cdecl; external core_lib;
+procedure cvMulSpectrums(const src1: pCvArr; const src2: pCvArr; dst: pCvArr; flags: Integer); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-function cvGetOptimalDFTSize(size0: Integer): Integer; cdecl; external core_lib;
+function cvGetOptimalDFTSize(size0: Integer): Integer; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-procedure cvDCT(const src: pCvArr; dst: pCvArr; flags: Integer); cdecl; external core_lib;
+procedure cvDCT(const src: pCvArr; dst: pCvArr; flags: Integer); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-procedure cvCartToPolar(const x: pCvArr; const y: pCvArr; magnitude: pCvArr; angle: pCvArr = nil; angle_in_degrees: Integer = 0); cdecl; external core_lib;
+procedure cvCartToPolar(const x: pCvArr; const y: pCvArr; magnitude: pCvArr; angle: pCvArr = nil; angle_in_degrees: Integer = 0); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-procedure cvPolarToCart(const magnitude: pCvArr; const angle: pCvArr; x: pCvArr; y: pCvArr; angle_in_degrees: Integer = 0); cdecl; external core_lib;
+procedure cvPolarToCart(const magnitude: pCvArr; const angle: pCvArr; x: pCvArr; y: pCvArr; angle_in_degrees: Integer = 0); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-procedure cvPow(const src: pCvArr; dst: pCvArr; power: double); cdecl; external core_lib;
+procedure cvPow(const src: pCvArr; dst: pCvArr; power: double); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-procedure cvExp(const src: pCvArr; dst: pCvArr); cdecl; external core_lib;
+procedure cvExp(const src: pCvArr; dst: pCvArr); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-procedure cvLog(const src: pCvArr; dst: pCvArr); cdecl; external core_lib;
+procedure cvLog(const src: pCvArr; dst: pCvArr); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-procedure cvCrossProduct(const src1: pCvArr; const src2: pCvArr; dst: pCvArr); cdecl; external core_lib;
+procedure cvCrossProduct(const src1: pCvArr; const src2: pCvArr; dst: pCvArr); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
 procedure cvMatMulAdd(const src1, src2, src3: pCvArr; dst: pCvArr);
 begin
   cvGEMM(src1, src2, 1, src3, 1, dst, 0);
 end;
 
-procedure cvGEMM(const src1: pCvArr; const src2: pCvArr; alpha: double; const src3: pCvArr; beta: double; dst: pCvArr; tABC: Integer = 0); cdecl; external core_lib;
+procedure cvGEMM(const src1: pCvArr; const src2: pCvArr; alpha: double; const src3: pCvArr; beta: double; dst: pCvArr; tABC: Integer = 0); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 procedure cvMatMulAddEx(const src1: pCvArr; const src2: pCvArr; alpha: double; const src3: pCvArr; beta: double; dst: pCvArr; tABC: Integer = 0); cdecl; external core_lib name 'cvGEMM';
 
-function cvInvert(const src: pCvArr; dst: pCvArr; method: Integer = CV_LU): double; cdecl; external core_lib;
+function cvInvert(const src: pCvArr; dst: pCvArr; method: Integer = CV_LU): double; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-function cvFastArctan(y, x: Float): Float; cdecl; external core_lib;
+function cvFastArctan(y, x: Float): Float; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-function cvCbrt(value: Float): Float; cdecl; external core_lib;
+function cvCbrt(value: Float): Float; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-function cvCheckArr(const arr: pCvArr; flags: Integer = 0; min_val: double = 0; max_val: double = 0): Integer; cdecl; external core_lib;
+function cvCheckArr(const arr: pCvArr; flags: Integer = 0; min_val: double = 0; max_val: double = 0): Integer; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-procedure cvGetTextSize(const text_string: pCvChar; const font: pCvFont; text_size: pCvSize; var baseline: Integer); cdecl; external core_lib;
+procedure cvGetTextSize(const text_string: pCvChar; const font: pCvFont; text_size: pCvSize; var baseline: Integer); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-procedure cvInitTreeNodeIterator(var tree_iterator: TCvTreeNodeIterator; const first: Pointer; max_level: Integer); cdecl; external core_lib;
+procedure cvInitTreeNodeIterator(var tree_iterator: TCvTreeNodeIterator; const first: Pointer; max_level: Integer); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-function cvNextTreeNode(tree_iterator: pCvTreeNodeIterator): Pointer; cdecl; external core_lib;
+function cvNextTreeNode(tree_iterator: pCvTreeNodeIterator): Pointer; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-function cvPrevTreeNode(tree_iterator: pCvTreeNodeIterator): Pointer; cdecl; external core_lib;
+function cvPrevTreeNode(tree_iterator: pCvTreeNodeIterator): Pointer; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-procedure cvInsertNodeIntoTree(node: Pointer; parent: Pointer; frame: Pointer); cdecl; external core_lib;
+procedure cvInsertNodeIntoTree(node: Pointer; parent: Pointer; frame: Pointer); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-procedure cvRemoveNodeFromTree(node: Pointer; frame: Pointer); cdecl; external core_lib;
+procedure cvRemoveNodeFromTree(node: Pointer; frame: Pointer); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-function cvTreeToNodeSeq(const first: Pointer; header_size: Integer; storage: pCvMemStorage): pCvSeq; cdecl; external core_lib;
+function cvTreeToNodeSeq(const first: Pointer; header_size: Integer; storage: pCvMemStorage): pCvSeq; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
 function cvKMeans2(const samples: pCvArr; cluster_count: Integer; labels: pCvArr; termcrit: TCvTermCriteria; attempts: Integer = 1; rng: pCvRNG = nil;
-  flags: Integer = 0; _centers: pCvArr = nil; compactness: pDouble = nil): Integer; cdecl; external core_lib;
+  flags: Integer = 0; _centers: pCvArr = nil; compactness: pDouble = nil): Integer; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-procedure cvAndS(const src: pCvArr; value: TCvScalar; dst: pCvArr; const mask: pCvArr = nil); cdecl; external core_lib;
+procedure cvAndS(const src: pCvArr; value: TCvScalar; dst: pCvArr; const mask: pCvArr = nil); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-procedure cvOrS(const src: pCvArr; value: TCvScalar; dst: pCvArr; const mask: pCvArr = nil); cdecl; external core_lib;
+procedure cvOrS(const src: pCvArr; value: TCvScalar; dst: pCvArr; const mask: pCvArr = nil); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-procedure cvCmp(const src1, src2: pCvArr; dst: pCvArr;  cmp_op: integer); cdecl; external core_lib;
+procedure cvCmp(const src1, src2: pCvArr; dst: pCvArr;  cmp_op: integer); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-procedure cvCmpS(const src: pCvArr; value: double; dst: pCvArr;  cmp_op: integer); cdecl; external core_lib;
+procedure cvCmpS(const src: pCvArr; value: double; dst: pCvArr;  cmp_op: integer); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-procedure cvMin(const src1, src2:pCvArr; dst:pCvArr); cdecl; external core_lib;
+procedure cvMin(const src1, src2:pCvArr; dst:pCvArr); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-procedure cvMax(const src1, src2:pCvArr; dst:pCvArr); cdecl; external core_lib;
+procedure cvMax(const src1, src2:pCvArr; dst:pCvArr); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-procedure cvMinS(const src:pCvArr; value:double; dst:pCvArr); cdecl; external core_lib;
+procedure cvMinS(const src:pCvArr; value:double; dst:pCvArr); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-procedure cvMaxS(const src:pCvArr; value:double; dst:pCvArr); cdecl; external core_lib;
+procedure cvMaxS(const src:pCvArr; value:double; dst:pCvArr); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-procedure cvAbsDiffS(const src: pCvArr; dst: pCvArr; value:TCvScalar); cdecl; external core_lib;
+procedure cvAbsDiffS(const src: pCvArr; dst: pCvArr; value:TCvScalar); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
 procedure cvSort(const src:pCvArr; dst : pCvArr = nil;
                     idxmat :pCvArr=nil;
-                    flags : integer =0); cdecl; external core_lib;
+                    flags : integer =0); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-function cvSolveCubic(const coeffs: pCvMat; roots: pCvMat): Integer; cdecl; external core_lib;
+function cvSolveCubic(const coeffs: pCvMat; roots: pCvMat): Integer; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-procedure cvSolvePoly(const coeffs: pCvMat; roots2: pCvMat; maxiter: Integer = 20; fig: Integer = 100); cdecl; external core_lib;
+procedure cvSolvePoly(const coeffs: pCvMat; roots2: pCvMat; maxiter: Integer = 20; fig: Integer = 100); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-procedure cvTransform(const src: pCvArr; dst: pCvArr; const transmat: pCvMat; const shiftvec: pCvMat = nil); cdecl; external core_lib;
+procedure cvTransform(const src: pCvArr; dst: pCvArr; const transmat: pCvMat; const shiftvec: pCvMat = nil); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 procedure cvMatMulAddS(const src: pCvArr; dst: pCvArr; const transmat: pCvMat; const shiftvec: pCvMat = nil); cdecl; external core_lib name 'cvTransform';
 
-procedure cvPerspectiveTransform(const src: pCvArr; dst: pCvArr; const mat: pCvMat); cdecl; external core_lib;
+procedure cvPerspectiveTransform(const src: pCvArr; dst: pCvArr; const mat: pCvMat); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-procedure cvMulTransposed(const src: pCvArr; dst: pCvArr; order: Integer; const delta: pCvArr = nil; scale: double = 1); cdecl; external core_lib;
+procedure cvMulTransposed(const src: pCvArr; dst: pCvArr; order: Integer; const delta: pCvArr = nil; scale: double = 1); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-procedure cvTranspose(const src: pCvArr; dst: pCvArr); cdecl; external core_lib;
+procedure cvTranspose(const src: pCvArr; dst: pCvArr); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 procedure cvT(const src: pCvArr; dst: pCvArr); cdecl; external core_lib name 'cvTranspose';
 
-procedure cvCompleteSymm(matrix: pCvMat; LtoR: Integer = 0); cdecl; external core_lib;
+procedure cvCompleteSymm(matrix: pCvMat; LtoR: Integer = 0); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-procedure cvSVD(A: pCvArr; W: pCvArr; U: pCvArr = nil; V: pCvArr = nil; flags: Integer = 0); cdecl; external core_lib;
+procedure cvSVD(A: pCvArr; W: pCvArr; U: pCvArr = nil; V: pCvArr = nil; flags: Integer = 0); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-procedure cvSVBkSb(const W: pCvArr; const U: pCvArr; const V: pCvArr; const B: pCvArr; x: pCvArr; flags: Integer); cdecl; external core_lib;
+procedure cvSVBkSb(const W: pCvArr; const U: pCvArr; const V: pCvArr; const B: pCvArr; x: pCvArr; flags: Integer); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-function cvSolve(const src1: pCvArr; const src2: pCvArr; dst: pCvArr; method: Integer = CV_LU): Integer; cdecl; external core_lib;
+function cvSolve(const src1: pCvArr; const src2: pCvArr; dst: pCvArr; method: Integer = CV_LU): Integer; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-function cvDet(const mat: pCvArr): double; cdecl; external core_lib;
+function cvDet(const mat: pCvArr): double; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-function cvTrace(const mat: pCvArr): TCvScalar; cdecl; external core_lib;
+function cvTrace(const mat: pCvArr): TCvScalar; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-procedure cvEigenVV(mat: pCvArr; evects: pCvArr; evals: pCvArr; eps: double = 0; lowindex: Integer = -1; highindex: Integer = -1); cdecl; external core_lib;
+procedure cvEigenVV(mat: pCvArr; evects: pCvArr; evals: pCvArr; eps: double = 0; lowindex: Integer = -1; highindex: Integer = -1); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-procedure cvSetIdentity(mat: pCvArr; value: TCvScalar { =cvRealScalar(1) } ); cdecl; external core_lib;
+procedure cvSetIdentity(mat: pCvArr; value: TCvScalar { =cvRealScalar(1) } ); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-function cvRange(mat: pCvArr; start: double; end_: double): pCvArr; cdecl; external core_lib;
+function cvRange(mat: pCvArr; start: double; end_: double): pCvArr; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-procedure cvCalcCovarMatrix(const vects: pCvArrArray; count: Integer; cov_mat: pCvArr; avg: pCvArr; flags: Integer); cdecl; external core_lib;
+procedure cvCalcCovarMatrix(const vects: pCvArrArray; count: Integer; cov_mat: pCvArr; avg: pCvArr; flags: Integer); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-procedure cvCalcPCA(const data: pCvArr; mean: pCvArr; eigenvals: pCvArr; eigenvects: pCvArr; flags: Integer); cdecl; external core_lib;
+procedure cvCalcPCA(const data: pCvArr; mean: pCvArr; eigenvals: pCvArr; eigenvects: pCvArr; flags: Integer); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-procedure cvProjectPCA(const data: pCvArr; const mean: pCvArr; const eigenvects: pCvArr; result: pCvArr); cdecl; external core_lib;
+procedure cvProjectPCA(const data: pCvArr; const mean: pCvArr; const eigenvects: pCvArr; result: pCvArr); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-procedure cvBackProjectPCA(const proj: pCvArr; const mean: pCvArr; const eigenvects: pCvArr; result: pCvArr); cdecl; external core_lib;
+procedure cvBackProjectPCA(const proj: pCvArr; const mean: pCvArr; const eigenvects: pCvArr; result: pCvArr); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-function cvMahalanobis(const vec1: pCvArr; const vec2: pCvArr; const mat: pCvArr): double; cdecl; external core_lib;
+function cvMahalanobis(const vec1: pCvArr; const vec2: pCvArr; const mat: pCvArr): double; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-function cvAvg(const arr: pCvArr; const mask: pCvArr = nil): TCvScalar; cdecl; external core_lib;
+function cvAvg(const arr: pCvArr; const mask: pCvArr = nil): TCvScalar; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-procedure cvAvgSdv(const arr: pCvArr; mean: pCvScalar; std_dev: pCvScalar; const mask: pCvArr = nil); cdecl; external core_lib;
+procedure cvAvgSdv(const arr: pCvArr; mean: pCvScalar; std_dev: pCvScalar; const mask: pCvArr = nil); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
 procedure cvNormalize(const src: pCvArr; dst: pCvArr; A: double { = CV_DEFAULT(1) }; B: double { =CV_DEFAULT(0.) }; norm_type: Integer { =CV_DEFAULT(CV_L2) };
-  const mask: pCvArr = nil); cdecl; external core_lib;
+  const mask: pCvArr = nil); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-procedure cvReduce(const src: pCvArr; dst: pCvArr; dim: Integer = -1; op: Integer = CV_REDUCE_SUM); cdecl; external core_lib;
+procedure cvReduce(const src: pCvArr; dst: pCvArr; dim: Integer = -1; op: Integer = CV_REDUCE_SUM); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-function cvSliceLength(slice: TCvSlice; const seq: pCvSeq): Integer; cdecl; external core_lib;
+function cvSliceLength(slice: TCvSlice; const seq: pCvSeq): Integer; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-procedure cvSaveMemStoragePos(const storage:pCvMemStorage; pos:pCvMemStoragePos); cdecl; external core_lib;
+procedure cvSaveMemStoragePos(const storage:pCvMemStorage; pos:pCvMemStoragePos); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-procedure cvRestoreMemStoragePos(storage:pCvMemStorage; pos:pCvMemStoragePos); cdecl; external core_lib;
+procedure cvRestoreMemStoragePos(storage:pCvMemStorage; pos:pCvMemStoragePos); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-function cvMemStorageAlloc(storage: pCvMemStorage; size: size_t): Pointer; cdecl; external core_lib;
+function cvMemStorageAlloc(storage: pCvMemStorage; size: size_t): Pointer; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-function cvMemStorageAllocString(storage: pCvMemStorage; const ptr: pCvChar; len: Integer = -1): TCvString; cdecl; external core_lib;
+function cvMemStorageAllocString(storage: pCvMemStorage; const ptr: pCvChar; len: Integer = -1): TCvString; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-procedure cvSetSeqBlockSize( seq:pCvSeq; delta_elems:Integer ); cdecl; external core_lib;
+procedure cvSetSeqBlockSize( seq:pCvSeq; delta_elems:Integer ); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-function cvSeqPushFront(seq: pCvSeq; const element: Pointer = nil): pschar; cdecl; external core_lib;
+function cvSeqPushFront(seq: pCvSeq; const element: Pointer = nil): pschar; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-procedure cvSeqPop(seq:pCvSeq; element : pointer = nil);cdecl; external core_lib;
+procedure cvSeqPop(seq:pCvSeq; element : pointer = nil);cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-procedure cvSeqPopFront(seq:pCvSeq; element :pointer = nil); cdecl; external core_lib;
+procedure cvSeqPopFront(seq:pCvSeq; element :pointer = nil); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-procedure cvSeqPushMulti(seq:pCvSeq; const elements:pointer; count:Integer; in_front:integer = 0); cdecl; external core_lib;
+procedure cvSeqPushMulti(seq:pCvSeq; const elements:pointer; count:Integer; in_front:integer = 0); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-procedure cvSeqPopMulti(seq:pCvSeq; elements:pointer; count:integer; in_front:integer=0); cdecl; external core_lib;
+procedure cvSeqPopMulti(seq:pCvSeq; elements:pointer; count:integer; in_front:integer=0); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-function cvSeqInsert(seq: pCvSeq; before_index: Integer; const element: Pointer = nil): pschar; cdecl; external core_lib;
+function cvSeqInsert(seq: pCvSeq; before_index: Integer; const element: Pointer = nil): pschar; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-function cvSeqElemIdx(const seq: pCvSeq; const element: Pointer; block: pCvSeqBlockArray = nil): Integer; cdecl; external core_lib;
+function cvSeqElemIdx(const seq: pCvSeq; const element: Pointer; block: pCvSeqBlockArray = nil): Integer; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-procedure cvStartAppendToSeq(seq:pCvSeq; writer:pCvSeqWriter); cdecl; external core_lib;
+procedure cvStartAppendToSeq(seq:pCvSeq; writer:pCvSeqWriter); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
 procedure cvStartWriteSeq( seq_flags:integer; header_size:Integer;
                               elem_size:Integer; storage:pCvMemStorage;
-                              writer:pCvSeqWriter); cdecl; external core_lib;
+                              writer:pCvSeqWriter); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-function cvEndWriteSeq(writer: pCvSeqWriter): pCvSeq; cdecl; external core_lib;
+function cvEndWriteSeq(writer: pCvSeqWriter): pCvSeq; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-procedure cvFlushSeqWriter( writer:pCvSeqWriter ); cdecl; external core_lib;
+procedure cvFlushSeqWriter( writer:pCvSeqWriter ); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-function cvGetSeqReaderPos(reader: pCvSeqReader): Integer; cdecl; external core_lib;
+function cvGetSeqReaderPos(reader: pCvSeqReader): Integer; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-procedure cvSetSeqReaderPos(reader:pCvSeqReader; index:Integer; is_relative :Integer = 0); cdecl; external core_lib;
+procedure cvSetSeqReaderPos(reader:pCvSeqReader; index:Integer; is_relative :Integer = 0); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
 function cvMakeSeqHeaderForArray(seq_type: Integer; header_size: Integer; elem_size: Integer; elements: Pointer; total: Integer; seq: pCvSeq;
-  block: pCvSeqBlock): pCvSeq; cdecl; external core_lib;
+  block: pCvSeqBlock): pCvSeq; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-function cvSeqSlice(const seq: pCvSeq; slice: TCvSlice; storage: pCvMemStorage = nil; copy_data: Integer = 0): pCvSeq; cdecl; external core_lib;
+function cvSeqSlice(const seq: pCvSeq; slice: TCvSlice; storage: pCvMemStorage = nil; copy_data: Integer = 0): pCvSeq; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-procedure cvSeqRemoveSlice( seq:pCvSeq; slice :TCvSlice); cdecl; external core_lib;
+procedure cvSeqRemoveSlice( seq:pCvSeq; slice :TCvSlice); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-procedure cvSeqInsertSlice(seq:pCvSeq; before_index:integer; const from_arr:pCvArr);cdecl; external core_lib;
+procedure cvSeqInsertSlice(seq:pCvSeq; before_index:integer; const from_arr:pCvArr);cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-procedure cvSeqSort(seq:pCvSeq; func:TCvCmpFunc; userdata:pointer = nil); cdecl; external core_lib;
+procedure cvSeqSort(seq:pCvSeq; func:TCvCmpFunc; userdata:pointer = nil); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-function cvSeqSearch(seq: pCvSeq; const elem: Pointer; func: TCvCmpFunc; is_sorted: Integer; elem_idx: pInteger; userdata: Pointer = nil): pschar; cdecl; external core_lib;
+function cvSeqSearch(seq: pCvSeq; const elem: Pointer; func: TCvCmpFunc; is_sorted: Integer; elem_idx: pInteger; userdata: Pointer = nil): pschar; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-procedure cvSeqInvert( seq:pCvSeq );cdecl; external core_lib;
+procedure cvSeqInvert( seq:pCvSeq );cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-function cvCreateSet(set_flags: Integer; header_size: Integer; elem_size: Integer; storage: pCvMemStorage): pCvSet; cdecl; external core_lib;
+function cvCreateSet(set_flags: Integer; header_size: Integer; elem_size: Integer; storage: pCvMemStorage): pCvSet; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-function cvSetAdd(set_header: pCvSet; elem: pCvSetElem = nil; inserted_elem: pCvSetElemArray = nil): Integer; cdecl; external core_lib;
+function cvSetAdd(set_header: pCvSet; elem: pCvSetElem = nil; inserted_elem: pCvSetElemArray = nil): Integer; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-procedure cvSetRemove(set_header:pCvSet; index:Integer );cdecl; external core_lib;
+procedure cvSetRemove(set_header:pCvSet; index:Integer );cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-procedure cvClearSet( set_header:pCvSet ); cdecl; external core_lib;
+procedure cvClearSet( set_header:pCvSet ); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-function cvCreateGraph(graph_flags: Integer; header_size: Integer; vtx_size: Integer; edge_size: Integer; storage: pCvMemStorage): pCvGraph; cdecl; external core_lib;
+function cvCreateGraph(graph_flags: Integer; header_size: Integer; vtx_size: Integer; edge_size: Integer; storage: pCvMemStorage): pCvGraph; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-function cvGraphAddVtx(graph: pCvGraph; const vtx: pCvGraphVtx = nil; inserted_vtx: pCvGraphVtxArray = nil): Integer; cdecl; external core_lib;
+function cvGraphAddVtx(graph: pCvGraph; const vtx: pCvGraphVtx = nil; inserted_vtx: pCvGraphVtxArray = nil): Integer; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-function cvGraphRemoveVtx(graph: pCvGraph; index: Integer): Integer; cdecl; external core_lib;
+function cvGraphRemoveVtx(graph: pCvGraph; index: Integer): Integer; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-function cvGraphRemoveVtxByPtr(graph: pCvGraph; vtx: pCvGraphVtx): Integer; cdecl; external core_lib;
+function cvGraphRemoveVtxByPtr(graph: pCvGraph; vtx: pCvGraphVtx): Integer; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
 function cvGraphAddEdge(graph: pCvGraph; start_idx: Integer; end_idx: Integer; const edge: pCvGraphEdge = nil; inserted_edge: pCvGraphEdgeArray = nil)
-  : Integer; cdecl; external core_lib;
+  : Integer; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
 function cvGraphAddEdgeByPtr(graph: pCvGraph; start_vtx: pCvGraphVtx; end_vtx: pCvGraphVtx; const edge: pCvGraphEdge = nil;
-  inserted_edge: pCvGraphEdgeArray = nil): Integer; cdecl; external core_lib;
+  inserted_edge: pCvGraphEdgeArray = nil): Integer; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-procedure cvGraphRemoveEdge(graph: pCvGraph; start_idx: Integer; end_idx: Integer); cdecl; external core_lib;
+procedure cvGraphRemoveEdge(graph: pCvGraph; start_idx: Integer; end_idx: Integer); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-procedure cvGraphRemoveEdgeByPtr(graph: pCvGraph; start_vtx: pCvGraphVtx; end_vtx: pCvGraphVtx); cdecl; external core_lib;
+procedure cvGraphRemoveEdgeByPtr(graph: pCvGraph; start_vtx: pCvGraphVtx; end_vtx: pCvGraphVtx); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-function cvFindGraphEdge(const graph: pCvGraph; start_idx: Integer; end_idx: Integer): pCvGraphEdge; cdecl; external core_lib;
+function cvFindGraphEdge(const graph: pCvGraph; start_idx: Integer; end_idx: Integer): pCvGraphEdge; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-function cvFindGraphEdgeByPtr(const graph: pCvGraph; const start_vtx: pCvGraphVtx; const end_vtx: pCvGraphVtx): pCvGraphEdge; cdecl; external core_lib;
+function cvFindGraphEdgeByPtr(const graph: pCvGraph; const start_vtx: pCvGraphVtx; const end_vtx: pCvGraphVtx): pCvGraphEdge; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-procedure cvClearGraph(graph: pCvGraph); cdecl; external core_lib;
+procedure cvClearGraph(graph: pCvGraph); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-function cvGraphVtxDegree(const graph: pCvGraph; vtx_idx: Integer): Integer; cdecl; external core_lib;
+function cvGraphVtxDegree(const graph: pCvGraph; vtx_idx: Integer): Integer; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-function cvGraphVtxDegreeByPtr(const graph: pCvGraph; const vtx: pCvGraphVtx): Integer; cdecl; external core_lib;
+function cvGraphVtxDegreeByPtr(const graph: pCvGraph; const vtx: pCvGraphVtx): Integer; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-function cvCreateGraphScanner(graph: pCvGraph; vtx: pCvGraphVtx = nil; mask: Integer = CV_GRAPH_ALL_ITEMS): pCvGraphScanner; cdecl; external core_lib;
+function cvCreateGraphScanner(graph: pCvGraph; vtx: pCvGraphVtx = nil; mask: Integer = CV_GRAPH_ALL_ITEMS): pCvGraphScanner; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-procedure cvReleaseGraphScanner(var scanner: pCvGraphScanner); cdecl; external core_lib;
+procedure cvReleaseGraphScanner(var scanner: pCvGraphScanner); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-function cvNextGraphItem(scanner: pCvGraphScanner): Integer; cdecl; external core_lib;
+function cvNextGraphItem(scanner: pCvGraphScanner): Integer; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-function cvCloneGraph(const graph: pCvGraph; storage: pCvMemStorage): pCvGraph; cdecl; external core_lib;
+function cvCloneGraph(const graph: pCvGraph; storage: pCvMemStorage): pCvGraph; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
 procedure cvRectangleR( img:pCvArr; r:TCvRect; color:TCvScalar; thickness:integer=1;
                                                       line_type :integer =8;
-                                                      shift:integer=0); cdecl; external core_lib;
+                                                      shift:integer=0); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
 procedure cvFillPoly( img:pCvArr; pts:pCvPointArray; const npts:pInteger;
                                                   contours:Integer; color:TCvScalar;
-                                                  line_type :Integer=8; shift :Integer=0 ); cdecl; external core_lib;
+                                                  line_type :Integer=8; shift :Integer=0 ); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-function cvClipLine(img_size: TCvSize; pt1: pCVPoint; pt2: pCVPoint): Integer; cdecl; external core_lib;
+function cvClipLine(img_size: TCvSize; pt1: pCVPoint; pt2: pCVPoint): Integer; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
 function cvInitLineIterator(const image: pCvArr; pt1: TCvPoint; pt2: TCvPoint; line_iterator: pCvLineIterator; connectivity: Integer = 8;
-  left_to_right: Integer = 0): Integer; cdecl; external core_lib;
+  left_to_right: Integer = 0): Integer; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-function cvColorToScalar(packed_color: double; arrtype: Integer): TCvScalar; cdecl; external core_lib;
+function cvColorToScalar(packed_color: double; arrtype: Integer): TCvScalar; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-function cvEllipse2Poly(center: TCvPoint; axes: TCvSize; angle: Integer; arc_start: Integer; arc_end: Integer; pts: pCVPoint; delta: Integer): Integer; cdecl; external core_lib;
+function cvEllipse2Poly(center: TCvPoint; axes: TCvSize; angle: Integer; arc_start: Integer; arc_end: Integer; pts: pCVPoint; delta: Integer): Integer; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-procedure cvLUT(const src: pCvArr; dst: pCvArr; const lut: pCvArr); cdecl; external core_lib;
+procedure cvLUT(const src: pCvArr; dst: pCvArr; const lut: pCvArr); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-function cvRegisterModule(const module_info: pCvModuleInfo): Integer; cdecl; external core_lib;
+function cvRegisterModule(const module_info: pCvModuleInfo): Integer; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-function cvUseOptimized(on_off: Integer): Integer; cdecl; external core_lib;
+function cvUseOptimized(on_off: Integer): Integer; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-procedure cvGetModuleInfo(const module_name: pCvChar; const version: ppCvChar; const loaded_addon_plugins: ppCvChar); cdecl; external core_lib;
+procedure cvGetModuleInfo(const module_name: pCvChar; const version: ppCvChar; const loaded_addon_plugins: ppCvChar); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-procedure cvSetMemoryManager(alloc_func: TCvAllocFunc = nil; free_func: TCvFreeFunc = nil; userdata: Pointer = nil); cdecl; external core_lib;
+procedure cvSetMemoryManager(alloc_func: TCvAllocFunc = nil; free_func: TCvFreeFunc = nil; userdata: Pointer = nil); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
 procedure cvSetIPLAllocators(create_header: TCv_iplCreateImageHeader; allocate_data: TCv_iplAllocateImageData; deallocate: TCv_iplDeallocate;
-  create_roi: TCv_iplCreateROI; clone_image: TCv_iplCloneImage); cdecl; external core_lib;
+  create_roi: TCv_iplCreateROI; clone_image: TCv_iplCloneImage); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-function cvAttrValue(const attr: pCvAttrList; const attr_name: pCvChar): pCvChar; cdecl; external core_lib;
+function cvAttrValue(const attr: pCvAttrList; const attr_name: pCvChar): pCvChar; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
 procedure cvStartWriteStruct( fs:pCvFileStorage; const name:pCVChar;
                                 struct_flags:Integer; const type_name :pCVChar;
-                                attributes:TCvAttrList); cdecl; external core_lib;
+                                attributes:TCvAttrList); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-procedure cvEndWriteStruct(fs:pCvFileStorage );cdecl; external core_lib;
+procedure cvEndWriteStruct(fs:pCvFileStorage );cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-procedure cvStartNextStream(fs: pCvFileStorage); cdecl; external core_lib;
+procedure cvStartNextStream(fs: pCvFileStorage); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-procedure cvWriteRawData(fs: pCvFileStorage; const src: Pointer; len: Integer; const dt: pCvChar); cdecl; external core_lib;
+procedure cvWriteRawData(fs: pCvFileStorage; const src: Pointer; len: Integer; const dt: pCvChar); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-function cvGetHashedKey(fs: pCvFileStorage; const name: pCvChar; len: Integer = -1; create_missing: Integer = 0): pCvStringHashNode; cdecl; external core_lib;
+function cvGetHashedKey(fs: pCvFileStorage; const name: pCvChar; len: Integer = -1; create_missing: Integer = 0): pCvStringHashNode; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-function cvGetRootFileNode(const fs: pCvFileStorage; stream_index: Integer = 0): pCvFileNode; cdecl; external core_lib;
+function cvGetRootFileNode(const fs: pCvFileStorage; stream_index: Integer = 0): pCvFileNode; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-function cvGetFileNode(fs: pCvFileStorage; map: pCvFileNode; const key: pCvStringHashNode; create_missing: Integer = 0): pCvFileNode; cdecl; external core_lib;
+function cvGetFileNode(fs: pCvFileStorage; map: pCvFileNode; const key: pCvStringHashNode; create_missing: Integer = 0): pCvFileNode; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-procedure cvStartReadRawData(const fs: pCvFileStorage; const src: pCvFileNode; reader: pCvSeqReader); cdecl; external core_lib;
+procedure cvStartReadRawData(const fs: pCvFileStorage; const src: pCvFileNode; reader: pCvSeqReader); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-procedure cvReadRawDataSlice(const fs: pCvFileStorage; reader: pCvSeqReader; count: Integer; dst: Pointer; const dt: pCvChar); cdecl; external core_lib;
+procedure cvReadRawDataSlice(const fs: pCvFileStorage; reader: pCvSeqReader; count: Integer; dst: Pointer; const dt: pCvChar); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-procedure cvReadRawData(const fs: pCvFileStorage; const src: pCvFileNode; dst: Pointer; const dt: pCvChar); cdecl; external core_lib;
+procedure cvReadRawData(const fs: pCvFileStorage; const src: pCvFileNode; dst: Pointer; const dt: pCvChar); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-procedure cvWriteFileNode(fs: pCvFileStorage; const new_node_name: pCvChar; const node: pCvFileNode; embed: Integer); cdecl; external core_lib;
+procedure cvWriteFileNode(fs: pCvFileStorage; const new_node_name: pCvChar; const node: pCvFileNode; embed: Integer); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-function cvGetFileNodeName(const node: pCvFileNode): pCvChar; cdecl; external core_lib;
+function cvGetFileNodeName(const node: pCvFileNode): pCvChar; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-procedure cvRegisterType(const info: pCvTypeInfo); cdecl; external core_lib;
+procedure cvRegisterType(const info: pCvTypeInfo); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-procedure cvUnregisterType(const type_name: pCvChar); cdecl; external core_lib;
+procedure cvUnregisterType(const type_name: pCvChar); cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-function cvFirstType: pCvTypeInfo; cdecl; external core_lib;
+function cvFirstType: pCvTypeInfo; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-function cvFindType(const type_name: pCvChar): pCvTypeInfo; cdecl; external core_lib;
+function cvFindType(const type_name: pCvChar): pCvTypeInfo; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-function cvTypeOf(const struct_ptr: Pointer): pCvTypeInfo; cdecl; external core_lib;
+function cvTypeOf(const struct_ptr: Pointer): pCvTypeInfo; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-function cvClone(const struct_ptr: Pointer): Pointer; cdecl; external core_lib;
+function cvClone(const struct_ptr: Pointer): Pointer; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-function cvErrorStr(status: Integer): pCvChar; cdecl; external core_lib;
+function cvErrorStr(status: Integer): pCvChar; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-function cvGetErrInfo(const errcode_desc: ppCvChar; const description: ppCvChar; const filename: ppCvChar; line: pInteger): Integer; cdecl; external core_lib;
+function cvGetErrInfo(const errcode_desc: ppCvChar; const description: ppCvChar; const filename: ppCvChar; line: pInteger): Integer; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-function cvErrorFromIppStatus(ipp_status: Integer): Integer; cdecl; external core_lib;
+function cvErrorFromIppStatus(ipp_status: Integer): Integer; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
-function cvRedirectError(error_handler: TCvErrorCallback; userdata: Pointer = nil; prev_userdata: ppvoid = nil): TCvErrorCallback; cdecl; external core_lib;
+function cvRedirectError(error_handler: TCvErrorCallback; userdata: Pointer = nil; prev_userdata: ppvoid = nil): TCvErrorCallback; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
 function cvNulDevReport(status: Integer; const func_name: pCvChar; const err_msg: pCvChar; const file_name: pCvChar; line: Integer; userdata: Pointer)
-  : Integer; cdecl; external core_lib;
+  : Integer; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
 function cvStdErrReport(status: Integer; const func_name: pCvChar; const err_msg: pCvChar; const file_name: pCvChar; line: Integer; userdata: Pointer)
-  : Integer; cdecl; external core_lib;
+  : Integer; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
 function cvGuiBoxReport(status: Integer; const func_name: pCvChar; const err_msg: pCvChar; const file_name: pCvChar; line: Integer; userdata: Pointer)
-  : Integer; cdecl; external core_lib;
+  : Integer; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
 procedure cvDecRefData(arr: pCvArr); {$IFDEF USE_INLINE}inline;{$ENDIF}
 Var
@@ -3454,7 +3451,7 @@ begin
   end;
 end;
 
-procedure cvCvtPixToPlane(const src: pCvArr; dst0: pCvArr; dst1: pCvArr; dst2: pCvArr; dst3: pCvArr); cdecl; external core_lib name 'cvSplit';
-procedure cvCvtPlaneToPix(const src0: pCvArr; const src1: pCvArr; const src2: pCvArr; const src3: pCvArr; dst: pCvArr); cdecl; external core_lib name 'cvMerge';
+procedure cvCvtPixToPlane(const src: pCvArr; dst0: pCvArr; dst1: pCvArr; dst2: pCvArr; dst3: pCvArr); cdecl; external core_lib name 'cvSplit' {$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+procedure cvCvtPlaneToPix(const src0: pCvArr; const src1: pCvArr; const src2: pCvArr; const src3: pCvArr; dst: pCvArr); cdecl; external core_lib name 'cvMerge' {$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
 end.
