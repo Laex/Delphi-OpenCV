@@ -44,7 +44,7 @@ var
   // Create a new Haar classifier
   cascade: pCvHaarClassifierCascade = nil;
   // Create a string that contains the cascade name
-  cascade_name: AnsiString = cResourceFaceDetect + 'haarcascade_eye.xml';
+  cascade_name: AnsiString = cResourceHaar + 'haarcascade_frontalface_default.xml';
   // Input file name for avi or image file.
   input_name: AnsiString = '0';
 
@@ -101,6 +101,7 @@ Var
   // Images to capture the frame from video or camera or from file
   frame: pIplImage = nil;
   frame_copy: pIplImage = nil;
+  HaarCascade:PcvChar;
 
 const
   opt = '--cascade=';
@@ -121,7 +122,8 @@ begin
     end;
 
     // Load the HaarClassifierCascade
-    cascade := cvLoad(pCVChar(@cascade_name[1]), 0, 0, 0);
+    HaarCascade := pCVChar({@}cascade_name{[1]});
+    cascade := cvLoad(HaarCascade, nil, nil, nil);
 
     // Check whether the cascade has loaded successfully. Else report and error and quit
     if not Assigned(cascade) then
@@ -203,7 +205,11 @@ begin
 
   except
     on E: Exception do
+    begin
       Writeln(E.ClassName, ': ', E.Message);
+      WriteLn('Press <Enter> to exit');
+      Readln;
+    end;
   end;
 
 end.

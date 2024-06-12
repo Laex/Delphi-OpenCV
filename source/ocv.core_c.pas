@@ -2327,7 +2327,7 @@ procedure cvSave(const filename: pCvChar; const struct_ptr: Pointer; const name:
 
 procedure cvSave(const filename: pCvChar; const struct_ptr: Pointer; const name: pCvChar = Nil; const comment: pCvChar = Nil); overload;
 {$IFDEF USE_INLINE} inline; {$ENDIF}
-function cvLoad(const filename: pCvChar; memstorage: pCvMemStorage = Nil; const name: pCvChar = nil; const real_name: ppCvChar = nil): Pointer; cdecl;
+function cvLoad(const filename: pCvChar; const memstorage: pCvMemStorage = Nil; const name: pCvChar = nil; const real_name: ppCvChar = nil): Pointer; cdecl;
 
 { *********************************** Measuring Execution Time *************************** }
 
@@ -2838,7 +2838,7 @@ begin
   cvSave(filename, struct_ptr, name, comment, ZeroCvAttrList);
 end;
 
-function cvLoad(const filename: pCvChar; memstorage: pCvMemStorage = Nil; const name: pCvChar = nil; const real_name: ppCvChar = nil): Pointer; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
+function cvLoad(const filename: pCvChar; const memstorage: pCvMemStorage = Nil; const name: pCvChar = nil; const real_name: ppCvChar = nil): Pointer; cdecl; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 
 // procedure cvInRange; external core_lib{$IFDEF DELAYEDLOADLIB} delayed{$ENDIF};
 // procedure cvInRange(const src: pIplImage; const lower: pIplImage; const upper: pIplImage; dst: pIplImage); cdecl;

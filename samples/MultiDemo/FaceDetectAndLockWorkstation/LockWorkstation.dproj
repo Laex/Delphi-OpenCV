@@ -7,7 +7,7 @@
         <TargetedPlatforms>3</TargetedPlatforms>
         <AppType>Application</AppType>
         <FrameworkType>VCL</FrameworkType>
-        <ProjectVersion>18.5</ProjectVersion>
+        <ProjectVersion>19.3</ProjectVersion>
         <Platform Condition="'$(Platform)'==''">Win32</Platform>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Config)'=='Base' or '$(Base)'!=''">
@@ -114,13 +114,13 @@
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2_Win32)'!=''">
         <DCC_DcuOutput>.\$(Platform)\$(Config)</DCC_DcuOutput>
-        <VerInfo_Build>4</VerInfo_Build>
+        <VerInfo_Build>5</VerInfo_Build>
         <DCC_MapFile>3</DCC_MapFile>
         <VerInfo_AutoIncVersion>true</VerInfo_AutoIncVersion>
         <VerInfo_Locale>1033</VerInfo_Locale>
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
         <DCC_ExeOutput>..\..\..\bin\$(Platform)</DCC_ExeOutput>
-        <VerInfo_Keys>CompanyName=Mikhail Grigorev;FileDescription=LockWorkstation;FileVersion=1.0.0.4;InternalName=LockWorkstation;LegalCopyright=Mikhail Grigorev;LegalTrademarks=Mikhail Grigorev;OriginalFilename=LockWorkstation;ProductName=LockWorkstation;ProductVersion=1.0.0.0;Comments=www.im-history.ru;ProgramID=com.embarcadero.$(MSBuildProjectName)</VerInfo_Keys>
+        <VerInfo_Keys>CompanyName=Mikhail Grigorev;FileDescription=LockWorkstation;FileVersion=1.0.0.5;InternalName=LockWorkstation;LegalCopyright=Mikhail Grigorev;LegalTrademarks=Mikhail Grigorev;OriginalFilename=LockWorkstation;ProductName=LockWorkstation;ProductVersion=1.0.0.0;Comments=www.im-history.ru;ProgramID=com.embarcadero.$(MSBuildProjectName)</VerInfo_Keys>
         <BT_BuildType>Debug</BT_BuildType>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2_Win64)'!=''">
@@ -138,15 +138,15 @@
         <DCCReference Include="uMainForm.pas">
             <Form>MainForm</Form>
         </DCCReference>
-        <BuildConfiguration Include="Debug">
-            <Key>Cfg_2</Key>
-            <CfgParent>Base</CfgParent>
-        </BuildConfiguration>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
         <BuildConfiguration Include="Release">
             <Key>Cfg_1</Key>
+            <CfgParent>Base</CfgParent>
+        </BuildConfiguration>
+        <BuildConfiguration Include="Debug">
+            <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>
         </BuildConfiguration>
     </ItemGroup>

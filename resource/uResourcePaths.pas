@@ -14,6 +14,8 @@ Const
   cResourceMedia = '..\..\resource\media\';
   cResourceFaces = '..\..\resource\faces\';
   cResourceFaceDetect = '..\..\resource\facedetectxml\';
+  cResourceHaar = '..\..\resource\facedetectxml\';
+  cResourceHaar_newer = '..\..\resource\facedetectxml_newer\';
   cResourceResultDefault = '..\..\resource\result\';
 
 function cResourceResult: AnsiString;
