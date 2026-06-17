@@ -698,9 +698,13 @@ type
     FTemplate: TPicture;
     FOnMathTemplateRect: TOnOcvRect;
     FDrawRect: TocvDraw;
+    FMatchScore: Double;
+    FDetected: Boolean;
+    FThreshold: Double;
     procedure SetFIPLTemplate(const Value: pIplImage);
     function GetIPLTemplate: pIplImage;
     procedure TemplateOnChange(Sender: TObject);
+    function IsMinMethod: Boolean;
   public
     constructor Create(AOwner: TPersistent); override;
     destructor Destroy; override;
@@ -708,6 +712,9 @@ type
     property IPLTemplate: pIplImage read GetIPLTemplate write SetFIPLTemplate;
   published
     property Method: TocvMatchTemplateMethod read FMethod write FMethod default TM_CCOEFF_NORMED;
+    property Threshold: Double read FThreshold write FThreshold;
+    property MatchScore: Double read FMatchScore;
+    property Detected: Boolean read FDetected;
     property Template: TPicture Read FTemplate write FTemplate;
     property DrawRect: TocvDraw read FDrawRect write FDrawRect;
     property OnMathTemplateRect: TOnOcvRect read FOnMathTemplateRect write FOnMathTemplateRect;
@@ -1958,9 +1965,9 @@ Var
   D: pIplImage;
   M: Integer;
 begin
-  // Матрица трансформации
+  // ??????? ?????????????
   rot_mat := cvCreateMat(2, 3, CV_32FC1);
-  // Вращение относительно центра изображения
+  // ???????? ???????????? ?????? ???????????
   if RotateAroundCenter then
   begin
     cvCenter.X := Source.IpImage^.Width div 2;
@@ -1972,9 +1979,9 @@ begin
     cvCenter.Y := CustomCenter.Y;
   end;
   cv2DRotationMatrix(cvCenter, Angle, Scale, rot_mat);
-  // Создаем изображение
+  // ??????? ???????????
   D := cvCreateImage(cvGetSize(Source.IpImage), Source.IpImage^.Depth, Source.IpImage^.nChannels);
-  // Выполняем вращение
+  // ????????? ????????
   M := Integer(Method);
   if WARP_FILL_OUTLIERS in FWarpingFlag then
     M := M or CV_WARP_FILL_OUTLIERS;
@@ -2291,7 +2298,13 @@ begin
   if Dest is TocvMatchTemplate then
   begin
     FMethod := (Dest as TocvMatchTemplate).FMethod;
+    FThreshold := (Dest as TocvMatchTemplate).FThreshold;
   end;
+end;
+
+function TocvMatchTemplate.IsMinMethod: Boolean;
+begin
+  Result := FMethod in [TM_SQDIFF, TM_SQDIFF_NORMED];
 end;
 
 constructor TocvMatchTemplate.Create(AOwner: TPersistent);
@@ -2301,6 +2314,7 @@ begin
   FTemplate.OnChange := TemplateOnChange;
   FDrawRect := TocvDraw.Create(Self);
   FMethod := TM_CCOEFF_NORMED;
+  FThreshold := 0.8;
 end;
 
 destructor TocvMatchTemplate.Destroy;
@@ -2321,30 +2335,45 @@ function TocvMatchTemplate.DoTransform(const Source: IocvImage; out Destanation:
 Var
   imgMat: pIplImage;
   P1, P2: TCvPoint;
-  min: Double;
+  MinVal, MaxVal: Double;
+  BestPt: TCvPoint;
   r, g, b: byte;
 begin
   Destanation := Source;
+  FMatchScore := 0;
+  FDetected := False;
   if Assigned(IPLTemplate) then
   begin
     imgMat := cvCreateImage(cvSize(Source.IpImage^.Width - IPLTemplate^.Width + 1, Source.IpImage^.height - IPLTemplate^.height + 1), IPL_DEPTH_32F, 1);
     cvMatchTemplate(Source.IpImage, IPLTemplate, imgMat, Integer(FMethod));
 
-    if Assigned(OnMathTemplateRect) or DrawRect.Enabled then
+    if IsMinMethod then
+      cvMinMaxLoc(imgMat, @MinVal, @MaxVal, @BestPt, nil, nil)
+    else
+      cvMinMaxLoc(imgMat, @MinVal, @MaxVal, nil, @BestPt, nil);
+
+    if IsMinMethod then
     begin
-      cvMinMaxLoc(imgMat, @min, @min, nil, @P1, nil);
-      P2.X := P1.X + IPLTemplate^.Width - 1;
-      P2.Y := P1.Y + IPLTemplate^.height - 1;
+      FMatchScore := MinVal;
+      FDetected := MinVal <= FThreshold;
+    end
+    else
+    begin
+      FMatchScore := MaxVal;
+      FDetected := MaxVal >= FThreshold;
+    end;
 
-      if Assigned(OnMathTemplateRect) then
-        OnMathTemplateRect(Self, Source, ocvRect(P1.X, P1.Y, P2.X, P2.Y));
+    P1 := BestPt;
+    P2.X := P1.X + IPLTemplate^.Width - 1;
+    P2.Y := P1.Y + IPLTemplate^.height - 1;
 
-      if DrawRect.Enabled then
-      begin
-        GetRGBValue(DrawRect.Color, r, g, b);
-        cvRectangle(Destanation.IpImage, P1, P2, CV_RGB(r, g, b));
-      end;
+    if FDetected and Assigned(OnMathTemplateRect) then
+      OnMathTemplateRect(Self, Source, ocvRect(P1.X, P1.Y, P2.X, P2.Y));
 
+    if FDetected and DrawRect.Enabled then
+    begin
+      GetRGBValue(DrawRect.Color, r, g, b);
+      cvRectangle(Destanation.IpImage, P1, P2, CV_RGB(r, g, b));
     end;
 
     cvReleaseImage(imgMat);
@@ -2454,12 +2483,12 @@ begin
       while (FContours <> nil) do
       begin
         area := cvContourArea(FContours, CV_WHOLE_SEQ);
-        if (abs(area) <= MinObjectSize) and RemoveSmallObject then // Если площадь меньше порога, то удаляем
+        if (abs(area) <= MinObjectSize) and RemoveSmallObject then // ???? ??????? ?????? ??????, ?? ???????
           cvDrawContours(ThresholdImage.IpImage, FContours, black, black, -1, CV_FILLED, 8, cvPoint(0, 0))
         else
           cvDrawContours(ThresholdImage.IpImage, FContours, white, white, -1, CV_FILLED, 8, cvPoint(0, 0));
 
-        FContours := FContours.h_next; // Переходим к следующему контуру
+        FContours := FContours.h_next; // ????????? ? ?????????? ???????
       end;
 
       cvClearMemStorage(storage);
@@ -2905,7 +2934,7 @@ begin
   GetImagesForTransorm(s1, s2, M);
   try
     Destanation := s1.Same;
-    // Источники должны иметь один размер или ROI
+    // ????????? ?????? ????? ???? ?????? ??? ROI
     cvAddWeighted(s1.IpImage, Alpha, s2.IpImage, Beta, Gamma, Destanation.IpImage);
     Result := True;
   except
