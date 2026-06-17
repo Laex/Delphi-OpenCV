@@ -238,7 +238,7 @@ Var
   begin
     if Assigned(pCodecCtx) then
     begin
-      avcodec_close(pCodecCtx);
+      avcodec_free_context(pCodecCtx);
       pCodecCtx := nil;
     end;
     if Assigned(pFormatCtx) then
@@ -269,13 +269,11 @@ Var
   end;
 
 Var
-  i, ret, videoStream: Integer;
-  frame_finished: Integer;
+  i, ret, videoStream, recvRet: Integer;
   linesize: array [0 .. 3] of Integer;
   RDelay: Cardinal;
   Image: IocvImage;
 begin
-  av_register_all();
   avformat_network_init();
 
   optionsDict := nil;
@@ -331,7 +329,7 @@ begin
       // Find the first video stream
       videoStream := -1;
       for i := 0 to pFormatCtx^.nb_streams - 1 do
-        if (pFormatCtx^.streams[i]^.codec^.codec_type = AVMEDIA_TYPE_VIDEO) then
+        if (pFormatCtx^.streams[i]^.codecpar^.codec_type = AVMEDIA_TYPE_VIDEO) then
         begin
           videoStream := i;
           Break;
@@ -344,10 +342,7 @@ begin
         Continue;
       end;
 
-      // Get a pointer to the codec context for the video stream
-      pCodecCtx := pFormatCtx^.streams[videoStream]^.codec; // pCodecCtx
-      // Find the decoder for the video stream
-      pCodec := avcodec_find_decoder(pCodecCtx^.codec_id);
+      pCodec := avcodec_find_decoder(pFormatCtx^.streams[videoStream]^.codecpar^.codec_id);
       if not Assigned(pCodec) then
       begin
         DoNotify(ffocvErrorGetStream);
@@ -355,9 +350,21 @@ begin
         Continue;
       end;
 
-      if (pCodec^.capabilities and AV_CODEC_CAP_TRUNCATED) = 0 then
-        pCodecCtx^.flags := pCodecCtx^.flags or AV_CODEC_FLAG_TRUNCATED; (* we dont send complete frames *)
-      // Open codec
+      pCodecCtx := avcodec_alloc_context3(pCodec);
+      if not Assigned(pCodecCtx) then
+      begin
+        DoNotify(ffocvErrorGetStream);
+        FisReconnect := True;
+        Continue;
+      end;
+
+      if avcodec_parameters_to_context(pCodecCtx, pFormatCtx^.streams[videoStream]^.codecpar) < 0 then
+      begin
+        DoNotify(ffocvErrorGetStream);
+        FisReconnect := True;
+        Continue;
+      end;
+
       if avcodec_open2(pCodecCtx, pCodec, nil) < 0 then
       begin
         DoNotify(ffocvErrorGetStream);
@@ -397,22 +404,26 @@ begin
             if (packet.stream_index = videoStream) then
             begin
               FOwner.DoNotifyPacket(packet, (packet.flags and AV_PKT_FLAG_KEY) <> 0);
-              // Video stream packet
-              avcodec_decode_video2(pCodecCtx, frame, frame_finished, @packet);
-              if (frame_finished <> 0) then
+              if avcodec_send_packet(pCodecCtx, @packet) >= 0 then
               begin
-                sws_scale(img_convert_context, @frame^.data, @frame^.linesize, 0, pCodecCtx^.Height, @iplframe^.imageData,
-                  @linesize);
-                if Assigned(OnNotifyData) then
-                begin
-                  Image := TocvImage.CreateClone(iplframe);
-                  OnNotifyData(FOwner, Image);
-                  Image := nil;
-                end;
+                repeat
+                  recvRet := avcodec_receive_frame(pCodecCtx, frame);
+                  if recvRet = 0 then
+                  begin
+                    sws_scale(img_convert_context, @frame^.data, @frame^.linesize, 0, pCodecCtx^.Height,
+                      @iplframe^.imageData, @linesize);
+                    if Assigned(OnNotifyData) then
+                    begin
+                      Image := TocvImage.CreateClone(iplframe);
+                      OnNotifyData(FOwner, Image);
+                      Image := nil;
+                    end;
+                  end;
+                until recvRet <> 0;
               end;
             end;
           finally
-            av_free_packet(@packet);
+            av_packet_unref(@packet);
           end;
         end
         else

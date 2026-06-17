@@ -1,4 +1,4 @@
-﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <PropertyGroup>
         <ProjectGuid>{042565DB-2CA2-4ACD-8A2D-2A9063C59236}</ProjectGuid>
         <MainSource>rtpFFMPEG.dpk</MainSource>
@@ -117,15 +117,15 @@
             <MainSource>MainSource</MainSource>
         </DelphiCompile>
         <DCCReference Include="rtl.dcp"/>
-        <DCCReference Include="..\Delphi-FFMPEG\source\ffmpeg_types.pas"/>
-        <DCCReference Include="..\Delphi-FFMPEG\source\libavcodec.pas"/>
-        <DCCReference Include="..\Delphi-FFMPEG\source\libavdevice.pas"/>
-        <DCCReference Include="..\Delphi-FFMPEG\source\libavfilter.pas"/>
-        <DCCReference Include="..\Delphi-FFMPEG\source\libavformat.pas"/>
-        <DCCReference Include="..\Delphi-FFMPEG\source\libavutil.pas"/>
-        <DCCReference Include="..\Delphi-FFMPEG\source\libpostproc.pas"/>
-        <DCCReference Include="..\Delphi-FFMPEG\source\libswresample.pas"/>
-        <DCCReference Include="..\Delphi-FFMPEG\source\libswscale.pas"/>
+        <DCCReference Include="..\..\Delphi-FFMPEG\source\ffmpeg_types.pas"/>
+        <DCCReference Include="..\..\Delphi-FFMPEG\source\libavcodec.pas"/>
+        <DCCReference Include="..\..\Delphi-FFMPEG\source\libavdevice.pas"/>
+        <DCCReference Include="..\..\Delphi-FFMPEG\source\libavfilter.pas"/>
+        <DCCReference Include="..\..\Delphi-FFMPEG\source\libavformat.pas"/>
+        <DCCReference Include="..\..\Delphi-FFMPEG\source\libavutil.pas"/>
+        <DCCReference Include="..\..\Delphi-FFMPEG\source\libpostproc.pas"/>
+        <DCCReference Include="..\..\Delphi-FFMPEG\source\libswresample.pas"/>
+        <DCCReference Include="..\..\Delphi-FFMPEG\source\libswscale.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

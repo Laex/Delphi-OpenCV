@@ -74,7 +74,7 @@
         <Base>true</Base>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base)'!=''">
-        <DCC_UnitSearchPath>..\..\..\source3;..\..\..\source;..\..\..\jedi;..\..\..\resource;..\..\..\resource\facedetectxml;..\..\..\packages;..\..\..\Delphi-FFMPEG\source;$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
+        <DCC_UnitSearchPath>..\..;..\..\..\source;..\..\..\jedi;..\..\..\resource;..\..\..\resource\facedetectxml;..\..\..\packages;..\..\..\Delphi-FFMPEG\source;$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
         <Icns_MainIcns>$(BDS)\bin\delphi_PROJECTICNS.icns</Icns_MainIcns>
         <Icon_MainIcon>$(BDS)\bin\delphi_PROJECTICON.ico</Icon_MainIcon>
         <Manifest_File>None</Manifest_File>
@@ -201,11 +201,11 @@
         <DCCReference Include="..\..\..\source\ocv.imgproc_c.pas"/>
         <DCCReference Include="..\..\..\source\ocv.lib.pas"/>
         <DCCReference Include="..\..\..\resource\uResourcePaths.pas"/>
-        <DCCReference Include="..\..\..\source3\ocv.cls.contrib.pas"/>
-        <DCCReference Include="..\..\..\source3\ocv.cls.core.pas"/>
-        <DCCReference Include="..\..\..\source3\ocv.cls.highgui.pas"/>
-        <DCCReference Include="..\..\..\source3\ocv.cls.objdetect.pas"/>
-        <DCCReference Include="..\..\..\source3\ocv.cls.types.pas"/>
+        <DCCReference Include="..\..\ocv.cls.contrib.pas"/>
+        <DCCReference Include="..\..\ocv.cls.core.pas"/>
+        <DCCReference Include="..\..\ocv.cls.highgui.pas"/>
+        <DCCReference Include="..\..\ocv.cls.objdetect.pas"/>
+        <DCCReference Include="..\..\ocv.cls.types.pas"/>
         <None Include="..\..\..\source\OpenCV.inc"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>

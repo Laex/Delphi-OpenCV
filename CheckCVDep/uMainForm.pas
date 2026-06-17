@@ -26,7 +26,7 @@ var
 implementation
 
 {$R *.dfm}
-{$I ffmpeg.inc}
+{$I ..\Delphi-FFMPEG\source\ffmpeg.inc}
 
 const
 
@@ -132,7 +132,7 @@ begin
       end
       else if chk1.Checked then
         mmo1.Lines.Add(CVDLL_Core[i] + '.dll - ok');
-      if (i < High(CVDLL_Core)) and (not CheckLoadDLL(CVDLL_Core[i] + 'd.dll', ErrorCode, ErrorString)) then
+      if not CheckLoadDLL(CVDLL_Core[i] + 'd.dll', ErrorCode, ErrorString) then
       begin
         mmo1.Lines.Add('Verifying ' + CVDLL_Core[i] + 'd.dll');
         mmo1.Lines.Add('   Error code: ' + ErrorCode.ToString + ' - ' + ErrorString);
@@ -146,31 +146,27 @@ begin
     if R then
       mmo1.Lines.Add('OK');
 
-    mmo1.Lines.Add('------- Delphi-OpenCV classes DLL -------');
-    R := True;
+    mmo1.Lines.Add('------- Delphi-OpenCV classes DLL (optional) -------');
+    mmo1.Lines.Add('Archival C++ wrappers — not required for main OpenCV C API.');
     for i := 0 to High(CVDLL_Classes) do
     begin
-      if not CheckLoadDLL(CVDLL_Classes[i] + '.dll', ErrorCode, ErrorString) then
+      if CheckLoadDLL(CVDLL_Classes[i] + '.dll', ErrorCode, ErrorString) then
       begin
-        mmo1.Lines.Add('Verifying ' + CVDLL_Classes[i] + '.dll');
-        mmo1.Lines.Add('   Error code: ' + ErrorCode.ToString + ' - ' + ErrorString);
-        R := False;
+        if chk1.Checked then
+          mmo1.Lines.Add(CVDLL_Classes[i] + '.dll - ok');
+      end
+      else
+        mmo1.Lines.Add(CVDLL_Classes[i] + '.dll - not found (optional)');
+      if CheckLoadDLL(CVDLL_Classes[i] + 'd.dll', ErrorCode, ErrorString) then
+      begin
+        if chk1.Checked then
+          mmo1.Lines.Add(CVDLL_Classes[i] + 'd.dll - ok');
       end
       else if chk1.Checked then
-        mmo1.Lines.Add(CVDLL_Classes[i] + '.dll - ok');
-      if not CheckLoadDLL(CVDLL_Classes[i] + 'd.dll', ErrorCode, ErrorString) then
-      begin
-        mmo1.Lines.Add('Verifying ' + CVDLL_Classes[i] + 'd.dll');
-        mmo1.Lines.Add('   Error code: ' + ErrorCode.ToString + ' - ' + ErrorString);
-        R := False;
-      end
-      else if chk1.Checked then
-        mmo1.Lines.Add(CVDLL_Classes[i] + 'd.dll - ok');
+        mmo1.Lines.Add(CVDLL_Classes[i] + 'd.dll - not found (optional)');
       pb1.Position := pb1.Position + 1;
       Application.ProcessMessages;
     end;
-    if R then
-      mmo1.Lines.Add('OK');
 
     mmo1.Lines.Add('------- FFMPEG DLL -------');
     R := True;

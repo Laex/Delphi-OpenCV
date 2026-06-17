@@ -3,6 +3,10 @@
 
 {$DEFINE DelphiOCVVersion_29}
 
+{$IFDEF MSWINDOWS}
+  {$DEFINE OCV_FFMPEG}
+{$ENDIF}
+
 {$IFNDEF FPC}
 {$IFDEF DEBUG}
 {$A8,B-,C+,D+,E-,F-,G+,H+,I+,J+,K-,L+,M-,N+,O-,P+,Q+,R+,S-,T-,U-,V+,W+,X+,Y+,Z1}

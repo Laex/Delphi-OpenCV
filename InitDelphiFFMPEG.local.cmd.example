@@ -1,0 +1,5 @@
+@echo off
+rem Copy to InitDelphiFFMPEG.local.cmd (gitignored) to point the junction at your FFmpeg tree.
+rem Used only when Delphi-FFMPEG\source is not already present.
+
+set "FFMPEG_DEV_PATH=D:\Work\Delphi\Delphi-FFMPEG"

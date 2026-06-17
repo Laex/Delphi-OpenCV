@@ -56,7 +56,11 @@ unit ocv.lock;
 interface
 
 Uses
+{$IFDEF HAS_UNITSCOPE}
+  Winapi.Windows
+{$ELSE}
   Windows
+{$ENDIF}
 {$IF DEFINED(USE_CRITICALSECTION) OR DEFINED(USE_SIMLOCK)}
     , SyncObjs
 {$IFEND}

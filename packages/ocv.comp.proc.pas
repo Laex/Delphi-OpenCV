@@ -1,4 +1,7 @@
+{$IFNDEF CLR}
+{$I ..\..\source\OpenCV.inc}
 unit ocv.comp.Proc;
+{$ENDIF}
 
 interface
 

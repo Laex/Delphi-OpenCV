@@ -184,7 +184,7 @@ begin
         color_tab := cvCreateMat(1, comp_count, CV_8UC3);
         for i := 0 to comp_count - 1 do
         begin
-          ptr := pByte(Integer(color_tab^.data) + i * 3);
+          ptr := pByte(NativeInt(color_tab^.data) + i * 3);
           ptr[0] := (cvRandInt(rng) mod 180 + 50);
           ptr[1] := (cvRandInt(rng) mod 180 + 50);
           ptr[2] := (cvRandInt(rng) mod 180 + 50);
@@ -217,7 +217,7 @@ begin
             end
             else
             begin
-              ptr := pByte(Integer(color_tab^.data) + (idx - 1) * 3);
+              ptr := pByte(NativeInt(color_tab^.data) + (idx - 1) * 3);
               dst[0] := ptr[0];
               dst[1] := ptr[1];
               dst[2] := ptr[2];

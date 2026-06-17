@@ -70,5 +70,8 @@ packages/Lazarus/
 # Command files exclusion
 *.cmd
 !InitDelphiFFMPEG.cmd
+InitDelphiFFMPEG.local.cmd
 !/CheckCVDep/CheckCVDep.exe
 !opencv_classes*.dll
+
+.obsidian/

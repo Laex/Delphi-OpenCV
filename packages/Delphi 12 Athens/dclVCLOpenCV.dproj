@@ -1,4 +1,4 @@
-﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <PropertyGroup>
         <ProjectGuid>{7E329DBD-3B38-463A-9589-A0A1C4A19305}</ProjectGuid>
         <MainSource>dclVCLOpenCV.dpk</MainSource>

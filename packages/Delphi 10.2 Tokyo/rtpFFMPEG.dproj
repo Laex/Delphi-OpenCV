@@ -1,4 +1,4 @@
-﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <PropertyGroup>
         <ProjectGuid>{1BFD60EE-8BB3-4529-A649-38B082478380}</ProjectGuid>
         <MainSource>rtpFFMPEG.dpk</MainSource>

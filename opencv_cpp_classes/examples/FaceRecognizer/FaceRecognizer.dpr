@@ -11,11 +11,11 @@ uses
   ocv.imgproc_c in '..\..\..\source\ocv.imgproc_c.pas',
   ocv.lib in '..\..\..\source\ocv.lib.pas',
   uResourcePaths in '..\..\..\resource\uResourcePaths.pas',
-  ocv.cls.contrib in '..\..\..\source3\ocv.cls.contrib.pas',
-  ocv.cls.core in '..\..\..\source3\ocv.cls.core.pas',
-  ocv.cls.highgui in '..\..\..\source3\ocv.cls.highgui.pas',
-  ocv.cls.objdetect in '..\..\..\source3\ocv.cls.objdetect.pas',
-  ocv.cls.types in '..\..\..\source3\ocv.cls.types.pas';
+  ocv.cls.contrib in '..\..\ocv.cls.contrib.pas',
+  ocv.cls.core in '..\..\ocv.cls.core.pas',
+  ocv.cls.highgui in '..\..\ocv.cls.highgui.pas',
+  ocv.cls.objdetect in '..\..\ocv.cls.objdetect.pas',
+  ocv.cls.types in '..\..\ocv.cls.types.pas';
 
 Var
   P         : IFaceRecognizer;

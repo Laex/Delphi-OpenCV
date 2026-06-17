@@ -1,3 +1,23 @@
+ARCHIVAL — for reference only. Unsuccessful experiment; use Delphi-OpenCV5 instead:
+  https://github.com/Laex/Delphi-OpenCV5
+  See README.md in this folder.
+
+OpenCV C++ API support for Delphi-OpenCV
+========================================
+
+Pascal bindings (ocv.cls.*.pas) and the native proxy DLL (opencv_classes/)
+for calling OpenCV C++ classes from Delphi via stdcall exports.
+
+Layout:
+  ocv.cls.*.pas       - Delphi object wrappers
+  opencv_classes/     - Visual C++ DLL project (build opencv_classes.dll)
+  examples/           - Sample projects (open examples/Classes.groupproj)
+
+Requires OpenCV 2.4.x C++ libraries and the opencv_classes DLL next to
+sample executables (see source/ocv.lib.pas, opencv_classes_lib).
+
+Wrapped API (partial):
+
 objdetect.hpp
 	class CascadeClassifier - not fully
 highgui.hpp
